@@ -1,0 +1,60 @@
+/* Pizza Basso — vain se mikä eroaa Pizza Partysta. Kaikki muu on peli.css:ssä.
+ * ⚠️ url() ratkeaa TÄHÄN tiedostoon nähden; basso.css on juuressa kuten
+ * peli.css, joten kuvat/… toimii. */
+
+/* --- PIZZAA! (Marko 6.10.2026: animaatio, ääni ja Basso-apinan kuva) --- */
+.basso-pizzaa{
+  position:fixed;inset:0;z-index:60;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+}
+.basso-pizzaa[hidden]{display:none}
+.basso-pizzaa img{width:min(46vw, 46vh, 260px);height:auto;
+  filter:drop-shadow(0 8px 18px rgba(60,40,20,.35))}
+.basso-pizzaa b{
+  font-size:min(14vw, 13vh, 84px);line-height:1;font-weight:800;letter-spacing:.02em;
+  color:#fff;background:var(--orange);padding:.12em .4em .16em;border-radius:16px;
+  box-shadow:0 6px 20px rgba(60,40,20,.30);
+}
+/* Apinan huuto: sama hetki, musta pohja kuten apinan laatikko. */
+.basso-pizzaa.apinan b{background:var(--ink)}
+.basso-pizzaa.nakyy img{animation:basso-hyppy 1.7s cubic-bezier(.2,.9,.3,1.3) both}
+.basso-pizzaa.nakyy b{animation:basso-huuto 1.7s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes basso-hyppy{
+  0%{transform:translateY(60px) scale(.3) rotate(-12deg);opacity:0}
+  18%{transform:translateY(-14px) scale(1.08) rotate(6deg);opacity:1}
+  30%{transform:translateY(0) scale(1) rotate(-4deg)}
+  42%{transform:rotate(4deg)} 54%{transform:rotate(-3deg)} 66%{transform:rotate(0)}
+  88%{transform:scale(1);opacity:1}
+  100%{transform:scale(.9);opacity:0}
+}
+@keyframes basso-huuto{
+  0%,8%{transform:scale(.2);opacity:0}
+  24%{transform:scale(1.18);opacity:1}
+  34%{transform:scale(.96)} 44%{transform:scale(1.04)} 54%{transform:scale(1)}
+  88%{opacity:1}
+  100%{transform:scale(1.1);opacity:0}
+}
+@media (prefers-reduced-motion: reduce){
+  .basso-pizzaa.nakyy img, .basso-pizzaa.nakyy b{animation:basso-hiljaa 1.7s linear both}
+  @keyframes basso-hiljaa{0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0}}
+}
+
+/* --- pelaajalaatikot: luku on korttien määrä, symbolina kortin selkä --- */
+.basso-kortit{display:inline-flex;align-items:center;gap:.18em}
+.basso-kortit::before{
+  content:'';display:inline-block;width:.5em;height:.72em;border-radius:.08em;
+  background:url('kuvat/tausta-tayte.webp?v=20260910a') center/cover;
+  box-shadow:0 0 0 1px rgba(60,40,20,.25);
+}
+
+/* --- tulosruutu --- */
+#tulosPisteet .pisteet{position:relative}
+.basso-lisays{font-size:15px;font-weight:700;color:var(--money);line-height:1;margin-top:2px}
+.basso-kruunu{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:24px}
+.basso-raja{display:flex;align-items:center;gap:6px;align-self:center;
+  font-size:18px;color:var(--himmea)}
+.basso-raja b{font-size:20px;color:var(--ink)}
+
+/* Sydänpizza on Partyssa 2 pistettä. Bassossa pizza ei anna pisteitä
+ * (voittaja saa muiden käsikortit), joten merkki kertoisi väärin. */
+#pizzaSydan{display:none!important}
