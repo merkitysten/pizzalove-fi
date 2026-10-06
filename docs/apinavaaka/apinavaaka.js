@@ -404,8 +404,41 @@
       x.classList.remove('av--tonaisu'); void x.offsetWidth; x.classList.add('av--tonaisu');
     }
 
-    // --- piirto
+    // --- siirtymäanimaatio (FLIP): torni liukuu vanhasta paikastaan uuteen, oli se sitten
+    // hylly, apinan käsi tai toinen hylly. Näin nähdään, minne kukin torni menee.
+    function paikat() {
+      var m = {};
+      Array.prototype.forEach.call(juuri.querySelectorAll('[data-n]'), function (x) {
+        var r = x.getBoundingClientRect();
+        if (r.width) m[x.getAttribute('data-n')] = r;
+      });
+      return m;
+    }
+    function liu(ennen) {
+      if (vahennaLiike || !Element.prototype.animate) return;
+      Array.prototype.forEach.call(juuri.querySelectorAll('[data-n]'), function (x) {
+        var a = ennen[x.getAttribute('data-n')], b = x.getBoundingClientRect();
+        if (!a || !b.width) return;
+        // alareunan keskikohdasta toiseen, koko skaalautuu (hyllyn torni on pienempi kuin käden)
+        var dx = (a.left + a.width / 2) - (b.left + b.width / 2), dy = a.bottom - b.bottom;
+        if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+        var s = a.height / b.height;
+        x.classList.add('av__lentaa');
+        var an = x.animate([
+          { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')', transformOrigin: '50% 100%' },
+          { transform: 'none', transformOrigin: '50% 100%' }
+        ], { duration: 620, easing: 'cubic-bezier(.25,.8,.35,1.08)' });
+        an.onfinish = function () { x.classList.remove('av__lentaa'); };
+      });
+    }
     function piirra() {
+      var ennen = paikat();
+      piirraNyt();
+      liu(ennen);
+    }
+
+    // --- piirto
+    function piirraNyt() {
       var teht = tila.tehtava, noppa = teht.noppa, heitetty = tila.heitetty;
       var vasenSumma = noppa + summa(tila.vasen), oikeaSumma = summa(tila.oikea);
       tila.valmis = !tila.siirretty && tila.oikea.length > 0 && vasenSumma === oikeaSumma;
@@ -486,7 +519,7 @@
       }
       function pinoNappi(n, kohde) {
         var b = el('button', 'av__pino-osa');
-        b.type = 'button';
+        b.type = 'button'; b.setAttribute('data-n', n);
         b.appendChild(torni(n));
         b.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
         b.addEventListener('click', function () { palauta(n); });
@@ -539,7 +572,7 @@
           var paikka = el('div', 'av__paikka');
           if (tila.paikka[n] === nimi) {
             var b = el('button', 'av__hylly-torni');
-            b.type = 'button';
+            b.type = 'button'; b.setAttribute('data-n', n);
             b.appendChild(torni(n));
             b.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
             b.title = t.taytteet[n - 1];

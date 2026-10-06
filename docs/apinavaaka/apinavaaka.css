@@ -51,7 +51,6 @@
   box-shadow:inset 0 calc(var(--pala)*-.22) 0 rgba(0,0,0,.2)}
 .av__torni i.av__punnus{background:#fff;box-shadow:inset 0 0 0 1px #9C9285,inset 0 calc(var(--pala)*-.22) 0 rgba(0,0,0,.1);
   font-style:normal;font-size:calc(var(--pala)*.8);line-height:var(--pala);text-align:center;font-weight:700;color:#6E6357}
-.av__pino-osa:not(.av__pino-osa--punnus) .av__torni{animation:av-pudotus .35s cubic-bezier(.3,1.6,.5,1)}
 @keyframes av-pudotus{from{transform:translateY(-40%);opacity:0}}
 .av__uusi .av__torni i{animation:av-punnus .3s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i)*110ms)}
 @keyframes av-punnus{from{transform:translateY(-300%);opacity:0}}
@@ -153,12 +152,14 @@
 /* täytteen tarra tornin päällä */
 .av__tarra{display:block;width:calc(var(--leveys)*.8);height:calc(var(--leveys)*.8);border-radius:50%;
   box-shadow:0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.35);margin-bottom:calc(var(--pala)*-.4);position:relative;z-index:1;display:grid;place-items:center;order:99}
-.av__tarra img{width:78%;height:78%;object-fit:contain}
+.av__tarra img{width:66%;height:66%;object-fit:contain}   /* 66 %: koko kuva mahtuu ympyrän sisään */
 .av__hylly-torni .av__tarra{width:20px;height:20px;margin-bottom:-3px;box-shadow:0 0 0 1.5px #fff,0 1px 2px rgba(0,0,0,.3)}
 .av__kortti-pizza i{display:grid;place-items:center;width:34px;height:34px}
-.av__kortti-pizza i img{width:80%;height:80%;object-fit:contain}
+.av__kortti-pizza i img{width:66%;height:66%;object-fit:contain}
 .av--apinat .av__paikka{min-height:64px}
 .av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--green,#2D5D3D),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av--apinat .av__kortit--valinta{grid-template-columns:repeat(auto-fit,38px);gap:8px;min-height:64px;align-content:center}
 .av__valinta{border:0;background:none;padding:0;cursor:pointer;--leveys:40px;--pala:8px;animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av__valinta .av__tarra{width:38px;height:38px;margin:0;animation:av-kortti 1.2s ease-in-out infinite}
+/* siirtymäanimaation aikana torni piirretään muiden päälle */
+.av__lentaa{position:relative;z-index:20}
