@@ -518,7 +518,7 @@ def main():
                                             "location.replace('/' + (valittu || '%s') + '/');" % OLETUSKIELI))
     if KAYTA_OMAA_DOMAINIA:
         with open(os.path.join(ULOS, 'CNAME'), 'w') as out:
-            out.write('pizzalove.fi\n')
+            out.write('pizzalove.fi')  # sama muoto kuin GitHubin asetussivun luoma tiedosto
     with open(os.path.join(ULOS, '.nojekyll'), 'w') as out:
         out.write('')
     print('valmis:', ULOS)
