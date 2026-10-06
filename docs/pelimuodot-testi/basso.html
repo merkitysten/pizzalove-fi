@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261006a">
+<link rel="stylesheet" href="basso.css?v=20261006b">
 </head>
 <body>
 
@@ -114,19 +114,21 @@
 
 <!-- TULOS -->
 <section id="tulosRuutu" class="ruutu" hidden>
-  <!-- ⚠️ JS tayttaa taman molemmissa pelimuodoissa. Kaksi eri merkintaa
-       (yksin / moninpeli) olisi kaksi paikkaa joihin sama korjaus pitaisi
-       muistaa tehda. -->
+  <!-- BASSO (Marko 6.10.2026): «ne jäljelle jääneet kortit pitäisi ensinnäkin
+       nähdä. Ja nuo alanapit oli sekavat.» Rivit (pisteet + jääneet kortit +
+       summa) piirtää basso.js. ▶ on heti tulosten alla, ja sen vieressä vain ⚙.
+       ⌂ on piilossa: Bassolla ei ole omaa valikkoa, ja Partyn valikkoon vievä
+       nappi heitti pelaajan pois pelistä. Elementti jää, ettei mikään viittaus
+       siihen kaadu. -->
   <div class="tulos-pisteet" id="tulosPisteet"></div>
 
-  <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
-    <img src="kuvat/apina.webp?v=20260910a" alt="">
-    <span class="apinanappi-teksti" aria-hidden="true">▶</span>
-  </button>
-
-  <div class="aloitus-linkit">
+  <div class="basso-tulos-napit">
+    <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
+      <img src="kuvat/apina.webp?v=20260910a" alt="">
+      <span class="apinanappi-teksti" aria-hidden="true">▶</span>
+    </button>
     <button id="asetuksiin" class="kuvake-nappi" data-ta="tulos.asetukset" aria-label="Asetukset">⚙</button>
-    <button id="tulosValikkoon" class="kuvake-nappi" data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
+    <button id="tulosValikkoon" class="kuvake-nappi" hidden data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
   </div>
 </section>
 
@@ -328,7 +330,7 @@
     <div class="tauko-merkki" aria-hidden="true">&#9208;</div>
     <button id="jatka" class="iso-nappi" data-t="tauko.jatka">Jatka</button>
     <button id="alustaPeli" class="toinen-nappi" data-t="tauko.alusta">Aloita alusta</button>
-    <button id="taukoValikkoon" class="toinen-nappi" data-t="valikko.alkuun">Alkuvalikkoon</button>
+    <button id="taukoValikkoon" class="toinen-nappi" hidden data-t="valikko.alkuun">Alkuvalikkoon</button>
   </div>
 </div>
 
@@ -362,6 +364,6 @@
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
 <script src="basso-saannot.js?v=20261006a"></script>
-<script src="basso.js?v=20261006a"></script>
+<script src="basso.js?v=20261006b"></script>
 </body>
 </html>

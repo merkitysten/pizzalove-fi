@@ -49,7 +49,7 @@
 
 /* --- tulosruutu --- */
 #tulosPisteet .pisteet{position:relative}
-.basso-lisays{font-size:15px;font-weight:700;color:var(--money);line-height:1;margin-top:2px}
+.basso-lisays{font-weight:700;color:var(--money);line-height:1}
 .basso-kruunu{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:24px}
 .basso-raja{display:flex;align-items:center;gap:6px;align-self:center;
   font-size:18px;color:var(--himmea)}
@@ -58,3 +58,27 @@
 /* Sydänpizza on Partyssa 2 pistettä. Bassossa pizza ei anna pisteitä
  * (voittaja saa muiden käsikortit), joten merkki kertoisi väärin. */
 #pizzaSydan{display:none!important}
+
+/* --- tulosruutu: yksi keskitetty sarake (Marko 6.10.2026) ---
+ * peli.css:n tulosruudulla ei ole omaa asettelua, joten leveällä näytöllä
+ * ▶ jäi vasempaan laitaan ja pisteet keskelle. Bassossa kaikki on samassa
+ * sarakkeessa, ja ▶ on heti tulosten alla. */
+#tulosRuutu:not([hidden]){display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:18px;min-height:100vh;min-height:100dvh}
+#tulosPisteet{flex-direction:column;align-items:stretch;gap:12px;margin:0;
+  width:min(100%, 560px)}
+.basso-tulos-rivi{display:flex;align-items:center;gap:12px;min-height:72px}
+.basso-tulos-rivi .pisteet.iso{flex:0 0 auto;min-width:92px;flex-direction:row;gap:8px;padding:8px 14px}
+.basso-tulos-rivi .pisteet.iso b{font-size:30px}
+.basso-tulos-rivi .pisteet.iso img{width:34px}
+.basso-jaaneet{display:flex;flex-wrap:wrap;gap:4px;flex:0 1 auto;min-width:0}
+.basso-minikortti{position:relative;width:50px;flex:0 0 auto}
+.basso-minikortti img{width:100%;display:block;border-radius:3px;
+  box-shadow:0 1px 3px rgba(60,40,20,.25)}
+.basso-minikortti small{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  background:var(--ink);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:0 4px}
+.basso-summa{flex:0 0 auto;font-size:24px;color:var(--ink);white-space:nowrap}
+.basso-tulos-rivi .basso-lisays{font-size:30px;margin:0}
+.basso-raja{justify-content:center;margin-top:4px}
+.basso-tulos-napit{display:flex;align-items:center;gap:18px}
+.basso-tulos-napit .apinanappi.pieni{width:min(22vh,110px)}

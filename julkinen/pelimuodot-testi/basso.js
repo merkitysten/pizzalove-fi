@@ -336,35 +336,75 @@ function piirraPelaajat() {
   });
 }
 
-/* Tulosruutu: jokaisen ottelupisteet, kierroksen voittajalle +N.
- * Ottelun päätyttyä voittaja kruunataan, ja ▶ aloittaa uuden ottelun. */
+/* Tulosruutu (Marko 6.10.2026: «ne jäljelle jääneet kortit pitäisi
+ * ensinnäkin nähdä»). Rivi per pelaaja, kierroksen voittaja ensin:
+ *
+ *   [ottelupisteet]  jääneet kortit kuvina  = summa      ← häviäjät
+ *   [ottelupisteet]  +summa                              ← voittaja
+ *
+ * Voittajan +N on tasan häviäjien summien summa, joten pisteiden alkuperä
+ * näkyy korteista eikä sitä tarvitse selittää. Ei tekstiä: kortit, luvut
+ * ja merkit ovat kieliriippumattomia. Fantasiakortti on 20 (painettu sääntö),
+ * ja se näkyy kortin vieressä, koska X-kortissa ei ole lukua. */
 function piirraTulos() {
   const sailio = document.getElementById('tulosPisteet');
   if (!sailio || !basso) return;
   sailio.innerHTML = '';
   const k = basso.kierros;
-  basso.pelaajat.forEach(function (p, i) {
-    const voitti = k && k.voittaja === i;
-    const ottelunVoittaja = basso.voittaja === i;
+  const jarjestys = basso.pelaajat.map(function (p, i) { return i; });
+  if (k && k.voittaja !== null) {
+    jarjestys.sort(function (a, b) { return (b === k.voittaja) - (a === k.voittaja); });
+  }
+  jarjestys.forEach(function (i) {
+    const p = basso.pelaajat[i];
+    const voitti = !!k && k.voittaja === i;
+    const kasi = k ? k.kasit[i] : [];
+    const rivi = document.createElement('div');
+    rivi.className = 'basso-tulos-rivi' + (voitti ? ' voitti' : '');
+
     const laatikko = document.createElement('div');
     laatikko.className = 'pisteet iso ' + (p.laji === 'apina' ? 'apina' : 'oma') +
       (voitti ? ' voittaja' : '');
     laatikko.innerHTML =
-      (ottelunVoittaja ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
+      (basso.voittaja === i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
       (p.laji === 'apina' ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
-      '<b>' + p.pisteet + '</b>' +
-      (voitti && k.pisteet ? '<small class="basso-lisays">+' + k.pisteet + '</small>' : '');
+      '<b>' + p.pisteet + '</b>';
     const kuka = i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: i });
     laatikko.setAttribute('aria-label', kuka + ': ' + p.pisteet);
-    sailio.appendChild(laatikko);
+    rivi.appendChild(laatikko);
+
+    if (voitti) {
+      const lisa = document.createElement('b');
+      lisa.className = 'basso-lisays';
+      lisa.textContent = '+' + k.pisteet;
+      rivi.appendChild(lisa);
+    } else if (kasi.length) {
+      const kortit = document.createElement('div');
+      kortit.className = 'basso-jaaneet';
+      kasi.forEach(function (kortti) {
+        const el = document.createElement('span');
+        el.className = 'basso-minikortti';
+        el.innerHTML = '<img src="' + kortti.kuva + '" alt="' + (kortti.fantasia
+          ? t('fantasia.valitsematta') : t('tayte.alt', { nimi: t('tayte.' + kortti.arvo), arvo: kortti.arvo })) + '">' +
+          (kortti.fantasia ? '<small>' + BASSO_FANTASIAN_PISTEET + '</small>' : '');
+        kortit.appendChild(el);
+      });
+      rivi.appendChild(kortit);
+      const summa = document.createElement('b');
+      summa.className = 'basso-summa';
+      summa.textContent = '= ' + bassoKadenPisteet(kasi);
+      rivi.appendChild(summa);
+    }
+    sailio.appendChild(rivi);
   });
-  /* Pisteraja näkyviin numerona lipun takana — ilman sitä luku ei kerro
-   * kuinka kaukana maali on. */
+
+  /* Pisteraja lipun takana — ilman sitä luku ei kerro kuinka kaukana maali on. */
   const raja = document.createElement('div');
   raja.className = 'basso-raja';
   raja.setAttribute('aria-label', t('as.pisteraja') + ': ' + basso.tavoite);
   raja.innerHTML = '<span aria-hidden="true">🏁</span><b>' + basso.tavoite + '</b>';
   sailio.appendChild(raja);
+
   const jatko = document.getElementById('uudelleen');
   if (jatko) {
     jatko.setAttribute('aria-label', t(basso.voittaja === null && !tila.keskeytetty
@@ -500,14 +540,9 @@ document.addEventListener('DOMContentLoaded', function () {
     bassoAloitaKierros();
   };
 
-  /* Ei alkuvalikkoa kokeilusivulla: ⌂ vie Pizza Partyn valikkoon. Repossa
-   * Party on samassa kansiossa; pizzalove.fi:n testipolulla se on
-   * /pizzaparty/, koska testikansioon kopioidaan vain Basso. */
-  const partyn = /\/pelimuodot-testi\//.test(location.pathname) ? '../pizzaparty/' : './';
-  ['taukoValikkoon', 'tulosValikkoon'].forEach(function (id) {
-    const n = document.getElementById(id);
-    if (n) n.onclick = function () { location.assign(partyn); };
-  });
+  /* ⌂-napit (tulos ja tauko) ovat basso.html:ssä piilossa: Bassolla ei ole
+   * omaa valikkoa, ja Partyn valikkoon vievä nappi heitti pelaajan pois
+   * pelistä (Marko 6.10.2026). */
 
   /* Vahti (sama henki kuin peli.js:n tarkistaKytkennat): Basso nojaa
    * peli.js:n nimiin, ja kadonnut nimi on muuten hiljainen. */
