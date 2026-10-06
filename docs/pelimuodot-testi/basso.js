@@ -47,6 +47,12 @@ let bassoValahdysAjastin = null;
  * apinan vuorolla null, ettei edellisen pelaajan käsi jää muiden nähtäväksi. */
 let bassoKatsoja = 0;
 
+/* VERKKOPELI (basso-verkko.js asettaa, 6.10.2026). null = peli tällä
+ * laitteella. Muuten { oma, varit, perustaja, laheta(), seuraava() }:
+ * oma käsi näkyy aina, muiden ei koskaan; siirto lähetetään palvelimelle
+ * heti kun säännöt hyväksyivät sen. */
+let bassoVerkossa = null;
+
 function bassoLataaAsetukset() {
   let a = null;
   try { a = JSON.parse(localStorage.getItem(BASSO_ASETUSAVAIN) || 'null'); } catch (e) { a = null; }
@@ -113,6 +119,7 @@ function bassoIhmisia() {
 
 /* Värit pelaajajärjestyksessä: ihmiset omillaan, apinat muista. */
 function bassoVarit() {
+  if (bassoVerkossa) return bassoVerkossa.varit.map(bassoVari);
   /* ⚠️ Käynnissä olevassa ottelussa voi olla ERI määrä ihmisiä kuin
    * asetuksissa (määrä vaihtuu vasta seuraavasta ottelusta), joten puuttuva
    * ihmisen väri otetaan samasta jonosta kuin apinoiden. */
@@ -131,6 +138,7 @@ function bassoNimi(i) {
   let h = 0, a = 0;
   for (let j = 0; j < i; j++) { if (bassoOnIhminen(j)) h++; else a++; }
   if (!bassoOnIhminen(i)) return t('basso.apina', { n: a + 1 });
+  if (bassoVerkossa && i === bassoVerkossa.oma) return t('basso.sina');
   return bassoIhmisia() > 1 ? t('pelaaja.nimi', { n: h + 1 }) : t('basso.sina');
 }
 
@@ -190,11 +198,18 @@ function aloitaPeli() {
 }
 
 function bassoAloitaKierros() {
+  bassoUusiKierros(basso);
+  bassoNaytaKierros();
+}
+
+/* Kierroksen NÄYTTÖ ilman jakoa: verkkopelissä jaon tekee perustajan laite,
+ * ja muut laitteet saavat valmiin kierroksen palvelimelta. */
+function bassoNaytaKierros() {
   pysaytaKaikkiAjastimet();
   bassoJuhlaKiinni();
   bassoVaihtoKiinni();
-  bassoUusiKierros(basso);
-  bassoKatsoja = bassoIhmisia() > 1 ? null : basso.pelaajat.map(function (p) { return p.laji; }).indexOf('ihminen');
+  bassoKatsoja = bassoVerkossa ? bassoVerkossa.oma
+    : bassoIhmisia() > 1 ? null : basso.pelaajat.map(function (p) { return p.laji; }).indexOf('ihminen');
   tila.kaynnissa = true;
   tila.keskeytetty = false;
   tila.tauko = null;
@@ -236,6 +251,18 @@ function bassoVuoro() {
   if (k.voittaja !== null) return;
   tila.vaihe = 'valinta';
   tila.ohitettu = false;
+  /* VERKOSSA: oma käsi näkyy aina, muiden ei koskaan; muiden vuorolla
+   * odotetaan palvelinta (basso-verkko.js). Ei vaihtoruutua, ei apinoita. */
+  if (bassoVerkossa) {
+    bassoKatsoja = bassoVerkossa.oma;
+    bassoSynkka();
+    tila.lukossa = k.vuorossa !== bassoVerkossa.oma;
+    tila.paljastettu = Date.now();
+    tila.pelaajanAika = null;
+    piirraKaikki();
+    piirraPisteet();
+    return;
+  }
   const monta = bassoIhmisia() > 1;
   if (bassoOnIhminen(k.vuorossa)) {
     /* Vuoro siirtyy toiselle ihmiselle: kortit piiloon ja vaihtoruutu. */
@@ -376,7 +403,12 @@ function enOsaa() {
   tila.lukossa = true;
   tila.ohitettu = true;
   piirraPizza();
-  const o = bassoOhita(basso, bassoKatsoja);
+  const kuka = bassoKatsoja;
+  const o = bassoOhita(basso, kuka);
+  if (bassoVerkossa) {
+    basso.viime = { tapa: 'nosti', kuka: kuka, nosti: !!o.nosti, uusiPizza: !!o.uusiPizza };
+    bassoVerkossa.laheta();
+  }
   /* Nostettu kortti tulee käteen selkäpuoli ylöspäin ja kääntyy
    * (peli.js piirraKasi) — pelaaja näkee että pakasta TULI kortti. */
   tila.uudet = o.nosti ? [o.nosti] : [];
@@ -407,6 +439,12 @@ function tarkistaLasku() {
     return false;
   }
   tila.lukossa = true;
+  if (bassoVerkossa) {
+    basso.viime = { tapa: 'pelasi', kuka: kuka, vastaus: vastaus,
+      kortit: r.pelatut.map(function (x) { return x.id; }),
+      pizza: bassoPizzaId(tila.pizza), pizzaa: !!r.pizzaa, voitto: !!r.voitto };
+    bassoVerkossa.laheta();
+  }
   /* ⚠️ Vastaus on rakennettu ENNEN nollausta: nollaaValinta tyhjentää X-kortin
    * arvon, ja säännöt lukevat arvon vastauksesta eivätkä kortista. */
   nollaaValinta();
@@ -592,6 +630,10 @@ function piirraTulos() {
   bassoPiirraKisa(varit);
 
   const jatko = document.getElementById('uudelleen');
+  /* Verkossa seuraavan kierroksen jakaa perustaja; muut odottavat ⏳. */
+  const odota = document.getElementById('bassoOdota');
+  if (jatko) jatko.hidden = !!bassoVerkossa && !bassoVerkossa.perustaja;
+  if (odota) odota.hidden = !bassoVerkossa || bassoVerkossa.perustaja;
   if (jatko) {
     jatko.setAttribute('aria-label', t(basso.voittaja === null && !tila.keskeytetty
       ? 'basso.seuraava' : 'tulos.uudelleen'));
@@ -600,7 +642,9 @@ function piirraTulos() {
    * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
   requestAnimationFrame(bassoLevitaViuhkat);
   /* Konfetti kun IHMINEN voitti kierroksen (kuka tahansa ihmisistä). */
-  if (k && k.voittaja !== null && bassoOnIhminen(k.voittaja)) bassoKonfetti();
+  /* Verkossa kaikki ovat ihmisiä: konfetti vain omalle voitolle. */
+  if (k && k.voittaja !== null && (bassoVerkossa ? k.voittaja === bassoVerkossa.oma
+    : bassoOnIhminen(k.voittaja))) bassoKonfetti();
   /* Ottelun voitto: juhla kerran per ottelu — piirraTulos ajetaan myös
    * värin vaihdossa, eikä juhla saa toistua siitä. */
   if (basso.voittaja !== null && !basso.juhlittu) {
@@ -882,6 +926,7 @@ function bassoPiirraAsetukset() {
 function bassoAsetuksetSuljettu() {
   if (!bassoAsetusMuuttui) return;
   bassoAsetusMuuttui = false;
+  if (bassoVerkossa) return;           // verkkopelin kokoonpano on huoneen
   aloitaPeli();
 }
 
@@ -923,6 +968,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * päättyi tai keskeytettiin. */
   const jatko = document.getElementById('uudelleen');
   if (jatko) jatko.onclick = function () {
+    if (bassoVerkossa) return bassoVerkossa.seuraava();
     if (!basso || basso.voittaja !== null || tila.keskeytetty) return aloitaPeli();
     bassoAloitaKierros();
   };

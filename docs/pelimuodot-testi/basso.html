@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261006j">
+<link rel="stylesheet" href="basso.css?v=20261006k">
 </head>
 <body>
 
@@ -129,6 +129,7 @@
       <img src="kuvat/apina.webp?v=20260910a" alt="">
       <span class="apinanappi-teksti" aria-hidden="true">▶</span>
     </button>
+    <span id="bassoOdota" class="basso-odota" hidden role="status" data-ta="verkko.odota">⏳</span>
     <button id="asetuksiin" class="kuvake-nappi" data-ta="tulos.asetukset" aria-label="Asetukset">⚙</button>
     <button id="tulosValikkoon" class="kuvake-nappi" hidden data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
   </div>
@@ -179,6 +180,9 @@
            target="_blank" rel="noopener" data-ta="as.kauppaAria">
           <span data-t="as.kauppa">Kauppaan</span>
           <img class="as-kotelo" src="kuvat/kotelo.webp?v=20260911a" alt=""></a>
+        <!-- Verkkopelissä: perustaja lopettaa pelin kaikilta, muut poistuvat. -->
+        <button class="as-rivi" id="asVerkkoLopeta" hidden>
+          <span id="asVerkkoLopetaTeksti"></span><b class="as-arvo"></b></button>
         <a class="as-rivi" id="asSivustolle" href="../">
           <span data-t="valikko.sivustolle">Takaisin sivustolle</span><b class="as-arvo"></b></a>
       </nav>
@@ -389,6 +393,56 @@
   <span id="bassoJuhlaHahmo" class="basso-juhla-hahmo"></span>
 </div>
 
+<!-- ALKUVALIKKO JA VERKKOPELI (basso-verkko.js, Marko 6.10.2026: «aloita se
+     netissä pelaaminen ihmistä vastaan»). Rakenne ja tekstit kuten Partyn
+     alkuvalikossa. Valikossa saa olla tekstiä; pelinäkymässä ei. -->
+<div id="bassoValikko" class="peite" hidden>
+  <div class="tauko-laatikko verkko-laatikko valikko-laatikko">
+    <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
+    <div class="verkko-osa" data-osa="paa">
+      <button id="bvPelaa" type="button" class="as-valinta"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
+      <button id="bvMoninpeli" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
+    </div>
+    <div class="verkko-osa" data-osa="moninpeli" hidden>
+      <button id="bvLuoAvaa" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>
+      <button id="bvLiityAvaa" type="button" class="as-valinta"><b data-t="valikko.liity"></b><small data-t="valikko.liitySelite"></small></button>
+      <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
+    </div>
+    <!-- Luo: väri ensin. Nimeä ei kysytä: pelaajan tunnistaa väristä. -->
+    <div class="verkko-osa" data-osa="luo" hidden>
+      <b class="bv-otsikko" data-t="bverkko.vari"></b>
+      <div id="bvLuoVarit" class="basso-varit"></div>
+      <button id="bvLuo" type="button" class="iso-nappi" data-t="isanta.luo"></button>
+      <p class="verkko-virhe bv-virhe" hidden></p>
+      <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
+    </div>
+    <div class="verkko-osa" data-osa="koodi" hidden>
+      <input id="bvKoodi" class="verkko-kentta" inputmode="numeric" pattern="[0-9]*" maxlength="4"
+             autocomplete="off" data-tp="verkko.koodi" data-ta="verkko.koodi">
+      <button id="bvKoodiJatka" type="button" class="iso-nappi" data-t="bverkko.jatka"></button>
+      <p class="verkko-virhe bv-virhe" hidden></p>
+      <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
+    </div>
+    <div class="verkko-osa" data-osa="liity" hidden>
+      <b class="bv-otsikko" data-t="bverkko.vari"></b>
+      <div id="bvLiityVarit" class="basso-varit"></div>
+      <p class="verkko-virhe bv-virhe" hidden></p>
+      <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
+    </div>
+    <!-- Aula: koodi isona + QR, liittyneet hahmoina. Perustaja aloittaa. -->
+    <div class="verkko-osa" data-osa="aula" hidden>
+      <div id="bvAulaKoodi" class="verkko-isanta-koodi" data-ta="isanta.koodiAria"></div>
+      <div id="bvAulaQr" class="verkko-isanta-qr" data-ta="isanta.qrAria"></div>
+      <div id="bvAulaPelaajat" class="bv-pelaajat"></div>
+      <button id="bvAloita" type="button" class="iso-nappi" data-t="isanta.aloita"></button>
+      <p id="bvAulaOdota" class="verkko-tilanne" data-t="bverkko.odotaPelaajia"></p>
+      <p class="verkko-virhe bv-virhe" hidden></p>
+      <button id="bvAulaPois" type="button" class="toinen-nappi"></button>
+    </div>
+  </div>
+</div>
+<p id="bvViesti" class="bv-viesti" hidden role="status"></p>
+
 <!-- VUORONVAIHTO SAMALLA LAITTEELLA: seuraavan pelaajan väri ja hahmo koko
      ruudulla, kortit piilossa kunnes hän napauttaa. Ei tekstiä. -->
 <div id="bassoVaihto" class="basso-vaihto" hidden role="button" tabindex="0">
@@ -401,7 +455,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261006g"></script>
+<script src="kielet.js?v=20261006h"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="ratkoja.js?v=20261006a"></script>
 <script src="laskin.js?v=20260909c"></script>
@@ -410,7 +464,9 @@
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
-<script src="basso-saannot.js?v=20261006a"></script>
-<script src="basso.js?v=20261006k"></script>
+<script src="basso-saannot.js?v=20261006b"></script>
+<script src="basso.js?v=20261006l"></script>
+<script src="qr.js?v=20260916a"></script>
+<script src="basso-verkko.js?v=20261006a"></script>
 </body>
 </html>

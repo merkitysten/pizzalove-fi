@@ -230,6 +230,30 @@
 .basso-vari-valinta:disabled{opacity:.25;cursor:default}
 .as-arvo .basso-vari-pallo + .basso-vari-pallo{margin-left:4px}
 
+/* --- VERKKOPELI: valikko, aula ja ilmoitukset (basso-verkko.js) ---
+ * Laatikko, napit ja kentät ovat Partyn alkuvalikon luokkia (peli.css);
+ * tässä vain Basson omat lisät. */
+.bv-otsikko{display:block;text-align:center;font-size:17px;margin:2px 0 4px}
+#bassoValikko .basso-varit{padding:4px 0 8px}
+#bassoValikko .basso-vari-valinta .basso-hahmo{--koko:44px}
+.bv-pelaajat{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:48px}
+.bv-pelaajat .basso-hahmo{--koko:46px}
+.bv-pelaajat .basso-hahmo.oma{box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--ink)}
+/* Ilmoitus ruudun yläreunassa (yhteyskatkos, peli päättyi). */
+.bv-viesti{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 8px);left:50%;transform:translateX(-50%);
+  z-index:80;max-width:min(92vw, 420px);margin:0;padding:8px 14px;border-radius:12px;
+  background:var(--ink);color:var(--ground);font-size:15px;text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.bv-viesti[hidden]{display:none}
+/* Verkossa ei ole taukoa (peli.js saakoPitaaTauon), joten yläkulman nappi
+ * näkyy vain lausekevaiheessa, jossa se ottaa kortit takaisin. */
+.basso-verkossa #peliRuutu:not(.selitys) #alusta{visibility:hidden}
+/* Tulosruudulla muut kuin perustaja odottavat seuraavaa jakoa. */
+.basso-odota{font-size:clamp(40px, 8vh, 64px);line-height:1;animation:odota-kaanto 2s ease-in-out infinite}
+.basso-odota[hidden]{display:none}
+@keyframes odota-kaanto{0%,40%{transform:rotate(0)} 50%,90%{transform:rotate(180deg)} 100%{transform:rotate(180deg)}}
+@media (prefers-reduced-motion: reduce){.basso-odota{animation:none}}
+
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
  * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Palli vasemmalle,
  * kisa ja napit oikealle. ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa

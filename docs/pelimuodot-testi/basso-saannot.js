@@ -218,3 +218,79 @@ function bassoApinanVastaus(ottelu, i) {
     ryhmat: r.ryhma ? [r.ryhma] : [],
   };
 }
+
+/* ============================================================
+ * SARJALLISTUS VERKKOPELIÄ VARTEN (6.10.2026, basso-huone.php)
+ *
+ * Kortit kulkevat NUMEROINA: täytekortti = sen `id` (0–57, taytepakka()-
+ * järjestys), pizza = paikka pizzapakka()-järjestyksessä (0–41). Molemmat
+ * pakat generoidaan aina samassa järjestyksessä (kortit.js tarkistaa sen),
+ * joten numero riittää ja tila on ~600 tavua eikä ~12 kt.
+ *
+ * Palvelin lukee tilasta vain `vuorossa` ja `kierrosOhi`; kaikki muu on sille
+ * läpinäkymätöntä. `viime` kertoo muille laitteille mitä juuri tapahtui
+ * (näytetään kuten apinan siirto).
+ *
+ * ⚠️ X-kortin arvo ei kulje: levossa olevan X:n arvo on aina null
+ * (bassoPelaa nollaa sen), ja pelatun arvo on `viime.vastaus`ssa.
+ * ============================================================ */
+function bassoPizzaId(pizza) {
+  const P = pizzapakka();
+  for (let i = 0; i < P.length; i++) if (P[i].kuva === pizza.kuva) return i;
+  return -1;
+}
+
+function bassoSarjallista(ottelu) {
+  const k = ottelu.kierros;
+  const id = function (kortti) { return kortti.id; };
+  const pid = bassoPizzaId;
+  return {
+    v: 1,
+    vuorossa: k && k.voittaja === null ? k.vuorossa : null,
+    kierrosOhi: !k || k.voittaja !== null,
+    tavoite: ottelu.tavoite,
+    kierroksia: ottelu.kierroksia,
+    aloittaja: ottelu.aloittaja,
+    voittaja: ottelu.voittaja,
+    pelaajat: ottelu.pelaajat.map(function (p) {
+      return { laji: p.laji, pisteet: p.pisteet, valmistetut: p.valmistetut.map(pid) };
+    }),
+    kierros: k ? {
+      pizzat: k.pizzat.map(pid), poydassa: k.poydassa.map(pid),
+      nosto: k.nosto.map(id), poistetut: k.poistetut.map(id),
+      kasit: k.kasit.map(function (kasi) { return kasi.map(id); }),
+      vuorossa: k.vuorossa,
+      valmistetut: k.valmistetut.map(function (l) { return l.map(pid); }),
+      tyhjiaOhituksia: k.tyhjiaOhituksia, kierratyksia: k.kierratyksia,
+      voittaja: k.voittaja, pisteet: k.pisteet,
+    } : null,
+    viime: ottelu.viime || null,
+  };
+}
+
+/* Takaisin olioiksi. `sallitut` tulee huoneen asetuksista, ei tilasta. */
+function bassoPalauta(s, sallitut) {
+  const T = taytepakka(), P = pizzapakka();
+  const kortti = function (i) { return T[i]; };
+  const pizza = function (i) { return P[i]; };
+  const ottelu = {
+    pelaajat: s.pelaajat.map(function (p) {
+      return { laji: p.laji, pisteet: p.pisteet, valmistetut: p.valmistetut.map(pizza) };
+    }),
+    tavoite: s.tavoite, sallitut: sallitut, kierroksia: s.kierroksia,
+    aloittaja: s.aloittaja, kierros: null, voittaja: s.voittaja, viime: s.viime || null,
+  };
+  const k = s.kierros;
+  if (k) {
+    ottelu.kierros = {
+      pizzat: k.pizzat.map(pizza), poydassa: k.poydassa.map(pizza),
+      nosto: k.nosto.map(kortti), poistetut: k.poistetut.map(kortti),
+      kasit: k.kasit.map(function (kasi) { return kasi.map(kortti); }),
+      vuorossa: k.vuorossa,
+      valmistetut: k.valmistetut.map(function (l) { return l.map(pizza); }),
+      tyhjiaOhituksia: k.tyhjiaOhituksia, kierratyksia: k.kierratyksia,
+      voittaja: k.voittaja, pisteet: k.pisteet,
+    };
+  }
+  return ottelu;
+}
