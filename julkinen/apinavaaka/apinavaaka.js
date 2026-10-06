@@ -340,7 +340,7 @@
 
       // vaaka
       var kulma = 0;
-      if (!tila.siirretty && (tila.oikea.length || tila.vasen.length)) {
+      if (!tila.siirretty && heitetty) {          // punnukset painavat heti heiton jälkeen
         kulma = Math.max(-MAKSIMIKULMA, Math.min(MAKSIMIKULMA, (oikeaSumma - vasenSumma) * 2.2));
       }
       var muunnos = 'rotate(' + kulma + 'deg)';
@@ -374,7 +374,7 @@
       lukuV.textContent = nayta ? [noppa].concat(tila.vasen).join(' + ') : '';
       lukuO.textContent = nayta && tila.oikea.length ? tila.oikea.join(' + ') : '';
       lukuV.hidden = !lukuV.textContent; lukuO.hidden = !lukuO.textContent;
-      var m = !nayta || !tila.oikea.length ? '' : vasenSumma === oikeaSumma ? '=' : vasenSumma < oikeaSumma ? '<' : '>';
+      var m = !nayta ? '' : vasenSumma === oikeaSumma ? '=' : vasenSumma < oikeaSumma ? '<' : '>';
       kieliEl.style.transform = 'rotate(' + (m ? KIELI_KULMA[m] : 0) + 'deg)';
       juuri.classList.toggle('av--valo', tila.valmis || tila.siirretty);
 
