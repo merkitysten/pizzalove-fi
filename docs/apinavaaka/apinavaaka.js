@@ -201,44 +201,21 @@
     otsake.appendChild(tehtavaRivi);
     var noppaEl = el('button', 'av__noppa');
     noppaEl.type = 'button';
-    noppaEl.innerHTML = '<span class="av__noppa-nimi">' + t.noppa + '</span>' +
-      '<svg viewBox="0 0 100 100" aria-hidden="true"><g class="av__d10">' +
-      '<path class="av__d10-runko" d="M50 3 94 40 50 97 6 40Z"/>' +
-      '<path class="av__d10-varjo" d="M6 40 26 50 50 64 50 97Z"/><path class="av__d10-varjo2" d="M94 40 74 50 50 64 50 97Z"/>' +
-      '<path class="av__d10-viiva" d="M50 3 26 50 50 64 74 50Z M26 50 6 40 M74 50 94 40 M50 64 50 97"/>' +
-      '<text x="50" y="47" text-anchor="middle" dominant-baseline="middle"></text></g></svg>';
-    var noppaTeksti = noppaEl.querySelector('text'), noppaRunko = noppaEl.querySelector('.av__d10-runko');
+    // 10-tahkoinen noppa kolmiulotteisena (noppa3d.js), tahkoina Merkitysten-nopan oikeat tahkokuvat.
+    noppaEl.innerHTML = '<span class="av__noppa-nimi">' + t.noppa + '</span><span class="av__d10"></span>';
+    var noppa3d = window.Noppa3D(noppaEl.querySelector('.av__d10'), KANSIO + 'noppa/');
     noppaEl.addEventListener('click', function () { heita(); });
     otsake.appendChild(noppaEl);
-    var TUMMA_TEKSTI = [3, 9, 10];   // vaaleat tahkot: musta numero
-    function naytaNoppa(n) {
-      noppaTeksti.textContent = n == null ? '?' : n;
-      noppaRunko.style.fill = n == null ? '' : VARIT[n - 1];
-      noppaTeksti.style.fill = n == null || TUMMA_TEKSTI.indexOf(n) >= 0 ? '#1A1A1A' : '#fff';
-    }
     var pyorii = false;
-    function heita(lopuksi) {
+    function heita() {
       if (pyorii || tila.heitetty) return;
       pyorii = true;
       noppaEl.classList.remove('av__noppa--odottaa');
-      noppaEl.classList.add('av__noppa--pyorii');
-      var tulos = tila.tehtava.noppa, viive = 35, kertaa = 0, ed = 0;
-      (function vaihda() {
-        if (viive > 200 || vahennaLiike) {
-          naytaNoppa(tulos);
-          noppaEl.classList.remove('av__noppa--pyorii');
-          noppaEl.classList.add('av__noppa--laskeutui');
-          setTimeout(function () { noppaEl.classList.remove('av__noppa--laskeutui'); }, 450);
-          pyorii = false; tila.heitetty = true; tila.uusiHeitto = true;
-          piirra();
-          if (lopuksi) lopuksi();
-          return;
-        }
-        var n; do { n = 1 + Math.floor(Math.random() * 10); } while (n === ed);
-        ed = n; naytaNoppa(n); kertaa++;
-        viive *= 1.13;
-        setTimeout(vaihda, viive);
-      })();
+      vihje.textContent = '';
+      noppa3d.heita(tila.tehtava.noppa, function () {
+        pyorii = false; tila.heitetty = true; tila.uusiHeitto = true;
+        piirra();
+      }, vahennaLiike);
     }
     juuri.appendChild(otsake);
 
@@ -302,7 +279,7 @@
       tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = teht.linjasto.indexOf(i) >= 0 ? 'linjasto' : 'varasto';
       tila.oikea = []; tila.vasen = []; tila.valmis = false; tila.siirretty = false; tila.viesti = '';
-      tila.heitetty = false; naytaNoppa(null); noppaEl.classList.add('av__noppa--odottaa');
+      tila.heitetty = false; noppa3d.odota(); noppaEl.classList.add('av__noppa--odottaa');
       piirra();
     }
 

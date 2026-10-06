@@ -8,18 +8,11 @@
 .av__noppa:disabled{cursor:default}
 .av__noppa:focus-visible{outline:3px solid var(--orange,#F47920);outline-offset:4px;border-radius:12px}
 .av__noppa-nimi{font-size:13px;font-weight:600;color:var(--soft,#6E6357)}
-.av__noppa svg{width:68px;height:68px;overflow:visible;filter:drop-shadow(0 3px 4px rgba(60,30,0,.25))}
-.av__d10{transform-origin:50% 50%;transform-box:fill-box}
-.av__d10-runko{fill:var(--orange,#F47920);stroke:#1A1A1A;stroke-width:3;stroke-linejoin:round;transition:fill .08s}
-.av__d10-varjo{fill:rgba(0,0,0,.18)}.av__d10-varjo2{fill:rgba(0,0,0,.08)}
-.av__d10-viiva{fill:none;stroke:#1A1A1A;stroke-width:2.2;stroke-linejoin:round;opacity:.75}
-.av__noppa text{font-family:Poppins,sans-serif;font-weight:800;font-size:30px}
-.av__noppa--odottaa .av__d10{animation:av-odota 1.4s ease-in-out infinite}
-@keyframes av-odota{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-12deg) scale(1.08)}30%{transform:rotate(10deg) scale(1.08)}45%{transform:rotate(0) scale(1)}}
-.av__noppa--pyorii .av__d10{animation:av-pyori .32s linear infinite}
-@keyframes av-pyori{0%{transform:translateY(0) rotate(0) scale(1.1)}50%{transform:translateY(-14%) rotate(180deg) scale(1.2)}100%{transform:translateY(0) rotate(360deg) scale(1.1)}}
-.av__noppa--laskeutui .av__d10{animation:av-laskeudu .45s cubic-bezier(.3,1.8,.5,1)}
-@keyframes av-laskeudu{0%{transform:scale(1.35) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
+.av__d10{display:block;width:80px;height:84px}
+.n3d{position:relative;perspective:420px}
+.n3d__kappale{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.n3d__tahko{position:absolute;left:0;top:0;transform-origin:0 0;backface-visibility:hidden;-webkit-backface-visibility:hidden;max-width:none}
+.av__noppa--odottaa .av__noppa-nimi{color:var(--deep,#C2580C)}
 .av__vihje{font-size:14.5px;margin:8px 0 0}
 
 .av__nayttamo{position:relative;width:100%;max-width:420px;margin:0 auto;--pala:8px;--leveys:34px}
