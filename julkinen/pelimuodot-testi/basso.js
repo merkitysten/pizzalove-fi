@@ -498,13 +498,16 @@ function piirraTulos() {
 /* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
  * sinne kohti ja samalla niiden alla palkki kasvaa»). Rata per pelaaja
  * pelaajajärjestyksessä, hahmo palkin kärjessä ja pisteet sen vieressä,
- * maaliviiva 🏁 pisterajan kohdalla. Kierroksen voittaja etenee
+ * maaliviiva pisterajan kohdalla ja sen päällä pizzapala (Marko 6.10.2026:
+ * «Kannattaisiko tätä kuvaa käyttää siellä maalissa?» — juostaan pizzalle).
+ * Kierroksen voittaja etenee
  * animaationa kierroksen pisteiden verran. Ylitys pysähtyy maaliin. */
 function bassoPiirraKisa(varit) {
   const kisa = document.getElementById('bassoKisa');
   if (!kisa) return;
   const k = basso.kierros, tavoite = basso.tavoite;
-  kisa.innerHTML = '<div class="kisa-maali" aria-hidden="true"><span>🏁</span><b>' + tavoite + '</b></div>';
+  kisa.innerHTML = '<div class="kisa-maali" aria-hidden="true">' +
+    '<img src="kuvat/pizzapala.webp?v=20261006a" alt=""><b>' + tavoite + '</b></div>';
   kisa.setAttribute('aria-label', t('as.pisteraja') + ': ' + tavoite);
   const siirrot = [];
   basso.pelaajat.forEach(function (p, i) {

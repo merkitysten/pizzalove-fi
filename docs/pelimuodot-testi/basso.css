@@ -131,15 +131,20 @@
 
 /* --- JUOKSUKILPAILU kohti pisterajaa --- */
 .basso-kisa{--rata-alku:22px;--rata-loppu:58px;position:relative;width:min(100%, 560px);
-  padding-top:30px}
+  padding-top:clamp(56px, 9vh, 76px)}
 .basso-kisa:empty{display:none}
 /* Maaliviiva: ruutukuvio radan loppukohdassa, pisteraja sen yläpuolella. */
-.basso-kisa::after{content:"";position:absolute;top:28px;bottom:0;right:var(--rata-loppu);width:8px;
-  transform:translateX(50%);border-radius:2px;
+.basso-kisa::after{content:"";position:absolute;top:calc(clamp(56px, 9vh, 76px) - 4px);bottom:0;
+  right:var(--rata-loppu);width:8px;transform:translateX(50%);border-radius:2px;
   background:repeating-conic-gradient(var(--ink) 0 25%, #fff 0 50%) 0 0/8px 8px}
-.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);transform:translateX(50%);
-  display:flex;align-items:center;gap:4px;font-size:18px;white-space:nowrap}
-.kisa-maali b{font-size:20px;color:var(--ink)}
+/* Maalissa pizzapala keskitettynä maaliviivan päälle, pisteraja sen oikealla.
+ * Nollaleveä ankkuri viivan kohdalla: pala ja luku asemoidaan siitä erikseen,
+ * jottei luvun leveys siirrä palaa viivalta. */
+.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);width:0;height:clamp(54px, 8.6vh, 74px)}
+.kisa-maali img{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none;display:block;
+  transform:translateX(-50%) rotate(-12deg);filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
+.kisa-maali b{position:absolute;top:2px;left:calc(clamp(54px, 8.6vh, 74px) * .36 + 4px);
+  font-size:20px;color:var(--ink)}
 .kisa-rata{position:relative;height:clamp(38px, 6.5vh, 48px)}
 /* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
 .kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
