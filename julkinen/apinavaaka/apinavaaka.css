@@ -1,24 +1,39 @@
-/* Apinavaaka-pikkupeli. Värit tulevat sivuston tyyli.css:n muuttujista. */
-.av{background:var(--surface,#fff);border:1px solid var(--line,#E7DCCA);border-radius:var(--radius,18px);
-  padding:14px 14px 16px;margin:16px 0;box-shadow:var(--shadow,none);-webkit-user-select:none;user-select:none}
-.av__otsake{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.av__tehtava{margin:0;font-size:14px;color:var(--soft,#6E6357)}
-.av__tehtava b{color:var(--ink,#1A1A1A)}
-.av__noppa{display:flex;align-items:center;gap:8px;flex:none;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit}
-.av__noppa:disabled{cursor:default}
-.av__noppa:focus-visible{outline:3px solid var(--orange,#F47920);outline-offset:4px;border-radius:12px}
-.av__noppa-nimi{font-size:13px;font-weight:600;color:var(--soft,#6E6357)}
-.av__d10{display:block;width:80px;height:84px}
-.n3d{position:relative;perspective:420px}
-.n3d__kappale{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
-.n3d__tahko{position:absolute;left:0;top:0;transform-origin:0 0;backface-visibility:hidden;-webkit-backface-visibility:hidden;max-width:none}
-.av__noppa--odottaa .av__noppa-nimi{color:var(--deep,#C2580C)}
-.av__vihje{font-size:14.5px;margin:8px 0 0}
-.av__vihje--havikki{background:var(--tint,#FBE3D2);border-radius:10px;padding:8px 12px;font-weight:600}
-.av__hylly-nimi b{color:var(--ink,#1A1A1A);margin-left:4px}
+/* Apinavaaka-pikkupeli. Mahtuu yhdelle puhelimen ruudulle (~560 px korkea, 360 px leveä).
+ * Värit tulevat sivuston tyyli.css:n muuttujista, oletukset tässä. */
+.av{position:relative;max-width:440px;margin:0 auto;background:var(--surface,#fff);border:1px solid var(--line,#E7DCCA);
+  border-radius:var(--radius,18px);padding:8px 10px 10px;box-shadow:var(--shadow,none);
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;font-family:Poppins,"Helvetica Neue",Arial,sans-serif}
+.av button{font:inherit;color:inherit}
 
-.av__nayttamo{position:relative;width:100%;max-width:420px;margin:0 auto;--pala:8px;--leveys:34px}
-.av__nayttamo img{position:absolute;height:auto;pointer-events:none;max-width:none}
+/* yläpalkki */
+.av__ylapalkki{display:grid;grid-template-columns:52px 1fr 80px;align-items:center;height:76px}
+.av__info{position:relative;width:48px;height:48px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:var(--warm,#FFF3E9);box-shadow:inset 0 0 0 2px var(--line,#E7DCCA)}
+.av__info img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.av__info span{position:absolute;right:-3px;top:-3px;width:20px;height:20px;border-radius:50%;background:var(--orange,#F47920);
+  color:#1A1A1A;font-weight:800;font-size:13px;line-height:20px;text-align:center}
+.av__pisteet{display:flex;justify-content:center;gap:7px}
+.av__pisteet i{width:10px;height:10px;border-radius:50%;background:var(--line,#E7DCCA);transition:background .3s,transform .3s}
+.av__pisteet i.nyt{background:var(--orange,#F47920);transform:scale(1.3)}
+.av__pisteet i.tehty{background:var(--green,#2D5D3D)}
+.av__noppa{justify-self:end;border:0;background:none;padding:0;cursor:pointer;border-radius:16px}
+.av__noppa:disabled{cursor:default}
+.av__d10{display:block;width:80px;height:76px}
+.av__noppa--odottaa .av__d10{animation:av-kutsu 1.8s ease-in-out infinite}
+@keyframes av-kutsu{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.12)}90%{transform:scale(.97)}}
+.av--tonaisu{animation:av-tonaisu .4s ease!important}
+@keyframes av-tonaisu{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+
+/* 3D-noppa (noppa3d.js) */
+.n3d{position:relative;perspective:420px}
+.n3d__kappale{position:absolute;left:50%;top:46%;width:0;height:0;transform-style:preserve-3d}
+.n3d__tahko{position:absolute;left:0;top:0;transform-origin:0 0;backface-visibility:hidden;-webkit-backface-visibility:hidden;max-width:none}
+.n3d__varjo{position:absolute;left:50%;bottom:2px;width:46px;height:9px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(40,20,0,.55),rgba(40,20,0,0));transform:translateX(-50%)}
+
+/* näyttämö */
+.av__nayttamo{position:relative;width:100%;--pala:8px;--leveys:34px}
+.av__nayttamo>img{position:absolute;height:auto;pointer-events:none;max-width:none}
 .av__vasen,.av__oikea{transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
 .av__lamppu--paalla,.av__saihkeet{opacity:0;transition:opacity .3s}
 .av__saihkeet{transform:scale(.6);transition:opacity .3s,transform .5s cubic-bezier(.3,1.8,.5,1)}
@@ -40,30 +55,60 @@
 .av__uusi .av__torni i{animation:av-punnus .3s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i)*110ms)}
 @keyframes av-punnus{from{transform:translateY(-300%);opacity:0}}
 
-.av__yhtalo{display:flex;justify-content:center;align-items:center;gap:14px;font-size:22px;font-weight:800;
-  min-height:34px;margin-top:6px;font-variant-numeric:tabular-nums}
-.av__merkki{min-width:34px;font-family:system-ui,sans-serif;text-align:center;color:var(--soft,#6E6357)}
-.av__merkki--ok{color:var(--green,#2D5D3D)}
-.av__viesti{text-align:center;margin:4px 0 0;min-height:1.5em;font-weight:600;font-size:15px}
-.av__viesti--ok{color:var(--green,#2D5D3D)}
-.av__napit{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:8px}
-.av__napit:empty{display:none}
-.av__napit .nappi{border:0;cursor:pointer;font:inherit;font-weight:700}
+.av__luku{position:absolute;transform:translate(-50%,0);z-index:4;background:var(--surface,#fff);border-radius:999px;
+  padding:1px 10px;font-weight:800;font-size:clamp(16px,5vw,20px);font-variant-numeric:tabular-nums;white-space:nowrap;
+  box-shadow:0 1px 4px rgba(60,30,0,.25);transition:left .5s cubic-bezier(.3,1.5,.5,1),top .5s cubic-bezier(.3,1.5,.5,1)}
+.av__merkki{position:absolute;width:8%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;z-index:2;
+  box-shadow:0 0 0 3px #fff,0 0 12px 6px rgba(255,255,255,.9);animation:av-merkki 1.2s ease-in-out infinite;pointer-events:none}
+.av__merkki--ok{box-shadow:0 0 0 3px #FFDF00,0 0 14px 8px rgba(255,223,0,.9)}
+@keyframes av-merkki{50%{transform:translate(-50%,-50%) scale(1.15)}}
 
-.av__hyllyt{display:grid;gap:10px;margin-top:14px}
-.av__hylly{background:var(--warm,#FFF3E9);border-radius:14px;padding:8px 8px 6px}
+.av__juhla{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.3);opacity:0;z-index:6;
+  background:var(--orange,#F47920);color:#1A1A1A;font-weight:800;font-size:clamp(22px,7vw,30px);padding:8px 18px;border-radius:16px;
+  box-shadow:0 6px 20px rgba(60,30,0,.3);transition:transform .45s cubic-bezier(.3,1.8,.5,1),opacity .2s;pointer-events:none;white-space:nowrap}
+.av__juhla.on{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-4deg)}
+
+/* viestirivi */
+.av__rivi{height:48px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:16px;line-height:1.2;padding:0 6px}
+.av__rivi .nappi{border:0;cursor:pointer;font-weight:800;min-height:44px;animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes av-esiin{from{transform:scale(.6);opacity:0}}
+.av__rivi--ok{color:var(--green,#2D5D3D);font-size:20px}
+.av__rivi--havikki{color:var(--deep,#C2580C)}
+
+/* varasto ja linjasto */
+.av__hyllyt{display:grid;gap:6px}
+.av__hylly{background:var(--warm,#FFF3E9);border-radius:12px;padding:4px 6px 3px}
 .av__hylly--linjasto{background:var(--greenTint,#DCEBE0)}
-.av__hylly-nimi{display:block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--soft,#6E6357);margin:0 0 4px 4px}
-.av__paikat{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;align-items:end;--pala:5px}
-.av__paikka{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:80px;border-radius:8px}
-.av__paikka small{font-size:11px;font-weight:700;color:var(--soft,#6E6357);margin-top:3px}
-.av__paikka--tyhja::before{content:"";display:block;width:min(22px,70%);height:5px;border-radius:3px;border:1px dashed var(--line2,#D6C7AF)}
-.av__hylly-torni{display:flex;width:100%;justify-content:center;padding:4px 0;border:0;background:none;cursor:pointer;border-radius:8px}
-.av__hylly-torni:hover:not(:disabled){background:rgba(255,255,255,.6)}
-.av__hylly-torni:focus-visible,.av__pino-osa:focus-visible{outline:3px solid var(--orange,#F47920);outline-offset:2px}
+.av--havikki .av__hylly--linjasto{box-shadow:inset 0 0 0 2px var(--orange,#F47920)}
+.av__hylly-nimi{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--soft,#6E6357);margin:0 0 0 4px;line-height:1.4}
+.av__hylly-nimi b{color:var(--ink,#1A1A1A);margin-left:3px}
+.av__paikat{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;align-items:end;--pala:4px}
+.av__paikka{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:62px}
+.av__paikka small{font-size:10.5px;font-weight:700;color:var(--soft,#6E6357);line-height:1.2}
+.av__paikka--tyhja::before{content:"";display:block;width:16px;height:4px;border-radius:3px;border:1px dashed var(--line2,#D6C7AF);margin-bottom:2px}
+.av__hylly-torni{display:flex;width:100%;justify-content:center;padding:3px 0 2px;border:0;background:none;cursor:pointer;border-radius:8px}
+.av__hylly-torni:active:not(:disabled){transform:scale(.92)}
 .av__hylly-torni:disabled{cursor:default}
-.av__hylly-torni .av__torni i{width:20px}
-@media (max-width:380px){.av__hylly-torni .av__torni i{width:16px}}
-@media (min-width:600px){.av__paikat{--pala:6px}.av__paikka{min-height:92px}}
+.av__hylly-torni .av__torni i{width:18px}
+.av__hylly-torni:focus-visible,.av__pino-osa:focus-visible,.av__info:focus-visible,.av__noppa:focus-visible{outline:3px solid var(--orange,#F47920);outline-offset:2px}
+
+/* ohjeikkuna */
+.av__ikkuna{position:fixed;inset:0;z-index:100;background:rgba(20,12,4,.45);display:grid;place-items:center;padding:16px}
+.av__ikkuna[hidden]{display:none}
+.av__ikkuna-sisus{position:relative;background:var(--surface,#fff);border-radius:18px;max-width:380px;width:100%;max-height:90vh;overflow:auto;
+  padding:18px 18px 16px;box-shadow:0 12px 40px rgba(0,0,0,.3);font-size:15px;line-height:1.45;-webkit-user-select:text;user-select:text}
+.av__ikkuna-basso{float:right;width:64px;margin:0 22px 4px 8px}
+.av__ikkuna h2{margin:0 0 8px;font-size:21px}
+.av__ikkuna ol{padding-left:20px;margin:0 0 10px}
+.av__ikkuna li{margin:3px 0}
+.av__ikkuna p{margin:0 0 8px}
+.av__tavat{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0 0 10px;clear:both}
+.av__tavat dt{width:24px;height:24px;border-radius:50%;background:var(--orange,#F47920);color:#1A1A1A;font-weight:800;text-align:center;line-height:24px;font-size:13px}
+.av__tavat dd{margin:0;align-self:center}
+.av__ikkuna-napit{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.av__ikkuna-napit .nappi{border:0;cursor:pointer;font-weight:700;font-size:15px}
+.av__sulje{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:var(--warm,#FFF3E9);
+  font-size:24px;line-height:1;cursor:pointer}
+
 .av--ei-liiketta *{transition:none!important;animation:none!important}
 @media (prefers-color-scheme:dark){.av__torni i[style*="#090A0D"]{box-shadow:inset 0 0 0 1px #666}}
