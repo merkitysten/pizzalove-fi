@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<!-- ⚠️ maximum-scale=1 + user-scalable=no ON TASSA TOINEN VYO, EI AINOA.
+     Kaksoisnapautuksen zoomin torjuu ensisijaisesti peli.css:n
+     touch-action (jokaisessa napautuskohteessa erikseen — se ei periydy).
+     iOS Safari OHITTAA user-scalable=no:n tarkoituksella, mutta
+     kotivalikosta avatussa standalone-tilassa se noudattaa sita — ja
+     Android noudattaa aina. Peliin ei ole mitaan zoomattavaa. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<!-- ⚠️ Selain EI VOI piilottaa omia palkkejaan. Ainoa tapa saada ne pois on
+     että peli lisätään kotivalikkoon ("Lisää Koti-valikkoon"), jolloin nämä
+     kaksi riviä avaavat sen ilman selainkromia. Silloin turva-alueet eivät
+     enää ole nollia (iPhonessa ~34 pt alhaalla), ja asettelu ottaa sen
+     huomioon env(safe-area-inset-*):lla. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!-- KOTIVALIKON KUVAKE
+     ⚠️ iOS EI LUE manifestin ikoneita — se lukee vain apple-touch-iconin.
+     Android lukee vain manifestin. Molemmat tarvitaan, eivätkä ne korvaa
+     toisiaan.
+
+     ⚠️ JA IKONILLA ON ?v=-LEIMA SAMASTA SYYSTÄ KUIN KOODILLA, mutta
+     pahemmalla seurauksella: iOS pitää web-clip-ikoneista omaa
+     välimuistia jonka avain on URL, eikä se tyhjenny yksityisestä
+     tilasta, puhelimen uudelleenkäynnistyksestä eikä kuvakkeen
+     poistamisesta. Jos kuva vaihtuu, LEIMA ON NOSTETTAVA — muuten
+     muutos ei näy kenellekään joka on joskus käynyt sivulla.
+     (Mitattu Norsussa 25.8.2026.)
+
+     ⚠️ Tausta on umpinainen oranssi eikä läpinäkyvä: iOS laittaa
+     läpinäkyvän alle MUSTAN. Eikä kuvaa pyöristetä itse — iOS
+     pyöristää sen, ja valmiiksi pyöristetty saisi kaksi kulmaa. -->
+<link rel="apple-touch-icon" href="kuvat/ikoni-180.png?v=20260910a">
+<meta name="apple-mobile-web-app-title" content="Pizza Party">
+<link rel="manifest" href="manifest.json?v=20260910a">
+<meta name="theme-color" content="#FAF6EE">
+<title>Pizza Party — näin sitä pelataan</title>
+<meta name="description" content="Pizza Love -korttipelin Pizza Party selaimessa. Opi mekaniikka kahdessa minuutissa.">
+<link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="peli.css?v=20261006b">
+</head>
+<body>
+
+
+<!-- PELI -->
+<section id="peliRuutu" class="ruutu" hidden>
+  <!-- ⚠️ PISTEET EIVAT OLE TASSA PALKISSA (Marko 10.9.2026). Ne olivat
+       ylhaalla yksinpelissa ja alhaalla moninpelissa — sama tieto kahdessa
+       eri paikassa riippuen pelimuodosta, ja ylhaalla ahtaasti. Nyt
+       molemmat kayttavat samaa #pelaajarivi-rivia ruudun alalaidassa. -->
+  <header class="palkki">
+    <!-- Peruuta on vasemmassa ylakulmassa ja nakyy vain lausekevaiheessa:
+         valintavaiheessa ei ole mitaan peruttavaa. -->
+    <button id="alusta" class="kulmanappi" data-ta="palkki.alusta" aria-label="Ota kortit takaisin">&#8630;</button>
+    <!-- ⚠️ Pizzalaskuri poistettu: pizzat eivat lopu kesken, joten luku ei
+         kerro mitaan (Marko 9.9.2026). Taytepakka on palkki eika numero:
+         kortin selkapuolia tiiviissa rivissa, ja rivi lyhenee sita mukaa
+         kun kortteja jaetaan. Se on sama tieto ilman lukua. -->
+    <div class="jaljella" id="taytepalkki" data-ta="palkki.taytteita" aria-label="Täytekortteja jäljellä"></div>
+    <!-- Vain yhteispelissä (pelaaja.js täyttää): erän eteneminen ja omat
+         pisteet ruudun yläreunaan (Marko 12.9.2026). Yksinpelissä tässä on
+         täytepakka, ja pisteet ovat alarivin laatikoissa. -->
+    <div id="verkkoPalkki" class="verkko-palkki" hidden>
+      <span id="verkkoPalkkiKierros"></span>
+      <b id="verkkoPalkkiPisteet" data-ta="pisteet.omat"></b>
+    </div>
+    <button id="asetuksetAuki" class="kulmanappi" data-ta="palkki.asetukset" aria-label="Asetukset">&#9881;</button>
+  </header>
+
+  <div class="pelialue">
+    <div class="pizza-alue">
+      <div class="pizza-kortti" id="pizzaKortti" role="button" tabindex="0" aria-disabled="true">
+        <!-- ⚠️ EI ARVOMERKKIA PIZZAN PAALLE (Marko 11.9.2026): "Kortin
+             numero nakyy kortissa itsessaan, niin sita ei tarvitse
+             korostaa. Peli tuntuu liian laskemispelilta eika pizzan
+             tekemiselta." Arvo on painettuna kortin kulmiin, ja
+             ruudunlukijalle se on kuvan alt-tekstissa. -->
+        <img id="pizzaKuva" alt="">
+        <span id="pizzaSydan" class="pizza-sydan" hidden data-ta="pizza.sydan" aria-label="Sydänpizza, kaksi pistettä">♥2</span>
+        <span id="pinoMerkki" class="pino-merkki" hidden></span>
+      </div>
+    </div>
+
+    <div class="tyoalue">
+      <div class="lasku-alue" id="laskuAlue" hidden>
+          <div id="operaattorit" class="operaattorit">
+      <button class="op" data-op="+">+</button>
+      <button class="op" data-op="−">−</button>
+      <button class="op" data-op="×">×</button>
+      <button class="op" data-op="÷">÷</button>
+      <button class="op" data-op="^">x<sup>y</sup></button>
+      <button class="op op-log" data-op="log">log</button>
+      <button id="sulut" class="op op-sulut">( )</button>
+        </div>
+      </div>
+
+      <div id="kasi" class="kasi"></div>
+    </div>
+  </div>
+  <!-- MONINPELI: pelaajanapit. Jokainen pelaaja on apina omalla varillaan
+       (Markon tarkennus 9.9.2026: "pelaajakin on tavallaan apina").
+       Nappi on se jolla vastausvuoro varataan, joten se on iso ja
+       kaikkien ulottuvilla. Yksinpelissa rivi on piilossa. -->
+  <div id="pelaajarivi" class="pelaajarivi" hidden></div>
+  <div id="valahdys" class="valahdys"></div>
+</section>
+
+<!-- TULOS -->
+<section id="tulosRuutu" class="ruutu" hidden>
+  <!-- ⚠️ JS tayttaa taman molemmissa pelimuodoissa. Kaksi eri merkintaa
+       (yksin / moninpeli) olisi kaksi paikkaa joihin sama korjaus pitaisi
+       muistaa tehda. -->
+  <div class="tulos-pisteet" id="tulosPisteet"></div>
+
+  <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
+    <img src="kuvat/apina.webp?v=20260910a" alt="">
+    <span class="apinanappi-teksti" aria-hidden="true">▶</span>
+  </button>
+
+  <div class="aloitus-linkit">
+    <button id="asetuksiin" class="kuvake-nappi" data-ta="tulos.asetukset" aria-label="Asetukset">⚙</button>
+    <button id="tulosValikkoon" class="kuvake-nappi" data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
+  </div>
+</section>
+
+
+<!-- ASETUKSET — valikko, ei yksi lista.
+     ⚠️ Sivulla ei ole selittävää tekstiä. Jokainen selitys on i-napin takana
+     (.as-selite), koska teksti jota ei lueta vie tilan siltä valinnalta jota
+     ollaan tekemässä (Marko 9.9.2026). Valikkorivi näyttää valitun arvon,
+     mikä korvaa suurimman osan entisestä selitystekstistä. -->
+<div id="asetusPeite" class="peite" hidden>
+  <div class="asetus-laatikko" onclick="event.stopPropagation()">
+
+    <!-- 0 · VALIKKO -->
+    <section class="as-sivu" data-sivu="valikko">
+      <div class="as-ylapalkki">
+        <span class="as-kulma as-tyhja" aria-hidden="true"></span>
+        <span class="as-nimi" data-t="as.otsikko">Asetukset</span>
+        <button id="asetusKiinni" class="as-kulma" data-ta="as.sulje" aria-label="Sulje asetukset">&#10005;</button>
+      </div>
+      <nav class="as-valikko">
+        <button class="as-rivi" data-avaa="kieli">
+          <span data-t="as.kieli">Kieli</span><b class="as-arvo" id="arvoKieli"></b></button>
+        <button class="as-rivi" data-avaa="taso">
+          <span data-t="as.taso">Vaikeusaste</span><b class="as-arvo" id="arvoTaso"></b></button>
+        <button class="as-rivi" data-avaa="pelaajat">
+          <span data-t="as.pelaajat">Pelaajat</span><b class="as-arvo" id="arvoPelaajat"></b></button>
+        <button class="as-rivi" data-avaa="tapa">
+          <span data-t="as.tapa">Pelimuoto</span><b class="as-arvo" id="arvoTapa"></b></button>
+        <button class="as-rivi" data-avaa="ajat">
+          <span data-t="as.ajat">Aikarajat</span><b class="as-arvo" id="arvoAjat"></b></button>
+        <button class="as-rivi" data-avaa="luvat">
+          <span data-t="as.luvat">Laskutoimitukset</span><b class="as-arvo" id="arvoLuvat"></b></button>
+        <button class="as-rivi" data-avaa="ohje">
+          <span data-t="as.ohje">Lisätietoja</span><b class="as-arvo"></b></button>
+        <a class="as-rivi" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/"
+           target="_blank" rel="noopener" data-ta="as.kauppaAria">
+          <span data-t="as.kauppa">Kauppaan</span>
+          <img class="as-kotelo" src="kuvat/kotelo.webp?v=20260911a" alt=""></a>
+        <a class="as-rivi" id="asSivustolle" href="../">
+          <span data-t="valikko.sivustolle">Takaisin sivustolle</span><b class="as-arvo"></b></a>
+      </nav>
+    </section>
+
+    <!-- 1 · KIELI -->
+    <section class="as-sivu" data-sivu="kieli" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.kieli">Kieli</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.kieli"></p>
+      <div id="kielet" class="as-lista"></div>
+    </section>
+
+    <!-- 2 · VAIKEUSASTE -->
+    <section class="as-sivu" data-sivu="taso" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.taso">Vaikeusaste</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.taso"></p>
+      <div id="tasot" class="as-lista"></div>
+    </section>
+
+    <!-- 3 · PELAAJAT -->
+    <section class="as-sivu" data-sivu="pelaajat" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.pelaajat">Pelaajat</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.pelaajat"></p>
+      <div id="pelaajat" class="as-lista"></div>
+    </section>
+
+    <!-- 4 · PELIMUOTO -->
+    <section class="as-sivu" data-sivu="tapa" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.tapa">Pelimuoto</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.tapa"></p>
+      <div id="tavat" class="as-lista">
+        <button class="as-valinta valittu" data-tapa="helppo" data-t="tapa.helppo">Helppo</button>
+        <button class="as-valinta" data-tapa="vaikea" data-t="tapa.vaikea">Vaikeampi</button>
+      </div>
+    </section>
+
+    <!-- 5 · AIKARAJAT — pelaajat saataa itse, ei koodissa (Marko 9.9.2026:
+         "ettei tarvitse aina koodailla erikseen"). Oikeaa arvoa ei voi
+         paatella; se on loydettava pelaamalla. -->
+    <section class="as-sivu" data-sivu="ajat" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.ajat">Aikarajat</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.ajat"></p>
+      <div class="as-saatimet">
+        <div class="as-saadin">
+          <span data-t="aika.valinta">Korttien valinta</span>
+          <div class="as-askeleet">
+            <button class="as-askel" data-aika="valinta" data-askel="-1" data-ta="aika.vahemman" aria-label="Vähemmän aikaa">&#8722;</button>
+            <b class="as-aika" id="arvoValinta">4 s</b>
+            <button class="as-askel" data-aika="valinta" data-askel="1" data-ta="aika.enemman" aria-label="Enemmän aikaa">+</button>
+          </div>
+        </div>
+        <div class="as-saadin">
+          <span data-t="aika.lauseke">Laskun rakentaminen</span>
+          <div class="as-askeleet">
+            <button class="as-askel" data-aika="lauseke" data-askel="-1" data-ta="aika.vahemman" aria-label="Vähemmän aikaa">&#8722;</button>
+            <b class="as-aika" id="arvoLauseke">6 s</b>
+            <button class="as-askel" data-aika="lauseke" data-askel="1" data-ta="aika.enemman" aria-label="Enemmän aikaa">+</button>
+          </div>
+        </div>
+      </div>
+      <button id="ajatOletus" class="toinen-nappi" data-t="aika.oletus">Palauta oletukset</button>
+    </section>
+
+    <!-- 6 · LASKUTOIMITUKSET -->
+    <section class="as-sivu" data-sivu="luvat" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.luvat">Laskutoimitukset</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.luvat"></p>
+      <div id="sallitut" class="sallitut">
+        <label class="lupa"><input type="checkbox" data-lupa="kerto" checked><span>&#215;</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="jako" checked><span>&#247;</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="potenssi"><span>x<sup>y</sup></span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="log"><span>log</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="sulut" checked><span>( )</span></label>
+      </div>
+    </section>
+
+    <!-- 7 · LISÄTIETOJA — tämä sivu ON selitys, siksi ei i-nappia -->
+    <section class="as-sivu" data-sivu="ohje" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="ohje.otsikko">Mitä laskutoimitus kysyy?</span>
+        <span class="as-kulma as-tyhja" aria-hidden="true"></span>
+      </div>
+      <p class="ohje-johdanto" data-th="ohje.johdanto"></p>
+      <dl class="ohje-lista">
+        <dt>2 + 3</dt>      <dd data-th="ohje.plus"></dd>
+        <dt>8 &#8722; 3</dt><dd data-th="ohje.miinus"></dd>
+        <dt>2 &#215; 4</dt> <dd data-th="ohje.kerto"></dd>
+        <dt>10 &#247; 2</dt><dd data-th="ohje.jako"></dd>
+        <dt>2<sup>3</sup></dt><dd data-th="ohje.potenssi"></dd>
+        <dt class="korostettu">2 log 8</dt>
+        <dd class="korostettu"><span data-th="ohje.log"></span>
+          <br><span class="ohje-lisa" data-th="ohje.logLisa"></span></dd>
+        <dt>( )</dt>
+        <dd><span data-th="ohje.sulut"></span>
+          <br><span class="ohje-lisa" data-th="ohje.sulutLisa"></span></dd>
+      </dl>
+      <p class="ohje-lopetus" data-th="ohje.lopetus"></p>
+    </section>
+
+  </div>
+</div>
+
+<!-- TAUKO. Markon pyynto 9.9.2026: "peli pitaisi pystya pausettamaan ja
+     jopa aloittamaan kokonaan uudelleen. Ylakulman nuolinappi voisi olla
+     looginen pausenapin paikka." -->
+<div id="taukoPeite" class="peite" hidden>
+  <div class="tauko-laatikko" onclick="event.stopPropagation()">
+    <div class="tauko-merkki" aria-hidden="true">&#9208;</div>
+    <button id="jatka" class="iso-nappi" data-t="tauko.jatka">Jatka</button>
+    <button id="alustaPeli" class="toinen-nappi" data-t="tauko.alusta">Aloita alusta</button>
+    <button id="taukoValikkoon" class="toinen-nappi" data-t="valikko.alkuun">Alkuvalikkoon</button>
+  </div>
+</div>
+
+<!-- X-KORTIN VALINTA (Marko 13.9.2026): ei uusi ikkuna vaan jatkumo. Pizza
+     jää näkyviin, valinta avautuu X-kortin kohdalta, ja vaihtoehtoina ovat
+     KORTIT 1–10 — pelaaja valitsee kortin jonka X korvaa, ei lukua.
+     ⚠️ Tausta on läpinäkyvä: se vain sulkee valinnan napautuksesta, eikä
+     himmennä pizzaa. Paneelin paikka lasketaan pizzasta (peli.js). -->
+<div id="fantasiaValitsin" class="fantasia-valitsin" hidden>
+  <div id="fantasiaTausta" class="fantasia-tausta"></div>
+  <div id="fantasiaPaneeli" class="fantasia-paneeli" role="dialog" data-ta="fantasia.kysymys">
+    <p class="fantasia-otsikko" data-t="fantasia.kysymys"></p>
+    <div id="fantasiaKortit" class="fantasia-kortit"></div>
+  </div>
+</div>
+
+<!-- YHTEISPELI OMALLA LAITTEELLA (pelaaja.js). Näkyy vain osoitteessa ?liity,
+     jonne pelaa.html ohjaa. ⚠️ Pelinäkymä on sama kuin yksinpelissä; tässä on
+     vain liittyminen, odotus, lähtölaskenta ja kello — sekä pelaavan isännän
+     luontilomake ja napit (pelaavaisanta.js). -->
+<div id="verkkoKello" class="verkko-kello" hidden><div id="verkkoKelloPalkki"></div></div>
+<div id="verkkoLaskuri" class="verkko-laskuri" hidden></div>
+<div id="verkkoPeite" class="peite verkko-peite" hidden>
+  <div class="tauko-laatikko verkko-laatikko">
+    <form id="verkkoLiity" class="verkko-osa" hidden>
+      <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
+      <input id="verkkoKoodi" class="verkko-kentta" inputmode="numeric" pattern="[0-9]*" maxlength="4"
+             autocomplete="off" data-tp="verkko.koodi" data-ta="verkko.koodi">
+      <input id="verkkoNimi" class="verkko-kentta" maxlength="16" autocomplete="off"
+             data-tp="verkko.nimi" data-ta="verkko.nimi">
+      <button id="verkkoLiityNappi" type="submit" class="iso-nappi" data-t="verkko.liity"></button>
+      <p id="verkkoVirhe" class="verkko-virhe" hidden></p>
+      <button id="verkkoLiityTakaisin" type="button" class="toinen-nappi" data-t="as.takaisin"></button>
+    </form>
+    <!-- PELAAVA ISÄNTÄ (Marko 11.9.2026): yksi pelaaja luo pelin ja pelaa itse
+         mukana. ⚠️ Askelnapeilla EI ole data-aika-määrettä: peli.js kytkee
+         sillä omat aikarajansa, ja vahti vaatii niiltä onclickin. -->
+    <form id="verkkoLuo" class="verkko-osa" hidden>
+      <input id="verkkoLuoNimi" class="verkko-kentta" maxlength="16" autocomplete="off"
+             data-tp="verkko.nimi" data-ta="verkko.nimi">
+      <div class="verkko-asetus">
+        <span data-t="isanta.kierroksia"></span>
+        <div id="verkkoLuoKierroksia" class="verkko-valinnat">
+          <button type="button" class="as-valinta" data-arvo="10">10</button>
+          <button type="button" class="as-valinta" data-arvo="20">20</button>
+        </div>
+      </div>
+      <div class="as-saadin verkko-asetus-rivi">
+        <span data-t="isanta.aika"></span>
+        <div class="as-askeleet">
+          <button type="button" id="verkkoLuoAikaMiinus" class="as-askel" data-ta="aika.vahemman">&#8722;</button>
+          <b id="verkkoLuoAika" class="as-aika"></b>
+          <button type="button" id="verkkoLuoAikaPlus" class="as-askel" data-ta="aika.enemman">+</button>
+        </div>
+      </div>
+      <label class="valinta verkko-asetus-rivi"><input type="checkbox" id="verkkoLuoOdota"><span data-t="isanta.odotaKaikkia"></span></label>
+      <div class="verkko-asetus">
+        <span data-t="as.tapa"></span>
+        <div id="verkkoLuoTapa" class="verkko-valinnat">
+          <button type="button" class="as-valinta" data-arvo="helppo" data-t="tapa.helppo"></button>
+          <button type="button" class="as-valinta" data-arvo="vaikea" data-t="tapa.vaikea"></button>
+        </div>
+      </div>
+      <div class="verkko-asetus">
+        <span data-t="as.luvat"></span>
+        <div id="verkkoLuoLuvat" class="sallitut">
+          <label class="lupa"><input type="checkbox" data-lupa="kerto"><span>&#215;</span></label>
+          <label class="lupa"><input type="checkbox" data-lupa="jako"><span>&#247;</span></label>
+          <label class="lupa"><input type="checkbox" data-lupa="potenssi"><span>x<sup>y</sup></span></label>
+          <label class="lupa"><input type="checkbox" data-lupa="log"><span>log</span></label>
+          <label class="lupa"><input type="checkbox" data-lupa="sulut"><span>( )</span></label>
+        </div>
+      </div>
+      <button id="verkkoLuoNappi" type="submit" class="iso-nappi" data-t="isanta.luo"></button>
+      <p id="verkkoLuoVirhe" class="verkko-virhe" hidden></p>
+      <button id="verkkoLuoTakaisin" type="button" class="toinen-nappi" data-t="as.takaisin"></button>
+    </form>
+    <div id="verkkoOdota" class="verkko-osa" hidden>
+      <!-- ⚠️ Nimi ja tulos piirretään textContentilla (pelaaja.js). -->
+      <b id="verkkoNimiNakyy" class="verkko-nimi"></b>
+      <p id="verkkoKierrosRivi" class="verkko-kierros"></p>
+      <p id="verkkoTilanne" class="verkko-tilanne"></p>
+      <div id="verkkoTulos" class="verkko-tulos"></div>
+      <ol id="verkkoTaulu" class="verkko-taulu" data-ta="verkko.pistetaulu" hidden></ol>
+      <button id="verkkoUusi" type="button" class="toinen-nappi" data-t="verkko.uusi" hidden></button>
+      <!-- Pelaajalle: «Poistu pelistä» pelin aikana, «Alkuvalikkoon» kun peli
+           on päättynyt (pelaaja.js). Isännällä on sen sijaan «Lopeta peli». -->
+      <button id="verkkoPoistu" type="button" class="toinen-nappi" hidden></button>
+      <!-- Vain pelaavalla isännällä. ⚠️ Nimimerkit textContentilla. -->
+      <div id="verkkoIsanta" class="verkko-isanta" hidden>
+        <div id="verkkoIsantaKoodi" class="verkko-isanta-koodi" data-ta="isanta.koodiAria"></div>
+        <div id="verkkoIsantaQr" class="verkko-isanta-qr" hidden></div>
+        <p id="verkkoIsantaOsoite" class="verkko-tilanne"></p>
+        <div id="verkkoIsantaPelaajat" class="verkko-pelaajat"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ⚠️ ISÄNNÄN PAINIKKEET KIINTEÄSSÄ PALKISSA RUUDUN ALAREUNASSA (Marko
+       13.9.2026): *"seuraava kierros pitäisi olla siinä samassa paikassa koko
+       ajan"*. Laatikon sisällä pääpainike siirtyi 98 px tulosten mukana, ja
+       «Lopeta kierros» osui kierroksen aikana juuri siihen kohtaan jossa
+       «Seuraava kierros» on tulosten jälkeen (mitattu 375 × 812). Palkki ei
+       riipu sisällön korkeudesta. -->
+  <div id="verkkoIsantaNapit" class="verkko-isanta-napit" hidden>
+    <p id="verkkoIsantaVirhe" class="verkko-virhe" hidden></p>
+    <button id="verkkoIsantaJatka" type="button" class="iso-nappi"></button>
+    <div class="verkko-isanta-lopetukset">
+      <!-- Paikka varataan myös kun painike ei ole käytössä (.varattu): muuten
+           palkki kasvaisi ja pääpainike nousisi kierroksen alkaessa. -->
+      <button id="verkkoIsantaLopetaKierros" type="button" class="toinen-nappi varattu" data-t="isanta.lopetaKierros"></button>
+      <button id="verkkoIsantaLopeta" type="button" class="toinen-nappi" data-t="isanta.lopetaPeli"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ALKUVALIKKO (valikko.js). Marko 11.9.2026: *"yksi linkki pizzaparty-peliin,
+     josta voisi sitten pelata yksinpeliä tai moninpeliä"*. Näkyy osoitteessa
+     ./ ilman ?liity-parametria; peli on sen alla lepotilassa (ei ajastimia).
+     ⚠️ QR-linkki (pelaa.html?koodi=…) ohittaa valikon ja vie suoraan liittymiseen. -->
+<div id="valikkoPeite" class="peite" hidden>
+  <div class="tauko-laatikko verkko-laatikko valikko-laatikko">
+    <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
+    <div id="valikkoPaa" class="verkko-osa">
+      <button id="valikkoPalaa" type="button" class="iso-nappi" hidden></button>
+      <button id="valikkoPelaa" type="button" class="as-valinta"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
+      <button id="valikkoMoninpeliin" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
+      <!-- Paluu sivustolle (Marko 6.10.2026: «nyt kun sinne päätyy, niin jää jumiin peliin»).
+           Osoitteen asettaa valikko.js: pizzalove.fi:ssä oman kielen sivu, varainhankinnassa sen etusivu. -->
+      <a id="valikkoSivustolle" class="toinen-nappi valikko-sivustolle" href="../" data-t="valikko.sivustolle">Takaisin sivustolle</a>
+    </div>
+    <div id="valikkoMoninpeli" class="verkko-osa" hidden>
+      <button id="valikkoLuo" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>
+      <button id="valikkoLiity" type="button" class="as-valinta"><b data-t="valikko.liity"></b><small data-t="valikko.liitySelite"></small></button>
+      <button id="valikkoIsoNaytto" type="button" class="as-valinta"><b data-t="valikko.isoNaytto"></b><small data-t="valikko.isoNayttoSelite"></small></button>
+      <button id="valikkoTakaisin" type="button" class="toinen-nappi" data-t="as.takaisin"></button>
+    </div>
+  </div>
+</div>
+
+<script src="kielet.js?v=20261006c"></script>
+<script src="kortit.js?v=20260912b"></script>
+<script src="ratkoja.js?v=20260909b"></script>
+<script src="laskin.js?v=20260909c"></script>
+<script src="kierros.js?v=20260914b"></script>
+<script src="yhteys.js?v=20261006a"></script>
+<script src="qr.js?v=20260916a"></script>
+<script src="isannointi.js?v=20260920a"></script>
+<script src="peli.js?v=20261006b"></script>
+<script src="pelaaja.js?v=20260918a"></script>
+<script src="pelaavaisanta.js?v=20260920d"></script>
+<script src="valikko.js?v=20261006a"></script>
+</body>
+</html>
