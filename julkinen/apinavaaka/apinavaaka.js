@@ -36,6 +36,7 @@
     fi: {
       otsikko: 'Kokeile apinavaakaa',
       ohje: 'Napauta varaston tornia, niin apina ottaa sen oikeaan käteensä. Kun tornit ovat yhtä korkeat, siirto on oikein.',
+      heitaVihje: 'Napauta noppaa ja heitä!',
       noppa: 'Noppa', varasto: 'Varasto', linjasto: 'Linjasto',
       punnukset: 'punnusta',
       tehtava: 'Tehtävä', vapaa: 'Vapaa harjoittelu',
@@ -61,6 +62,7 @@
     sv: {
       otsikko: 'Prova apavågen',
       ohje: 'Tryck på ett torn i lagret så tar apan det i sin högra hand. När tornen är lika höga är flytten rätt.',
+      heitaVihje: 'Tryck på tärningen och kasta!',
       noppa: 'Tärning', varasto: 'Lager', linjasto: 'Linje',
       punnukset: 'vikter',
       tehtava: 'Uppgift', vapaa: 'Fri träning',
@@ -86,6 +88,7 @@
     en: {
       otsikko: 'Try the monkey scales',
       ohje: 'Tap a tower in the storage and the monkey takes it in its right hand. When the towers are equally high, the move is right.',
+      heitaVihje: 'Tap the dice to roll!',
       noppa: 'Dice', varasto: 'Storage', linjasto: 'Line',
       punnukset: 'weights',
       tehtava: 'Task', vapaa: 'Free practice',
@@ -111,6 +114,7 @@
     de: {
       otsikko: 'Probier die Affenwaage aus',
       ohje: 'Tippe auf einen Turm im Lager, dann nimmt der Affe ihn in die rechte Hand. Wenn beide Türme gleich hoch sind, stimmt der Zug.',
+      heitaVihje: 'Tippe auf den Würfel und würfle!',
       noppa: 'Würfel', varasto: 'Lager', linjasto: 'Linie',
       punnukset: 'Gewichte',
       tehtava: 'Aufgabe', vapaa: 'Freies Üben',
@@ -195,8 +199,47 @@
     var otsake = el('div', 'av__otsake');
     var tehtavaRivi = el('p', 'av__tehtava');
     otsake.appendChild(tehtavaRivi);
-    var noppaEl = el('div', 'av__noppa');
+    var noppaEl = el('button', 'av__noppa');
+    noppaEl.type = 'button';
+    noppaEl.innerHTML = '<span class="av__noppa-nimi">' + t.noppa + '</span>' +
+      '<svg viewBox="0 0 100 100" aria-hidden="true"><g class="av__d10">' +
+      '<path class="av__d10-runko" d="M50 3 94 40 50 97 6 40Z"/>' +
+      '<path class="av__d10-varjo" d="M6 40 26 50 50 64 50 97Z"/><path class="av__d10-varjo2" d="M94 40 74 50 50 64 50 97Z"/>' +
+      '<path class="av__d10-viiva" d="M50 3 26 50 50 64 74 50Z M26 50 6 40 M74 50 94 40 M50 64 50 97"/>' +
+      '<text x="50" y="47" text-anchor="middle" dominant-baseline="middle"></text></g></svg>';
+    var noppaTeksti = noppaEl.querySelector('text'), noppaRunko = noppaEl.querySelector('.av__d10-runko');
+    noppaEl.addEventListener('click', function () { heita(); });
     otsake.appendChild(noppaEl);
+    var TUMMA_TEKSTI = [3, 9, 10];   // vaaleat tahkot: musta numero
+    function naytaNoppa(n) {
+      noppaTeksti.textContent = n == null ? '?' : n;
+      noppaRunko.style.fill = n == null ? '' : VARIT[n - 1];
+      noppaTeksti.style.fill = n == null || TUMMA_TEKSTI.indexOf(n) >= 0 ? '#1A1A1A' : '#fff';
+    }
+    var pyorii = false;
+    function heita(lopuksi) {
+      if (pyorii || tila.heitetty) return;
+      pyorii = true;
+      noppaEl.classList.remove('av__noppa--odottaa');
+      noppaEl.classList.add('av__noppa--pyorii');
+      var tulos = tila.tehtava.noppa, viive = 35, kertaa = 0, ed = 0;
+      (function vaihda() {
+        if (viive > 200 || vahennaLiike) {
+          naytaNoppa(tulos);
+          noppaEl.classList.remove('av__noppa--pyorii');
+          noppaEl.classList.add('av__noppa--laskeutui');
+          setTimeout(function () { noppaEl.classList.remove('av__noppa--laskeutui'); }, 450);
+          pyorii = false; tila.heitetty = true; tila.uusiHeitto = true;
+          piirra();
+          if (lopuksi) lopuksi();
+          return;
+        }
+        var n; do { n = 1 + Math.floor(Math.random() * 10); } while (n === ed);
+        ed = n; naytaNoppa(n); kertaa++;
+        viive *= 1.13;
+        setTimeout(vaihda, viive);
+      })();
+    }
     juuri.appendChild(otsake);
 
     var vihje = el('p', 'av__vihje');
@@ -259,16 +302,17 @@
       tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = teht.linjasto.indexOf(i) >= 0 ? 'linjasto' : 'varasto';
       tila.oikea = []; tila.vasen = []; tila.valmis = false; tila.siirretty = false; tila.viesti = '';
+      tila.heitetty = false; naytaNoppa(null); noppaEl.classList.add('av__noppa--odottaa');
       piirra();
     }
 
     function napautaVarasto(n) {
-      if (tila.valmis || tila.siirretty) return;
+      if (tila.valmis || tila.siirretty || !tila.heitetty) return;
       tila.paikka[n] = 'oikea'; tila.oikea.push(n); tila.viesti = '';
       piirra();
     }
     function napautaLinjasto(n) {
-      if (tila.valmis || tila.siirretty) return;
+      if (tila.valmis || tila.siirretty || !tila.heitetty) return;
       if (tila.vasen.length) { tila.viesti = t.vainYksi; piirra(); return; }
       tila.paikka[n] = 'vasen'; tila.vasen.push(n); tila.viesti = '';
       piirra();
@@ -296,8 +340,9 @@
       tehtavaRivi.innerHTML = (tila.nro < TEHTAVAT.length
         ? '<b>' + t.tehtava + ' ' + (tila.nro + 1) + '/' + TEHTAVAT.length + '</b> · '
         : '<b>' + t.vapaa + '</b> · ') + t.tavat[teht.tapa];
-      noppaEl.innerHTML = '<span>' + t.noppa + '</span><b>' + noppa + '</b>';
-      vihje.textContent = t.vihjeet[teht.tapa];
+      noppaEl.disabled = tila.heitetty;
+      noppaEl.setAttribute('aria-label', tila.heitetty ? t.noppa + ': ' + noppa : t.heitaVihje);
+      vihje.textContent = tila.heitetty ? t.vihjeet[teht.tapa] : t.heitaVihje;
 
       // vaa'an kallistus: painavampi puoli alas
       var kulma = 0;
@@ -313,9 +358,11 @@
 
       // pinot käsissä
       pinoV.innerHTML = ''; pinoO.innerHTML = '';
-      if (!tila.siirretty) {
-        var punn = el('span', 'av__pino-osa av__pino-osa--punnus');
+      if (!tila.siirretty && tila.heitetty) {
+        var punn = el('span', 'av__pino-osa av__pino-osa--punnus' + (tila.uusiHeitto ? ' av__uusi' : ''));
+        tila.uusiHeitto = false;
         punn.appendChild(torni(noppa, null, true));
+        Array.prototype.forEach.call(punn.querySelectorAll('i'), function (p, i) { p.style.setProperty('--i', i); });
         punn.setAttribute('aria-label', noppa + ' ' + t.punnukset);
         pinoV.appendChild(punn);
       }
@@ -337,7 +384,7 @@
       var vasenTxt = [noppa].concat(tila.vasen).join(' + ');
       var oikeaTxt = tila.oikea.length ? tila.oikea.join(' + ') : '?';
       var merkki = !tila.oikea.length ? '' : vasenSumma === oikeaSumma ? '=' : vasenSumma < oikeaSumma ? '<' : '>';
-      if (tila.siirretty) {
+      if (tila.siirretty || !tila.heitetty) {
         yhtalo.innerHTML = '';
       } else {
         yhtalo.innerHTML = '<span>' + vasenTxt + '</span><b class="av__merkki' +
@@ -356,6 +403,7 @@
         seur.addEventListener('click', function () {
           tila.nro++;
           aloita(tila.nro < TEHTAVAT.length ? TEHTAVAT[tila.nro] : arvoTehtava());
+          if (tila.nro >= TEHTAVAT.length) heita();
         });
         napit.appendChild(seur);
         if (tila.nro >= TEHTAVAT.length - 1) {
@@ -395,7 +443,7 @@
                 if (nimi === 'varasto') napautaVarasto(n); else napautaLinjasto(n);
               });
             })(n, nimi);
-            if (tila.siirretty) b.disabled = true;
+            if (tila.siirretty || !tila.heitetty) b.disabled = true;
             paikka.appendChild(b);
           } else {
             paikka.classList.add('av__paikka--tyhja');
