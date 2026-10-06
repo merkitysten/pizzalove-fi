@@ -1,0 +1,146 @@
+{
+  "lang": "sv",
+  "nimi": "Svenska",
+  "lyhenne": "SV",
+  "ui": {
+    "nav_etusivu": "Start",
+    "nav_korttipeli": "Kortspelet",
+    "nav_lautapeli": "Brädspelet",
+    "nav_pelaa": "Spela online",
+    "kielivalinta": "Språk",
+    "kauppaan": "Till butiken",
+    "katso_video": "Se video",
+    "video_kieli": {"fi": "på finska", "en": "på engelska"},
+    "lataa": "Ladda ner",
+    "alaosa_teksti": "Pizza Love® är ett spel från Merkitysten Oy. Designat och tillverkat i Finland.",
+    "alaosa_yhteys": "Frågor? Skriv till oss:",
+    "alaosa_tavaramerkki": "Pizza Love® och Merkitysten® är registrerade varumärken som ägs av Merkitysten Oy.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Insamling",
+    "ohita": "Hoppa till innehållet"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – regler, videor och onlinespel",
+    "kuvaus": "Regler och instruktionsvideor för Pizza Love® kortspel och brädspel, samt onlinespelet Pizza Party.",
+    "h1": "Välkommen till pizzafabriken!",
+    "ingressi": "Här hittar du reglerna och instruktionsvideorna för Pizza Love®-spelen. Välj ditt spel, så är du igång på några minuter.",
+    "valitse": "Välj ditt spel",
+    "korttipeli_tiedot": "2–5 spelare · 6+ · 3 sätt att spela",
+    "lautapeli_tiedot": "2–4 spelare · 4+ · 3 sätt att spela",
+    "avaa": "Regler och videor →",
+    "pelaa_otsikko": "Spela Pizza Party online",
+    "pelaa_teksti": "Ensam, på samma enhet eller med kompisar – var och en på sin egen telefon.",
+    "pelaa_nappi": "Spela nu",
+    "kauppa_otsikko": "Vill du ha fler?",
+    "kauppa_teksti": "Pizza Love®-spelen finns i Merkitystens webbutik."
+  },
+  "korttipeli": {
+    "title": "Pizza Love® kortspel – regler och videor",
+    "kuvaus": "Regler och instruktionsvideor för Pizza Love® kortspel: Pizza Party, Pizza Basso och Pizza Love.",
+    "h1": "Pizza Love® kortspel",
+    "ingressi": "Tre spel med samma kortlek. Börja med Pizza Party – det går snabbast att lära sig.",
+    "tiedot": ["2–5 spelare", "6+", "42 pizzakort", "58 fyllningskort"],
+    "hyppy": {"perusteet": "Så tillagar du en pizza", "muodot": "Tre sätt att spela", "lataa": "Reglerna som PDF"},
+    "perusteet_otsikko": "Så tillagar du en pizza",
+    "perusteet_ingressi": "Alla tre spelen bygger på samma grundregel. Lär dig den först.",
+    "pizzakortit_otsikko": "Pizzakort",
+    "pizzakortit": "På pizzakortet finns en pizza med en till fyra olika fyllningar. I kortets hörn syns pizzans värde (1–10). Spelet innehåller 10 hjärtpizzor med värdet 10.",
+    "taytekortit_otsikko": "Fyllningskort",
+    "taytekortit": "På fyllningskortet finns en fyllning. I kortets hörn syns fyllningens värde (1–10). De 3 fantasifyllningarna (X) kan vara vilken fyllning som helst.",
+    "perussaanto_otsikko": "Grundregel",
+    "perussaanto": "Pizzakorten ligger alltid på bordet. De tillagas med fyllningskort från handen.",
+    "arvo_otsikko": "Pizzans värde",
+    "arvo": "Tillaga pizzan med dina egna fyllningskort och säg högt den räkneoperation som ger pizzans värde. Alla räknesätt är tillåtna och kan kombineras, så länge resultatet är lika med pizzans värde. Till exempel <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Exempel: tomat-ananas-pizza",
+    "esimerkki_alt": "Ett pizzakort med värdet 5, en tomat (2) och en ananas (3)",
+    "esimerkki": "Pizzan har två fyllningar och dess värde är 5. Tomat 2 + ananas 3 = 5. Det finns fler sätt: 4 + 1, 6 – 1 eller till och med 10 : 2.",
+    "tavat_otsikko": "Två sätt att tillaga pizza",
+    "helpompi_otsikko": "Enklare sätt",
+    "helpompi": "Pizzan kan tillagas med hur många fyllningskort som helst, även med ett enda. Använd detta när du spelar Pizza Party för första gången eller med ett litet barn.",
+    "basso_tapa_otsikko": "Apan Bassos sätt",
+    "basso_tapa": "Du måste använda lika många fyllningskort som pizzan har fyllningar. Tomat-ananas-pizzan kräver alltså två fyllningskort. Använd detta i Pizza Basso eller för en extra utmaning i Pizza Party.",
+    "huomio_bruno": "<b>Bruno eller Basso?</b> Apan i spelet heter numera Basso. I äldre regler och videor heter han Bruno, och det andra spelläget heter Pizza Bruno. Reglerna är desamma.",
+    "muodot_otsikko": "Tre sätt att spela",
+    "muodot_ingressi": "Öppna ett spelläge för att se reglerna och videorna.",
+    "videot_otsikko": "Videor",
+    "videot": {
+      "party_en": "Pizza Party – så spelar man",
+      "party_fi": "Pizza Party – så spelar man",
+      "party_helpompi": "Det enklare sättet att spela",
+      "party_helpottaminen": "Att göra spelet lättare",
+      "party_ei_valmistu": "När ingen kan tillaga pizzan",
+      "party_basso_tapa": "Apan Bassos sätt",
+      "basso_fi": "Pizza Basso – så spelar man"
+    },
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Lättast att börja med, snabbt och livligt",
+        "html": "<h3>Mål</h3><p>Spelarna tävlar om att tillaga pizzor. Vinnare är den som hinner tillaga flest pizzor innan pizzorna eller fyllningarna tar slut.</p><h3>Förberedelser</h3><ol class=\"lista\"><li>Blanda pizzakorten och lägg dem som en hög inom räckhåll för alla.</li><li>Blanda fyllningskorten och dela ut 5 kort till varje spelare. Resten bildar en draghög. Spelarna får titta på sina kort.</li></ol><h3>Början</h3><p>Vänd upp det första pizzakortet bredvid högen. Alla spelare försöker genast tillaga den pizzan med sina fyllningskort.</p><h3>Spelets gång</h3><ul class=\"lista\"><li>Spelet spelas utan turordning: alla försöker tillaga pizzor samtidigt.</li><li>Den snabbaste spelaren som tillagar pizzan får kortet och samlar det framför sig.</li><li>Använda fyllningskort tas ur spel. Dra nya kort tills du har 5 kort på handen igen.</li><li>Vänd genast upp ett nytt pizzakort. Fortsätt tills pizza- eller fyllningskorten är slut och ingen längre kan tillaga en pizza.</li></ul><h3>Om en pizza inte kan tillagas</h3><p>Om ingen kan eller vill tillaga pizzan som ligger framme, vänds ett nytt pizzakort upp ovanpå den. Den som tillagar nästa pizza får alla pizzor som ligger framme.</p><h3>Poäng och vinst</h3><p>Vanlig pizza = 1 poäng, hjärtpizza = 2 poäng. Omgången vinns av den som fått flest poäng. Kom överens om antalet omgångar – till exempel vinner den som först vinner 3 eller 5 omgångar hela spelet.</p><h3>Lugnare Pizza Party</h3><p>Ni kan också spela med turordning, så att alla får tänka i lugn och ro på sin egen tur.</p><h3>Valfria regler</h3><p>Ni kan komma överens om regler som begränsar räkneoperationerna, till exempel:</p><ul class=\"lista\"><li>spela bara med addition och subtraktion</li><li>varje pizza måste innehålla multiplikation eller division.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Lugnt och spännande",
+        "html": "<p class=\"pieni\">I äldre regler: Pizza Bruno.</p><h3>Mål</h3><p>Spelarna försöker bli av med alla sina fyllningskort. Den som lyckas först vinner omgången.</p><p><b>Observera:</b> Pizzorna tillagas på apan Bassos sätt: lika många fyllningskort som pizzan har fyllningar.</p><h3>Förberedelser</h3><ol class=\"lista\"><li>Blanda pizzakorten och lägg dem som en hög inom räckhåll för alla.</li><li>Blanda fyllningskorten och dela ut 7 kort till varje spelare. Resten bildar draghögen. Spelarna får titta på sina kort.</li></ol><h3>Början</h3><p>Vänd upp det första pizzakortet bredvid högen. Den spelare som senast åt pizza börjar.</p><h3>Spelets gång</h3><p>Spelarna försöker i tur och ordning tillaga pizzan som ligger framme med sina fyllningskort.</p><p><b>A) Om du lyckas:</b> ta bort de använda fyllningskorten ur spelet och vänd upp ett nytt pizzakort från högen ovanpå det gamla. Turen går vidare till nästa spelare.</p><p><b>B) Om du inte kan eller vill tillaga pizzan:</b> dra ett fyllningskort. Turen går vidare till nästa spelare.</p><p><b>C) Ett kort kvar:</b> när du bara har ett fyllningskort kvar ska du härma en hungrig apa Basso och ropa: ”PIZZAAA!”</p><h3>Om fyllningskorten tar slut</h3><p>Blanda de borttagna fyllningskorten till en ny draghög och fortsätt.</p><h3>Poäng och vinst</h3><p>Den som först blir av med alla sina fyllningskort vinner omgången. Värdet på korten som finns kvar i de andra spelarnas händer räknas ihop – summan blir vinnarens poäng. Vanliga fyllningar räknas med sitt värde (1–10), en fantasifyllning är värd 20.</p><p>Först till 100 poäng vinner och får titeln <b>Pizza Basso – den sanna pizzaapan</b>.</p><h3>Kortare spel</h3><p>Ni kan komma överens om att spelet slutar vid t.ex. 30 eller 50 poäng, eller att hela spelet vinns av den som först vinner 3 eller 5 omgångar.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Mest taktiskt och utmanande, från 8 år",
+        "html": "<h3>Mål</h3><p>Spelarna försöker tillaga alla sina egna pizzor före de andra. Den som lyckas först vinner.</p><p><b>Observera:</b> Nu spelar fyllningarna en roll: pizzan kan tillagas bara med rätt fyllningar.</p><h3>Förberedelser</h3><ol class=\"lista\"><li>Blanda och dela ut 8 pizzakort till varje spelare. Spelarna lägger dem i en hög framför sig med baksidan uppåt och vänder det översta kortet med framsidan uppåt.</li><li>Lägg ett pizzakort med framsidan uppåt i mitten av bordet som bytespizza. Resten av pizzakorten tas ur spel.</li><li>Blanda fyllningskorten och lägg dem som en draghög på bordet.</li></ol><h3>Lagret</h3><p>Varje spelare har 4 platser för lagerkort. Fyllningskorten i lagret ligger med framsidan uppåt. De kan användas till egna pizzor precis som kort på handen, och de är också tillgängliga för andra spelares byten.</p><h3>Början</h3><p>Den spelare som senast åt pizza börjar och drar 5 fyllningskort till sin hand.</p><h3>Spelets gång</h3><ol class=\"lista\"><li>Dra fyllningskort tills du har 5 kort på handen.</li><li>Försök tillaga pizzan överst i din hög med kort från handen och lagret.</li><li>Du kan byta kort i ditt lager mot en annan spelares lagerkort med hjälp av räkneoperationer.</li><li>En gång per tur kan du byta pizzan överst i din hög mot bytespizzan i mitten. Den får tillagas direkt.</li><li>Avsluta turen genom att lägga ett fyllningskort från handen öppet i ditt lager.</li></ol><h3>Att tillaga pizza</h3><p>När du har de fyllningar som behövs på handen och/eller i lagret kan du tillaga pizzan. Pizzakortet och de spelade fyllningskorten tas ur spel. Vänd upp nästa pizzakort från din hög – om du har rätt fyllningar kan du tillaga den direkt.</p><h3>Hjärtpizza</h3><p>Om du tillagar en hjärtpizza ska du ge ditt nästa pizzakort (utan att titta) till en annan spelare. Hen lägger det underst i sin hög.</p><h3>Att byta lagerkort</h3><p>Skaffa de fyllningar du behöver genom att byta kort i ditt lager mot en annan spelares lagerkort. Bytet sker med räkneoperationer: allt är tillåtet, så länge resultatet är detsamma på båda spelarnas kort. Du kan göra flera byten under samma tur, men varje byte sker alltid mellan två lager. Ett kort som ligger under ett annat kan inte bytas. De nya korten placeras i ditt lager i valfri ordning.</p><h3>Att fylla lagret</h3><p>Om du spelar ut alla kort på handen innan du lägger ett lagerkort, dra 5 nya kort och fortsätt turen. Platserna behöver inte fyllas i ordning, och korten kan staplas. Det översta måste alltid användas före de underliggande. Lagerkort får inte flyttas efter att de har spelats ut.</p><h3>Att vinna spelet</h3><p>Spelet slutar när en spelare har tillagat alla pizzor i sin hög.</p>"
+      }
+    ],
+    "lataa_otsikko": "Reglerna som PDF",
+    "lataa_teksti": "Det tryckta regelbladet på finska, svenska och engelska.",
+    "lataa_tiedosto": "Kortspelets regler (FI · SV · EN)",
+    "pelaa_otsikko": "Öva online",
+    "pelaa_teksti": "Pizza Party fungerar också i webbläsaren. Prova före ditt första spel, eller spela med kompisar på era egna telefoner."
+  },
+  "lautapeli": {
+    "title": "Pizza Love® brädspel – regler och videor",
+    "kuvaus": "Regler och instruktionsvideor för Pizza Love® brädspel: förberedelser, spelturen och tre sätt att spela.",
+    "h1": "Pizza Love® brädspel",
+    "ingressi": "Tillaga pizzakartongernas favoritpizzor och samla först 10 olika bitar – så vinner du!",
+    "tiedot": ["2–4 spelare", "4+", "3 sätt att spela"],
+    "hyppy": {"kokoaminen": "Före första spelet", "peli": "Så fungerar spelet", "muodot": "Tre sätt att spela", "lataa": "Reglerna som PDF"},
+    "kokoaminen_otsikko": "Före första spelet",
+    "kokoaminen": "I lådan finns ett klistermärkesark och fyra boxar som monteras en gång. Det tar en stund, och sedan är spelet alltid redo.",
+    "videot": {
+      "HE9301owOKI": "Montera boxarna",
+      "RbLfhUyXHKw": "Klistermärken på brickorna",
+      "Ya73FhJfj54": "Ställa i ordning spelet",
+      "IN2LvbXo9eA": "Spelturen och hur man vinner"
+    },
+    "peli_otsikko": "Så fungerar spelet",
+    "voittaminen_otsikko": "Att vinna spelet",
+    "voittaminen": "Vinn genom att först samla <b>10 olika</b> bitar i din box. Tillaga pizzor på spelbrädet och få motsvarande bitar i din box. En hjärtpizza ger dig en valfri extrabit.",
+    "valmistelut_otsikko": "Spelförberedelser",
+    "valmistelut": ["Stapla de färgglada fyllningstornen på plats i lagret.", "Blanda och lägg 4 pizzakort på spelbrädet. Lägg övriga pizzakort som kortlek på bordet.", "Blanda och lägg apakorten som kortlek på bordet.", "Ge varje spelare en tom box."],
+    "vuoro_otsikko": "Spelturen",
+    "vaiheet": [
+      {"otsikko": "Kasta tärningen och flytta brickorna", "html": "<p>Den som senast åt pizza börjar genom att kasta tärningen. Tärningen avgör hur många brickor som flyttas mellan lagret och linjen. Brickor med samma färg flyttas alltid som ett torn. Om du inte kan göra en förflyttning, slutar din speltur.</p><p class=\"pieni\">Apavågen och vikterna hjälper barn att förstå förflyttningarna. <b>De behöver inte användas.</b></p>"},
+      {"otsikko": "Tillaga pizza", "html": "<p>När fyllningarna som pizzan behöver finns på linjen, tillaga pizzan och samla bitarna till din box. Du kan tillaga flera pizzor per speltur, men varje fyllning får bara användas till en pizza per speltur. Returnera använda fyllningar till lagret och dra ett nytt pizzakort från kortleken till spelbrädet.</p>"},
+      {"otsikko": "Lyfta ett apakort", "html": "<p>Om du tillagade minst en pizza, lyft ett apakort i slutet av spelturen och följ det. Turen går medurs.</p>"}
+    ],
+    "muodot_otsikko": "Tre sätt att spela",
+    "muodot_ingressi": "Att kasta tärningen, flytta fyllningar och tillaga pizza fungerar likadant i alla tre.",
+    "muodot": [
+      {"nimi": "Pizza Love – grundspel", "kuvaus": "Tävling för hela familjen, 6+", "html": "<p>Tillaga pizzakartongernas favoritpizzor och samla först 10 olika bitar i din box. När ni kan grundspelet hittar ni extraregler i regelboken som ger spelet mer fart.</p>"},
+      {"nimi": "Hungriga apor", "kuvaus": "Samarbetsspel, för ca 4–5-åringar", "html": "<p>Det enklaste sättet att börja. Ni spelar tillsammans och fyller en gemensam box. Fyll boxen med 10 olika bitar så vinner ni. Men se upp: de hungriga aporna äter upp sina bitar direkt om inga nya kommer!</p>"},
+      {"nimi": "Hemliga pizzor", "kuvaus": "Spännande och strategiskt", "html": "<p>Alla får två hemliga pizzor som de andra inte ser – ingen vet vilka pizzor du tänker tillaga. Den som först fyller sin box med 10 olika bitar vinner.</p>"}
+    ],
+    "lataa_otsikko": "Reglerna som PDF",
+    "lataa_teksti": "Fullständiga regler för alla spellägen på finska, svenska och engelska.",
+    "lataukset": {
+      "pikaohje": "Snabbguide (för utskrift)",
+      "peruspeli": "Grundspel – hela regelboken",
+      "apinat": "Hungriga apor – hela regelboken",
+      "salatut": "Hemliga pizzor – hela regelboken"
+    }
+  }
+}

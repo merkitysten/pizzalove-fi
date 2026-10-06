@@ -1,0 +1,146 @@
+{
+  "lang": "de",
+  "nimi": "Deutsch",
+  "lyhenne": "DE",
+  "ui": {
+    "nav_etusivu": "Start",
+    "nav_korttipeli": "Kartenspiel",
+    "nav_lautapeli": "Brettspiel",
+    "nav_pelaa": "Online spielen",
+    "kielivalinta": "Sprache",
+    "kauppaan": "Zum Shop",
+    "katso_video": "Video ansehen",
+    "video_kieli": {"fi": "auf Finnisch", "en": "auf Englisch"},
+    "lataa": "Herunterladen",
+    "alaosa_teksti": "Pizza Love® ist ein Spiel von Merkitysten Oy. Entwickelt und hergestellt in Finnland.",
+    "alaosa_yhteys": "Fragen? Schreib uns:",
+    "alaosa_tavaramerkki": "Pizza Love® und Merkitysten® sind eingetragene Marken der Merkitysten Oy.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Spendenaktionen",
+    "ohita": "Zum Inhalt springen"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – Regeln, Videos und Online-Spiel",
+    "kuvaus": "Regeln und Erklärvideos zum Pizza Love® Kartenspiel und Brettspiel sowie das Online-Spiel Pizza Party.",
+    "h1": "Willkommen in der Pizzafabrik!",
+    "ingressi": "Hier findest du die Regeln und Erklärvideos zu den Pizza Love®-Spielen. Wähle dein Spiel – in wenigen Minuten kann es losgehen.",
+    "valitse": "Wähle dein Spiel",
+    "korttipeli_tiedot": "2–5 Spieler · ab 6 · 3 Spielvarianten",
+    "lautapeli_tiedot": "2–4 Spieler · ab 4 · 3 Spielvarianten",
+    "avaa": "Regeln und Videos →",
+    "pelaa_otsikko": "Pizza Party online spielen",
+    "pelaa_teksti": "Allein, an einem Gerät oder mit Freunden – jeder auf seinem eigenen Handy.",
+    "pelaa_nappi": "Jetzt spielen",
+    "kauppa_otsikko": "Lust auf mehr?",
+    "kauppa_teksti": "Die Pizza Love®-Spiele gibt es im Onlineshop von Merkitysten."
+  },
+  "korttipeli": {
+    "title": "Pizza Love® Kartenspiel – Regeln und Videos",
+    "kuvaus": "Regeln und Erklärvideos zum Pizza Love® Kartenspiel: Pizza Party, Pizza Basso und Pizza Love.",
+    "h1": "Pizza Love® Kartenspiel",
+    "ingressi": "Drei Spiele mit einem Kartenstapel. Fang mit Pizza Party an – das ist am schnellsten gelernt.",
+    "tiedot": ["2–5 Spieler", "ab 6", "42 Pizzakarten", "58 Belagkarten"],
+    "hyppy": {"perusteet": "So entsteht eine Pizza", "muodot": "Drei Spielvarianten", "lataa": "Regeln als PDF"},
+    "perusteet_otsikko": "So entsteht eine Pizza",
+    "perusteet_ingressi": "Alle drei Spiele beruhen auf derselben Grundregel. Lerne sie zuerst.",
+    "pizzakortit_otsikko": "Pizzakarten",
+    "pizzakortit": "Auf einer Pizzakarte ist eine Pizza mit einem bis vier verschiedenen Belägen. In den Ecken steht der Wert der Pizza (1–10). Im Spiel gibt es 10 Herzpizzas mit dem Wert 10.",
+    "taytekortit_otsikko": "Belagkarten",
+    "taytekortit": "Auf einer Belagkarte ist ein Belag. In den Ecken steht der Wert des Belags (1–10). Die 3 Fantasiebeläge (X) können jeder beliebige Belag sein.",
+    "perussaanto_otsikko": "Grundregel",
+    "perussaanto": "Die Pizzakarten liegen immer auf dem Tisch. Sie werden mit Belagkarten aus der Hand zubereitet.",
+    "arvo_otsikko": "Der Wert der Pizza",
+    "arvo": "Bereite die Pizza mit deinen eigenen Belagkarten zu und sage laut die Rechnung, die den Wert der Pizza ergibt. Alle Rechenarten sind erlaubt und dürfen kombiniert werden, solange das Ergebnis dem Wert der Pizza entspricht. Zum Beispiel <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Beispiel: Tomaten-Ananas-Pizza",
+    "esimerkki_alt": "Eine Pizzakarte mit dem Wert 5, eine Tomate (2) und eine Ananas (3)",
+    "esimerkki": "Die Pizza hat zwei Beläge und den Wert 5. Tomate 2 + Ananas 3 = 5. Es gibt noch andere Wege: 4 + 1, 6 – 1 oder sogar 10 : 2.",
+    "tavat_otsikko": "Zwei Arten, eine Pizza zuzubereiten",
+    "helpompi_otsikko": "Die einfachere Art",
+    "helpompi": "Eine Pizza kann mit beliebig vielen Belagkarten zubereitet werden, auch mit nur einer. Nutze diese Art, wenn du Pizza Party zum ersten Mal oder mit einem kleinen Kind spielst.",
+    "basso_tapa_otsikko": "Die Art von Affe Basso",
+    "basso_tapa": "Du musst so viele Belagkarten verwenden, wie die Pizza Beläge hat. Für die Tomaten-Ananas-Pizza brauchst du also zwei Belagkarten. Nutze diese Art bei Pizza Basso oder als zusätzliche Herausforderung bei Pizza Party.",
+    "huomio_bruno": "<b>Bruno oder Basso?</b> Der Affe im Spiel heißt jetzt Basso. In älteren Regeln und Videos heißt er Bruno, und die zweite Spielvariante heißt Pizza Bruno. Die Regeln sind dieselben.",
+    "muodot_otsikko": "Drei Spielvarianten",
+    "muodot_ingressi": "Öffne eine Spielvariante, um ihre Regeln und Videos zu sehen.",
+    "videot_otsikko": "Videos",
+    "videot": {
+      "party_en": "Pizza Party – so wird gespielt",
+      "party_fi": "Pizza Party – so wird gespielt",
+      "party_helpompi": "Die einfachere Art zu spielen",
+      "party_helpottaminen": "Das Spiel leichter machen",
+      "party_ei_valmistu": "Wenn niemand die Pizza zubereiten kann",
+      "party_basso_tapa": "Die Art von Affe Basso",
+      "basso_fi": "Pizza Basso – so wird gespielt"
+    },
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Am leichtesten zum Einstieg, schnell und lebhaft",
+        "html": "<h3>Ziel</h3><p>Die Spieler bereiten um die Wette Pizzas zu. Es gewinnt, wer die meisten Pizzas zubereitet, bevor die Pizza- oder Belagkarten ausgehen.</p><h3>Vorbereitung</h3><ol class=\"lista\"><li>Mische die Pizzakarten und lege sie als Stapel in Reichweite aller Spieler.</li><li>Mische die Belagkarten und gib jedem Spieler 5 Karten. Die übrigen bilden den Nachziehstapel. Die Spieler dürfen ihre Karten ansehen.</li></ol><h3>Spielbeginn</h3><p>Decke die erste Pizzakarte neben dem Stapel auf. Alle versuchen sofort, diese Pizza mit ihren Belagkarten zuzubereiten.</p><h3>Spielablauf</h3><ul class=\"lista\"><li>Es wird ohne Reihenfolge gespielt: Alle versuchen gleichzeitig, Pizzas zuzubereiten.</li><li>Wer die Pizza am schnellsten zubereitet, bekommt die Karte und legt sie vor sich ab.</li><li>Verwendete Belagkarten kommen aus dem Spiel. Ziehe neue Karten nach, bis du wieder 5 auf der Hand hast.</li><li>Decke sofort eine neue Pizzakarte auf. Spielt weiter, bis die Pizza- oder Belagkarten ausgehen und niemand mehr eine Pizza zubereiten kann.</li></ul><h3>Wenn keine Pizza zubereitet werden kann</h3><p>Wenn niemand die offene Pizza zubereiten kann oder will, deckt eine neue Pizzakarte darauf auf. Wer die nächste Pizza zubereitet, bekommt alle offenen Pizzas.</p><h3>Punkte und Sieg</h3><p>Normale Pizza = 1 Punkt, Herzpizza = 2 Punkte. Die Runde gewinnt, wer die meisten Punkte hat. Vereinbart, wie viele Runden ihr spielt – zum Beispiel gewinnt das ganze Spiel, wer zuerst 3 oder 5 Runden gewinnt.</p><h3>Ruhigere Pizza Party</h3><p>Ihr könnt auch reihum spielen, damit jeder in seinem Zug in Ruhe nachdenken kann.</p><h3>Zusatzregeln</h3><p>Ihr könnt Regeln vereinbaren, die die Rechenarten einschränken, zum Beispiel:</p><ul class=\"lista\"><li>nur Plus- und Minusrechnen</li><li>bei jeder Pizza muss Mal- oder Geteiltrechnen vorkommen.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Ruhig und spannend",
+        "html": "<p class=\"pieni\">In älteren Regeln: Pizza Bruno.</p><h3>Ziel</h3><p>Die Spieler versuchen, alle ihre Belagkarten loszuwerden. Wer das zuerst schafft, gewinnt die Runde.</p><p><b>Hinweis:</b> Die Pizzas werden auf die Art von Affe Basso zubereitet: so viele Belagkarten, wie die Pizza Beläge hat.</p><h3>Vorbereitung</h3><ol class=\"lista\"><li>Mische die Pizzakarten und lege sie als Stapel in Reichweite aller Spieler.</li><li>Mische die Belagkarten und gib jedem Spieler 7 Karten. Die übrigen bilden den Nachziehstapel. Die Spieler dürfen ihre Karten ansehen.</li></ol><h3>Spielbeginn</h3><p>Decke die erste Pizzakarte neben dem Stapel auf. Wer zuletzt Pizza gegessen hat, beginnt.</p><h3>Spielablauf</h3><p>Reihum versuchen die Spieler, die offene Pizza mit ihren Belagkarten zuzubereiten.</p><p><b>A) Wenn es klappt:</b> Lege die verwendeten Belagkarten aus dem Spiel und decke eine neue Pizzakarte vom Stapel auf die alte auf. Der nächste Spieler ist dran.</p><p><b>B) Wenn es nicht klappt oder du nicht willst:</b> Ziehe eine Belagkarte. Der nächste Spieler ist dran.</p><p><b>C) Nur noch eine Karte:</b> Wenn du nur noch eine Belagkarte hast, spiele einen hungrigen Affen Basso und rufe: „PIZZAAA!“</p><h3>Wenn die Belagkarten ausgehen</h3><p>Mische die abgelegten Belagkarten zu einem neuen Nachziehstapel und spielt weiter.</p><h3>Punkte und Sieg</h3><p>Die Runde gewinnt, wer zuerst alle Belagkarten los ist. Die Werte der Karten, die die anderen noch auf der Hand haben, werden zusammengezählt – die Summe sind die Punkte des Siegers. Normale Beläge zählen ihren Wert (1–10), ein Fantasiebelag zählt 20.</p><p>Wer zuerst 100 Punkte hat, gewinnt und bekommt den Titel <b>Pizza Basso – der wahre Pizzaaffe</b>.</p><h3>Kürzeres Spiel</h3><p>Ihr könnt vereinbaren, dass das Spiel z. B. bei 30 oder 50 Punkten endet oder dass gewinnt, wer zuerst 3 oder 5 Runden gewinnt.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Am taktischsten und anspruchsvollsten, ab 8",
+        "html": "<h3>Ziel</h3><p>Die Spieler versuchen, alle eigenen Pizzas vor den anderen zuzubereiten. Wer das zuerst schafft, gewinnt.</p><p><b>Hinweis:</b> Jetzt zählen die Beläge: Eine Pizza kann nur mit den richtigen Belägen zubereitet werden.</p><h3>Vorbereitung</h3><ol class=\"lista\"><li>Mische und gib jedem Spieler 8 Pizzakarten. Die Spieler legen sie verdeckt als Stapel vor sich und decken die oberste Karte auf.</li><li>Lege eine Pizzakarte offen in die Tischmitte. Das ist die Tauschpizza. Die übrigen Pizzakarten kommen aus dem Spiel.</li><li>Mische die Belagkarten und lege sie als Nachziehstapel auf den Tisch.</li></ol><h3>Vorrat</h3><p>Jeder Spieler hat 4 Plätze für Vorratskarten. Die Belagkarten im Vorrat liegen offen. Du kannst sie für deine eigenen Pizzas verwenden wie Karten auf der Hand, und die anderen können sie zum Tauschen nutzen.</p><h3>Spielbeginn</h3><p>Wer zuletzt Pizza gegessen hat, beginnt und zieht 5 Belagkarten auf die Hand.</p><h3>Spielablauf</h3><ol class=\"lista\"><li>Ziehe Belagkarten, bis du 5 Karten auf der Hand hast.</li><li>Versuche, die oberste Pizza deines Stapels mit Karten aus Hand und Vorrat zuzubereiten.</li><li>Du darfst Karten aus deinem Vorrat mithilfe von Rechnungen gegen Vorratskarten eines anderen Spielers tauschen.</li><li>Einmal pro Zug darfst du die oberste Pizza deines Stapels gegen die Tauschpizza in der Mitte tauschen. Sie darf sofort zubereitet werden.</li><li>Lege am Ende deines Zuges eine Belagkarte aus der Hand offen in deinen Vorrat.</li></ol><h3>Eine Pizza zubereiten</h3><p>Wenn du die nötigen Beläge auf der Hand und/oder im Vorrat hast, bereite die Pizza zu. Die Pizzakarte und die verwendeten Belagkarten kommen aus dem Spiel. Decke die nächste Pizzakarte deines Stapels auf – hast du die passenden Beläge, darfst du sie sofort zubereiten.</p><h3>Herzpizza</h3><p>Wenn du eine Herzpizza zubereitest, gib deine nächste Pizzakarte (ohne sie anzusehen) einem anderen Spieler. Er legt sie unter seinen Stapel.</p><h3>Vorratskarten tauschen</h3><p>Hole dir fehlende Beläge, indem du Karten aus deinem Vorrat gegen Vorratskarten eines anderen Spielers tauschst. Getauscht wird mit Rechnungen: Alles ist erlaubt, solange das Ergebnis auf den Karten beider Spieler gleich ist. Du darfst in einem Zug mehrmals tauschen, aber jeder Tausch findet zwischen zwei Vorräten statt. Eine Karte, die unter einer anderen liegt, kann nicht getauscht werden. Die erhaltenen Karten legst du in beliebiger Reihenfolge in deinen Vorrat.</p><h3>Den Vorrat füllen</h3><p>Wenn deine Hand leer ist, bevor du eine Vorratskarte abgelegt hast, ziehe 5 neue Karten und spiele weiter. Die Vorratsplätze müssen nicht der Reihe nach gefüllt werden, und Karten dürfen gestapelt werden. Die oberste muss immer vor den unteren verwendet werden. Abgelegte Vorratskarten dürfen nicht verschoben werden.</p><h3>Spielende</h3><p>Das Spiel endet, wenn ein Spieler alle Pizzas seines Stapels zubereitet hat.</p>"
+      }
+    ],
+    "lataa_otsikko": "Regeln als PDF",
+    "lataa_teksti": "Das gedruckte Regelblatt auf Finnisch, Schwedisch und Englisch.",
+    "lataa_tiedosto": "Regeln Kartenspiel (FI · SV · EN)",
+    "pelaa_otsikko": "Online üben",
+    "pelaa_teksti": "Pizza Party läuft auch im Browser. Probiere es vor dem ersten Spiel aus oder spiele mit Freunden auf euren eigenen Handys."
+  },
+  "lautapeli": {
+    "title": "Pizza Love® Brettspiel – Regeln und Videos",
+    "kuvaus": "Regeln und Erklärvideos zum Pizza Love® Brettspiel: Aufbau, Spielzug und drei Spielvarianten.",
+    "h1": "Pizza Love® Brettspiel",
+    "ingressi": "Bereite die Lieblingspizzas der Pizzakartons zu und sammle als Erster 10 verschiedene Stücke – dann hast du gewonnen!",
+    "tiedot": ["2–4 Spieler", "ab 4", "3 Spielvarianten"],
+    "hyppy": {"kokoaminen": "Vor dem ersten Spiel", "peli": "So funktioniert das Spiel", "muodot": "Drei Spielvarianten", "lataa": "Regeln als PDF"},
+    "kokoaminen_otsikko": "Vor dem ersten Spiel",
+    "kokoaminen": "In der Schachtel sind ein Stickerbogen und vier Boxen, die einmal zusammengebaut werden. Das dauert einen Moment – danach ist das Spiel immer startklar.",
+    "videot": {
+      "HE9301owOKI": "Die Boxen zusammenbauen",
+      "RbLfhUyXHKw": "Sticker auf die Spielsteine",
+      "Ya73FhJfj54": "Das Spiel aufbauen",
+      "IN2LvbXo9eA": "Spielzug und Sieg"
+    },
+    "peli_otsikko": "So funktioniert das Spiel",
+    "voittaminen_otsikko": "Spielziel",
+    "voittaminen": "Gewinne, indem du als Erster <b>10 verschiedene</b> Stücke in deiner Box sammelst. Bereite die Pizzas auf dem Spielbrett zu, dann bekommst du die passenden Stücke für deine Box. Eine Herzpizza bringt dir ein zusätzliches Stück nach Wahl.",
+    "valmistelut_otsikko": "Spielvorbereitung",
+    "valmistelut": ["Stapelt die bunten Belagtürme an ihren Platz im Lager.", "Mischt 4 Pizzakarten und legt sie auf das Spielbrett. Legt die übrigen Pizzakarten als Stapel auf den Tisch.", "Mischt die Affenkarten und legt sie als Stapel auf den Tisch.", "Gebt jedem Spieler eine leere Box."],
+    "vuoro_otsikko": "Der Spielzug",
+    "vaiheet": [
+      {"otsikko": "Würfeln und Spielsteine bewegen", "html": "<p>Wer zuletzt Pizza gegessen hat, beginnt und würfelt. Der Würfel bestimmt, wie viele Spielsteine zwischen dem Lager und dem Band bewegt werden. Gleichfarbige Spielsteine bewegen sich immer als ein Turm. Kannst du keinen Zug machen, endet dein Zug.</p><p class=\"pieni\">Die Affenwaage und die Gewichte helfen Kindern, die Züge zu verstehen. <b>Sie müssen nicht verwendet werden.</b></p>"},
+      {"otsikko": "Pizza zubereiten", "html": "<p>Wenn die Beläge, die eine Pizza braucht, auf dem Band liegen, bereite die Pizza zu und sammle die Stücke in deiner Box. Du kannst in einem Zug mehrere Pizzas zubereiten, aber jeder Belag darf pro Zug nur für eine Pizza verwendet werden. Bringe die verwendeten Beläge ins Lager zurück und lege eine neue Pizzakarte vom Stapel auf das Spielbrett.</p>"},
+      {"otsikko": "Eine Affenkarte ziehen", "html": "<p>Wenn du mindestens eine Pizza zubereitet hast, ziehe am Ende deines Zuges eine Affenkarte und befolge sie. Dann geht es im Uhrzeigersinn weiter.</p>"}
+    ],
+    "muodot_otsikko": "Drei Spielvarianten",
+    "muodot_ingressi": "Würfeln, Beläge bewegen und Pizzas zubereiten funktioniert in allen drei Varianten gleich.",
+    "muodot": [
+      {"nimi": "Pizza Love – Grundspiel", "kuvaus": "Wettrennen für die ganze Familie, ab 6", "html": "<p>Bereite die Lieblingspizzas der Pizzakartons zu und sammle als Erster 10 verschiedene Stücke in deiner Box. Wenn ihr das Grundspiel kennt, findet ihr in der Anleitung Zusatzregeln, die das Spiel schneller machen.</p>"},
+      {"nimi": "Hungrige Affen", "kuvaus": "Kooperatives Spiel, für etwa 4- bis 5-Jährige", "html": "<p>Der leichteste Einstieg. Ihr spielt zusammen und füllt eine gemeinsame Box. Füllt sie mit 10 verschiedenen Stücken, dann habt ihr gewonnen. Aber Vorsicht: Die hungrigen Affen essen ihre Stücke sofort auf, wenn keine neuen kommen!</p>"},
+      {"nimi": "Geheime Pizzas", "kuvaus": "Spannend und strategisch", "html": "<p>Jeder bekommt zwei geheime Pizzas, die die anderen nicht sehen – niemand weiß, welche Pizzas du zubereiten willst. Wer seine Box zuerst mit 10 verschiedenen Stücken füllt, gewinnt.</p>"}
+    ],
+    "lataa_otsikko": "Regeln als PDF",
+    "lataa_teksti": "Die vollständigen Regeln aller Spielvarianten auf Finnisch, Schwedisch und Englisch.",
+    "lataukset": {
+      "pikaohje": "Kurzanleitung (zum Ausdrucken)",
+      "peruspeli": "Grundspiel – vollständige Anleitung",
+      "apinat": "Hungrige Affen – vollständige Anleitung",
+      "salatut": "Geheime Pizzas – vollständige Anleitung"
+    }
+  }
+}

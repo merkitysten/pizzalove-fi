@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pizza Love®</title>
+<meta name="description" content="Pizza Love® – rules, videos and online game · säännöt, videot ja verkkopeli">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<script>
+(function () {
+  var kielet = ["fi", "sv", "en", "de"], valittu = null;
+  try { valittu = localStorage.getItem('pizzalove-kieli'); } catch (e) {}
+  if (kielet.indexOf(valittu) < 0) {
+    valittu = null;
+    var selain = navigator.languages || [navigator.language || ''];
+    for (var i = 0; i < selain.length && !valittu; i++) {
+      var k = String(selain[i]).slice(0, 2).toLowerCase();
+      if (kielet.indexOf(k) >= 0) valittu = k;
+    }
+  }
+  location.replace((valittu || 'en') + '/' + location.hash);
+})();
+</script>
+<style>body{font-family:system-ui,sans-serif;background:#FAF6EE;color:#1A1A1A;display:grid;place-items:center;min-height:90vh;margin:0}
+ul{list-style:none;padding:0;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+a{display:block;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1A1A1A;font-weight:700;text-decoration:none}</style>
+</head>
+<body>
+<main><p style="text-align:center;font-weight:700">Pizza Love®</p><ul><li><a href="fi/" hreflang="fi" lang="fi">Suomi</a></li><li><a href="sv/" hreflang="sv" lang="sv">Svenska</a></li><li><a href="en/" hreflang="en" lang="en">English</a></li><li><a href="de/" hreflang="de" lang="de">Deutsch</a></li></ul></main>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fi" class="isanta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pizza Party — yhteispeli</title>
+<!-- ISÄNNÄN NÄYTTÖ: iso yhteinen ruutu (tietokone, näyttö, taulu).
+     Pelaajat pelaavat omilla laitteillaan (pelaa.html).
+     ⚠️ peli.css ladataan ENSIN: tokenit, fontit ja korttien kuvasäännöt
+     tulevat sieltä. isanta.css koskee vain tätä sivua. -->
+<link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="peli.css?v=20260920e">
+<link rel="stylesheet" href="isanta.css?v=20260917b">
+</head>
+<body>
+<main class="isanta-sivu">
+
+<!-- 1 · ASETUKSET -->
+<section id="nAsetukset" class="isanta-nakyma">
+  <img class="isanta-apina" src="kuvat/apina.webp?v=20260910a" alt="">
+  <h1 class="isanta-otsikko" data-t="isanta.otsikko"></h1>
+  <div class="isanta-asetukset">
+    <span data-t="isanta.kierroksia"></span>
+    <div class="isanta-valinnat" id="valKierroksia">
+      <button type="button" data-arvo="10">10</button>
+      <button type="button" data-arvo="20">20</button>
+    </div>
+
+    <span data-t="isanta.aika"></span>
+    <div class="isanta-askel">
+      <button type="button" id="aikaMiinus" data-ta="aika.vahemman">−</button>
+      <output id="aikaArvo"></output>
+      <button type="button" id="aikaPlus" data-ta="aika.enemman">+</button>
+    </div>
+
+    <label for="odotaKaikkia" data-t="isanta.odotaKaikkia"></label>
+    <input type="checkbox" id="odotaKaikkia" class="isanta-kytkin">
+
+    <span data-t="as.tapa"></span>
+    <div class="isanta-valinnat" id="valTapa">
+      <button type="button" data-arvo="helppo" data-t="tapa.helppo"></button>
+      <button type="button" data-arvo="vaikea" data-t="tapa.vaikea"></button>
+    </div>
+
+    <span data-t="as.luvat"></span>
+    <div class="isanta-luvat" id="luvat">
+      <label><input type="checkbox" data-lupa="kerto"><span>×</span></label>
+      <label><input type="checkbox" data-lupa="jako"><span>÷</span></label>
+      <label><input type="checkbox" data-lupa="potenssi"><span>x<sup>y</sup></span></label>
+      <label><input type="checkbox" data-lupa="log"><span>log</span></label>
+      <label><input type="checkbox" data-lupa="sulut"><span>( )</span></label>
+    </div>
+  </div>
+  <button type="button" id="luoPeli" class="isanta-iso" data-t="isanta.luo"></button>
+  <!-- Kulmassa eikä virrassa: näkymä on 1280 × 720:ssa jo 721 px korkea, ja
+       napin lisääminen virtaan vei Luo peli -rivin alta tilaa (784 px, mitattu). -->
+  <button type="button" id="valikkoon" class="isanta-toissijainen isanta-kulma" data-t="valikko.alkuun"></button>
+  <p id="asetusVirhe" class="isanta-virhe" hidden></p>
+</section>
+
+<!-- 2 · AULA: koodi ja liittyneet -->
+<section id="nAula" class="isanta-nakyma" hidden>
+  <!-- QR (Marko 11.9.2026) koodin rinnalla, ei sen tilalla: kamera voi puuttua.
+       ⚠️ Osoite OMALLA RIVILLÄÄN eikä koodin palstassa: tuotannon osoite
+       (51 merkkiä) levitti palstan 920 px:iin, QR putosi yläpuolelle ja
+       Aloita jäi 1280 × 720 -ruudulla näkymän alle (mitattu 11.9.2026). -->
+  <div class="isanta-liittyminen">
+    <div id="qr" class="isanta-qr" hidden></div>
+    <div id="koodi" class="isanta-koodi" data-ta="isanta.koodiAria"></div>
+  </div>
+  <p class="isanta-liity"><span data-t="isanta.liity"></span> <b id="osoite"></b></p>
+  <p id="aulaMaara" class="isanta-maara"></p>
+  <!-- ⚠️ Nimimerkit piirretään textContentilla (isanta.js). -->
+  <div id="aulaPelaajat" class="isanta-pelaajat"></div>
+  <!-- ⚠️ «Lopeta peli» joka vaiheessa (Marko 11.9.2026): aula oli umpikuja,
+       eikä uudelleenlataus auttanut koska istunto palasi samaan aulaan. -->
+  <div class="isanta-napit">
+    <button type="button" id="aloitaPeli" class="isanta-iso" data-t="isanta.aloita" disabled></button>
+    <button type="button" class="isanta-toissijainen isanta-lopeta" data-t="isanta.lopetaPeli"></button>
+  </div>
+</section>
+
+<!-- 3 · KIERROS -->
+<section id="nKierros" class="isanta-nakyma isanta-kierros" hidden>
+  <header class="isanta-palkki">
+    <span id="kierrosNro"></span>
+    <span id="vastanneet"></span>
+    <span id="kierrosKoodi" class="isanta-koodi-pieni"></span>
+  </header>
+  <div id="lahtolaskenta" class="isanta-lahto"></div>
+  <div id="poyta" class="isanta-poyta" hidden>
+    <div id="kPizza" class="pizza-kortti"><img alt=""><span class="pizza-sydan" data-ta="pizza.sydan" hidden>♥2</span></div>
+    <div id="kKortit" class="isanta-kortit"></div>
+  </div>
+  <div id="kello" class="isanta-kello"><div id="kelloPalkki" class="isanta-kello-palkki"></div></div>
+  <p id="aikaJaljella" class="isanta-aika"></p>
+  <div class="isanta-napit">
+    <button type="button" id="lopetaKierros" class="isanta-toissijainen" data-t="isanta.lopetaKierros"></button>
+    <button type="button" class="isanta-toissijainen isanta-lopeta" data-t="isanta.lopetaPeli"></button>
+  </div>
+</section>
+
+<!-- 4 · KIERROKSEN TULOS -->
+<section id="nTulos" class="isanta-nakyma" hidden>
+  <h2 id="tulosOtsikko" class="isanta-alaotsikko"></h2>
+  <p id="esimerkki" class="isanta-esimerkki"></p>
+  <div class="isanta-kaksi">
+    <ol id="kierrosRivit" class="isanta-rivit"></ol>
+    <div class="isanta-sarake">
+      <h3 class="isanta-sarakeotsikko" data-t="isanta.pisteet"></h3>
+      <ol id="kokonaisRivit" class="isanta-rivit isanta-kokonais"></ol>
+    </div>
+  </div>
+  <div class="isanta-napit">
+    <button type="button" id="seuraava" class="isanta-iso"></button>
+    <button type="button" class="isanta-toissijainen isanta-lopeta" data-t="isanta.lopetaPeli"></button>
+  </div>
+</section>
+
+<!-- 5 · LOPPUTULOS -->
+<section id="nLoppu" class="isanta-nakyma" hidden>
+  <h1 class="isanta-otsikko" data-t="isanta.lopputulos"></h1>
+  <ol id="podium" class="isanta-podium"></ol>
+  <ol id="loppuRivit" class="isanta-rivit isanta-kokonais"></ol>
+  <div class="isanta-napit">
+    <button type="button" id="uudelleen" class="isanta-iso" data-t="isanta.uudelleen"></button>
+    <button type="button" id="lopetaPeli" class="isanta-toissijainen isanta-lopeta" data-t="isanta.lopetaPeli"></button>
+  </div>
+</section>
+
+<p id="yhteysVirhe" class="isanta-yhteys" role="status" hidden></p>
+</main>
+
+<script src="kielet.js?v=20261006a"></script>
+<script src="kortit.js?v=20260912b"></script>
+<script src="ratkoja.js?v=20260909b"></script>
+<script src="laskin.js?v=20260909c"></script>
+<script src="kierros.js?v=20260914b"></script>
+<script src="yhteys.js?v=20261006a"></script>
+<script src="qr.js?v=20260916a"></script>
+<script src="isannointi.js?v=20260920a"></script>
+<!-- valikko.js ENNEN isanta.js:ää: isanta.js käynnistyy heti ja sen vahti kysyy valikkoAlkuun(). -->
+<script src="valikko.js?v=20260917a"></script>
+<script src="isanta.js?v=20260918a"></script>
+</body>
+</html>

@@ -1,0 +1,1253 @@
+/* Pizza Love — Pizza Party selaimessa.
+ * Värit varainhankintasivuston :root-lohkosta (mitattu 8.9.2026), jotta
+ * peli ja sivusto ovat samaa ilmettä eivätkä ajaudu erilleen. */
+
+/* ⚠️ Poppins on ITSE ISÄNNÖITY, ei Googlelta (8.9.2026).
+ * Peli ei kutsu enää yhtäkään ulkopuolista palvelinta — ei fonttia, ei
+ * analytiikkaa, ei mitään. Se oli sen ainoa ulos menevä pyyntö, ja koska
+ * linkin päässä on lapsia, se oli kysymys johon ei kannata joutua
+ * vastaamaan.
+ *
+ * Vain leikkaukset 400 ja 700, vain latin-osajoukko: mitattu, että CSS
+ * käyttää `font-weight: 700` ja perii muuten 400:n — aiemmin ladattiin
+ * turhaan myös 600 ja 800. Latin (U+0000–00FF) kattaa ä, ö ja å.
+ * Yhteensä 16 kt.
+ *
+ * Poppins, SIL Open Font License 1.1 — ks. fontit/OFL.txt.
+ * ⚠️ Lisenssitiedosto kuuluu mukaan myös palvelimelle. */
+@font-face{
+  font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('fontit/poppins-400.woff2?v=20260911a') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,
+    U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('fontit/poppins-700.woff2?v=20260911a') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,
+    U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root{
+  --ground:#FAF6EE;
+  --ink:#1A1A1A;
+  /* ⚠️ BRÄNDIORANSSI, mitattu logo-SVG:stä 8.9.2026. Tässä luki #E96E2A,
+   * joka oli poimittu varainhankintasivustolta eikä vastaa logoa (ero 40)
+   * eikä tuoteväriä 5 (#EF7925, katkarapukortti, ero 35). Kolme eri
+   * oranssia — ks. muistio pizza-love-varit. */
+  --orange:#EE7203;
+  --money:#2D5D3D;
+  --himmea:#7A7064;
+  --raja:#E4DACA;
+  /* ⚠️ NÄKYVÄN kortin suhde, mitattu kuvien alfakanavasta 8.9.2026.
+   * Lähdekuva on 439x620, mutta kortti siinä on vain 349x531 kohdassa
+   * (45,44) — reunoilla on 45 px LÄPINÄKYVÄÄ täytettä, ja se söi
+   * 28 % leveydestä. Kortin oma valkoinen reuna (18 px) on tämän sisällä
+   * eikä sitä leikata. Vanha arvo 860/1215 oli painokortin mitta eikä
+   * kuvan, ja siksi laatikko oli aina korttia isompi. */
+  --kortti-suhde: 349 / 531;
+  /* Hehkut YHDESSA paikassa. Sävy on brändioranssi #EE7203 ja
+   * voittovihreä --money, molemmat läpikuultavina. */
+  --hehku-vihje:        0 0 0 2px rgba(238,114,3,.30), 0 0 10px 2px rgba(238,114,3,.25);
+  --hehku-oranssi:      0 0 0 2px rgba(238,114,3,.65), 0 0 18px 5px rgba(238,114,3,.55), 0 8px 16px rgba(60,40,20,.22);
+  --hehku-oranssi-vahva:0 0 0 3px rgba(238,114,3,.85), 0 0 26px 9px rgba(238,114,3,.70), 0 8px 16px rgba(60,40,20,.22);
+  --hehku-vihrea:       0 0 0 2px rgba(45,93,61,.65),  0 0 18px 5px rgba(45,93,61,.45),  0 8px 16px rgba(60,40,20,.22);
+  --kuva-lev: 125.79%;   /* 439/349 */
+  --kuva-kork: 116.76%;  /* 620/531 */
+  --kuva-vas: -12.89%;   /* -45/349 */
+  --kuva-yla: -8.29%;    /* -44/531 */
+  /* ⚠️ YKSI LÄHDE. Kortin leveys oli kolmessa paikassa (88 / 68 / 92), ja
+   * sen on pakko olla sama valinta- ja lausekevaiheessa — muuten käsi
+   * hyppää juuri kun pelaajan sormi on korteilla. Media queryt muuttavat
+   * VAIN tätä lukua. Yläraja on 219 px: lähdekuva on 439 px leveä, joten
+   * 2× näytöllä suurempi kortti alkaisi pehmetä. */
+  --kortti-lev: 88px;
+  /* Kaannon kesto YHDESSA paikassa: peli.js lukee taman ja ajoittaa
+   * kuvanvaihdon puolivaliin, jolloin vaihto tapahtuu piilossa. */
+  --kaanto: 340ms;
+  /* ⚠️ KAKSI ERI AIKAA, JA NE MITTAAVAT ERI ASIAA (Markon testihavainto
+   * 9.9.2026): "pelaajat alkoivat painaa omaa apinaansa etukateen, joten he
+   * saivat nain varattua vuoron, jolloin ehtivat ajatella."
+   *
+   *   --valinta-aika  korttien valintaan. LYHYT, koska juuri tama on
+   *                   se aika jonka pelaaja voi varastaa painamalla nappia
+   *                   ennen kuin on miettinyt. Kolmessa sekunnissa ei ehdi
+   *                   etsia kortteja — vain poimia ne jotka on jo nahnyt.
+   *   --lauseke-aika  laskun rakentamiseen. Erillinen, koska kortit
+   *                   ovat siina vaiheessa jo sitovat: aika ei enaa suojaa
+   *                   varaukselta vaan pitaa pelin liikkeessa.
+   *
+   * ⚠️ ALA KIRJOITA LUKUJA TAHAN SELITYKSEEN. Ne olivat 3 s ja 5 s
+   * 9.9.2026 asti, ja Marko nosti molempia sekunnilla ensimmaisen
+   * testikierroksen jalkeen. Selitykseen kirjoitettu luku vanhenee
+   * hiljaa; alla olevat rivit ovat ainoa lahde.
+   *
+   * Ajat ovat TAALLA eivatka JS:ssa, ja peli.js lukee ne taalta — kello
+   * piirretaan CSS:ssa, ja kaksi lukua kahdessa tiedostossa ajautuisi
+   * erilleen. Sama kuvio kuin --kaanto. */
+  --valinta-aika: 4000ms;
+  --lauseke-aika: 6000ms;
+}
+
+/* ---------- lepotila: kortit selkapuoli ylospain ----------
+ * ⚠️ Peli ei ala napista vaan korteista (Markon linjaus 9.9.2026).
+ * Yksi oranssi ja viisi mustaa odottavat kaannettavaksi; kierros
+ * kaynnistyy vasta kun molemmat on kaannetty. */
+.selka{cursor:pointer}
+/* Hidas hehku on ainoa vihje siita etta tahan saa koskea — peli on
+ * sanaton, joten kutsu on liikkeessa eika tekstissa. */
+.selka:not(.kaantyy){animation:odottaa-kortti 2.6s ease-in-out infinite}
+@keyframes odottaa-kortti{
+  0%,100%{box-shadow:0 2px 5px rgba(60,40,20,.20), 0 0 0 1px rgba(60,40,20,.07)}
+  50%{box-shadow:var(--hehku-oranssi)}
+}
+/* Kaanto: kortti kutistuu reunalleen, kuva vaihtuu piilossa, kortti
+ * aukeaa. Ei tarvitse korttiin toista puolta, ja lukee oikeana
+ * kaantona — ei valahdyksena. */
+.kaantyy{animation:kaanto var(--kaanto) ease-in-out both}
+@keyframes kaanto{
+  0%{transform:scaleX(1)}
+  50%{transform:scaleX(.04)}
+  100%{transform:scaleX(1)}
+}
+
+*{box-sizing:border-box}
+/* ⚠️ .peite ja .ruutu asettavat display:n, ja luokka voittaa hidden-attribuutin
+ * oletustyylin. Ilman tätä riviä fantasiavalikko oli näkyvissä heti latauksessa
+ * (mitattu 8.9.2026, ensimmäinen ajo selaimessa). */
+[hidden]{display:none!important}
+/* ⚠️ SIVU EI VIERI. Sisältö mahtuu, mutta iOS antaa silti kumittaa
+ * dokumenttia — ja kumitus on eri asia kuin ylivuoto: mittari joka kysyy
+ * «mahtuuko sisältö» ei näe sitä lainkaan. overscroll-behavior estää
+ * kumituksen, overflow:hidden vierityksen, ja molemmat tarvitaan.
+ * touch-action:manipulation poistaa kaksoisnapautuksen zoomin, joka
+ * kilpajuoksupelissä laukeaa vahingossa. */
+html,body{margin:0;padding:0;height:100%;overflow:hidden;
+  overscroll-behavior:none;touch-action:manipulation}
+/* ⚠️ JA `touch-action` EI PERIYDY — mitattu 11.9.2026.
+ * body:n `manipulation` nayttaa kattavan koko sivun, mutta jokaisen
+ * napautuskohteen oma laskettu arvo oli `auto`. Moninpelissa pelaajat
+ * hakkaavat omaa nappiaan, joten kaksoisnapautus laukesi juuri siella
+ * missa se hairitsee eniten. Sama koskee pizzakorttia, aukkoja ja
+ * asetusrivien nappeja.
+ * Kortit (.kasi .tayte-kortti) ja laskumerkit (#operaattorit .op) saavat
+ * yha `none`n: ne raahataan, ja `manipulation` antaisi selaimen kaapata
+ * eleen. Ne valitsimet ovat tarkempia, joten ne voittavat taman. */
+button, .pizza-kortti{touch-action:manipulation}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:Poppins,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.5;
+  -webkit-text-size-adjust:100%;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right)
+          env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+img{max-width:100%;display:block}
+
+.ruutu{max-width:520px;margin:0 auto;padding:20px 18px 32px}
+/* ⚠️ VAAKATASO ON ENSISIJAINEN (Markon päätös 8.9.2026): peliä pelataan
+ * puhelin vaakatasossa, ja sama asettelu toimii myös tietokoneella.
+ *
+ * Mitattu ennen tätä: 667 × 375 px:n näkymässä sivu oli 582 px korkea eli
+ * **207 px yli ruudun**, käsi jäi taitteen alle ja pizzakortti kutistui
+ * 58 × 83 pikseliin — koska sen korkeus oli `22vh` ja vaakatasossa vh on
+ * puolet pienempi. Koko asettelu oli pystypino, joka hukkasi kaiken
+ * vaakatilan (667 px ruutu, sisältö 520 px sarakkeessa).
+ *
+ * Pystyasettelu jää voimaan kapeille ruuduille; se toimii eikä sitä pureta. */
+#peliRuutu{padding:12px 18px 16px}
+h1{font-size:30px;line-height:1.15;margin:8px 0 12px}
+h2{font-size:17px;margin:26px 0 6px}
+.ingressi{margin:0 0 12px}
+.pikkuteksti{color:var(--himmea);font-size:14px;margin:0 0 12px}
+
+/* --- aloitusruudun esimerkki: se mitä tämä peli on olemassa opettamaan --- */
+.esimerkki{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;border:2px solid var(--raja);border-radius:14px;
+  padding:14px 16px;margin:16px 0;
+}
+.esim-arvo{
+  flex:0 0 auto;width:46px;height:46px;border-radius:12px;
+  background:var(--orange);color:#fff;font-weight:700;font-size:24px;
+  display:grid;place-items:center;
+}
+.esim-laskut{font-size:15px;line-height:1.7}
+
+/* --- ASETUSVALIKKO ---
+ * ⚠️ YKSI VALINTARIVIN TYYLI, EI KOLMEA. Ennen tätä taso, tapa ja kieli
+ * olivat kolme erinäköistä listaa samassa paneelissa; nyt ne ovat sama
+ * .as-valinta. Kolme tyyliä samaan asiaan on juuri se kuvio jossa korjaus
+ * osuu yhteen ja kaksi jää. */
+.as-valinta{
+  font:inherit;text-align:left;cursor:pointer;color:inherit;width:100%;
+  background:#fff;border:2px solid var(--raja);border-radius:12px;padding:12px 14px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.as-valinta small{color:var(--himmea);line-height:1.4}
+.as-valinta.valittu{border-color:var(--orange);background:#FFF3EA}
+.as-valinta[disabled]{opacity:.45;cursor:default}
+.as-lista{display:grid;gap:8px;margin:0}
+
+/* Aikarajan saadin: nimi vasemmalle, - arvo + oikealle. Kaksi nimea ovat
+ * ainoa teksti talla sivulla, ja ne NIMEAVAT saadettavan asian — ne eivat
+ * selita sita. Selitys on i-napin takana kuten muillakin sivuilla. */
+.as-saatimet{display:grid;gap:8px;margin:0 0 10px}
+.as-saadin{
+  display:flex;align-items:center;gap:10px;
+  background:#fff;border:2px solid var(--raja);border-radius:12px;
+  padding:8px 10px 8px 14px;
+}
+.as-saadin > span{flex:1 1 auto;font-size:15px}
+.as-askeleet{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.as-askel{
+  font:inherit;font-size:20px;line-height:1;width:38px;height:38px;cursor:pointer;
+  background:none;color:var(--ink);border:2px solid var(--raja);border-radius:10px;
+  display:grid;place-items:center;padding:0;
+}
+.as-askel:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.as-askel:disabled{opacity:.3;cursor:default}
+.as-aika{
+  min-width:52px;text-align:center;font-size:17px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.valinta{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:6px 0 20px;cursor:pointer}
+.valinta input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--orange);flex:0 0 auto}
+
+.iso-nappi{
+  display:block;width:100%;font:inherit;font-weight:700;font-size:19px;
+  background:var(--orange);color:#fff;border:0;border-radius:12px;
+  padding:15px;cursor:pointer;
+}
+.iso-nappi:active{transform:translateY(1px)}
+/* Odottava pääpainike: sama paikka ja koko, mutta vain reunaviiva (Marko
+ * 13.9.2026). Reuna on sisävarjo eikä border, jottei painike muuta kokoaan
+ * kun se täyttyy. Väri asetetaan myös -webkit-text-fill-colorina: iOS
+ * himmentää poistetun painikkeen tekstin muuten itse. */
+.iso-nappi.odottaa{background:none;box-shadow:inset 0 0 0 2px var(--orange);cursor:default}
+.iso-nappi.odottaa:disabled{opacity:1;color:var(--orange);-webkit-text-fill-color:var(--orange)}
+.iso-nappi.odottaa:active{transform:none}
+
+/* Sallitut laskutoimitukset: peli skaalataan pelaajan tasolle. */
+.sallitut{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 16px}
+.lupa{flex:1 1 58px;cursor:pointer}
+.lupa input{position:absolute;opacity:0;pointer-events:none}
+.lupa span{
+  /* ⚠️ EI display:grid. Ruudukko tekee tekstistä ja <sup>:sta kaksi erillistä
+   * riviä, jolloin xʸ näkyy x:nä ja y:nä allekkain. Rivi on tässä
+   * tekstirivi, ei laatikkoasettelu — silloin yläindeksi käyttäytyy oikein. */
+  display:block;text-align:center;line-height:44px;height:48px;
+  font-size:19px;font-weight:700;white-space:nowrap;
+  background:#fff;border:2px solid var(--raja);border-radius:11px;color:var(--himmea);
+}
+.lupa span sup{font-size:.62em}
+.lupa input:checked + span{border-color:var(--orange);background:#FFF3EA;color:var(--ink)}
+.lupa input:focus-visible + span{outline:3px solid var(--orange);outline-offset:2px}
+.toinen-nappi{
+  display:block;width:100%;margin-top:8px;font:inherit;font-size:16px;
+  background:none;color:var(--ink);border:2px solid var(--raja);
+  border-radius:12px;padding:13px;cursor:pointer;
+}
+
+/* Lopetuksen varmistus (isannointiVarmistaEnsin). Toiminnallinen väri. */
+.toinen-nappi.varmista{color:#C1121F;border-color:#C1121F;font-weight:700}
+
+.virhe{background:#FDECEC;border:2px solid #D93B3B;border-radius:12px;padding:14px;color:#7A1F1F}
+
+/* --- pelipalkki --- */
+.palkki{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.pisteet{display:flex;flex-direction:column;align-items:center;min-width:64px;
+  border-radius:10px;padding:5px 10px;background:#fff;border:2px solid var(--raja)}
+.pisteet img{width:26px;display:block}
+/* ? ja ✕ ovat ylapalkin oikeassa laidassa eivatka korttien vieressa:
+ * ne ovat pelin ulkopuolisia toimintoja eivatka saa kilpailla kadesta. */
+/* ⚠️ EI PIENENE (Marko 9.9.2026). Napin koolla on alaraja 44 px, joka on
+ * sormen mitta — pystyasennossa se kutistui sisallon kokoiseksi ja nakyi
+ * oudolta. Isolla ruudulla se saa kasvaa kortin mukana. */
+.kulmanappi{
+  display:grid;place-items:center;padding:0;font:inherit;line-height:1;
+  width:44px;height:44px;font-size:21px;border-radius:12px;
+  background:#fff;color:var(--himmea);border:2px solid var(--raja);cursor:pointer;
+}
+/* Pakkalaskurit venyvat keskelle, jolloin omat pisteet jaavat vasempaan
+ * laitaan ja apina + napit oikeaan. Ilman tata nelja ryhmaa jakautuivat
+ * tasavalein ja apina valui keskelle. */
+/* ⚠️ Taytepakka on PALKKI eika luku: yksi siru per jaljella oleva kortti,
+ * tiiviissa rivissa, ja rivi lyhenee jaon mukana. Siru on kortin
+ * selkapuolen viipale, joten se lukee korttipinon reunana. */
+/* ⚠️ PINO, EI PALKKI. Vierekkaiset viivat eivat lue korttipinona
+ * (Markon havainto 9.9.2026). Kortit ovat paallekkain vinottain:
+ * pinon paksuus kertoo maaran, ja tilaa menee murto-osa siita mita
+ * rivi vei — 48 korttia on noin 40 px leveana pinona kun rivi oli 98.
+ * Sijainnit tulevat JS:sta, koska CSS ei osaa indeksoida. */
+.pino{position:relative;flex:0 0 auto}   /* korkeus JS:sta: kasvaa pinon mukana */
+.siru{
+  position:absolute;width:20px;height:30px;border-radius:2px;
+  background:url('kuvat/tausta-tayte.webp?v=20260910a') center/cover;
+  box-shadow:0 0 0 .5px rgba(23,20,15,.5);
+}
+/* Paallimmainen kortti saa oman varjonsa, jotta pino irtoaa taustasta. */
+.siru:last-child{box-shadow:0 0 0 .5px rgba(23,20,15,.6), 2px 2px 5px rgba(60,40,20,.28)}
+.pisteet.iso{padding:10px 22px}
+.pisteet.iso b{font-size:34px}
+.pisteet.iso img{width:40px}
+/* ⚠️ YKSI saanto. Kirjoitin talle 9.9.2026 toisen saannon alemmas
+ * (gap:10px, flex-wrap) tarkistamatta oliko tama jo olemassa — ja koska
+ * tarkkuus on sama, jalkimmainen olisi voittanut hiljaa. Neljalla
+ * pelaajalla rivi tarvitsee rivityksen, joten arvot ovat tassa yhdessa. */
+.tulos-pisteet{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:0 0 22px}
+.tulos-napit{display:flex;justify-content:center}
+.pisteet b{font-size:22px;line-height:1}
+/* Tulosruutu kayttaa SAMOJA tunnistevareja kuin peliruutu: pelaaja
+ * oranssi, apina musta. Eri vari samalle osapuolelle eri ruudussa olisi
+ * kaksi eri kieltä samasta asiasta. */
+.pisteet.oma{border-color:var(--orange)}
+.pisteet.apina{border-color:var(--ink)}
+/* Tulosruudun pelaajalaatikko: sama vari kuin pelaajan napissa. */
+.pisteet.pelaaja{border-color:var(--pelaaja-vari);background:var(--pelaaja-vari);color:#fff}
+/* ⚠️ Korkein pistemaara korostetaan, ei "voittaja" yksikossa: tasapelissa
+ * korostuvat kaikki. Tasapeli on tulos eika puuttuva voittaja. */
+.pisteet.voittaja{box-shadow:0 0 0 3px var(--ground), 0 0 0 6px currentColor}
+/* Pakan kuluminen on peliä ohjaava tieto, ei koriste: kierros päättyy kun
+ * täytekortit loppuvat eikä kädestä voi enää tehdä pizzaa (Marko 8.9.2026). */
+ /* Sanat «pizzapakassa» ja «täytepakassa» korvattiin korttien omilla
+  * takapuolilla: symboli näkyviin, numero symbolin viereen. */
+/* ⚠️ YKSI SAANTO. Tama oli kahdessa paikassa samalla tarkkuudella, ja
+ * jalkimmainen voitti: gap:0 kirjoitettiin ylos ja gap:14px alas, joten
+ * palkki sai 47 x 14 px valia ja vuoti 756 px:iin kun tilaa oli 98
+ * (mitattu 9.9.2026). Sama jarjestysansa on CLAUDE.md:ssa. */
+/* ⚠️ EI overflow:hidden. Se oli vanhan siru-RIVIN ajalta, jolloin se esti
+ * ylivuodon nakymisen — mutta pinossa se LEIKKASI ylimmat kortit, koska
+ * pino kasvaa ylospain. Pino mahtuu nyt itse (40 px kun tilaa on 98),
+ * joten leikkausta ei tarvita. */
+.jaljella{display:flex;gap:0;align-items:center;justify-content:center;
+  flex:1;flex-wrap:nowrap}
+.pakka{display:flex;align-items:center;gap:5px}
+.pakka img{width:20px;height:auto;border-radius:3px;display:block}
+.jaljella b{font-size:15px;color:var(--ink)}
+.tulos-syy{font-size:14px;color:var(--himmea);margin:-4px 0 14px}
+
+/* --- pizza --- */
+.pizza-alue{text-align:center}
+.pelialue{display:block}
+.pizza-alue{display:flex;flex-direction:column;align-items:center;
+  /* Pizzakortti ja käsi erotetaan taustan värillä: pizza lepää omalla
+   * läpikuultavalla oranssilla pinnallaan, käsi sivun omalla. Väri on
+   * brändioranssi #EE7203 matalalla peitolla — ei tummennusta. */
+  background:rgba(238,114,3,.13);border-radius:16px;padding:12px}
+.tyoalue{display:block}
+
+
+
+/* --- aloitusruutu: apinan pää on se nappi --- */
+/* ⚠️ Aloitussivulla oli 1 360 merkkiä tekstiä ja 2,3 ruudullista vieritettävää
+ * ennen kuin Pelataan-nappi oli näkyvissä. Pelin oma perustelu on että
+ * PELAAMINEN opettaa mekaniikan — lukeminen oli siirretty videosta tekstiin.
+ * Kaikki selittävä siirtyi Asetukset- ja Miten pelataan -paneeleihin.
+ * Napiksi Markon ehdotus: apinan pää (basso-kieli, Pizza Loven omaa
+ * kuvitusta) — vastustaja on se jota vasten pelataan, joten se on myös
+ * luonteva sisäänkäynti. */
+.aloitus{text-align:center;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px}
+.aloitus h1{font-size:34px;margin:0}
+.aloitus-lause{font-size:16px;color:var(--himmea);margin:2px 0 4px}
+.apinanappi{
+  background:none;border:0;padding:0;cursor:pointer;position:relative;
+  width:min(52vh,240px);transition:transform .15s;
+}
+.apinanappi img{width:100%;display:block;filter:drop-shadow(0 6px 14px rgba(26,26,26,.18))}
+.apinanappi:hover{transform:scale(1.04)}
+.apinanappi:active{transform:scale(.97)}
+.apinanappi:focus-visible{outline:3px solid var(--orange);outline-offset:8px;border-radius:20px}
+.apinanappi.pieni{width:min(30vh,150px)}
+.apinanappi-teksti{
+  position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  background:var(--orange);color:#fff;font:inherit;font-weight:700;font-size:22px;
+  width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  padding-left:4px;box-shadow:0 4px 12px rgba(26,26,26,.2);
+}
+/* Kuvakenappi: ratas ja kysymysmerkki ovat kieliriippumattomia. */
+.kuvake-nappi{
+  font:inherit;font-size:22px;line-height:1;width:52px;height:52px;cursor:pointer;
+  background:none;color:var(--himmea);border:2px solid var(--raja);border-radius:50%;
+  display:grid;place-items:center;
+}
+.kuvake-nappi:hover{color:var(--ink);border-color:var(--orange)}
+.aloitus-linkit{display:flex;gap:8px;margin-top:26px;flex-wrap:wrap;justify-content:center}
+.aloitus-linkit .toinen-nappi{width:auto;margin:0;padding:10px 18px;font-size:15px}
+
+.asetus-laatikko{
+  background:var(--ground);border-radius:16px;padding:14px 16px 16px;
+  width:100%;max-width:420px;max-height:88vh;max-height:88dvh;overflow-y:auto;
+  overscroll-behavior:contain;
+}
+/* Ylapalkki: takaisin | nimi | i. Kolme saraketta jotta nimi on aina
+ * keskella riippumatta siita onko i-nappia. */
+.as-ylapalkki{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
+  gap:6px;margin:0 0 12px}
+.as-nimi{text-align:center;font-weight:700;font-size:17px}
+.as-kulma{
+  font:inherit;font-size:20px;line-height:1;width:40px;height:40px;cursor:pointer;
+  background:none;color:var(--himmea);border:2px solid var(--raja);border-radius:11px;
+  display:grid;place-items:center;padding:0;
+}
+.as-kulma:hover{color:var(--ink);border-color:var(--orange)}
+.as-info{font-weight:700;font-size:17px;font-style:italic}
+.as-info.auki{color:#fff;background:var(--orange);border-color:var(--orange)}
+.as-tyhja{border:0;background:none}
+
+/* Valikkorivi nayttaa VALITUN ARVON. Se korvaa selittavan tekstin: pelaaja
+ * nakee mita on valittuna avaamatta sivua. */
+.as-valikko{display:flex;flex-direction:column}
+.as-rivi{
+  font:inherit;font-size:16px;color:inherit;text-align:left;cursor:pointer;
+  background:none;border:0;border-bottom:1px solid var(--raja);
+  padding:15px 4px;display:flex;align-items:center;gap:10px;
+  text-decoration:none;width:100%;
+}
+.as-rivi:last-child{border-bottom:0}
+.as-rivi > span{flex:1 1 auto}
+.as-rivi::after{content:"\203A";color:var(--himmea);font-size:22px;line-height:1}
+.as-rivi:hover{color:var(--orange)}
+.as-arvo{color:var(--himmea);font-weight:400;font-size:15px;text-align:right}
+.as-kotelo{height:30px;width:auto}
+
+/* Selite on i-napin takana eika sivulla (Marko 9.9.2026). */
+.as-selite{
+  margin:0 0 12px;padding:12px 14px;border-radius:12px;
+  background:#FFF3EA;border:2px solid var(--orange);
+  font-size:14px;line-height:1.5;color:var(--ink);
+}
+
+/* --- MONINPELI: pelaajanapit ---
+ * ⚠️ Pelaaja ON apina, vain eri varilla (Markon tarkennus 9.9.2026).
+ * Nappi on se jolla vastausvuoro varataan — se on kilpajuoksun kohde,
+ * joten se on iso ja tasan yhta iso kaikilla. */
+/* ⚠️ align-items:stretch (flexin oletus) ON TASSA MERKITTAVA: se tekee
+ * laatikoista yhta korkeat vaikka vain toisessa on kuva. Ilman sita
+ * kuvaton laatikko olisi matalampi, ja Marko pyysi 10.9.2026 nimenomaan
+ * etta ne ovat samankokoiset "vaikka toisessa onkin apinan kuva". */
+/* ⚠️ SELKEA ERO KORTTEIHIN (Marko 10.9.2026): "Nyt ne on liian lahella
+ * kortteja." Vali on suhde kortin leveydesta eika kiintea pikseli, jotta
+ * se skaalautuu ruudun mukana. */
+.pelaajarivi{display:flex;gap:8px;justify-content:center;
+  margin:calc(var(--kortti-lev) * .34) 0 0}
+/* ⚠️ MONINPELISSA NAPIT ERILLEEN (Marko 11.9.2026): "reunimmaiset napit
+ * ihan reunaan ja sitten keskelle loput tasaisesti."
+ *
+ * `justify-content:space-between` tekee tasan sen — mutta VAIN koska
+ * napilla on `max-width`. Ilman sita `flex:1 1 0` kasvattaisi napit
+ * tayttamaan rivin, eika jaettavaa valia jaisi lainkaan: space-between
+ * nayttaisi tismalleen samalta kuin center.
+ *
+ * ⚠️ Vain moninpelissa. Yksinpelin rivilla ei ole pelaajien nappeja vaan
+ * kaksi pistelaatikkoa (pelaaja + apina), ja ne kuuluvat yhteen — niiden
+ * sinkoaminen ruudun vastakkaisiin reunoihin olisi eri asia kuin se mita
+ * pyydettiin. Reuna on turva-alueen reuna: body:n padding on
+ * env(safe-area-inset-*), joten lovi ei peita nappia. */
+#peliRuutu.moninpeli .pelaajarivi{justify-content:space-between}
+.pelaajanappi{
+  position:relative;overflow:hidden;flex:1 1 0;max-width:160px;
+  border:3px solid var(--pelaaja-vari);border-radius:14px;
+  background:var(--pelaaja-vari);cursor:pointer;padding:6px 4px 8px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;
+  font:inherit;color:#fff;
+}
+/* ⚠️ YKSINPELIN LAATIKOT OVAT PELKKA AARIVIIVA (Marko 10.9.2026):
+ * pelaajalla oranssi, apinalla musta. Ne EIVAT ole painettavia, eika
+ * tayttovari saa antaa ymmartaa etta olisivat — moninpelissa tayton
+ * tehtava on nimenomaan sanoa «tama on sinun nappisi».
+ *
+ * ⚠️ Ja vihrea vaihtui koska se ei ole brandivari. Se EI kuitenkaan
+ * poistunut pelista: `--money` on yha onnistumisen valahdys ja osuvan
+ * laskun tulos, ja ne ovat TOIMINNALLISTA signalointia (oikein/vaarin)
+ * eivatka ilmetta. Vaihdettiin vain pelaajan TUNNUSVARINA. */
+.pelaajanappi.p-oma{--pelaaja-vari:var(--orange);cursor:default}
+.pelaajanappi.p-apina{--pelaaja-vari:var(--ink);cursor:default}
+.pelaajanappi.p-oma, .pelaajanappi.p-apina{
+  background:none;color:var(--pelaaja-vari);
+}
+/* ⚠️ Kuvaton laatikko saa ISOMMAN luvun, ei tyhjaa tilaa kuvan paikalle.
+ * Yhta korkea laatikko jossa on pelkka pieni numero nayttaisi vajaalta —
+ * luku tayttaa sen tilan jonka kuva tayttaa toisessa. */
+.pelaajanappi.ei-kuvaa .pelaajanappi-pisteet{font-size:34px}
+.pelaajanappi img{width:38px;height:auto}
+.pelaajanappi-pisteet{font-size:20px;font-weight:700;line-height:1}
+/* Vuorossa oleva nostetaan ja kehystetaan: kaikkien on nahtava kuka varasi. */
+.pelaajanappi.vuorossa{transform:translateY(-4px);box-shadow:0 0 0 3px #fff, 0 0 16px 4px var(--pelaaja-vari)}
+/* Ulkona = yritti jo taman pizzan. Ei piiloteta, koska pelaajan on
+ * nahtava oma nappinsa myos silloin kun se ei ole kaytettavissa. */
+.pelaajanappi.ulkona{opacity:.32}
+.pelaajanappi:disabled{cursor:default}
+/* Kello: palkki joka valuu tyhjaksi vastausajassa. Kesto tulee
+ * --vastausaika-muuttujasta, samasta jonka JS lukee. */
+.pelaajanappi-kello{
+  position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:#fff;transform:scaleX(0);transform-origin:left center;
+}
+.pelaajanappi.vuorossa .pelaajanappi-kello{
+  animation:vuorokello var(--valinta-aika) linear forwards;
+}
+/* Lausekevaiheessa kello jatkaa omalla ajallaan. Kesto asetetaan JS:sta,
+ * koska sama elementti mittaa kahta eri aikaa. */
+.pelaajanappi.vuorossa.lauseke .pelaajanappi-kello{
+  animation-duration:var(--lauseke-aika);
+}
+@keyframes vuorokello{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+/* --- RAAHAUS: valitut kortit pizzalle ---
+ * ⚠️ touch-action:none on PAKOLLINEN kosketuslaitteella. Sivun oletus on
+ * `manipulation`, joka sallii selaimen oman panoroinnin — silloin selain
+ * kaappaisi eleen eika pointermove tulisi lainkaan. Sivu ei vieri
+ * (overflow:hidden), joten talla ei menetetä mitaan. */
+.kasi .tayte-kortti{touch-action:none}
+/* Kuvan oma raahaus pois (tyopoyta) ja tekstivalinta pois (pitka
+ * painallus puhelimessa avaisi valikon kesken eleen). */
+.tayte-kortti img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+.tayte-kortti{-webkit-touch-callout:none}
+/* ⚠️ pointer-events:none raahattavaan korttiin: ilman sita
+ * `elementFromPoint` palauttaisi kortin itsensa eika sita mika on ALLA,
+ * eika pudotuskohdetta voisi tunnistaa lainkaan. */
+/* ⚠️ EI `.tayte-kortti.raahataan` VAAN PELKKA `.raahataan`. Saanto oli
+ * korttiin sidottu, ja kun samaa koneistoa alettiin kayttaa myos
+ * laskumerkkeihin, raahattu MERKKI ei saanut `pointer-events:none`:ia:
+ * se jai itse osoittimen alle, `elementFromPoint` palautti sen eika
+ * aukkoa, eika yksikaan pudotus loytanyt kohdettaan. Mitattu 11.9.2026.
+ *
+ * Luokka kuvaa TILAA (tata raahataan), ei elementtilajia — silloin sen
+ * valitsin ei saa nimeta lajia. */
+.raahataan{
+  position:relative;z-index:6;pointer-events:none;transition:none;
+  filter:drop-shadow(0 10px 20px rgba(60,40,20,.40));
+}
+/* Pudotuskohde kertoo ottavansa vastaan. Sama oranssi hehku kuin
+ * valinnalla: se on jo pelin kieli sanalle «tama on aktiivinen».
+ * Yksi ilme kaikille kolmelle lajille, jotta ele opitaan kerran. */
+.pizza-kortti.kohde{transform:scale(1.04);box-shadow:var(--hehku-oranssi-vahva)}
+.aukko.kohde{background:var(--orange);border-color:var(--orange);color:#fff;
+  transform:scale(1.25);box-shadow:var(--hehku-oranssi)}
+#kasi .tayte-kortti.kohde{transform:translateY(-6px) scale(1.04);
+  box-shadow:var(--hehku-oranssi-vahva)}
+/* Laskumerkit raahataan aukkoihin, joten selaimen oma ele on estettava
+ * niiltakin — sama syy kuin korteilla. */
+#operaattorit .op{touch-action:none}
+
+/* --- pizzakortti --- */
+.pizza-kortti{
+  position:relative;height:min(22vh,250px);aspect-ratio:var(--kortti-suhde);
+  margin-top:6px;border-radius:10px;transition:transform .15s,box-shadow .15s;
+}
+.pizza-kortti img{position:absolute;display:block;pointer-events:none;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla);
+  max-width:none}
+/* Kortti on painike vasta kun sillä on tehtävää: pelaaja on valinnut arvot
+ * ja lyö ne pizzan päälle. Muulloin se on pelkkä kuva. */
+.pizza-kortti.pelattavissa{cursor:pointer;box-shadow:var(--hehku-oranssi);animation:kutsu 1.4s ease-in-out infinite}
+.pizza-kortti.pelattavissa:active{transform:scale(.97)}
+/* ⚠️ EI korostusta lausekevaiheessa. Tassa oli vihrea hehku, mutta
+ * vihrea on pelin VOITTOVARI ja pizzaa ei ole viela voitettu — se lupasi
+ * liikaa (Markon havainto 9.9.2026). Kortit pöydällä kertovat tilan jo
+ * itse, ja huomion pitaa olla laskunapeissa. */
+.pizza-kortti.pelattu{box-shadow:none}
+/* ⚠️ OHITETTU PIZZA saa punaisen ruksin paalleen. Se on vastaus siihen
+ * mita pelaaja juuri teki: painoi pizzaa ilman kortteja eli ilmoitti
+ * ettei pysty. Merkki piirretaan ::before ja ::after -viivoina, jolloin
+ * se ei tarvitse omaa elementtia eika voi jaada DOMiin roikkumaan. */
+.pizza-kortti.ohitettu::before,
+.pizza-kortti.ohitettu::after{
+  content:'';position:absolute;left:50%;top:50%;
+  width:118%;height:calc(var(--kortti-lev) * .11);
+  background:#E62448;border-radius:99px;pointer-events:none;
+  box-shadow:0 2px 6px rgba(60,40,20,.35);
+  /* ⚠️ z-index koska ::before maalataan LAPSIEN ALLE ja kortin kuva on
+   * lapinakymaton — ilman tata ruksista nakyi vain toinen viiva. */
+  z-index:2;
+}
+.pizza-kortti.ohitettu::before{transform:translate(-50%,-50%) rotate(-32deg)}
+.pizza-kortti.ohitettu::after{transform:translate(-50%,-50%) rotate(32deg)}
+/* Kutsu hehkuu eika hypi: pizzakortti on kiintopiste, ja liikkuva
+ * kiintopiste vie huomion korteilta joita pelaaja lukee. */
+@keyframes kutsu{50%{box-shadow:var(--hehku-oranssi-vahva)}}
+.pizza-kehotus{
+  position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);
+  background:var(--orange);color:#fff;font-size:12px;font-weight:700;
+  padding:3px 10px;border-radius:9px;white-space:nowrap;opacity:0;transition:opacity .15s;
+}
+.pizza-kortti.pelattavissa .pizza-kehotus{opacity:1}
+/* Kortin oma arvo on kulmissa pienenä. Tämä toistaa sen isona: pelaajan on
+ * nähtävä arvo ja täytemäärä yhdellä silmäyksellä, se on koko tehtävä. */
+/* Sydänmerkki kertoo NÄKYMÄTTÖMÄN asian (2 pistettä 1:n sijaan), joten se jää.
+ * Alareunaan, ettei se peitä kortin omaa kulmanumeroa. */
+.pizza-sydan{
+  position:absolute;right:-6px;bottom:14px;background:#D93B3B;color:#fff;
+  font-size:12px;font-weight:700;padding:3px 8px;border-radius:9px;
+}
+/* Pino: kun kukaan ei osaa, uusi pizza tulee edellisen päälle ja koko pino
+ * menee seuraavalle onnistujalle. Merkki kertoo mistä nyt pelataan. */
+.pizza-sydan{font-size:14px}
+.pino-merkki{
+  position:absolute;left:-8px;top:18px;background:var(--money);color:#fff;
+  font-size:12px;font-weight:700;padding:3px 8px;border-radius:9px;white-space:nowrap;
+}
+.pizza-kortti.pinossa{box-shadow:6px 6px 0 -2px var(--raja), 12px 12px 0 -4px var(--raja)}
+
+.taytteet{display:inline-flex;gap:5px;vertical-align:middle;margin-left:7px}
+.tayte-pallura{width:11px;height:11px;border-radius:50%;background:var(--orange);
+  border:2px solid var(--ink)}
+.pizza-selite{font-weight:700;font-size:21px;margin:8px 0 0}
+.pizza-ohje{font-size:13px;color:var(--himmea);margin:1px 0 8px}
+
+/* --- laskurivi --- */
+.lasku-alue{margin:0 0 10px}
+/* .lasku-luku poistettu: kortit itse ovat lauseke */
+.EI-KAYTOSSA-lasku-luku{
+  min-width:36px;height:36px;padding:0 8px;border-radius:9px;border:0;font:inherit;
+  color:#fff;font-weight:700;font-size:19px;display:grid;place-items:center;
+}
+/* Ryhmittelytilassa luvut ovat painikkeita: pelaaja osoittaa ryhmän
+ * ensimmäisen ja viimeisen kortin, ja sulkeet syntyvät niiden ympärille. */
+.lasku-luku.osoitettavissa{cursor:pointer;outline:3px dashed var(--orange);outline-offset:2px}
+.lasku-luku.ryhman-alku{outline:3px solid var(--orange);outline-offset:2px}
+/* Arvon paikkaa voi vaihtaa: järjestys on osa laskua, ja 2 ÷ 10 ei ole 10 ÷ 2. */
+.lasku-luku.siirrettavissa{cursor:pointer}
+.lasku-luku.nostettu{outline:3px solid var(--money);outline-offset:2px;transform:translateY(-5px)}
+/* Fantasiakortti odottaa arvoaan: se on lauseke vasta kun arvo on valittu. */
+.lasku-luku.arvoton{
+  background:#fff;color:var(--orange);
+  border:2px dashed var(--orange);cursor:pointer;
+}
+.sulku{font-size:24px;font-weight:700;color:var(--orange);line-height:1;
+  background:none;border:0;padding:0 2px;cursor:pointer}
+.lasku-op{font-size:21px;font-weight:700;color:var(--himmea)}
+/* Väli kahden pelatun kortin välissä: tähän pelaaja kertoo miten laski. */
+/* ⚠️ OSUMAPINTA ON ISOMPI KUIN NAKYVA AUKKO (Marko 11.9.2026).
+ * Aukko on 34 x 36 px eli alle sormen 44 px:n mitan, ja siihen
+ * pudotetaan laskumerkki. Ratkaisu ei ole isompi aukko vaan isompi
+ * OSUMA-ALUE: ::before venyttaa napin osumapinnan ilman etta ruudulla
+ * nakyva laatikko kasvaa.
+ *
+ * Pystysuunnassa varaa on paljon (kortti on ~130 px korkea), vaakaan
+ * vain 4 px korttien vali — siksi -22px pystyyn ja -6px sivuille.
+ * Osumapinta: 46 x 80 px. */
+.aukko{
+  position:relative;
+  font:inherit;font-size:20px;font-weight:700;line-height:1;
+  width:34px;height:36px;padding:0;cursor:pointer;
+  background:#fff;color:var(--himmea);
+  border:2px dashed var(--orange);border-radius:9px;
+}
+.aukko::before{content:'';position:absolute;inset:-22px -6px}
+.aukko.taytetty{border-style:solid;border-color:var(--raja);color:var(--ink)}
+.aukko.valittu{background:var(--orange);border-color:var(--orange);color:#fff}
+.aukko:disabled{cursor:default;opacity:.5}
+.lasku-tulos{
+  min-width:38px;height:36px;padding:0 8px;border-radius:9px;display:grid;place-items:center;
+  background:var(--raja);font-weight:700;font-size:19px;
+}
+.lasku-tulos.osuu{background:var(--money);color:#fff}
+.lasku-tulos.ohi{background:#D93B3B;color:#fff}
+
+.log-vihje{font-size:12px;color:var(--himmea);text-align:center;margin:5px 0 0}
+/* Kahdeksan painiketta ei mahdu 375 px:n riville luettavan kokoisena, joten
+ * ne kääriytyvät kahdelle riville. Neljä peruslaskutoimitusta ensin. */
+.operaattorit{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.op{
+  font:inherit;font-size:21px;font-weight:700;cursor:pointer;line-height:1.1;
+  background:#fff;color:var(--ink);border:2px solid var(--raja);border-radius:11px;padding:7px 0;
+}
+.op sup{font-size:.62em}
+.op.op-log{font-size:15px}
+.op.op-sulut{font-size:18px}
+.op.op-sulut.kesken{background:var(--orange);border-color:var(--orange);color:#fff}
+.op.alusta{font-size:14px;color:var(--himmea)}
+.op[hidden]{display:none}
+.op:disabled{opacity:.35;cursor:default}
+.korostus{animation:tarise .4s}
+@keyframes tarise{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* --- käsi = lauseke ---
+ * ⚠️ Erillistä laskuriviä ei ole. Valintavaiheessa tässä on viisi korttia;
+ * pizzan painalluksen jälkeen vain pelatut, ja niiden väleissä aukot
+ * laskumerkeille. Se on se mitä pöydässäkin näkyy. */
+/* ⚠️ Väli pizzakortin alle PYSTYASENNOSSA. Käsi alkoi tasan pizza-alueen
+ * alareunasta, joten valittu kortti — joka nousee — meni 10 px pinnan
+ * päälle (mitattu 9.9.2026: alue 305, kortin yläreuna 295). Väli on
+ * suhde eikä luku, jotta se seuraa kortin kokoa.
+ * Vaakalohko asettaa margin:0, joten tämä koskee vain pystyä. */
+.kasi{display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap;
+  margin-top:calc(var(--kortti-lev) * .28)}
+.kasi.lauseke{gap:4px}
+.tayte-kortti{
+  position:relative;flex:0 0 auto;width:var(--kortti-lev);max-width:var(--kortti-lev);
+  aspect-ratio:var(--kortti-suhde);padding:0;background:none;border:0;
+  cursor:pointer;border-radius:calc(var(--kortti-lev) * .055);transition:transform .12s;
+  /* Varjo ja valinnan kehys ovat NAPISSA eivätkä kuvassa: nappi on tasan
+   * näkyvän kortin kokoinen, kuva on sitä isompi ja läpinäkyvä reunoilta. */
+  box-shadow:0 2px 5px rgba(60,40,20,.20), 0 0 0 1px rgba(60,40,20,.07);
+}
+/* ⚠️ Kortin koko on SAMA molemmissa vaiheissa. Kun se oli lausekkeessa
+ * pienempi, käsi hyppäsi 48 px pizzan painalluksesta — eli kortit
+ * kutistuivat juuri sillä hetkellä kun pelaaja oli koskenut niihin. */
+.kasi.lauseke .tayte-kortti{flex:0 0 auto}
+/* Pelatun kortin arvo luetaan isona: kortin omat kulmanumerot ovat pieniä,
+ * ja fantasiakortilla arvo on pelaajan itsensä valitsema. */
+.arvomerkki{
+  position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);
+  min-width:26px;height:24px;padding:0 6px;
+  background:var(--ink);color:#fff;font-size:15px;font-weight:700;
+  border-radius:8px;display:grid;place-items:center;
+}
+/* ⚠️ X-kortin arvo on VIELA PAATTAMATTA, ja se on paatos jota peli
+ * odottaa — ei pikkumerkinta kortin alalaidassa. Merkinta peittaa koko
+ * kortin lapikuultavana, jolloin kortti nakyy himmeasti alta ja on silti
+ * selvaa etta tahan pitaa koskea. Sykkii, koska se on ainoa asia jota
+ * pelaajalta odotetaan. (Markon linjaus 9.9.2026.) */
+.tayte-kortti.arvoton .arvomerkki{
+  position:absolute;inset:0;left:0;bottom:auto;transform:none;
+  width:100%;height:100%;min-width:0;padding:0;
+  background:rgba(238,114,3,.78);color:#fff;
+  border:3px dashed rgba(255,255,255,.95);
+  border-radius:inherit;
+  font-size:calc(var(--kortti-lev) * .55);line-height:1;
+  animation:odottaa 1.5s ease-in-out infinite;
+}
+@keyframes odottaa{50%{background:rgba(238,114,3,.60)}}
+/* Kolme tilaa erottuvat varilla ja voimakkuudella, ei viivatyylilla:
+ * osoitettavissa = vihje (vaimea), ryhman-alku = valittu (täysi),
+ * nostettu = siirrettava (vihrea, nousee enemman). */
+.tayte-kortti.osoitettavissa{box-shadow:var(--hehku-vihje)}
+.tayte-kortti.ryhman-alku{box-shadow:var(--hehku-oranssi)}
+.tayte-kortti.nostettu{transform:translateY(-14px);box-shadow:var(--hehku-vihrea)}
+/* ⚠️ Valkoinen kortinreuna kermaa vasten on kontrastia 1.08:1 — käytännössä
+ * ei eroa. Varjo nostaa kortin pinnalta sen sijaan että taustaa
+ * tummennettaisiin, jolloin brändin kermanvalkoinen säilyy. */
+.tayte-kortti img{position:absolute;display:block;pointer-events:none;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla);
+  max-width:none}
+.tayte-kortti:active{transform:translateY(2px)}
+/* Pelattu kortti ei katoa kädestä vaan nousee ylös ja saa järjestysnumeron —
+ * pöydässäkin näkee mitkä kortit lähtivät ja missä järjestyksessä. */
+/* ⚠️ Valittu kortti NOUSEE JA HEHKUU — ei kehysta. Kehys oli kaksi
+ * ongelmaa yhdessa: se oli piirretty KUVAN ympärille, ja kuva on
+ * tarkoituksella laatikkoaan isompi (läpinäkyvä reuna), joten kehys
+ * kulki kortin ulkopuolella ja vinossa. Ja se oli kova viiva siina
+ * missa kortin pitaa nayttaa nousevan poydalta.
+ *
+ * Hehku on kolme kerrosta: ohut reunus jotta valinta erottuu myos
+ * vaalealla pinnalla, laaja pehmea hehku, ja pohjavarjo joka pitaa
+ * kortin pinnalla eika ilmassa. */
+.tayte-kortti.pelattu{transform:translateY(-10px);box-shadow:var(--hehku-oranssi)}
+.tayte-kortti:disabled:not(.pelattu){opacity:.4}
+.jarjestys{
+  position:absolute;top:-9px;right:-5px;min-width:20px;height:20px;
+  background:var(--orange);color:#fff;font-size:12px;font-weight:700;
+  border-radius:50%;display:grid;place-items:center;
+}
+
+/* «Näillä korteilla ei onnistu» sanattomana: täytekortin takapuoli
+ * yliviivattuna. Merkitys luetaan kuvasta, ei kielestä. */
+.ei-onnistu{flex:1 1 auto}
+
+/* --- valahdys --- */
+.valahdys{
+  position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(.85);
+  padding:14px 22px;border-radius:14px;color:#fff;font-weight:700;font-size:21px;
+  max-width:88vw;text-align:center;
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:4;
+}
+.valahdys.nakyy{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.valahdys{display:flex;align-items:center;gap:10px;justify-content:center}
+.valahdys-apina{width:38px;display:block}
+.valahdys-merkki{font-size:30px;line-height:1}
+.valahdys.oma{background:var(--money)}
+.valahdys.apina{background:var(--orange)}
+.valahdys.ei-kukaan{background:var(--himmea)}
+
+/* --- fantasiatäytteen arvonvalinta --- */
+.peite{position:fixed;inset:0;background:rgba(26,26,26,.55);display:grid;place-items:center;padding:20px;z-index:5}
+.tauko-laatikko{background:var(--ground);border-radius:16px;padding:22px 20px;
+  max-width:300px;width:100%;display:grid;gap:10px;justify-items:center}
+.tauko-merkki{font-size:44px;line-height:1;margin-bottom:2px}
+.tauko-laatikko .toinen-nappi{margin:0}
+/* --- X-kortin valinta (Marko 13.9.2026) ---
+ * ⚠️ EI PEITETTÄ. 12.9. valinta oli koko ruudun ikkuna, ja se katkaisi
+ * ajatuksen: pizza katosi juuri kun sitä tarvittiin. Nyt paneeli asettuu
+ * pizzan alle (pystyssä) tai viereen (vaakatasossa), ja sen koko ja paikka
+ * lasketaan peli.js:ssä pizzasta (sijoitaFantasiaValitsin). Tässä vain ulkoasu. */
+.fantasia-valitsin{position:fixed;inset:0;z-index:6}
+.fantasia-tausta{position:absolute;inset:0}
+.fantasia-paneeli{
+  position:absolute;box-sizing:border-box;padding:10px;
+  background:var(--ground);border-radius:14px;box-shadow:0 6px 28px rgba(0,0,0,.28);
+}
+.fantasia-otsikko{margin:0 0 8px;font-size:16px;font-weight:700;text-align:center}
+.fantasia-kortit{display:grid;grid-template-columns:repeat(5, var(--fv-lev));gap:6px;justify-content:center}
+.fantasia-vaihtoehto{
+  font:inherit;padding:0;border:0;background:none;cursor:pointer;color:var(--ink);
+  display:grid;gap:2px;justify-items:center;
+}
+.fantasia-vaihtoehto img{
+  width:var(--fv-lev);aspect-ratio:var(--kortti-suhde);display:block;
+  border-radius:calc(var(--fv-lev) * .055);box-shadow:0 1px 4px rgba(0,0,0,.28);
+}
+/* Numero kortin alla vain kun kortti on pieni: mitattu 13.9.2026, 59 px
+ * leveällä kortilla kulmanumero on noin 8 px eikä erotu. */
+.fantasia-numero{display:none}
+.fantasia-paneeli.numerot .fantasia-numero{display:block;font-size:17px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.fantasia-vaihtoehto.valittu img{outline:3px solid var(--orange);outline-offset:2px}
+/* ⚠️ VALITTU X-KORTTI NÄYTTÄÄ KORTIN JONKA SE KORVAA (luonnos 1, Marko
+ * 13.9.2026). Läpikuultava päällekkäisyys hylättiin luonnoksesta: kaksi
+ * kuvioitua korttia sekoittuu. Katkoviiva ja X-merkki kertovat että kortti
+ * on fantasia — ilman niitä se näyttäisi tavalliselta kortilta. */
+.tayte-kortti.fantasia-arvottu{outline:3px dashed var(--orange);outline-offset:2px}
+.fantasiamerkki{
+  position:absolute;right:-8px;top:-8px;z-index:2;width:24px;height:24px;
+  border-radius:8px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;
+  display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.3);pointer-events:none;
+}
+
+/* Pedagoginen ohje: peli ei ole vain pelattava vaan myös opettava ympäristö
+ * (Markon linjaus 8.9.2026). Jokainen laskutoimitus esitetään KYSYMYKSENÄ,
+ * johon pizzan arvo on vastaus. */
+.ohje-johdanto{margin:0 0 14px;font-size:15px}
+.ohje-lista{margin:0 0 14px}
+.ohje-lista dt{
+  font-weight:700;font-size:19px;margin-top:12px;
+  color:var(--orange);font-variant-numeric:tabular-nums;
+}
+.ohje-lista dt sup{font-size:.62em}
+.ohje-lista dd{margin:2px 0 0;font-size:15px;line-height:1.5}
+.ohje-lista dd sup{font-size:.7em}
+.ohje-lista .korostettu{background:#FFF3EA;border-radius:9px;padding:8px 10px}
+.ohje-lista dt.korostettu{margin-top:14px;padding-bottom:2px;border-radius:9px 9px 0 0}
+.ohje-lista dd.korostettu{border-radius:0 0 9px 9px;padding-top:0}
+.ohje-lisa{display:block;margin-top:5px;font-size:13.5px;color:var(--himmea)}
+.ohje-lopetus{font-size:15px;margin:0 0 16px}
+
+/* ============================================================
+ * VAAKA-ASETTELU — ensisijainen (Markon päätös 8.9.2026)
+ *
+ * ⚠️ TÄMÄ LOHKO ON TIEDOSTON LOPUSSA TARKOITUKSELLA. Ensimmäinen versio oli
+ * `.pizza-alue`-säännön vieressä eli ENNEN `.pizza-kortti`-perussääntöä, ja
+ * koska tarkkuus on sama, perussääntö voitti pelkällä järjestyksellä: kortti
+ * jäi 58 pikseliin vaikka media query sanoi 210. Sama ansa on kirjattu
+ * CLAUDE.md:hen — tarkkuus kestää järjestyksen muuttumisen, järjestys ei.
+ * ============================================================ */
+@media (orientation:landscape){
+  /* ==================================================================
+   * MITOITUS: YKSI SUHDELUKU, EI YHTÄÄN LUKITTUA PIKSELIÄ
+   *
+   * ⚠️ Aiempi versio laski kortin koon pikselivakioista (222, 281, 100,
+   * 120), jotka olivat ARVAUKSIA siitä paljonko kromia laitteella on.
+   * Markon puhelimella arvaus meni pieleen ja viides kortti putosi
+   * riviltä. Kiinteä luku on tapahtuma; suhde on sääntö.
+   *
+   * Kaikki johdetaan muuttujasta --kortti-lev:
+   *   täytekortti  1,000 x leveys,  korkeus 1,521 x leveys  (349:531)
+   *   pizzakortti  1,150 x          hieman isompi
+   *   väli         0,060 x
+   *   laskurivi    1,100 x   (yksi rivi, isot napit)
+   *   ohita        0,400 x
+   *
+   * Leveystarve  1,15 + 5,00 + 5 x 0,06        = 6,45 x leveys
+   * Korkeustarve 1,10 + 0,06 + 1,521 + 0,096   = 2,78 x leveys
+   *
+   * 174px on ainoa kiinteä luku ja se on KUVAN mitta: lähdekortti on
+   * 349 px leveä, joten 2x-näytöllä isompi alkaisi pehmetä. */
+  :root{
+    /* ⚠️ NÄKYVÄ ruutu, ei koko ruutu. iOS:n Safarissa 100vh on ISO
+     * näkymä — se mitä ruudulla olisi JOS palkit olisivat piilossa.
+     * Kun ne ovat näkyvissä, 100vh:hon mitoitettu sisältö ei mahdu, ja
+     * juuri siksi viides kortti jäi Markon puhelimella reunan taakse.
+     * dvh/dvw seuraavat palkkien liikettä; vh/vw eivät.
+     *
+     * env(safe-area-inset-*) vaatii viewport-fit=cover, joka on
+     * index.html:ssä. Selaimessa insetit ovat usein 0 ja
+     * kotivalikkotilassa eivät — sama koodi käyttäytyy eri tavoin.
+     * Ks. norsu-site/memory/juhlaruutu-ja-pinnat.md. */
+    --leveys: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    --korkeus: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    --leveys: calc(100dvw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    --korkeus: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    --reuna: calc(var(--leveys) * .03);
+    /* ⚠️ Korkeuskerroin koskee VAIN pelialuetta (laskurivi + väli + kortti
+     * + alapehmuste = 2,427 x kortin leveys). Yläpalkki ei ole mukana,
+     * koska se on nostettu pois asettelun korkeudesta — ks. .palkki.
+     * Ennen se oli mukana ja skaalautui ITSEKIN kortin mukana, jolloin
+     * kasvava kortti kasvatti myös palkkia: Markon iPhonella yli 22 px
+     * (mitattu ?mitat=1, 750 x 306 kaytettavissa). 1/2,427 = 0,412,
+     * ja 0,40 jättää pelivaran. */
+    /* ⚠️ .355 eika .40: laskurivi kasvoi 0,75:sta 1,10:een kortin
+     * leveydesta, koska napit siirtyivat korttien PAALLE yhdelle rivalle
+     * ja saivat sen korkeuden joka pystysuunnassa oli kayttamatta.
+     * 1/2,78 = 0,360, ja 0,355 jattaa pelivaran. */
+    /* ⚠️ KERROIN .26, EI .355. Ruudulla on nyt PISTERIVI molemmissa
+     * pelimuodoissa ja sen ylla iso vali, joten korkeutta on vahemman
+     * jaettavana. Kerroin oli .355 kun rivia ei ollut, ja .29 kun se oli
+     * vain moninpelissa (`#peliRuutu.moninpeli`) — nyt yksi arvo, koska
+     * rivi on aina. YKSI MAARITTELY: alempi `#peliRuutu`-saanto voitti
+     * tarkkuudella ja jatti taman valehtelemaan. */
+    --kortti-lev: min(calc(var(--leveys) * .142), calc(var(--korkeus) * .26), 174px);
+    --vali: calc(var(--kortti-lev) * .06);
+  }
+
+  /* ⚠️ Aloitus- ja tulosruutu noudattavat samaa sääntöä kuin peliruutu:
+   * NÄKYVÄ korkeus ja turva-alueet. Ennen apinanappi mitoitettiin 44vh:lla
+   * — eli isosta näkymästä (390) eikä näkyvästä (326) — ja aloitusruutu
+   * vuoti 6 px yli Markon iPhonella. */
+  /* ⚠️ Turva-alueet VAIN täällä. body:llä on sama pehmuste pystyasettelua
+   * varten, ja jos molemmat ovat voimassa ne SUMMAUTUVAT — iPhonella se
+   * olisi 47+47 = 94 px kummallakin sivulla. */
+  body{padding:0}
+  .aloitus,#tulosRuutu{min-height:0;height:100vh;height:100dvh;overflow:hidden;
+    padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px)
+            env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+  .aloitus h1{font-size:calc(var(--korkeus) * .085)}
+  .aloitus-lause{font-size:14px;margin:0 0 2px}
+  .apinanappi{width:min(calc(var(--korkeus) * .44), 210px)}
+  .apinanappi-teksti{font-size:18px;padding:6px 24px}
+  .aloitus-linkit{margin-top:20px}
+  .aloitus-linkit .toinen-nappi{padding:8px 16px;font-size:14px}
+
+  /* Palkki ylös, kortit alas, vapaa tila niiden väliin — sinne mihin
+   * «loput jutut» sijoitetaan. overflow:hidden koska korttikuva on
+   * tarkoituksella laatikkoaan isompi (läpinäkyvä reuna valuu yli). */
+  .ruutu{max-width:none}
+  #peliRuutu{position:relative;display:flex;flex-direction:column;
+    height:100vh;height:100dvh;justify-content:flex-end;overflow:hidden;
+    padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px)
+            env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+  /* ⚠️ Palkki EI VIE asettelun korkeutta. Se lepää siinä vapaassa tilassa
+   * joka korttien yläpuolelle jää, eikä siis kilpaile niiden kanssa.
+   * Absoluuttinen sijainti on turva-alueiden SISÄLLÄ, koska #peliRuutun
+   * pehmuste muodostaa sijoituslaatikon. */
+  .palkki{position:absolute;top:0;left:0;right:0;margin:0;
+    padding:calc(var(--vali) * 1.6) var(--reuna) 0}
+
+  .pelialue{display:flex;align-items:flex-end;justify-content:center;
+    gap:var(--vali);padding:0 var(--reuna) calc(var(--vali) * 1.6);flex:0 0 auto}
+
+  /* --- pizzasarake --- */
+  .pizza-alue{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
+    padding:var(--vali);border-radius:calc(var(--kortti-lev) * .14)}
+  .pizza-kortti{width:calc(var(--kortti-lev) * 1.15);height:auto;margin:0;
+    aspect-ratio:var(--kortti-suhde)}
+
+  /* --- työsarake: laskurivi + käsi --- */
+  .tyoalue{flex:0 0 auto;display:flex;flex-direction:column;align-items:stretch}
+  /* ⚠️ Laskurivi varaa tilansa AINA, myös piilossa. Ilman tätä käsi
+   * liikkuisi sillä hetkellä kun rivi ilmestyy pizzan painalluksesta —
+   * eli juuri kun pelaajan sormi on korteilla. */
+  /* ⚠️ Nappirivi on AINA taydeen kaden levyinen, ei pelattujen korttien.
+   * Ilman min-leveytta se kutistui kaden mukana: neljalla kortilla nappi
+   * oli 106 px, kahdella vain 47 — eli kapeimmillaan juuri siina
+   * tavallisimmassa tilanteessa. 5,24 = 5 korttia + 4 valia. */
+  .lasku-alue{height:calc(var(--kortti-lev) * 1.10);margin:0 0 var(--vali);
+    min-width:calc(var(--kortti-lev) * 5.24)}
+  #laskuAlue[hidden]{display:block!important;visibility:hidden}
+  /* ⚠️ YKSI RIVI korttien paalla, ei kahta eika sivupalstaa. Sivussa
+   * napit veivat leveytta juuri silloin kun taytekortteja on eniten —
+   * ja usealla kortilla pelaaminen on koko vaiheen tarkoitus. */
+  .operaattorit{margin:0;gap:calc(var(--vali) * .8);height:100%;
+    grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr}
+  .op{padding:0;font-size:calc(var(--kortti-lev) * .19);
+    border-radius:calc(var(--kortti-lev) * .09)}
+  .op.op-log{font-size:calc(var(--kortti-lev) * .13)}
+  .op.alusta{font-size:calc(var(--kortti-lev) * .12)}
+
+  /* ⚠️ nowrap: käsi EI VOI kietoutua kahdelle riville rakenteellisesti,
+   * tuli mitoituksesta mitä tahansa. Se oli Markon puhelimella se vika
+   * jota kaikki pikselikaavat yrittivät estää laskemalla. */
+  .kasi{flex-wrap:nowrap;gap:var(--vali);margin:0;justify-content:center}
+  .tayte-kortti{flex:0 0 auto;width:var(--kortti-lev);max-width:var(--kortti-lev)}
+
+  /* Palkin osat skaalautuvat mukana, jotta ne eivät syö korttien tilaa
+   * pienellä ruudulla. */
+  /* Vaakaan pystyn sijaan: pystysuuntainen pilleri oli kaksi riviä korkea
+   * ja söi juuri sen tilan jossa palkin pitää nyt mahtua. */
+  .pisteet{flex-direction:row;align-items:center;gap:calc(var(--vali) * .8);
+    padding:calc(var(--vali) * .45) calc(var(--vali) * 1.1);min-width:0;
+    border-radius:calc(var(--kortti-lev) * .09)}
+  .pisteet b{font-size:calc(var(--kortti-lev) * .20)}
+  .pisteet img{width:calc(var(--kortti-lev) * .22)}
+  /* ⚠️ gap:0 — vali oli kahden vanhan laskurin ajalta, ja palkissa se
+   * kertyy 47 kertaa: 48 sirua a 5 px = 240, mutta valeineen 720 px
+   * (mitattu 9.9.2026), jolloin palkki leikkautui. */
+  .jaljella{gap:0}
+  .pakka img{width:calc(var(--kortti-lev) * .16)}
+  .jaljella b{font-size:calc(var(--kortti-lev) * .14)}
+  /* Kulmanapit ovat isommat kuin pistepillerit: ne ovat ainoat asiat
+   * joita tassa ruudussa painetaan pelin ulkopuolelta. */
+  .kulmanappi{width:max(44px, calc(var(--kortti-lev) * .42));
+    height:max(44px, calc(var(--kortti-lev) * .42));
+    font-size:max(21px, calc(var(--kortti-lev) * .26));
+    border-radius:max(12px, calc(var(--kortti-lev) * .11))}
+  /* ⚠️ NUOLI ON NYT AINA NAKYVISSA. Se oli piilossa valintavaiheessa
+   * perusteella "ei ole mitaan peruttavaa" — mutta sama nappi on nyt
+   * TAUKO silloin kun peruttavaa ei ole (Marko 9.9.2026). */
+
+  /* ⚠️ MONINPELISSA RUUDULLA ON YKSI RIVI ENEMMAN, joten kortin leveys
+   * on laskettava uudelleen — muuten pelaajanapit tyontaisivat kaden
+   * ruudun alle. Korkeuden kerroin .355 -> .29 kattaa napin (.42 x lev)
+   * ja sen valin. Leveys ja katto pysyvat: ne eivat muutu. */
+  /* ⚠️ Vaakatasossa ruutu on ylhaalta rajattu (`justify-content:flex-end` +
+   * `overflow:hidden`), joten ylivuoto EI nay sivunvierityksena vaan
+   * leikkaa pizzakortin ylareunan aanettomasti. Korkeuden kerroin on
+   * yhdessa paikassa ylempana. */
+  .pelaajarivi{margin:calc(var(--kortti-lev) * .38) 0 0;gap:var(--vali)}
+  .pelaajanappi{padding:4px 4px 6px;border-width:2px;
+    max-width:calc(var(--kortti-lev) * 1.4)}
+  .pelaajanappi img{width:calc(var(--kortti-lev) * .30)}
+  .pelaajanappi-pisteet{font-size:calc(var(--kortti-lev) * .20)}
+  .pelaajanappi.ei-kuvaa .pelaajanappi-pisteet{font-size:calc(var(--kortti-lev) * .34)}
+  /* ⚠️ PELAAJARIVI LAUSEKEVAIHEESSA VAIN MONINPELISSA.
+   *
+   * Moninpelissa se on pakko nayttaa: lausekevaiheen kello piirretaan
+   * juuri siihen nappiin, ja piilotettu kello on sama kuin ei kelloa.
+   *
+   * Yksinpelissa se on piilotettava, ja syita on kaksi. Markon linjaus
+   * 9.9.2026: lausekevaiheen ainoa tehtava on painaa oikeat merkit,
+   * ja siksi pisteet ja pakkalaskurit ovat siina jo pois. Ja mitattu
+   * syy 10.9.2026: rivi + sen ylavali vievat noin 96 px, jolloin
+   * sarake ei mahtunut ja LASKUMERKIT LIUKUIVAT YLAPALKIN ALLE —
+   * napin keskikohta osui palkkiin, ei nappiin, ja merkkia joutui
+   * painamaan kahdesti. Palkki on `position:absolute`, joten se ei
+   * varaa tilaa mutta ottaa painallukset vastaan.
+   *
+   * ⚠️ Tata EI nae leikkaustarkistuksella joka ajetaan valintavaiheessa:
+   * `.lasku-alue` on silloin `hidden` eika sita voi mitata. Vaiheittain
+   * vaihtuva asettelu on mitattava JOKAISESSA vaiheessa. */
+  #peliRuutu.selitys:not(.moninpeli) .pelaajarivi{display:none}
+  /* ⚠️ MONINPELISSA RIVI EI VOI KADOTA — lausekevaiheen kello on siina.
+   * Se TIIVISTETAAN: apinan kuva pois ja ylavali pieneksi. Vari ja kello
+   * riittavat kertomaan kuka on vuorossa, ja kuva maksaa 27 px korkeutta
+   * jota lausekevaiheessa ei ole. Mitattu: ilman tata laskumerkit
+   * jaivat ylapalkin alle myos moninpelissa. */
+  #peliRuutu.selitys.moninpeli .pelaajarivi{margin-top:var(--vali)}
+  #peliRuutu.selitys.moninpeli .pelaajanappi{padding:3px 4px 4px}
+  #peliRuutu.selitys.moninpeli .pelaajanappi img{display:none}
+
+  /* ⚠️ ASETUSVALIKKO MAHTUU VAAKATASOSSA KERRALLA. Mitattu 9.9.2026:
+   * 844x326 ruudulla laatikko oli 287 px ja seitsemasta rivista nakyi
+   * nelja — valikko jota pitaa vierittaa nahdakseen mita siina on, ei
+   * ole valikko vaan lista.
+   *
+   * ⚠️ MITOITUS ON RIVIMAARAN FUNKTIO, JA SE ON TARKISTETTAVA JOKA KERTA
+   * KUN RIVI LISATAAN. Tama oli mitoitettu seitsemalle riville; kun
+   * "Aikarajat" tuli mukaan, kahdeksas jai ruudun alle enka huomannut sita
+   * ennen kuin mittasin. Riviluku ei ole tassa vakiona juuri siksi — se
+   * vanhenisi hiljaa. Mittaa: avaa valikko 844x326 ja laske nakyvat rivit. */
+  .asetus-laatikko{max-height:96vh;max-height:96dvh;padding:8px 14px 10px;max-width:460px}
+  .as-ylapalkki{margin:0 0 6px}
+  .as-kulma{width:34px;height:34px;font-size:18px}
+  .as-ylapalkki{grid-template-columns:34px 1fr 34px}
+  .as-nimi{font-size:16px}
+  .as-rivi{padding:4px 4px;font-size:14px}
+  /* Kahdeksan riviä mahtuu vaakatasossa vain tiiviina. */
+  .as-saadin{padding:5px 8px 5px 12px}
+  .as-askel{width:32px;height:32px;font-size:18px}
+  .as-saadin > span{font-size:14px}
+  .as-saatimet{gap:6px;margin:0 0 8px}
+  .as-valinta{padding:8px 12px}
+  .as-kotelo{height:24px}
+  .as-selite{padding:9px 12px;margin:0 0 8px;font-size:13px}
+
+  /* ⚠️ LAUSEKEVAIHE ON ERI RUUTU, ja sen ainoa tehtava on painaa oikeat
+   * merkit. Siksi: pisteet ja pakkalaskurit pois, kortit vasemmalle ja
+   * laskutoimitukset oikeaan laitaan niin isoina kuin tilaa riittaa.
+   * (Markon linjaus 9.9.2026.) */
+  #peliRuutu.selitys .pisteet,
+  #peliRuutu.selitys .jaljella{display:none}
+
+  #peliRuutu.selitys .op{font-size:calc(var(--kortti-lev) * .34);
+    border-radius:calc(var(--kortti-lev) * .10)}
+  #peliRuutu.selitys .op.op-log{font-size:calc(var(--kortti-lev) * .22)}
+}
+
+@media (prefers-color-scheme:dark){
+  :root{--ground:#171310;--ink:#F7F1E7;--orange:#FF881F;--money:#82C99C;
+        --himmea:#7A7064;--raja:#332B24}
+  /* ⚠️ VALKOINEN TEKSTI --ink-TAUSTALLA KATOAA TUMMASSA TILASSA.
+   * `--ink` on vaalea pimealla (#F7F1E7), joten valkoinen teksti sen
+   * paalla on kontrastiltaan 1,12:1 — mitattu 10.9.2026, vaatimus on
+   * 3:1. Pizzan ARVO oli siis kaytannossa nakymaton, ja se on pelin
+   * tarkein luku.
+   *
+   * ⚠️ Vika oli vanha eika mistaan muutoksesta: se syntyi silla hetkella
+   * kun tumma tila lisattiin, koska `color:#fff` on kiintea eika token.
+   * Se ei kaadu, ei kirjaa konsoliin eika nay yhdessakaan tarkistimessa —
+   * loytyi vain katsomalla ruutua pimeassa.
+   *
+   * Teksti kaannetaan taustan variksi, ei toisin pain: `--ink` on
+   * tarkoituksella se vari joka vaihtuu teeman mukana. */
+  .arvomerkki{color:var(--ground)}
+  .esimerkki,.as-valinta,.pisteet,.op,.aukko{background:#221C17}
+  .as-valinta.valittu{background:#33241A}
+  .as-selite{background:#33241A}
+  .lasku-tulos{background:#332B24;color:var(--ink)}
+  .lupa span{background:#221C17}
+  .lupa input:checked + span{background:#33241A}
+  .ohje-lista .korostettu{background:#33241A}
+  .virhe{background:#3A1F1F;color:#F3C9C9}
+}
+
+/* ============================================================
+ * YHTEISPELI OMALLA LAITTEELLA (pelaaja.js, ?liity)
+ *
+ * ⚠️ Pelinäkymä on sama kuin yksinpelissä. Tässä on vain se mitä
+ * yksinpelissä ei ole: liittymis- ja odotuspeite, lähtölaskenta ja
+ * kierroksen kello. Asetukset ja täytepakka piilotetaan: asetukset tulevat
+ * isännältä, ja pakkaa ei ole — jokainen kierros on tuore jako.
+ * ============================================================ */
+body.verkkopeli #asetuksetAuki,
+body.verkkopeli #taytepalkki,
+body.verkkopeli #alusta:disabled{visibility:hidden}
+
+/* max-height + overflow: luontilomake on vaakatasossa korkeampi kuin ruutu,
+ * ja keskitetty peite leikkaisi sen ylä- ja alapään vieritettävyyden ulkopuolelle. */
+/* Erän eteneminen ja pisteet yläpalkissa (Marko 12.9.2026). Alarivin
+ * pistelaatikko on samalla piilossa: sama luku kahdessa paikassa on tämän
+ * projektin toistuvin vikaluokka. */
+.verkko-palkki{display:flex;align-items:baseline;gap:12px;margin-left:auto;font-weight:700}
+#verkkoPalkkiKierros{font-size:15px;color:var(--himmea)}
+#verkkoPalkkiPisteet{font-size:22px;color:var(--orange);font-variant-numeric:tabular-nums}
+body.verkkopeli #pelaajarivi{display:none}
+.verkko-kierros{margin:0;color:var(--himmea);font-size:15px}
+
+.verkko-laatikko{max-width:340px;gap:12px;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow:auto;box-sizing:border-box}
+/* minmax(0, 1fr): yksi katkeamaton teksti ei saa levittää saraketta — ja
+ * sen mukana 100 %-levyisiä nappeja — laatikon yli (mitattu 11.9.2026:
+ * tuotannon osoite teki sarakkeesta 455 px 340 px:n laatikossa). */
+.verkko-osa{display:grid;grid-template-columns:minmax(0, 1fr);gap:10px;justify-items:center;width:100%}
+.verkko-apina{width:92px;height:auto}
+.verkko-kentta{
+  width:100%;box-sizing:border-box;font:inherit;font-size:22px;font-weight:700;text-align:center;
+  padding:12px;border:2px solid var(--raja);border-radius:12px;background:var(--ground);color:var(--ink);
+}
+#verkkoKoodi{letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.verkko-kentta:focus{outline:none;border-color:var(--orange)}
+.verkko-virhe{margin:0;color:#C1121F;font-weight:700;text-align:center}
+.verkko-nimi{font-size:22px;text-align:center;overflow-wrap:anywhere}
+.verkko-tilanne{margin:0;color:var(--himmea);text-align:center}
+.verkko-tulos{display:grid;gap:4px;justify-items:center;text-align:center}
+.verkko-merkki{font-size:44px;font-weight:700;line-height:1}
+/* Toiminnallinen väri (oikein / väärin), ei brändiväri. */
+.verkko-merkki.oikein{color:var(--money)}
+.verkko-merkki.vaarin{color:#C1121F}
+.verkko-iso{font-size:44px;font-weight:700;line-height:1.1;color:var(--orange);font-variant-numeric:tabular-nums}
+.verkko-sija{font-size:22px;font-weight:700}
+.verkko-selite{color:var(--himmea)}
+
+/* Lähtölaskenta kortien päällä: kortit ovat jo pöydällä selkäpuoli ylöspäin. */
+.verkko-laskuri{
+  position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);z-index:4;pointer-events:none;
+  font-size:min(34vh, 42vw);font-weight:700;line-height:1;color:var(--orange);
+  font-variant-numeric:tabular-nums;text-shadow:0 2px 16px var(--ground);
+}
+.verkko-kello{
+  position:fixed;left:0;right:0;top:env(safe-area-inset-top, 0px);height:6px;z-index:3;
+  background:var(--raja);pointer-events:none;
+}
+.verkko-kello > div{height:100%;background:var(--orange);transform-origin:left center}
+
+/* --- alkuvalikko (valikko.js, Marko 11.9.2026) --- */
+.valikko-laatikko .as-valinta{gap:4px;padding:14px 16px}
+.valikko-laatikko .as-valinta b{font-size:18px}
+.valikko-laatikko .as-valinta small{font-size:14px}
+
+/* --- pelaava isäntä (pelaavaisanta.js, Marko 11.9.2026) ---
+ * Lomake käyttää asetuspaneelin omia osia (.as-valinta, .as-saadin, .lupa,
+ * .valinta); tässä vain niiden sovitus kapeaan laatikkoon. */
+.verkko-asetus{display:grid;gap:6px;width:100%;text-align:left}
+.verkko-asetus > span{font-size:15px}
+.verkko-asetus-rivi{width:100%;box-sizing:border-box}
+.verkko-valinnat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.verkko-valinnat .as-valinta{align-items:center;padding:10px;font-weight:700}
+#verkkoLuo .valinta{margin:0;align-items:center;font-size:15px}
+/* Viisi lupaa yhdelle riville: oletusleveydellä (58 px) sulut valuivat yksin toiselle. */
+#verkkoLuoLuvat{margin:0}
+#verkkoLuoLuvat .lupa{flex-basis:44px}
+/* Isännän painikepalkki: oma kortti ruudun alareunassa, aina samassa kohdassa. */
+.verkko-isanta-napit{
+  position:fixed;left:50%;transform:translateX(-50%);z-index:6;
+  top:calc(100vh - 16px - var(--palkki-taysi, 200px));
+  top:calc(100dvh - env(safe-area-inset-bottom, 0px) - 16px - var(--palkki-taysi, 200px));
+  width:min(340px, calc(100vw - 40px));box-sizing:border-box;
+  display:grid;gap:10px;padding:12px;border-radius:16px;background:var(--ground);
+  box-shadow:0 4px 20px rgba(0,0,0,.22);
+}
+.verkko-isanta-lopetukset{display:grid;gap:8px;width:100%;margin-top:8px}
+/* .toinen-nappi tuo oman 8 px yläreunuksen: palkissa välit tulevat vain
+ * gapista, muuten täyden korkeuden laskenta heittää (mitattu 8 px). */
+.verkko-isanta-napit .toinen-nappi{margin:0}
+/* Virhe palkin yläpuolelle eikä sen sisään: palkki ei saa kasvaa, muuten
+ * pääpainike nousisi aina kun yhteysilmoitus tulee. */
+.verkko-isanta-napit .verkko-virhe{
+  position:absolute;left:0;right:0;bottom:calc(100% + 8px);margin:0;
+  padding:8px 12px;border-radius:12px;background:var(--ground);box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.toinen-nappi.varattu{display:none}
+/* Laatikko keskittyy palkin YLÄPUOLELLE jäävään tilaan. */
+.verkko-peite.isanta-napit{padding-bottom:calc(var(--napit-kork, 0px) + env(safe-area-inset-bottom, 0px) + 28px)}
+.verkko-peite.isanta-napit .verkko-laatikko{
+  max-height:calc(100vh - 48px - var(--napit-kork, 0px));
+  max-height:calc(100dvh - 48px - var(--napit-kork, 0px) - env(safe-area-inset-bottom, 0px));
+}
+/* Vaakatasossa palkki on yksi rivi: lopetukset vasemmalla, pääpainike oikealla
+ * peukalon alla. Pystyyn pinottuna se veisi 390 px korkeasta ruudusta puolet. */
+@media (orientation:landscape) and (max-height:560px){
+  .verkko-isanta-napit{
+    width:min(640px, 94vw);grid-template-columns:auto minmax(0, 1fr);align-items:center;
+    top:auto;bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);padding:8px;
+  }
+  /* Yksi rivi: paikka varataan näkymättömänä, jottei pääpainike levene. */
+  .toinen-nappi.varattu{display:block;visibility:hidden}
+  .verkko-isanta-napit .iso-nappi{grid-column:2;grid-row:1;padding:11px}
+  .verkko-isanta-lopetukset{grid-column:1;grid-row:1;margin:0;grid-auto-flow:column;gap:6px}
+  .verkko-isanta-lopetukset .toinen-nappi{padding:9px 12px;font-size:14px;width:auto}
+  .verkko-peite.isanta-napit{padding-bottom:calc(var(--napit-kork, 0px) + 20px)}
+  .verkko-peite.isanta-napit .verkko-laatikko{max-height:calc(100dvh - 36px - var(--napit-kork, 0px))}
+}
+.verkko-isanta{display:grid;grid-template-columns:minmax(0, 1fr);gap:10px;justify-items:center;width:100%}
+#verkkoIsantaOsoite{overflow-wrap:anywhere}
+.verkko-isanta-koodi{
+  font-size:56px;font-weight:700;line-height:1;letter-spacing:.12em;color:var(--orange);
+  font-variant-numeric:tabular-nums;
+}
+/* Muut skannaavat isännän puhelimen näytöltä. Korkeusraja pitää koodin,
+ * kuvion ja Aloita-napin samassa näkymässä pystytasossa. */
+.verkko-isanta-qr{width:min(220px, 62vw, 42vh);aspect-ratio:1;border-radius:12px;overflow:hidden}
+.verkko-isanta-qr svg{display:block;width:100%;height:100%}
+.verkko-pelaajat{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-height:22vh;overflow:auto}
+.verkko-pelaajat span{
+  max-width:100%;padding:4px 10px;border-radius:10px;background:rgba(122,112,100,.10);font-size:15px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* --- tulostaulu pelaajan puhelimessa erien välissä (Marko 11.9.2026) ---
+ * Vaakatasossa oma tulos vasemmalle ja taulu oikealle: 390 px korkeaan
+ * ruutuun ei mahdu molempia päällekkäin. Pystytasossa päällekkäin. */
+.verkko-laatikko.nayta-taulu{max-width:min(640px, 94vw)}
+.verkko-taulu{
+  position:relative;list-style:none;margin:0;padding:0;width:100%;
+  display:grid;gap:4px;align-content:start;max-height:34vh;overflow:auto;
+}
+.verkko-taulu li{
+  display:grid;grid-template-columns:2.2em minmax(0, 1fr) auto;gap:8px;align-items:center;
+  padding:6px 10px;border-radius:10px;background:rgba(122,112,100,.10);text-align:left;
+}
+.verkko-taulu li.oma{background:rgba(238,114,3,.20);font-weight:700}
+.verkko-taulu-sija{color:var(--himmea);font-variant-numeric:tabular-nums}
+.verkko-taulu-nimi{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.verkko-taulu-pisteet{color:var(--orange);font-weight:700;font-variant-numeric:tabular-nums}
+@media (orientation:landscape) and (min-width:560px){
+  .verkko-laatikko.nayta-taulu #verkkoOdota{grid-template-columns:minmax(0, 1fr) minmax(0, 1.3fr);column-gap:20px}
+  .verkko-laatikko.nayta-taulu #verkkoOdota > *{grid-column:1}
+  /* Kaksi id:tä: voittaa yllä olevan tarkkuudella eikä järjestyksellä. */
+  .verkko-laatikko.nayta-taulu #verkkoOdota #verkkoTaulu{
+    grid-column:2;grid-row:1 / span 5;align-self:stretch;
+    max-height:calc(100vh - 110px);max-height:calc(100dvh - 110px);
+  }
+}

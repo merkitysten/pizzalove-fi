@@ -1,0 +1,193 @@
+{
+  "lang": "fi",
+  "nimi": "Suomi",
+  "lyhenne": "FI",
+  "ui": {
+    "nav_etusivu": "Etusivu",
+    "nav_korttipeli": "Korttipeli",
+    "nav_lautapeli": "Lautapeli",
+    "nav_pelaa": "Pelaa verkossa",
+    "kielivalinta": "Kieli",
+    "kauppaan": "Kauppaan",
+    "katso_video": "Katso video",
+    "video_kieli": {
+      "fi": "FI",
+      "en": "EN"
+    },
+    "lataa": "Lataa",
+    "alaosa_teksti": "Pizza Love® on Merkitysten Oy:n peli. Pelit on suunniteltu ja valmistettu Suomessa.",
+    "alaosa_yhteys": "Kysyttävää? Kirjoita meille:",
+    "alaosa_tavaramerkki": "Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n rekisteröityjä tavaramerkkejä.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Varainhankinta luokille ja joukkueille",
+    "ohita": "Siirry sisältöön"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – säännöt, videot ja verkkopeli",
+    "kuvaus": "Pizza Love® -korttipelin ja -lautapelin säännöt, ohjevideot ja Pizza Party -verkkopeli.",
+    "h1": "Tervetuloa pizzatehtaalle!",
+    "ingressi": "Täältä löydät Pizza Love® -pelien säännöt ja ohjevideot. Valitse pelisi, niin pääset pelaamaan muutamassa minuutissa.",
+    "valitse": "Valitse pelisi",
+    "korttipeli_tiedot": "2–5 pelaajaa · 6+ · 3 tapaa pelata",
+    "lautapeli_tiedot": "2–4 pelaajaa · 4+ · 3 tapaa pelata",
+    "avaa": "Säännöt ja videot →",
+    "pelaa_otsikko": "Pelaa Pizza Partya verkossa",
+    "pelaa_teksti": "Yksin, samalla laitteella tai kavereiden kanssa jokainen omalla puhelimellaan.",
+    "pelaa_nappi": "Pelaa nyt",
+    "kauppa_otsikko": "Lisää peliä?",
+    "kauppa_teksti": "Pizza Love® -pelit löytyvät Merkitysten verkkokaupasta."
+  },
+  "korttipeli": {
+    "title": "Pizza Love® -korttipeli – säännöt ja videot",
+    "kuvaus": "Pizza Love® -korttipelin säännöt ja ohjevideot: Pizza Party, Pizza Basso ja Pizza Love.",
+    "h1": "Pizza Love® -korttipeli",
+    "ingressi": "Kolme peliä samalla pakalla. Aloita Pizza Partystä: se on nopein oppia.",
+    "tiedot": [
+      "2–5 pelaajaa",
+      "6+",
+      "42 pizzakorttia",
+      "58 täytekorttia"
+    ],
+    "hyppy": {
+      "perusteet": "Näin pizza tehdään",
+      "muodot": "Kolme tapaa pelata",
+      "lataa": "Säännöt PDF:nä"
+    },
+    "perusteet_otsikko": "Näin pizza tehdään",
+    "perusteet_ingressi": "Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.",
+    "pizzakortit_otsikko": "Pizzakortit",
+    "pizzakortit": "Pizzakortissa on pizza, jossa on yhdestä neljään eri täytettä. Kortin kulmissa on pizzan arvo (1–10). Pelissä on 10 sydänpizzaa, joiden arvo on 10.",
+    "taytekortit_otsikko": "Täytekortit",
+    "taytekortit": "Täytekortissa on yksi täyte. Kortin kulmissa on täytteen arvo (1–10). Kolme fantasiatäytettä (X) voivat olla mikä tahansa täyte.",
+    "perussaanto_otsikko": "Perussääntö",
+    "perussaanto": "Pizzakortit ovat aina pöydällä. Ne valmistetaan kädessä olevilla täytekorteilla.",
+    "arvo_otsikko": "Pizzan arvo",
+    "arvo": "Valmista pizza omilla täytekorteillasi ja sano ääneen laskutoimitus, jolla saat pizzan arvon. Kaikki laskutoimitukset ovat sallittuja ja niitä saa yhdistää, kunhan tulos on pizzan arvo. Esimerkiksi <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Esimerkki: tomaatti-ananaspizza",
+    "esimerkki_alt": "Pizzakortti, jonka arvo on 5, sekä tomaatti (2) ja ananas (3)",
+    "esimerkki": "Pizzassa on kaksi täytettä ja sen arvo on 5. Tomaatti 2 + ananas 3 = 5. Muitakin tapoja on: 4 + 1, 6 – 1 tai jopa 10 : 2.",
+    "tavat_otsikko": "Kaksi tapaa valmistaa pizza",
+    "helpompi_otsikko": "Helpompi tapa",
+    "helpompi": "Pizzan voi valmistaa millä tahansa määrällä täytekortteja, myös yhdellä. Käytä tätä, kun pelaat Pizza Partya ensimmäistä kertaa tai pienen lapsen kanssa.",
+    "basso_tapa_otsikko": "Basso-apinan tapa",
+    "basso_tapa": "Täytekortteja on käytettävä yhtä monta kuin pizzassa on täytteitä. Tomaatti-ananaspizzaan tarvitaan siis kaksi täytekorttia. Käytä tätä Pizza Bassossa tai kun haluat Pizza Partyyn lisähaastetta.",
+    "huomio_bruno": "<b>Bruno vai Basso?</b> Pelin apina on nykyään Basso. Vanhemmissa ohjeissa ja videoissa hänen nimensä on Bruno, ja toisen pelimuodon nimi on Pizza Bruno. Säännöt ovat samat.",
+    "muodot_otsikko": "Kolme tapaa pelata",
+    "muodot_ingressi": "Avaa pelimuoto, niin näet säännöt ja videot.",
+    "videot_otsikko": "Videot",
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Helpoin aloitus, nopea ja vauhdikas",
+        "html": "<h3>Tavoite</h3><p>Pelaajat valmistavat kilpaa pizzoja. Voittaja on se, joka tekee eniten pizzoja ennen kuin pizzat tai täytteet loppuvat.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita pizzakortit ja aseta ne pinoksi kaikkien ulottuville.</li><li>Sekoita täytekortit ja jaa jokaiselle pelaajalle 5 korttia. Loput täytekortit ovat nostopakka. Pelaajat saavat katsoa korttinsa.</li></ol><h3>Aloittaminen</h3><p>Käännä ensimmäinen pizzakortti näkyviin pinon viereen. Kaikki yrittävät heti valmistaa sen omilla täytekorteillaan.</p><h3>Pelin kulku</h3><ul class=\"lista\"><li>Peliä pelataan ilman vuoroja: kaikki yrittävät valmistaa pizzoja yhtä aikaa.</li><li>Nopein pelaaja, joka valmistaa pizzan, saa kortin ja kerää sen eteensä.</li><li>Käytetyt täytekortit poistetaan pelistä. Nosta uusia, kunnes kädessä on taas 5 korttia.</li><li>Käännä heti uusi pizzakortti näkyviin. Jatka, kunnes pizzakortit tai täytekortit loppuvat eikä kukaan pysty enää valmistamaan pizzaa.</li></ul><h3>Jos pizzaa ei voi valmistaa</h3><p>Jos kukaan ei pysty tai halua valmistaa näkyvää pizzaa, käännä uusi pizzakortti sen päälle. Seuraavan pizzan valmistaja saa kaikki näkyvät pizzat.</p><h3>Pisteet ja voittaminen</h3><p>Tavallinen pizza = 1 piste, sydänpizza = 2 pistettä. Kierroksen voittaa eniten pisteitä saanut. Sopikaa, montako kierrosta pelataan, esimerkiksi ensimmäisenä 3 tai 5 kierrosta voittanut voittaa koko pelin.</p><h3>Rauhallisempi Pizza Party</h3><p>Voitte pelata myös vuoroissa, jolloin jokainen saa miettiä rauhassa omalla vuorollaan.</p><h3>Valinnaiset säännöt</h3><p>Voitte rajata laskutoimituksia, esimerkiksi:</p><ul class=\"lista\"><li>pelataan vain yhteen- ja vähennyslaskuilla</li><li>jokaisessa pizzassa on käytettävä kerto- tai jakolaskua.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Rauhallinen ja jännittävä",
+        "html": "<p class=\"pieni\">Vanhemmissa ohjeissa: Pizza Bruno.</p><h3>Tavoite</h3><p>Pelaajat yrittävät päästä eroon kaikista täytekorteistaan. Ensimmäisenä onnistunut voittaa kierroksen.</p><p><b>Huom.</b> Pizzat valmistetaan Basso-apinan tapaan: täytekortteja käytetään yhtä monta kuin pizzassa on täytteitä.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita pizzakortit ja aseta ne pinoksi kaikkien ulottuville.</li><li>Sekoita täytekortit ja jaa jokaiselle pelaajalle 7 korttia. Loput täytekortit ovat nostopakka. Pelaajat saavat katsoa korttinsa.</li></ol><h3>Aloittaminen</h3><p>Käännä ensimmäinen pizzakortti näkyviin pinon viereen. Viimeksi pizzaa syönyt pelaaja aloittaa.</p><h3>Pelin kulku</h3><p>Pelaajat yrittävät vuorollaan valmistaa näkyvän pizzan omilla täytekorteillaan.</p><p><b>A) Jos onnistut:</b> poista käytetyt täytekortit pelistä ja käännä pinosta uusi pizza edellisen päälle. Vuoro siirtyy seuraavalle.</p><p><b>B) Jos et onnistu tai halua valmistaa pizzaa:</b> nosta yksi täytekortti. Vuoro siirtyy seuraavalle.</p><p><b>C) Yksi kortti kädessä:</b> kun sinulla on enää yksi täytekortti, elehdi kuin nälkäinen Basso-apina ja huuda: ”PIZZAA!”</p><h3>Jos täytekortit loppuvat</h3><p>Sekoita pelistä poistetut täytekortit uudeksi nostopakaksi ja jatka.</p><h3>Pisteet ja voittaminen</h3><p>Kierroksen voittaa se, joka pääsee ensimmäisenä eroon kaikista täytekorteistaan. Muiden kädessä olevien korttien arvot lasketaan yhteen, ja summa on voittajan pisteet. Tavallinen täyte on arvonsa verran (1–10), fantasiatäyte 20.</p><p>Ensimmäisenä 100 pistettä kerännyt voittaa ja saa tittelin <b>Pizza Basso – todellinen pizza-apina</b>.</p><h3>Lyhyempi peli</h3><p>Voitte sopia, että peli päättyy esimerkiksi 30 tai 50 pisteeseen, tai että koko pelin voittaa ensimmäisenä 3 tai 5 kierrosta voittanut.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Taktisin ja haastavin, 8+",
+        "html": "<h3>Tavoite</h3><p>Pelaajat yrittävät valmistaa kaikki omat pizzansa ennen muita. Ensimmäisenä onnistunut voittaa.</p><p><b>Huom.</b> Nyt täytteet ratkaisevat: pizzan voi valmistaa vain oikeilla täytteillä.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita ja jaa jokaiselle 8 pizzakorttia. Pelaajat asettavat ne kuvapuoli alaspäin pinoksi eteensä ja kääntävät päällimmäisen näkyviin.</li><li>Aseta yksi pizzakortti keskelle pöytää kuvapuoli ylöspäin. Se on vaihtopizza. Loput pizzakortit poistetaan pelistä.</li><li>Sekoita täytekortit nostopakaksi pöydälle.</li></ol><h3>Varasto</h3><p>Jokaisella on edessään 4 paikkaa varastokorteille. Varaston täytekortit ovat kuvapuoli ylöspäin. Niitä voi käyttää omiin pizzoihin kuten kädessä olevia, ja muut pelaajat voivat käyttää niitä vaihtoihin.</p><h3>Aloittaminen</h3><p>Viimeksi pizzaa syönyt aloittaa ja nostaa 5 täytekorttia käteensä.</p><h3>Pelin kulku</h3><ol class=\"lista\"><li>Nosta täytekortteja, kunnes sinulla on 5 korttia kädessä.</li><li>Yritä valmistaa oman pinosi päällimmäinen pizza käden ja varaston korteilla.</li><li>Voit vaihtaa varastosi kortteja toisen pelaajan varastokortteihin laskutoimitusten avulla.</li><li>Kerran vuorossa voit vaihtaa oman pinosi päällimmäisen pizzan keskellä olevaan vaihtopizzaan. Sen saa valmistaa heti.</li><li>Laita vuoron lopuksi yksi täytekortti kädestäsi kuvapuoli ylöspäin varastoosi.</li></ol><h3>Pizzan valmistaminen</h3><p>Kun sinulla on pizzaan tarvittavat täytteet kädessä ja/tai varastossa, valmista pizza. Pizzakortti ja käytetyt täytekortit poistetaan pelistä. Käännä pinostasi uusi pizza näkyviin: jos sinulla on siihen täytteet, voit valmistaa senkin heti.</p><h3>Sydänpizza</h3><p>Kun valmistat sydänpizzan, anna seuraava pizzakorttisi katsomatta toiselle pelaajalle. Hän laittaa sen pinonsa alimmaiseksi.</p><h3>Varastokorttien vaihtaminen</h3><p>Hanki puuttuvia täytteitä vaihtamalla varastosi kortteja toisen pelaajan varastokortteihin. Vaihto tehdään laskutoimituksilla: kaikki käy, kunhan tulos on sama molempien pelaajien korteilla. Voit tehdä vuorossa useita vaihtoja, mutta yksi vaihto on aina kahden varaston välillä. Toisen kortin alla olevaa korttia ei voi vaihtaa. Saadut kortit laitetaan omaan varastoon haluttuun järjestykseen.</p><h3>Varaston täyttäminen</h3><p>Jos pelaat kätesi tyhjäksi ennen varastokortin laittamista, nosta 5 uutta korttia ja jatka vuoroa. Varastopaikat voi täyttää missä järjestyksessä tahansa, ja kortteja voi pinota päällekkäin. Päällimmäinen on käytettävä ennen alempia. Varastossa olevia kortteja ei saa siirtää.</p><h3>Pelin voittaminen</h3><p>Peli päättyy, kun joku on valmistanut kaikki pinonsa pizzat.</p>"
+      }
+    ],
+    "lataa_otsikko": "Säännöt PDF:nä",
+    "lataa_teksti": "Painettu sääntöarkki suomeksi, ruotsiksi ja englanniksi.",
+    "lataa_tiedosto": "Korttipelin säännöt (FI · SV · EN)",
+    "pelaa_otsikko": "Harjoittele verkossa",
+    "pelaa_teksti": "Pizza Party toimii myös selaimessa. Kokeile ennen ensimmäistä peliä tai pelaa kavereiden kanssa omilla puhelimilla.",
+    "videot": {
+      "party_en": "Pizza Party – näin pelataan",
+      "party_fi": "Pizza Party – näin pelataan",
+      "party_helpompi": "Helpompi tapa pelata",
+      "party_helpottaminen": "Pelin helpottaminen",
+      "party_ei_valmistu": "Kun pizzaa ei voi valmistaa",
+      "party_basso_tapa": "Basso-apinan tapa",
+      "basso_fi": "Pizza Basso – näin pelataan"
+    }
+  },
+  "lautapeli": {
+    "title": "Pizza Love® -lautapeli – säännöt ja videot",
+    "kuvaus": "Pizza Love® -lautapelin säännöt ja ohjevideot: kokoaminen, vuoron kulku ja kolme pelimuotoa.",
+    "h1": "Pizza Love® -lautapeli",
+    "ingressi": "Valmista boksien lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa – niin voitat!",
+    "tiedot": [
+      "2–4 pelaajaa",
+      "4+",
+      "3 tapaa pelata"
+    ],
+    "hyppy": {
+      "kokoaminen": "Ennen ensimmäistä peliä",
+      "peli": "Näin peli toimii",
+      "muodot": "Kolme tapaa pelata",
+      "lataa": "Ohjeet PDF:nä"
+    },
+    "kokoaminen_otsikko": "Ennen ensimmäistä peliä",
+    "kokoaminen": "Laatikossa on tarra-arkki ja neljä boksia, jotka kootaan kerran. Se vie hetken, ja sen jälkeen peli on aina valmis.",
+    "videot": {
+      "HE9301owOKI": "Boksien kokoaminen",
+      "RbLfhUyXHKw": "Tarrat nappuloihin",
+      "Ya73FhJfj54": "Pelin pystytys",
+      "IN2LvbXo9eA": "Vuoron kulku ja voittaminen"
+    },
+    "peli_otsikko": "Näin peli toimii",
+    "voittaminen_otsikko": "Pelin voittaminen",
+    "voittaminen": "Voita keräämällä ensimmäisenä <b>10 erilaista</b> palaa boksiisi. Valmista pelilaudalla olevia pizzoja, niin saat täytteiden mukaiset palat boksiisi. Sydänpizzasta saat yhden vapaavalintaisen lisäpalan.",
+    "valmistelut_otsikko": "Pelivalmistelut",
+    "valmistelut": [
+      "Pinoa värikkäät täytetornit paikoilleen varastoon.",
+      "Sekoita ja vie 4 pizzakorttia pelilaudalle. Aseta muut pizzakortit pakaksi pöydälle.",
+      "Sekoita ja aseta apinakortit pakaksi pöydälle.",
+      "Anna jokaiselle pelaajalle tyhjä boksi."
+    ],
+    "vuoro_otsikko": "Vuoron kulku",
+    "vaiheet": [
+      {
+        "otsikko": "Nopan heitto ja nappuloiden siirto",
+        "html": "<p>Viimeksi pizzaa syönyt aloittaa heittämällä noppaa. Noppa kertoo, montako nappulaa siirretään varaston ja linjaston välillä. Samanväriset nappulat liikkuvat aina yhtenä tornina. Jos et voi tehdä siirtoa, vuorosi päättyy.</p><p class=\"pieni\">Apinavaaka ja punnukset auttavat lasta hahmottamaan siirtoja. <b>Niitä ei ole pakko käyttää.</b></p>"
+      },
+      {
+        "otsikko": "Pizzan valmistaminen",
+        "html": "<p>Kun linjastolla on pizzaan tarvittavat täytteet, valmista pizza ja kerää palat boksiisi. Voit valmistaa vuoron aikana useita pizzoja, mutta samaa täytettä voi käyttää vain yhteen pizzaan. Palauta käytetyt täytteet varastoon ja nosta pakasta uusi pizzakortti pelilaudalle.</p>"
+      },
+      {
+        "otsikko": "Apinakortin nostaminen",
+        "html": "<p>Jos valmistit vähintään yhden pizzan, nosta vuoron lopuksi apinakortti ja toimi sen mukaan. Vuoro siirtyy myötäpäivään.</p>"
+      }
+    ],
+    "muodot_otsikko": "Kolme tapaa pelata",
+    "muodot_ingressi": "Nopan heitto, täytteiden siirtäminen ja pizzan valmistaminen toimivat kaikissa samalla tavalla.",
+    "muodot": [
+      {
+        "nimi": "Pizza Love – peruspeli",
+        "kuvaus": "Koko perheen kilpailu, 6+",
+        "html": "<p>Valmista pizzalaatikoiden lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa boksiisi. Kun peruspeli on tuttu, ohjekirjasta löytyy lisäsääntöjä, joilla peliin saa lisää vauhtia.</p>"
+      },
+      {
+        "nimi": "Nälkäiset apinat",
+        "kuvaus": "Yhteistyöpeli, n. 4–5-vuotiaille",
+        "html": "<p>Helpoin tapa aloittaa. Pelaatte yhdessä ja täytätte yhteistä boksia. Täyttämällä boksin 10 erilaisella palalla voitatte pelin. Mutta varokaa: nälkäiset apinat syövät palansa heti, jos uusia ei tule!</p>"
+      },
+      {
+        "nimi": "Salatut pizzat",
+        "kuvaus": "Jännittävä ja strateginen",
+        "html": "<p>Jokainen saa kaksi salaista pizzaa, joita muut eivät näe. Muut eivät tiedä, mitä pizzoja aiot valmistaa. Boksinsa ensimmäisenä 10 erilaisella palalla täyttänyt voittaa.</p>"
+      }
+    ],
+    "lataa_otsikko": "Ohjeet PDF:nä",
+    "lataa_teksti": "Kaikkien pelimuotojen tarkat säännöt suomeksi, ruotsiksi ja englanniksi.",
+    "lataukset": {
+      "pikaohje": "Pikaohje (tulostettava)",
+      "peruspeli": "Peruspeli – koko ohje",
+      "apinat": "Nälkäiset apinat – koko ohje",
+      "salatut": "Salatut pizzat – koko ohje"
+    }
+  }
+}
