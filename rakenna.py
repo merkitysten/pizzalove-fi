@@ -26,6 +26,12 @@ OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään nä
 OSOITE = 'https://pizzalove.fi'
 SAHKOPOSTI = 'info@merkitysten.fi'
 
+# ⚠️ OMA DOMAIN PÄÄLLE VASTA DNS-VAIHDOSSA. Kun docs/CNAME on olemassa, GitHub
+# ohjaa merkitysten.github.io/pizzalove-fi/ -testiosoitteen pizzalove.fi:hin,
+# joka osoittaa vielä vanhaan paikkaan, eikä sivua voi testata. Vaihda True:ksi
+# samana päivänä kun DNS vaihdetaan (ks. LUE-MINUT.md).
+KAYTA_OMAA_DOMAINIA = False
+
 KAUPPA = {
     'korttipeli': 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
     'lautapeli': 'https://merkitysten.fi/tuote/pizza-love-lautapeli/',
@@ -464,8 +470,9 @@ def main():
     with open(os.path.join(ULOS, '404.html'), 'w', encoding='utf-8') as out:
         out.write(juurisivu(kaikki).replace("location.replace((valittu || '%s') + '/' + location.hash);" % OLETUSKIELI,
                                             "location.replace('/' + (valittu || '%s') + '/');" % OLETUSKIELI))
-    with open(os.path.join(ULOS, 'CNAME'), 'w') as out:
-        out.write('pizzalove.fi\n')
+    if KAYTA_OMAA_DOMAINIA:
+        with open(os.path.join(ULOS, 'CNAME'), 'w') as out:
+            out.write('pizzalove.fi\n')
     with open(os.path.join(ULOS, '.nojekyll'), 'w') as out:
         out.write('')
     print('valmis:', ULOS)
