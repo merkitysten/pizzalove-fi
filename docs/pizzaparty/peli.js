@@ -839,6 +839,7 @@ const RAAHAUS_KYNNYS = 10;
  * aukkoihin — napautus jaa silti voimaan. */
 const RAAHAUS_KOHTEET = {
   pizza:  '.pizza-kortti',
+  pois:   '.pizza-kortti',
   merkki: '.aukko',
   siirto: '#kasi .tayte-kortti',
 };
@@ -890,10 +891,19 @@ function raahausAlku(e) {
 
   let laji = null, lahde = null;
   if (tila.vaihe === 'valinta') {
-    const el = raahattavaKortti(e.target);
-    if (!el || !el.__kortti) return;
-    if (tila.valitut.indexOf(el.__kortti) < 0) return;   // vain valittu
-    laji = 'pizza'; lahde = el;
+    /* ⚠️ RAAHAUS VALITSEE, EI PELAA (Marko 6.10.2026). Ennen vain jo
+     * valittua korttia sai raahata, koska pudotus pelasi koko ryhman ja
+     * vahinkoraahaus olisi sitonut vuoron. Nyt pudotus vain asettaa YHDEN
+     * kortin pizzan paalle, ja pelaaminen on aina pizzan painallus —
+     * joten rajoitukselle ei ole enaa syyta. */
+    const pieni = e.target.closest && e.target.closest('.pieni-tayte');
+    if (pieni && pieni.__kortti) { laji = 'pois'; lahde = pieni; }
+    else {
+      const el = raahattavaKortti(e.target);
+      if (!el || !el.__kortti) return;
+      if (tila.valitut.indexOf(el.__kortti) >= 0) return;   // tyhja paikka
+      laji = 'pizza'; lahde = el;
+    }
   } else if (tila.vaihe === 'selitys') {
     /* ⚠️ Ryhmitys kesken: silloin kortin napautus OSOITTAA lukua eika
      * siirra sita, joten raahaus olisi eri teko kuin napautus. */
@@ -928,10 +938,7 @@ function raahausLiike(e) {
     raahaus.aktiivinen = true;
     /* Valintavaiheessa siirtyy KOKO valittu ryhma; lausekevaiheessa
      * vain se yksi jota kosketettiin. */
-    raahaus.kortit = raahaus.laji === 'pizza'
-      ? [].filter.call(document.querySelectorAll('#kasi .tayte-kortti'),
-          function (el) { return el.__kortti && tila.valitut.indexOf(el.__kortti) >= 0; })
-      : [raahaus.lahde];
+    raahaus.kortit = [raahaus.lahde];
     raahaus.kortit.forEach(function (el) { el.classList.add('raahataan'); });
   }
   /* Estaa selaimen oman eleen (vieritys, kuvan raahaus) vasta kun on
@@ -963,10 +970,18 @@ function raahausLoppu(e) {
   if (!oliRaahaus) return;            // oli napautus — click hoitaa valinnan
   raahaus.tehty = true;
   setTimeout(function () { raahaus.tehty = false; }, 0);
+  /* Pieni kortti pudotettiin pizzan ULKOPUOLELLE: takaisin kateen. */
+  if (laji === 'pois') {
+    if (!kohde && tila.valitut.indexOf(lahde.__kortti) >= 0) valitseKortti(lahde.__kortti);
+    return;
+  }
   if (!kohde) return;
   /* ⚠️ Jokainen haara paattyy OLEMASSA OLEVAAN funktioon. Raahaus
    * valitsee kohteen; saannon omistaa yha se funktio joka sen omisti. */
-  if (laji === 'pizza') return pelaaPizzalle();
+  if (laji === 'pizza') {
+    if (kohde && tila.valitut.indexOf(lahde.__kortti) < 0) valitseKortti(lahde.__kortti);
+    return;
+  }
   if (laji === 'merkki') {
     valitseAukko(kohde.__idx);
     return asetaMerkki(lahde.dataset.op);
@@ -1276,6 +1291,64 @@ function piirraPizza() {
    * ilman kortteja ohitus. Hehku (pelattavissa) nakyy vain lyonnille. */
   const painettavissa = tila.vaihe === 'valinta' && !tila.lukossa;
   kortti.setAttribute('aria-disabled', painettavissa ? 'false' : 'true');
+  piirraPizzanTaytteet(kortti);
+}
+
+/* ============================================================
+ * VALITUT KORTIT PIZZAN PAALLA (Marko 6.10.2026)
+ *
+ * *"vetamalla se taytekortti pitaisi luultavasti jaada pizzan paalle
+ * jotenkin siten, etta myos pizzakortti jaa nakyviin"* — ja paatos A:
+ * myos napautus vie kortin tanne. Yksi malli: pizzan paalla olevat
+ * kortit = vastaukseni. Pizzan painallus vahvistaa.
+ *
+ * Kortit ovat pienia ja rivissa pizzan alaosassa, jarjestyksessa jossa
+ * ne lasketaan. Pizzan arvo nakyy ylakulmassa niiden ylapuolella.
+ * Pientä korttia napauttamalla (tai raahaamalla pois pizzalta) se
+ * palaa kateen. Kaden tilalle jaa tyhja paikka, jottei kasi hyppaa.
+ * ============================================================ */
+const PIENI_LEVEYS = 33;     /* % pizzakortin leveydesta */
+const PIENI_ALUE = 104;      /* % jolle pienet kortit levitetaan */
+
+function piirraPizzanTaytteet(kortti) {
+  let alue = document.getElementById('pizzanTaytteet');
+  if (!alue) {
+    alue = document.createElement('div');
+    alue.id = 'pizzanTaytteet';
+    alue.className = 'pizzan-taytteet';
+    kortti.appendChild(alue);
+    alue.addEventListener('pointerdown', raahausAlku);
+  }
+  alue.innerHTML = '';
+  if (tila.vaihe !== 'valinta') return;
+  const n = tila.valitut.length;
+  const askel = n > 1 ? Math.min(PIENI_LEVEYS + 2, (PIENI_ALUE - PIENI_LEVEYS) / (n - 1)) : 0;
+  const alku = (100 - (PIENI_LEVEYS + askel * (n - 1))) / 2;
+  tila.valitut.forEach(function (k, i) {
+    const arvoton = k.fantasia && typeof k.arvo !== 'number';
+    const kuva = k.fantasia && !arvoton ? 'kuvat/tayte-' + k.arvo + '.webp' : k.kuva;
+    const nappi = document.createElement('button');
+    nappi.type = 'button';
+    nappi.className = 'pieni-tayte';
+    nappi.__kortti = k;
+    nappi.disabled = tila.lukossa;
+    nappi.style.left = (alku + askel * i).toFixed(2) + '%';
+    nappi.style.setProperty('--kulma', ((i - (n - 1) / 2) * 4).toFixed(1) + 'deg');
+    nappi.style.zIndex = 1 + i;
+    const alt = k.fantasia
+      ? (arvoton ? t('fantasia.valitsematta') : t('fantasia.arvona', { arvo: k.arvo }))
+      : t('tayte.alt', { nimi: t('tayte.' + k.arvo), arvo: k.arvo });
+    nappi.setAttribute('aria-label', alt);
+    nappi.innerHTML = '<img src="' + kuva + '" alt="">' +
+      (k.fantasia && !arvoton ? '<span class="fantasiamerkki" aria-hidden="true">X</span>' : '');
+    nappi.onclick = function (e) {
+      /* Pizzan oma click on vahvistus — pieni kortti ei saa laukaista sita. */
+      e.stopPropagation();
+      if (raahaus.tehty) return;
+      valitseKortti(k);
+    };
+    alue.appendChild(nappi);
+  });
 }
 
 /* ⚠️ TEKSTI NÄYTETÄÄN VAIN KUN SE KERTOO JOTAIN NÄKYMÄTÖNTÄ (Marko 8.9.2026:
@@ -1377,8 +1450,7 @@ function piirraKasi() {
 }
 
 function korttiNappi(k, i, selitys, ryhmittelee) {
-  const jarjestys = tila.valitut.indexOf(k);
-  const pelattu = jarjestys >= 0;
+  const pelattu = tila.valitut.indexOf(k) >= 0;
   const arvoton = k.fantasia && typeof k.arvo !== 'number';
   const nappi = document.createElement('button');
   /* ⚠️ Korttiolio kiinni elementtiin. Raahaus tarvitsee tiedon SIITA
@@ -1390,7 +1462,7 @@ function korttiNappi(k, i, selitys, ryhmittelee) {
 
   nappi.className = 'tayte-kortti' +
     (k.fantasia && !arvoton ? ' fantasia-arvottu' : '') +
-    (pelattu && !selitys ? ' pelattu' : '') +
+    (pelattu && !selitys ? ' pizzalla' : '') +
     (selitys && ryhmittelee ? ' osoitettavissa' : '') +
     (selitys && ryhmittelee && tila.ryhmitysKesken.alku === i ? ' ryhman-alku' : '') +
     (selitys && tila.siirrettava === i ? ' nostettu' : '') +
@@ -1413,7 +1485,7 @@ function korttiNappi(k, i, selitys, ryhmittelee) {
   const kuva = k.fantasia && !arvoton ? 'kuvat/tayte-' + k.arvo + '.webp' : k.kuva;
   nappi.innerHTML = '<img src="' + (uusi ? 'kuvat/tausta-tayte.webp?v=20260910a' : kuva) +
     '" alt="' + (uusi ? '' : alt) + '">' +
-    (!selitys && pelattu ? '<span class="jarjestys">' + (jarjestys + 1) + '</span>' : '') +
+
     (k.fantasia && !arvoton && !uusi ? '<span class="fantasiamerkki" aria-hidden="true">X</span>' : '') +
     /* ⚠️ ARVOMERKKI VAIN ARVOTTOMALLE X-KORTILLE SELITYSVAIHEESSA: se on
      * päätös jota peli odottaa (sykkivä peite, Markon linjaus 9.9.2026).

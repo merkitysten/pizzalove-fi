@@ -544,7 +544,7 @@ h2{font-size:17px;margin:26px 0 6px}
   max-width:none}
 /* Kortti on painike vasta kun sillä on tehtävää: pelaaja on valinnut arvot
  * ja lyö ne pizzan päälle. Muulloin se on pelkkä kuva. */
-.pizza-kortti.pelattavissa{cursor:pointer;box-shadow:var(--hehku-oranssi);animation:kutsu 1.4s ease-in-out infinite}
+.pizza-kortti.pelattavissa{cursor:pointer;box-shadow:var(--hehku-oranssi);animation:kutsu 1.6s ease-out infinite}
 .pizza-kortti.pelattavissa:active{transform:scale(.97)}
 /* ⚠️ EI korostusta lausekevaiheessa. Tassa oli vihrea hehku, mutta
  * vihrea on pelin VOITTOVARI ja pizzaa ei ole viela voitettu — se lupasi
@@ -569,7 +569,46 @@ h2{font-size:17px;margin:26px 0 6px}
 .pizza-kortti.ohitettu::after{transform:translate(-50%,-50%) rotate(32deg)}
 /* Kutsu hehkuu eika hypi: pizzakortti on kiintopiste, ja liikkuva
  * kiintopiste vie huomion korteilta joita pelaaja lukee. */
-@keyframes kutsu{50%{box-shadow:var(--hehku-oranssi-vahva)}}
+/* ⚠️ KUTSU ON NYT SELVA (Marko 6.10.2026: *"voisiko se pizzakortti muuttua
+ * jotenkin siten, etta pelaaja ymmartaisi, etta nyt sita voi painaa"*).
+ * Entinen hehku oli sama kuin valitun kortin hehku, joten pizza ei
+ * erottunut. Nyt: hehku + laajeneva rengas (tutuin «paina tasta» -ele) +
+ * hengitys 3 %. Valitut kortit eivat enaa hehku kadessa, joten pizza on
+ * ainoa hehkuva asia ruudulla. Ilman liiketta jos kayttaja on sita pyytanyt. */
+@keyframes kutsu{
+  0%{box-shadow:var(--hehku-oranssi), 0 0 0 0 rgba(244,121,32,.65);transform:scale(1)}
+  45%{transform:scale(1.03)}
+  70%{box-shadow:var(--hehku-oranssi-vahva), 0 0 0 18px rgba(244,121,32,0)}
+  100%{box-shadow:var(--hehku-oranssi), 0 0 0 0 rgba(244,121,32,0);transform:scale(1)}
+}
+@media (prefers-reduced-motion: reduce){
+  .pizza-kortti.pelattavissa{animation:none;box-shadow:var(--hehku-oranssi-vahva)}
+}
+
+/* --- valitut kortit pizzan paalla (piirraPizzanTaytteet) --- */
+.pizzan-taytteet{position:absolute;inset:0;pointer-events:none;z-index:3}
+.pieni-tayte{
+  position:absolute;bottom:-9%;width:33%;aspect-ratio:var(--kortti-suhde);
+  padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;
+  border-radius:6px;touch-action:none;-webkit-touch-callout:none;
+  transform:rotate(var(--kulma,0deg));transform-origin:50% 100%;
+  filter:drop-shadow(0 3px 5px rgba(60,40,20,.40));
+  animation:pieni-sisaan .18s ease-out;
+}
+.pieni-tayte img{position:absolute;display:block;pointer-events:none;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla);
+  max-width:none;-webkit-user-drag:none;user-select:none}
+.pieni-tayte .fantasiamerkki{font-size:11px}
+.pieni-tayte:disabled{cursor:default}
+/* Raahattava ei saa olla elementFromPointin tiella (sama syy kuin .raahataan). */
+.pieni-tayte.raahataan{pointer-events:none;animation:none;z-index:20}
+@keyframes pieni-sisaan{from{transform:translateY(40%) scale(.6) rotate(var(--kulma,0deg));opacity:0}}
+@media (prefers-reduced-motion: reduce){.pieni-tayte{animation:none}}
+
+/* Kaden tyhja paikka: kortti on pizzalla. Napautus palauttaa sen. */
+.tayte-kortti.pizzalla{box-shadow:none;background:transparent;
+  outline:2px dashed rgba(60,40,20,.22);outline-offset:-2px}
+.tayte-kortti.pizzalla img,.tayte-kortti.pizzalla .fantasiamerkki{visibility:hidden}
 .pizza-kehotus{
   position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);
   background:var(--orange);color:#fff;font-size:12px;font-weight:700;
