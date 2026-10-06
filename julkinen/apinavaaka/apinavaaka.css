@@ -35,6 +35,7 @@
 .av__nayttamo{position:relative;width:100%;--pala:8px;--leveys:34px}
 .av__nayttamo>img{position:absolute;height:auto;pointer-events:none;max-width:none}
 .av__vasen,.av__oikea{transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.av__kieli{transition:transform .6s cubic-bezier(.3,1.9,.5,1)}
 .av__lamppu--paalla,.av__saihkeet{opacity:0;transition:opacity .3s}
 .av__saihkeet{transform:scale(.6);transition:opacity .3s,transform .5s cubic-bezier(.3,1.8,.5,1)}
 .av--valo .av__lamppu--paalla{opacity:1}

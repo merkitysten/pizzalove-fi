@@ -24,10 +24,13 @@
     vasen:   [0, 1585, 1256, 564],
     oikea:   [1911, 1601, 1299, 513],
     saihkeet:[1162, 22, 1131, 681],
-    lamppu:  [1475, 210, 403, 672]
+    lamppu:  [1475, 210, 403, 672],
+    kieli:   [1443, 1720, 253, 441]
   };
   var NIVEL_V = [1240, 1790], NIVEL_O = [1925, 1775];   // olkapäät
   var SYMB_V = [508, 1655],  SYMB_O = [2700, 1668];     // symbaalien keskikohta
+  // Kieli on vaa'an kieli: osoittaa ruokalapun merkkiin < = >. Kääntöpiste suussa.
+  var KIELI_NIVEL = [1580, 1740], KIELI_KULMA = { '<': 15, '=': -5, '>': -24 };
   var MAKSIMIKULMA = 9;
 
   var VARIT = ['#090A0D', '#E62448', '#FFDF00', '#1072B9', '#EF7925',
@@ -179,6 +182,9 @@
     lamppuPaalla.classList.add('av__lamppu--paalla');
     nayttamo.appendChild(kasiV); nayttamo.appendChild(kasiO);
     nayttamo.appendChild(kuva('vartalo'));
+    var kieliEl = kuva('kieli');
+    kieliEl.style.transformOrigin = pros(KIELI_NIVEL[0] - OSAT.kieli[0], OSAT.kieli[2]) + ' ' + pros(KIELI_NIVEL[1] - OSAT.kieli[1], OSAT.kieli[3]);
+    nayttamo.appendChild(kieliEl);
     nayttamo.appendChild(kuva('saihkeet')); nayttamo.appendChild(kuva('lamppu', 'lamppu-pois')); nayttamo.appendChild(lamppuPaalla);
     var pinoV = el('div', 'av__pino'), pinoO = el('div', 'av__pino');
     var lukuV = el('span', 'av__luku'), lukuO = el('span', 'av__luku');
@@ -368,6 +374,8 @@
       lukuV.textContent = nayta ? [noppa].concat(tila.vasen).join(' + ') : '';
       lukuO.textContent = nayta && tila.oikea.length ? tila.oikea.join(' + ') : '';
       lukuV.hidden = !lukuV.textContent; lukuO.hidden = !lukuO.textContent;
+      var m = !nayta || !tila.oikea.length ? '' : vasenSumma === oikeaSumma ? '=' : vasenSumma < oikeaSumma ? '<' : '>';
+      kieliEl.style.transform = 'rotate(' + (m ? KIELI_KULMA[m] : 0) + 'deg)';
       juuri.classList.toggle('av--valo', tila.valmis || tila.siirretty);
 
       // viestirivi: joko lyhyt teksti tai yksi nappi
