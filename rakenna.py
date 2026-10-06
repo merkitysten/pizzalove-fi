@@ -30,7 +30,7 @@ SAHKOPOSTI = 'info@merkitysten.fi'
 # ohjaa merkitysten.github.io/pizzalove-fi/ -testiosoitteen pizzalove.fi:hin,
 # joka osoittaa vielä vanhaan paikkaan, eikä sivua voi testata. Vaihda True:ksi
 # samana päivänä kun DNS vaihdetaan (ks. LUE-MINUT.md).
-KAYTA_OMAA_DOMAINIA = False
+KAYTA_OMAA_DOMAINIA = True
 
 KAUPPA = {
     'korttipeli': 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
