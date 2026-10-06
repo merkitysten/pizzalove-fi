@@ -33,7 +33,7 @@ const BASSO_APINAN_NAYTTO = 1700;   // apinan laskun näkyvyys — se on opetusp
 const BASSO_PIZZAA_KESTO = 1700;
 
 /* Apinoiden määrä ja pisteraja. 🔵 Marko 6.10.2026: 30 pistettä oletuksena. */
-const bassoAsetukset = { apinoita: 1, tavoite: BASSO_TAVOITTEET[0], vari: 0 };
+const bassoAsetukset = { apinoita: 1, tavoite: BASSO_TAVOITTEET[0], variNro: 2 };
 let basso = null;                    // käynnissä oleva ottelu (basso-saannot.js)
 let bassoAsetusMuuttui = false;
 let bassoValahdysAjastin = null;
@@ -46,21 +46,52 @@ function bassoLataaAsetukset() {
   if (!a) return;
   if (a.apinoita >= 1 && a.apinoita <= 3) bassoAsetukset.apinoita = a.apinoita | 0;
   if (BASSO_TAVOITTEET.indexOf(a.tavoite) >= 0) bassoAsetukset.tavoite = a.tavoite;
-  if (a.vari >= 0 && a.vari < PELAAJAVARIT.length) bassoAsetukset.vari = a.vari | 0;
+  if (bassoVari(a.variNro)) {
+    bassoAsetukset.variNro = a.variNro;
+  } else if (a.vari >= 0 && a.vari < PELAAJAVARIT.length) {
+    /* Vanha tallennus (6.10.2026, ennen kymmentä väriä): indeksi Partyn
+     * neljän värin listaan. Muunnetaan Merkitysten numeroksi, jotta jo
+     * valittu väri säilyy. */
+    const vanha = TAYTTEET.filter(function (x) { return x.vari === PELAAJAVARIT[a.vari]; })[0];
+    if (vanha) bassoAsetukset.variNro = vanha.arvo;
+  }
 }
 
 /* JOKAISELLA PELAAJALLA ON HAHMO JA VÄRI (Marko 6.10.2026: «Silloin kaikilla
- * pelaajilla olisi sekä hahmo että väri»). Värit ovat Partyn moninpelin
- * (`PELAAJAVARIT`, peli.js) — sama kieli samasta asiasta. Ihminen valitsee
- * omansa, apinat saavat loput järjestyksessä.
- * ⚠️ Brändioranssi EI ole mukana samasta syystä kuin Partyssa: se on pizzan
- * väri, ja pelaaja joka on pizzan värinen olisi juuri se sekaannus jota
- * värillä yritetään välttää. */
+ * pelaajilla olisi sekä hahmo että väri»).
+ *
+ * 🔵 VÄRIT OVAT MERKITYSTEN 10 VÄRIÄ (Marko 6.10.2026: «Anna muuten
+ * mahdollisuudeksi valita mikä tahansa väri 10 eri merkitysten väristä»).
+ * Ne ovat Kakkukirjan pallurat ja Pizza Love -korttien täytteet (BRAND.md §3),
+ * joten lähde on kortit.js:n TAYTTEET — ei kopiota tänne. Väri tallennetaan
+ * NUMERONA (1–10), koska numero on Merkitysten järjestelmässä värin nimi.
+ *
+ * Apinat saavat erottuvat värit tässä järjestyksessä, ihmisen väri ohitetaan.
+ * Neljä ensimmäistä ovat Partyn moninpelin värit (`PELAAJAVARIT`). */
+const BASSO_APINOIDEN_VARIT = [2, 4, 7, 6, 1, 10, 9, 8, 3, 5];
+
+function bassoVari(nro) {
+  const x = TAYTTEET.filter(function (t) { return t.arvo === nro; })[0];
+  return x ? x.vari : null;
+}
+
 function bassoVarit() {
-  const muut = PELAAJAVARIT.filter(function (v, i) { return i !== bassoAsetukset.vari; });
+  const muut = BASSO_APINOIDEN_VARIT.filter(function (n) { return n !== bassoAsetukset.variNro; });
   return basso.pelaajat.map(function (p, i) {
-    return i === BASSO_IHMINEN ? PELAAJAVARIT[bassoAsetukset.vari] : muut[(i - 1) % muut.length];
+    return bassoVari(i === BASSO_IHMINEN ? bassoAsetukset.variNro : muut[(i - 1) % muut.length]);
   });
+}
+
+/* Valkoinen numero katoaa keltaiselle, turkoosille ja vaaleanpunaiselle.
+ * Teksti valitaan taustan suhteellisesta luminanssista (WCAG-kaava). */
+function bassoTekstiVari(hex) {
+  const c = [1, 3, 5].map(function (i) {
+    const v = parseInt(hex.substr(i, 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  /* Kontrasti valkoiseen vs. mustaan (#1A1A1A, L ≈ 0,010): valitaan suurempi. */
+  return (1.05 / (L + 0.05)) >= ((L + 0.05) / 0.06) ? '#fff' : '#1A1A1A';
 }
 
 /* Hahmo värillisellä pohjalla — sama kaikille, pelissä ja tulosruudussa. */
@@ -343,6 +374,7 @@ function piirraPelaajat() {
       const el = document.createElement('div');
       el.className = 'pelaajanappi basso-pelaaja' + (i === BASSO_IHMINEN ? ' oma' : '');
       el.style.setProperty('--pelaaja-vari', varit[i]);
+      el.style.color = bassoTekstiVari(varit[i]);
       el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">' +
         '<b class="pelaajanappi-pisteet basso-kortit">0</b>';
       rivi.appendChild(el);
@@ -565,7 +597,9 @@ function bassoValahda(kenen, sisalto, ms) {
 function bassoPizzaa(kuka) {
   const el = document.getElementById('bassoPizzaa');
   if (!el) return;
-  el.style.setProperty('--pelaaja-vari', bassoVarit()[kuka]);
+  const vari = bassoVarit()[kuka];
+  el.style.setProperty('--pelaaja-vari', vari);
+  el.style.setProperty('--pelaaja-teksti', bassoTekstiVari(vari));
   el.hidden = false;
   /* Animaatio alkaa alusta myös jos edellinen on yhä kesken. */
   el.classList.remove('nakyy');
@@ -606,7 +640,7 @@ function bassoHuuto() {
 function bassoPaivitaAsetusarvot() {
   const v = document.getElementById('arvoVari');
   if (v) v.innerHTML = '<span class="basso-vari-pallo" style="background:' +
-    PELAAJAVARIT[bassoAsetukset.vari] + '"></span>';
+    bassoVari(bassoAsetukset.variNro) + '"></span>';
   const a = document.getElementById('arvoApinat');
   if (a) a.textContent = bassoAsetukset.apinoita === 1
     ? t('apinat.yksi') : t('apinat.monta', { n: bassoAsetukset.apinoita });
@@ -640,14 +674,15 @@ function bassoPiirraAsetukset() {
   const varit = document.getElementById('bassoVarit');
   if (varit) {
     varit.innerHTML = '';
-    PELAAJAVARIT.forEach(function (vari, n) {
+    TAYTTEET.forEach(function (x) {
+      const n = x.arvo, valittu = n === bassoAsetukset.variNro;
       const nappi = document.createElement('button');
-      nappi.className = 'basso-vari-valinta' + (n === bassoAsetukset.vari ? ' valittu' : '');
-      nappi.setAttribute('aria-label', t('basso.vari', { n: n + 1 }));
-      nappi.setAttribute('aria-pressed', n === bassoAsetukset.vari ? 'true' : 'false');
-      nappi.innerHTML = bassoHahmo(vari);
+      nappi.className = 'basso-vari-valinta' + (valittu ? ' valittu' : '');
+      nappi.setAttribute('aria-label', t('basso.vari', { n: n }));
+      nappi.setAttribute('aria-pressed', valittu ? 'true' : 'false');
+      nappi.innerHTML = bassoHahmo(x.vari);
       nappi.onclick = function () {
-        bassoAsetukset.vari = n;
+        bassoAsetukset.variNro = n;
         tallennaAsetukset();
         bassoPiirraAsetukset();
         if (basso && basso.kierros) { piirraPelaajat(); if (!document.getElementById('tulosRuutu').hidden) piirraTulos(); }

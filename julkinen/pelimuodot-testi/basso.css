@@ -17,7 +17,7 @@
 }
 /* Apinan huuto: sama hetki, musta pohja kuten apinan laatikko. */
 /* Huudon pohja on huutajan oma väri (basso.js asettaa --pelaaja-vari). */
-.basso-pizzaa b{background:var(--pelaaja-vari, var(--orange))}
+.basso-pizzaa b{background:var(--pelaaja-vari, var(--orange));color:var(--pelaaja-teksti, #fff)}
 .basso-pizzaa.nakyy img{animation:basso-hyppy 1.7s cubic-bezier(.2,.9,.3,1.3) both}
 .basso-pizzaa.nakyy b{animation:basso-huuto 1.7s cubic-bezier(.2,.9,.3,1.3) both}
 @keyframes basso-hyppy{
@@ -130,9 +130,10 @@
 .pelaajanappi.basso-pelaaja .basso-kortit::before{box-shadow:0 0 0 1px rgba(255,255,255,.8)}
 
 /* Asetukset: neljä värivaihtoehtoa hahmoina. */
-.basso-varit{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:12px 0}
+/* Kymmenen väriä Merkitysten järjestyksessä 1–10, viisi per rivi. */
+.basso-varit{display:grid;grid-template-columns:repeat(5, auto);gap:6px 8px;justify-content:center;padding:12px 0}
 .basso-vari-valinta{background:none;border:0;padding:6px;border-radius:50%;cursor:pointer}
-.basso-vari-valinta .basso-hahmo{--koko:52px}
+.basso-vari-valinta .basso-hahmo{--koko:46px}
 .basso-vari-valinta.valittu .basso-hahmo{box-shadow:0 0 0 3px #fff, 0 0 0 7px var(--ink)}
 .basso-vari-pallo{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle}
 
