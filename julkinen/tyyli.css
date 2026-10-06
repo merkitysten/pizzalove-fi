@@ -118,8 +118,9 @@ ul.lista li,ol.lista li{margin:4px 0}
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   box-shadow:var(--shadow);overflow:hidden;transition:transform .15s ease}
 .peli-kortti:hover{transform:translateY(-2px)}
-.peli-kortti__kuva{background:#fff;height:clamp(190px,30vw,240px);display:grid;place-items:center;padding:12px;border-bottom:1px solid var(--line)}
-.peli-kortti__kuva img{height:100%;width:auto;max-width:100%;object-fit:contain}
+.peli-kortti__kuva{background:#fff;height:clamp(190px,30vw,240px);display:flex;align-items:center;justify-content:center;
+  padding:12px;border-bottom:1px solid var(--line);overflow:hidden}
+.peli-kortti__kuva img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain}
 .peli-kortti__teksti{padding:14px 16px 16px}
 .peli-kortti__nimi{font-size:20px;font-weight:800;margin:0}
 .peli-kortti__tiedot{font-size:14px;color:var(--soft);margin:2px 0 10px}
@@ -175,8 +176,8 @@ details.muoto[open]>summary::after{content:"–"}
 .muoto__sisus h3:first-child{margin-top:16px}
 
 /* ---------- Videot (kevyt upotus: kuva ensin, YouTube vasta klikkauksesta) ---------- */
-.videot{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(128px,34vw,160px);gap:12px;margin:12px -18px 8px;
-  padding:0 18px 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.videot{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(128px,34vw,160px);gap:12px;margin:12px 0 8px;
+  padding:0 0 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin}
 .videot>*{scroll-snap-align:start}
 main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 .videot--vaaka{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));overflow:visible;margin-left:0;margin-right:0;padding:0}
