@@ -30,6 +30,43 @@ const BV_OSOITE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 const BV_AVAIN = 'pizzabasso-verkko';
 const BV_KYSELYVALI = 1000;
 const BV_VIRHERAJA = 3;          // kuten yhteys.js: yksi ohi mennyt kysely ei ole katkos
+/* ⚠️ AIKARAJA (6.10.2026). Marko puhelimella: «En pystynyt luomaan peliä. Se
+ * ei antanut minulle koodia tai mitään.» Samalla sivulla ja palvelimella
+ * luonti onnistui tietokoneen selaimessa — eli puhelin ei saanut vastausta
+ * eikä virhettä. Ilman aikarajaa roikkuva pyyntö on näkymätön: nappi vain
+ * harmaantuu. Nyt 12 s jälkeen tulee yhteysvirhe näkyviin. */
+const BV_AIKARAJA = 12000;
+/* ?diag=1 → jokainen palvelinpyyntö ja skriptivirhe näkyy ruudulla.
+ * Mittaus siirretään laitteeseen, koska puhelimen konsolia ei näe. */
+const BV_DIAG = new URLSearchParams(location.search).get('diag') === '1';
+const bvLoki = [];
+function bvKirjaa(rivi) {
+  if (!BV_DIAG) return;
+  bvLoki.push(new Date().toLocaleTimeString() + ' ' + rivi);
+  if (bvLoki.length > 12) bvLoki.shift();
+  let el = document.getElementById('bvDiag');
+  if (!el) {
+    el = document.createElement('pre');
+    el.id = 'bvDiag';
+    el.className = 'bv-diag';
+    document.body.appendChild(el);
+  }
+  el.textContent = bvLoki.join('\n');
+}
+/* Skriptivirhe näkyviin myös ilman diagia: puhelimessa se olisi muuten
+ * täysin hiljainen. Vain verkkokerroksen tila (valikko auki tai verkossa),
+ * ettei yksinpelin ohimenevä virhe ilmesty peliin. */
+window.addEventListener('error', function (e) {
+  bvKirjaa('VIRHE ' + (e.message || e.type) + (e.filename ? ' @' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+  const valikko = document.getElementById('bassoValikko');
+  if ((valikko && !valikko.hidden) || bassoVerkossa) bvViesti(e.message || String(e.type), 6000);
+});
+window.addEventListener('unhandledrejection', function (e) {
+  const r = e.reason;
+  bvKirjaa('LUPAUS ' + (r && r.message ? r.message : String(r)));
+  const valikko = document.getElementById('bassoValikko');
+  if ((valikko && !valikko.hidden) || bassoVerkossa) bvViesti(r && r.message ? r.message : String(r), 6000);
+});
 
 const bv = {
   koodi: null, avain: null, oma: null, versio: 0, tila: null,
@@ -41,18 +78,28 @@ const bv = {
 
 async function bvApi(toiminto, data) {
   let vastaus;
+  const alku = Date.now();
+  const keskeytys = typeof AbortController === 'function' ? new AbortController() : null;
+  const ajastin = keskeytys ? setTimeout(function () { keskeytys.abort(); }, BV_AIKARAJA) : null;
   try {
     vastaus = await fetch(BV_OSOITE, {
       method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.assign({ toiminto: toiminto }, data || {})),
+      signal: keskeytys ? keskeytys.signal : undefined,
     });
   } catch (e) {
+    if (ajastin) clearTimeout(ajastin);
+    if (toiminto !== 'tila') bvKirjaa(toiminto + ' → EI VASTAUSTA (' + (Date.now() - alku) + ' ms): ' + (e && e.name) + ' ' + (e && e.message));
     const v = new Error(t('yhteys.eiYhteytta'));
     v.yhteys = true;
     throw v;
   }
+  if (ajastin) clearTimeout(ajastin);
   let j = null;
   try { j = await vastaus.json(); } catch (e) { j = null; }
+  if (toiminto !== 'tila' || !j || !j.ok || !j.sama) {
+    bvKirjaa(toiminto + ' → HTTP ' + vastaus.status + ' ' + (j ? (j.ok ? 'ok' : j.virhe) : 'ei JSONia') + ' (' + (Date.now() - alku) + ' ms)');
+  }
   if (!j || typeof j !== 'object') throw new Error(t('yhteys.palvelinVirhe', { koodi: vastaus.status }));
   if (!j.ok) {
     const v = new Error(j.viesti || j.virhe);
@@ -152,7 +199,9 @@ function bvAvaaLuo() {
 
 async function bvLuo() {
   const nappi = bvEl('bvLuo');
+  if (nappi.disabled) return;
   nappi.disabled = true;
+  nappi.classList.add('odottaa');                // näkyvä «työn alla» -tila
   try {
     const j = await bvApi('luo', { vari: bv.vari, nimi: bvNimi('bvLuoNimi'), asetukset: { tavoite: bassoAsetukset.tavoite, sallitut: tila.sallitut } });
     bv.koodi = j.koodi; bv.avain = j.avain;
@@ -161,6 +210,7 @@ async function bvLuo() {
     bvKaynnistaKysely();
   } catch (e) { bvNaytaVirhe(e); }
   nappi.disabled = false;
+  nappi.classList.remove('odottaa');
 }
 
 function bvAvaaKoodi(koodi) {

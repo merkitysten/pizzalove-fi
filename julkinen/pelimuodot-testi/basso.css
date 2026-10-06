@@ -297,6 +297,18 @@
 @keyframes odota-kaanto{0%,40%{transform:rotate(0)} 50%,90%{transform:rotate(180deg)} 100%{transform:rotate(180deg)}}
 @media (prefers-reduced-motion: reduce){.basso-odota{animation:none}}
 
+/* Napin «työn alla» -tila: palvelinpyyntö on matkalla. Ilman tätä
+ * odottava nappi näytti vain harmaalta eikä kertonut mitään. */
+#bassoValikko .iso-nappi.odottaa{position:relative;color:transparent}
+#bassoValikko .iso-nappi.odottaa::after{content:"";position:absolute;left:50%;top:50%;width:22px;height:22px;
+  margin:-11px 0 0 -11px;border-radius:50%;border:3px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:bv-pyori .8s linear infinite}
+@keyframes bv-pyori{to{transform:rotate(360deg)}}
+/* ?diag=1: palvelinpyyntöjen loki ruudun alareunassa. */
+.bv-diag{position:fixed;left:0;right:0;bottom:0;z-index:90;margin:0;max-height:40vh;overflow:auto;
+  padding:6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);background:rgba(0,0,0,.85);color:#9f9;
+  font:11px/1.35 ui-monospace, Menlo, monospace;white-space:pre-wrap;pointer-events:none}
+
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
  * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Palli vasemmalle,
  * kisa ja napit oikealle. ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa
