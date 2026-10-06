@@ -166,6 +166,41 @@
   .kisa-rata.liikkuu .kisa-juoksija .basso-hahmo{animation:none}
 }
 
+
+
+/* --- OTTELUN VOITTO: Basso syö pizzapalan voittajan värisellä pohjalla ---
+ * Juhlaruutu saa täyden väripinnan (sama periaate kuin Norsussa: juhlaruudut
+ * ovat hetkiä eivätkä työkaluja). Kuosi päällä vaaleana, jotta pinta on
+ * Pizza Lovea eikä pelkkä väri. */
+.basso-juhla{position:fixed;inset:0;z-index:70;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px, 2vh, 18px);
+  background:var(--pelaaja-vari)}
+.basso-juhla[hidden]{display:none}
+.basso-juhla::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
+  opacity:.22;mix-blend-mode:multiply}
+.basso-juhla > *{position:relative}
+.basso-juhla-syo{width:min(62vw, 46vh, 360px);height:auto;max-width:none;
+  filter:drop-shadow(0 10px 24px rgba(0,0,0,.30))}
+.basso-juhla-kruunu{font-size:min(14vw, 10vh, 72px);line-height:1}
+.basso-juhla-hahmo .basso-hahmo{--koko:min(16vw, 11vh, 84px);
+  box-shadow:0 0 0 5px #fff, 0 6px 16px rgba(0,0,0,.3)}
+.basso-juhla.nakyy{animation:juhla-sisaan .35s ease-out both}
+.basso-juhla.nakyy .basso-juhla-syo{animation:juhla-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both,
+  juhla-mutustus .5s .8s ease-in-out infinite}
+.basso-juhla.nakyy .basso-juhla-kruunu{animation:juhla-kruunu .6s .45s cubic-bezier(.2,.9,.3,1.5) both}
+@keyframes juhla-sisaan{from{opacity:0}to{opacity:1}}
+@keyframes juhla-pomppu{from{transform:scale(.3) translateY(80px)}to{transform:scale(1) translateY(0)}}
+@keyframes juhla-mutustus{0%,100%{transform:rotate(0) scale(1)} 25%{transform:rotate(-3deg) scale(1.02, .98)}
+  75%{transform:rotate(3deg) scale(.98, 1.02)}}
+@keyframes juhla-kruunu{from{transform:translateY(-60px) rotate(-30deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){
+  .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-syo, .basso-juhla.nakyy .basso-juhla-kruunu{animation:none}
+}
+/* Maalin pala on syöty ottelun voiton jälkeen. */
+.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) scale(.2);
+  transition:opacity .4s, transform .4s}
+
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
  * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Palli vasemmalle,
  * kisa ja napit oikealle. ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa
@@ -181,4 +216,9 @@
   .palli-hahmo.voittaja{margin-top:18px}
   .palli-ala{padding-top:4px}
   .basso-summa{margin-top:2px}
+  /* Juhla: mitattu 844 × 390, kruunu alkoi −3 px:stä. */
+  .basso-juhla{gap:4px}
+  .basso-juhla-syo{width:min(62vw, 38vh, 360px)}
+  .basso-juhla-kruunu{font-size:min(14vw, 9vh, 72px)}
+  .basso-juhla-hahmo .basso-hahmo{--koko:min(16vw, 10vh, 84px)}
 }

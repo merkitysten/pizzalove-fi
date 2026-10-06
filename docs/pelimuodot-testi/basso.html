@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261006g">
+<link rel="stylesheet" href="basso.css?v=20261006h">
 </head>
 <body>
 
@@ -365,6 +365,15 @@
 
 <!-- PIZZAA! (Marko 6.10.2026: «Animaatio, ääni ja animaatioon yhdistettynä
      Basso-apinan kuva.»). Huuto on sivuston sääntötekstistä, kielittäin. -->
+<!-- OTTELUN VOITTO (Marko 6.10.2026: «kyllä se syöminen voisi olla hauska
+     juttu, ja siihen taustalle sitten se voittaneen pelaajan väri»). Koko
+     ruutu voittajan värissä, Basso syö maalin pizzapalan. Napautus sulkee. -->
+<div id="bassoJuhla" class="basso-juhla" hidden role="button" tabindex="0" data-ta="tauko.jatka">
+  <span class="basso-juhla-kruunu" aria-hidden="true">👑</span>
+  <img class="basso-juhla-syo" src="kuvat/basso-syo.webp?v=20261006a" alt="">
+  <span id="bassoJuhlaHahmo" class="basso-juhla-hahmo"></span>
+</div>
+
 <div id="bassoPizzaa" class="basso-pizzaa" hidden aria-live="assertive">
   <img src="kuvat/apina.webp?v=20260910a" alt="">
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
@@ -380,6 +389,6 @@
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
 <script src="basso-saannot.js?v=20261006a"></script>
-<script src="basso.js?v=20261006h"></script>
+<script src="basso.js?v=20261006i"></script>
 </body>
 </html>

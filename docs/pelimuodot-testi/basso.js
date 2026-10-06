@@ -137,6 +137,7 @@ function aloitaPeli() {
 
 function bassoAloitaKierros() {
   pysaytaKaikkiAjastimet();
+  bassoJuhlaKiinni();
   bassoUusiKierros(basso);
   tila.kaynnissa = true;
   tila.keskeytetty = false;
@@ -493,6 +494,38 @@ function piirraTulos() {
    * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
   requestAnimationFrame(bassoLevitaViuhkat);
   if (k && k.voittaja === BASSO_IHMINEN) bassoKonfetti();
+  /* Ottelun voitto: juhla kerran per ottelu — piirraTulos ajetaan myös
+   * värin vaihdossa, eikä juhla saa toistua siitä. */
+  if (basso.voittaja !== null && !basso.juhlittu) {
+    basso.juhlittu = true;
+    bassoJuhla(varit[basso.voittaja]);
+  }
+  /* Syöty pala ei palaa maaliin, vaikka ruutu piirretään uudelleen. */
+  if (basso.juhlittu) document.getElementById('bassoKisa').classList.add('syoty');
+}
+
+/* OTTELUN VOITTO (Marko 6.10.2026): Basso syö maalin pizzapalan, tausta on
+ * voittajan värinen — siitä voittajan tunnistaa ilman tekstiä. Avautuu kun
+ * juoksija on ehtinyt maaliin (kisan viive 450 ms + liike 1 300 ms). */
+const BASSO_JUHLA_VIIVE = 1900;
+function bassoJuhla(vari) {
+  const el = document.getElementById('bassoJuhla');
+  if (!el) return;
+  el.style.setProperty('--pelaaja-vari', vari);
+  document.getElementById('bassoJuhlaHahmo').innerHTML = bassoHahmo(vari);
+  setTimeout(function () {
+    if (document.getElementById('tulosRuutu').hidden) return;   // jo jatkettu
+    el.hidden = false;
+    el.classList.remove('nakyy');
+    void el.offsetWidth;
+    el.classList.add('nakyy');
+    bassoHuuto();
+    el.focus();
+  }, BASSO_JUHLA_VIIVE);
+}
+function bassoJuhlaKiinni() {
+  const el = document.getElementById('bassoJuhla');
+  if (el) { el.hidden = true; el.classList.remove('nakyy'); }
 }
 
 /* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
@@ -726,6 +759,14 @@ document.addEventListener('DOMContentLoaded', function () {
   if (peite) peite.addEventListener('click', function (e) {
     if (e.target === peite) bassoAsetuksetSuljettu();
   });
+
+  const juhla = document.getElementById('bassoJuhla');
+  if (juhla) {
+    juhla.addEventListener('click', bassoJuhlaKiinni);
+    juhla.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { e.preventDefault(); bassoJuhlaKiinni(); }
+    });
+  }
 
   /* ▶ tulosruudussa: seuraava kierros, tai uusi ottelu jos edellinen
    * päättyi tai keskeytettiin. */
