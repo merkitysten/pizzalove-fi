@@ -20,7 +20,8 @@
     "alaosa_tavaramerkki": "Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n rekisteröityjä tavaramerkkejä.",
     "alaosa_yritys": "Merkitysten Oy",
     "alaosa_varainhankinta": "Varainhankinta luokille ja joukkueille",
-    "ohita": "Siirry sisältöön"
+    "ohita": "Siirry sisältöön",
+    "nav_varainhankinta": "Varainhankinta"
   },
   "etusivu": {
     "title": "Pizza Love® – säännöt, videot ja verkkopeli",
@@ -35,7 +36,13 @@
     "pelaa_teksti": "Yksin, samalla laitteella tai kavereiden kanssa jokainen omalla puhelimellaan.",
     "pelaa_nappi": "Pelaa nyt",
     "kauppa_otsikko": "Lisää peliä?",
-    "kauppa_teksti": "Pizza Love® -pelit löytyvät Merkitysten verkkokaupasta."
+    "kauppa_teksti": "Pizza Love® -pelit löytyvät Merkitysten verkkokaupasta.",
+    "varainhankinta": {
+      "otsikko": "Hanki rahaa luokalle tai joukkueelle",
+      "teksti": "Luokka tai joukkue myy Pizza Love® -korttipelejä ja pitää itse 9 € jokaisesta myydystä pelistä. Ei ennakkomaksua eikä riskiä.",
+      "nappi": "Lue lisää varainhankinnasta",
+      "url": "https://varainhankinta.merkitysten.fi/"
+    }
   },
   "korttipeli": {
     "title": "Pizza Love® -korttipeli – säännöt ja videot",
@@ -70,7 +77,7 @@
     "helpompi_otsikko": "Helpompi tapa",
     "helpompi": "Pizzan voi valmistaa millä tahansa määrällä täytekortteja, myös yhdellä. Käytä tätä, kun pelaat Pizza Partya ensimmäistä kertaa tai pienen lapsen kanssa.",
     "basso_tapa_otsikko": "Basso-apinan tapa",
-    "basso_tapa": "Täytekortteja on käytettävä yhtä monta kuin pizzassa on täytteitä. Tomaatti-ananaspizzaan tarvitaan siis kaksi täytekorttia. Käytä tätä Pizza Bassossa tai kun haluat Pizza Partyyn lisähaastetta.",
+    "basso_tapa": "Käytä yhtä monta <b>eri täytettä</b> kuin pizzassa on täytteitä. Kortteja saa olla enemmänkin: tomaatti-ananaspizzan (arvo 5) voi tehdä vaikka kahdella tomaatilla ja yhdellä oliivilla, 2 + 2 + 1 = 5, koska täytteitä on kaksi eri lajia. Käytä tätä Pizza Bassossa tai kun haluat Pizza Partyyn lisähaastetta.<br><span class=\"pieni\">Painetuissa ohjeissa sääntö on vielä muodossa ”yhtä monta täytekorttia kuin täytteitä”. Uusi tapa antaa pelille enemmän mahdollisuuksia.</span>",
     "huomio_bruno": "<b>Bruno vai Basso?</b> Pelin apina on nykyään Basso. Vanhemmissa ohjeissa ja videoissa hänen nimensä on Bruno, ja toisen pelimuodon nimi on Pizza Bruno. Säännöt ovat samat.",
     "muodot_otsikko": "Kolme tapaa pelata",
     "muodot_ingressi": "Avaa pelimuoto, niin näet säännöt ja videot.",
@@ -88,7 +95,7 @@
         "numero": "#2",
         "nimi": "Pizza Basso",
         "kuvaus": "Rauhallinen ja jännittävä",
-        "html": "<p class=\"pieni\">Vanhemmissa ohjeissa: Pizza Bruno.</p><h3>Tavoite</h3><p>Pelaajat yrittävät päästä eroon kaikista täytekorteistaan. Ensimmäisenä onnistunut voittaa kierroksen.</p><p><b>Huom.</b> Pizzat valmistetaan Basso-apinan tapaan: täytekortteja käytetään yhtä monta kuin pizzassa on täytteitä.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita pizzakortit ja aseta ne pinoksi kaikkien ulottuville.</li><li>Sekoita täytekortit ja jaa jokaiselle pelaajalle 7 korttia. Loput täytekortit ovat nostopakka. Pelaajat saavat katsoa korttinsa.</li></ol><h3>Aloittaminen</h3><p>Käännä ensimmäinen pizzakortti näkyviin pinon viereen. Viimeksi pizzaa syönyt pelaaja aloittaa.</p><h3>Pelin kulku</h3><p>Pelaajat yrittävät vuorollaan valmistaa näkyvän pizzan omilla täytekorteillaan.</p><p><b>A) Jos onnistut:</b> poista käytetyt täytekortit pelistä ja käännä pinosta uusi pizza edellisen päälle. Vuoro siirtyy seuraavalle.</p><p><b>B) Jos et onnistu tai halua valmistaa pizzaa:</b> nosta yksi täytekortti. Vuoro siirtyy seuraavalle.</p><p><b>C) Yksi kortti kädessä:</b> kun sinulla on enää yksi täytekortti, elehdi kuin nälkäinen Basso-apina ja huuda: ”PIZZAA!”</p><h3>Jos täytekortit loppuvat</h3><p>Sekoita pelistä poistetut täytekortit uudeksi nostopakaksi ja jatka.</p><h3>Pisteet ja voittaminen</h3><p>Kierroksen voittaa se, joka pääsee ensimmäisenä eroon kaikista täytekorteistaan. Muiden kädessä olevien korttien arvot lasketaan yhteen, ja summa on voittajan pisteet. Tavallinen täyte on arvonsa verran (1–10), fantasiatäyte 20.</p><p>Ensimmäisenä 100 pistettä kerännyt voittaa ja saa tittelin <b>Pizza Basso – todellinen pizza-apina</b>.</p><h3>Lyhyempi peli</h3><p>Voitte sopia, että peli päättyy esimerkiksi 30 tai 50 pisteeseen, tai että koko pelin voittaa ensimmäisenä 3 tai 5 kierrosta voittanut.</p>"
+        "html": "<p class=\"pieni\">Vanhemmissa ohjeissa: Pizza Bruno.</p><h3>Tavoite</h3><p>Pelaajat yrittävät päästä eroon kaikista täytekorteistaan. Ensimmäisenä onnistunut voittaa kierroksen.</p><p><b>Huom.</b> Pizzat valmistetaan Basso-apinan tapaan: käytä yhtä monta eri täytettä kuin pizzassa on täytteitä. Kortteja saa olla enemmän, esimerkiksi kaksi oliivia.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita pizzakortit ja aseta ne pinoksi kaikkien ulottuville.</li><li>Sekoita täytekortit ja jaa jokaiselle pelaajalle 7 korttia. Loput täytekortit ovat nostopakka. Pelaajat saavat katsoa korttinsa.</li></ol><h3>Aloittaminen</h3><p>Käännä ensimmäinen pizzakortti näkyviin pinon viereen. Viimeksi pizzaa syönyt pelaaja aloittaa.</p><h3>Pelin kulku</h3><p>Pelaajat yrittävät vuorollaan valmistaa näkyvän pizzan omilla täytekorteillaan.</p><p><b>A) Jos onnistut:</b> poista käytetyt täytekortit pelistä ja käännä pinosta uusi pizza edellisen päälle. Vuoro siirtyy seuraavalle.</p><p><b>B) Jos et onnistu tai halua valmistaa pizzaa:</b> nosta yksi täytekortti. Vuoro siirtyy seuraavalle.</p><p><b>C) Yksi kortti kädessä:</b> kun sinulla on enää yksi täytekortti, elehdi kuin nälkäinen Basso-apina ja huuda: ”PIZZAA!”</p><h3>Jos täytekortit loppuvat</h3><p>Sekoita pelistä poistetut täytekortit uudeksi nostopakaksi ja jatka.</p><h3>Pisteet ja voittaminen</h3><p>Kierroksen voittaa se, joka pääsee ensimmäisenä eroon kaikista täytekorteistaan. Muiden kädessä olevien korttien arvot lasketaan yhteen, ja summa on voittajan pisteet. Tavallinen täyte on arvonsa verran (1–10), fantasiatäyte 20.</p><p>Ensimmäisenä 100 pistettä kerännyt voittaa ja saa tittelin <b>Pizza Basso – todellinen pizza-apina</b>.</p><h3>Lyhyempi peli</h3><p>Voitte sopia, että peli päättyy esimerkiksi 30 tai 50 pisteeseen, tai että koko pelin voittaa ensimmäisenä 3 tai 5 kierrosta voittanut.</p>"
       },
       {
         "avain": "love",

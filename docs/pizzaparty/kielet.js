@@ -763,6 +763,10 @@ let KIELI = 'fi';
       localStorage.setItem(AVAIN, JSON.stringify(a));
     }
   } catch (e) { /* yksityinen selaus: oletuskieli */ }
+  /* Välilehden otsikko valitulla kielellä (index.html:n <title> on suomeksi). */
+  var OTSIKKO = { sv: 'Pizza Party — så spelar man', en: 'Pizza Party — how to play',
+                  de: 'Pizza Party — so wird gespielt' };
+  if (OTSIKKO[KIELI] && /näin sitä pelataan/.test(document.title)) document.title = OTSIKKO[KIELI];
 })();
 
 /* ⚠️ PUUTTUVA AVAIN PALAUTTAA AVAIMEN, EI TYHJÄÄ. Tyhjä merkkijono näyttää

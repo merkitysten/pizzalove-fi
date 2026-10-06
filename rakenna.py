@@ -91,6 +91,9 @@ def ylaosa(t, sivu, kaikki):
            ('korttipeli.html', ui['nav_korttipeli'], 'korttipeli'),
            ('lautapeli.html', ui['nav_lautapeli'], 'lautapeli'),
            ('../pizzaparty/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
+    # Varainhankinta on vain suomeksi, joten välilehti näkyy vain kielillä joilla avain on.
+    if ui.get('nav_varainhankinta') and t['etusivu'].get('varainhankinta'):
+        nav.append((t['etusivu']['varainhankinta']['url'], ui['nav_varainhankinta'], 'varainhankinta'))
     navi = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if k == sivu else '', e(n))
                    for h, n, k in nav)
     kielet = ''.join(
@@ -149,7 +152,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%s</title>
 <meta name="description" content="%s">
-<meta name="theme-color" content="#000002">
+<meta name="theme-color" content="#F47920">
 <link rel="icon" href="../favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="../favicon-180.png">
 <link rel="preload" href="../fontit/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -208,6 +211,17 @@ def lataukset(avaimet, nimet, polut):
 
 # ---------------------------------------------------------------- sivut
 
+def varainhankinta_osio(s):
+    v = s.get('varainhankinta')
+    if not v:
+        return ''
+    return '''<section class="laatikko varain" style="margin-top:20px">
+  <h2 style="margin-top:0">%s</h2>
+  <p>%s</p>
+  <div class="napit"><a class="nappi" href="%s">%s →</a></div>
+</section>''' % (e(v['otsikko']), e(v['teksti']), v['url'], e(v['nappi']))
+
+
 def etusivu(t, kaikki):
     s = t['etusivu']
     lang = t['lang']
@@ -249,6 +263,7 @@ def etusivu(t, kaikki):
   </div>
 </a>
 
+%s
 <h2>%s</h2>
 <p>%s</p>
 <div class="napit">
@@ -259,6 +274,7 @@ def etusivu(t, kaikki):
        e(t['ui']['nav_korttipeli']), e(s['korttipeli_tiedot']), e(s['avaa']),
        e(t['ui']['nav_lautapeli']), e(s['lautapeli_tiedot']), e(s['avaa']),
        lang, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), e(s['pelaa_nappi']),
+       varainhankinta_osio(s),
        e(s['kauppa_otsikko']), e(s['kauppa_teksti']),
        KAUPPA['korttipeli'], e(t['ui']['kauppaan']), e(t['ui']['nav_korttipeli']),
        KAUPPA['lautapeli'], e(t['ui']['kauppaan']), e(t['ui']['nav_lautapeli']))
@@ -343,7 +359,7 @@ def korttipeli(t, kaikki):
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
        e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
-       e(s['tavat_otsikko']), e(s['helpompi_otsikko']), e(s['helpompi']), e(s['basso_tapa_otsikko']), e(s['basso_tapa']),
+       e(s['tavat_otsikko']), e(s['helpompi_otsikko']), e(s['helpompi']), e(s['basso_tapa_otsikko']), s['basso_tapa'],
        s['huomio_bruno'],
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),

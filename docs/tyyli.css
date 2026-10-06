@@ -13,9 +13,10 @@
 :root{
   --ground:#FAF6EE; --surface:#FFFFFF; --warm:#FFF3E9;
   --ink:#1A1A1A; --soft:#6E6357; --line:#E7DCCA; --line2:#D6C7AF;
-  --orange:#E96E2A; --deep:#C2580C; --tint:#FBE3D2;
+  --orange:#F47920; --deep:#C2580C; --tint:#FBE3D2;
   --green:#2D5D3D; --greenTint:#DCEBE0;
   --bar:#000002; --barInk:#FBF6EE;
+  --brandi:#F47920;   /* Pizza Loven oranssi: yläpalkki */
   --shadow:0 1px 2px rgba(60,34,12,.06),0 8px 24px rgba(60,34,12,.08);
   --radius:18px;
   --palsta:720px;
@@ -48,19 +49,19 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
   background:url("kuosi.svg") repeat;background-size:286px 285px;opacity:.45;pointer-events:none}
 @media (prefers-color-scheme:dark){body::before{display:none}}
 
-/* ---------- Yläosa: musta palkki, riippuva viiri, sivurivi ---------- */
+/* ---------- Yläosa: oranssi palkki (#F47920, Marko 6.10.2026), riippuva musta viiri, sivurivi ---------- */
 .ylaosa{position:sticky;top:0;z-index:50}
-.palkki{background:var(--bar);color:var(--barInk);
+.palkki{background:var(--brandi);color:#1A1A1A;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:8px max(16px,calc((100% - 1040px)/2))}
 .palkki__logo{display:block;line-height:0}
 .palkki__viiri{width:var(--viiri-w);margin-bottom:-46px;position:relative;z-index:2;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
 .kielet{display:flex;gap:4px;align-items:center}
-.kielet a{color:var(--barInk);text-decoration:none;font-size:13px;font-weight:600;
+.kielet a{color:#1A1A1A;text-decoration:none;font-size:13px;font-weight:600;
   padding:6px 9px;border-radius:8px;letter-spacing:.02em;opacity:.75}
-.kielet a:hover{opacity:1;box-shadow:inset 0 0 0 1.5px rgba(251,246,238,.5)}
-.kielet a[aria-current="true"]{opacity:1;background:var(--orange);color:#1A1A1A}
+.kielet a:hover{opacity:1;box-shadow:inset 0 0 0 1.5px rgba(26,26,26,.6)}
+.kielet a[aria-current="true"]{opacity:1;background:#1A1A1A;color:#FFFFFF}
 
 .sivurivi{background:color-mix(in srgb,var(--ground) 92%,transparent);
   backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);
@@ -132,7 +133,7 @@ ul.lista li,ol.lista li{margin:4px 0}
 .pelaa-banneri img{width:84px}
 .pelaa-banneri strong{display:block;font-size:20px;line-height:1.25}
 .pelaa-banneri span{display:block;font-size:14.5px;opacity:.8;margin-top:4px}
-.pelaa-banneri .nappi{margin-top:10px}
+.pelaa-banneri .nappi{margin-top:10px;opacity:1;display:inline-flex;font-size:16px}
 
 /* ---------- Pelisivu ---------- */
 .pelin-tiedot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
