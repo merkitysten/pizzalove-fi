@@ -14,6 +14,8 @@
 .n3d__tahko{position:absolute;left:0;top:0;transform-origin:0 0;backface-visibility:hidden;-webkit-backface-visibility:hidden;max-width:none}
 .av__noppa--odottaa .av__noppa-nimi{color:var(--deep,#C2580C)}
 .av__vihje{font-size:14.5px;margin:8px 0 0}
+.av__vihje--havikki{background:var(--tint,#FBE3D2);border-radius:10px;padding:8px 12px;font-weight:600}
+.av__hylly-nimi b{color:var(--ink,#1A1A1A);margin-left:4px}
 
 .av__nayttamo{position:relative;width:100%;max-width:420px;margin:0 auto;--pala:8px;--leveys:34px}
 .av__nayttamo img{position:absolute;height:auto;pointer-events:none;max-width:none}

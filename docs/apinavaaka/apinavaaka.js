@@ -37,6 +37,7 @@
       otsikko: 'Kokeile apinavaakaa',
       ohje: 'Napauta varaston tornia, niin apina ottaa sen oikeaan käteensä. Kun tornit ovat yhtä korkeat, siirto on oikein.',
       heitaVihje: 'Napauta noppaa ja heitä!',
+      havikki: "Hävikki", havikkiVihje: "Hävikkiä! Nopan luku on suurempi kuin varaston tornit yhteensä. Nyt linjastolta viedään torneja varastoon: napauta linjaston torneja.", liikaaH: " Kokeile pienempää – tai nosta varaston torni punnusten päälle.", vieVarastoon: "Vie varastoon", valmisH: "Linjaston luku pieneni {n}:llä.", pizzaparty: "Pizzapartyt! Linjasto on täynnä.", uusiPeli: "Uusi peli", vapaaNappi: "Vapaa harjoittelu",
       noppa: 'Noppa', varasto: 'Varasto', linjasto: 'Linjasto',
       punnukset: 'punnusta',
       tehtava: 'Tehtävä', vapaa: 'Vapaa harjoittelu',
@@ -45,7 +46,7 @@
         A: 'Etsi varastosta torni, joka on yhtä korkea kuin punnusten torni.',
         B: 'Linjastolla on jo sopiva torni. Kokoa sama korkeus pienemmistä torneista.',
         C: 'Varaston tornit ovat liian korkeita. Napauta linjaston tornia, niin se nousee punnusten päälle.',
-        X: 'Keksi itse, miten tornit saa yhtä korkeiksi.'
+        X: "Keksi itse, miten tornit saa yhtä korkeiksi. Siirto onnistuu aina!"
       },
       liianVahan: 'Liian matala. Lisää torneja oikeaan käteen.',
       liikaa: 'Liian korkea!',
@@ -63,6 +64,7 @@
       otsikko: 'Prova apavågen',
       ohje: 'Tryck på ett torn i lagret så tar apan det i sin högra hand. När tornen är lika höga är flytten rätt.',
       heitaVihje: 'Tryck på tärningen och kasta!',
+      havikki: "Svinn", havikkiVihje: "Svinn! Tärningens tal är större än tornen i lagret tillsammans. Nu flyttas torn från linjen till lagret: tryck på tornen på linjen.", liikaaH: " Prova ett mindre – eller lyft ett torn från lagret ovanpå vikterna.", vieVarastoon: "Flytta till lagret", valmisH: "Linjens värde minskade med {n}.", pizzaparty: "Pizzaparty! Linjen är full.", uusiPeli: "Nytt spel", vapaaNappi: "Fri träning",
       noppa: 'Tärning', varasto: 'Lager', linjasto: 'Linje',
       punnukset: 'vikter',
       tehtava: 'Uppgift', vapaa: 'Fri träning',
@@ -71,7 +73,7 @@
         A: 'Hitta ett torn i lagret som är lika högt som viktornet.',
         B: 'Det passande tornet finns redan på linjen. Bygg samma höjd av mindre torn.',
         C: 'Tornen i lagret är för höga. Tryck på ett torn på linjen så lyfts det ovanpå vikterna.',
-        X: 'Hitta själv ett sätt att göra tornen lika höga.'
+        X: "Hitta själv ett sätt att göra tornen lika höga. Det går alltid!"
       },
       liianVahan: 'För lågt. Lägg fler torn i högra handen.',
       liikaa: 'För högt!',
@@ -89,6 +91,7 @@
       otsikko: 'Try the monkey scales',
       ohje: 'Tap a tower in the storage and the monkey takes it in its right hand. When the towers are equally high, the move is right.',
       heitaVihje: 'Tap the dice to roll!',
+      havikki: "Food waste", havikkiVihje: "Food waste! The dice shows more than all the towers in the storage together. Now towers go from the line back to the storage: tap the towers on the line.", liikaaH: " Try a smaller one – or lift a tower from the storage on top of the weights.", vieVarastoon: "Move to the storage", valmisH: "The line shrank by {n}.", pizzaparty: "Pizza party! The line is full.", uusiPeli: "New game", vapaaNappi: "Free practice",
       noppa: 'Dice', varasto: 'Storage', linjasto: 'Line',
       punnukset: 'weights',
       tehtava: 'Task', vapaa: 'Free practice',
@@ -97,7 +100,7 @@
         A: 'Find a tower in the storage that is as high as the tower of weights.',
         B: 'The matching tower is already on the line. Build the same height from smaller towers.',
         C: 'The towers in the storage are too high. Tap a tower on the line to lift it on top of the weights.',
-        X: 'Find your own way to make the towers equally high.'
+        X: "Find your own way to make the towers equally high. There is always a way!"
       },
       liianVahan: 'Too low. Add towers to the right hand.',
       liikaa: 'Too high!',
@@ -115,6 +118,7 @@
       otsikko: 'Probier die Affenwaage aus',
       ohje: 'Tippe auf einen Turm im Lager, dann nimmt der Affe ihn in die rechte Hand. Wenn beide Türme gleich hoch sind, stimmt der Zug.',
       heitaVihje: 'Tippe auf den Würfel und würfle!',
+      havikki: "Verschwendung", havikkiVihje: "Verschwendung! Der Würfel zeigt mehr als alle Türme im Lager zusammen. Jetzt kommen Türme von der Linie zurück ins Lager: Tippe auf die Türme auf der Linie.", liikaaH: " Probier einen kleineren – oder heb einen Turm aus dem Lager auf die Gewichte.", vieVarastoon: "Ins Lager", valmisH: "Die Linie ist um {n} kleiner geworden.", pizzaparty: "Pizzaparty! Die Linie ist voll.", uusiPeli: "Neues Spiel", vapaaNappi: "Freies Üben",
       noppa: 'Würfel', varasto: 'Lager', linjasto: 'Linie',
       punnukset: 'Gewichte',
       tehtava: 'Aufgabe', vapaa: 'Freies Üben',
@@ -123,7 +127,7 @@
         A: 'Finde im Lager einen Turm, der genauso hoch ist wie der Turm aus Gewichten.',
         B: 'Der passende Turm steht schon auf der Linie. Baue dieselbe Höhe aus kleineren Türmen.',
         C: 'Die Türme im Lager sind zu hoch. Tippe auf einen Turm auf der Linie, dann kommt er auf die Gewichte.',
-        X: 'Finde selbst einen Weg, die Türme gleich hoch zu machen.'
+        X: "Finde selbst einen Weg, die Türme gleich hoch zu machen. Es geht immer!"
       },
       liianVahan: 'Zu niedrig. Leg mehr Türme in die rechte Hand.',
       liikaa: 'Zu hoch!',
@@ -150,25 +154,9 @@
     { tapa: 'C', noppa: 2, linjasto: [1, 2, 4, 6] }
   ];
 
-  function ratkeava(noppa, linj) {
-    var vars = [];
-    for (var i = 1; i <= 10; i++) if (linj.indexOf(i) < 0) vars.push(i);
-    var summat = {0: true};               // varaston osajoukkojen summat
-    vars.forEach(function (v) {
-      Object.keys(summat).map(Number).forEach(function (s) { summat[s + v] = true; });
-    });
-    if (summat[noppa]) return true;
-    return linj.some(function (t) { return summat[noppa + t]; });
-  }
-
-  function arvoTehtava() {
-    for (var k = 0; k < 200; k++) {
-      var noppa = 1 + Math.floor(Math.random() * 10), linj = [];
-      for (var i = 1; i <= 10; i++) if (Math.random() < 0.4) linj.push(i);
-      if (ratkeava(noppa, linj)) return { tapa: 'X', noppa: noppa, linjasto: linj };
-    }
-    return { tapa: 'X', noppa: 3, linjasto: [] };
-  }
+  // Vapaassa harjoittelussa tilanne jatkuu kierroksesta toiseen kuten oikeassa pelissä.
+  // Siirto onnistuu aina (tarkistettu kaikille 1024 jaolle ja nopan luvuille 1–10),
+  // ja jos nopan luku on suurempi kuin varasto yhteensä, syntyy hävikkiä.
 
   // ---------------------------------------------------------------- apurit
   function el(tag, cls, html) {
@@ -278,34 +266,51 @@
       tila.tehtava = teht;
       tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = teht.linjasto.indexOf(i) >= 0 ? 'linjasto' : 'varasto';
-      tila.oikea = []; tila.vasen = []; tila.valmis = false; tila.siirretty = false; tila.viesti = '';
+      tila.oikea = []; tila.vasen = []; tila.lahde = {}; tila.havikki = false; tila.valmis = false; tila.siirretty = false; tila.viesti = '';
       tila.heitetty = false; noppa3d.odota(); noppaEl.classList.add('av__noppa--odottaa');
       piirra();
     }
 
-    function napautaVarasto(n) {
+    function napauta(n, mista) {
       if (tila.valmis || tila.siirretty || !tila.heitetty) return;
-      tila.paikka[n] = 'oikea'; tila.oikea.push(n); tila.viesti = '';
-      piirra();
-    }
-    function napautaLinjasto(n) {
-      if (tila.valmis || tila.siirretty || !tila.heitetty) return;
-      if (tila.vasen.length) { tila.viesti = t.vainYksi; piirra(); return; }
-      tila.paikka[n] = 'vasen'; tila.vasen.push(n); tila.viesti = '';
+      var oikealle = mista === (tila.havikki ? 'linjasto' : 'varasto');
+      if (!oikealle && tila.vasen.length) { tila.viesti = tila.havikki ? '' : t.vainYksi; piirra(); return; }
+      tila.lahde[n] = mista;
+      if (oikealle) { tila.paikka[n] = 'oikea'; tila.oikea.push(n); }
+      else { tila.paikka[n] = 'vasen'; tila.vasen.push(n); }
+      tila.viesti = '';
       piirra();
     }
     function palauta(n) {
       if (tila.siirretty) return;
-      if (tila.paikka[n] === 'oikea') { tila.oikea.splice(tila.oikea.indexOf(n), 1); tila.paikka[n] = 'varasto'; }
-      else if (tila.paikka[n] === 'vasen') { tila.vasen = []; tila.paikka[n] = 'linjasto'; }
+      if (tila.paikka[n] === 'oikea') tila.oikea.splice(tila.oikea.indexOf(n), 1);
+      else tila.vasen = [];
+      tila.paikka[n] = tila.lahde[n];
       tila.viesti = '';
       piirra();
     }
-    function vieLinjastolle() {
-      tila.oikea.forEach(function (n) { tila.paikka[n] = 'linjasto'; });
-      tila.vasen.forEach(function (n) { tila.paikka[n] = 'varasto'; });
+    function vieSiirto() {                    // jokainen torni toiselle hyllylle kuin mistä tuli
+      tila.oikea.concat(tila.vasen).forEach(function (n) {
+        tila.paikka[n] = tila.lahde[n] === 'varasto' ? 'linjasto' : 'varasto';
+      });
       tila.siirretty = true;
       piirra();
+    }
+    function varastonSumma() {
+      var x = 0; for (var i = 1; i <= 10; i++) if (tila.paikka[i] === 'varasto') x += i; return x;
+    }
+    function uusiKierros() {                  // vapaa harjoittelu: sama varasto ja linjasto jatkuvat
+      var d = 1 + Math.floor(Math.random() * 10);
+      tila.havikki = d > varastonSumma();
+      tila.tehtava = { tapa: tila.havikki ? 'H' : 'X', noppa: d };
+      tila.oikea = []; tila.vasen = []; tila.lahde = {}; tila.valmis = false; tila.siirretty = false; tila.viesti = '';
+      tila.heitetty = false; noppa3d.odota(); noppaEl.classList.add('av__noppa--odottaa');
+      piirra();
+    }
+    function aloitaVapaa() {
+      tila.nro = TEHTAVAT.length; tila.paikka = {};
+      for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
+      uusiKierros();
     }
 
     // --- piirto
@@ -316,10 +321,11 @@
 
       tehtavaRivi.innerHTML = (tila.nro < TEHTAVAT.length
         ? '<b>' + t.tehtava + ' ' + (tila.nro + 1) + '/' + TEHTAVAT.length + '</b> · '
-        : '<b>' + t.vapaa + '</b> · ') + t.tavat[teht.tapa];
+        : '<b>' + t.vapaa + '</b> · ') + (teht.tapa === 'H' ? t.havikki : t.tavat[teht.tapa]);
       noppaEl.disabled = tila.heitetty;
       noppaEl.setAttribute('aria-label', tila.heitetty ? t.noppa + ': ' + noppa : t.heitaVihje);
-      vihje.textContent = tila.heitetty ? t.vihjeet[teht.tapa] : t.heitaVihje;
+      vihje.textContent = !tila.heitetty ? t.heitaVihje : teht.tapa === 'H' ? t.havikkiVihje : t.vihjeet[teht.tapa];
+      vihje.classList.toggle('av__vihje--havikki', tila.heitetty && teht.tapa === 'H');
 
       // vaa'an kallistus: painavampi puoli alas
       var kulma = 0;
@@ -371,32 +377,29 @@
       // viesti ja napit
       napit.innerHTML = '';
       var v = tila.viesti;
+      function nappi(teksti, luokka, f) {
+        var x = el('button', 'nappi' + (luokka ? ' ' + luokka : ''), teksti);
+        x.type = 'button'; x.addEventListener('click', f); napit.appendChild(x);
+      }
+      var vapaa = tila.nro >= TEHTAVAT.length;
       if (tila.siirretty) {
-        v = t.valmis.replace('{n}', noppa);
-        var viimeinen = tila.nro === TEHTAVAT.length - 1;
-        if (viimeinen) v += ' ' + t.kaikkiValmiit;
-        var seur = el('button', 'nappi', (tila.nro >= TEHTAVAT.length - 1 ? t.heita : t.seuraava) + ' →');
-        seur.type = 'button';
-        seur.addEventListener('click', function () {
-          tila.nro++;
-          aloita(tila.nro < TEHTAVAT.length ? TEHTAVAT[tila.nro] : arvoTehtava());
-          if (tila.nro >= TEHTAVAT.length) heita();
-        });
-        napit.appendChild(seur);
-        if (tila.nro >= TEHTAVAT.length - 1) {
-          var al = el('button', 'nappi nappi--toinen', t.alusta);
-          al.type = 'button';
-          al.addEventListener('click', function () { tila.nro = 0; aloita(TEHTAVAT[0]); });
-          napit.appendChild(al);
+        v = (tila.havikki ? t.valmisH : t.valmis).replace('{n}', noppa);
+        if (vapaa && varastonSumma() === 0) v = t.pizzaparty;
+        if (tila.nro === TEHTAVAT.length - 1) v += ' ' + t.kaikkiValmiit;
+        if (vapaa) {
+          nappi(t.heita + ' →', '', function () { uusiKierros(); heita(); });
+          nappi(t.uusiPeli, 'nappi--toinen', function () { aloitaVapaa(); });
+        } else if (tila.nro === TEHTAVAT.length - 1) {
+          nappi(t.vapaaNappi + ' →', '', function () { aloitaVapaa(); heita(); });
+          nappi(t.alusta, 'nappi--toinen', function () { tila.nro = 0; aloita(TEHTAVAT[0]); });
+        } else {
+          nappi(t.seuraava + ' →', '', function () { tila.nro++; aloita(TEHTAVAT[tila.nro]); });
         }
       } else if (tila.valmis) {
         v = t.tasapaino + ' ' + vasenTxt + ' = ' + oikeaTxt;
-        var vie = el('button', 'nappi', t.vie + ' →');
-        vie.type = 'button';
-        vie.addEventListener('click', vieLinjastolle);
-        napit.appendChild(vie);
+        nappi((tila.havikki ? t.vieVarastoon : t.vie) + ' →', '', vieSiirto);
       } else if (!v && tila.oikea.length) {
-        v = oikeaSumma < vasenSumma ? t.liianVahan : t.liikaa + (teht.tapa === 'C' || teht.tapa === 'X' ? t.liikaaC : '');
+        v = oikeaSumma < vasenSumma ? t.liianVahan : t.liikaa + (teht.tapa === 'H' ? t.liikaaH : teht.tapa === 'C' || teht.tapa === 'X' ? t.liikaaC : '');
       }
       viesti.textContent = v || '';
       viesti.classList.toggle('av__viesti--ok', tila.valmis || tila.siirretty);
@@ -404,7 +407,8 @@
       // hyllyt
       [['varasto', varastoEl, t.varasto], ['linjasto', linjastoEl, t.linjasto]].forEach(function (h) {
         var nimi = h[0], kohde = h[1];
-        kohde.innerHTML = '<span class="av__hylly-nimi">' + h[2] + '</span>';
+        var hs = 0; for (var q = 1; q <= 10; q++) if (tila.paikka[q] === nimi) hs += q;
+        kohde.innerHTML = '<span class="av__hylly-nimi">' + h[2] + ' <b>' + hs + '</b></span>';
         var rivi = el('div', 'av__paikat');
         for (var n = 1; n <= 10; n++) {
           var paikka = el('div', 'av__paikka');
@@ -417,7 +421,7 @@
             b.title = t.taytteet[n - 1];
             (function (n, nimi) {
               b.addEventListener('click', function () {
-                if (nimi === 'varasto') napautaVarasto(n); else napautaLinjasto(n);
+                napauta(n, nimi);
               });
             })(n, nimi);
             if (tila.siirretty || !tila.heitetty) b.disabled = true;
