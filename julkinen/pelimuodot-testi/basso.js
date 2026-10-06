@@ -32,29 +32,60 @@ const BASSO_MIETINTA = 1100;        // apinan «miettimisaika» ennen siirtoa, m
 const BASSO_APINAN_NAYTTO = 1700;   // apinan laskun näkyvyys — se on opetuspuoli
 const BASSO_PIZZAA_KESTO = 1700;
 
-/* Apinoiden määrä ja pisteraja. 🔵 Marko 6.10.2026: 30 pistettä oletuksena. */
-const bassoAsetukset = { apinoita: 1, tavoite: BASSO_TAVOITTEET[0], variNro: 2 };
+/* Pelaajat, pisteraja ja värit. 🔵 Marko 6.10.2026: 30 pistettä oletuksena;
+ * ihmisiä samalla laitteella 1–4 ja apinoita 0–3, yhteensä 2–4.
+ * `variNrot[h]` = h:nnen ihmisen väri Merkitysten numerona 1–10. */
+const BASSO_PELAAJIA_ENINTAAN = 4;
+const bassoAsetukset = { ihmisia: 1, apinoita: 1, tavoite: BASSO_TAVOITTEET[0], variNrot: [2] };
 let basso = null;                    // käynnissä oleva ottelu (basso-saannot.js)
 let bassoAsetusMuuttui = false;
 let bassoValahdysAjastin = null;
 
-const BASSO_IHMINEN = 0;             // ihminen on aina pelaaja 0
+/* Kenen kortit ovat näkyvissä (pelaajan indeksi) tai null = ei kenenkään.
+ * Yksin pelatessa aina se ainoa ihminen. Useamman ihmisen pelissä se on
+ * vuorossa oleva ihminen vasta kun hän on napauttanut vaihtoruudun — ja
+ * apinan vuorolla null, ettei edellisen pelaajan käsi jää muiden nähtäväksi. */
+let bassoKatsoja = 0;
 
 function bassoLataaAsetukset() {
   let a = null;
   try { a = JSON.parse(localStorage.getItem(BASSO_ASETUSAVAIN) || 'null'); } catch (e) { a = null; }
   if (!a) return;
-  if (a.apinoita >= 1 && a.apinoita <= 3) bassoAsetukset.apinoita = a.apinoita | 0;
+  if (a.ihmisia >= 1 && a.ihmisia <= BASSO_PELAAJIA_ENINTAAN) bassoAsetukset.ihmisia = a.ihmisia | 0;
+  if (a.apinoita >= 0 && a.apinoita <= 3) bassoAsetukset.apinoita = a.apinoita | 0;
   if (BASSO_TAVOITTEET.indexOf(a.tavoite) >= 0) bassoAsetukset.tavoite = a.tavoite;
-  if (bassoVari(a.variNro)) {
-    bassoAsetukset.variNro = a.variNro;
+  if (Array.isArray(a.variNrot)) {
+    bassoAsetukset.variNrot = a.variNrot.filter(function (n, i, l) {
+      return bassoVari(n) && l.indexOf(n) === i;
+    });
+  } else if (bassoVari(a.variNro)) {
+    /* Tallennus ennen useaa ihmistä: yksi väri. */
+    bassoAsetukset.variNrot = [a.variNro];
   } else if (a.vari >= 0 && a.vari < PELAAJAVARIT.length) {
     /* Vanha tallennus (6.10.2026, ennen kymmentä väriä): indeksi Partyn
      * neljän värin listaan. Muunnetaan Merkitysten numeroksi, jotta jo
      * valittu väri säilyy. */
     const vanha = TAYTTEET.filter(function (x) { return x.vari === PELAAJAVARIT[a.vari]; })[0];
-    if (vanha) bassoAsetukset.variNro = vanha.arvo;
+    if (vanha) bassoAsetukset.variNrot = [vanha.arvo];
   }
+  bassoTasapainota('ihmisia');
+}
+
+/* Pelaajia 2–4: kun toista määrää muutetaan, toinen joustaa. Jokaisella
+ * ihmisellä on oma, eri väri; puuttuvat täytetään apinoiden järjestyksestä. */
+function bassoTasapainota(muuttui) {
+  const a = bassoAsetukset;
+  if (muuttui === 'apinoita') {
+    a.ihmisia = Math.min(a.ihmisia, BASSO_PELAAJIA_ENINTAAN - a.apinoita);
+    a.ihmisia = Math.max(a.ihmisia, 2 - a.apinoita, 1);
+  } else {
+    a.apinoita = Math.min(a.apinoita, BASSO_PELAAJIA_ENINTAAN - a.ihmisia);
+    a.apinoita = Math.max(a.apinoita, 2 - a.ihmisia, 0);
+  }
+  a.variNrot = a.variNrot.slice(0, a.ihmisia);
+  BASSO_APINOIDEN_VARIT.forEach(function (n) {
+    if (a.variNrot.length < a.ihmisia && a.variNrot.indexOf(n) < 0) a.variNrot.push(n);
+  });
 }
 
 /* JOKAISELLA PELAAJALLA ON HAHMO JA VÄRI (Marko 6.10.2026: «Silloin kaikilla
@@ -75,11 +106,32 @@ function bassoVari(nro) {
   return x ? x.vari : null;
 }
 
+function bassoOnIhminen(i) { return !!basso && basso.pelaajat[i].laji === 'ihminen'; }
+function bassoIhmisia() {
+  return basso.pelaajat.filter(function (p) { return p.laji === 'ihminen'; }).length;
+}
+
+/* Värit pelaajajärjestyksessä: ihmiset omillaan, apinat muista. */
 function bassoVarit() {
-  const muut = BASSO_APINOIDEN_VARIT.filter(function (n) { return n !== bassoAsetukset.variNro; });
-  return basso.pelaajat.map(function (p, i) {
-    return bassoVari(i === BASSO_IHMINEN ? bassoAsetukset.variNro : muut[(i - 1) % muut.length]);
+  /* ⚠️ Käynnissä olevassa ottelussa voi olla ERI määrä ihmisiä kuin
+   * asetuksissa (määrä vaihtuu vasta seuraavasta ottelusta), joten puuttuva
+   * ihmisen väri otetaan samasta jonosta kuin apinoiden. */
+  const omat = bassoAsetukset.variNrot;
+  const muut = BASSO_APINOIDEN_VARIT.filter(function (n) { return omat.indexOf(n) < 0; });
+  let h = 0, a = 0;
+  return basso.pelaajat.map(function (p) {
+    if (p.laji === 'ihminen' && h < omat.length) return bassoVari(omat[h++]);
+    return bassoVari(muut[(a++) % muut.length]);
   });
+}
+
+/* Nimi ruudunlukijalle: yksin pelatessa «Sinä», muuten «Pelaaja n»;
+ * apinat numeroidaan omana joukkonaan. Näkyvää tekstiä ei ole. */
+function bassoNimi(i) {
+  let h = 0, a = 0;
+  for (let j = 0; j < i; j++) { if (bassoOnIhminen(j)) h++; else a++; }
+  if (!bassoOnIhminen(i)) return t('basso.apina', { n: a + 1 });
+  return bassoIhmisia() > 1 ? t('pelaaja.nimi', { n: h + 1 }) : t('basso.sina');
 }
 
 /* Valkoinen numero katoaa keltaiselle, turkoosille ja vaaleanpunaiselle.
@@ -127,7 +179,9 @@ function aloitaPeli() {
   tila.pelaajiaKaynnissa = 1;
   tila.moninpeli = false;
   tila.taso = TASOT[1];
-  const lajit = ['ihminen'];
+  /* Ihmiset ensin, sitten apinat: vuoro kiertää samassa järjestyksessä. */
+  const lajit = [];
+  for (let i = 0; i < bassoAsetukset.ihmisia; i++) lajit.push('ihminen');
   for (let i = 0; i < bassoAsetukset.apinoita; i++) lajit.push('apina');
   /* `tila.sallitut` jaetaan viittauksena: asetuksista muutettu lupa koskee
    * heti seuraavaa siirtoa, kuten Partyssa. */
@@ -138,7 +192,9 @@ function aloitaPeli() {
 function bassoAloitaKierros() {
   pysaytaKaikkiAjastimet();
   bassoJuhlaKiinni();
+  bassoVaihtoKiinni();
   bassoUusiKierros(basso);
+  bassoKatsoja = bassoIhmisia() > 1 ? null : basso.pelaajat.map(function (p) { return p.laji; }).indexOf('ihminen');
   tila.kaynnissa = true;
   tila.keskeytetty = false;
   tila.tauko = null;
@@ -160,7 +216,7 @@ function bassoAloitaKierros() {
  * säännöstölle niillä indekseillä. */
 function bassoSynkka() {
   const k = basso.kierros;
-  tila.kasi = k.kasit[BASSO_IHMINEN];
+  tila.kasi = bassoKatsoja === null ? [] : k.kasit[bassoKatsoja];
   tila.taytteet = k.nosto;
   tila.pizza = bassoPizza(k);
   /* Pöydän pino ei ole Bassossa pisteitä vaan poistopakka: yksi pizza
@@ -170,7 +226,7 @@ function bassoSynkka() {
 }
 
 function bassoOmaVuoro() {
-  return !!basso && bassoVuoroKelpaa(basso, BASSO_IHMINEN);
+  return !!basso && bassoKatsoja !== null && bassoVuoroKelpaa(basso, bassoKatsoja);
 }
 
 /* Vuoron alku. Ihmisen vuorolla odotetaan, apinan vuorolla apina miettii. */
@@ -180,7 +236,17 @@ function bassoVuoro() {
   if (k.voittaja !== null) return;
   tila.vaihe = 'valinta';
   tila.ohitettu = false;
-  if (k.vuorossa === BASSO_IHMINEN) {
+  const monta = bassoIhmisia() > 1;
+  if (bassoOnIhminen(k.vuorossa)) {
+    /* Vuoro siirtyy toiselle ihmiselle: kortit piiloon ja vaihtoruutu. */
+    if (monta && bassoKatsoja !== k.vuorossa) {
+      bassoKatsoja = null;
+      bassoSynkka();
+      tila.lukossa = true;
+      piirraKaikki();
+      piirraPisteet();
+      return bassoVaihto(k.vuorossa);
+    }
     tila.lukossa = false;
     tila.paljastettu = Date.now();
     tila.pelaajanAika = null;
@@ -188,10 +254,49 @@ function bassoVuoro() {
     piirraPisteet();
     return;
   }
+  /* Apinan vuoro. Useamman ihmisen pelissä edellisen pelaajan käsi piiloon. */
+  if (monta) { bassoKatsoja = null; bassoSynkka(); }
   tila.lukossa = true;
   piirraKaikki();
   piirraPisteet();
   tila.siirtymaAjastin = setTimeout(bassoApinaPelaa, BASSO_MIETINTA);
+}
+
+/* VUORONVAIHTO SAMALLA LAITTEELLA: seuraavan pelaajan väri ja hahmo koko
+ * ruudulla. Kortit näkyvät vasta kun hän napauttaa — muuten edellinen
+ * pelaaja näkisi seuraavan käden laitetta ojentaessaan. */
+function bassoVaihto(i) {
+  const el = document.getElementById('bassoVaihto');
+  const vari = bassoVarit()[i];
+  el.style.setProperty('--pelaaja-vari', vari);
+  document.getElementById('bassoVaihtoHahmo').innerHTML = bassoHahmo(vari);
+  el.setAttribute('aria-label', t('basso.vaihto', { nimi: bassoNimi(i) }));
+  el.dataset.kuka = String(i);
+  /* ⚠️ Näytetään vasta seuraavalla tikillä. peli.js ajaa kytkentävahdin
+   * (tarkistaKytkennat) heti latauksen jälkeen ja mittaa mikä peittää
+   * napit — ja ensimmäinen vaihtoruutu syntyy juuri latauksessa. Mitattu
+   * 6.10.2026: neljä väärää «PEITOSSA: DIV.basso-vaihto» -hälytystä.
+   * Peitto on tarkoituksellinen, ja väärä hälytys opettaa ohittamaan
+   * oikeatkin. */
+  setTimeout(function () {
+    if (el.dataset.kuka !== String(i) || !basso || basso.kierros.vuorossa !== i) return;
+    if (!tila.kaynnissa || document.getElementById('peliRuutu').hidden) return;   // lopetettu välissä
+    el.hidden = false;
+    el.focus();
+  }, 0);
+}
+function bassoVaihtoKiinni() {
+  const el = document.getElementById('bassoVaihto');
+  if (el) el.hidden = true;
+}
+function bassoVaihtoNapautus() {
+  const el = document.getElementById('bassoVaihto');
+  if (!el || el.hidden || !basso) return;
+  const i = Number(el.dataset.kuka);
+  el.hidden = true;
+  if (basso.kierros.vuorossa !== i) return;
+  bassoKatsoja = i;
+  bassoVuoro();
 }
 
 function bassoSeuraavaVuoro(viive) {
@@ -271,7 +376,7 @@ function enOsaa() {
   tila.lukossa = true;
   tila.ohitettu = true;
   piirraPizza();
-  const o = bassoOhita(basso, BASSO_IHMINEN);
+  const o = bassoOhita(basso, bassoKatsoja);
   /* Nostettu kortti tulee käteen selkäpuoli ylöspäin ja kääntyy
    * (peli.js piirraKasi) — pelaaja näkee että pakasta TULI kortti. */
   tila.uudet = o.nosti ? [o.nosti] : [];
@@ -294,7 +399,8 @@ function tarkistaLasku() {
     merkit: tila.merkit.slice(),
     ryhmat: tila.ryhmat.slice(),
   };
-  const r = bassoPelaa(basso, BASSO_IHMINEN, vastaus);
+  const kuka = bassoKatsoja;
+  const r = bassoPelaa(basso, kuka, vastaus);
   if (!r.ok) {
     /* Näkymän ja sääntöjen tarkistus erosivat — vika, ei pelaajan virhe. */
     console.error('Pizza Basso: säännöt hylkäsivät laskun jonka näkymä hyväksyi', r.syy, vastaus);
@@ -305,7 +411,7 @@ function tarkistaLasku() {
    * arvon, ja säännöt lukevat arvon vastauksesta eivätkä kortista. */
   nollaaValinta();
   bassoValahda('oma', '<span class="valahdys-merkki">✓</span>', 800);
-  bassoSiirronJalkeen(r, BASSO_IHMINEN, 800);
+  bassoSiirronJalkeen(r, kuka, 800);
   return true;
 }
 
@@ -376,7 +482,7 @@ function piirraPelaajat() {
     rivi.innerHTML = '';
     basso.pelaajat.forEach(function (p, i) {
       const el = document.createElement('div');
-      el.className = 'pelaajanappi basso-pelaaja' + (i === BASSO_IHMINEN ? ' oma' : '');
+      el.className = 'pelaajanappi basso-pelaaja' + (p.laji === 'ihminen' ? ' oma' : '');
       el.style.setProperty('--pelaaja-vari', varit[i]);
       el.style.color = bassoTekstiVari(varit[i]);
       el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">';
@@ -386,9 +492,8 @@ function piirraPelaajat() {
   [].forEach.call(rivi.children, function (el, i) {
     const n = k.kasit[i].length;
     el.classList.toggle('vuorossa', k.voittaja === null && k.vuorossa === i);
-    const kuka = i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: i });
-    el.setAttribute('aria-label', kuka + ': ' + t('basso.kortteja', { n: n }) +
-      (k.vuorossa === i && i === BASSO_IHMINEN ? ' · ' + t('basso.sinunVuoro') : ''));
+    el.setAttribute('aria-label', bassoNimi(i) + ': ' + t('basso.kortteja', { n: n }) +
+      (k.vuorossa === i && i === bassoKatsoja ? ' · ' + t('basso.sinunVuoro') : ''));
   });
 }
 
@@ -424,6 +529,7 @@ function bassoSijat() {
 function piirraTulos() {
   const sailio = document.getElementById('tulosPisteet');
   if (!sailio || !basso) return;
+  bassoVaihtoKiinni();                 // Esc kesken vaihtoruudun → tulos näkyviin
   sailio.innerHTML = '';
   const k = basso.kierros;
   const sijat = bassoSijat();
@@ -448,7 +554,7 @@ function piirraTulos() {
     hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
     hahmo.innerHTML = (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
       bassoHahmo(varit[r.i]);
-    const kuka = r.i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: r.i });
+    const kuka = bassoNimi(r.i);
     hahmo.setAttribute('aria-label', kuka + ': ' + r.sija + '.');
     yla.appendChild(hahmo);
     paikka.appendChild(yla);
@@ -493,7 +599,8 @@ function piirraTulos() {
   /* Viuhka mitoitetaan vasta kun ruutu on näkyvissä: piirto tapahtuu ennen
    * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
   requestAnimationFrame(bassoLevitaViuhkat);
-  if (k && k.voittaja === BASSO_IHMINEN) bassoKonfetti();
+  /* Konfetti kun IHMINEN voitti kierroksen (kuka tahansa ihmisistä). */
+  if (k && k.voittaja !== null && bassoOnIhminen(k.voittaja)) bassoKonfetti();
   /* Ottelun voitto: juhla kerran per ottelu — piirraTulos ajetaan myös
    * värin vaihdossa, eikä juhla saa toistua siitä. */
   if (basso.voittaja !== null && !basso.juhlittu) {
@@ -548,9 +655,9 @@ function bassoPiirraKisa(varit) {
     const ennen = Math.min(1, Math.max(0, (p.pisteet - lisa) / tavoite));
     const nyt = Math.min(1, p.pisteet / tavoite);
     const rata = document.createElement('div');
-    rata.className = 'kisa-rata' + (i === BASSO_IHMINEN ? ' oma' : '') + (nyt >= 1 ? ' maalissa' : '');
+    rata.className = 'kisa-rata' + (p.laji === 'ihminen' ? ' oma' : '') + (nyt >= 1 ? ' maalissa' : '');
     rata.style.setProperty('--pelaaja-vari', varit[i]);
-    const kuka = i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: i });
+    const kuka = bassoNimi(i);
     rata.setAttribute('aria-label', kuka + ': ' + p.pisteet + ' / ' + tavoite);
     rata.innerHTML = '<span class="kisa-palkki"></span>' +
       '<span class="kisa-juoksija">' + bassoHahmo(varit[i]) + '<b>' + p.pisteet + '</b></span>';
@@ -672,20 +779,27 @@ function bassoHuuto() {
   } catch (e) { /* ääni on lisä, ei ehto */ }
 }
 
-/* ---------- asetukset: apinat ja pisteraja ---------- */
+/* ---------- asetukset: pelaajat, värit ja pisteraja ---------- */
+
+let bassoVariKuka = 0;               // kenen ihmisen väriä asetuksissa valitaan
 
 function bassoPaivitaAsetusarvot() {
+  const a = bassoAsetukset;
   const v = document.getElementById('arvoVari');
-  if (v) v.innerHTML = '<span class="basso-vari-pallo" style="background:' +
-    bassoVari(bassoAsetukset.variNro) + '"></span>';
-  const a = document.getElementById('arvoApinat');
-  if (a) a.textContent = bassoAsetukset.apinoita === 1
-    ? t('apinat.yksi') : t('apinat.monta', { n: bassoAsetukset.apinoita });
+  if (v) v.innerHTML = a.variNrot.map(function (n) {
+    return '<span class="basso-vari-pallo" style="background:' + bassoVari(n) + '"></span>';
+  }).join('');
+  const ih = document.getElementById('arvoIhmiset');
+  if (ih) ih.textContent = a.ihmisia === 1 ? t('ihmiset.yksi') : t('ihmiset.monta', { n: a.ihmisia });
+  const ap = document.getElementById('arvoApinat');
+  if (ap) ap.textContent = a.apinoita === 0 ? t('apinat.ei')
+    : a.apinoita === 1 ? t('apinat.yksi') : t('apinat.monta', { n: a.apinoita });
   const p = document.getElementById('arvoPisteraja');
-  if (p) p.textContent = t('pisteraja.n', { n: bassoAsetukset.tavoite });
+  if (p) p.textContent = t('pisteraja.n', { n: a.tavoite });
 }
 
 function bassoPiirraAsetukset() {
+  const a = bassoAsetukset;
   function lista(id, arvot, nimi, onValittu, valitse) {
     const sailio = document.getElementById(id);
     if (!sailio) return;
@@ -703,38 +817,67 @@ function bassoPiirraAsetukset() {
       sailio.appendChild(nappi);
     });
   }
-  lista('bassoApinat', [1, 2, 3],
-    function (n) { return n === 1 ? t('apinat.yksi') : t('apinat.monta', { n: n }); },
-    function (n) { return n === bassoAsetukset.apinoita; },
-    function (n) { bassoAsetukset.apinoita = n; });
-  /* Väri vaihtuu heti eikä aloita uutta ottelua: se ei muuta pelin kulkua. */
+  /* Määrät joustavat toisiinsa (yhteensä 2–4): valinta ei ole koskaan
+   * mahdoton, vaan toinen määrä mukautuu (bassoTasapainota). */
+  lista('bassoIhmiset', [1, 2, 3, 4],
+    function (n) { return n === 1 ? t('ihmiset.yksi') : t('ihmiset.monta', { n: n }); },
+    function (n) { return n === a.ihmisia; },
+    function (n) { a.ihmisia = n; bassoTasapainota('ihmisia'); });
+  lista('bassoApinat', [0, 1, 2, 3],
+    function (n) { return n === 0 ? t('apinat.ei') : n === 1 ? t('apinat.yksi') : t('apinat.monta', { n: n }); },
+    function (n) { return n === a.apinoita; },
+    function (n) { a.apinoita = n; bassoTasapainota('apinoita'); });
+
+  /* VÄRIT. Useampi ihminen: ensin kenen väri (hahmo hänen nykyisellä
+   * värillään), sitten väri. Toisen ihmisen jo valitsema väri ei käy.
+   * Väri vaihtuu heti eikä aloita uutta ottelua: se ei muuta pelin kulkua. */
+  if (bassoVariKuka >= a.ihmisia) bassoVariKuka = 0;
+  const kuka = document.getElementById('bassoVariKuka');
+  if (kuka) {
+    kuka.innerHTML = '';
+    kuka.hidden = a.ihmisia < 2;
+    a.variNrot.forEach(function (n, h) {
+      const nappi = document.createElement('button');
+      nappi.className = 'basso-vari-valinta' + (h === bassoVariKuka ? ' valittu' : '');
+      nappi.setAttribute('aria-label', t('pelaaja.nimi', { n: h + 1 }));
+      nappi.setAttribute('aria-pressed', h === bassoVariKuka ? 'true' : 'false');
+      nappi.innerHTML = bassoHahmo(bassoVari(n));
+      nappi.onclick = function () { bassoVariKuka = h; bassoPiirraAsetukset(); };
+      kuka.appendChild(nappi);
+    });
+  }
   const varit = document.getElementById('bassoVarit');
   if (varit) {
     varit.innerHTML = '';
     TAYTTEET.forEach(function (x) {
-      const n = x.arvo, valittu = n === bassoAsetukset.variNro;
+      const n = x.arvo, valittu = n === a.variNrot[bassoVariKuka];
+      const toisen = !valittu && a.variNrot.indexOf(n) >= 0;
       const nappi = document.createElement('button');
       nappi.className = 'basso-vari-valinta' + (valittu ? ' valittu' : '');
+      nappi.disabled = toisen;
       nappi.setAttribute('aria-label', t('basso.vari', { n: n }));
       nappi.setAttribute('aria-pressed', valittu ? 'true' : 'false');
       nappi.innerHTML = bassoHahmo(x.vari);
       nappi.onclick = function () {
-        bassoAsetukset.variNro = n;
+        a.variNrot[bassoVariKuka] = n;
         tallennaAsetukset();
         bassoPiirraAsetukset();
-        if (basso && basso.kierros) { piirraPelaajat(); if (!document.getElementById('tulosRuutu').hidden) piirraTulos(); }
+        if (basso && basso.kierros) {
+          piirraPelaajat();
+          if (!document.getElementById('tulosRuutu').hidden) piirraTulos();
+        }
       };
       varit.appendChild(nappi);
     });
   }
   lista('bassoPisterajat', BASSO_TAVOITTEET,
     function (n) { return t('pisteraja.n', { n: n }); },
-    function (n) { return n === bassoAsetukset.tavoite; },
-    function (n) { bassoAsetukset.tavoite = n; });
+    function (n) { return n === a.tavoite; },
+    function (n) { a.tavoite = n; });
   bassoPaivitaAsetusarvot();
 }
 
-/* ⚠️ Apinoiden määrä ja pisteraja vaihtavat OTTELUN, joten ne astuvat
+/* ⚠️ Pelaajien määrät ja pisteraja vaihtavat OTTELUN, joten ne astuvat
  * voimaan kun asetukset suljetaan — kuten pelaajamäärä Partyssa. */
 function bassoAsetuksetSuljettu() {
   if (!bassoAsetusMuuttui) return;
@@ -759,6 +902,14 @@ document.addEventListener('DOMContentLoaded', function () {
   if (peite) peite.addEventListener('click', function (e) {
     if (e.target === peite) bassoAsetuksetSuljettu();
   });
+
+  const vaihto = document.getElementById('bassoVaihto');
+  if (vaihto) {
+    vaihto.addEventListener('click', bassoVaihtoNapautus);
+    vaihto.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bassoVaihtoNapautus(); }
+    });
+  }
 
   const juhla = document.getElementById('bassoJuhla');
   if (juhla) {

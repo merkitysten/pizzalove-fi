@@ -201,6 +201,35 @@
 .basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) scale(.2);
   transition:opacity .4s, transform .4s}
 
+/* --- VUORONVAIHTO SAMALLA LAITTEELLA ---
+ * Seuraavan pelaajan väri koko ruudulla ja hänen hahmonsa isona; kortit
+ * piilossa kunnes hän napauttaa. Sama pinta kuin voittojuhlassa (väri +
+ * kuosi), mutta rauhallisempi: tämä toistuu joka vuorolla. */
+.basso-vaihto{position:fixed;inset:0;z-index:65;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px, 3vh, 28px);
+  background:var(--pelaaja-vari)}
+.basso-vaihto[hidden]{display:none}
+.basso-vaihto::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
+  opacity:.22;mix-blend-mode:multiply}
+.basso-vaihto > *{position:relative}
+.basso-vaihto-hahmo .basso-hahmo{--koko:min(46vw, 34vh, 220px);
+  box-shadow:0 0 0 8px #fff, 0 10px 28px rgba(0,0,0,.3)}
+.basso-vaihto:not([hidden]) .basso-vaihto-hahmo{animation:juhla-pomppu .45s cubic-bezier(.2,.9,.3,1.4) both}
+.basso-vaihto-kosketus{font-size:min(14vw, 9vh, 56px);line-height:1;
+  animation:vaihto-napauta 1.2s ease-in-out infinite}
+@keyframes vaihto-napauta{0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}}
+@media (prefers-reduced-motion: reduce){
+  .basso-vaihto:not([hidden]) .basso-vaihto-hahmo, .basso-vaihto-kosketus{animation:none}
+}
+
+/* Väriasetus usealla ihmisellä: kenen väri ensin, sitten väri. */
+.basso-vari-kuka{display:flex;gap:8px;justify-content:center;padding:4px 0 10px;
+  border-bottom:2px solid var(--raja);margin-bottom:6px}
+.basso-vari-kuka[hidden]{display:none}
+.basso-vari-valinta:disabled{opacity:.25;cursor:default}
+.as-arvo .basso-vari-pallo + .basso-vari-pallo{margin-left:4px}
+
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
  * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Palli vasemmalle,
  * kisa ja napit oikealle. ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa
