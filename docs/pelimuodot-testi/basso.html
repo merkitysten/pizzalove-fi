@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261006k">
+<link rel="stylesheet" href="basso.css?v=20261006l">
 </head>
 <body>
 
@@ -288,6 +288,9 @@
       <p class="as-selite" hidden data-t="selite.vari"></p>
       <!-- Useampi ihminen: ensin valitaan kenen väri, sitten väri. -->
       <div id="bassoVariKuka" class="basso-vari-kuka"></div>
+      <!-- Nimi (valinnainen) valitulle pelaajalle — Marko 6.10.2026. -->
+      <input id="bassoNimiKentta" class="verkko-kentta basso-nimikentta" autocomplete="off"
+             data-tp="bverkko.nimi" data-ta="bverkko.nimi">
       <div id="bassoVarit" class="basso-varit"></div>
     </section>
 
@@ -391,6 +394,7 @@
   <span class="basso-juhla-kruunu" aria-hidden="true">👑</span>
   <img class="basso-juhla-syo" src="kuvat/basso-syo.webp?v=20261006a" alt="">
   <span id="bassoJuhlaHahmo" class="basso-juhla-hahmo"></span>
+  <b id="bassoJuhlaNimi" class="basso-juhla-nimi"></b>
 </div>
 
 <!-- ALKUVALIKKO JA VERKKOPELI (basso-verkko.js, Marko 6.10.2026: «aloita se
@@ -410,6 +414,7 @@
     </div>
     <!-- Luo: väri ensin. Nimeä ei kysytä: pelaajan tunnistaa väristä. -->
     <div class="verkko-osa" data-osa="luo" hidden>
+      <input id="bvLuoNimi" class="verkko-kentta" autocomplete="off" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
       <b class="bv-otsikko" data-t="bverkko.vari"></b>
       <div id="bvLuoVarit" class="basso-varit"></div>
       <button id="bvLuo" type="button" class="iso-nappi" data-t="isanta.luo"></button>
@@ -424,6 +429,7 @@
       <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
     </div>
     <div class="verkko-osa" data-osa="liity" hidden>
+      <input id="bvLiityNimi" class="verkko-kentta" autocomplete="off" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
       <b class="bv-otsikko" data-t="bverkko.vari"></b>
       <div id="bvLiityVarit" class="basso-varit"></div>
       <p class="verkko-virhe bv-virhe" hidden></p>
@@ -447,7 +453,7 @@
      ruudulla, kortit piilossa kunnes hän napauttaa. Ei tekstiä. -->
 <div id="bassoVaihto" class="basso-vaihto" hidden role="button" tabindex="0">
   <span id="bassoVaihtoHahmo" class="basso-vaihto-hahmo"></span>
-  <span class="basso-vaihto-kosketus" aria-hidden="true">👆</span>
+  <b id="bassoVaihtoNimi" class="basso-vaihto-nimi"></b>
 </div>
 
 <div id="bassoPizzaa" class="basso-pizzaa" hidden aria-live="assertive">
@@ -455,7 +461,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261006h"></script>
+<script src="kielet.js?v=20261006i"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="ratkoja.js?v=20261006a"></script>
 <script src="laskin.js?v=20260909c"></script>
@@ -465,8 +471,8 @@
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
 <script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261006l"></script>
+<script src="basso.js?v=20261006m"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="basso-verkko.js?v=20261006a"></script>
+<script src="basso-verkko.js?v=20261006b"></script>
 </body>
 </html>

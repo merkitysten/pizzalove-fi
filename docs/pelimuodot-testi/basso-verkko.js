@@ -132,7 +132,16 @@ function bvVarit(sailio, varatut, valittu, valitse) {
   });
 }
 
+/* Nimi kentästä; sama nimi muistiin tälle laitteelle (asetusten 1. pelaaja). */
+function bvNimi(id) {
+  const n = bassoSiistiNimi(bvEl(id).value);
+  bassoAsetukset.nimet[0] = n;
+  tallennaAsetukset();
+  return n;
+}
+
 function bvAvaaLuo() {
+  bvEl('bvLuoNimi').value = bassoAsetukset.nimet[0] || '';
   bv.vari = bassoAsetukset.variNrot[0] || 2;
   const piirra = function () {
     bvVarit(bvEl('bvLuoVarit'), [], bv.vari, function (n) { bv.vari = n; piirra(); });
@@ -145,7 +154,7 @@ async function bvLuo() {
   const nappi = bvEl('bvLuo');
   nappi.disabled = true;
   try {
-    const j = await bvApi('luo', { vari: bv.vari, asetukset: { tavoite: bassoAsetukset.tavoite, sallitut: tila.sallitut } });
+    const j = await bvApi('luo', { vari: bv.vari, nimi: bvNimi('bvLuoNimi'), asetukset: { tavoite: bassoAsetukset.tavoite, sallitut: tila.sallitut } });
     bv.koodi = j.koodi; bv.avain = j.avain;
     bvTallenna();
     bvSovella(j.tila);
@@ -170,6 +179,7 @@ async function bvKoodiJatka() {
     if (j.vaihe !== 'aula') return bvNaytaVirhe({ virhe: 'alkanut' });
     if (!j.tilaa) return bvNaytaVirhe({ virhe: 'taynna' });
     bv.koodi = koodi;
+    bvEl('bvLiityNimi').value = bassoAsetukset.nimet[0] || '';
     bvVarit(bvEl('bvLiityVarit'), j.varatut, null, bvLiity);
     bvOsa('liity');
   } catch (e) { bvNaytaVirhe(e); }
@@ -177,7 +187,7 @@ async function bvKoodiJatka() {
 
 async function bvLiity(vari) {
   try {
-    const j = await bvApi('liity', { koodi: bv.koodi, vari: vari });
+    const j = await bvApi('liity', { koodi: bv.koodi, vari: vari, nimi: bvNimi('bvLiityNimi') });
     bv.avain = j.avain;
     bvTallenna();
     bvSovella(j.tila);
@@ -201,9 +211,15 @@ function bvNaytaAula(tilaP) {
     qr.dataset.linkki = linkki;
   }
   qr.hidden = !perustaja;
-  bvEl('bvAulaPelaajat').innerHTML = tilaP.pelaajat.map(function (p, i) {
-    return bassoHahmo(bassoVari(p.vari), i === tilaP.oma ? 'oma' : '');
-  }).join('');
+  const aula = bvEl('bvAulaPelaajat');
+  aula.innerHTML = '';
+  tilaP.pelaajat.forEach(function (p, i) {
+    const el = document.createElement('span');
+    el.className = 'bv-pelaaja';
+    el.innerHTML = bassoHahmo(bassoVari(p.vari), i === tilaP.oma ? 'oma' : '') + '<small></small>';
+    el.querySelector('small').textContent = p.nimi || '';      // ⚠️ textContent: nimi on syötettä
+    aula.appendChild(el);
+  });
   const aloita = bvEl('bvAloita');
   aloita.hidden = !perustaja;
   aloita.disabled = tilaP.pelaajat.length < 2;
@@ -266,6 +282,7 @@ function bvKytkeKoukku(tilaP) {
     oma: tilaP.oma,
     perustaja: tilaP.oma === 0,
     varit: tilaP.pelaajat.map(function (p) { return p.vari; }),
+    nimet: tilaP.pelaajat.map(function (p) { return p.nimi || ''; }),
     laheta: bvLahetaSiirto,
     seuraava: bvJaa,
   };
@@ -433,7 +450,11 @@ document.addEventListener('DOMContentLoaded', function () {
       bvOsa(nyt && (nyt.dataset.osa === 'moninpeli') ? 'paa' : 'moninpeli');
     };
   });
-  bvEl('bvPelaa').onclick = function () { bvOsa(null); };
+  bvEl('bvPelaa').onclick = function () {
+    bvOsa(null);
+    /* Samalla laitteella usea ihminen: vaihtoruutu odotti valikon alla. */
+    if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
+  };
   bvEl('bvMoninpeli').onclick = function () { bvOsa('moninpeli'); };
   bvEl('bvLuoAvaa').onclick = bvAvaaLuo;
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };

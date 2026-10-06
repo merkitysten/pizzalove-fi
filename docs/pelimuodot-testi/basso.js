@@ -36,7 +36,14 @@ const BASSO_PIZZAA_KESTO = 1700;
  * ihmisiä samalla laitteella 1–4 ja apinoita 0–3, yhteensä 2–4.
  * `variNrot[h]` = h:nnen ihmisen väri Merkitysten numerona 1–10. */
 const BASSO_PELAAJIA_ENINTAAN = 4;
-const bassoAsetukset = { ihmisia: 1, apinoita: 1, tavoite: BASSO_TAVOITTEET[0], variNrot: [2] };
+const bassoAsetukset = { ihmisia: 1, apinoita: 1, tavoite: BASSO_TAVOITTEET[0], variNrot: [2], nimet: [] };
+/* 🔵 Marko 6.10.2026: «Pelaajat haluaisivat myös nimetä omat hahmot.»
+ * Nimi on valinnainen; tyhjä = hahmo ilman nimeä. Sama raja kuin Partyn
+ * nimimerkissä (16), koska verkkopelissä nimi kulkee samoin säännöin. */
+const BASSO_NIMI_ENINTAAN = 16;
+function bassoSiistiNimi(s) {
+  return String(s || '').replace(/\s+/g, ' ').trim().slice(0, BASSO_NIMI_ENINTAAN);
+}
 let basso = null;                    // käynnissä oleva ottelu (basso-saannot.js)
 let bassoAsetusMuuttui = false;
 let bassoValahdysAjastin = null;
@@ -74,6 +81,7 @@ function bassoLataaAsetukset() {
     const vanha = TAYTTEET.filter(function (x) { return x.vari === PELAAJAVARIT[a.vari]; })[0];
     if (vanha) bassoAsetukset.variNrot = [vanha.arvo];
   }
+  if (Array.isArray(a.nimet)) bassoAsetukset.nimet = a.nimet.map(bassoSiistiNimi);
   bassoTasapainota('ihmisia');
 }
 
@@ -134,10 +142,21 @@ function bassoVarit() {
 
 /* Nimi ruudunlukijalle: yksin pelatessa «Sinä», muuten «Pelaaja n»;
  * apinat numeroidaan omana joukkonaan. Näkyvää tekstiä ei ole. */
+/* Pelaajan oma nimi tai tyhjä. Verkossa huoneen nimi, muuten asetuksista
+ * (h:s ihminen). Apinoilla ei ole nimeä. */
+function bassoOmaNimi(i) {
+  if (!basso || !bassoOnIhminen(i)) return '';
+  if (bassoVerkossa) return bassoVerkossa.nimet[i] || '';
+  let h = 0;
+  for (let j = 0; j < i; j++) if (bassoOnIhminen(j)) h++;
+  return bassoAsetukset.nimet[h] || '';
+}
+
 function bassoNimi(i) {
   let h = 0, a = 0;
   for (let j = 0; j < i; j++) { if (bassoOnIhminen(j)) h++; else a++; }
   if (!bassoOnIhminen(i)) return t('basso.apina', { n: a + 1 });
+  if (bassoOmaNimi(i)) return bassoOmaNimi(i);
   if (bassoVerkossa && i === bassoVerkossa.oma) return t('basso.sina');
   return bassoIhmisia() > 1 ? t('pelaaja.nimi', { n: h + 1 }) : t('basso.sina');
 }
@@ -296,7 +315,9 @@ function bassoVaihto(i) {
   const el = document.getElementById('bassoVaihto');
   const vari = bassoVarit()[i];
   el.style.setProperty('--pelaaja-vari', vari);
+  el.style.setProperty('--pelaaja-teksti', bassoTekstiVari(vari));
   document.getElementById('bassoVaihtoHahmo').innerHTML = bassoHahmo(vari);
+  document.getElementById('bassoVaihtoNimi').textContent = bassoOmaNimi(i);
   el.setAttribute('aria-label', t('basso.vaihto', { nimi: bassoNimi(i) }));
   el.dataset.kuka = String(i);
   /* ⚠️ Näytetään vasta seuraavalla tikillä. peli.js ajaa kytkentävahdin
@@ -308,6 +329,11 @@ function bassoVaihto(i) {
   setTimeout(function () {
     if (el.dataset.kuka !== String(i) || !basso || basso.kierros.vuorossa !== i) return;
     if (!tila.kaynnissa || document.getElementById('peliRuutu').hidden) return;   // lopetettu välissä
+    /* ⚠️ Ei aloitusvalikon päälle: valikko on auki latauksessa ja verkko-
+     * pelistä palatessa, ja vaihtoruutu (kerros 65) peitti sen. «Pelaa»
+     * kutsuu bassoVuoroa, joka näyttää vaihtoruudun valikon sulkeuduttua. */
+    const valikko = document.getElementById('bassoValikko');
+    if (valikko && !valikko.hidden) return;
     el.hidden = false;
     el.focus();
   }, 0);
@@ -523,12 +549,15 @@ function piirraPelaajat() {
       el.className = 'pelaajanappi basso-pelaaja' + (p.laji === 'ihminen' ? ' oma' : '');
       el.style.setProperty('--pelaaja-vari', varit[i]);
       el.style.color = bassoTekstiVari(varit[i]);
-      el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">';
+      el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">' +
+        '<small class="basso-laatikkonimi"></small>';
       rivi.appendChild(el);
     });
   }
   [].forEach.call(rivi.children, function (el, i) {
     const n = k.kasit[i].length;
+    const nimi = el.querySelector('.basso-laatikkonimi');
+    if (nimi) nimi.textContent = bassoOmaNimi(i);
     el.classList.toggle('vuorossa', k.voittaja === null && k.vuorossa === i);
     el.setAttribute('aria-label', bassoNimi(i) + ': ' + t('basso.kortteja', { n: n }) +
       (k.vuorossa === i && i === bassoKatsoja ? ' · ' + t('basso.sinunVuoro') : ''));
@@ -539,8 +568,11 @@ function piirraPelaajat() {
  * liian karu — — täytekuosi taustalle — — enemmän brändin näköisen ja
  * iloisemman. Ehkä joku palkintopallijuttu»).
  *
- * Sija kierroksessa: voittaja 1., muut sen mukaan kenen käteen jäi VÄHITEN
- * pisteitä (tasapisteet jakavat sijan). Askelman päällä pelaajan hahmo
+ * 🔵 SIJA OTTELUPISTEIDEN MUKAAN (Marko 6.10.2026: «nyt 2. ja 3. kilpailija on
+ * molemmat 0:ssa pisteessä, joten ne pitäisi olla samalla sijalla»). Ennen
+ * sija tuli tämän kierroksen jääneistä korteista — ja palli näytti silloin
+ * eri järjestyksen kuin juoksukilpailu sen alla. Tasapisteet jakavat sijan;
+ * tasatilanteessa kierroksen voittaja piirretään ensin. Askelman päällä pelaajan hahmo
  * omalla värillään (sama kuin pelissä). Ottelupisteet ovat pallin alla
  * juoksukilpailuna. Askelman alla jääneet kortit viuhkana ja niiden summa
  * (Marko aiemmin samana päivänä: «ne jäljelle jääneet kortit pitäisi
@@ -552,13 +584,13 @@ const BASSO_PALLIN_JARJESTYS = [1, 0, 2, 3];        // sijaindeksit vasemmalta o
 function bassoSijat() {
   const k = basso.kierros;
   const rivit = basso.pelaajat.map(function (p, i) {
-    return { i: i, voitti: !!k && k.voittaja === i, summa: k ? bassoKadenPisteet(k.kasit[i]) : 0 };
+    return { i: i, pisteet: p.pisteet, voitti: !!k && k.voittaja === i,
+             summa: k ? bassoKadenPisteet(k.kasit[i]) : 0 };
   });
-  rivit.sort(function (a, b) { return (b.voitti - a.voitti) || (a.summa - b.summa) || (a.i - b.i); });
+  rivit.sort(function (a, b) { return (b.pisteet - a.pisteet) || (b.voitti - a.voitti) || (a.i - b.i); });
   let edellinen = null, sija = 0;
   rivit.forEach(function (r, n) {
-    const avain = r.voitti ? 'v' : r.summa;
-    if (avain !== edellinen) { sija = n + 1; edellinen = avain; }
+    if (r.pisteet !== edellinen) { sija = n + 1; edellinen = r.pisteet; }
     r.sija = sija;
   });
   return rivit;
@@ -591,7 +623,9 @@ function piirraTulos() {
     const hahmo = document.createElement('div');
     hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
     hahmo.innerHTML = (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
-      bassoHahmo(varit[r.i]);
+      bassoHahmo(varit[r.i]) +
+      (bassoOmaNimi(r.i) ? '<small class="palli-nimi"></small>' : '');
+    if (bassoOmaNimi(r.i)) hahmo.querySelector('.palli-nimi').textContent = bassoOmaNimi(r.i);
     const kuka = bassoNimi(r.i);
     hahmo.setAttribute('aria-label', kuka + ': ' + r.sija + '.');
     yla.appendChild(hahmo);
@@ -649,7 +683,7 @@ function piirraTulos() {
    * värin vaihdossa, eikä juhla saa toistua siitä. */
   if (basso.voittaja !== null && !basso.juhlittu) {
     basso.juhlittu = true;
-    bassoJuhla(varit[basso.voittaja]);
+    bassoJuhla(varit[basso.voittaja], bassoOmaNimi(basso.voittaja));
   }
   /* Syöty pala ei palaa maaliin, vaikka ruutu piirretään uudelleen. */
   if (basso.juhlittu) document.getElementById('bassoKisa').classList.add('syoty');
@@ -659,11 +693,13 @@ function piirraTulos() {
  * voittajan värinen — siitä voittajan tunnistaa ilman tekstiä. Avautuu kun
  * juoksija on ehtinyt maaliin (kisan viive 450 ms + liike 1 300 ms). */
 const BASSO_JUHLA_VIIVE = 1900;
-function bassoJuhla(vari) {
+function bassoJuhla(vari, nimi) {
   const el = document.getElementById('bassoJuhla');
   if (!el) return;
   el.style.setProperty('--pelaaja-vari', vari);
+  el.style.setProperty('--pelaaja-teksti', bassoTekstiVari(vari));
   document.getElementById('bassoJuhlaHahmo').innerHTML = bassoHahmo(vari);
+  document.getElementById('bassoJuhlaNimi').textContent = nimi || '';
   setTimeout(function () {
     if (document.getElementById('tulosRuutu').hidden) return;   // jo jatkettu
     el.hidden = false;
@@ -890,6 +926,12 @@ function bassoPiirraAsetukset() {
       kuka.appendChild(nappi);
     });
   }
+  /* NIMI valitulle ihmiselle (yksin pelatessa omalle). Kirjoitus tallentuu
+   * heti eikä kenttää piirretä uudelleen kesken kirjoittamisen. */
+  const nimiKentta = document.getElementById('bassoNimiKentta');
+  if (nimiKentta && document.activeElement !== nimiKentta) {
+    nimiKentta.value = a.nimet[bassoVariKuka] || '';
+  }
   const varit = document.getElementById('bassoVarit');
   if (varit) {
     varit.innerHTML = '';
@@ -947,6 +989,16 @@ document.addEventListener('DOMContentLoaded', function () {
   if (peite) peite.addEventListener('click', function (e) {
     if (e.target === peite) bassoAsetuksetSuljettu();
   });
+
+  const nimiKentta = document.getElementById('bassoNimiKentta');
+  if (nimiKentta) {
+    nimiKentta.maxLength = BASSO_NIMI_ENINTAAN;
+    nimiKentta.addEventListener('input', function () {
+      bassoAsetukset.nimet[bassoVariKuka] = bassoSiistiNimi(nimiKentta.value);
+      tallennaAsetukset();
+      if (basso && basso.kierros && !bassoVerkossa) piirraPelaajat();
+    });
+  }
 
   const vaihto = document.getElementById('bassoVaihto');
   if (vaihto) {

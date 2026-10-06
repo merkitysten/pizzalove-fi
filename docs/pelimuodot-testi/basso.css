@@ -56,6 +56,12 @@
 #tulosRuutu::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.45}
 @media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
+/* 🔵 «taustan väri saisi olla se sama kuin on pizzalove.fi -sivustollakin»
+ * (Marko 6.10.2026). Mitattu sivustolta: sisältö on kermanvärisellä
+ * palstalla (--ground #FAF6EE, enintään 720 px), ja kuosi näkyy VAIN sen
+ * ulkopuolella. Puhelimessa palsta täyttää ruudun → pelkkä kerma. Sama tässä. */
+#tulosRuutu::after{content:"";position:absolute;top:0;bottom:0;left:50%;z-index:0;pointer-events:none;
+  width:min(100%, 720px);transform:translateX(-50%);background:var(--ground)}
 #tulosRuutu > *{position:relative;z-index:1}
 #tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100%, 620px)}
 
@@ -83,17 +89,29 @@
 /* Kruunu tarvitsee tilansa: ilman tätä se osui «+N»-merkin päälle. */
 .palli-hahmo.voittaja{margin-top:20px}
 
-/* Jääneet kortit viuhkana askelman alla (sijainnit JS:stä). */
-.palli-ala{width:100%;min-height:calc(clamp(44px, 8vh, 58px) * 1.45 + 30px);
+/* Jääneet kortit viuhkana askelman alla (sijainnit JS:stä).
+ * ⚠️ KIINTEÄ korkeus eikä min-height: voittajalla ei ole kortteja, ja
+ * min-heightillä hänen alaosansa jäi muita matalammaksi — jolloin
+ * ykkösaskelman alareuna valui muiden alapuolelle (Markon kuva 6.10.2026:
+ * «palkintokorokkeet menee ihan hassusti»). */
+.basso-palli{--mk:clamp(44px, 8vh, 58px)}
+.palli-ala{width:100%;height:calc(var(--mk) * 1.52 + 52px);
   display:flex;flex-direction:column;align-items:center;padding-top:14px;
   border-top:4px solid rgba(60,34,12,.18)}
-.palli-kortit{position:relative;width:100%;height:calc(clamp(44px, 8vh, 58px) * 1.45)}
-.basso-minikortti{position:absolute;top:0;left:0;width:clamp(44px, 8vh, 58px);
+.palli-kortit{position:relative;width:100%;height:calc(var(--mk) * 1.52)}
+/* ⚠️ KORTTIKUVASSA ON LEIKKUUVARA (Markon havainto 6.10.2026: «korteilla on ne
+ * rumat reunat»). Kuva on 26 % korttia leveämpi; peli rajaa sen samoilla
+ * muuttujilla (--kuva-*, peli.css) kortin muotoiseen laatikkoon. Tässä sama. */
+.basso-minikortti{position:absolute;top:0;left:0;width:var(--mk);aspect-ratio:var(--kortti-suhde);
+  overflow:hidden;border-radius:calc(var(--mk) * .055);
+  box-shadow:0 1px 4px rgba(60,40,20,.3), 0 0 0 1px rgba(60,40,20,.07);
   transform:rotate(var(--kulma, 0deg));transform-origin:50% 120%}
-.basso-minikortti img{width:100%;display:block;border-radius:4px;
-  box-shadow:0 1px 4px rgba(60,40,20,.3)}
-.basso-minikortti small{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+.basso-minikortti img{position:absolute;display:block;max-width:none;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla)}
+.basso-minikortti small{position:absolute;left:50%;bottom:3px;transform:translateX(-50%);
   background:var(--ink);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:0 4px}
+.palli-nimi{display:block;text-align:center;font-size:13px;font-weight:700;line-height:1.2;margin-top:4px;
+  max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .basso-summa{font-size:clamp(18px, 3vh, 22px);color:var(--ink);white-space:nowrap;margin-top:6px}
 
 .basso-tulos-napit{display:flex;align-items:center;gap:18px}
@@ -130,21 +148,24 @@
 .basso-vari-pallo{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle}
 
 /* --- JUOKSUKILPAILU kohti pisterajaa --- */
-.basso-kisa{--rata-alku:22px;--rata-loppu:58px;position:relative;width:min(100%, 560px);
-  padding-top:clamp(56px, 9vh, 76px)}
+.basso-kisa{--rata-alku:22px;--rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);
+  position:relative;width:min(100%, 560px);padding-top:calc(22px + var(--pala) * .6 + 8px)}
 .basso-kisa:empty{display:none}
-/* Maaliviiva: ruutukuvio radan loppukohdassa, pisteraja sen yläpuolella. */
-.basso-kisa::after{content:"";position:absolute;top:calc(clamp(56px, 9vh, 76px) - 4px);bottom:0;
+/* Maaliviiva: ruutukuvio radan loppukohdassa. */
+.basso-kisa::after{content:"";position:absolute;top:calc(22px + var(--pala) * .6 + 4px);bottom:0;
   right:var(--rata-loppu);width:8px;transform:translateX(50%);border-radius:2px;
   background:repeating-conic-gradient(var(--ink) 0 25%, #fff 0 50%) 0 0/8px 8px}
-/* Maalissa pizzapala keskitettynä maaliviivan päälle, pisteraja sen oikealla.
- * Nollaleveä ankkuri viivan kohdalla: pala ja luku asemoidaan siitä erikseen,
- * jottei luvun leveys siirrä palaa viivalta. */
-.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);width:0;height:clamp(54px, 8.6vh, 74px)}
-.kisa-maali img{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none;display:block;
-  transform:translateX(-50%) rotate(-12deg);filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
-.kisa-maali b{position:absolute;top:2px;left:calc(clamp(54px, 8.6vh, 74px) * .36 + 4px);
-  font-size:20px;color:var(--ink)}
+/* Maalissa pizzapala VAAKASUORASSA, kärki kohti juoksijoita (Marko 6.10.2026:
+ * «Pitäisikö se pizzanpala olla kuitenkin vaakasuunnassa?» — rata kulkee
+ * vaakaan, ja pystyssä pala luki lipputankona). Pisteraja palan yläpuolella.
+ * Nollaleveä ankkuri maaliviivan kohdalla: molemmat keskitetään siihen.
+ * Kuva on pystykuva (leveys 0,6 × korkeus), joten kääntö 90° vie sen
+ * pystymitasta 0,6 — siksi top siirtyy −0,2 × korkeus. */
+.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);width:0;height:calc(22px + var(--pala) * .6)}
+.kisa-maali b{position:absolute;top:0;left:0;transform:translateX(-50%);font-size:20px;line-height:22px;color:var(--ink)}
+.kisa-maali img{position:absolute;top:calc(22px - var(--pala) * .2);left:0;height:var(--pala);width:auto;
+  max-width:none;display:block;transform:translateX(-50%) rotate(90deg);
+  filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
 .kisa-rata{position:relative;height:clamp(38px, 6.5vh, 48px)}
 /* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
 .kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
@@ -198,7 +219,7 @@
   .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-syo, .basso-juhla.nakyy .basso-juhla-kruunu{animation:none}
 }
 /* Maalin pala on syöty ottelun voiton jälkeen. */
-.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) scale(.2);
+.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
   transition:opacity .4s, transform .4s}
 
 /* --- VUORONVAIHTO SAMALLA LAITTEELLA ---
@@ -215,13 +236,35 @@
 .basso-vaihto > *{position:relative}
 .basso-vaihto-hahmo .basso-hahmo{--koko:min(46vw, 34vh, 220px);
   box-shadow:0 0 0 8px #fff, 0 10px 28px rgba(0,0,0,.3)}
-.basso-vaihto:not([hidden]) .basso-vaihto-hahmo{animation:juhla-pomppu .45s cubic-bezier(.2,.9,.3,1.4) both}
-.basso-vaihto-kosketus{font-size:min(14vw, 9vh, 56px);line-height:1;
-  animation:vaihto-napauta 1.2s ease-in-out infinite}
-@keyframes vaihto-napauta{0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}}
+/* 🔵 Ei emojia (Marko 6.10.2026: «Pelkkä apinakuvakkeen sykkiminen tai
+ * sellainen pieni pomppiminen on riittävä ja ehkä pieni taustahehku»).
+ * Hahmo saapuu ponnahtaen ja jää sitten hengittämään: pieni pomppu ja sen
+ * takana sykkivä valkoinen hehku — kutsu napauttaa ilman sanaa tai merkkiä. */
+.basso-vaihto-hahmo{position:relative;display:grid;place-items:center}
+.basso-vaihto-hahmo::before{content:"";position:absolute;inset:-34%;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,.28) 55%, rgba(255,255,255,0));
+  animation:vaihto-hehku 1.8s ease-in-out infinite}
+.basso-vaihto-hahmo .basso-hahmo{position:relative}
+.basso-vaihto:not([hidden]) .basso-vaihto-hahmo .basso-hahmo{
+  animation:juhla-pomppu .45s cubic-bezier(.2,.9,.3,1.4) both, vaihto-pomppu 1.8s .45s ease-in-out infinite}
+@keyframes vaihto-pomppu{0%,100%{transform:translateY(0) scale(1)} 30%{transform:translateY(-12px) scale(1.04)}
+  50%{transform:translateY(0) scale(.98, 1.02)} 60%{transform:translateY(-4px) scale(1)}}
+@keyframes vaihto-hehku{0%,100%{opacity:.55;transform:scale(.9)} 50%{opacity:1;transform:scale(1.08)}}
+.basso-vaihto-nimi, .basso-juhla-nimi{font-size:min(9vw, 5vh, 40px);line-height:1.1;font-weight:800;
+  color:var(--pelaaja-teksti, #fff);text-align:center;max-width:90vw;overflow-wrap:anywhere}
+.basso-vaihto-nimi:empty, .basso-juhla-nimi:empty{display:none}
 @media (prefers-reduced-motion: reduce){
-  .basso-vaihto:not([hidden]) .basso-vaihto-hahmo, .basso-vaihto-kosketus{animation:none}
+  .basso-vaihto:not([hidden]) .basso-vaihto-hahmo .basso-hahmo, .basso-vaihto-hahmo::before{animation:none}
 }
+
+/* Nimi pelaajalaatikossa hahmon alla (väri tekstille JS:stä, kontrastin mukaan). */
+.basso-laatikkonimi{display:block;font-size:11px;font-weight:700;line-height:1.1;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
+.basso-laatikkonimi:empty{display:none}
+.basso-nimikentta{display:block;width:100%;max-width:280px;margin:6px auto 8px}
+.bv-pelaaja{display:flex;flex-direction:column;align-items:center;gap:4px}
+.bv-pelaaja small{font-size:12px;font-weight:700;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bv-pelaaja small:empty{display:none}
 
 /* Väriasetus usealla ihmisellä: kenen väri ensin, sitten väri. */
 .basso-vari-kuka{display:flex;gap:8px;justify-content:center;padding:4px 0 10px;
