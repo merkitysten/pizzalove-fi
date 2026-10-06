@@ -163,3 +163,11 @@
 .av__valinta .av__tarra{width:38px;height:38px;margin:0;animation:av-kortti 1.2s ease-in-out infinite}
 /* siirtymäanimaation aikana torni piirretään muiden päälle */
 .av__lentaa{position:relative;z-index:20}
+
+/* linjasto: täytekulhot – takaosa, torni ja etuosa päällekkäin, jolloin torni on kulhon sisällä */
+.av__hylly--linjasto .av__paikka{min-height:0;justify-content:flex-end}
+.av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:64px}
+.av__kulho img{position:absolute;left:0;top:0;width:100%;height:auto;pointer-events:none}
+.av__kulho-takana{z-index:0}.av__kulho-edessa{z-index:2}
+.av__kulho .av__hylly-torni{position:absolute;left:50%;bottom:80%;transform:translateX(-50%);z-index:1;width:auto;padding:0}
+.av__hylly--linjasto .av__paikka--tyhja::before{display:none}

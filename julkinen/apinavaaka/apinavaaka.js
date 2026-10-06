@@ -214,7 +214,7 @@
     // --- hyllyt
     var hyllyt = el('div', 'av__hyllyt');
     var varastoEl = el('div', 'av__hylly'), linjastoEl = el('div', 'av__hylly av__hylly--linjasto');
-    hyllyt.appendChild(varastoEl); hyllyt.appendChild(linjastoEl);
+    hyllyt.appendChild(linjastoEl); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
     juuri.appendChild(hyllyt);
 
     // --- ohjeikkuna
@@ -570,6 +570,13 @@
         var paikat = el('div', 'av__paikat');
         for (var n = 1; n <= 10; n++) {
           var paikka = el('div', 'av__paikka');
+          var kulho = null;
+          if (nimi === 'linjasto') {
+            // linjasto = täytekulhot (Markon säiliö.psd: tausta + etuala): torni seisoo kulhon sisällä
+            kulho = el('div', 'av__kulho');
+            kulho.innerHTML = '<img class="av__kulho-takana" src="' + KANSIO + 'kulho/tausta.webp" alt="">';
+            paikka.appendChild(kulho);
+          }
           if (tila.paikka[n] === nimi) {
             var b = el('button', 'av__hylly-torni');
             b.type = 'button'; b.setAttribute('data-n', n);
@@ -578,9 +585,12 @@
             b.title = t.taytteet[n - 1];
             (function (n, nimi) { b.addEventListener('click', function () { napauta(n, nimi); }); })(n, nimi);
             if (tila.siirretty || tila.loppu) b.disabled = true;
-            paikka.appendChild(b);
+            (kulho || paikka).appendChild(b);
           } else paikka.classList.add('av__paikka--tyhja');
-          paikka.appendChild(el('small', null, String(n)));
+          if (kulho) {
+            var etu = el('img', 'av__kulho-edessa'); etu.src = KANSIO + 'kulho/' + n + '.webp'; etu.alt = '';
+            kulho.appendChild(etu);
+          } else paikka.appendChild(el('small', null, String(n)));
           paikat.appendChild(paikka);
         }
         kohde.appendChild(paikat);
