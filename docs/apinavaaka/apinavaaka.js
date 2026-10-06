@@ -429,7 +429,7 @@
           sv += '<path class="' + (tay ? 'tay' : '') + (tila.uusiPala === n0 ? ' uusi' : '') + '" d="M0 0L' + (44 * Math.cos(a0)).toFixed(2) + ' ' + (44 * Math.sin(a0)).toFixed(2) +
             'A44 44 0 0 1 ' + (44 * Math.cos(a1)).toFixed(2) + ' ' + (44 * Math.sin(a1)).toFixed(2) + 'Z" style="fill:' + (tay ? VARIT[j] : 'transparent') + '"/>';
         }
-        sv += '</svg><b>' + tila.boksi.length + '/10</b>';
+        sv += '</svg>';
         tila.uusiPala = null;
         pisteet.innerHTML = ''; pisteet.appendChild(boksiEl);
         boksiEl.innerHTML = sv;

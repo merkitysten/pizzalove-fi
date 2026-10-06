@@ -118,7 +118,7 @@
 /* ---- Nälkäiset apinat ---- */
 .av__boksi{display:none}
 .av--apinat .av__boksi{display:flex;align-items:center;gap:8px}
-.av__boksi svg{width:62px;height:62px;filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
+.av__boksi svg{width:68px;height:68px;filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
 .av__boksi-pohja{fill:#F3D9A4;stroke:#C98F3A;stroke-width:3}
 .av__boksi path{stroke:#fff;stroke-width:1.5;transition:fill .3s}
 .av__boksi path:not(.tay){stroke:#E5C68C}
