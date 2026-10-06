@@ -208,13 +208,18 @@
     juuri.appendChild(rivi);
 
     // --- pizzakortit (Nälkäiset apinat)
+    // pizzat kulkevat liukuhihnalla linjaston (kulhojen) alla kohti uunia (liukuhihna ja uuni.psd)
     var kortitEl = el('div', 'av__kortit');
-    juuri.appendChild(kortitEl);
+    var tuotanto = el('div', 'av__tuotanto');
+    tuotanto.appendChild(kortitEl);
+    tuotanto.insertAdjacentHTML('beforeend', '<img class="av__hihna" src="' + KANSIO + 'hihna.webp" alt="">');
+    var uuniEl = el('img', 'av__uuni'); uuniEl.src = KANSIO + 'uuni.webp'; uuniEl.alt = '';
+    tuotanto.appendChild(uuniEl);
 
     // --- hyllyt
     var hyllyt = el('div', 'av__hyllyt');
     var varastoEl = el('div', 'av__hylly'), linjastoEl = el('div', 'av__hylly av__hylly--linjasto');
-    hyllyt.appendChild(linjastoEl); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
+    hyllyt.appendChild(linjastoEl); hyllyt.appendChild(tuotanto); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
     juuri.appendChild(hyllyt);
 
     // --- ohjeikkuna
@@ -318,12 +323,30 @@
     function valmistettavat() {
       return (tila.laudalla || []).filter(function (n) { return tila.paikka[n] === 'linjasto'; });
     }
-    function valmista(n) {
-      if (tila.vaihe !== 'pizza' || tila.paikka[n] !== 'linjasto') return;
+    function valmista(n, korttiEl) {
+      if (tila.vaihe !== 'pizza' || tila.paikka[n] !== 'linjasto' || tila.paistuu) return;
+      // pizza liukuu hihnaa pitkin uuniin, ja vasta sitten pala menee boksiin
+      if (korttiEl && !vahennaLiike && korttiEl.animate) {
+        tila.paistuu = true;
+        var a = korttiEl.getBoundingClientRect(), u = uuniEl.getBoundingClientRect();
+        var dx = (u.left + u.width * 0.42) - (a.left + a.width / 2), dy = (u.top + u.height * 0.8) - (a.top + a.height / 2);
+        korttiEl.classList.add('av__kortti--paistuu');
+        uuniEl.classList.add('av__uuni--paistaa');
+        var an = korttiEl.animate([{ transform: 'none', opacity: 1 },
+          { transform: 'translate(' + dx * 0.85 + 'px,' + dy * 0.85 + 'px) scale(.6)', opacity: 1, offset: 0.75 },
+          { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.25)', opacity: 0 }],
+          { duration: 700, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' });
+        an.onfinish = function () {
+          tila.paistuu = false;
+          setTimeout(function () { uuniEl.classList.remove('av__uuni--paistaa'); }, 500);
+          valmista(n);
+        };
+        return;
+      }
       tila.paikka[n] = 'varasto';                       // käytetty täyte takaisin varastoon
       if (tila.boksi.indexOf(n) < 0) { tila.boksi.push(n); tila.uusiPala = n; }   // sama pala vain kerran
       var i = tila.laudalla.indexOf(n);
-      if (tila.pakka.length) tila.laudalla[i] = tila.pakka.shift(); else tila.laudalla.splice(i, 1);
+      if (tila.pakka.length) { tila.laudalla[i] = tila.pakka.shift(); tila.uusiKortti = tila.laudalla[i]; } else tila.laudalla.splice(i, 1);
       tila.vuoronPizzat++;
       // sydänpizza (täytteet yhteensä 10): yksi vapaavalintainen lisäpala
       if (n === 10 && tila.boksi.length < 10) { tila.valitsee = true; return piirra(); }
@@ -486,13 +509,14 @@
       } else if (apinat) {
         tila.laudalla.forEach(function (n) {
           var ok = tila.vaihe === 'pizza' && tila.paikka[n] === 'linjasto';
-          var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : ''));
+          var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : '') + (tila.uusiKortti === n ? ' av__kortti--uusi' : ''));
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
           k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i></span><b>' + n + '</b>';
-          k.addEventListener('click', function () { if (ok) valmista(n); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
+          k.addEventListener('click', function () { if (ok) valmista(n, k); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
           kortitEl.appendChild(k);
         });
+        tila.uusiKortti = null;
       }
       noppaEl.disabled = heitetty;
       noppaEl.setAttribute('aria-label', heitetty ? t.noppa + ': ' + noppa : t.heita);
