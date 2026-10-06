@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Apinavaaka – testi</title>
+<link rel="stylesheet" href="../tyyli.css">
+<link rel="stylesheet" href="../apinavaaka/apinavaaka.css">
+</head>
+<body>
+<main style="padding-top:24px">
+<p class="pieni">Testisivu (ei näy hakukoneille). Kieli: <a href="?kieli=fi">fi</a> · <a href="?kieli=sv">sv</a> · <a href="?kieli=en">en</a> · <a href="?kieli=de">de</a></p>
+<h1 id="otsikko">Kokeile apinavaakaa</h1>
+<p class="ingressi" id="ohje"></p>
+<div class="apinavaaka" id="av"></div>
+</main>
+<script>
+var k = (new URLSearchParams(location.search).get('kieli') || 'fi');
+document.documentElement.lang = k;
+document.getElementById('av').setAttribute('data-kieli', k);
+</script>
+<script src="../apinavaaka/apinavaaka.js"></script>
+</body>
+</html>
