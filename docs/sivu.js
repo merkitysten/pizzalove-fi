@@ -19,6 +19,16 @@
     b.appendChild(f);
   });
 
+  /* Kielivalikko sulkeutuu, kun painetaan sen ulkopuolelle tai Esc. */
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details.kielet[open]').forEach(function (d) {
+      if (!d.contains(e.target)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('details.kielet[open]').forEach(function (d) { d.open = false; });
+  });
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.kielet a');
     if (!a) return;

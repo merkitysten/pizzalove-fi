@@ -96,18 +96,24 @@ def ylaosa(t, sivu, kaikki):
         nav.append((t['etusivu']['varainhankinta']['url'], ui['nav_varainhankinta'], 'varainhankinta'))
     navi = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if k == sivu else '', e(n))
                    for h, n, k in nav)
+    # Kielivalinta: yksi nappi (maapallo + nykyinen kieli), joka avaa listan.
+    # Uusi kieli = uusi rivi KIELET-listaan ja sisalto/xx.json. (Marko 6.10.2026)
     kielet = ''.join(
-        '<a href="../%s/%s" hreflang="%s" lang="%s" title="%s"%s>%s</a>' % (
-            k, sivutiedosto(sivu), k, k, e(kaikki[k]['nimi']),
-            ' aria-current="true"' if k == t['lang'] else '', kaikki[k]['lyhenne'])
+        '<li><a href="../%s/%s" hreflang="%s" lang="%s"%s>%s</a></li>' % (
+            k, sivutiedosto(sivu), k, k,
+            ' aria-current="true"' if k == t['lang'] else '', e(kaikki[k]['nimi']))
         for k in KIELET)
+    kielet = '''<details class="kielet">
+      <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul class="kielet__lista">%s</ul>
+    </details>''' % (e(ui['kielivalinta']), e(t['nimi']), e(t['nimi']), kielet)
     return '''<a class="ohita" href="#sisalto">%s</a>
 <header class="ylaosa">
   <div class="palkki">
     <a class="palkki__logo" href="index.html" aria-label="Pizza Love®, %s">
       <img class="palkki__viiri" src="../kuvat/viiri.webp" width="340" height="322" alt="Pizza Love – every pizza counts">
     </a>
-    <nav class="kielet" aria-label="%s">%s</nav>
+    <nav class="kielivalinta" aria-label="%s">%s</nav>
   </div>
   <nav class="sivurivi" aria-label="Pizza Love"><div class="sivurivi__sisus">%s</div></nav>
 </header>''' % (e(ui['ohita']), e(ui['nav_etusivu']), e(ui['kielivalinta']), kielet, navi)

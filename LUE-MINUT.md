@@ -26,6 +26,13 @@ Pelin päivitys: tee muutos `../pizzaparty/`-repossa, kopioi tiedostot
 `julkinen/pizzaparty/`-kansioon (ei `*.md`, `*.php`, `.htaccess`, `testit/`,
 `laskinkoe.js`, `kellokoe.html`) ja aja `rakenna.py`.
 
+## Uuden kielen lisääminen
+
+1. Kopioi `sisalto/en.json` nimelle `sisalto/xx.json` ja käännä arvot (avaimia ei muuteta).
+2. Lisää `xx` listaan `KIELET` tiedoston `rakenna.py` alussa.
+3. Peli: lisää kielen lohko `../pizzaparty/kielet.js`:ään (ohje tiedoston alussa).
+4. `python3 rakenna.py`. Kielivalikko päivittyy itsestään.
+
 ## Moninpeli
 
 GitHub Pages ei aja PHP:tä. Moninpelin palvelin (`huone.php`) on
