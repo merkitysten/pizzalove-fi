@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261006c">
+<link rel="stylesheet" href="basso.css?v=20261006d">
 </head>
 <body>
 
@@ -121,6 +121,8 @@
        nappi heitti pelaajan pois pelistä. Elementti jää, ettei mikään viittaus
        siihen kaadu. -->
   <div class="tulos-pisteet" id="tulosPisteet"></div>
+  <!-- Juoksukilpailu kohti pisterajaa (Marko 6.10.2026). basso.js piirtää. -->
+  <div id="bassoKisa" class="basso-kisa"></div>
 
   <div class="basso-tulos-napit">
     <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
@@ -161,6 +163,8 @@
           <span data-t="as.ajat">Aikarajat</span><b class="as-arvo" id="arvoAjat"></b></button>
         <!-- BASSO: Partyn taso, pelaajat, tapa ja ajat ovat piilossa mutta OLEMASSA —
              peli.js:n paivitaArvot ja kytkentävahti kirjoittavat niihin. -->
+        <button class="as-rivi" data-avaa="vari">
+          <span data-t="as.vari">Oma väri</span><b class="as-arvo" id="arvoVari"></b></button>
         <button class="as-rivi" data-avaa="apinat">
           <span data-t="as.apinat">Apinat</span><b class="as-arvo" id="arvoApinat"></b></button>
         <button class="as-rivi" data-avaa="pisteraja">
@@ -254,6 +258,18 @@
         </div>
       </div>
       <button id="ajatOletus" class="toinen-nappi" data-t="aika.oletus">Palauta oletukset</button>
+    </section>
+
+    <!-- BASSO · OMA VÄRI (Marko 6.10.2026: «kaikilla pelaajilla olisi sekä
+         hahmo että väri», kuten Partyn moninpelissä) -->
+    <section class="as-sivu" data-sivu="vari" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.vari">Oma väri</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.vari"></p>
+      <div id="bassoVarit" class="basso-varit"></div>
     </section>
 
     <!-- BASSO · APINAT -->
@@ -354,7 +370,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261006d"></script>
+<script src="kielet.js?v=20261006e"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="ratkoja.js?v=20261006a"></script>
 <script src="laskin.js?v=20260909c"></script>
@@ -364,6 +380,6 @@
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
 <script src="basso-saannot.js?v=20261006a"></script>
-<script src="basso.js?v=20261006c"></script>
+<script src="basso.js?v=20261006d"></script>
 </body>
 </html>

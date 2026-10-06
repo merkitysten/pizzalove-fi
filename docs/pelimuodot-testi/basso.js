@@ -33,7 +33,7 @@ const BASSO_APINAN_NAYTTO = 1700;   // apinan laskun näkyvyys — se on opetusp
 const BASSO_PIZZAA_KESTO = 1700;
 
 /* Apinoiden määrä ja pisteraja. 🔵 Marko 6.10.2026: 30 pistettä oletuksena. */
-const bassoAsetukset = { apinoita: 1, tavoite: BASSO_TAVOITTEET[0] };
+const bassoAsetukset = { apinoita: 1, tavoite: BASSO_TAVOITTEET[0], vari: 0 };
 let basso = null;                    // käynnissä oleva ottelu (basso-saannot.js)
 let bassoAsetusMuuttui = false;
 let bassoValahdysAjastin = null;
@@ -46,6 +46,27 @@ function bassoLataaAsetukset() {
   if (!a) return;
   if (a.apinoita >= 1 && a.apinoita <= 3) bassoAsetukset.apinoita = a.apinoita | 0;
   if (BASSO_TAVOITTEET.indexOf(a.tavoite) >= 0) bassoAsetukset.tavoite = a.tavoite;
+  if (a.vari >= 0 && a.vari < PELAAJAVARIT.length) bassoAsetukset.vari = a.vari | 0;
+}
+
+/* JOKAISELLA PELAAJALLA ON HAHMO JA VÄRI (Marko 6.10.2026: «Silloin kaikilla
+ * pelaajilla olisi sekä hahmo että väri»). Värit ovat Partyn moninpelin
+ * (`PELAAJAVARIT`, peli.js) — sama kieli samasta asiasta. Ihminen valitsee
+ * omansa, apinat saavat loput järjestyksessä.
+ * ⚠️ Brändioranssi EI ole mukana samasta syystä kuin Partyssa: se on pizzan
+ * väri, ja pelaaja joka on pizzan värinen olisi juuri se sekaannus jota
+ * värillä yritetään välttää. */
+function bassoVarit() {
+  const muut = PELAAJAVARIT.filter(function (v, i) { return i !== bassoAsetukset.vari; });
+  return basso.pelaajat.map(function (p, i) {
+    return i === BASSO_IHMINEN ? PELAAJAVARIT[bassoAsetukset.vari] : muut[(i - 1) % muut.length];
+  });
+}
+
+/* Hahmo värillisellä pohjalla — sama kaikille, pelissä ja tulosruudussa. */
+function bassoHahmo(vari, luokka) {
+  return '<span class="basso-hahmo' + (luokka ? ' ' + luokka : '') + '" style="--pelaaja-vari:' + vari +
+    '"><img src="kuvat/apina.webp?v=20260910a" alt=""></span>';
 }
 
 /* ⚠️ KORVAA peli.js:n tallennuksen. Alkuperäinen kirjoittaa KOKO Partyn
@@ -305,23 +326,24 @@ function bassoMitoitaKasi() {
 }
 window.addEventListener('resize', function () { if (basso && tila.pizza) bassoMitoitaKasi(); });
 
-/* Laatikko per pelaaja: luku on KORTTIEN MÄÄRÄ kädessä, koska se on
- * Bassossa se kilpa (ensimmäinen tyhjä käsi voittaa). Pisteet näkyvät
- * kierroksen lopussa. Vuorossa oleva nostetaan. */
+/* Laatikko per pelaaja: hahmo omalla värillään ja KORTTIEN MÄÄRÄ kädessä,
+ * koska se on Bassossa se kilpa (ensimmäinen tyhjä käsi voittaa). Pisteet
+ * näkyvät kierroksen lopussa juoksukilpailuna. Vuorossa oleva nostetaan.
+ * Oma laatikko on aina ensimmäinen: väri on ainoa ero apinoihin. */
 function piirraPelaajat() {
   const rivi = document.getElementById('pelaajarivi');
   if (!rivi || !basso || !basso.kierros) return;
   rivi.hidden = false;
-  const k = basso.kierros;
-  const tunniste = 'basso' + basso.pelaajat.length;
+  const k = basso.kierros, varit = bassoVarit();
+  const tunniste = 'basso' + basso.pelaajat.length + varit.join('');
   if (rivi.dataset.tila !== tunniste) {
     rivi.dataset.tila = tunniste;
     rivi.innerHTML = '';
-    basso.pelaajat.forEach(function (p) {
+    basso.pelaajat.forEach(function (p, i) {
       const el = document.createElement('div');
-      const apina = p.laji === 'apina';
-      el.className = 'pelaajanappi ' + (apina ? 'p-apina' : 'p-oma ei-kuvaa');
-      el.innerHTML = (apina ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
+      el.className = 'pelaajanappi basso-pelaaja' + (i === BASSO_IHMINEN ? ' oma' : '');
+      el.style.setProperty('--pelaaja-vari', varit[i]);
+      el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">' +
         '<b class="pelaajanappi-pisteet basso-kortit">0</b>';
       rivi.appendChild(el);
     });
@@ -341,9 +363,9 @@ function piirraPelaajat() {
  * iloisemman. Ehkä joku palkintopallijuttu»).
  *
  * Sija kierroksessa: voittaja 1., muut sen mukaan kenen käteen jäi VÄHITEN
- * pisteitä (tasapisteet jakavat sijan). Askelman päällä pelaajan oma
- * laatikko ottelupisteineen — sama tunnus kuin pelissä: oranssi sinä,
- * musta apina. Askelman alla jääneet kortit viuhkana ja niiden summa
+ * pisteitä (tasapisteet jakavat sijan). Askelman päällä pelaajan hahmo
+ * omalla värillään (sama kuin pelissä). Ottelupisteet ovat pallin alla
+ * juoksukilpailuna. Askelman alla jääneet kortit viuhkana ja niiden summa
  * (Marko aiemmin samana päivänä: «ne jäljelle jääneet kortit pitäisi
  * ensinnäkin nähdä»). Voittajan «+N» on häviäjien summien summa.
  *
@@ -371,6 +393,7 @@ function piirraTulos() {
   sailio.innerHTML = '';
   const k = basso.kierros;
   const sijat = bassoSijat();
+  const varit = bassoVarit();
 
   const palli = document.createElement('div');
   palli.className = 'basso-palli';
@@ -385,16 +408,15 @@ function piirraTulos() {
     if (r.voitti && k.pisteet) {
       yla.innerHTML = '<b class="palli-lisays">+' + k.pisteet + '</b>';
     }
-    const laatikko = document.createElement('div');
-    laatikko.className = 'pisteet iso ' + (p.laji === 'apina' ? 'apina' : 'oma') +
-      (basso.voittaja === r.i ? ' voittaja' : '');
-    laatikko.innerHTML =
-      (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
-      (p.laji === 'apina' ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
-      '<b>' + p.pisteet + '</b>';
+    /* Pallilla vain hahmo: ottelupisteet näkyvät alla juoksukilpailussa,
+     * eikä samaa lukua näytetä kahdesti. */
+    const hahmo = document.createElement('div');
+    hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
+    hahmo.innerHTML = (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
+      bassoHahmo(varit[r.i]);
     const kuka = r.i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: r.i });
-    laatikko.setAttribute('aria-label', kuka + ': ' + p.pisteet);
-    yla.appendChild(laatikko);
+    hahmo.setAttribute('aria-label', kuka + ': ' + r.sija + '.');
+    yla.appendChild(hahmo);
     paikka.appendChild(yla);
 
     const askel = document.createElement('div');
@@ -427,12 +449,7 @@ function piirraTulos() {
   });
   sailio.appendChild(palli);
 
-  /* Pisteraja lipun takana — ilman sitä luku ei kerro kuinka kaukana maali on. */
-  const raja = document.createElement('div');
-  raja.className = 'basso-raja';
-  raja.setAttribute('aria-label', t('as.pisteraja') + ': ' + basso.tavoite);
-  raja.innerHTML = '<span aria-hidden="true">🏁</span><b>' + basso.tavoite + '</b>';
-  sailio.appendChild(raja);
+  bassoPiirraKisa(varit);
 
   const jatko = document.getElementById('uudelleen');
   if (jatko) {
@@ -443,6 +460,48 @@ function piirraTulos() {
    * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
   requestAnimationFrame(bassoLevitaViuhkat);
   if (k && k.voittaja === BASSO_IHMINEN) bassoKonfetti();
+}
+
+/* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
+ * sinne kohti ja samalla niiden alla palkki kasvaa»). Rata per pelaaja
+ * pelaajajärjestyksessä, hahmo palkin kärjessä ja pisteet sen vieressä,
+ * maaliviiva 🏁 pisterajan kohdalla. Kierroksen voittaja etenee
+ * animaationa kierroksen pisteiden verran. Ylitys pysähtyy maaliin. */
+function bassoPiirraKisa(varit) {
+  const kisa = document.getElementById('bassoKisa');
+  if (!kisa) return;
+  const k = basso.kierros, tavoite = basso.tavoite;
+  kisa.innerHTML = '<div class="kisa-maali" aria-hidden="true"><span>🏁</span><b>' + tavoite + '</b></div>';
+  kisa.setAttribute('aria-label', t('as.pisteraja') + ': ' + tavoite);
+  const siirrot = [];
+  basso.pelaajat.forEach(function (p, i) {
+    const lisa = (k && k.voittaja === i) ? k.pisteet : 0;
+    const ennen = Math.min(1, Math.max(0, (p.pisteet - lisa) / tavoite));
+    const nyt = Math.min(1, p.pisteet / tavoite);
+    const rata = document.createElement('div');
+    rata.className = 'kisa-rata' + (i === BASSO_IHMINEN ? ' oma' : '') + (nyt >= 1 ? ' maalissa' : '');
+    rata.style.setProperty('--pelaaja-vari', varit[i]);
+    const kuka = i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: i });
+    rata.setAttribute('aria-label', kuka + ': ' + p.pisteet + ' / ' + tavoite);
+    rata.innerHTML = '<span class="kisa-palkki"></span>' +
+      '<span class="kisa-juoksija">' + bassoHahmo(varit[i]) + '<b>' + p.pisteet + '</b></span>';
+    bassoKisaKohta(rata, ennen);
+    kisa.appendChild(rata);
+    if (nyt !== ennen) siirrot.push([rata, nyt]);
+  });
+  /* Ensin edellinen tilanne, sitten liike — muuten selain piirtää suoraan
+   * lopputilan eikä mitään tapahdu. Odotetaan että ruutu on näkyvissä. */
+  setTimeout(function () {
+    siirrot.forEach(function (s) { s[0].classList.add('liikkuu'); bassoKisaKohta(s[0], s[1]); });
+  }, 450);
+}
+
+/* Palkin pituus ja hahmon paikka samasta osuudesta. Radan reunat ovat
+ * CSS-muuttujissa, jotta JS ja tyyli eivät laske eri rataa. */
+function bassoKisaKohta(rata, osuus) {
+  rata.querySelector('.kisa-palkki').style.width = 'calc((100% - var(--rata-alku) - var(--rata-loppu)) * ' + osuus + ')';
+  rata.querySelector('.kisa-juoksija').style.left =
+    'calc(var(--rata-alku) + (100% - var(--rata-alku) - var(--rata-loppu)) * ' + osuus + ')';
 }
 
 /* Kortit limittyvät vain sen verran kuin on pakko: pari korttia rinnakkain,
@@ -506,7 +565,7 @@ function bassoValahda(kenen, sisalto, ms) {
 function bassoPizzaa(kuka) {
   const el = document.getElementById('bassoPizzaa');
   if (!el) return;
-  el.classList.toggle('apinan', kuka !== BASSO_IHMINEN);
+  el.style.setProperty('--pelaaja-vari', bassoVarit()[kuka]);
   el.hidden = false;
   /* Animaatio alkaa alusta myös jos edellinen on yhä kesken. */
   el.classList.remove('nakyy');
@@ -545,6 +604,9 @@ function bassoHuuto() {
 /* ---------- asetukset: apinat ja pisteraja ---------- */
 
 function bassoPaivitaAsetusarvot() {
+  const v = document.getElementById('arvoVari');
+  if (v) v.innerHTML = '<span class="basso-vari-pallo" style="background:' +
+    PELAAJAVARIT[bassoAsetukset.vari] + '"></span>';
   const a = document.getElementById('arvoApinat');
   if (a) a.textContent = bassoAsetukset.apinoita === 1
     ? t('apinat.yksi') : t('apinat.monta', { n: bassoAsetukset.apinoita });
@@ -574,6 +636,25 @@ function bassoPiirraAsetukset() {
     function (n) { return n === 1 ? t('apinat.yksi') : t('apinat.monta', { n: n }); },
     function (n) { return n === bassoAsetukset.apinoita; },
     function (n) { bassoAsetukset.apinoita = n; });
+  /* Väri vaihtuu heti eikä aloita uutta ottelua: se ei muuta pelin kulkua. */
+  const varit = document.getElementById('bassoVarit');
+  if (varit) {
+    varit.innerHTML = '';
+    PELAAJAVARIT.forEach(function (vari, n) {
+      const nappi = document.createElement('button');
+      nappi.className = 'basso-vari-valinta' + (n === bassoAsetukset.vari ? ' valittu' : '');
+      nappi.setAttribute('aria-label', t('basso.vari', { n: n + 1 }));
+      nappi.setAttribute('aria-pressed', n === bassoAsetukset.vari ? 'true' : 'false');
+      nappi.innerHTML = bassoHahmo(vari);
+      nappi.onclick = function () {
+        bassoAsetukset.vari = n;
+        tallennaAsetukset();
+        bassoPiirraAsetukset();
+        if (basso && basso.kierros) { piirraPelaajat(); if (!document.getElementById('tulosRuutu').hidden) piirraTulos(); }
+      };
+      varit.appendChild(nappi);
+    });
+  }
   lista('bassoPisterajat', BASSO_TAVOITTEET,
     function (n) { return t('pisteraja.n', { n: n }); },
     function (n) { return n === bassoAsetukset.tavoite; },

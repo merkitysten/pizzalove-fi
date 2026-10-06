@@ -227,6 +227,9 @@ const KIELET = {
     'valikko.alkuun':         'Alkuvalikkoon',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAA!',
+    'as.vari':                'Oma väri',
+    'basso.vari':             'Väri {n}',
+    'selite.vari':            'Sinäkin olet Basso-apina. Valitse oma värisi – muut apinat saavat loput värit, ja niistä tunnistat kuka juoksee missäkin.',
     'basso.kortteja':         '{n} korttia kädessä',
     'basso.apina':            'Apina {n}',
     'basso.sinunVuoro':       'Sinun vuorosi',
@@ -411,6 +414,9 @@ const KIELET = {
     'valikko.alkuun':         'Till startmenyn',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'as.vari':                'Din färg',
+    'basso.vari':             'Färg {n}',
+    'selite.vari':            'Du är också en Basso-apa. Välj din färg – de andra aporna får de övriga färgerna, så att du ser vem som springer var.',
     'basso.kortteja':         '{n} kort på handen',
     'basso.apina':            'Apa {n}',
     'basso.sinunVuoro':       'Din tur',
@@ -593,6 +599,9 @@ const KIELET = {
     'valikko.alkuun':         'Main menu',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'as.vari':                'Your colour',
+    'basso.vari':             'Colour {n}',
+    'selite.vari':            'You are a Basso monkey too. Pick your colour – the other monkeys get the remaining colours, so you can tell who is running where.',
     'basso.kortteja':         '{n} cards in hand',
     'basso.apina':            'Monkey {n}',
     'basso.sinunVuoro':       'Your turn',
@@ -775,6 +784,9 @@ const KIELET = {
     'valikko.alkuun':         'Zum Startmenü',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'as.vari':                'Deine Farbe',
+    'basso.vari':             'Farbe {n}',
+    'selite.vari':            'Du bist auch ein Basso-Affe. Wähle deine Farbe – die anderen Affen bekommen die übrigen Farben, damit du siehst, wer wo läuft.',
     'basso.kortteja':         '{n} Karten auf der Hand',
     'basso.apina':            'Affe {n}',
     'basso.sinunVuoro':       'Du bist dran',
