@@ -114,3 +114,38 @@
 
 .av--ei-liiketta *{transition:none!important;animation:none!important}
 @media (prefers-color-scheme:dark){.av__torni i[style*="#090A0D"]{box-shadow:inset 0 0 0 1px #666}}
+
+/* ---- Nälkäiset apinat ---- */
+.av__boksi{display:none}
+.av--apinat .av__boksi{display:flex;align-items:center;gap:8px}
+.av__boksi svg{width:62px;height:62px;filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
+.av__boksi-pohja{fill:#F3D9A4;stroke:#C98F3A;stroke-width:3}
+.av__boksi path{stroke:#fff;stroke-width:1.5;transition:fill .3s}
+.av__boksi path:not(.tay){stroke:#E5C68C}
+.av__boksi path.uusi{animation:av-pala .6s cubic-bezier(.3,1.8,.5,1);transform-origin:0 0}
+@keyframes av-pala{from{transform:scale(1.5)}}
+.av__boksi b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+
+.av__kortit{display:none}
+.av--apinat .av__kortit{display:grid;grid-template-columns:repeat(4,64px);justify-content:center;gap:10px;margin:0 0 10px}
+.av__kortti{position:relative;width:64px;height:64px;border-radius:10px;border:0;padding:0;cursor:pointer;
+  background:var(--warm,#FFF3E9);box-shadow:inset 0 0 0 1.5px var(--line2,#D6C7AF),0 2px 4px rgba(60,30,0,.12);
+  display:grid;place-items:center;transition:transform .2s}
+.av__kortti-pizza{width:48px;height:48px;border-radius:50%;background:#E9B95A;box-shadow:inset 0 0 0 4px #D49A3C;display:grid;place-items:center}
+.av__kortti-pizza i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.av__kortti b{position:absolute;right:4px;bottom:2px;font-size:14px;font-weight:800;background:#fff;border-radius:999px;padding:0 5px;line-height:18px;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.av__kortti--ok{box-shadow:inset 0 0 0 3px var(--green,#2D5D3D),0 0 0 4px rgba(45,93,61,.25);animation:av-kortti 1s ease-in-out infinite}
+@keyframes av-kortti{50%{transform:translateY(-4px) scale(1.05)}}
+
+.av__loppu{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;z-index:7;
+  width:min(86%,320px);background:var(--surface,#fff);border-radius:18px;padding:16px 16px 18px;text-align:center;
+  box-shadow:0 10px 30px rgba(60,30,0,.3);transition:transform .45s cubic-bezier(.3,1.7,.5,1),opacity .2s}
+.av__loppu.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.av__loppu b{display:block;font-size:30px;font-weight:800}
+.av__loppu span{display:block;font-size:17px;font-weight:600;margin:4px 0 14px}
+.av__loppu.voitto{background:#FFF6D6;box-shadow:0 0 0 4px #FFDF00,0 10px 30px rgba(60,30,0,.3)}
+
+/* apinat-tilassa tiiviimpi, jotta korttirivi mahtuu samalle ruudulle */
+.av--apinat .av__ylapalkki{margin-bottom:4px}
+.av--apinat .av__rivi{height:46px;margin:6px 0 8px}
+.av--apinat .av__paikka{min-height:56px}

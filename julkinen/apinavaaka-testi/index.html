@@ -16,10 +16,11 @@
 <body>
 <main>
 <div class="apinavaaka" id="av"></div>
-<p class="kielet-testi">Testi · <a href="?kieli=fi">fi</a> · <a href="?kieli=sv">sv</a> · <a href="?kieli=en">en</a> · <a href="?kieli=de">de</a></p>
+<p class="kielet-testi">Testi · <a href="?tila=harjoitus" onclick="this.href+='&kieli='+k">harjoitus</a> · <a href="?tila=apinat" onclick="this.href+='&kieli='+k">Nälkäiset apinat</a> · <a href="?kieli=fi" onclick="this.href+='&tila='+(q.get('tila')||'')">fi</a> · <a href="?kieli=sv" onclick="this.href+='&tila='+(q.get('tila')||'')">sv</a> · <a href="?kieli=en" onclick="this.href+='&tila='+(q.get('tila')||'')">en</a> · <a href="?kieli=de" onclick="this.href+='&tila='+(q.get('tila')||'')">de</a></p>
 </main>
 <script>
-var k = (new URLSearchParams(location.search).get('kieli') || 'fi');
+var q = new URLSearchParams(location.search), k = q.get("kieli") || "fi";
+document.getElementById("av").setAttribute("data-tila", q.get("tila") || "harjoitus");
 document.documentElement.lang = k;
 document.getElementById('av').setAttribute('data-kieli', k);
 </script>

@@ -40,6 +40,7 @@
   var T = {
     fi: {
       heita: 'Heitä noppaa!',
+      valmista: "Valmista pizza!", eiPizzaa: "Ei pizzaa vielä. Heitä uudelleen!", apinat: "Nälkäiset apinat", uusiPeli: "Uusi peli", harjoittele: "Harjoittele", tasot: ["AARGH! Tyhjä maha.", "Öö… Mitä sitten syödään?", "Nam. Muutama pala olisi vielä maistunut.", "Se on siinä – apinan lempipizza!"], palaa: "palaa", boksi: "Yhteinen boksi", infoA: "<h3>Nälkäiset apinat</h3><p>Pelatkaa yhdessä. Kun pizzan täyte on linjastolla, napauta pizzaa. Pala menee yhteiseen boksiin.</p><p>Jos vuorolla ei synny pizzaa, nälkäiset apinat syövät palat ja peli päättyy. Täyttäkää boksi kymmenellä palalla!</p>",
       vihjeet: { A: 'Etsi yhtä korkea torni.', B: 'Kokoa pienemmistä torneista.',
         C: 'Nosta linjaston torni punnusten päälle.', X: 'Tee tornit yhtä korkeiksi.', H: 'Hävikki! Vie linjastolta varastoon.' },
       vainYksi: 'Vain yksi torni linjastolta.',
@@ -58,6 +59,7 @@
     },
     sv: {
       heita: 'Kasta tärningen!',
+      valmista: "Gör pizzan!", eiPizzaa: "Ingen pizza än. Kasta igen!", apinat: "Hungriga apor", uusiPeli: "Nytt spel", harjoittele: "Träna", tasot: ["AARGH! Tom mage.", "Öö… Vad äter vi nu?", "Mums. Några bitar till hade suttit fint.", "Det är klart – apans favoritpizza!"], palaa: "bitar", boksi: "Gemensam box", infoA: "<h3>Hungriga apor</h3><p>Spela tillsammans. När pizzans fyllning finns på linjen, tryck på pizzan. Biten hamnar i den gemensamma boxen.</p><p>Om det inte blir någon pizza på en tur äter de hungriga aporna upp bitarna och spelet tar slut. Fyll boxen med tio bitar!</p>",
       vihjeet: { A: 'Hitta ett lika högt torn.', B: 'Bygg av mindre torn.',
         C: 'Lyft ett torn från linjen ovanpå vikterna.', X: 'Gör tornen lika höga.', H: 'Svinn! Flytta från linjen till lagret.' },
       vainYksi: 'Bara ett torn från linjen.',
@@ -76,6 +78,7 @@
     },
     en: {
       heita: 'Roll the dice!',
+      valmista: "Make the pizza!", eiPizzaa: "No pizza yet. Roll again!", apinat: "Hungry monkeys", uusiPeli: "New game", harjoittele: "Practise", tasot: ["AARGH! Empty stomach.", "Uhh… What do we eat now?", "Yum. A few more slices would have been nice.", "That’s it – the monkey’s favourite pizza!"], palaa: "slices", boksi: "Shared box", infoA: "<h3>Hungry monkeys</h3><p>Play together. When a pizza’s topping is on the line, tap the pizza. The slice goes into the shared box.</p><p>If no pizza is made on a turn, the hungry monkeys eat the slices and the game ends. Fill the box with ten slices!</p>",
       vihjeet: { A: 'Find a tower just as high.', B: 'Build it from smaller towers.',
         C: 'Lift a tower from the line onto the weights.', X: 'Make the towers equally high.', H: 'Food waste! Move from the line to the storage.' },
       vainYksi: 'Only one tower from the line.',
@@ -94,6 +97,7 @@
     },
     de: {
       heita: 'Würfle!',
+      valmista: "Back die Pizza!", eiPizzaa: "Noch keine Pizza. Würfle noch einmal!", apinat: "Hungrige Affen", uusiPeli: "Neues Spiel", harjoittele: "Üben", tasot: ["AARGH! Leerer Bauch.", "Äh… Was essen wir jetzt?", "Mmh. Ein paar Stücke mehr wären lecker gewesen.", "Geschafft – die Lieblingspizza des Affen!"], palaa: "Stücke", boksi: "Gemeinsame Box", infoA: "<h3>Hungrige Affen</h3><p>Spielt zusammen. Wenn die Zutat einer Pizza auf der Linie liegt, tippt auf die Pizza. Das Stück kommt in die gemeinsame Box.</p><p>Wenn in einem Zug keine Pizza entsteht, essen die hungrigen Affen die Stücke und das Spiel ist vorbei. Füllt die Box mit zehn Stücken!</p>",
       vihjeet: { A: 'Finde einen gleich hohen Turm.', B: 'Bau ihn aus kleineren Türmen.',
         C: 'Heb einen Turm von der Linie auf die Gewichte.', X: 'Mach die Türme gleich hoch.', H: 'Verschwendung! Von der Linie ins Lager.' },
       vainYksi: 'Nur ein Turm von der Linie.',
@@ -156,6 +160,9 @@
     infoNappi.setAttribute('aria-label', t.ohjeet);
     infoNappi.innerHTML = '<img src="' + KANSIO + 'basso-paa.webp" alt=""><span aria-hidden="true">?</span>';
     var pisteet = el('div', 'av__pisteet');
+    var boksiEl = el('div', 'av__boksi');          // Nälkäiset apinat: yhteinen boksi (10 palaa)
+    boksiEl.setAttribute('role', 'img');
+    pisteet.appendChild(boksiEl);
     var noppaEl = el('button', 'av__noppa');
     noppaEl.type = 'button';
     noppaEl.innerHTML = '<span class="av__d10"></span>';
@@ -191,12 +198,18 @@
     [pinoV, pinoO, lukuV, lukuO].forEach(function (x) { nayttamo.appendChild(x); });
     var juhla = el('div', 'av__juhla');
     nayttamo.appendChild(juhla);
+    var loppuEl = el('div', 'av__loppu');
+    nayttamo.appendChild(loppuEl);
     juuri.appendChild(nayttamo);
 
     // --- viestirivi (teksti tai nappi)
     var rivi = el('div', 'av__rivi');
     rivi.setAttribute('aria-live', 'polite');
     juuri.appendChild(rivi);
+
+    // --- pizzakortit (Nälkäiset apinat)
+    var kortitEl = el('div', 'av__kortit');
+    juuri.appendChild(kortitEl);
 
     // --- hyllyt
     var hyllyt = el('div', 'av__hyllyt');
@@ -210,7 +223,7 @@
     ikkuna.setAttribute('role', 'dialog');
     ikkuna.setAttribute('aria-modal', 'true');
     ikkuna.innerHTML = '<div class="av__ikkuna-sisus"><img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
-      t.info + '<div class="av__ikkuna-napit"></div><button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
+      t.info + t.infoA + '<div class="av__ikkuna-napit"></div><button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
     juuri.appendChild(ikkuna);
     var ikkunaNapit = ikkuna.querySelector('.av__ikkuna-napit');
     function nappi(kohde, teksti, luokka, f) {
@@ -224,8 +237,9 @@
     ikkuna.querySelector('.av__sulje').addEventListener('click', sulje);
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
-    nappi(ikkunaNapit, t.alusta, 'nappi--toinen', function () { sulje(); tila.nro = 0; aloita(TEHTAVAT[0]); });
-    nappi(ikkunaNapit, t.vapaa, 'nappi--toinen', function () { sulje(); aloitaVapaa(); });
+    nappi(ikkunaNapit, t.harjoittele, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; tila.nro = 0; aloita(TEHTAVAT[0]); });
+    nappi(ikkunaNapit, t.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); });
+    nappi(ikkunaNapit, t.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); });
 
     // --- tornin piirto
     function torni(luku, punnus) {
@@ -256,7 +270,7 @@
     // --- kierrokset
     function nollaa() {
       tila.oikea = []; tila.vasen = []; tila.lahde = {}; tila.valmis = false; tila.siirretty = false;
-      tila.viesti = ''; tila.heitetty = false;
+      tila.viesti = ''; tila.heitetty = false; tila.vuoronPizzat = 0; tila.vaihe = 'heitto';
       noppa3d.odota(); noppaEl.classList.add('av__noppa--odottaa');
     }
     function aloita(teht) {
@@ -277,6 +291,54 @@
       tila.nro = TEHTAVAT.length; tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
       uusiKierros();
+    }
+
+    // --- Nälkäiset apinat: yhteistyöpeli yhden täytteen pizzoilla (10 korttia, 4 pelilaudalla)
+    function sekoita(a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x; }
+      return a;
+    }
+    function aloitaApinat() {
+      tila.muoto = 'apinat'; tila.nro = TEHTAVAT.length; tila.paikka = {};
+      for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
+      tila.pakka = sekoita([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      tila.laudalla = tila.pakka.splice(0, 4);
+      tila.boksi = []; tila.ensimmainen = true; tila.loppu = false;
+      loppuEl.classList.remove('on');
+      uusiKierros();
+    }
+    function valmistettavat() {
+      return (tila.laudalla || []).filter(function (n) { return tila.paikka[n] === 'linjasto'; });
+    }
+    function valmista(n) {
+      if (tila.vaihe !== 'pizza' || tila.paikka[n] !== 'linjasto') return;
+      tila.paikka[n] = 'varasto';                       // käytetty täyte takaisin varastoon
+      tila.boksi.push(n);
+      var i = tila.laudalla.indexOf(n);
+      if (tila.pakka.length) tila.laudalla[i] = tila.pakka.shift(); else tila.laudalla.splice(i, 1);
+      tila.vuoronPizzat++;
+      tila.uusiPala = n;
+      if (tila.boksi.length === 10) { piirra(); return setTimeout(function () { lopeta(); }, 700); }
+      if (!valmistettavat().length) return vuoroLoppuu();
+      piirra();
+    }
+    function vuoroLoppuu() {
+      tila.vaihe = 'odota';
+      piirra();
+      if (tila.vuoronPizzat === 0 && !tila.ensimmainen) return setTimeout(lopeta, 900);
+      var eiPizzaa = tila.vuoronPizzat === 0;
+      tila.ensimmainen = false;
+      if (eiPizzaa) { rivi.textContent = t.eiPizzaa; rivi.className = 'av__rivi av__rivi--havikki'; }
+      setTimeout(uusiKierros, eiPizzaa ? 1600 : 900);
+    }
+    function lopeta() {
+      tila.loppu = true; tila.vaihe = 'loppu';
+      var n = tila.boksi.length, taso = n >= 10 ? 3 : n >= 7 ? 2 : n >= 4 ? 1 : 0;
+      loppuEl.innerHTML = '<b>' + n + ' / 10</b><span>' + t.tasot[taso] + '</span>';
+      nappi(loppuEl, t.uusiPeli + ' →', 'av__vie', aloitaApinat);
+      loppuEl.classList.toggle('voitto', n >= 10);
+      loppuEl.classList.add('on');
+      piirra();
     }
 
     // --- siirrot
@@ -303,6 +365,11 @@
         tila.paikka[n] = tila.lahde[n] === 'varasto' ? 'linjasto' : 'varasto';
       });
       tila.siirretty = true;
+      if (tila.muoto === 'apinat') {
+        tila.vaihe = 'pizza';
+        if (!valmistettavat().length) return vuoroLoppuu();
+        return piirra();
+      }
       var vapaa = tila.nro >= TEHTAVAT.length;
       var party = varastonSumma() === 0;
       if (party) { juhla.textContent = t.party; juhla.classList.add('on'); }
@@ -334,7 +401,39 @@
           p += '<i class="' + (i < tila.nro || (i === tila.nro && tila.siirretty) ? 'tehty' : i === tila.nro ? 'nyt' : '') + '"></i>';
         }
       }
-      pisteet.innerHTML = p;
+      var apinat = tila.muoto === 'apinat';
+      juuri.classList.toggle('av--apinat', apinat);
+      if (apinat) {
+        // boksi pizzana: 10 siivua, täytetty siivu täytteen värinen
+        var sv = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><circle r="47" class="av__boksi-pohja"/>';
+        for (var j = 0; j < 10; j++) {
+          var a0 = (j * 36 - 90) * Math.PI / 180, a1 = ((j + 1) * 36 - 90) * Math.PI / 180, n0 = j + 1;
+          var tay = tila.boksi.indexOf(n0) >= 0;
+          sv += '<path class="' + (tay ? 'tay' : '') + (tila.uusiPala === n0 ? ' uusi' : '') + '" d="M0 0L' + (44 * Math.cos(a0)).toFixed(2) + ' ' + (44 * Math.sin(a0)).toFixed(2) +
+            'A44 44 0 0 1 ' + (44 * Math.cos(a1)).toFixed(2) + ' ' + (44 * Math.sin(a1)).toFixed(2) + 'Z" style="fill:' + (tay ? VARIT[j] : 'transparent') + '"/>';
+        }
+        sv += '</svg><b>' + tila.boksi.length + '/10</b>';
+        tila.uusiPala = null;
+        pisteet.innerHTML = ''; pisteet.appendChild(boksiEl);
+        boksiEl.innerHTML = sv;
+        boksiEl.setAttribute('aria-label', t.boksi + ': ' + tila.boksi.length + '/10');
+      } else pisteet.innerHTML = p;
+      pisteet.classList.toggle('av__pisteet--boksi', apinat);
+      if (!apinat) pisteet.appendChild(boksiEl);
+
+      // pizzakortit
+      kortitEl.innerHTML = '';
+      if (apinat) {
+        tila.laudalla.forEach(function (n) {
+          var ok = tila.vaihe === 'pizza' && tila.paikka[n] === 'linjasto';
+          var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : ''));
+          k.type = 'button';
+          k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
+          k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"></i></span><b>' + n + '</b>';
+          k.addEventListener('click', function () { if (ok) valmista(n); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
+          kortitEl.appendChild(k);
+        });
+      }
       noppaEl.disabled = heitetty;
       noppaEl.setAttribute('aria-label', heitetty ? t.noppa + ': ' + noppa : t.heita);
 
@@ -366,8 +465,10 @@
         b.addEventListener('click', function () { palauta(n); });
         kohde.appendChild(b);
       }
-      tila.vasen.forEach(function (n) { pinoNappi(n, pinoV); });
-      tila.oikea.forEach(function (n) { pinoNappi(n, pinoO); });
+      if (!tila.siirretty) {                      // siirron jälkeen tornit ovat jo hyllyillä
+        tila.vasen.forEach(function (n) { pinoNappi(n, pinoV); });
+        tila.oikea.forEach(function (n) { pinoNappi(n, pinoO); });
+      }
 
       // luvut symbaalien alla ja ruokalapun merkki
       var nayta = heitetty && !tila.siirretty;
@@ -381,7 +482,12 @@
       // viestirivi: joko lyhyt teksti tai yksi nappi
       rivi.innerHTML = '';
       rivi.className = 'av__rivi';
-      if (tila.valmis) {
+      if (apinat && tila.vaihe === 'pizza') {
+        rivi.textContent = t.valmista; rivi.classList.add('av__rivi--ok');
+      } else if (apinat && (tila.vaihe === 'odota' || tila.vaihe === 'loppu')) {
+        rivi.textContent = tila.vaihe === 'odota' && tila.vuoronPizzat ? t.hyva : '';
+        if (tila.vuoronPizzat) rivi.classList.add('av__rivi--ok');
+      } else if (tila.valmis) {
         nappi(rivi, (tila.havikki ? t.vieV : t.vie) + ' <span aria-hidden="true">↓</span>', 'av__vie' + (tila.havikki ? ' av__vie--varasto' : ''), vieSiirto);
       } else if (tila.siirretty) {
         rivi.textContent = t.hyva; rivi.classList.add('av__rivi--ok');
@@ -407,7 +513,7 @@
             b.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
             b.title = t.taytteet[n - 1];
             (function (n, nimi) { b.addEventListener('click', function () { napauta(n, nimi); }); })(n, nimi);
-            if (tila.siirretty) b.disabled = true;
+            if (tila.siirretty || tila.loppu) b.disabled = true;
             paikka.appendChild(b);
           } else paikka.classList.add('av__paikka--tyhja');
           paikka.appendChild(el('small', null, String(n)));
@@ -426,7 +532,7 @@
     window.addEventListener('resize', mitoita);
     mitoita();
     if (vahennaLiike) juuri.classList.add('av--ei-liiketta');
-    aloita(TEHTAVAT[0]);
+    if (juuri.getAttribute('data-tila') === 'apinat') aloitaApinat(); else { tila.muoto = 'harjoitus'; aloita(TEHTAVAT[0]); }
   }
 
   function kaynnista() {
