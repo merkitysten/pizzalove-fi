@@ -22,6 +22,7 @@ JULKINEN = os.path.join(JUURI, 'julkinen')
 ULOS = os.path.join(JUURI, 'docs')
 
 KIELET = ['fi', 'sv', 'en', 'de']      # järjestys kielivalikossa
+LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE'}
 OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään näistä
 OSOITE = 'https://pizzalove.fi'
 SAHKOPOSTI = 'info@merkitysten.fi'
@@ -176,8 +177,14 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 %s
 <meta property="og:title" content="%s">
 <meta property="og:description" content="%s">
-<meta property="og:image" content="%s/kuvat/jako-1200x630.jpg">
+<meta property="og:image" content="%s/kuvat/jako-%s.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="%s/%s/%s">
+<meta property="og:site_name" content="Pizza Love®">
+<meta property="og:locale" content="%s">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 %s
@@ -188,7 +195,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <script src="../%s" defer></script>
 </body>
 </html>
-''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu), alt, e(title), e(kuvaus), OSOITE,
+''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu), LOKAALIT[lang],
        ylaosa(t, sivu, kaikki), runko, alaosa(t), leima('sivu.js'))
 
 
@@ -450,6 +457,15 @@ def juurisivu(kaikki):
 <title>Pizza Love®</title>
 <meta name="description" content="Pizza Love® – rules, videos and online game · säännöt, videot ja verkkopeli">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
+<meta property="og:title" content="Pizza Love® – säännöt, videot ja verkkopeli">
+<meta property="og:description" content="Pizza Love® -korttipelin ja -lautapelin säännöt, ohjevideot ja Pizza Party -verkkopeli. Suomeksi, ruotsiksi, englanniksi ja saksaksi.">
+<meta property="og:image" content="%s/kuvat/jako-fi.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="%s/">
+<meta property="og:site_name" content="Pizza Love®">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <script>
 (function () {
   var kielet = %s, valittu = null;
@@ -473,7 +489,7 @@ a{display:block;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1
 <main><p style="text-align:center;font-weight:700">Pizza Love®</p><ul>%s</ul></main>
 </body>
 </html>
-''' % (json.dumps(KIELET), OLETUSKIELI, linkit)
+''' % (OSOITE, OSOITE, json.dumps(KIELET), OLETUSKIELI, linkit)
 
 
 def main():
