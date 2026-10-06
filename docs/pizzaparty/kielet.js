@@ -226,6 +226,7 @@ const KIELET = {
     'valikko.palaa':          'Palaa peliin {koodi}',
     'valikko.alkuun':         'Alkuvalikkoon',
     'verkko.uusi':            'Liity toiseen peliin',
+    'valikko.sivustolle':     '← Takaisin sivustolle',
   } },
 
   /* ⚠️ sv / en / de lisätty 6.10.2026 pizzalove.fi:tä varten.
@@ -396,6 +397,7 @@ const KIELET = {
     'valikko.palaa':          'Tillbaka till spel {koodi}',
     'valikko.alkuun':         'Till startmenyn',
     'verkko.uusi':            'Gå med i ett annat spel',
+    'valikko.sivustolle':     '← Tillbaka till webbplatsen',
   } },
 
   en: { nimi: 'English', valmis: true, t: {
@@ -564,6 +566,7 @@ const KIELET = {
     'valikko.palaa':          'Back to game {koodi}',
     'valikko.alkuun':         'Main menu',
     'verkko.uusi':            'Join another game',
+    'valikko.sivustolle':     '← Back to the website',
   } },
 
   de: { nimi: 'Deutsch', valmis: true, t: {
@@ -732,6 +735,7 @@ const KIELET = {
     'valikko.palaa':          'Zurück zu Spiel {koodi}',
     'valikko.alkuun':         'Zum Startmenü',
     'verkko.uusi':            'Einem anderen Spiel beitreten',
+    'valikko.sivustolle':     '← Zurück zur Website',
   } },
 };
 

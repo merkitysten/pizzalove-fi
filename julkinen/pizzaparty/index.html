@@ -40,7 +40,7 @@
 <title>Pizza Party — näin sitä pelataan</title>
 <meta name="description" content="Pizza Love -korttipelin Pizza Party selaimessa. Opi mekaniikka kahdessa minuutissa.">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="peli.css?v=20260920e">
+<link rel="stylesheet" href="peli.css?v=20261006a">
 </head>
 <body>
 
@@ -161,6 +161,8 @@
            target="_blank" rel="noopener" data-ta="as.kauppaAria">
           <span data-t="as.kauppa">Kauppaan</span>
           <img class="as-kotelo" src="kuvat/kotelo.webp?v=20260911a" alt=""></a>
+        <a class="as-rivi" id="asSivustolle" href="../">
+          <span data-t="valikko.sivustolle">Takaisin sivustolle</span><b class="as-arvo"></b></a>
       </nav>
     </section>
 
@@ -421,6 +423,9 @@
       <button id="valikkoPalaa" type="button" class="iso-nappi" hidden></button>
       <button id="valikkoPelaa" type="button" class="as-valinta"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
       <button id="valikkoMoninpeliin" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
+      <!-- Paluu sivustolle (Marko 6.10.2026: «nyt kun sinne päätyy, niin jää jumiin peliin»).
+           Osoitteen asettaa valikko.js: pizzalove.fi:ssä oman kielen sivu, varainhankinnassa sen etusivu. -->
+      <a id="valikkoSivustolle" class="toinen-nappi valikko-sivustolle" href="../" data-t="valikko.sivustolle">Takaisin sivustolle</a>
     </div>
     <div id="valikkoMoninpeli" class="verkko-osa" hidden>
       <button id="valikkoLuo" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>
@@ -431,7 +436,7 @@
   </div>
 </div>
 
-<script src="kielet.js?v=20261006b"></script>
+<script src="kielet.js?v=20261006c"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="ratkoja.js?v=20260909b"></script>
 <script src="laskin.js?v=20260909c"></script>
@@ -442,6 +447,6 @@
 <script src="peli.js?v=20260919a"></script>
 <script src="pelaaja.js?v=20260918a"></script>
 <script src="pelaavaisanta.js?v=20260920d"></script>
-<script src="valikko.js?v=20260917a"></script>
+<script src="valikko.js?v=20261006a"></script>
 </body>
 </html>
