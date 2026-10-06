@@ -167,11 +167,11 @@ ul.lista li,ol.lista li{margin:4px 0}
 
 /* Esimerkkikortit: pizza = täyte + täyte */
 .esimerkki{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
-.esimerkki img{width:clamp(64px,18vw,104px);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.esimerkki img{width:clamp(64px,18vw,104px);filter:drop-shadow(0 3px 6px rgba(60,30,0,.22))}
 .esimerkki b{font-size:26px;font-weight:800;color:var(--soft)}
 .korttiparit{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0}
 .korttipari{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:start}
-.korttipari img{width:72px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.korttipari img{width:64px;filter:drop-shadow(0 3px 5px rgba(60,30,0,.2))}
 .korttipari p{font-size:14.5px;margin:0}
 @media (max-width:560px){.korttiparit{grid-template-columns:1fr}}
 
