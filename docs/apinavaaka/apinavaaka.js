@@ -18,9 +18,9 @@
 
   // ---------------------------------------------------------------- kuvan geometria
   // PSD:n pikseleitä; ylhäältä leikattu 250 px, alhaalta rajattu ruokalapun alle.
-  var W = 3210, H = 2470;
+  var W = 3210, H = 2422;
   var OSAT = {
-    vartalo: [255, 0, 2926, 2470],
+    vartalo: [255, 0, 2926, 2422],
     vasen:   [0, 1585, 1256, 564],
     oikea:   [1911, 1601, 1299, 513],
     saihkeet:[1162, 22, 1131, 681],
@@ -28,7 +28,6 @@
   };
   var NIVEL_V = [1240, 1790], NIVEL_O = [1925, 1775];   // olkapäät
   var SYMB_V = [508, 1655],  SYMB_O = [2700, 1668];     // symbaalien keskikohta
-  var RUOKALAPPU = { '<': [1362, 2318], '=': [1632, 2318], '>': [1902, 2318] };  // < = > ruokalapussa
   var MAKSIMIKULMA = 9;
 
   var VARIT = ['#090A0D', '#E62448', '#FFDF00', '#1072B9', '#EF7925',
@@ -181,8 +180,6 @@
     nayttamo.appendChild(kasiV); nayttamo.appendChild(kasiO);
     nayttamo.appendChild(kuva('vartalo'));
     nayttamo.appendChild(kuva('saihkeet')); nayttamo.appendChild(kuva('lamppu', 'lamppu-pois')); nayttamo.appendChild(lamppuPaalla);
-    var merkki = el('span', 'av__merkki');          // korostus ruokalapun < = > -merkin päällä
-    nayttamo.appendChild(merkki);
     var pinoV = el('div', 'av__pino'), pinoO = el('div', 'av__pino');
     var lukuV = el('span', 'av__luku'), lukuO = el('span', 'av__luku');
     [pinoV, pinoO, lukuV, lukuO].forEach(function (x) { nayttamo.appendChild(x); });
@@ -371,19 +368,13 @@
       lukuV.textContent = nayta ? [noppa].concat(tila.vasen).join(' + ') : '';
       lukuO.textContent = nayta && tila.oikea.length ? tila.oikea.join(' + ') : '';
       lukuV.hidden = !lukuV.textContent; lukuO.hidden = !lukuO.textContent;
-      var m = !nayta || !tila.oikea.length ? '' : vasenSumma === oikeaSumma ? '=' : vasenSumma < oikeaSumma ? '<' : '>';
-      merkki.hidden = !m;
-      if (m) {
-        merkki.style.left = pros(RUOKALAPPU[m][0], W); merkki.style.top = pros(RUOKALAPPU[m][1], H);
-        merkki.classList.toggle('av__merkki--ok', m === '=');
-      }
       juuri.classList.toggle('av--valo', tila.valmis || tila.siirretty);
 
       // viestirivi: joko lyhyt teksti tai yksi nappi
       rivi.innerHTML = '';
       rivi.className = 'av__rivi';
       if (tila.valmis) {
-        nappi(rivi, (tila.havikki ? t.vieV : t.vie) + ' →', '', vieSiirto);
+        nappi(rivi, (tila.havikki ? t.vieV : t.vie) + ' <span aria-hidden="true">↓</span>', 'av__vie' + (tila.havikki ? ' av__vie--varasto' : ''), vieSiirto);
       } else if (tila.siirretty) {
         rivi.textContent = t.hyva; rivi.classList.add('av__rivi--ok');
       } else if (!heitetty) {

@@ -70,7 +70,7 @@ window.Noppa3D = function (juuri, kansio) {
   varjo.className = 'n3d__varjo';
   juuri.insertBefore(varjo, kappale);
 
-  var VALO = norm([-0.4, -0.7, 0.9]);
+  var VALO = norm([0, -0.375, 0.927]);   // valo edestä: lopputulostahko on kirkkain
 
   tahkot.forEach(function (f) {
     var keski = mul(add(add(f.karki, f.pohja), add(f.a, f.b)), 0.25);
@@ -112,7 +112,7 @@ window.Noppa3D = function (juuri, kansio) {
     var Rm = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
     for (var i = 0; i < 3; i++) for (var r = 0; r < 3; r++) for (var c = 0; c < 3; c++) Rm[r][c] += T[i][r] * Sr[i][c];
     // pieni kallistus, jotta naapuritahkot näkyvät ja noppa näyttää kappaleelta
-    return mm(mm(kierto([1, 0, 0], -4 * rad), kierto([0, 1, 0], 10 * rad)), Rm);
+    return mm(mm(kierto([1, 0, 0], 22 * rad), kierto([0, 1, 0], 0 * rad)), Rm);
   }
 
   var M = asento(1), anim = null;
@@ -124,7 +124,7 @@ window.Noppa3D = function (juuri, kansio) {
     tahkot.forEach(function (f) {
       var nn = mv(Mx, f.n);
       var v = Math.max(0, dot(nn, VALO));
-      f.img.style.filter = 'brightness(' + (0.55 + 0.55 * v).toFixed(3) + ')';
+      f.img.style.filter = 'brightness(' + (0.52 + 0.5 * Math.pow(v, 1.5)).toFixed(3) + ')';
     });
   }
   function seis() { if (anim) cancelAnimationFrame(anim); anim = null; }
