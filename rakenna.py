@@ -109,7 +109,7 @@ def ylaosa(t, sivu, kaikki):
     </a>
     <nav class="kielet" aria-label="%s">%s</nav>
   </div>
-  <nav class="sivurivi" aria-label="Pizza Love">%s</nav>
+  <nav class="sivurivi" aria-label="Pizza Love"><div class="sivurivi__sisus">%s</div></nav>
 </header>''' % (e(ui['ohita']), e(ui['nav_etusivu']), e(ui['kielivalinta']), kielet, navi)
 
 
@@ -140,6 +140,14 @@ def alaosa(t):
                 e(ui['alaosa_tavaramerkki']))
 
 
+def leima(nimi):
+    """Tiedoston sisällöstä laskettu ?v=-leima: selain hakee uuden version heti
+    kun tiedosto muuttuu, eikä näytä vanhaa välimuistista."""
+    import hashlib
+    with open(os.path.join(JULKINEN, nimi), 'rb') as f:
+        return nimi + '?v=' + hashlib.sha1(f.read()).hexdigest()[:8]
+
+
 def kehys(t, kaikki, sivu, title, kuvaus, runko):
     lang = t['lang']
     alt = ''.join('<link rel="alternate" hreflang="%s" href="%s/%s/%s">' % (k, OSOITE, k, sivutiedosto(sivu))
@@ -157,7 +165,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <link rel="apple-touch-icon" href="../favicon-180.png">
 <link rel="preload" href="../fontit/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fontit/poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../tyyli.css">
+<link rel="stylesheet" href="../%s">
 <link rel="canonical" href="%s/%s/%s">
 %s
 <meta property="og:title" content="%s">
@@ -171,11 +179,11 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 %s
 </main>
 %s
-<script src="../sivu.js" defer></script>
+<script src="../%s" defer></script>
 </body>
 </html>
-''' % (lang, e(title), e(kuvaus), OSOITE, lang, sivutiedosto(sivu), alt, e(title), e(kuvaus), OSOITE,
-       ylaosa(t, sivu, kaikki), runko, alaosa(t))
+''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu), alt, e(title), e(kuvaus), OSOITE,
+       ylaosa(t, sivu, kaikki), runko, alaosa(t), leima('sivu.js'))
 
 
 def video(tunnus, otsikko, kieli, t, muoto='vaaka'):

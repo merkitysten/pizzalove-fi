@@ -54,7 +54,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .palkki{background:var(--brandi);color:#1A1A1A;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:8px max(16px,calc((100% - 1040px)/2))}
-.palkki__logo{display:block;line-height:0}
+/* Viiri alkaa palkin yläreunasta kuten painotuotteissa: ei oranssia viirin yläpuolella. */
+.palkki__logo{display:block;line-height:0;align-self:flex-start;margin-top:-8px}
 .palkki__viiri{width:var(--viiri-w);margin-bottom:-46px;position:relative;z-index:2;
   filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
 .kielet{display:flex;gap:4px;align-items:center}
@@ -66,10 +67,12 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .sivurivi{background:color-mix(in srgb,var(--ground) 92%,transparent);
   backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);
   border-bottom:1px solid var(--line);
-  display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
   padding:0 max(16px,calc((100% - 1040px)/2));
   padding-left:calc(max(16px,calc((100% - 1040px)/2)) + var(--viiri-w) + 10px)}
-.sivurivi::-webkit-scrollbar{display:none}
+/* Vieritys tapahtuu sisemmässä laatikossa, joka alkaa viirin oikealta puolelta:
+   välilehdet eivät liu'u viirin alle kapealla ruudulla. */
+.sivurivi__sisus{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.sivurivi__sisus::-webkit-scrollbar{display:none}
 .sivurivi a{flex:none;text-decoration:none;color:var(--soft);font-weight:600;font-size:14.5px;
   padding:12px 10px;position:relative;white-space:nowrap}
 .sivurivi a:hover{color:var(--ink)}
