@@ -149,3 +149,13 @@
 .av--apinat .av__ylapalkki{margin-bottom:4px}
 .av--apinat .av__rivi{height:46px;margin:6px 0 8px}
 .av--apinat .av__paikka{min-height:56px}
+
+/* täytteen tarra tornin päällä */
+.av__tarra{display:block;width:calc(var(--leveys)*.8);height:calc(var(--leveys)*.8);border-radius:50%;
+  box-shadow:0 0 0 2px #fff,0 1px 3px rgba(0,0,0,.35);margin-bottom:calc(var(--pala)*-.4);position:relative;z-index:1;display:grid;place-items:center;order:99}
+.av__tarra img{width:78%;height:78%;object-fit:contain}
+.av__hylly-torni .av__tarra{width:20px;height:20px;margin-bottom:-3px;box-shadow:0 0 0 1.5px #fff,0 1px 2px rgba(0,0,0,.3)}
+.av__kortti-pizza i{display:grid;place-items:center;width:34px;height:34px}
+.av__kortti-pizza i img{width:80%;height:80%;object-fit:contain}
+.av--apinat .av__paikka{min-height:64px}
+.av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--green,#2D5D3D),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}

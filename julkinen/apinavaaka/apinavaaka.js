@@ -39,7 +39,7 @@
   // ---------------------------------------------------------------- tekstit (lyhyet!)
   var T = {
     fi: {
-      heita: 'Heitä noppaa!',
+      heita: 'Heitä noppaa!', seuraavaVuoro: 'Seuraava vuoro',
       valmista: "Valmista pizza!", eiPizzaa: "Ei pizzaa vielä. Heitä uudelleen!", apinat: "Nälkäiset apinat", uusiPeli: "Uusi peli", harjoittele: "Harjoittele", tasot: ["AARGH! Tyhjä maha.", "Öö… Mitä sitten syödään?", "Nam. Muutama pala olisi vielä maistunut.", "Se on siinä – apinan lempipizza!"], palaa: "palaa", boksi: "Yhteinen boksi", infoA: "<h3>Nälkäiset apinat</h3><p>Pelatkaa yhdessä. Kun pizzan täyte on linjastolla, napauta pizzaa. Pala menee yhteiseen boksiin.</p><p>Jos vuorolla ei synny pizzaa, nälkäiset apinat syövät palat ja peli päättyy. Täyttäkää boksi kymmenellä palalla!</p>",
       vihjeet: { A: 'Etsi yhtä korkea torni.', B: 'Kokoa pienemmistä torneista.',
         C: 'Nosta linjaston torni punnusten päälle.', X: 'Tee tornit yhtä korkeiksi.', H: 'Hävikki! Vie linjastolta varastoon.' },
@@ -58,7 +58,7 @@
       taytteet: ['Oliivi', 'Tomaatti', 'Ananas', 'Homejuusto', 'Katkarapu', 'Munakoiso', 'Rucola', 'Herkkusieni', 'Kinkku', 'Kala']
     },
     sv: {
-      heita: 'Kasta tärningen!',
+      heita: 'Kasta tärningen!', seuraavaVuoro: 'Nästa tur',
       valmista: "Gör pizzan!", eiPizzaa: "Ingen pizza än. Kasta igen!", apinat: "Hungriga apor", uusiPeli: "Nytt spel", harjoittele: "Träna", tasot: ["AARGH! Tom mage.", "Öö… Vad äter vi nu?", "Mums. Några bitar till hade suttit fint.", "Det är klart – apans favoritpizza!"], palaa: "bitar", boksi: "Gemensam box", infoA: "<h3>Hungriga apor</h3><p>Spela tillsammans. När pizzans fyllning finns på linjen, tryck på pizzan. Biten hamnar i den gemensamma boxen.</p><p>Om det inte blir någon pizza på en tur äter de hungriga aporna upp bitarna och spelet tar slut. Fyll boxen med tio bitar!</p>",
       vihjeet: { A: 'Hitta ett lika högt torn.', B: 'Bygg av mindre torn.',
         C: 'Lyft ett torn från linjen ovanpå vikterna.', X: 'Gör tornen lika höga.', H: 'Svinn! Flytta från linjen till lagret.' },
@@ -77,7 +77,7 @@
       taytteet: ['Oliv', 'Tomat', 'Ananas', 'Ädelost', 'Räka', 'Aubergine', 'Ruccola', 'Champinjon', 'Skinka', 'Fisk']
     },
     en: {
-      heita: 'Roll the dice!',
+      heita: 'Roll the dice!', seuraavaVuoro: 'Next turn',
       valmista: "Make the pizza!", eiPizzaa: "No pizza yet. Roll again!", apinat: "Hungry monkeys", uusiPeli: "New game", harjoittele: "Practise", tasot: ["AARGH! Empty stomach.", "Uhh… What do we eat now?", "Yum. A few more slices would have been nice.", "That’s it – the monkey’s favourite pizza!"], palaa: "slices", boksi: "Shared box", infoA: "<h3>Hungry monkeys</h3><p>Play together. When a pizza’s topping is on the line, tap the pizza. The slice goes into the shared box.</p><p>If no pizza is made on a turn, the hungry monkeys eat the slices and the game ends. Fill the box with ten slices!</p>",
       vihjeet: { A: 'Find a tower just as high.', B: 'Build it from smaller towers.',
         C: 'Lift a tower from the line onto the weights.', X: 'Make the towers equally high.', H: 'Food waste! Move from the line to the storage.' },
@@ -96,7 +96,7 @@
       taytteet: ['Olive', 'Tomato', 'Pineapple', 'Blue cheese', 'Shrimp', 'Aubergine', 'Rocket', 'Mushroom', 'Ham', 'Fish']
     },
     de: {
-      heita: 'Würfle!',
+      heita: 'Würfle!', seuraavaVuoro: 'Nächster Zug',
       valmista: "Back die Pizza!", eiPizzaa: "Noch keine Pizza. Würfle noch einmal!", apinat: "Hungrige Affen", uusiPeli: "Neues Spiel", harjoittele: "Üben", tasot: ["AARGH! Leerer Bauch.", "Äh… Was essen wir jetzt?", "Mmh. Ein paar Stücke mehr wären lecker gewesen.", "Geschafft – die Lieblingspizza des Affen!"], palaa: "Stücke", boksi: "Gemeinsame Box", infoA: "<h3>Hungrige Affen</h3><p>Spielt zusammen. Wenn die Zutat einer Pizza auf der Linie liegt, tippt auf die Pizza. Das Stück kommt in die gemeinsame Box.</p><p>Wenn in einem Zug keine Pizza entsteht, essen die hungrigen Affen die Stücke und das Spiel ist vorbei. Füllt die Box mit zehn Stücken!</p>",
       vihjeet: { A: 'Finde einen gleich hohen Turm.', B: 'Bau ihn aus kleineren Türmen.',
         C: 'Heb einen Turm von der Linie auf die Gewichte.', X: 'Mach die Türme gleich hoch.', H: 'Verschwendung! Von der Linie ins Lager.' },
@@ -241,6 +241,13 @@
     nappi(ikkunaNapit, t.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); });
     nappi(ikkunaNapit, t.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); });
 
+    // --- täytteen tarra: värillinen ympyrä, valkoinen reuna ja Markon täytekuva (tayte/1–10.webp)
+    function tarra(luku) {
+      var x = el('span', 'av__tarra');
+      x.style.background = VARIT[luku - 1];
+      x.innerHTML = '<img src="' + KANSIO + 'tayte/' + luku + '.webp" alt="">';
+      return x;
+    }
     // --- tornin piirto
     function torni(luku, punnus) {
       var d = el('span', 'av__torni');
@@ -250,6 +257,7 @@
         else p.style.background = VARIT[luku - 1];
         d.appendChild(p);
       }
+      if (!punnus) d.appendChild(tarra(luku));   // tornin päällä täytteen tarra kuten oikeissa nappuloissa
       return d;
     }
 
@@ -429,7 +437,7 @@
           var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : ''));
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
-          k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"></i></span><b>' + n + '</b>';
+          k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i></span><b>' + n + '</b>';
           k.addEventListener('click', function () { if (ok) valmista(n); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
           kortitEl.appendChild(k);
         });
@@ -483,7 +491,9 @@
       rivi.innerHTML = '';
       rivi.className = 'av__rivi';
       if (apinat && tila.vaihe === 'pizza') {
-        rivi.textContent = t.valmista; rivi.classList.add('av__rivi--ok');
+        // pizzan saa jättää odottamaan, kun vuorolla on jo tehty vähintään yksi
+        if (tila.vuoronPizzat > 0) nappi(rivi, t.seuraavaVuoro + ' →', 'av__vie av__vie--toinen', vuoroLoppuu);
+        else { rivi.textContent = t.valmista; rivi.classList.add('av__rivi--ok'); }
       } else if (apinat && (tila.vaihe === 'odota' || tila.vaihe === 'loppu')) {
         rivi.textContent = tila.vaihe === 'odota' && tila.vuoronPizzat ? t.hyva : '';
         if (tila.vuoronPizzat) rivi.classList.add('av__rivi--ok');
