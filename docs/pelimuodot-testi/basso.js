@@ -336,67 +336,96 @@ function piirraPelaajat() {
   });
 }
 
-/* Tulosruutu (Marko 6.10.2026: «ne jäljelle jääneet kortit pitäisi
- * ensinnäkin nähdä»). Rivi per pelaaja, kierroksen voittaja ensin:
+/* Tulosruutu: PALKINTOPALLI (Marko 6.10.2026: «tämä loppunäkymä on edelleen
+ * liian karu — — täytekuosi taustalle — — enemmän brändin näköisen ja
+ * iloisemman. Ehkä joku palkintopallijuttu»).
  *
- *   [ottelupisteet]  jääneet kortit kuvina  = summa      ← häviäjät
- *   [ottelupisteet]  +summa                              ← voittaja
+ * Sija kierroksessa: voittaja 1., muut sen mukaan kenen käteen jäi VÄHITEN
+ * pisteitä (tasapisteet jakavat sijan). Askelman päällä pelaajan oma
+ * laatikko ottelupisteineen — sama tunnus kuin pelissä: oranssi sinä,
+ * musta apina. Askelman alla jääneet kortit viuhkana ja niiden summa
+ * (Marko aiemmin samana päivänä: «ne jäljelle jääneet kortit pitäisi
+ * ensinnäkin nähdä»). Voittajan «+N» on häviäjien summien summa.
  *
- * Voittajan +N on tasan häviäjien summien summa, joten pisteiden alkuperä
- * näkyy korteista eikä sitä tarvitse selittää. Ei tekstiä: kortit, luvut
- * ja merkit ovat kieliriippumattomia. Fantasiakortti on 20 (painettu sääntö),
- * ja se näkyy kortin vieressä, koska X-kortissa ei ole lukua. */
+ * Järjestys ruudulla on pallin järjestys: 2 · 1 · 3 · 4. */
+const BASSO_PALLIN_JARJESTYS = [1, 0, 2, 3];        // sijaindeksit vasemmalta oikealle
+
+function bassoSijat() {
+  const k = basso.kierros;
+  const rivit = basso.pelaajat.map(function (p, i) {
+    return { i: i, voitti: !!k && k.voittaja === i, summa: k ? bassoKadenPisteet(k.kasit[i]) : 0 };
+  });
+  rivit.sort(function (a, b) { return (b.voitti - a.voitti) || (a.summa - b.summa) || (a.i - b.i); });
+  let edellinen = null, sija = 0;
+  rivit.forEach(function (r, n) {
+    const avain = r.voitti ? 'v' : r.summa;
+    if (avain !== edellinen) { sija = n + 1; edellinen = avain; }
+    r.sija = sija;
+  });
+  return rivit;
+}
+
 function piirraTulos() {
   const sailio = document.getElementById('tulosPisteet');
   if (!sailio || !basso) return;
   sailio.innerHTML = '';
   const k = basso.kierros;
-  const jarjestys = basso.pelaajat.map(function (p, i) { return i; });
-  if (k && k.voittaja !== null) {
-    jarjestys.sort(function (a, b) { return (b === k.voittaja) - (a === k.voittaja); });
-  }
-  jarjestys.forEach(function (i) {
-    const p = basso.pelaajat[i];
-    const voitti = !!k && k.voittaja === i;
-    const kasi = k ? k.kasit[i] : [];
-    const rivi = document.createElement('div');
-    rivi.className = 'basso-tulos-rivi' + (voitti ? ' voitti' : '');
+  const sijat = bassoSijat();
 
+  const palli = document.createElement('div');
+  palli.className = 'basso-palli';
+  BASSO_PALLIN_JARJESTYS.filter(function (n) { return n < sijat.length; }).forEach(function (n) {
+    const r = sijat[n], p = basso.pelaajat[r.i];
+    const kasi = k ? k.kasit[r.i] : [];
+    const paikka = document.createElement('div');
+    paikka.className = 'palli-paikka sija-' + Math.min(r.sija, 4) + (r.voitti ? ' voitti' : '');
+
+    const yla = document.createElement('div');
+    yla.className = 'palli-yla';
+    if (r.voitti && k.pisteet) {
+      yla.innerHTML = '<b class="palli-lisays">+' + k.pisteet + '</b>';
+    }
     const laatikko = document.createElement('div');
     laatikko.className = 'pisteet iso ' + (p.laji === 'apina' ? 'apina' : 'oma') +
-      (voitti ? ' voittaja' : '');
+      (basso.voittaja === r.i ? ' voittaja' : '');
     laatikko.innerHTML =
-      (basso.voittaja === i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
+      (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
       (p.laji === 'apina' ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
       '<b>' + p.pisteet + '</b>';
-    const kuka = i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: i });
+    const kuka = r.i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: r.i });
     laatikko.setAttribute('aria-label', kuka + ': ' + p.pisteet);
-    rivi.appendChild(laatikko);
+    yla.appendChild(laatikko);
+    paikka.appendChild(yla);
 
-    if (voitti) {
-      const lisa = document.createElement('b');
-      lisa.className = 'basso-lisays';
-      lisa.textContent = '+' + k.pisteet;
-      rivi.appendChild(lisa);
-    } else if (kasi.length) {
-      const kortit = document.createElement('div');
-      kortit.className = 'basso-jaaneet';
-      kasi.forEach(function (kortti) {
+    const askel = document.createElement('div');
+    askel.className = 'palli-askel';
+    askel.innerHTML = '<b>' + r.sija + '</b>';
+    paikka.appendChild(askel);
+
+    const ala = document.createElement('div');
+    ala.className = 'palli-ala';
+    if (kasi.length) {
+      const viuhka = document.createElement('div');
+      viuhka.className = 'palli-kortit';
+      kasi.forEach(function (kortti, j) {
         const el = document.createElement('span');
         el.className = 'basso-minikortti';
+        el.style.setProperty('--kulma', ((j - (kasi.length - 1) / 2) * 5).toFixed(1) + 'deg');
         el.innerHTML = '<img src="' + kortti.kuva + '" alt="' + (kortti.fantasia
           ? t('fantasia.valitsematta') : t('tayte.alt', { nimi: t('tayte.' + kortti.arvo), arvo: kortti.arvo })) + '">' +
           (kortti.fantasia ? '<small>' + BASSO_FANTASIAN_PISTEET + '</small>' : '');
-        kortit.appendChild(el);
+        viuhka.appendChild(el);
       });
-      rivi.appendChild(kortit);
+      ala.appendChild(viuhka);
       const summa = document.createElement('b');
       summa.className = 'basso-summa';
-      summa.textContent = '= ' + bassoKadenPisteet(kasi);
-      rivi.appendChild(summa);
+      summa.textContent = '= ' + r.summa;
+      ala.appendChild(summa);
     }
-    sailio.appendChild(rivi);
+    paikka.appendChild(ala);
+    palli.appendChild(paikka);
   });
+  sailio.appendChild(palli);
 
   /* Pisteraja lipun takana — ilman sitä luku ei kerro kuinka kaukana maali on. */
   const raja = document.createElement('div');
@@ -410,6 +439,52 @@ function piirraTulos() {
     jatko.setAttribute('aria-label', t(basso.voittaja === null && !tila.keskeytetty
       ? 'basso.seuraava' : 'tulos.uudelleen'));
   }
+  /* Viuhka mitoitetaan vasta kun ruutu on näkyvissä: piirto tapahtuu ennen
+   * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
+  requestAnimationFrame(bassoLevitaViuhkat);
+  if (k && k.voittaja === BASSO_IHMINEN) bassoKonfetti();
+}
+
+/* Kortit limittyvät vain sen verran kuin on pakko: pari korttia rinnakkain,
+ * neljätoista tiiviinä viuhkana askelman levyisenä. */
+function bassoLevitaViuhkat() {
+  [].forEach.call(document.querySelectorAll('#tulosPisteet .palli-kortit'), function (v) {
+    const kortit = v.children, n = kortit.length;
+    if (!n) return;
+    const leveys = v.getBoundingClientRect().width;
+    const kortti = kortit[0].getBoundingClientRect().width;
+    const askel = n > 1 ? Math.min(kortti + 3, (leveys - kortti) / (n - 1)) : 0;
+    const alku = (leveys - (kortti + askel * (n - 1))) / 2;
+    [].forEach.call(kortit, function (el, j) { el.style.left = (alku + askel * j).toFixed(1) + 'px'; });
+  });
+}
+window.addEventListener('resize', function () {
+  if (!document.getElementById('tulosRuutu').hidden) bassoLevitaViuhkat();
+});
+
+/* Konfetti täytteiden väreillä, kun SINÄ voitit kierroksen. Kerran, kevyesti.
+ * Liikettä vähentävä asetus → ei konfettia lainkaan. */
+function bassoKonfetti() {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ruutu = document.getElementById('tulosRuutu');
+  const vanha = ruutu.querySelector('.basso-konfetti');
+  if (vanha) vanha.remove();
+  const kerros = document.createElement('div');
+  kerros.className = 'basso-konfetti';
+  kerros.setAttribute('aria-hidden', 'true');
+  const varit = TAYTTEET.map(function (x) { return x.vari; });
+  for (let i = 0; i < 46; i++) {
+    const s = document.createElement('span');
+    s.style.left = (Math.random() * 100).toFixed(1) + '%';
+    s.style.background = varit[i % varit.length];
+    s.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's';
+    s.style.animationDuration = (2.2 + Math.random() * 1.4).toFixed(2) + 's';
+    s.style.setProperty('--kierto', (Math.random() * 720 - 360).toFixed(0) + 'deg');
+    s.style.setProperty('--sivu', (Math.random() * 120 - 60).toFixed(0) + 'px');
+    kerros.appendChild(s);
+  }
+  ruutu.appendChild(kerros);
+  setTimeout(function () { kerros.remove(); }, 4000);
 }
 
 /* Välähdys omalla kestollaan. peli.js:n valahda() pitää aina 900 ms, ja

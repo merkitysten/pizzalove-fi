@@ -47,38 +47,87 @@
   box-shadow:0 0 0 1px rgba(60,40,20,.25);
 }
 
-/* --- tulosruutu --- */
-#tulosPisteet .pisteet{position:relative}
-.basso-lisays{font-weight:700;color:var(--money);line-height:1}
-.basso-kruunu{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:24px}
-.basso-raja{display:flex;align-items:center;gap:6px;align-self:center;
-  font-size:18px;color:var(--himmea)}
-.basso-raja b{font-size:20px;color:var(--ink)}
-
 /* Sydänpizza on Partyssa 2 pistettä. Bassossa pizza ei anna pisteitä
  * (voittaja saa muiden käsikortit), joten merkki kertoisi väärin. */
 #pizzaSydan{display:none!important}
 
-/* --- tulosruutu: yksi keskitetty sarake (Marko 6.10.2026) ---
- * peli.css:n tulosruudulla ei ole omaa asettelua, joten leveällä näytöllä
- * ▶ jäi vasempaan laitaan ja pisteet keskelle. Bassossa kaikki on samassa
- * sarakkeessa, ja ▶ on heti tulosten alla. */
+/* --- TULOSRUUTU: kuosi + palkintopalli (Marko 6.10.2026) ---
+ * Täytekuosi on sama kuin pizzalove.fi:ssä (julkinen/kuosi.svg, sama koko ja
+ * peittävyys), ja tummassa teemassa se on pois kuten sivustollakin.
+ * peli.css:n tulosruudulla ei ole omaa asettelua (leveällä näytöllä ▶ jäi
+ * vasempaan laitaan), joten Bassossa kaikki on yhdessä keskitetyssä sarakkeessa. */
 #tulosRuutu:not([hidden]){display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:18px;min-height:100vh;min-height:100dvh}
-#tulosPisteet{flex-direction:column;align-items:stretch;gap:12px;margin:0;
-  width:min(100%, 560px)}
-.basso-tulos-rivi{display:flex;align-items:center;gap:12px;min-height:72px}
-.basso-tulos-rivi .pisteet.iso{flex:0 0 auto;min-width:92px;flex-direction:row;gap:8px;padding:8px 14px}
-.basso-tulos-rivi .pisteet.iso b{font-size:30px}
-.basso-tulos-rivi .pisteet.iso img{width:34px}
-.basso-jaaneet{display:flex;flex-wrap:wrap;gap:4px;flex:0 1 auto;min-width:0}
-.basso-minikortti{position:relative;width:50px;flex:0 0 auto}
-.basso-minikortti img{width:100%;display:block;border-radius:3px;
-  box-shadow:0 1px 3px rgba(60,40,20,.25)}
+  justify-content:center;gap:clamp(10px, 2.4vh, 22px);min-height:100vh;min-height:100dvh;
+  position:relative;overflow:hidden}
+#tulosRuutu::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.45}
+@media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
+#tulosRuutu > *{position:relative;z-index:1}
+#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100%, 620px)}
+
+.basso-palli{display:flex;align-items:stretch;justify-content:center;width:100%;gap:6px}
+.palli-paikka{flex:1 1 0;max-width:150px;min-width:0;display:flex;flex-direction:column;align-items:center}
+.palli-yla{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  gap:6px;padding-bottom:8px}
+.palli-yla .pisteet.iso{position:relative;flex-direction:row;gap:6px;padding:6px 12px;min-width:0;
+  background:var(--ground)}
+.palli-yla .pisteet.iso b{font-size:clamp(22px, 4vh, 30px)}
+.palli-yla .pisteet.iso img{width:clamp(26px, 5vh, 36px)}
+/* Askelma: 1. sija korkein ja brändioranssi, muut lämmintä sävyä. */
+.palli-askel{width:100%;display:flex;align-items:flex-start;justify-content:center;
+  border-radius:12px 12px 0 0;background:#F6D9BF;color:#9A4A0A;
+  box-shadow:inset 0 -6px 0 rgba(60,34,12,.08)}
+.palli-askel b{font-size:clamp(24px, 5vh, 40px);line-height:1;margin-top:8px}
+.sija-1 .palli-askel{height:clamp(84px, 17vh, 140px);background:var(--orange);color:#fff}
+.sija-2 .palli-askel{height:clamp(60px, 12vh, 100px)}
+.sija-3 .palli-askel{height:clamp(42px, 8.5vh, 72px)}
+.sija-4 .palli-askel{height:clamp(30px, 6vh, 50px)}
+.palli-lisays{font-size:clamp(22px, 4vh, 30px);color:#fff;background:var(--money);
+  padding:2px 12px;border-radius:12px;line-height:1.2;
+  animation:palli-pomppu .6s .2s cubic-bezier(.2,.9,.3,1.4) both}
+@keyframes palli-pomppu{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.basso-kruunu{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:26px;line-height:1}
+/* Kruunu tarvitsee tilansa: ilman tätä se osui «+N»-merkin päälle. */
+.palli-yla .pisteet.iso.voittaja{margin-top:22px}
+
+/* Jääneet kortit viuhkana askelman alla (sijainnit JS:stä). */
+.palli-ala{width:100%;min-height:calc(clamp(44px, 8vh, 58px) * 1.45 + 30px);
+  display:flex;flex-direction:column;align-items:center;padding-top:8px;
+  border-top:4px solid rgba(60,34,12,.18)}
+.palli-kortit{position:relative;width:100%;height:calc(clamp(44px, 8vh, 58px) * 1.45)}
+.basso-minikortti{position:absolute;top:0;left:0;width:clamp(44px, 8vh, 58px);
+  transform:rotate(var(--kulma, 0deg));transform-origin:50% 120%}
+.basso-minikortti img{width:100%;display:block;border-radius:4px;
+  box-shadow:0 1px 4px rgba(60,40,20,.3)}
 .basso-minikortti small{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
   background:var(--ink);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:0 4px}
-.basso-summa{flex:0 0 auto;font-size:24px;color:var(--ink);white-space:nowrap}
-.basso-tulos-rivi .basso-lisays{font-size:30px;margin:0}
-.basso-raja{justify-content:center;margin-top:4px}
+.basso-summa{font-size:clamp(18px, 3vh, 22px);color:var(--ink);white-space:nowrap;margin-top:6px}
+
+.basso-raja{display:flex;align-items:center;gap:6px;justify-content:center;
+  font-size:18px;color:var(--himmea)}
+.basso-raja b{font-size:20px;color:var(--ink)}
 .basso-tulos-napit{display:flex;align-items:center;gap:18px}
-.basso-tulos-napit .apinanappi.pieni{width:min(22vh,110px)}
+.basso-tulos-napit .apinanappi.pieni{width:clamp(80px, 15vh, 120px)}
+.basso-tulos-napit .kuvake-nappi{background:var(--ground)}
+
+/* Konfetti (vain kun sinä voitit kierroksen). */
+.basso-konfetti{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.basso-konfetti span{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;
+  animation:konfetti linear both}
+@keyframes konfetti{
+  from{transform:translate(0, 0) rotate(0)}
+  to{transform:translate(var(--sivu), 105vh) rotate(var(--kierto))}
+}
+
+/* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
+ * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Napit pallin
+ * oikealle puolelle ja välit tiiviimmiksi. */
+@media (max-height: 500px){
+  #tulosRuutu:not([hidden]){flex-direction:row;gap:28px;padding:8px 16px}
+  #tulosPisteet{width:min(68%, 560px);gap:4px}
+  .basso-tulos-napit{flex-direction:column;gap:12px}
+  .palli-yla{gap:3px;padding-bottom:4px}
+  .palli-yla .pisteet.iso.voittaja{margin-top:18px}
+  .palli-ala{padding-top:4px}
+  .basso-summa{margin-top:2px}
+}
