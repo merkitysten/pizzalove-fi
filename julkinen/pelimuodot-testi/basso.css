@@ -40,13 +40,6 @@
   @keyframes basso-hiljaa{0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0}}
 }
 
-/* --- pelaajalaatikot: luku on korttien määrä, symbolina kortin selkä --- */
-.basso-kortit{display:inline-flex;align-items:center;gap:.18em}
-.basso-kortit::before{
-  content:'';display:inline-block;width:.5em;height:.72em;border-radius:.08em;
-  background:url('kuvat/tausta-tayte.webp?v=20260910a') center/cover;
-  box-shadow:0 0 0 1px rgba(60,40,20,.25);
-}
 
 /* Sydänpizza on Partyssa 2 pistettä. Bassossa pizza ei anna pisteitä
  * (voittaja saa muiden käsikortit), joten merkki kertoisi väärin. */
@@ -127,7 +120,6 @@
 
 /* Pelaajarivi: Partyn moninpelin täytetty laatikko, luku valkoisena. */
 .pelaajanappi.basso-pelaaja{cursor:default}
-.pelaajanappi.basso-pelaaja .basso-kortit::before{box-shadow:0 0 0 1px rgba(255,255,255,.8)}
 
 /* Asetukset: neljä värivaihtoehtoa hahmoina. */
 /* Kymmenen väriä Merkitysten järjestyksessä 1–10, viisi per rivi. */

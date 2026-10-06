@@ -227,6 +227,7 @@ const KIELET = {
     'valikko.alkuun':         'Alkuvalikkoon',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAA!',
+    'basso.sina':             'Sinä',
     'as.vari':                'Oma väri',
     'basso.vari':             'Väri {n}',
     'selite.vari':            'Sinäkin olet Basso-apina. Valitse oma värisi – muut apinat saavat loput värit, ja niistä tunnistat kuka juoksee missäkin.',
@@ -414,6 +415,7 @@ const KIELET = {
     'valikko.alkuun':         'Till startmenyn',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'basso.sina':             'Du',
     'as.vari':                'Din färg',
     'basso.vari':             'Färg {n}',
     'selite.vari':            'Du är också en Basso-apa. Välj din färg – de andra aporna får de övriga färgerna, så att du ser vem som springer var.',
@@ -599,6 +601,7 @@ const KIELET = {
     'valikko.alkuun':         'Main menu',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'basso.sina':             'You',
     'as.vari':                'Your colour',
     'basso.vari':             'Colour {n}',
     'selite.vari':            'You are a Basso monkey too. Pick your colour – the other monkeys get the remaining colours, so you can tell who is running where.',
@@ -784,6 +787,7 @@ const KIELET = {
     'valikko.alkuun':         'Zum Startmenü',
     /* --- Pizza Basso (basso.html, kokeilu 6.10.2026) --- */
     'basso.pizzaa':           'PIZZAAA!',
+    'basso.sina':             'Du',
     'as.vari':                'Deine Farbe',
     'basso.vari':             'Farbe {n}',
     'selite.vari':            'Du bist auch ein Basso-Affe. Wähle deine Farbe – die anderen Affen bekommen die übrigen Farben, damit du siehst, wer wo läuft.',

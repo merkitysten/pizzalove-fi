@@ -357,10 +357,13 @@ function bassoMitoitaKasi() {
 }
 window.addEventListener('resize', function () { if (basso && tila.pizza) bassoMitoitaKasi(); });
 
-/* Laatikko per pelaaja: hahmo omalla värillään ja KORTTIEN MÄÄRÄ kädessä,
- * koska se on Bassossa se kilpa (ensimmäinen tyhjä käsi voittaa). Pisteet
- * näkyvät kierroksen lopussa juoksukilpailuna. Vuorossa oleva nostetaan.
- * Oma laatikko on aina ensimmäinen: väri on ainoa ero apinoihin. */
+/* Laatikko per pelaaja: hahmo omalla värillään. Vuorossa oleva nostetaan.
+ * Oma laatikko on aina ensimmäinen: väri on ainoa ero apinoihin.
+ *
+ * 🔵 EI KORTTIEN MÄÄRÄÄ (Marko 6.10.2026): *«Pelaajakuvakkeessa ei tarvitse
+ * näkyä sitä korttien lukumäärää, koska se pizzan huutaminen on juuri se
+ * merkki, että on enää yksi kortti kädessä.»* Määrä jää ruudunlukijalle
+ * aria-labeliin, koska sitä ei muuten kuule mistään. */
 function piirraPelaajat() {
   const rivi = document.getElementById('pelaajarivi');
   if (!rivi || !basso || !basso.kierros) return;
@@ -375,16 +378,14 @@ function piirraPelaajat() {
       el.className = 'pelaajanappi basso-pelaaja' + (i === BASSO_IHMINEN ? ' oma' : '');
       el.style.setProperty('--pelaaja-vari', varit[i]);
       el.style.color = bassoTekstiVari(varit[i]);
-      el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">' +
-        '<b class="pelaajanappi-pisteet basso-kortit">0</b>';
+      el.innerHTML = '<img src="kuvat/apina.webp?v=20260910a" alt="">';
       rivi.appendChild(el);
     });
   }
   [].forEach.call(rivi.children, function (el, i) {
     const n = k.kasit[i].length;
-    el.querySelector('.pelaajanappi-pisteet').textContent = n;
     el.classList.toggle('vuorossa', k.voittaja === null && k.vuorossa === i);
-    const kuka = i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: i });
+    const kuka = i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: i });
     el.setAttribute('aria-label', kuka + ': ' + t('basso.kortteja', { n: n }) +
       (k.vuorossa === i && i === BASSO_IHMINEN ? ' · ' + t('basso.sinunVuoro') : ''));
   });
@@ -446,7 +447,7 @@ function piirraTulos() {
     hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
     hahmo.innerHTML = (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
       bassoHahmo(varit[r.i]);
-    const kuka = r.i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: r.i });
+    const kuka = r.i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: r.i });
     hahmo.setAttribute('aria-label', kuka + ': ' + r.sija + '.');
     yla.appendChild(hahmo);
     paikka.appendChild(yla);
@@ -513,7 +514,7 @@ function bassoPiirraKisa(varit) {
     const rata = document.createElement('div');
     rata.className = 'kisa-rata' + (i === BASSO_IHMINEN ? ' oma' : '') + (nyt >= 1 ? ' maalissa' : '');
     rata.style.setProperty('--pelaaja-vari', varit[i]);
-    const kuka = i === BASSO_IHMINEN ? t('pisteet.omat') : t('basso.apina', { n: i });
+    const kuka = i === BASSO_IHMINEN ? t('basso.sina') : t('basso.apina', { n: i });
     rata.setAttribute('aria-label', kuka + ': ' + p.pisteet + ' / ' + tavoite);
     rata.innerHTML = '<span class="kisa-palkki"></span>' +
       '<span class="kisa-juoksija">' + bassoHahmo(varit[i]) + '<b>' + p.pisteet + '</b></span>';
