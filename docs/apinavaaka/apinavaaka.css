@@ -6,17 +6,19 @@
 .av button{font:inherit;color:inherit}
 
 /* yläpalkki */
-.av__ylapalkki{display:grid;grid-template-columns:56px 1fr 84px;align-items:center;height:80px;margin-bottom:14px}
+.av__ylapalkki{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;height:64px;margin-bottom:-58px;pointer-events:none}
+.av__ylapalkki>*{pointer-events:auto}
+.av__nopparivi{display:flex;justify-content:center;margin:-6px 0 -10px;position:relative;z-index:4}
 .av__info{position:relative;width:48px;height:48px;border-radius:50%;border:0;padding:0;cursor:pointer;
   background:var(--warm,#FFF3E9);box-shadow:inset 0 0 0 2px var(--line,#E7DCCA)}
 .av__info img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
 .av__info span{position:absolute;right:-3px;top:-3px;width:20px;height:20px;border-radius:50%;background:var(--orange,#F47920);
   color:#1A1A1A;font-weight:800;font-size:13px;line-height:20px;text-align:center}
-.av__pisteet{display:flex;justify-content:center;gap:7px}
+.av__pisteet{display:flex;justify-content:flex-end;gap:6px;width:110px}
 .av__pisteet i{width:10px;height:10px;border-radius:50%;background:var(--line,#E7DCCA);transition:background .3s,transform .3s}
 .av__pisteet i.nyt{background:var(--orange,#F47920);transform:scale(1.3)}
 .av__pisteet i.tehty{background:var(--green,#2D5D3D)}
-.av__noppa{justify-self:end;border:0;background:none;padding:0;cursor:pointer;border-radius:16px}
+.av__noppa{border:0;background:none;padding:0;cursor:pointer;border-radius:16px}
 .av__noppa:disabled{cursor:default}
 .av__d10{display:block;width:80px;height:76px}
 .av__noppa--odottaa .av__d10{animation:av-kutsu 1.8s ease-in-out infinite}
@@ -78,13 +80,14 @@
 
 /* varasto ja linjasto */
 .av__hyllyt{display:grid;gap:10px}
-.av__hylly{background:var(--warm,#FFF3E9);border-radius:14px;padding:8px 8px 6px}
-.av__hylly--linjasto{background:var(--greenTint,#DCEBE0)}
+.av__hylly{position:relative;background:#F1EBBC;border-radius:14px;padding:8px 8px 6px}   /* pelilaudan keltainen */
+.av__hylly--linjasto{background:#CDE9F0}   /* pelilaudan vaaleansininen */
 .av--havikki .av__hylly--linjasto{box-shadow:inset 0 0 0 2px var(--orange,#F47920)}
-.av__hylly-nimi{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--soft,#6E6357);margin:0 0 0 4px;line-height:1.4}
+.av__hylly-nimi{position:absolute;left:12px;top:7px;z-index:3;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#6B6438;line-height:1.4}
+.av__hylly--linjasto .av__hylly-nimi{color:#4E6670}
 .av__hylly-nimi b{color:var(--ink,#1A1A1A);margin-left:3px}
 .av__paikat{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;align-items:end;--pala:4px}
-.av__paikka{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:66px}
+.av__paikka{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:72px}
 .av__paikka small{font-size:10.5px;font-weight:700;color:var(--soft,#6E6357);line-height:1.2}
 .av__paikka--tyhja::before{content:"";display:block;width:16px;height:4px;border-radius:3px;border:1px dashed var(--line2,#D6C7AF);margin-bottom:2px}
 .av__hylly-torni{display:flex;width:100%;justify-content:center;padding:3px 0 2px;border:0;background:none;cursor:pointer;border-radius:8px}
@@ -145,9 +148,8 @@
 .av__loppu.voitto{background:#FFF6D6;box-shadow:0 0 0 4px #FFDF00,0 10px 30px rgba(60,30,0,.3)}
 
 /* apinat-tilassa tiiviimpi, jotta korttirivi mahtuu samalle ruudulle */
-.av--apinat .av__ylapalkki{margin-bottom:4px}
+
 .av--apinat .av__rivi{height:46px;margin:6px 0 8px}
-.av--apinat .av__paikka{min-height:56px}
 
 /* täytteen tarra tornin päällä */
 .av__tarra{display:block;width:calc(var(--leveys)*.8);height:calc(var(--leveys)*.8);border-radius:50%;
@@ -156,7 +158,6 @@
 .av__hylly-torni .av__tarra{width:20px;height:20px;margin-bottom:-3px;box-shadow:0 0 0 1.5px #fff,0 1px 2px rgba(0,0,0,.3)}
 .av__kortti-pizza i{display:grid;place-items:center;width:34px;height:34px}
 .av__kortti-pizza i img{width:66%;height:66%;object-fit:contain}
-.av--apinat .av__paikka{min-height:64px}
 .av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--green,#2D5D3D),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av--apinat .av__kortit--valinta{grid-template-columns:repeat(auto-fit,38px);gap:8px;min-height:64px;align-content:center}
 .av__valinta{border:0;background:none;padding:0;cursor:pointer;--leveys:40px;--pala:8px;animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
@@ -166,17 +167,17 @@
 
 /* linjasto: täytekulhot – takaosa, torni ja etuosa päällekkäin, jolloin torni on kulhon sisällä */
 .av__hylly--linjasto .av__paikka{min-height:0;justify-content:flex-end}
-.av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:64px}
+.av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:40px}
 .av__kulho img{position:absolute;left:0;top:0;width:100%;height:auto;pointer-events:none}
 .av__kulho-takana{z-index:0}.av__kulho-edessa{z-index:2}
 .av__kulho .av__hylly-torni{position:absolute;left:50%;bottom:80%;transform:translateX(-50%);z-index:1;width:auto;padding:0}
 .av__hylly--linjasto .av__paikka--tyhja::before{display:none}
 
-/* Nälkäiset apinat: liukuhihna ja uuni */
+/* Nälkäiset apinat: liukuhihna kulkee uunin läpi, molemmat linjaston taustalla */
 .av__tuotanto{display:none}
-.av--apinat .av__tuotanto{display:block;position:relative;padding-right:58px;margin:0}
+.av--apinat .av__tuotanto{display:block;position:relative;margin:6px -2px 0}
 .av__hihna{display:block;width:100%;height:auto;position:relative;z-index:1}
-.av__uuni{position:absolute;right:-4px;bottom:0;width:66px;z-index:3;transform-origin:50% 100%}
+.av__uuni{position:absolute;right:2px;bottom:-2px;width:54px;z-index:3;transform-origin:50% 100%}
 .av__uuni--paistaa{animation:av-uuni .5s ease-in-out 2}
 @keyframes av-uuni{50%{transform:scale(1.08);filter:brightness(1.15) saturate(1.3)}}
 .av__kortti--paistuu{pointer-events:none;z-index:4}
