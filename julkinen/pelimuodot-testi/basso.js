@@ -686,8 +686,9 @@ function piirraTulos() {
   const jatko = document.getElementById('uudelleen');
   /* Verkossa seuraavan kierroksen jakaa perustaja; muut odottavat ⏳. */
   const odota = document.getElementById('bassoOdota');
-  if (jatko) jatko.hidden = !!bassoVerkossa && !bassoVerkossa.perustaja;
-  if (odota) odota.hidden = !bassoVerkossa || bassoVerkossa.perustaja;
+  const odottaa = !!bassoVerkossa && !bassoVerkossa.perustaja && basso.voittaja === null;
+  if (jatko) jatko.hidden = odottaa;
+  if (odota) odota.hidden = !odottaa;
   if (jatko) {
     jatko.setAttribute('aria-label', t(basso.voittaja === null && !tila.keskeytetty
       ? 'basso.seuraava' : 'tulos.uudelleen'));
@@ -699,20 +700,32 @@ function piirraTulos() {
   /* Verkossa kaikki ovat ihmisiä: konfetti vain omalle voitolle. */
   if (k && k.voittaja !== null && (bassoVerkossa ? k.voittaja === bassoVerkossa.oma
     : bassoOnIhminen(k.voittaja))) bassoKonfetti();
-  /* Ottelun voitto: juhla kerran per ottelu — piirraTulos ajetaan myös
-   * värin vaihdossa, eikä juhla saa toistua siitä. */
-  if (basso.voittaja !== null && !basso.juhlittu) {
-    basso.juhlittu = true;
-    bassoJuhla(varit);
-  }
-  /* Syöty pala ei palaa maaliin, vaikka ruutu piirretään uudelleen. */
-  if (basso.juhlittu) document.getElementById('bassoKisa').classList.add('syoty');
+  /* ⚠️ VOITTORUUTU EI AVAUDU ITSESTÄÄN (Marko 7.10.2026: «Se tulosruutu meni
+   * aivan liian nopeasti, jotta sitä olisi ehtinyt katsoa — — Tulosruutu
+   * voisi mennä pois vasta ruutua napauttamalla»). Ennen juhla peitti
+   * tulosruudun 1,9 s:n jälkeen. Nyt napautus vie eteenpäin: ks.
+   * bassoTulosEteenpain. */
 }
 
-/* OTTELUN VOITTO (Marko 6.10.2026): Basso syö maalin pizzapalan, tausta on
- * voittajan värinen — siitä voittajan tunnistaa ilman tekstiä. Avautuu kun
- * juoksija on ehtinyt maaliin (kisan viive 450 ms + liike 1 300 ms). */
-const BASSO_JUHLA_VIIVE = 1900;
+/* Tulosruudun napautus (missä tahansa, ⚙ pois lukien) tai ▶:
+ *   kierros päättyi   → seuraava kierros (verkossa jakaa perustaja)
+ *   ottelu päättyi    → voittoruutu; sen napautus → uusi ottelu */
+function bassoTulosEteenpain() {
+  if (!basso || document.getElementById('tulosRuutu').hidden) return;
+  if (!document.getElementById('bassoJuhla').hidden) return;
+  if (basso.voittaja !== null && !tila.keskeytetty) return bassoJuhla(bassoVarit());
+  bassoSeuraava();
+}
+
+function bassoSeuraava() {
+  if (bassoVerkossa) return bassoVerkossa.seuraava();     // vain perustaja jakaa
+  if (!basso || basso.voittaja !== null || tila.keskeytetty) return aloitaPeli();
+  bassoAloitaKierros();
+}
+
+/* OTTELUN VOITTO: voittajan oma hahmo pizza suussa, tausta voittajan
+ * värinen. Avautuu tulosruudun napautuksesta, ja maalin pizzapala on
+ * silloin syöty. */
 function bassoJuhla(varit) {
   const el = document.getElementById('bassoJuhla');
   if (!el) return;
@@ -743,19 +756,23 @@ function bassoJuhla(varit) {
       muut.appendChild(li);
     });
   el.setAttribute('aria-label', bassoNimi(v) + ': ' + basso.pelaajat[v].pisteet + ' · ' + t('tauko.jatka'));
-  setTimeout(function () {
-    if (document.getElementById('tulosRuutu').hidden) return;   // jo jatkettu
-    el.hidden = false;
-    el.classList.remove('nakyy');
-    void el.offsetWidth;
-    el.classList.add('nakyy');
-    bassoHuuto();
-    el.focus();
-  }, BASSO_JUHLA_VIIVE);
+  el.hidden = false;
+  el.classList.remove('nakyy');
+  void el.offsetWidth;
+  el.classList.add('nakyy');
+  bassoHuuto();
+  el.focus();
+  document.getElementById('bassoKisa').classList.add('syoty');   // pala syöty
 }
 function bassoJuhlaKiinni() {
   const el = document.getElementById('bassoJuhla');
   if (el) { el.hidden = true; el.classList.remove('nakyy'); }
+}
+/* Voittoruudun napautus: uusi ottelu (verkossa perustajan laite jakaa; muut
+ * palaavat tulosruutuun odottamaan ⏳). */
+function bassoJuhlaNapautus() {
+  bassoJuhlaKiinni();
+  bassoSeuraava();
 }
 
 /* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
@@ -1053,20 +1070,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const juhla = document.getElementById('bassoJuhla');
   if (juhla) {
-    juhla.addEventListener('click', bassoJuhlaKiinni);
+    juhla.addEventListener('click', bassoJuhlaNapautus);
     juhla.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { e.preventDefault(); bassoJuhlaKiinni(); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bassoJuhlaNapautus(); }
+      if (e.key === 'Escape') { e.preventDefault(); bassoJuhlaKiinni(); }
     });
   }
 
   /* ▶ tulosruudussa: seuraava kierros, tai uusi ottelu jos edellinen
    * päättyi tai keskeytettiin. */
   const jatko = document.getElementById('uudelleen');
-  if (jatko) jatko.onclick = function () {
-    if (bassoVerkossa) return bassoVerkossa.seuraava();
-    if (!basso || basso.voittaja !== null || tila.keskeytetty) return aloitaPeli();
-    bassoAloitaKierros();
-  };
+  if (jatko) jatko.onclick = function (e) { e.stopPropagation(); bassoTulosEteenpain(); };
+  /* Koko tulosruutu on napautettava (Marko 7.10.2026). ⚙ ja muut napit
+   * hoitavat itsensä eivätkä vie eteenpäin. */
+  const tulosRuutu = document.getElementById('tulosRuutu');
+  if (tulosRuutu) tulosRuutu.addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input')) return;
+    bassoTulosEteenpain();
+  });
 
   /* ⌂-napit (tulos ja tauko) ovat basso.html:ssä piilossa: Bassolla ei ole
    * omaa valikkoa, ja Partyn valikkoon vievä nappi heitti pelaajan pois

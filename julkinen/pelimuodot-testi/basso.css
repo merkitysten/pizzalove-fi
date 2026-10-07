@@ -247,17 +247,23 @@
   .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-hahmo .basso-hahmo, .basso-juhla.nakyy .basso-juhla-muut li{animation:none}
 }
 /* Pizzaa syövä hahmo: ympyrä rajaa sivut ja alaosan, tukka nousee yli.
- * Kehys on ympyrää 25 % korkeampi (top:-25 %), joten ympyrän keskipiste on
- * 0,75 / 1,25 = 60 % kehyksen korkeudesta. Maski = ympyrä ∪ kehyksen yläosa
- * keskipisteeseen asti. Tukan vaatima tila varataan marginaalilla, ettei se
- * osu yläpuolella olevaan nimeen tai «+N»-merkkiin. */
-.basso-hahmo.syo{position:relative;overflow:visible;margin-top:calc(var(--koko) * .25)}
-.basso-hahmo.syo .syo-kehys{position:absolute;left:0;right:0;bottom:0;top:-25%;
-  -webkit-mask:radial-gradient(circle at 50% 60%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
-    linear-gradient(#000, #000) top / 100% 60% no-repeat;
-          mask:radial-gradient(circle at 50% 60%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
-    linear-gradient(#000, #000) top / 100% 60% no-repeat}
-.basso-hahmo.syo img{position:absolute;top:0;left:0;width:100%;height:auto;max-width:none}
+ * 🔵 Marko 7.10.2026: «apina saisi olla hiukan vieläkin isompi — ruokalappu
+ * leikkaantuu kevyesti alhaalta — kädet saa rajautua myös enemmän. Näin se
+ * pizza tulee isommaksi keskellä.» → kuva 125 % ympyrän leveydestä, pizza
+ * ympyrän keskelle. Laskettu kuvan mitoista (438 × 520; pizza ~58 %, tukan
+ * latva ~6 %, ruokalapun alareuna ~90 % kuvan korkeudesta):
+ *   kuvan korkeus 1,48 D; kuvan yläreuna 0,36 D ympyrän yläpuolella
+ *   → pizza 0,50 D (keskellä), ruokalappu 0,97 D (leikkautuu kevyesti),
+ *     tukka 0,27 D ympyrän yläpuolella.
+ * Kehys on siksi 30 % ympyrää korkeampi; ympyrän keskipiste on
+ * 0,80 / 1,30 = 61,5 % kehyksen korkeudesta. Tukan tila varataan marginaalilla. */
+.basso-hahmo.syo{position:relative;overflow:visible;margin-top:calc(var(--koko) * .30)}
+.basso-hahmo.syo .syo-kehys{position:absolute;left:0;right:0;bottom:0;top:-30%;
+  -webkit-mask:radial-gradient(circle at 50% 61.5%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 61.5% no-repeat;
+          mask:radial-gradient(circle at 50% 61.5%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 61.5% no-repeat}
+.basso-hahmo.syo img{position:absolute;top:calc(var(--koko) * -.06);left:-12.5%;width:125%;height:auto;max-width:none}
 /* Maalin pala on syöty ottelun voiton jälkeen. */
 .basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
   transition:opacity .4s, transform .4s}
