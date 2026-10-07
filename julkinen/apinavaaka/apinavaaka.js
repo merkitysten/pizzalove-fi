@@ -116,6 +116,71 @@
     }
   };
 
+
+  // ---------------------------------------------------------------- vinkit valikossa (pelimuodon mukaan)
+  var TAVAT_DL = {
+    fi: ['Perussiirto', 'Summasiirto', 'Erotussiirto'], sv: ['Basflytt', 'Summaflytt', 'Skillnadsflytt'],
+    en: ['Basic move', 'Sum move', 'Difference move'], de: ['Grundzug', 'Summenzug', 'Differenzzug']
+  };
+  var VINKIT = {
+    fi: {
+      valikko: 'Valikko', vinkit: 'Vinkit', muodot: 'Pelimuodot',
+      nimet: { harjoitus: 'Harjoittele', vapaa: 'Vapaa peli', apinat: 'Nälkäiset apinat' },
+      harjoitus: ['Heitä noppaa. Punnukset tulevat apinan vasempaan käteen.', 'Napauta varaston torneja. Tee tornit yhtä korkeiksi.',
+        'Kun lamppu syttyy ja kieli osoittaa =, vie tornit linjastolle.', 'Torni liikkuu aina kokonaisena: tornin korkeus on täytteen luku.'],
+      vapaa: ['Linjasto täyttyy heitto heitolta. Siirto onnistuu aina – etsi se!',
+        '<b>Hävikki:</b> jos noppa näyttää enemmän kuin varastossa on, tornit viedään linjastolta varastoon.', '<b>Pizzapartyt:</b> kun linjasto on täynnä!'],
+      apinat: ['Pelatkaa yhdessä: kaikki palat menevät yhteiseen boksiin oikeassa yläkulmassa.',
+        'Katso ensin pizzoja: valitse siirto, joka tuo pizzan täytteen kulhoon.',
+        'Kun täyte on kulhossa, napauta pizzaa. Se paistuu uunissa ja pala menee boksiin.',
+        'Kun vuorolla on jo tehty pizza, toisen voi jättää odottamaan.',
+        'Kalapizza (10) on sydänpizza: saat valita lisäpalan.',
+        'Jos vuorolla ei synny pizzaa, nälkäiset apinat syövät palat ja peli päättyy.']
+    },
+    sv: {
+      valikko: 'Meny', vinkit: 'Tips', muodot: 'Spellägen',
+      nimet: { harjoitus: 'Träna', vapaa: 'Fritt spel', apinat: 'Hungriga apor' },
+      harjoitus: ['Kasta tärningen. Vikterna hamnar i apans vänstra hand.', 'Tryck på tornen i lagret. Gör tornen lika höga.',
+        'När lampan tänds och tungan pekar på =, flytta tornen till linjen.', 'Ett torn flyttas alltid helt: tornets höjd är fyllningens tal.'],
+      vapaa: ['Linjen fylls kast för kast. Det finns alltid en flytt – hitta den!',
+        '<b>Svinn:</b> om tärningen visar mer än lagret flyttas torn från linjen till lagret.', '<b>Pizzaparty:</b> när linjen är full!'],
+      apinat: ['Spela tillsammans: alla bitar hamnar i den gemensamma boxen uppe till höger.',
+        'Titta först på pizzorna: välj en flytt som för pizzans fyllning till skålen.',
+        'När fyllningen är i skålen, tryck på pizzan. Den gräddas i ugnen och biten hamnar i boxen.',
+        'När ni redan gjort en pizza på turen kan nästa få vänta.',
+        'Fiskpizzan (10) är en hjärtpizza: ni får välja en extrabit.',
+        'Om det inte blir någon pizza på en tur äter de hungriga aporna upp bitarna och spelet tar slut.']
+    },
+    en: {
+      valikko: 'Menu', vinkit: 'Tips', muodot: 'Game modes',
+      nimet: { harjoitus: 'Practise', vapaa: 'Free play', apinat: 'Hungry monkeys' },
+      harjoitus: ['Roll the dice. The weights go to the monkey’s left hand.', 'Tap the towers in the storage. Make the towers equally high.',
+        'When the lamp lights up and the tongue points to =, move the towers to the line.', 'A tower always moves as a whole: its height is the topping’s number.'],
+      vapaa: ['The line fills up roll by roll. There is always a move – find it!',
+        '<b>Food waste:</b> if the dice shows more than the storage holds, towers go from the line to the storage.', '<b>Pizza party:</b> when the line is full!'],
+      apinat: ['Play together: all slices go into the shared box in the top corner.',
+        'Look at the pizzas first: choose a move that brings a pizza’s topping into its bowl.',
+        'When the topping is in the bowl, tap the pizza. It bakes in the oven and the slice goes into the box.',
+        'Once you have made a pizza on your turn, the next one can wait.',
+        'The fish pizza (10) is a heart pizza: choose an extra slice.',
+        'If no pizza is made on a turn, the hungry monkeys eat the slices and the game ends.']
+    },
+    de: {
+      valikko: 'Menü', vinkit: 'Tipps', muodot: 'Spielarten',
+      nimet: { harjoitus: 'Üben', vapaa: 'Freies Spiel', apinat: 'Hungrige Affen' },
+      harjoitus: ['Würfle. Die Gewichte kommen in die linke Hand des Affen.', 'Tippe auf die Türme im Lager. Mach die Türme gleich hoch.',
+        'Wenn die Lampe leuchtet und die Zunge auf = zeigt, bring die Türme auf die Linie.', 'Ein Turm bewegt sich immer ganz: seine Höhe ist die Zahl der Zutat.'],
+      vapaa: ['Die Linie füllt sich Wurf für Wurf. Es gibt immer einen Zug – finde ihn!',
+        '<b>Verschwendung:</b> zeigt der Würfel mehr als das Lager, gehen Türme von der Linie ins Lager.', '<b>Pizzaparty:</b> wenn die Linie voll ist!'],
+      apinat: ['Spielt zusammen: alle Stücke kommen in die gemeinsame Box oben rechts.',
+        'Schaut zuerst auf die Pizzen: wählt einen Zug, der die Zutat einer Pizza in ihre Schüssel bringt.',
+        'Liegt die Zutat in der Schüssel, tippt auf die Pizza. Sie backt im Ofen und das Stück kommt in die Box.',
+        'Habt ihr in eurem Zug schon eine Pizza gebacken, darf die nächste warten.',
+        'Die Fischpizza (10) ist eine Herzpizza: ihr dürft ein Extrastück wählen.',
+        'Entsteht in einem Zug keine Pizza, essen die hungrigen Affen die Stücke und das Spiel ist vorbei.']
+    }
+  };
+
   // ---------------------------------------------------------------- harjoitustehtävät
   // linjasto = täytteet, jotka ovat alussa linjastolla. Tämän jälkeen vapaa peli,
   // jossa varasto ja linjasto jatkuvat kierroksesta toiseen. Siirto onnistuu aina
@@ -158,8 +223,9 @@
     var ylapalkki = el('div', 'av__ylapalkki');
     var infoNappi = el('button', 'av__info');
     infoNappi.type = 'button';
-    infoNappi.setAttribute('aria-label', t.ohjeet);
-    infoNappi.innerHTML = '<img src="' + KANSIO + 'basso-paa.webp" alt=""><span aria-hidden="true">?</span>';
+    infoNappi.setAttribute('aria-label', (VINKIT[kieli] || VINKIT.en).valikko);
+    // Markon miettivä apina: kasvot ympyrässä, tukka ja kyynärpää tulevat ympyrän yli
+    infoNappi.innerHTML = '<img src="' + KANSIO + 'basso-nappi.webp" alt=""><span class="av__info-merkki" aria-hidden="true"><i></i><i></i><i></i></span>';
     var pisteet = el('div', 'av__pisteet');
     var boksiEl = el('div', 'av__boksi');          // Nälkäiset apinat: yhteinen boksi (10 palaa)
     boksiEl.setAttribute('role', 'img');
@@ -234,24 +300,36 @@
     ikkuna.hidden = true;
     ikkuna.setAttribute('role', 'dialog');
     ikkuna.setAttribute('aria-modal', 'true');
+    var vk = VINKIT[kieli] || VINKIT.en, tavat = TAVAT_DL[kieli] || TAVAT_DL.en;
     ikkuna.innerHTML = '<div class="av__ikkuna-sisus"><img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
-      t.info + t.infoA + '<div class="av__ikkuna-napit"></div><button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
+      '<div class="av__vinkit"></div><h3 class="av__muodot-otsikko">' + vk.muodot + '</h3><div class="av__ikkuna-napit"></div>' +
+      '<button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
     juuri.appendChild(ikkuna);
-    var ikkunaNapit = ikkuna.querySelector('.av__ikkuna-napit');
+    var ikkunaNapit = ikkuna.querySelector('.av__ikkuna-napit'), vinkitEl = ikkuna.querySelector('.av__vinkit');
+    function nykyMuoto() { return tila.muoto === 'apinat' ? 'apinat' : tila.nro >= TEHTAVAT.length ? 'vapaa' : 'harjoitus'; }
+    function taytaVinkit() {
+      var m = nykyMuoto(), h = '<h2>' + vk.vinkit + ': ' + vk.nimet[m] + '</h2><ul>';
+      vk[m].forEach(function (x) { h += '<li>' + x + '</li>'; });
+      h += '</ul>';
+      if (m !== 'apinat') h += '<dl class="av__tavat"><dt>A</dt><dd>' + tavat[0] + ' <b>3 = 3</b></dd><dt>B</dt><dd>' + tavat[1] +
+        ' <b>1 + 2 = 3</b></dd><dt>C</dt><dd>' + tavat[2] + ' <b>5 − 2 = 3</b></dd></dl>';
+      vinkitEl.innerHTML = h;
+      Array.prototype.forEach.call(ikkunaNapit.children, function (b) { b.classList.toggle('av__muoto--nyt', b.getAttribute('data-muoto') === m); });
+    }
     function nappi(kohde, teksti, luokka, f) {
       var x = el('button', 'nappi' + (luokka ? ' ' + luokka : ''), teksti);
       x.type = 'button'; x.addEventListener('click', f); kohde.appendChild(x);
       return x;
     }
-    function avaa() { ikkuna.hidden = false; ikkuna.querySelector('.av__sulje').focus(); }
+    function avaa() { taytaVinkit(); ikkuna.hidden = false; ikkuna.querySelector('.av__sulje').focus(); }
     function sulje() { ikkuna.hidden = true; infoNappi.focus(); }
     infoNappi.addEventListener('click', avaa);
     ikkuna.querySelector('.av__sulje').addEventListener('click', sulje);
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
-    nappi(ikkunaNapit, t.harjoittele, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; tila.nro = 0; aloita(TEHTAVAT[0]); });
-    nappi(ikkunaNapit, t.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); });
-    nappi(ikkunaNapit, t.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); });
+    nappi(ikkunaNapit, vk.nimet.harjoitus, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; tila.nro = 0; aloita(TEHTAVAT[0]); }).setAttribute('data-muoto', 'harjoitus');
+    nappi(ikkunaNapit, vk.nimet.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); }).setAttribute('data-muoto', 'vapaa');
+    nappi(ikkunaNapit, vk.nimet.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); }).setAttribute('data-muoto', 'apinat');
 
     // --- täytteen tarra: värillinen ympyrä, valkoinen reuna ja Markon täytekuva (tayte/1–10.webp)
     function tarra(luku) {
