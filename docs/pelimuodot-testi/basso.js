@@ -179,6 +179,16 @@ function bassoHahmo(vari, luokka) {
     '"><img src="kuvat/apina.webp?v=20260910a" alt=""></span>';
 }
 
+/* OTTELUN VOITTAJA: sama hahmo omalla värillään, mutta pizza suussa (Marko
+ * 7.10.2026: «koska minä voitin, niin minulla on pizzaa suussa»). Kuva on
+ * pizzalove.fi:n basso-syo.webp rajattuna samaan ympyrään kuin muut hahmot,
+ * joten väri tunnistaa pelaajan kuten kaikkialla muualla. Korvaa kruunun,
+ * joka oli emoji eikä Pizza Loven piirrosjälkeä («kruunu on mauton»). */
+function bassoSyoHahmo(vari, luokka) {
+  return '<span class="basso-hahmo syo' + (luokka ? ' ' + luokka : '') + '" style="--pelaaja-vari:' + vari +
+    '"><img src="kuvat/basso-syo.webp?v=20261006a" alt=""></span>';
+}
+
 /* ⚠️ KORVAA peli.js:n tallennuksen. Alkuperäinen kirjoittaa KOKO Partyn
  * asetusolion `tila`sta — ja Bassossa `tila.apinanTapa` on aina tosi, joten
  * yksikin kielen vaihto Bassossa olisi kääntänyt Partyn «Vaikeampi»-tilan
@@ -622,8 +632,7 @@ function piirraTulos() {
      * eikä samaa lukua näytetä kahdesti. */
     const hahmo = document.createElement('div');
     hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
-    hahmo.innerHTML = (basso.voittaja === r.i ? '<span class="basso-kruunu" aria-hidden="true">👑</span>' : '') +
-      bassoHahmo(varit[r.i]) +
+    hahmo.innerHTML = (basso.voittaja === r.i ? bassoSyoHahmo(varit[r.i]) : bassoHahmo(varit[r.i])) +
       (bassoOmaNimi(r.i) ? '<small class="palli-nimi"></small>' : '');
     if (bassoOmaNimi(r.i)) hahmo.querySelector('.palli-nimi').textContent = bassoOmaNimi(r.i);
     const kuka = bassoNimi(r.i);
@@ -683,7 +692,7 @@ function piirraTulos() {
    * värin vaihdossa, eikä juhla saa toistua siitä. */
   if (basso.voittaja !== null && !basso.juhlittu) {
     basso.juhlittu = true;
-    bassoJuhla(varit[basso.voittaja], bassoOmaNimi(basso.voittaja));
+    bassoJuhla(varit);
   }
   /* Syöty pala ei palaa maaliin, vaikka ruutu piirretään uudelleen. */
   if (basso.juhlittu) document.getElementById('bassoKisa').classList.add('syoty');
@@ -693,13 +702,36 @@ function piirraTulos() {
  * voittajan värinen — siitä voittajan tunnistaa ilman tekstiä. Avautuu kun
  * juoksija on ehtinyt maaliin (kisan viive 450 ms + liike 1 300 ms). */
 const BASSO_JUHLA_VIIVE = 1900;
-function bassoJuhla(vari, nimi) {
+function bassoJuhla(varit) {
   const el = document.getElementById('bassoJuhla');
   if (!el) return;
+  const v = basso.voittaja, vari = varit[v];
   el.style.setProperty('--pelaaja-vari', vari);
   el.style.setProperty('--pelaaja-teksti', bassoTekstiVari(vari));
-  document.getElementById('bassoJuhlaHahmo').innerHTML = bassoHahmo(vari);
-  document.getElementById('bassoJuhlaNimi').textContent = nimi || '';
+  /* Voittaja isona pizza suussa; muut alla pistejärjestyksessä (Marko
+   * 7.10.2026: «muut pelaajat näkyvät — alla pistejärjestyksessä. Voittaja
+   * isoimpana ja tosiaan pizza suussa»). ⚠️ Nimet textContentilla: ne ovat
+   * pelaajan syötettä ja verkkopelissä toisen laitteen syötettä. */
+  document.getElementById('bassoJuhlaHahmo').innerHTML = bassoSyoHahmo(vari);
+  document.getElementById('bassoJuhlaNimi').textContent = bassoOmaNimi(v);
+  document.getElementById('bassoJuhlaPisteet').textContent = basso.pelaajat[v].pisteet;
+  const muut = document.getElementById('bassoJuhlaMuut');
+  muut.innerHTML = '';
+  basso.pelaajat.map(function (p, i) { return { i: i, pisteet: p.pisteet }; })
+    .filter(function (r) { return r.i !== v; })
+    .sort(function (a, b) { return (b.pisteet - a.pisteet) || (a.i - b.i); })
+    .forEach(function (r, n) {
+      const li = document.createElement('li');
+      li.style.animationDelay = (0.55 + n * 0.12).toFixed(2) + 's';
+      li.innerHTML = bassoHahmo(varit[r.i]) + '<span class="juhla-muu-nimi"></span><b></b>';
+      /* Nimetön (apina tai nimeämätön ihminen): «Apina 1» / «Pelaaja 2» — tyhjä
+       * rivi näytti viallisetta. */
+      li.querySelector('.juhla-muu-nimi').textContent = bassoOmaNimi(r.i) || bassoNimi(r.i);
+      li.querySelector('b').textContent = r.pisteet;
+      li.setAttribute('aria-label', bassoNimi(r.i) + ': ' + r.pisteet);
+      muut.appendChild(li);
+    });
+  el.setAttribute('aria-label', bassoNimi(v) + ': ' + basso.pelaajat[v].pisteet + ' · ' + t('tauko.jatka'));
   setTimeout(function () {
     if (document.getElementById('tulosRuutu').hidden) return;   // jo jatkettu
     el.hidden = false;

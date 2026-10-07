@@ -85,9 +85,7 @@
   padding:2px 12px;border-radius:12px;line-height:1.2;
   animation:palli-pomppu .6s .2s cubic-bezier(.2,.9,.3,1.4) both}
 @keyframes palli-pomppu{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
-.basso-kruunu{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:26px;line-height:1}
-/* Kruunu tarvitsee tilansa: ilman tätä se osui «+N»-merkin päälle. */
-.palli-hahmo.voittaja{margin-top:20px}
+/* Ottelun voittaja pallilla: sama pizza suussa -hahmo kuin juhlassa (ei kruunua). */
 
 /* Jääneet kortit viuhkana askelman alla (sijainnit JS:stä).
  * ⚠️ KIINTEÄ korkeus eikä min-height: voittajalla ei ole kortteja, ja
@@ -201,23 +199,36 @@
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
   opacity:.22;mix-blend-mode:multiply}
 .basso-juhla > *{position:relative}
-.basso-juhla-syo{width:min(62vw, 46vh, 360px);height:auto;max-width:none;
-  filter:drop-shadow(0 10px 24px rgba(0,0,0,.30))}
-.basso-juhla-kruunu{font-size:min(14vw, 10vh, 72px);line-height:1}
-.basso-juhla-hahmo .basso-hahmo{--koko:min(16vw, 11vh, 84px);
-  box-shadow:0 0 0 5px #fff, 0 6px 16px rgba(0,0,0,.3)}
 .basso-juhla.nakyy{animation:juhla-sisaan .35s ease-out both}
-.basso-juhla.nakyy .basso-juhla-syo{animation:juhla-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both,
-  juhla-mutustus .5s .8s ease-in-out infinite}
-.basso-juhla.nakyy .basso-juhla-kruunu{animation:juhla-kruunu .6s .45s cubic-bezier(.2,.9,.3,1.5) both}
 @keyframes juhla-sisaan{from{opacity:0}to{opacity:1}}
 @keyframes juhla-pomppu{from{transform:scale(.3) translateY(80px)}to{transform:scale(1) translateY(0)}}
-@keyframes juhla-mutustus{0%,100%{transform:rotate(0) scale(1)} 25%{transform:rotate(-3deg) scale(1.02, .98)}
-  75%{transform:rotate(3deg) scale(.98, 1.02)}}
-@keyframes juhla-kruunu{from{transform:translateY(-60px) rotate(-30deg);opacity:0}to{transform:none;opacity:1}}
+/* Voittaja: OMA hahmo pizza suussa, iso. 🔵 Marko 7.10.2026: kruunu pois
+ * («mauton») ja heiluminen pois («heiluu kummallisesti» — koko kuva kiertyi
+ * ±3°). Tilalle kerran ponnahdus ja hiljainen hengitys (vain koko, ei kiertoa). */
+.basso-juhla-hahmo .basso-hahmo{--koko:min(58vw, 34vh, 280px);
+  box-shadow:0 0 0 8px #fff, 0 12px 30px rgba(0,0,0,.3)}
+.basso-juhla.nakyy .basso-juhla-hahmo .basso-hahmo{
+  animation:juhla-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both, juhla-hengitys 2.4s .8s ease-in-out infinite}
+@keyframes juhla-hengitys{0%,100%{transform:scale(1)} 50%{transform:scale(1.035)}}
+.basso-juhla-pisteet{font-size:min(14vw, 8vh, 64px);line-height:1;font-weight:800;color:var(--pelaaja-teksti, #fff)}
+/* Muut pistejärjestyksessä: vaaleat rivit, jotta teksti erottuu millä
+ * voittajan värillä tahansa. */
+.basso-juhla-muut{list-style:none;margin:clamp(4px, 1.5vh, 14px) 0 0;padding:0;display:flex;flex-direction:column;
+  gap:6px;width:min(80vw, 300px)}
+.basso-juhla-muut li{display:flex;align-items:center;gap:10px;padding:5px 14px 5px 6px;border-radius:12px;
+  background:rgba(255,255,255,.88);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.basso-juhla-muut li .basso-hahmo{--koko:34px;box-shadow:0 0 0 2px #fff}
+.juhla-muu-nimi{flex:1 1 auto;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.basso-juhla-muut b{font-size:20px}
+.basso-juhla.nakyy .basso-juhla-muut li{animation:juhla-rivi .4s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes juhla-rivi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){
-  .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-syo, .basso-juhla.nakyy .basso-juhla-kruunu{animation:none}
+  .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-hahmo .basso-hahmo, .basso-juhla.nakyy .basso-juhla-muut li{animation:none}
 }
+/* Pizzaa syövä hahmo samaan ympyrään: kuvasta näkyy kasvot ja pizza.
+ * Kuva on tarra (valkoinen reuna), joten se rajataan ympyrän sisälle. */
+.basso-hahmo.syo{overflow:hidden}
+.basso-hahmo.syo img{width:112%;max-width:none;margin-top:-2%}
 /* Maalin pala on syöty ottelun voiton jälkeen. */
 .basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
   transition:opacity .4s, transform .4s}
@@ -321,12 +332,10 @@
   .basso-kisa{grid-area:kisa;width:100%;max-width:420px}
   .basso-tulos-napit{grid-area:napit;flex-direction:row;justify-self:center}
   .palli-yla{gap:3px;padding-bottom:4px}
-  .palli-hahmo.voittaja{margin-top:18px}
   .palli-ala{padding-top:4px}
   .basso-summa{margin-top:2px}
   /* Juhla: mitattu 844 × 390, kruunu alkoi −3 px:stä. */
   .basso-juhla{gap:4px}
-  .basso-juhla-syo{width:min(62vw, 38vh, 360px)}
-  .basso-juhla-kruunu{font-size:min(14vw, 9vh, 72px)}
-  .basso-juhla-hahmo .basso-hahmo{--koko:min(16vw, 10vh, 84px)}
+  .basso-juhla-hahmo .basso-hahmo{--koko:min(40vw, 30vh, 220px)}
+  .basso-juhla-muut{flex-direction:row;flex-wrap:wrap;justify-content:center;width:auto}
 }
