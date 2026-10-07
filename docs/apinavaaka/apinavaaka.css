@@ -71,7 +71,7 @@
 /* viestirivi */
 .av__rivi{height:60px;margin:10px 0 14px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:16px;line-height:1.2;padding:0 6px}
 .av .av__vie{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;font-weight:700;font-size:18px;
-  padding:12px 26px;border-radius:14px;background:var(--orange,#F47920);color:#1A1A1A;box-shadow:0 4px 0 #C2580C,0 8px 18px rgba(244,121,32,.35);
+  padding:12px 26px;border-radius:14px;background:var(--orange,#F47920);color:#fff;box-shadow:0 4px 0 #C2580C,0 8px 18px rgba(244,121,32,.35);
   animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1),av-kehota 1.6s ease-in-out .6s infinite}
 .av__vie span{font-size:20px;line-height:1}
 .av__vie:active{transform:translateY(2px);box-shadow:0 2px 0 #C2580C}
