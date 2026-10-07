@@ -216,5 +216,5 @@
 }
 
 /* oma sivu: peli käyttää koko ruudun, ei korttikehystä */
-.av--koko{border:0;border-radius:0;box-shadow:none;background:transparent;max-width:520px}
-@media (orientation:landscape) and (max-height:520px){.av--koko{max-width:none}}
+.av--koko{border:0;border-radius:0;box-shadow:none;background:transparent;max-width:520px;margin-left:auto;margin-right:auto}
+@media (orientation:landscape) and (max-height:520px){.av--koko{max-width:940px}}

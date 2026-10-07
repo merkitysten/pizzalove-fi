@@ -639,6 +639,25 @@
     if (window.ResizeObserver) new ResizeObserver(mitoita).observe(nayttamo);
     window.addEventListener('resize', mitoita);
     mitoita();
+
+    // Omalla sivulla (data-koko) peli kutistetaan mahtumaan näkyvään alueeseen, kun selaimen
+    // osoite- ja välilehtipalkit vievät tilaa (erityisesti puhelin poikittain).
+    var sovitusAjastin = null;
+    function sovita() {
+      if (!juuri.classList.contains('av--koko')) return;
+      juuri.style.zoom = '';
+      if (window.innerWidth <= window.innerHeight) return;   // pystyssä vieritetään mieluummin kuin pienennetään torneja
+      var vv = window.visualViewport, kork = vv ? vv.height : window.innerHeight;
+      var yla = juuri.getBoundingClientRect().top + (window.scrollY || 0);
+      var tarve = juuri.offsetHeight, tila_ = kork - Math.max(0, yla) - 6;
+      var z = Math.min(1, tila_ / tarve);
+      if (z < 0.98) juuri.style.zoom = Math.max(0.55, z).toFixed(3);
+    }
+    function sovitaPian() { clearTimeout(sovitusAjastin); sovitusAjastin = setTimeout(sovita, 120); }
+    window.addEventListener('resize', sovitaPian);
+    window.addEventListener('orientationchange', sovitaPian);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', sovitaPian);
+    setTimeout(sovita, 300);
     if (vahennaLiike) juuri.classList.add('av--ei-liiketta');
     if (juuri.getAttribute('data-tila') === 'apinat') aloitaApinat(); else { tila.muoto = 'harjoitus'; aloita(TEHTAVAT[0]); }
   }
