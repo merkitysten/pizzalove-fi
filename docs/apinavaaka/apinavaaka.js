@@ -146,6 +146,97 @@
   };
   var KIELET = [['fi', 'Suomi'], ['sv', 'Svenska'], ['en', 'English'], ['de', 'Deutsch']];
 
+
+  // ---------------------------------------------------------------- opastettu harjoitus (tutoriaali)
+  // Kuusi vaihetta: jokaisesta siirtotavasta ensin ohjattu kierros, heti perään oma harjoitus.
+  // Vaiheet ovat kiinteitä, jotta tekstit voivat puhua juuri näistä täytteistä.
+  var OPAS_VAIHEET = [
+    { tapa: 'A', ohjattu: true,  noppa: 3, linjasto: [],        kortit: [3, 1, 5, 9], pizza: 3 },
+    { tapa: 'A', ohjattu: false, noppa: 7, linjasto: [],        kortit: [7, 1, 5, 9], ratkaisu: { oikea: [7], vasen: [] } },
+    { tapa: 'B', ohjattu: true,  noppa: 3, linjasto: [],        kortit: [1, 5, 9, 4], pizza: 1 },
+    { tapa: 'B', ohjattu: false, noppa: 7, linjasto: [2],       kortit: [4, 6, 9, 8], ratkaisu: { oikea: [3, 4], vasen: [] } },
+    { tapa: 'C', ohjattu: true,  noppa: 3, linjasto: [2],       kortit: [5, 9, 4, 8], pizza: 5 },
+    { tapa: 'C', ohjattu: false, noppa: 2, linjasto: [1, 2, 6], kortit: [8, 3, 4, 10], ratkaisu: { oikea: [3], vasen: [1] } }
+  ];
+  var OPAS = {
+    fi: {
+      aloita: 'Aloita', harjoitus: 'Harjoitus', apinoihin: 'Pelaa Nälkäisiä apinoita', uudelleen: 'Harjoittele uudelleen',
+      tavat: {
+        A: ['Perussiirto', '”Yhtä suuri kuin”', 'Täyte on yhtä suuri kuin nopan luku.'],
+        B: ['Summasiirto', '”Lisätään pieniä täytteitä”', 'Kokoa nopan luku pienemmistä täytteistä.'],
+        C: ['Erotussiirto', '”Vähennetään täytteitä”', 'Tuo isompi täyte ja vie linjastolta erotus pois.']
+      },
+      teeItse: { A: 'Tee itse perussiirto.', B: 'Tee itse summasiirto.', C: 'Tee itse erotussiirto.' },
+      loppu: ['Hienoa!', 'Osaat nyt kaikki kolme siirtoa.'],
+      nopasta: 'Nopasta tuli {d}. Apina pitää {d} punnusta.',
+      A: { kysy: 'Mikä varaston täyte tuo tasapainon?', ok: 'Jes! Nyt tornit ovat yhtä korkeat. 3 = 3.', pizza: 'Ananas on linjastolla. Valmista ananaspizza!' },
+      B: { kysy: 'Nyt emme tarvitse ananasta. Kokoa 3 pienemmistä täytteistä.', puuttuu: 'Vielä puuttuu {p}. Mitä lisäät?',
+        ok: 'Totta! 1 + 2 = 3.', pizza: 'Oliivi on linjastolla. Valmista oliivipizza!' },
+      C: { kysy: 'Tuo katkarapu (5).', liikaa: 'Oho, liian painava! Mikä linjaston täyte tasapainottaa?',
+        ok: 'Aivan! 3 + 2 = 5. Tomaatti palaa varastoon ja katkarapu menee linjastolle.', pizza: 'Linjasto kasvoi 5 − 2 = 3. Valmista katkarapupizza!' },
+      vie: 'Vie', itseOk: 'Tasapaino!', pizzaItse: 'Valmista pizza!', vihje: 'Katso hohtavia täytteitä.',
+      vaara: { A: 'Tasapaino, mutta perussiirto tehdään yhdellä tornilla.', B: 'Tasapaino, mutta summasiirrossa käytetään useaa pientä tornia.',
+        C: 'Tasapaino, mutta erotussiirrossa yksi torni lähtee linjastolta.' }
+    },
+    sv: {
+      aloita: 'Börja', harjoitus: 'Övning', apinoihin: 'Spela Hungriga apor', uudelleen: 'Träna igen',
+      tavat: {
+        A: ['Basflytt', '”Lika med”', 'Fyllningen är lika stor som tärningens tal.'],
+        B: ['Summaflytt', '”Lägg till små fyllningar”', 'Bygg tärningens tal av mindre fyllningar.'],
+        C: ['Skillnadsflytt', '”Minska fyllningar”', 'Hämta en större fyllning och ta bort skillnaden från linjen.']
+      },
+      teeItse: { A: 'Gör själv en basflytt.', B: 'Gör själv en summaflytt.', C: 'Gör själv en skillnadsflytt.' },
+      loppu: ['Bra!', 'Nu kan du alla tre flyttar.'],
+      nopasta: 'Tärningen visar {d}. Apan håller {d} vikter.',
+      A: { kysy: 'Vilken fyllning i lagret ger balans?', ok: 'Ja! Nu är tornen lika höga. 3 = 3.', pizza: 'Ananasen är på linjen. Gör ananaspizzan!' },
+      B: { kysy: 'Nu behöver vi inte ananasen. Bygg 3 av mindre fyllningar.', puuttuu: 'Det fattas {p}. Vad lägger du till?',
+        ok: 'Rätt! 1 + 2 = 3.', pizza: 'Oliven är på linjen. Gör olivpizzan!' },
+      C: { kysy: 'Hämta räkan (5).', liikaa: 'Oj, för tungt! Vilken fyllning på linjen ger balans?',
+        ok: 'Precis! 3 + 2 = 5. Tomaten går tillbaka till lagret och räkan till linjen.', pizza: 'Linjen växte 5 − 2 = 3. Gör räkpizzan!' },
+      vie: 'Flytta', itseOk: 'Balans!', pizzaItse: 'Gör pizzan!', vihje: 'Titta på de lysande fyllningarna.',
+      vaara: { A: 'Balans, men en basflytt görs med ett torn.', B: 'Balans, men i en summaflytt används flera små torn.',
+        C: 'Balans, men i en skillnadsflytt lämnar ett torn linjen.' }
+    },
+    en: {
+      aloita: 'Start', harjoitus: 'Practice', apinoihin: 'Play Hungry monkeys', uudelleen: 'Practise again',
+      tavat: {
+        A: ['Basic move', '“Equal to”', 'The topping is equal to the number on the dice.'],
+        B: ['Sum move', '“Adding small toppings”', 'Build the dice number from smaller toppings.'],
+        C: ['Difference move', '“Removing toppings”', 'Bring a bigger topping and take the difference off the line.']
+      },
+      teeItse: { A: 'Make a basic move yourself.', B: 'Make a sum move yourself.', C: 'Make a difference move yourself.' },
+      loppu: ['Well done!', 'Now you know all three moves.'],
+      nopasta: 'The dice shows {d}. The monkey holds {d} weights.',
+      A: { kysy: 'Which topping in the storage brings balance?', ok: 'Yes! The towers are equally high. 3 = 3.', pizza: 'The pineapple is on the line. Make the pineapple pizza!' },
+      B: { kysy: 'We don’t need the pineapple now. Build 3 from smaller toppings.', puuttuu: '{p} still missing. What do you add?',
+        ok: 'Right! 1 + 2 = 3.', pizza: 'The olive is on the line. Make the olive pizza!' },
+      C: { kysy: 'Bring the shrimp (5).', liikaa: 'Oops, too heavy! Which topping on the line brings balance?',
+        ok: 'Exactly! 3 + 2 = 5. The tomato goes back to the storage and the shrimp to the line.', pizza: 'The line grew by 5 − 2 = 3. Make the shrimp pizza!' },
+      vie: 'Move', itseOk: 'Balanced!', pizzaItse: 'Make the pizza!', vihje: 'Look at the glowing toppings.',
+      vaara: { A: 'Balanced, but a basic move uses one tower.', B: 'Balanced, but a sum move uses several small towers.',
+        C: 'Balanced, but in a difference move one tower leaves the line.' }
+    },
+    de: {
+      aloita: 'Los', harjoitus: 'Übung', apinoihin: 'Hungrige Affen spielen', uudelleen: 'Noch einmal üben',
+      tavat: {
+        A: ['Grundzug', '„Gleich groß wie“', 'Die Zutat ist so groß wie die Würfelzahl.'],
+        B: ['Summenzug', '„Kleine Zutaten addieren“', 'Bilde die Würfelzahl aus kleineren Zutaten.'],
+        C: ['Differenzzug', '„Zutaten abziehen“', 'Bring eine größere Zutat und nimm den Unterschied von der Linie.']
+      },
+      teeItse: { A: 'Mach selbst einen Grundzug.', B: 'Mach selbst einen Summenzug.', C: 'Mach selbst einen Differenzzug.' },
+      loppu: ['Super!', 'Jetzt kannst du alle drei Züge.'],
+      nopasta: 'Der Würfel zeigt {d}. Der Affe hält {d} Gewichte.',
+      A: { kysy: 'Welche Zutat im Lager bringt das Gleichgewicht?', ok: 'Ja! Die Türme sind gleich hoch. 3 = 3.', pizza: 'Die Ananas ist auf der Linie. Back die Ananaspizza!' },
+      B: { kysy: 'Die Ananas brauchen wir jetzt nicht. Bilde 3 aus kleineren Zutaten.', puuttuu: 'Es fehlt noch {p}. Was legst du dazu?',
+        ok: 'Richtig! 1 + 2 = 3.', pizza: 'Die Olive ist auf der Linie. Back die Olivenpizza!' },
+      C: { kysy: 'Bring die Garnele (5).', liikaa: 'Hoppla, zu schwer! Welche Zutat auf der Linie bringt das Gleichgewicht?',
+        ok: 'Genau! 3 + 2 = 5. Die Tomate geht zurück ins Lager, die Garnele auf die Linie.', pizza: 'Die Linie ist um 5 − 2 = 3 gewachsen. Back die Garnelenpizza!' },
+      vie: 'Los', itseOk: 'Gleichgewicht!', pizzaItse: 'Back die Pizza!', vihje: 'Schau auf die leuchtenden Zutaten.',
+      vaara: { A: 'Gleichgewicht, aber ein Grundzug braucht einen Turm.', B: 'Gleichgewicht, aber ein Summenzug braucht mehrere kleine Türme.',
+        C: 'Gleichgewicht, aber beim Differenzzug verlässt ein Turm die Linie.' }
+    }
+  };
+
   // ---------------------------------------------------------------- harjoitustehtävät
   // linjasto = täytteet, jotka ovat alussa linjastolla. Tämän jälkeen vapaa peli,
   // jossa varasto ja linjasto jatkuvat kierroksesta toiseen. Siirto onnistuu aina
@@ -261,6 +352,12 @@
     hyllyt.appendChild(linjastoEl); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
     juuri.appendChild(hyllyt);
 
+    // --- opastuksen väliruutu (siirtotavan esittely / harjoituksen aloitus / loppu)
+    var ot = OPAS[kieli] || OPAS.en;
+    var opasRuutu = el('div', 'av__opasruutu');
+    opasRuutu.hidden = true;
+    juuri.appendChild(opasRuutu);
+
     // --- ohjeikkuna
     var ikkuna = el('div', 'av__ikkuna');
     ikkuna.hidden = true;
@@ -274,7 +371,7 @@
       '<button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
     juuri.appendChild(ikkuna);
     var ikkunaNapit = ikkuna.querySelector('.av__ikkuna-napit'), vinkitEl = ikkuna.querySelector('.av__vinkit');
-    function nykyMuoto() { return tila.muoto === 'apinat' ? 'apinat' : tila.nro >= TEHTAVAT.length ? 'vapaa' : 'harjoitus'; }
+    function nykyMuoto() { return tila.muoto === 'apinat' ? 'apinat' : tila.muoto === 'opas' ? 'harjoitus' : 'vapaa'; }
     function taytaVinkit() {
       var m = nykyMuoto(), h = '<h2>' + vk.nimet[m] + '</h2><ul>';
       vk[m].forEach(function (x) { h += '<li>' + x + '</li>'; });
@@ -301,7 +398,7 @@
     ikkuna.querySelector('.av__sulje').addEventListener('click', sulje);
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
-    nappi(ikkunaNapit, vk.nimet.harjoitus, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; tila.nro = 0; aloita(TEHTAVAT[0]); }).setAttribute('data-muoto', 'harjoitus');
+    nappi(ikkunaNapit, vk.nimet.harjoitus, 'nappi--toinen', function () { sulje(); aloitaOpas(0); }).setAttribute('data-muoto', 'harjoitus');
     nappi(ikkunaNapit, vk.nimet.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); }).setAttribute('data-muoto', 'vapaa');
     nappi(ikkunaNapit, vk.nimet.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); }).setAttribute('data-muoto', 'apinat');
 
@@ -333,8 +430,9 @@
       noppaEl.classList.remove('av__noppa--odottaa');
       rivi.textContent = '';
       noppa3d.heita(tila.tehtava.noppa, function () {
-        pyorii = false; tila.heitetty = true; tila.uusiHeitto = true;
+        pyorii = false; tila.heitetty = true; tila.uusiHeitto = true; tila.heittoAika = Date.now();
         piirra();
+        if (tila.muoto === 'opas') { setTimeout(piirra, 2300); ajastaVihje(); }
       }, vahennaLiike);
     }
     noppaEl.addEventListener('click', heita);
@@ -360,6 +458,7 @@
       nollaa(); piirra();
     }
     function aloitaVapaa() {
+      opasRuutu.hidden = true; clearTimeout(vihjeAjastin);
       tila.nro = TEHTAVAT.length; tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
       uusiKierros();
@@ -371,6 +470,7 @@
       return a;
     }
     function aloitaApinat() {
+      opasRuutu.hidden = true; clearTimeout(vihjeAjastin);
       tila.muoto = 'apinat'; tila.nro = TEHTAVAT.length; tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
       tila.pakka = sekoita([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -379,6 +479,91 @@
       loppuEl.classList.remove('on');
       uusiKierros();
     }
+    // ---- opastettu harjoitus
+    var vihjeAjastin = null;
+    function vaihe() { return OPAS_VAIHEET[tila.oVaihe]; }
+    function aloitaOpas(nro) {
+      tila.muoto = 'opas'; tila.oVaihe = nro; tila.boksi = []; tila.loppu = false; tila.valitsee = false;
+      loppuEl.classList.remove('on');
+      var v = vaihe();
+      // esittely ennen ohjattua kierrosta, harjoituskortti ennen omaa vuoroa
+      var tapaNro = { A: 1, B: 2, C: 3 }[v.tapa], tt = ot.tavat[v.tapa];
+      if (v.ohjattu) naytaRuutu('<small>' + tapaNro + ' / 3</small><h2>' + tt[0] + '</h2><p class="av__lainaus">' + tt[1] + '</p><p>' + tt[2] + '</p>', ot.aloita, function () { kaynnistaVaihe(); });
+      else naytaRuutu('<small>' + tt[0] + '</small><h2>' + ot.harjoitus + ' ' + tapaNro + '</h2><p>' + ot.teeItse[v.tapa] + '</p>', ot.aloita, function () { kaynnistaVaihe(); });
+      // lauta valmiiksi taustalle
+      asetaVaihe();
+    }
+    function asetaVaihe() {
+      var v = vaihe();
+      tila.paikka = {};
+      for (var i = 1; i <= 10; i++) tila.paikka[i] = v.linjasto.indexOf(i) >= 0 ? 'linjasto' : 'varasto';
+      tila.laudalla = v.kortit.slice(); tila.pakka = [];
+      tila.tehtava = { tapa: v.tapa, noppa: v.noppa }; tila.havikki = false;
+      nollaa(); tila.vihje = null; piirra();
+    }
+    function kaynnistaVaihe() { opasRuutu.hidden = true; ajastaVihje(); }
+    function naytaRuutu(html, napinTeksti, f, toinen) {
+      opasRuutu.innerHTML = '<div class="av__opaskortti">' + html + '<div class="av__opasnapit"></div></div>';
+      var np = opasRuutu.querySelector('.av__opasnapit');
+      nappi(np, napinTeksti + ' →', 'av__vie', f);
+      if (toinen) nappi(np, toinen[0], 'nappi--toinen', toinen[1]);
+      opasRuutu.hidden = false;
+    }
+    // ohjatussa vaiheessa sallitut tornit päätellään tilanteesta
+    function sallitut() {
+      var v = vaihe();
+      if (!v || !v.ohjattu || !tila.heitetty || tila.siirretty) return null;
+      if (v.tapa === 'A') return tila.oikea.length ? { varasto: [], linjasto: [] } : { varasto: [3], linjasto: [] };
+      if (v.tapa === 'B') {
+        if (!tila.oikea.length) return { varasto: [1, 2], linjasto: [] };
+        if (tila.oikea.length === 1) return { varasto: [3 - tila.oikea[0]], linjasto: [] };
+        return { varasto: [], linjasto: [] };
+      }
+      if (!tila.oikea.length) return { varasto: [5], linjasto: [] };
+      if (!tila.vasen.length) return { varasto: [], linjasto: [2] };
+      return { varasto: [], linjasto: [] };
+    }
+    function oikeaTapa() {
+      var v = vaihe();
+      if (v.tapa === 'A') return tila.oikea.length === 1 && !tila.vasen.length;
+      if (v.tapa === 'B') return tila.oikea.length >= 2 && !tila.vasen.length;
+      return tila.vasen.length === 1;
+    }
+    // omalla vuorolla: jos 6 sekuntiin ei tapahdu mitään, oikeat tornit alkavat hohtaa
+    function ajastaVihje() {
+      clearTimeout(vihjeAjastin);
+      if (tila.muoto !== 'opas' || vaihe().ohjattu) return;
+      tila.vihje = null;
+      vihjeAjastin = setTimeout(function () {
+        if (tila.muoto !== 'opas' || !opasRuutu.hidden) return;
+        if (!tila.heitetty) { tonaise(noppaEl); return ajastaVihje(); }
+        if (tila.siirretty) return;
+        var rk = vaihe().ratkaisu;
+        tila.vihje = rk.oikea.concat(rk.vasen).filter(function (n) { return tila.oikea.indexOf(n) < 0 && tila.vasen.indexOf(n) < 0; });
+        piirra();
+      }, 6000);
+    }
+    function opasVie() {
+      var v = vaihe();
+      tila.vaihe = 'pizza';
+      if (!valmistettavat().length) return opasValmis();
+      piirra();
+    }
+    function opasPizza() {
+      if (vaihe().ohjattu || !valmistettavat().length) return opasValmis();
+      piirra();
+    }
+    function opasValmis() {
+      tila.vaihe = 'odota'; clearTimeout(vihjeAjastin);
+      piirra();
+      setTimeout(function () {
+        if (tila.oVaihe < OPAS_VAIHEET.length - 1) return aloitaOpas(tila.oVaihe + 1);
+        tila.oVaihe = OPAS_VAIHEET.length;
+        naytaRuutu('<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt=""><h2>' + ot.loppu[0] + '</h2><p>' + ot.loppu[1] + '</p>',
+          ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); }, [ot.uudelleen, function () { aloitaOpas(0); }]);
+      }, 1100);
+    }
+
     function valmistettavat() {
       return (tila.laudalla || []).filter(function (n) { return tila.paikka[n] === 'linjasto'; });
     }
@@ -408,6 +593,7 @@
       if (tila.pakka.length) { tila.laudalla[i] = tila.pakka.shift(); tila.uusiKortti = tila.laudalla[i]; } else tila.laudalla.splice(i, 1);
       tila.vuoronPizzat++;
       // sydänpizza (täytteet yhteensä 10): yksi vapaavalintainen lisäpala
+      if (tila.muoto === 'opas') return opasPizza();
       if (n === 10 && tila.boksi.length < 10) { tila.valitsee = true; return piirra(); }
       jatkaPizzat();
     }
@@ -443,6 +629,11 @@
     // --- siirrot
     function napauta(n, mista) {
       if (tila.valmis || tila.siirretty || !tila.heitetty) { if (!tila.heitetty) tonaise(noppaEl); return; }
+      if (tila.muoto === 'opas') {
+        var sal = sallitut();
+        if (sal && sal[mista].indexOf(n) < 0) return;      // ohjatussa vaiheessa vain hohtava torni käy
+        ajastaVihje();
+      }
       var oikealle = mista === (tila.havikki ? 'linjasto' : 'varasto');
       if (!oikealle && tila.vasen.length) { tila.viesti = tila.havikki ? '' : t.vainYksi; piirra(); return; }
       tila.lahde[n] = mista;
@@ -453,6 +644,7 @@
     }
     function palauta(n) {
       if (tila.siirretty) return;
+      if (tila.muoto === 'opas') { if (vaihe().ohjattu) return; ajastaVihje(); }
       if (tila.paikka[n] === 'oikea') tila.oikea.splice(tila.oikea.indexOf(n), 1);
       else tila.vasen = [];
       tila.paikka[n] = tila.lahde[n];
@@ -464,6 +656,7 @@
         tila.paikka[n] = tila.lahde[n] === 'varasto' ? 'linjasto' : 'varasto';
       });
       tila.siirretty = true;
+      if (tila.muoto === 'opas') return opasVie();
       if (tila.muoto === 'apinat') {
         tila.vaihe = 'pizza';
         if (!valmistettavat().length) return vuoroLoppuu();
@@ -523,7 +716,9 @@
     function piirraNyt() {
       var teht = tila.tehtava, noppa = teht.noppa, heitetty = tila.heitetty;
       var vasenSumma = noppa + summa(tila.vasen), oikeaSumma = summa(tila.oikea);
-      tila.valmis = !tila.siirretty && tila.oikea.length > 0 && vasenSumma === oikeaSumma;
+      var opas = tila.muoto === 'opas';
+      var tasapaino = !tila.siirretty && tila.oikea.length > 0 && vasenSumma === oikeaSumma;
+      tila.valmis = tasapaino && (!opas || oikeaTapa());
       juuri.classList.toggle('av--havikki', heitetty && tila.havikki);
 
       // edistyminen: kuusi pistettä, vapaassa pelissä piilossa
@@ -533,8 +728,14 @@
           p += '<i class="' + (i < tila.nro || (i === tila.nro && tila.siirretty) ? 'tehty' : i === tila.nro ? 'nyt' : '') + '"></i>';
         }
       }
-      var apinat = tila.muoto === 'apinat';
-      juuri.classList.toggle('av--apinat', apinat);
+      var apinat = tila.muoto === 'apinat', tuot = apinat || opas;
+      juuri.classList.toggle('av--apinat', tuot);
+      juuri.classList.toggle('av--opas', opas);
+      if (opas) {
+        p = '';
+        for (var oi = 0; oi < OPAS_VAIHEET.length; oi++)
+          p += '<i class="' + (oi < tila.oVaihe ? 'tehty' : oi === tila.oVaihe ? 'nyt' : '') + '"></i>';
+      }
       if (apinat) {
         // boksi pizzana: 10 siivua, täytetty siivu täytteen värinen
         var sv = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><circle r="47" class="av__boksi-pohja"/>';
@@ -565,9 +766,9 @@
           v.addEventListener('click', function () { valitseLisapala(q); });
           kortitEl.appendChild(v);
         })(q);
-      } else if (apinat) {
+      } else if (tuot) {
         tila.laudalla.forEach(function (n) {
-          var ok = tila.vaihe === 'pizza' && tila.paikka[n] === 'linjasto';
+          var ok = tila.vaihe === 'pizza' && tila.paikka[n] === 'linjasto' && (!opas || !vaihe().ohjattu || n === vaihe().pizza);
           var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : '') + (tila.uusiKortti === n ? ' av__kortti--uusi' : ''));
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
@@ -626,7 +827,30 @@
       // viestirivi: joko lyhyt teksti tai yksi nappi
       rivi.innerHTML = '';
       rivi.className = 'av__rivi';
-      if (apinat && tila.valitsee) {
+      var ov = opas && vaihe(), oteksti = ov ? (ot[ov.tapa] || {}) : null;
+      if (opas && !ov) {
+        rivi.textContent = '';
+      } else if (opas && tila.vaihe === 'pizza') {
+        rivi.textContent = ov.ohjattu ? oteksti.pizza : ot.pizzaItse; rivi.classList.add('av__rivi--ok');
+      } else if (opas && tila.vaihe === 'odota') {
+        rivi.textContent = t.hyva; rivi.classList.add('av__rivi--ok');
+      } else if (opas && !heitetty) {
+        rivi.textContent = t.heita;
+      } else if (opas && tila.valmis) {
+        var tx = el('span', 'av__rivi-teksti', ov.ohjattu ? oteksti.ok : ot.itseOk);
+        rivi.appendChild(tx);
+        nappi(rivi, ot.vie + ' <span aria-hidden="true">↓</span>', 'av__vie', vieSiirto);
+        rivi.classList.add('av__rivi--ok');
+      } else if (opas) {
+        var viesti;
+        if (Date.now() - (tila.heittoAika || 0) < 2200 && !tila.oikea.length) viesti = ot.nopasta.replace(/\{d\}/g, noppa);
+        else if (tasapaino) viesti = ot.vaara[ov.tapa];
+        else if (!ov.ohjattu) viesti = tila.vihje && tila.vihje.length ? ot.vihje : ot.teeItse[ov.tapa];
+        else if (ov.tapa === 'B' && tila.oikea.length === 1) viesti = oteksti.puuttuu.replace('{p}', noppa - oikeaSumma);
+        else if (ov.tapa === 'C' && tila.oikea.length) viesti = oteksti.liikaa;
+        else viesti = oteksti.kysy;
+        rivi.textContent = viesti;
+      } else if (apinat && tila.valitsee) {
         rivi.textContent = t.lisapala; rivi.classList.add('av__rivi--ok');
       } else if (apinat && tila.vaihe === 'pizza') {
         // pizzan saa jättää odottamaan, kun vuorolla on jo tehty vähintään yksi
@@ -670,6 +894,11 @@
             // koko sarake on kosketusalue, ei vain pieni torni (napin klikkaus kuplii sarakkeeseen)
             (function (n, nimi) { paikka.addEventListener('click', function () { napauta(n, nimi); }); })(n, nimi);
             paikka.classList.add('av__paikka--torni');
+            if (opas) {
+              var sal = sallitut();
+              if (sal) paikka.classList.add(sal[nimi].indexOf(n) >= 0 ? 'av__paikka--vihje' : 'av__paikka--himmea');
+              else if (tila.vihje && tila.vihje.indexOf(n) >= 0) paikka.classList.add('av__paikka--vihje');
+            }
             if (tila.siirretty || tila.loppu) b.disabled = true;
             (kulho || paikka).appendChild(b);
           } else paikka.classList.add('av__paikka--tyhja');
@@ -712,7 +941,7 @@
     if (window.visualViewport) window.visualViewport.addEventListener('resize', sovitaPian);
     setTimeout(sovita, 300);
     if (vahennaLiike) juuri.classList.add('av--ei-liiketta');
-    if (juuri.getAttribute('data-tila') === 'apinat') aloitaApinat(); else { tila.muoto = 'harjoitus'; aloita(TEHTAVAT[0]); }
+    if (juuri.getAttribute('data-tila') === 'apinat') aloitaApinat(); else aloitaOpas(0);
   }
 
   function kaynnista() {
