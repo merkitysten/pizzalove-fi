@@ -85,8 +85,10 @@
 .sija-2 .palli-askel{height:clamp(50px, 8.5vh, 94px)}
 .sija-3 .palli-askel{height:clamp(36px, 6vh, 66px)}
 .sija-4 .palli-askel{height:clamp(26px, 4vh, 44px)}
-.palli-lisays{font-size:clamp(22px, 4vh, 30px);color:#fff;background:var(--money);
-  padding:2px 12px;border-radius:12px;line-height:1.2;
+.palli-ala.voitti{justify-content:center;padding-top:0}
+/* Oranssi kuten ykkösaskelma: vihreä ei ole brändiväri (Marko 7.10.2026). */
+.palli-lisays{font-size:clamp(22px, 4vh, 30px);color:#fff;background:var(--orange);
+  padding:4px 14px;border-radius:12px;line-height:1.2;box-shadow:0 2px 6px rgba(60,34,12,.18);
   animation:palli-pomppu .6s .2s cubic-bezier(.2,.9,.3,1.4) both}
 @keyframes palli-pomppu{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
 /* Ottelun voittaja pallilla: sama pizza suussa -hahmo kuin juhlassa (ei kruunua). */
@@ -161,7 +163,11 @@
 .basso-vari-pallo{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle}
 
 /* --- JUOKSUKILPAILU kohti pisterajaa --- */
-.basso-kisa{--rata-alku:22px;--rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);
+/* ⚠️ Radan korkeus ja alkukohta lasketaan HAHMON koosta (Marko 7.10.2026:
+ * «Alempi laatikko on liian ahdas»). Mitattu 375 × 667: rata 34 px, hahmo
+ * ~37 px → 0-pisteiset hahmot päällekkäin ja yli laatikon reunan. */
+.basso-kisa{--kisa-hahmo:clamp(30px, 5vh, 40px);--rata-alku:calc(var(--kisa-hahmo) / 2 + 10px);
+  --rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);
   position:relative;width:min(100%, 560px);padding-top:calc(22px + var(--pala) * .6 + 8px)}
 .basso-kisa:empty{display:none}
 /* Maaliviiva: ruutukuvio radan loppukohdassa. */
@@ -179,7 +185,7 @@
 .kisa-maali img{position:absolute;top:calc(22px - var(--pala) * .2);left:0;height:var(--pala);width:auto;
   max-width:none;display:block;transform:translateX(-50%) rotate(90deg);
   filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
-.kisa-rata{position:relative;height:clamp(34px, 5.4vh, 46px)}
+.kisa-rata{position:relative;height:calc(var(--kisa-hahmo) + 12px)}
 /* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
 .kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
   top:50%;height:12px;transform:translateY(-50%);border-radius:6px;background:rgba(60,34,12,.12)}
@@ -187,7 +193,7 @@
   border-radius:6px;background:var(--pelaaja-vari);width:0}
 .kisa-juoksija{position:absolute;top:50%;left:var(--rata-alku);transform:translate(-50%, -50%);
   display:flex;align-items:center;gap:4px;z-index:1}
-.kisa-juoksija .basso-hahmo{--koko:clamp(30px, 5.5vh, 40px)}
+.kisa-juoksija .basso-hahmo{--koko:var(--kisa-hahmo)}
 .kisa-juoksija b{position:absolute;left:100%;margin-left:6px;font-size:clamp(17px, 3vh, 21px);
   color:var(--ink);background:var(--ground);padding:0 5px;border-radius:6px;line-height:1.3}
 .kisa-rata.oma .kisa-juoksija b{box-shadow:0 0 0 2px var(--pelaaja-vari)}
@@ -387,7 +393,6 @@
   #tulosRuutu:not([hidden]){padding-top:calc(env(safe-area-inset-top, 0px) + 60px);gap:8px}
   .basso-palli{--mk:clamp(36px, 6vh, 58px)}
   .palli-ala{padding-top:8px}
-  .basso-kisa{--pala:48px}
-  .kisa-rata{height:34px}
+  .basso-kisa{--pala:48px;--kisa-hahmo:32px}
   .basso-jatka{width:60px}
 }

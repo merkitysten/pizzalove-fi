@@ -630,9 +630,6 @@ function piirraTulos() {
 
     const yla = document.createElement('div');
     yla.className = 'palli-yla';
-    if (r.voitti && k.pisteet) {
-      yla.innerHTML = '<b class="palli-lisays">+' + k.pisteet + '</b>';
-    }
     /* Pallilla vain hahmo: ottelupisteet näkyvät alla juoksukilpailussa,
      * eikä samaa lukua näytetä kahdesti. */
     const hahmo = document.createElement('div');
@@ -654,7 +651,14 @@ function piirraTulos() {
 
     const ala = document.createElement('div');
     ala.className = 'palli-ala';
-    if (kasi.length) {
+    /* 🔵 «+N» KIERROKSEN VOITTAJAN ALLE, korttien paikalle (Marko 7.10.2026:
+     * «Sen kuuluisi olla — korttien välissä, koska niistä korteista se summa
+     * muodostuu — sen erän voittaneen pelaajan alla olipa ko. pelaaja millä
+     * podiumilla tahansa»). Voittajalla ei ole kortteja, joten paikka on vapaa. */
+    if (r.voitti && k.pisteet) {
+      ala.classList.add('voitti');
+      ala.innerHTML = '<b class="palli-lisays">+' + k.pisteet + '</b>';
+    } else if (kasi.length) {
       const viuhka = document.createElement('div');
       viuhka.className = 'palli-kortit';
       kasi.forEach(function (kortti, j) {
@@ -669,7 +673,7 @@ function piirraTulos() {
       ala.appendChild(viuhka);
       const summa = document.createElement('b');
       summa.className = 'basso-summa';
-      summa.textContent = '= ' + r.summa;
+      summa.textContent = r.summa;          // ilman «=»-merkkiä (Marko 7.10.2026)
       ala.appendChild(summa);
     }
     paikka.appendChild(ala);
