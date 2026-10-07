@@ -56,12 +56,10 @@
 #tulosRuutu::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.45}
 @media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
-/* 🔵 «taustan väri saisi olla se sama kuin on pizzalove.fi -sivustollakin»
- * (Marko 6.10.2026). Mitattu sivustolta: sisältö on kermanvärisellä
- * palstalla (--ground #FAF6EE, enintään 720 px), ja kuosi näkyy VAIN sen
- * ulkopuolella. Puhelimessa palsta täyttää ruudun → pelkkä kerma. Sama tässä. */
-#tulosRuutu::after{content:"";position:absolute;top:0;bottom:0;left:50%;z-index:0;pointer-events:none;
-  width:min(100%, 720px);transform:translateX(-50%);background:var(--ground)}
+/* ⚠️ KUOSI NÄKYY MYÖS PUHELIMESSA (Marko 7.10.2026: «Tulosruudun taustalla
+ * saisi olla sitä täytekuosia»). 6.10. tähän tehtiin sivuston kermapalsta,
+ * joka peitti kuosin puhelimessa — tulkinta Markon «taustan väri saisi olla
+ * sama kuin sivustolla» -toiveesta, joka koski luultavasti voittoruutua. */
 #tulosRuutu > *{position:relative;z-index:1}
 #tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100%, 620px)}
 
@@ -108,13 +106,24 @@
   width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla)}
 .basso-minikortti small{position:absolute;left:50%;bottom:3px;transform:translateX(-50%);
   background:var(--ink);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:0 4px}
-.palli-nimi{display:block;text-align:center;font-size:13px;font-weight:700;line-height:1.2;margin-top:4px;
+.palli-nimi{display:block;text-align:center;font-size:13px;font-weight:700;line-height:1.2;margin:0 auto 4px;
   max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .basso-summa{font-size:clamp(18px, 3vh, 22px);color:var(--ink);white-space:nowrap;margin-top:6px}
 
-.basso-tulos-napit{display:flex;align-items:center;gap:18px}
-.basso-tulos-napit .apinanappi.pieni{width:clamp(76px, 11vh, 110px)}
-.basso-tulos-napit .kuvake-nappi{background:var(--ground)}
+.basso-tulos-napit{display:flex;align-items:center;justify-content:center;gap:18px}
+/* ▶ pelkkänä nappina: brändioranssi ympyrä, valkoinen kolmio piirroksena
+ * (ei tekstimerkkiä, jonka muoto vaihtelee fontin mukaan). */
+.basso-jatka{width:clamp(64px, 10vh, 84px);aspect-ratio:1;border:0;border-radius:50%;padding:0;cursor:pointer;
+  display:grid;place-items:center;background:var(--orange);color:#fff;
+  box-shadow:0 0 0 5px #fff, 0 8px 20px rgba(60,40,20,.28);transition:transform .15s}
+.basso-jatka svg{width:46%;height:46%;fill:currentColor;margin-left:8%}
+.basso-jatka:hover{transform:scale(1.05)}
+.basso-jatka:active{transform:scale(.96)}
+.basso-jatka:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
+.basso-jatka[hidden]{display:none}
+/* ⚙ oikeaan yläkulmaan, samaan paikkaan kuin pelinäkymässä. */
+#tulosRuutu > .basso-tulos-asetukset{position:absolute;z-index:3;
+  top:calc(env(safe-area-inset-top, 0px) + 12px);right:calc(env(safe-area-inset-right, 0px) + 12px)}
 
 /* Konfetti (vain kun sinä voitit kierroksen). */
 .basso-konfetti{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
@@ -225,10 +234,18 @@
 @media (prefers-reduced-motion: reduce){
   .basso-juhla.nakyy, .basso-juhla.nakyy .basso-juhla-hahmo .basso-hahmo, .basso-juhla.nakyy .basso-juhla-muut li{animation:none}
 }
-/* Pizzaa syövä hahmo samaan ympyrään: kuvasta näkyy kasvot ja pizza.
- * Kuva on tarra (valkoinen reuna), joten se rajataan ympyrän sisälle. */
-.basso-hahmo.syo{overflow:hidden}
-.basso-hahmo.syo img{width:112%;max-width:none;margin-top:-2%}
+/* Pizzaa syövä hahmo: ympyrä rajaa sivut ja alaosan, tukka nousee yli.
+ * Kehys on ympyrää 25 % korkeampi (top:-25 %), joten ympyrän keskipiste on
+ * 0,75 / 1,25 = 60 % kehyksen korkeudesta. Maski = ympyrä ∪ kehyksen yläosa
+ * keskipisteeseen asti. Tukan vaatima tila varataan marginaalilla, ettei se
+ * osu yläpuolella olevaan nimeen tai «+N»-merkkiin. */
+.basso-hahmo.syo{position:relative;overflow:visible;margin-top:calc(var(--koko) * .25)}
+.basso-hahmo.syo .syo-kehys{position:absolute;left:0;right:0;bottom:0;top:-25%;
+  -webkit-mask:radial-gradient(circle at 50% 60%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 60% no-repeat;
+          mask:radial-gradient(circle at 50% 60%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 60% no-repeat}
+.basso-hahmo.syo img{position:absolute;top:0;left:0;width:100%;height:auto;max-width:none}
 /* Maalin pala on syöty ottelun voiton jälkeen. */
 .basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
   transition:opacity .4s, transform .4s}

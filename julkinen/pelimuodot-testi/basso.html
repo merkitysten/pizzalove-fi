@@ -44,7 +44,7 @@
 <meta name="description" content="Pizza Love -korttipelin Pizza Basso selaimessa (kokeilu).">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="basso.css?v=20261007a">
+<link rel="stylesheet" href="basso.css?v=20261007b">
 </head>
 <body>
 
@@ -124,13 +124,15 @@
   <!-- Juoksukilpailu kohti pisterajaa (Marko 6.10.2026). basso.js piirtää. -->
   <div id="bassoKisa" class="basso-kisa"></div>
 
+  <!-- 🔵 Marko 7.10.2026: «Asetukset ensinnäkin yläkulmaan ja tuon play-napin
+       alta apina pois. Se on jäänne ajalta, kun pelissä ei ollut vielä apinan
+       kuvia muualla.» ⚙ samaan paikkaan kuin pelinäkymässä, ▶ pelkkä nappi. -->
+  <button id="asetuksiin" class="kulmanappi basso-tulos-asetukset" data-ta="tulos.asetukset" aria-label="Asetukset">&#9881;</button>
   <div class="basso-tulos-napit">
-    <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
-      <img src="kuvat/apina.webp?v=20260910a" alt="">
-      <span class="apinanappi-teksti" aria-hidden="true">▶</span>
+    <button id="uudelleen" class="basso-jatka" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
     </button>
     <span id="bassoOdota" class="basso-odota" hidden role="status" data-ta="verkko.odota">⏳</span>
-    <button id="asetuksiin" class="kuvake-nappi" data-ta="tulos.asetukset" aria-label="Asetukset">⚙</button>
     <button id="tulosValikkoon" class="kuvake-nappi" hidden data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
   </div>
 </section>
@@ -475,7 +477,7 @@
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261006b"></script>
 <script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261007a"></script>
+<script src="basso.js?v=20261007b"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="basso-verkko.js?v=20261007a"></script>
 </body>

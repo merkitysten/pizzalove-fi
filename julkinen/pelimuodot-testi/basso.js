@@ -184,9 +184,14 @@ function bassoHahmo(vari, luokka) {
  * pizzalove.fi:n basso-syo.webp rajattuna samaan ympyrään kuin muut hahmot,
  * joten väri tunnistaa pelaajan kuten kaikkialla muualla. Korvaa kruunun,
  * joka oli emoji eikä Pizza Loven piirrosjälkeä («kruunu on mauton»). */
+/* ⚠️ RAJAUS (Marko 7.10.2026: «Nyt ei näy sitä pizzaa lainkaan — — apinan
+ * tukka saa tulla vähän sen keltaisen ympyrän ulkopuolelle»). Kuva on
+ * maskikehyksessä, joka on ympyrää 25 % korkeampi: maski = ympyrä ∪ sen
+ * yläpuoli. Ympyrä rajaa sivut ja alaosan, ylhäältä tukka nousee yli —
+ * jolloin kasvot, pizza ja paita mahtuvat ympyrään pienentämättä hahmoa. */
 function bassoSyoHahmo(vari, luokka) {
   return '<span class="basso-hahmo syo' + (luokka ? ' ' + luokka : '') + '" style="--pelaaja-vari:' + vari +
-    '"><img src="kuvat/basso-syo.webp?v=20261006a" alt=""></span>';
+    '"><span class="syo-kehys"><img src="kuvat/basso-syo.webp?v=20261006a" alt=""></span></span>';
 }
 
 /* ⚠️ KORVAA peli.js:n tallennuksen. Alkuperäinen kirjoittaa KOKO Partyn
@@ -632,8 +637,10 @@ function piirraTulos() {
      * eikä samaa lukua näytetä kahdesti. */
     const hahmo = document.createElement('div');
     hahmo.className = 'palli-hahmo' + (basso.voittaja === r.i ? ' voittaja' : '');
-    hahmo.innerHTML = (basso.voittaja === r.i ? bassoSyoHahmo(varit[r.i]) : bassoHahmo(varit[r.i])) +
-      (bassoOmaNimi(r.i) ? '<small class="palli-nimi"></small>' : '');
+    /* Nimi hahmon YLÄPUOLELLA: hahmo seisoo askelmalla, eikä nimi saa tulla
+     * niiden väliin (Markon kysymys 7.10.2026, Clauden perustelu). */
+    hahmo.innerHTML = (bassoOmaNimi(r.i) ? '<small class="palli-nimi"></small>' : '') +
+      (basso.voittaja === r.i ? bassoSyoHahmo(varit[r.i]) : bassoHahmo(varit[r.i]));
     if (bassoOmaNimi(r.i)) hahmo.querySelector('.palli-nimi').textContent = bassoOmaNimi(r.i);
     const kuka = bassoNimi(r.i);
     hahmo.setAttribute('aria-label', kuka + ': ' + r.sija + '.');
