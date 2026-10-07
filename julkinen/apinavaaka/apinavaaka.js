@@ -167,8 +167,10 @@
     noppaEl.type = 'button';
     noppaEl.innerHTML = '<span class="av__d10"></span>';
     var noppa3d = window.Noppa3D(noppaEl.querySelector('.av__d10'), KANSIO + 'noppa/');
-    ylapalkki.appendChild(infoNappi); ylapalkki.appendChild(pisteet); ylapalkki.appendChild(noppaEl);
+    ylapalkki.appendChild(infoNappi); ylapalkki.appendChild(pisteet);
     juuri.appendChild(ylapalkki);
+    var noppaRivi = el('div', 'av__nopparivi');      // noppa keskellä apinan alapuolella
+    noppaRivi.appendChild(noppaEl);
 
     // --- näyttämö
     var nayttamo = el('div', 'av__nayttamo');
@@ -201,6 +203,7 @@
     var loppuEl = el('div', 'av__loppu');
     nayttamo.appendChild(loppuEl);
     juuri.appendChild(nayttamo);
+    juuri.appendChild(noppaRivi);
 
     // --- viestirivi (teksti tai nappi)
     var rivi = el('div', 'av__rivi');
@@ -219,7 +222,7 @@
     // --- hyllyt
     var hyllyt = el('div', 'av__hyllyt');
     var varastoEl = el('div', 'av__hylly'), linjastoEl = el('div', 'av__hylly av__hylly--linjasto');
-    hyllyt.appendChild(linjastoEl); hyllyt.appendChild(tuotanto); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
+    hyllyt.appendChild(linjastoEl); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
     juuri.appendChild(hyllyt);
 
     // --- ohjeikkuna
@@ -329,7 +332,7 @@
       if (korttiEl && !vahennaLiike && korttiEl.animate) {
         tila.paistuu = true;
         var a = korttiEl.getBoundingClientRect(), u = uuniEl.getBoundingClientRect();
-        var dx = (u.left + u.width * 0.42) - (a.left + a.width / 2), dy = (u.top + u.height * 0.8) - (a.top + a.height / 2);
+        var dx = (u.left + u.width * 0.3) - (a.left + a.width / 2), dy = (u.top + u.height * 0.82) - (a.top + a.height / 2);
         korttiEl.classList.add('av__kortti--paistuu');
         uuniEl.classList.add('av__uuni--paistaa');
         var an = korttiEl.animate([{ transform: 'none', opacity: 1 },
@@ -618,6 +621,7 @@
           paikat.appendChild(paikka);
         }
         kohde.appendChild(paikat);
+        if (nimi === 'linjasto') kohde.appendChild(tuotanto);   // hihna ja uuni kuuluvat linjastoon
       });
     }
 
