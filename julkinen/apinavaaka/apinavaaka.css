@@ -190,3 +190,26 @@
 .av__paikka--torni:active{background:rgba(255,255,255,.55)}
 .av__paikat{gap:1px}
 .av__hylly{padding-left:4px;padding-right:4px}
+
+/* ---- Vaakanäyttö (puhelin poikittain): apina vasemmalla, linjasto ja varasto oikealla ---- */
+@media (orientation:landscape) and (max-height:520px){
+  .av{max-width:none;display:grid;grid-template-columns:150px 170px minmax(0,1fr);
+    grid-template-areas:"yla yla hyllyt" "apina apina hyllyt" "noppa rivi hyllyt";
+    grid-template-rows:auto auto 1fr;column-gap:14px;align-items:start;padding:8px 12px 10px}
+  .av__ylapalkki{grid-area:yla}
+  .av__nayttamo{grid-area:apina}
+  .av__nopparivi{grid-area:noppa;margin:0;align-self:center}
+  .av__rivi{grid-area:rivi;margin:0;height:auto;min-height:60px;align-self:center;font-size:15px}
+  .av .av__vie{font-size:15px;padding:10px 16px}
+  .av__hyllyt{grid-area:hyllyt;align-self:stretch;display:flex;flex-direction:column;gap:8px}
+  .av__hylly--linjasto{flex:none}
+  .av:not(.av--apinat) .av__hyllyt{justify-content:center}
+  /* isommat tornit ja kulhot, kun tilaa on leveyssuunnassa */
+  .av__paikat{--pala:5px}
+  .av__hylly-torni .av__torni i{width:24px}
+  .av__hylly-torni .av__tarra{width:26px;height:26px}
+  .av__paikka{min-height:86px}
+  .av__kulho{max-width:48px;margin-top:52px}
+  .av--apinat .av__kortit{grid-template-columns:repeat(4,60px)}
+  .av__uuni{width:60px}
+}
