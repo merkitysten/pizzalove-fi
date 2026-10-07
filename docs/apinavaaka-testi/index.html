@@ -4,28 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#FAF6EE">
 <title>Apinavaaka</title>
 <link rel="stylesheet" href="../tyyli.css">
-<link rel="stylesheet" href="../apinavaaka/apinavaaka.css">
 <style>
   body::before{display:none}
-  main{padding:8px 8px 12px;max-width:460px}
-  @media (orientation:landscape) and (max-height:520px){main{max-width:none;padding:4px 8px}.kielet-testi{display:none}}
+  body{background:#FAF6EE}
+  main{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) 8px max(6px,env(safe-area-inset-left));max-width:none;margin:0;background:transparent}
   .kielet-testi{text-align:center;font-size:12px;color:var(--soft);margin:8px 0 0}
+  @media (orientation:landscape) and (max-height:520px){.kielet-testi{display:none}}
 </style>
 </head>
 <body>
 <main>
-<div class="apinavaaka" id="av"></div>
+<div class="apinavaaka" id="av" data-koko></div>
 <p class="kielet-testi">Testi · <a href="?tila=harjoitus" onclick="this.href+='&kieli='+k">harjoitus</a> · <a href="?tila=apinat" onclick="this.href+='&kieli='+k">Nälkäiset apinat</a> · <a href="?kieli=fi" onclick="this.href+='&tila='+(q.get('tila')||'')">fi</a> · <a href="?kieli=sv" onclick="this.href+='&tila='+(q.get('tila')||'')">sv</a> · <a href="?kieli=en" onclick="this.href+='&tila='+(q.get('tila')||'')">en</a> · <a href="?kieli=de" onclick="this.href+='&tila='+(q.get('tila')||'')">de</a></p>
 </main>
 <script>
 var q = new URLSearchParams(location.search), k = q.get("kieli") || "fi";
-document.getElementById("av").setAttribute("data-tila", q.get("tila") || "harjoitus");
 document.documentElement.lang = k;
-document.getElementById('av').setAttribute('data-kieli', k);
+var av = document.getElementById("av");
+av.setAttribute("data-tila", q.get("tila") || "harjoitus");
+av.setAttribute("data-kieli", k);
+// testisivulla aina tuoreimmat tiedostot (ei selaimen välimuistia)
+var v = Date.now();
+var css = document.createElement("link"); css.rel = "stylesheet"; css.href = "../apinavaaka/apinavaaka.css?v=" + v; document.head.appendChild(css);
+function lataa(src, f) { var s = document.createElement("script"); s.src = src + "?v=" + v; s.onload = f; document.body.appendChild(s); }
+lataa("../apinavaaka/noppa3d.js", function () { lataa("../apinavaaka/apinavaaka.js"); });
 </script>
-<script src="../apinavaaka/noppa3d.js"></script>
-<script src="../apinavaaka/apinavaaka.js"></script>
 </body>
 </html>

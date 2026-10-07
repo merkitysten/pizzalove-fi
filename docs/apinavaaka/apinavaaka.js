@@ -152,6 +152,7 @@
 
     juuri.innerHTML = '';
     juuri.classList.add('av');
+    if (juuri.hasAttribute('data-koko')) juuri.classList.add('av--koko');   // oma sivu: koko ruutu ilman korttikehystä
 
     // --- yläpalkki: Basso (ohjeet) · edistyminen · noppa
     var ylapalkki = el('div', 'av__ylapalkki');
@@ -215,9 +216,12 @@
     var kortitEl = el('div', 'av__kortit');
     var tuotanto = el('div', 'av__tuotanto');
     tuotanto.appendChild(kortitEl);
-    tuotanto.insertAdjacentHTML('beforeend', '<img class="av__hihna" src="' + KANSIO + 'hihna.webp" alt="">');
+    // hihna ja uuni samassa kehyksessä, jolloin uunin korkeus on aina suhteessa hihnaan
+    var hihnaRivi = el('div', 'av__hihnarivi');
+    hihnaRivi.innerHTML = '<img class="av__hihna" src="' + KANSIO + 'hihna.webp" alt="">';
     var uuniEl = el('img', 'av__uuni'); uuniEl.src = KANSIO + 'uuni.webp'; uuniEl.alt = '';
-    tuotanto.appendChild(uuniEl);
+    hihnaRivi.appendChild(uuniEl);
+    tuotanto.appendChild(hihnaRivi);
 
     // --- hyllyt
     var hyllyt = el('div', 'av__hyllyt');
