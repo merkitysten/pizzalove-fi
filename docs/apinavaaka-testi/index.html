@@ -24,7 +24,6 @@
 <body>
 <main>
 <div class="apinavaaka" id="av" data-koko></div>
-<p class="kielet-testi">Testi · <a href="?tila=harjoitus" onclick="this.href+='&kieli='+k">harjoitus</a> · <a href="?tila=apinat" onclick="this.href+='&kieli='+k">Nälkäiset apinat</a> · <a href="?kieli=fi" onclick="this.href+='&tila='+(q.get('tila')||'')">fi</a> · <a href="?kieli=sv" onclick="this.href+='&tila='+(q.get('tila')||'')">sv</a> · <a href="?kieli=en" onclick="this.href+='&tila='+(q.get('tila')||'')">en</a> · <a href="?kieli=de" onclick="this.href+='&tila='+(q.get('tila')||'')">de</a></p>
 </main>
 <script>
 var q = new URLSearchParams(location.search), k = q.get("kieli") || "fi";

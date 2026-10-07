@@ -234,6 +234,7 @@
 .av__kielet button.nyt{background:var(--orange,#F47920)}
 .av__vinkit h2{padding-right:76px}
 .av__vinkit li{font-size:16px}
-.av__sydan{position:absolute;right:-6px;top:-8px;width:26px;transform:rotate(8deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.av__sydan{position:absolute;right:-5px;bottom:-5px;width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.av__sydan img{width:68%;height:auto}
 .av__laatikko{display:block;width:110px;margin:-46px auto 2px}
 .av__loppu{padding-top:10px}

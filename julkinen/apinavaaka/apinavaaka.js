@@ -572,7 +572,7 @@
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
           k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i></span>' +
-            (n === 10 ? '<img class="av__sydan" src="' + KANSIO + 'sydan.webp" alt="">' : '');   // sydänpizza
+            (n === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');   // sydänpizza
           k.addEventListener('click', function () { if (ok) valmista(n, k); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
           kortitEl.appendChild(k);
         });
