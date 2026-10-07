@@ -51,8 +51,13 @@
  * peli.css:n tulosruudulla ei ole omaa asettelua (leveällä näytöllä ▶ jäi
  * vasempaan laitaan), joten Bassossa kaikki on yhdessä keskitetyssä sarakkeessa. */
 #tulosRuutu:not([hidden]){display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:clamp(10px, 2.4vh, 22px);min-height:100vh;min-height:100dvh;
-  position:relative;overflow:hidden}
+  justify-content:center;gap:clamp(8px, 1.6vh, 16px);min-height:100vh;min-height:100dvh;
+  position:relative;overflow-x:hidden;
+  /* ⚙ on yläkulmassa: sisältö alkaa sen rivin alta, ettei se peitä laatikkoa. */
+  padding:calc(env(safe-area-inset-top, 0px) + 64px) 0 calc(env(safe-area-inset-bottom, 0px) + 12px);
+  /* Varalla vieritys: jos sisältö ei jollain laitteella mahdu, ▶ ei saa jäädä
+   * ulottumattomiin (overflow:hidden leikkasi sen 667 px:n korkeudella). */
+  overflow-y:auto}
 #tulosRuutu::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.45}
 @media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
@@ -61,7 +66,8 @@
  * joka peitti kuosin puhelimessa — tulkinta Markon «taustan väri saisi olla
  * sama kuin sivustolla» -toiveesta, joka koski luultavasti voittoruutua. */
 #tulosRuutu > *{position:relative;z-index:1}
-#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100%, 620px)}
+#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100% - 24px, 600px);
+  padding:12px 10px 8px}
 
 .basso-palli{display:flex;align-items:stretch;justify-content:center;width:100%;gap:6px}
 .palli-paikka{flex:1 1 0;max-width:150px;min-width:0;display:flex;flex-direction:column;align-items:center}
@@ -173,7 +179,7 @@
 .kisa-maali img{position:absolute;top:calc(22px - var(--pala) * .2);left:0;height:var(--pala);width:auto;
   max-width:none;display:block;transform:translateX(-50%) rotate(90deg);
   filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
-.kisa-rata{position:relative;height:clamp(38px, 6.5vh, 48px)}
+.kisa-rata{position:relative;height:clamp(34px, 5.4vh, 46px)}
 /* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
 .kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
   top:50%;height:12px;transform:translateY(-50%);border-radius:6px;background:rgba(60,34,12,.12)}
@@ -337,6 +343,21 @@
   padding:6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);background:rgba(0,0,0,.85);color:#9f9;
   font:11px/1.35 ui-monospace, Menlo, monospace;white-space:pre-wrap;pointer-events:none}
 
+/* --- TULOSRUUDUN LAATIKOT kuosin päällä (Marko 7.10.2026: «Nyt tulosruutu
+ * muuttui sekavaksi. Pitäisikö näille eri elementeillä olla omat rajatut
+ * alueensa taustakuosin päällä?») ---
+ * Sama ratkaisu kuin pizzalove.fi:ssä: kuosi taustana, sisältö omissa
+ * laatikoissaan. Arvot sivuston .laatikko-tyylistä (julkinen/tyyli.css):
+ * valkoinen pinta, reuna #E7DCCA, pyöristys 18 px, sama varjo. Kaksi
+ * laatikkoa, koska ne kertovat eri asiaa: KIERROS (palli + jääneet kortit)
+ * ja OTTELU (juoksukilpailu). ▶ ja ⚙ jäävät kuosin päälle. */
+#tulosPisteet, #bassoKisa:not(:empty){background:var(--basso-pinta, #fff);border:1px solid var(--basso-reuna, #E7DCCA);
+  border-radius:18px;box-shadow:0 1px 2px rgba(60,34,12,.06), 0 8px 24px rgba(60,34,12,.08)}
+#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:8px;width:min(100% - 24px, 600px)}
+@media (prefers-color-scheme:dark){
+  #tulosPisteet, #bassoKisa:not(:empty){--basso-pinta:#221D18;--basso-reuna:#38302A}
+}
+
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390, sarakkeena sisältö
  * vei 418 px — palli alkoi −14 px:stä ja ▶ päättyi 404:ään. Palli vasemmalle,
  * kisa ja napit oikealle. ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa
@@ -344,7 +365,9 @@
 @media (max-height: 500px){
   #tulosRuutu:not([hidden]){display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows:auto auto;grid-template-areas:"palli kisa" "palli napit";
-    align-content:center;align-items:center;column-gap:28px;row-gap:12px;padding:8px 16px}
+    align-content:center;align-items:center;column-gap:28px;row-gap:12px;
+    /* oikealla tila ⚙:lle, ettei se osu kisalaatikon kulmaan */
+    padding:8px 64px 8px 16px}
   #tulosPisteet{grid-area:palli;width:100%;max-width:440px;justify-self:end;gap:4px}
   .basso-kisa{grid-area:kisa;width:100%;max-width:420px}
   .basso-tulos-napit{grid-area:napit;flex-direction:row;justify-self:center}
@@ -355,4 +378,16 @@
   .basso-juhla{gap:4px}
   .basso-juhla-hahmo .basso-hahmo{--koko:min(40vw, 30vh, 220px)}
   .basso-juhla-muut{flex-direction:row;flex-wrap:wrap;justify-content:center;width:auto}
+}
+
+/* Puhelin pystyssä selaimen palkkien kanssa (iPhone + Safari ≈ 667 px):
+ * mitattu 375 × 667, ▶ päättyi 694 px:iin. Pienemmät kortit, pala ja välit.
+ * ⚠️ Tiedoston lopussa samasta syystä kuin matalan ruudun lohko. */
+@media (min-height: 501px) and (max-height: 740px){
+  #tulosRuutu:not([hidden]){padding-top:calc(env(safe-area-inset-top, 0px) + 60px);gap:8px}
+  .basso-palli{--mk:clamp(36px, 6vh, 58px)}
+  .palli-ala{padding-top:8px}
+  .basso-kisa{--pala:48px}
+  .kisa-rata{height:34px}
+  .basso-jatka{width:60px}
 }
