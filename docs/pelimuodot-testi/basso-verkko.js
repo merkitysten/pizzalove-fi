@@ -179,12 +179,47 @@ function bvVarit(sailio, varatut, valittu, valitse) {
   });
 }
 
-/* Nimi kentästä; sama nimi muistiin tälle laitteelle (asetusten 1. pelaaja). */
+/* ⚠️ NIMI TARKISTETAAN JO TÄÄLLÄ, samalla säännöllä kuin basso-huone.php:n
+ * siistiNimi (= huone.php:n nimimerkki). Marko 7.10.2026 puhelimella: nimen
+ * kanssa luonti ei tehnyt «mitään», ilman nimeä toimi. Mitattu palvelimelta:
+ * iPhonen kaareva heittomerkki (’), huutomerkki ja emoji → nimiKelpaa — ja
+ * virheteksti jäi napin alle laatikon vieritettävään osaan eikä näkynyt.
+ * Nyt virheellistä nimeä ei lähetetä, ja ohje näkyy heti kentän alla. */
+const BV_NIMI_KUVIO = /^[\p{L}\p{N}][\p{L}\p{N} ._\-]*$/u;
+function bvNimiKelpaa(n) {
+  return n === '' || (BV_NIMI_KUVIO.test(n) && Array.from(n).length <= BASSO_NIMI_ENINTAAN);
+}
+
+/* Nimi kentästä tai null jos ei kelpaa (ohje näytetään kentän alle).
+ * Kelpaava nimi muistiin tälle laitteelle (asetusten 1. pelaaja). */
 function bvNimi(id) {
   const n = bassoSiistiNimi(bvEl(id).value);
+  if (!bvNimiKelpaa(n)) {
+    bvNaytaVirhe({ virhe: 'nimiKelpaa' });
+    bvEl(id).focus();
+    return null;
+  }
   bassoAsetukset.nimet[0] = n;
   tallennaAsetukset();
   return n;
+}
+
+/* Kirjoittaessa: ohje näkyviin heti kun nimi ei kelpaa, pois kun kelpaa. */
+function bvNimiKentta(id, enter) {
+  const kentta = bvEl(id);
+  kentta.maxLength = BASSO_NIMI_ENINTAAN;
+  kentta.addEventListener('input', function () {
+    const p = kentta.parentNode.querySelector('.bv-virhe');
+    const ok = bvNimiKelpaa(bassoSiistiNimi(kentta.value));
+    if (!ok) { p.textContent = bvVirheTeksti({ virhe: 'nimiKelpaa' }); p.hidden = false; }
+    else if (p.textContent === bvVirheTeksti({ virhe: 'nimiKelpaa' })) p.hidden = true;
+  });
+  kentta.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    kentta.blur();
+    if (enter) enter();
+  });
 }
 
 function bvAvaaLuo() {
@@ -200,10 +235,12 @@ function bvAvaaLuo() {
 async function bvLuo() {
   const nappi = bvEl('bvLuo');
   if (nappi.disabled) return;
+  const nimi = bvNimi('bvLuoNimi');
+  if (nimi === null) return;
   nappi.disabled = true;
   nappi.classList.add('odottaa');                // näkyvä «työn alla» -tila
   try {
-    const j = await bvApi('luo', { vari: bv.vari, nimi: bvNimi('bvLuoNimi'), asetukset: { tavoite: bassoAsetukset.tavoite, sallitut: tila.sallitut } });
+    const j = await bvApi('luo', { vari: bv.vari, nimi: nimi, asetukset: { tavoite: bassoAsetukset.tavoite, sallitut: tila.sallitut } });
     bv.koodi = j.koodi; bv.avain = j.avain;
     bvTallenna();
     bvSovella(j.tila);
@@ -236,8 +273,10 @@ async function bvKoodiJatka() {
 }
 
 async function bvLiity(vari) {
+  const nimi = bvNimi('bvLiityNimi');
+  if (nimi === null) return;
   try {
-    const j = await bvApi('liity', { koodi: bv.koodi, vari: vari, nimi: bvNimi('bvLiityNimi') });
+    const j = await bvApi('liity', { koodi: bv.koodi, vari: vari, nimi: nimi });
     bv.avain = j.avain;
     bvTallenna();
     bvSovella(j.tila);
@@ -509,6 +548,8 @@ document.addEventListener('DOMContentLoaded', function () {
   bvEl('bvLuoAvaa').onclick = bvAvaaLuo;
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuo').onclick = bvLuo;
+  bvNimiKentta('bvLuoNimi', bvLuo);
+  bvNimiKentta('bvLiityNimi', null);
   bvEl('bvKoodiJatka').onclick = bvKoodiJatka;
   bvEl('bvKoodi').addEventListener('keydown', function (e) { if (e.key === 'Enter') bvKoodiJatka(); });
   bvEl('bvAloita').onclick = bvJaa;

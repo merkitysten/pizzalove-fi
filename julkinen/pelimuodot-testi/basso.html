@@ -414,11 +414,13 @@
     </div>
     <!-- Luo: väri ensin. Nimeä ei kysytä: pelaajan tunnistaa väristä. -->
     <div class="verkko-osa" data-osa="luo" hidden>
-      <input id="bvLuoNimi" class="verkko-kentta" autocomplete="off" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
+      <input id="bvLuoNimi" class="verkko-kentta" autocomplete="off" enterkeyhint="go" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
+      <!-- ⚠️ Virhe HETI kentän alla. Napin alla se jäi puhelimessa laatikon
+           vieritettävään alaosaan eikä näkynyt lainkaan (mitattu 6.10.2026). -->
+      <p class="verkko-virhe bv-virhe" hidden></p>
       <b class="bv-otsikko" data-t="bverkko.vari"></b>
       <div id="bvLuoVarit" class="basso-varit"></div>
       <button id="bvLuo" type="button" class="iso-nappi" data-t="isanta.luo"></button>
-      <p class="verkko-virhe bv-virhe" hidden></p>
       <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
     </div>
     <div class="verkko-osa" data-osa="koodi" hidden>
@@ -429,10 +431,10 @@
       <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
     </div>
     <div class="verkko-osa" data-osa="liity" hidden>
-      <input id="bvLiityNimi" class="verkko-kentta" autocomplete="off" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
+      <input id="bvLiityNimi" class="verkko-kentta" autocomplete="off" enterkeyhint="done" data-tp="bverkko.nimi" data-ta="bverkko.nimi">
+      <p class="verkko-virhe bv-virhe" hidden></p>
       <b class="bv-otsikko" data-t="bverkko.vari"></b>
       <div id="bvLiityVarit" class="basso-varit"></div>
-      <p class="verkko-virhe bv-virhe" hidden></p>
       <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
     </div>
     <!-- Aula: koodi isona + QR, liittyneet hahmoina. Perustaja aloittaa. -->
@@ -473,6 +475,6 @@
 <script src="basso-saannot.js?v=20261006b"></script>
 <script src="basso.js?v=20261006m"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="basso-verkko.js?v=20261006c"></script>
+<script src="basso-verkko.js?v=20261007a"></script>
 </body>
 </html>
