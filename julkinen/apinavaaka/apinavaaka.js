@@ -610,7 +610,9 @@
             b.appendChild(torni(n));
             b.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
             b.title = t.taytteet[n - 1];
-            (function (n, nimi) { b.addEventListener('click', function () { napauta(n, nimi); }); })(n, nimi);
+            // koko sarake on kosketusalue, ei vain pieni torni (napin klikkaus kuplii sarakkeeseen)
+            (function (n, nimi) { paikka.addEventListener('click', function () { napauta(n, nimi); }); })(n, nimi);
+            paikka.classList.add('av__paikka--torni');
             if (tila.siirretty || tila.loppu) b.disabled = true;
             (kulho || paikka).appendChild(b);
           } else paikka.classList.add('av__paikka--tyhja');

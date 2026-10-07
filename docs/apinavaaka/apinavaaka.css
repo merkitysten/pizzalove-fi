@@ -177,10 +177,16 @@
 .av__tuotanto{display:none}
 .av--apinat .av__tuotanto{display:block;position:relative;margin:6px -2px 0}
 .av__hihna{display:block;width:100%;height:auto;position:relative;z-index:1}
-.av__uuni{position:absolute;right:2px;bottom:-2px;width:54px;z-index:3;transform-origin:50% 100%}
+.av__uuni{position:absolute;right:2px;bottom:8px;width:54px;z-index:3;transform-origin:50% 100%}
 .av__uuni--paistaa{animation:av-uuni .5s ease-in-out 2}
 @keyframes av-uuni{50%{transform:scale(1.08);filter:brightness(1.15) saturate(1.3)}}
 .av__kortti--paistuu{pointer-events:none;z-index:4}
 .av__kortti--uusi{animation:av-uusikortti .5s cubic-bezier(.3,1.4,.5,1)}
 @keyframes av-uusikortti{from{transform:translateX(-90px);opacity:0}}
 .av--apinat .av__kortit--valinta{margin-bottom:0}
+
+/* isompi kosketusalue: koko sarake */
+.av__paikka--torni{cursor:pointer;border-radius:10px;transition:background .15s}
+.av__paikka--torni:active{background:rgba(255,255,255,.55)}
+.av__paikat{gap:1px}
+.av__hylly{padding-left:4px;padding-right:4px}
