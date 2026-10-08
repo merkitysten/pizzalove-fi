@@ -714,10 +714,14 @@ function bassoTulosEteenpain() {
   if (!basso || document.getElementById('tulosRuutu').hidden) return;
   if (!document.getElementById('bassoJuhla').hidden) return;
   if (basso.voittaja !== null && !tila.keskeytetty) return bassoJuhla(bassoVarit());
-  bassoSeuraava();
+  bassoJatka();
 }
 
-function bassoSeuraava() {
+/* ⚠️ EI `bassoSeuraava`: se nimi on basso-saannot.js:n «kuka pelaa
+ * seuraavaksi», ja myöhempi määrittely voittaa hiljaa. Mitattu 7.10.2026:
+ * jokainen vuoronvaihto aloitti uuden kierroksen, eivätkä vastustajat
+ * pelanneet lainkaan. testit/bassokoe.js vartioi nyt nimitörmäyksiä. */
+function bassoJatka() {
   if (bassoVerkossa) return bassoVerkossa.seuraava();     // vain perustaja jakaa
   if (!basso || basso.voittaja !== null || tila.keskeytetty) return aloitaPeli();
   bassoAloitaKierros();
@@ -772,7 +776,7 @@ function bassoJuhlaKiinni() {
  * palaavat tulosruutuun odottamaan ⏳). */
 function bassoJuhlaNapautus() {
   bassoJuhlaKiinni();
-  bassoSeuraava();
+  bassoJatka();
 }
 
 /* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
