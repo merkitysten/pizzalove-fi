@@ -272,32 +272,32 @@
     fi: { nimi: 'Auta Bassoa', taso: 'Taso', aloita: 'Aloita', seuraava: 'Seuraava taso', alusta: 'Aloita alusta',
       intro: 'Basso tarvitsee apua! Valmista pizza yhdellä siirrolla.',
       kuvaus: ['Perussiirto', 'Summasiirto', 'Kahden täytteen pizza', 'Erotussiirto', 'Kaksi täytettä kerralla',
-        'Summa ja erotus yhdessä', 'Kolmen täytteen pizza', 'Varo ansaa!', 'Monta pizzaa', 'Mestaritaso'],
-      kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?', valitse: 'Valitse taso',
+        'Summa ja erotus yhdessä', 'Kolmen täytteen pizza', 'Varo ansaa!', 'Kaksi pizzaa yhdellä siirrolla', 'Mestaritaso'],
+      kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?', kysyKaikki: 'Valmista kaikki pizzat yhdellä siirrolla.', eiKaikki: 'Tasapaino, mutta kaikki pizzat eivät valmistu.', pizzat: 'Valmista pizzat!', valitse: 'Valitse taso',
       eiPizza: 'Tasapaino, mutta pizza ei valmistu. Katso pizzaa!', ok: 'Tasapaino!', pizza: 'Valmista pizza!', hyva: 'Hienoa!',
       vinkki: ['Vihje: perussiirto.', 'Vihje: summasiirto.', 'Vihje: erotussiirto.', 'Vihje: summa ja erotus yhdessä.'],
       hohto: 'Katso hohtavia täytteitä.', tasoValmis: 'Taso {n} valmis!', loppu: ['Mestaripizzaiolo!', 'Ratkaisit kaikki pulmat.'] },
     sv: { nimi: 'Hjälp Basso', taso: 'Nivå', aloita: 'Börja', seuraava: 'Nästa nivå', alusta: 'Börja om',
       intro: 'Basso behöver hjälp! Gör pizzan med en flytt.',
       kuvaus: ['Basflytt', 'Summaflytt', 'Pizza med två fyllningar', 'Skillnadsflytt', 'Två fyllningar på en gång',
-        'Summa och skillnad tillsammans', 'Pizza med tre fyllningar', 'Akta fällan!', 'Många pizzor', 'Mästarnivå'],
-      kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?', valitse: 'Välj nivå',
+        'Summa och skillnad tillsammans', 'Pizza med tre fyllningar', 'Akta fällan!', 'Två pizzor med en flytt', 'Mästarnivå'],
+      kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?', kysyKaikki: 'Gör alla pizzor med en flytt.', eiKaikki: 'Balans, men alla pizzor blir inte klara.', pizzat: 'Gör pizzorna!', valitse: 'Välj nivå',
       eiPizza: 'Balans, men pizzan blir inte klar. Titta på pizzan!', ok: 'Balans!', pizza: 'Gör pizzan!', hyva: 'Bra!',
       vinkki: ['Tips: basflytt.', 'Tips: summaflytt.', 'Tips: skillnadsflytt.', 'Tips: summa och skillnad tillsammans.'],
       hohto: 'Titta på de lysande fyllningarna.', tasoValmis: 'Nivå {n} klar!', loppu: ['Mästarpizzaiolo!', 'Du löste alla gåtor.'] },
     en: { nimi: 'Help Basso', taso: 'Level', aloita: 'Start', seuraava: 'Next level', alusta: 'Start over',
       intro: 'Basso needs help! Make the pizza with one move.',
       kuvaus: ['Basic move', 'Sum move', 'Two-topping pizza', 'Difference move', 'Two toppings at once',
-        'Sum and difference together', 'Three-topping pizza', 'Watch out for the trap!', 'Many pizzas', 'Master level'],
-      kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?', valitse: 'Choose a level',
+        'Sum and difference together', 'Three-topping pizza', 'Watch out for the trap!', 'Two pizzas with one move', 'Master level'],
+      kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?', kysyKaikki: 'Make all the pizzas with one move.', eiKaikki: 'Balanced, but not every pizza is ready.', pizzat: 'Make the pizzas!', valitse: 'Choose a level',
       eiPizza: 'Balanced, but the pizza isn’t ready. Look at the pizza!', ok: 'Balanced!', pizza: 'Make the pizza!', hyva: 'Well done!',
       vinkki: ['Hint: basic move.', 'Hint: sum move.', 'Hint: difference move.', 'Hint: sum and difference together.'],
       hohto: 'Look at the glowing toppings.', tasoValmis: 'Level {n} done!', loppu: ['Master pizzaiolo!', 'You solved every puzzle.'] },
     de: { nimi: 'Hilf Basso', taso: 'Stufe', aloita: 'Los', seuraava: 'Nächste Stufe', alusta: 'Von vorn',
       intro: 'Basso braucht Hilfe! Back die Pizza mit einem Zug.',
       kuvaus: ['Grundzug', 'Summenzug', 'Pizza mit zwei Zutaten', 'Differenzzug', 'Zwei Zutaten auf einmal',
-        'Summe und Differenz zusammen', 'Pizza mit drei Zutaten', 'Vorsicht, Falle!', 'Viele Pizzen', 'Meisterstufe'],
-      kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', valitse: 'Stufe wählen',
+        'Summe und Differenz zusammen', 'Pizza mit drei Zutaten', 'Vorsicht, Falle!', 'Zwei Pizzen mit einem Zug', 'Meisterstufe'],
+      kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', kysyKaikki: 'Back alle Pizzen mit einem Zug.', eiKaikki: 'Gleichgewicht, aber nicht alle Pizzen werden fertig.', pizzat: 'Back die Pizzen!', valitse: 'Stufe wählen',
       eiPizza: 'Gleichgewicht, aber die Pizza wird nicht fertig. Schau auf die Pizza!', ok: 'Gleichgewicht!', pizza: 'Back die Pizza!', hyva: 'Super!',
       vinkki: ['Tipp: Grundzug.', 'Tipp: Summenzug.', 'Tipp: Differenzzug.', 'Tipp: Summe und Differenz zusammen.'],
       hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Meister-Pizzaiolo!', 'Du hast alle Rätsel gelöst.'] }
@@ -344,7 +344,7 @@
     { koko: [3], lin: [1, 4], ehto: function (p) { return p.helpoin <= 2; } },
     // ansa: pizzan oma täyte on jo linjastolla, ja jokin houkutteleva erotussiirto veisi sen pois
     { koko: [2, 3], lin: [2, 4], ehto: function (p) { return p.puuttuu < p.kohde.length && p.rat.length <= 2 && p.helpoin >= 2 && p.ansa; } },
-    { koko: [1, 2], lin: [1, 4], monta: 3, ehto: function (p) { return p.helpoin <= 3; } },
+    { koko: [1, 2], lin: [0, 3], kaikki: 2, ehto: function (p) { return p.rat.length <= 4; } },
     { koko: [3, 4], lin: [1, 4], ehto: function (p) { return p.rat.length === 1 && p.helpoin >= 2; } }
   ];
   var PULMIA_TASOLLA = 5;
@@ -362,11 +362,20 @@
     for (var yritys = 0; yritys < 200000 && tulos.length < PULMIA_TASOLLA; yritys++) {
       var koko = arvo(taso.koko);
       var ehdokkaat = PIZZAT.filter(function (pz) { return pz.length === koko; });
-      var kohde = arvo(ehdokkaat), d = 1 + Math.floor(rnd() * 10);
+      var kohde = arvo(ehdokkaat), d = 1 + Math.floor(rnd() * 10), valitut = [kohde];
+      if (taso.kaikki) {
+        // useampi pizza, joissa ei ole yhteisiä täytteitä (valmistettu pizza palauttaa täytteensä varastoon)
+        while (valitut.length < taso.kaikki) {
+          var lisa = arvo(PIZZAT.filter(function (pz) { return pz.length === arvo(taso.koko); }));
+          if (valitut.some(function (v) { return v.some(function (x) { return lisa.indexOf(x) >= 0; }); })) continue;
+          valitut.push(lisa);
+        }
+        kohde = [].concat.apply([], valitut).sort(function (a, b) { return a - b; });
+      }
       var linMaara = taso.lin[0] + Math.floor(rnd() * (taso.lin[1] - taso.lin[0] + 1)), lin = [];
       while (lin.length < linMaara) { var x = 1 + Math.floor(rnd() * 10); if (lin.indexOf(x) < 0) lin.push(x); }
       lin.sort(function (a, b) { return a - b; });
-      if (kohde.every(function (x) { return lin.indexOf(x) >= 0; })) continue;   // pizza ei saa olla valmiina
+      if (valitut.some(function (v) { return v.every(function (x) { return lin.indexOf(x) >= 0; }); })) continue;   // pizza ei saa olla valmiina
       var rat = pulmaRatkaisut(d, lin, kohde);
       if (!rat.length) continue;
       var p = { kohde: kohde, d: d, lin: lin, rat: rat, helpoin: Math.min.apply(null, rat.map(siirronTapa)),
@@ -378,7 +387,7 @@
         return false;
       });
       if (!taso.ehto(p)) continue;
-      p.pizzat = [kohde];
+      p.pizzat = valitut; p.kaikki = !!taso.kaikki;
       if (taso.monta) {                          // muut pizzat: houkuttelevia, mutta yhdelläkään siirrolla ei saa valmiiksi
         var muut = PIZZAT.filter(function (pz) {
           return pz !== kohde && pz.length <= 2 && !pz.every(function (x) { return lin.indexOf(x) >= 0; }) && !pulmaRatkaisut(d, lin, pz).length;
@@ -387,7 +396,7 @@
         while (p.pizzat.length < taso.monta) { var m = arvo(muut); if (p.pizzat.indexOf(m) < 0) p.pizzat.push(m); }
         p.pizzat.sort(function () { return rnd() - 0.5; });
       }
-      var avain = kohde.join('+') + '/' + d + '/' + lin.join(',');
+      var avain = valitut.map(function (v) { return v.join('+'); }).join('|') + '/' + d + '/' + lin.join(',');
       if (nahty[avain]) continue;
       nahty[avain] = true;
       tulos.push(p);
@@ -701,7 +710,8 @@
     function pizzaValmiina(pz) { return pz.every(function (x) { return tila.paikka[x] === 'linjasto'; }); }
     // valmistuisiko vaa'alla olevalla siirrolla jokin pizza?
     function pulmaSyntyy() {
-      return (tila.pizzat || []).some(function (pz) {
+      var kaikki = tila.muoto === 'pulmat' && pulma().kaikki;
+      return (tila.pizzat || [])[kaikki ? 'every' : 'some'](function (pz) {
         return pz.every(function (x) { return tila.paikka[x] === 'linjasto' || tila.oikea.indexOf(x) >= 0; });
       });
     }
@@ -743,6 +753,7 @@
       paista(korttiEl, function () {
         pz.forEach(function (x) { tila.paikka[x] = 'varasto'; });   // käytetyt täytteet palaavat varastoon
         tila.pizzat.splice(i, 1);
+        if (tila.pizzat.some(pizzaValmiina)) return piirra();   // loputkin pizzat odottavat valmistamista
         tila.vaihe = 'odota';
         piirra();
         setTimeout(seuraavaPulma, 1300);
@@ -1177,14 +1188,14 @@
       rivi.className = 'av__rivi';
       var ov = opas && vaihe(), oteksti = ov ? (ot[ov.tapa] || {}) : null;
       if (pulmat) {
-        if (tila.vaihe === 'pizza') { rivi.textContent = pt.pizza; rivi.classList.add('av__rivi--ok'); }
+        if (tila.vaihe === 'pizza') { rivi.textContent = tila.pizzat.length > 1 ? pt.pizzat : pt.pizza; rivi.classList.add('av__rivi--ok'); }
         else if (tila.vaihe === 'odota') { rivi.textContent = pt.hyva; rivi.classList.add('av__rivi--ok'); }
         else if (tila.valmis) {
           rivi.appendChild(el('span', 'av__rivi-teksti', pt.ok));
           nappi(vieSlot, tila.vasen.length ? ot.vie : t.vie, 'av__vie', vieSiirto);
           rivi.classList.add('av__rivi--ok');
         } else {
-          var pv = pEiPizza ? pt.eiPizza : tila.vihje ? pt.hohto : tila.pVinkki ? pt.vinkki[pulma().helpoin - 1] : (tila.pizzat.length > 1 ? pt.kysyMonta : pt.kysy);
+          var pv = pEiPizza ? (pulma().kaikki ? pt.eiKaikki : pt.eiPizza) : tila.vihje ? pt.hohto : tila.pVinkki ? pt.vinkki[pulma().helpoin - 1] : (pulma().kaikki ? pt.kysyKaikki : pt.kysy);
           rivi.appendChild(el('span', 'av__rivi-alku', pt.taso + ' ' + (tila.pTaso + 1)));
           lauseet(pv).forEach(function (x) { rivi.appendChild(el('span', 'av__lause', x)); });
         }
