@@ -271,32 +271,28 @@
   var PULMA = {
     fi: { nimi: 'Auta Bassoa', taso: 'Taso', aloita: 'Aloita', seuraava: 'Seuraava taso', alusta: 'Aloita alusta',
       intro: 'Basso tarvitsee apua! Valmista pizza yhdellä siirrolla.',
-      kuvaus: ['Perussiirto', 'Summasiirto', 'Kahden täytteen pizza', 'Erotussiirto', 'Kaksi täytettä kerralla',
-        'Summa ja erotus yhdessä', 'Kolmen täytteen pizza', 'Varo ansaa!', 'Kaksi pizzaa yhdellä siirrolla', 'Mestaritaso'],
+      kuvaus: ['Perussiirto', 'Summasiirto', 'Kahden täytteen pizza', 'Erotussiirto', 'Kaksi täytettä kerralla', 'Kolmen täytteen pizza', 'Summa ja erotus yhdessä', 'Kaksi pizzaa yhdellä siirrolla', 'Varo ansaa!', 'Kolme pizzaa yhdellä siirrolla', 'Mestaritaso', 'Suurmestari'],
       kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?', kysyKaikki: 'Valmista kaikki pizzat yhdellä siirrolla.', eiKaikki: 'Tasapaino, mutta kaikki pizzat eivät valmistu.', pizzat: 'Valmista pizzat!', valitse: 'Valitse taso',
       eiPizza: 'Tasapaino, mutta pizza ei valmistu. Katso pizzaa!', ok: 'Tasapaino!', pizza: 'Valmista pizza!', hyva: 'Hienoa!',
       vinkki: ['Vihje: perussiirto.', 'Vihje: summasiirto.', 'Vihje: erotussiirto.', 'Vihje: summa ja erotus yhdessä.'],
       hohto: 'Katso hohtavia täytteitä.', tasoValmis: 'Taso {n} valmis!', loppu: ['Mestaripizzaiolo!', 'Ratkaisit kaikki pulmat.'] },
     sv: { nimi: 'Hjälp Basso', taso: 'Nivå', aloita: 'Börja', seuraava: 'Nästa nivå', alusta: 'Börja om',
       intro: 'Basso behöver hjälp! Gör pizzan med en flytt.',
-      kuvaus: ['Basflytt', 'Summaflytt', 'Pizza med två fyllningar', 'Skillnadsflytt', 'Två fyllningar på en gång',
-        'Summa och skillnad tillsammans', 'Pizza med tre fyllningar', 'Akta fällan!', 'Två pizzor med en flytt', 'Mästarnivå'],
+      kuvaus: ['Basflytt', 'Summaflytt', 'Pizza med två fyllningar', 'Skillnadsflytt', 'Två fyllningar på en gång', 'Pizza med tre fyllningar', 'Summa och skillnad tillsammans', 'Två pizzor med en flytt', 'Akta fällan!', 'Tre pizzor med en flytt', 'Mästarnivå', 'Stormästare'],
       kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?', kysyKaikki: 'Gör alla pizzor med en flytt.', eiKaikki: 'Balans, men alla pizzor blir inte klara.', pizzat: 'Gör pizzorna!', valitse: 'Välj nivå',
       eiPizza: 'Balans, men pizzan blir inte klar. Titta på pizzan!', ok: 'Balans!', pizza: 'Gör pizzan!', hyva: 'Bra!',
       vinkki: ['Tips: basflytt.', 'Tips: summaflytt.', 'Tips: skillnadsflytt.', 'Tips: summa och skillnad tillsammans.'],
       hohto: 'Titta på de lysande fyllningarna.', tasoValmis: 'Nivå {n} klar!', loppu: ['Mästarpizzaiolo!', 'Du löste alla gåtor.'] },
     en: { nimi: 'Help Basso', taso: 'Level', aloita: 'Start', seuraava: 'Next level', alusta: 'Start over',
       intro: 'Basso needs help! Make the pizza with one move.',
-      kuvaus: ['Basic move', 'Sum move', 'Two-topping pizza', 'Difference move', 'Two toppings at once',
-        'Sum and difference together', 'Three-topping pizza', 'Watch out for the trap!', 'Two pizzas with one move', 'Master level'],
+      kuvaus: ['Basic move', 'Sum move', 'Two-topping pizza', 'Difference move', 'Two toppings at once', 'Three-topping pizza', 'Sum and difference together', 'Two pizzas with one move', 'Watch out for the trap!', 'Three pizzas with one move', 'Master level', 'Grandmaster'],
       kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?', kysyKaikki: 'Make all the pizzas with one move.', eiKaikki: 'Balanced, but not every pizza is ready.', pizzat: 'Make the pizzas!', valitse: 'Choose a level',
       eiPizza: 'Balanced, but the pizza isn’t ready. Look at the pizza!', ok: 'Balanced!', pizza: 'Make the pizza!', hyva: 'Well done!',
       vinkki: ['Hint: basic move.', 'Hint: sum move.', 'Hint: difference move.', 'Hint: sum and difference together.'],
       hohto: 'Look at the glowing toppings.', tasoValmis: 'Level {n} done!', loppu: ['Master pizzaiolo!', 'You solved every puzzle.'] },
     de: { nimi: 'Hilf Basso', taso: 'Stufe', aloita: 'Los', seuraava: 'Nächste Stufe', alusta: 'Von vorn',
       intro: 'Basso braucht Hilfe! Back die Pizza mit einem Zug.',
-      kuvaus: ['Grundzug', 'Summenzug', 'Pizza mit zwei Zutaten', 'Differenzzug', 'Zwei Zutaten auf einmal',
-        'Summe und Differenz zusammen', 'Pizza mit drei Zutaten', 'Vorsicht, Falle!', 'Zwei Pizzen mit einem Zug', 'Meisterstufe'],
+      kuvaus: ['Grundzug', 'Summenzug', 'Pizza mit zwei Zutaten', 'Differenzzug', 'Zwei Zutaten auf einmal', 'Pizza mit drei Zutaten', 'Summe und Differenz zusammen', 'Zwei Pizzen mit einem Zug', 'Vorsicht, Falle!', 'Drei Pizzen mit einem Zug', 'Meisterstufe', 'Großmeister'],
       kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', kysyKaikki: 'Back alle Pizzen mit einem Zug.', eiKaikki: 'Gleichgewicht, aber nicht alle Pizzen werden fertig.', pizzat: 'Back die Pizzen!', valitse: 'Stufe wählen',
       eiPizza: 'Gleichgewicht, aber die Pizza wird nicht fertig. Schau auf die Pizza!', ok: 'Gleichgewicht!', pizza: 'Back die Pizza!', hyva: 'Super!',
       vinkki: ['Tipp: Grundzug.', 'Tipp: Summenzug.', 'Tipp: Differenzzug.', 'Tipp: Summe und Differenz zusammen.'],
@@ -333,75 +329,32 @@
   }
   // siirron tapa: 1 perus, 2 summa, 3 erotus, 4 yhdistelmä
   function siirronTapa(r) { return r.vasen.length ? (r.oikea.length > 1 ? 4 : 3) : (r.oikea.length > 1 ? 2 : 1); }
-  // tasot: jokaisessa 5 pulmaa. ehto(p) saa pulman { pizzat, kohde, d, lin, rat, helpoin, puuttuu }
-  var PULMATASOT = [
-    { koko: [1], lin: [0, 2], ehto: function (p) { return p.helpoin === 1; } },
-    { koko: [1], lin: [0, 2], ehto: function (p) { return p.helpoin === 2; } },
-    { koko: [2], lin: [1, 3], ehto: function (p) { return p.puuttuu === 1 && p.helpoin <= 2; } },
-    { koko: [1, 2], lin: [1, 3], ehto: function (p) { return p.helpoin === 3 && p.puuttuu === 1; } },
-    { koko: [2], lin: [0, 3], ehto: function (p) { return p.puuttuu === 2 && p.helpoin === 2; } },
-    { koko: [1, 2], lin: [1, 4], ehto: function (p) { return p.helpoin === 4; } },
-    { koko: [3], lin: [1, 4], ehto: function (p) { return p.helpoin <= 2; } },
-    // ansa: pizzan oma täyte on jo linjastolla, ja jokin houkutteleva erotussiirto veisi sen pois
-    { koko: [2, 3], lin: [2, 4], ehto: function (p) { return p.puuttuu < p.kohde.length && p.rat.length <= 2 && p.helpoin >= 2 && p.ansa; } },
-    { koko: [1, 2], lin: [0, 3], kaikki: 2, ehto: function (p) { return p.rat.length <= 4; } },
-    { koko: [3, 4], lin: [1, 4], ehto: function (p) { return p.rat.length === 1 && p.helpoin >= 2; } }
+  // Tasot: 12 × 5 pulmaa, laskettu valmiiksi (pulmadata.py) ja järjestetty vaikeuden mukaan.
+  // Vaikeus mitataan sillä, kuinka monta houkuttelevampaa mutta väärää tasapainoista siirtoa ihminen
+  // todennäköisesti kokeilee ennen oikeaa, kuinka "outoja" osia (täyte, jota mikään pizza ei tarvitse,
+  // tai vähennys linjastolta) ratkaisu vaatii, montako tornia siirretään ja onko ratkaisuja vain yksi.
+  var PULMADATA = [
+    [{ d: 6, lin: [8], pizzat: [[6]] }, { d: 2, lin: [1, 9], pizzat: [[2]] }, { d: 6, lin: [7, 8], pizzat: [[6]] }, { d: 6, lin: [], pizzat: [[6]] }, { d: 1, lin: [2], pizzat: [[1]] }],
+    [{ d: 7, lin: [6], pizzat: [[4]] }, { d: 8, lin: [4], pizzat: [[2]] }, { d: 8, lin: [5, 9], pizzat: [[1]] }, { d: 7, lin: [3], pizzat: [[1]] }, { d: 7, lin: [1], pizzat: [[2]] }],
+    [{ d: 8, lin: [2], pizzat: [[2, 8]] }, { d: 5, lin: [6, 8, 9], pizzat: [[1, 6]] }, { d: 10, lin: [3], pizzat: [[3, 4]] }, { d: 3, lin: [5, 6, 10], pizzat: [[1, 6]] }, { d: 6, lin: [3], pizzat: [[1, 3]] }],
+    [{ d: 3, lin: [2, 5, 10], pizzat: [[2, 8]] }, { d: 3, lin: [1, 3], pizzat: [[4]] }, { d: 2, lin: [2, 5, 6], pizzat: [[2, 7]] }, { d: 1, lin: [2, 7], pizzat: [[8]] }, { d: 4, lin: [1, 2, 3], pizzat: [[3, 5]] }],
+    [{ d: 10, lin: [2, 8], pizzat: [[1, 5]] }, { d: 9, lin: [8, 9], pizzat: [[2, 3]] }, { d: 8, lin: [10], pizzat: [[1, 3]] }, { d: 6, lin: [], pizzat: [[2, 3]] }, { d: 9, lin: [], pizzat: [[2, 4]] }],
+    [{ d: 10, lin: [1], pizzat: [[1, 2, 5]] }, { d: 10, lin: [2], pizzat: [[1, 2, 3]] }, { d: 10, lin: [1], pizzat: [[1, 2, 3]] }, { d: 9, lin: [1, 5, 7, 8], pizzat: [[1, 2, 5]] }, { d: 9, lin: [1, 7], pizzat: [[1, 2, 7]] }],
+    [{ d: 1, lin: [9], pizzat: [[3, 7]] }, { d: 3, lin: [1, 2, 3, 10], pizzat: [[9]] }, { d: 2, lin: [5, 6], pizzat: [[1, 5]] }, { d: 1, lin: [4, 7], pizzat: [[2, 4]] }, { d: 3, lin: [9], pizzat: [[4, 5]] }],
+    [{ d: 2, lin: [9], pizzat: [[2], [1, 8]] }, { d: 6, lin: [7], pizzat: [[2, 5], [6]] }, { d: 4, lin: [2, 9], pizzat: [[4], [2, 3]] }, { d: 5, lin: [1, 2, 9], pizzat: [[3], [2, 5]] }, { d: 1, lin: [7, 9], pizzat: [[2, 7], [1, 3]] }],
+    [{ d: 7, lin: [1, 8, 9], pizzat: [[1, 4, 5]] }, { d: 9, lin: [2, 5, 7, 10], pizzat: [[1, 3, 4]] }, { d: 10, lin: [6, 7], pizzat: [[1, 2, 5]] }, { d: 3, lin: [6, 7], pizzat: [[4, 6]] }, { d: 5, lin: [3, 4, 10], pizzat: [[1, 2, 7]] }],
+    [{ d: 4, lin: [3, 5, 10], pizzat: [[2, 5], [1], [3, 4]] }, { d: 7, lin: [6, 9], pizzat: [[1], [2], [3]] }, { d: 4, lin: [5, 8, 9], pizzat: [[1, 5], [6], [4]] }, { d: 6, lin: [3, 8, 9], pizzat: [[1, 9], [2, 3], [7]] }, { d: 7, lin: [5, 9], pizzat: [[1, 9], [2], [3]] }],
+    [{ d: 6, lin: [5, 7, 10], pizzat: [[1, 2], [3, 4]] }, { d: 4, lin: [1, 2, 5, 10], pizzat: [[1, 3, 5]] }, { d: 3, lin: [9], pizzat: [[3, 6]] }, { d: 10, lin: [10], pizzat: [[2, 8], [3, 6]] }, { d: 10, lin: [9], pizzat: [[1, 2, 3], [6]] }],
+    [{ d: 7, lin: [5, 10], pizzat: [[1, 3, 5], [2]] }, { d: 9, lin: [3, 4, 5, 10], pizzat: [[1, 3, 5], [7]] }, { d: 1, lin: [5, 9, 10], pizzat: [[3, 4]] }, { d: 7, lin: [6, 8], pizzat: [[3, 5], [1, 6]] }, { d: 8, lin: [6, 7], pizzat: [[1, 4, 5]] }]
   ];
   var PULMIA_TASOLLA = 5;
-  function satunnainen(siemen) {              // toistettava satunnaisluku (mulberry32): samat pulmat joka kerta
-    return function () {
-      siemen |= 0; siemen = siemen + 0x6D2B79F5 | 0;
-      var x = Math.imul(siemen ^ siemen >>> 15, 1 | siemen);
-      x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x;
-      return ((x ^ x >>> 14) >>> 0) / 4294967296;
-    };
-  }
   function luoPulmat(tasoNro) {
-    var taso = PULMATASOT[tasoNro], rnd = satunnainen(1000 + tasoNro * 97), tulos = [], nahty = {};
-    function arvo(a) { return a[Math.floor(rnd() * a.length)]; }
-    for (var yritys = 0; yritys < 200000 && tulos.length < PULMIA_TASOLLA; yritys++) {
-      var koko = arvo(taso.koko);
-      var ehdokkaat = PIZZAT.filter(function (pz) { return pz.length === koko; });
-      var kohde = arvo(ehdokkaat), d = 1 + Math.floor(rnd() * 10), valitut = [kohde];
-      if (taso.kaikki) {
-        // useampi pizza, joissa ei ole yhteisiä täytteitä (valmistettu pizza palauttaa täytteensä varastoon)
-        while (valitut.length < taso.kaikki) {
-          var lisa = arvo(PIZZAT.filter(function (pz) { return pz.length === arvo(taso.koko); }));
-          if (valitut.some(function (v) { return v.some(function (x) { return lisa.indexOf(x) >= 0; }); })) continue;
-          valitut.push(lisa);
-        }
-        kohde = [].concat.apply([], valitut).sort(function (a, b) { return a - b; });
-      }
-      var linMaara = taso.lin[0] + Math.floor(rnd() * (taso.lin[1] - taso.lin[0] + 1)), lin = [];
-      while (lin.length < linMaara) { var x = 1 + Math.floor(rnd() * 10); if (lin.indexOf(x) < 0) lin.push(x); }
-      lin.sort(function (a, b) { return a - b; });
-      if (valitut.some(function (v) { return v.every(function (x) { return lin.indexOf(x) >= 0; }); })) continue;   // pizza ei saa olla valmiina
-      var rat = pulmaRatkaisut(d, lin, kohde);
-      if (!rat.length) continue;
-      var p = { kohde: kohde, d: d, lin: lin, rat: rat, helpoin: Math.min.apply(null, rat.map(siirronTapa)),
-        puuttuu: kohde.filter(function (x) { return lin.indexOf(x) < 0; }).length };
-      // ansa: erotussiirto, joka tasapainottaa mutta vie pizzan oman täytteen linjastolta
-      p.ansa = kohde.some(function (t) {
-        if (lin.indexOf(t) < 0) return false;
-        for (var s = 1; s <= 10; s++) if (lin.indexOf(s) < 0 && s === d + t) return true;
-        return false;
-      });
-      if (!taso.ehto(p)) continue;
-      p.pizzat = valitut; p.kaikki = !!taso.kaikki;
-      if (taso.monta) {                          // muut pizzat: houkuttelevia, mutta yhdelläkään siirrolla ei saa valmiiksi
-        var muut = PIZZAT.filter(function (pz) {
-          return pz !== kohde && pz.length <= 2 && !pz.every(function (x) { return lin.indexOf(x) >= 0; }) && !pulmaRatkaisut(d, lin, pz).length;
-        });
-        if (muut.length < taso.monta - 1) continue;
-        while (p.pizzat.length < taso.monta) { var m = arvo(muut); if (p.pizzat.indexOf(m) < 0) p.pizzat.push(m); }
-        p.pizzat.sort(function () { return rnd() - 0.5; });
-      }
-      var avain = valitut.map(function (v) { return v.join('+'); }).join('|') + '/' + d + '/' + lin.join(',');
-      if (nahty[avain]) continue;
-      nahty[avain] = true;
-      tulos.push(p);
-    }
-    return tulos;
+    return PULMADATA[tasoNro].map(function (q) {
+      var kohde = [].concat.apply([], q.pizzat).sort(function (a, b) { return a - b; });
+      var rat = pulmaRatkaisut(q.d, q.lin, kohde);
+      return { d: q.d, lin: q.lin, pizzat: q.pizzat, kohde: kohde, rat: rat, kaikki: q.pizzat.length > 1,
+        helpoin: Math.min.apply(null, rat.map(siirronTapa)) };
+    });
   }
 
   // ---------------------------------------------------------------- komponentti
@@ -656,12 +609,12 @@
     // ---- Auta Bassoa: pulmat (pizza valmiiksi yhdellä siirrolla)
     var pt = PULMA[kieli] || PULMA.en, pulmaVarasto = {}, pulmaAjastin = null;
     function lueTaso() {
-      try { return Math.min(PULMATASOT.length - 1, Math.max(0, parseInt(localStorage.getItem('apinavaaka-pulmataso'), 10) || 0)); } catch (e) { return 0; }
+      try { return Math.min(PULMADATA.length - 1, Math.max(0, parseInt(localStorage.getItem('apinavaaka-pulmataso'), 10) || 0)); } catch (e) { return 0; }
     }
     function tallennaTaso(n) { try { localStorage.setItem('apinavaaka-pulmataso', String(n)); } catch (e) {} }
     function tasonPulmat(n) {
       // helpoimmat (eniten ratkaisuja) ensin
-      return pulmaVarasto[n] || (pulmaVarasto[n] = luoPulmat(n).sort(function (a, b) { return b.rat.length - a.rat.length; }));
+      return pulmaVarasto[n] || (pulmaVarasto[n] = luoPulmat(n));
     }
     function pulma() { return tasonPulmat(tila.pTaso)[tila.pNro]; }
     function aloitaPulmat(taso, hiljaa) {
@@ -673,9 +626,9 @@
       if (hiljaa) { opasRuutu.hidden = true; return heitaPulma(); }
       // tason voi valita itse: kaikki tasot ovat auki
       var valinta = '<p class="av__tasot-otsikko">' + pt.valitse + '</p><div class="av__tasot">';
-      for (var i = 0; i < PULMATASOT.length; i++) valinta += '<button type="button" data-taso="' + i + '"' + (i === tila.pTaso ? ' class="nyt"' : '') + '>' + (i + 1) + '</button>';
+      for (var i = 0; i < PULMADATA.length; i++) valinta += '<button type="button" data-taso="' + i + '"' + (i === tila.pTaso ? ' class="nyt"' : '') + '>' + (i + 1) + '</button>';
       valinta += '</div>';
-      naytaRuutu('<small>' + pt.nimi + '</small><h2>' + pt.taso + ' ' + (tila.pTaso + 1) + ' / ' + PULMATASOT.length + '</h2>' +
+      naytaRuutu('<small>' + pt.nimi + '</small><h2>' + pt.taso + ' ' + (tila.pTaso + 1) + ' / ' + PULMADATA.length + '</h2>' +
         '<p class="av__lainaus">' + pt.kuvaus[tila.pTaso] + '</p>' + (tila.pTaso === 0 ? '<p>' + pt.intro + '</p>' : '') + valinta,
         pt.aloita, function () { opasRuutu.hidden = true; heitaPulma(); });
       Array.prototype.forEach.call(opasRuutu.querySelectorAll('.av__tasot button'), function (b) {
@@ -771,7 +724,7 @@
       tila.pNro++;
       if (tila.pNro < PULMIA_TASOLLA) { asetaPulma(); return heitaPulma(); }
       var seur = tila.pTaso + 1, laatikko = '<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt="">';
-      if (seur < PULMATASOT.length) {
+      if (seur < PULMADATA.length) {
         tallennaTaso(seur);
         naytaRuutu(laatikko + '<h2>' + pt.tasoValmis.replace('{n}', tila.pTaso + 1) + '</h2><p>' + pt.taso + ' ' + (seur + 1) + ': ' + pt.kuvaus[seur] + '</p>',
           pt.seuraava, function () { aloitaPulmat(seur, true); });
