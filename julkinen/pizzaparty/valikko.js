@@ -52,8 +52,8 @@ function valikkoNayta() {
  * osoitteen (sivustonOsoite), koska Bassokin tarvitsee sen. */
 
 function valikkoKytke() {
-  valikkoEl('valikkoPelaa').addEventListener('click', function () { valikkoEl('valikkoPeite').hidden = true; });
-  valikkoEl('valikkoMoninpeliin').addEventListener('click', function () { valikkoSivu('moninpeli'); });
+  valikkoEl('alkuPelaa').addEventListener('click', function () { valikkoEl('valikkoPeite').hidden = true; });
+  valikkoEl('alkuMoninpeli').addEventListener('click', function () { valikkoSivu('moninpeli'); });
   valikkoEl('valikkoTakaisin').addEventListener('click', function () { valikkoSivu('paa'); });
   valikkoEl('valikkoPalaa').addEventListener('click', function () { location.assign('./?liity'); });
   valikkoEl('valikkoLuo').addEventListener('click', function () { location.assign('./?liity&luo'); });
@@ -73,7 +73,7 @@ function valikkoKytke() {
 /* ⚠️ VAHTI, EI TARKISTIN (sama kuin isantaVahti). */
 function valikkoVahti() {
   const puuttuu = [];
-  ['valikkoPeite', 'valikkoPaa', 'valikkoMoninpeli', 'valikkoPalaa', 'valikkoPelaa', 'valikkoMoninpeliin',
+  ['valikkoPeite', 'valikkoPaa', 'valikkoMoninpeli', 'valikkoPalaa', 'alkuPelaa', 'alkuMoninpeli',
    'valikkoLuo', 'valikkoLiity', 'valikkoIsoNaytto', 'valikkoTakaisin', 'taukoValikkoon', 'tulosValikkoon']
     .forEach(function (id) { if (!valikkoEl(id)) puuttuu.push('#' + id); });
   ['t', 'verkkoTilaan'].forEach(function (f) { if (typeof window[f] !== 'function') puuttuu.push(f + '()'); });

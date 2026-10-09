@@ -539,12 +539,12 @@ document.addEventListener('DOMContentLoaded', function () {
       bvOsa(nyt && (nyt.dataset.osa === 'moninpeli') ? 'paa' : 'moninpeli');
     };
   });
-  bvEl('bvPelaa').onclick = function () {
+  bvEl('alkuPelaa').onclick = function () {
     bvOsa(null);
     /* Samalla laitteella usea ihminen: vaihtoruutu odotti valikon alla. */
     if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
   };
-  bvEl('bvMoninpeli').onclick = function () { bvOsa('moninpeli'); };
+  bvEl('alkuMoninpeli').onclick = function () { bvOsa('moninpeli'); };
   bvEl('bvLuoAvaa').onclick = bvAvaaLuo;
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuo').onclick = bvLuo;

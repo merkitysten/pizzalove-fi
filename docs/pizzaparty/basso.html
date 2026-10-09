@@ -48,7 +48,7 @@
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261009a">
-<link rel="stylesheet" href="yhteinen.css?v=20261009n">
+<link rel="stylesheet" href="yhteinen.css?v=20261009o">
 <link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
 <body>
@@ -422,21 +422,32 @@
      netissä pelaaminen ihmistä vastaan»). Rakenne ja tekstit kuten Partyn
      alkuvalikossa. Valikossa saa olla tekstiä; pelinäkymässä ei. -->
 <div id="bassoValikko" class="peite" hidden>
-  <div class="tauko-laatikko verkko-laatikko valikko-laatikko">
-    <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
-    <div class="verkko-osa" data-osa="paa">
+  <!-- 🔵 ALOITUSRUUTU KOKO RUUDUN (Marko 9.10.2026: «Pitäisikö alkuvalikko olla koko
+       ruudun mittainen, jolloin siihen jäisi tilaa myös sille pizza love etiketille? —
+       Sekä alas merkitysten-logolle.» ja «se on liian levoton — — Mieti kriittisesti
+       taas tekstejä ja että voisiko niitä korvata jollain ikoneilla»).
+       Yksi täytetty oranssi (Pelaa), muut reunaviivalla; selitetekstit pois —
+       kuvake kertoo (apina = pelaa tässä, puhelimet = jokainen omallaan), ja koko
+       teksti on aria-labelissa. YHTEINEN LOHKO molemmille peleille (sivut.py). -->
+  <div class="tauko-laatikko verkko-laatikko valikko-laatikko aloitusruutu">
+    <img class="alku-viiri" src="kuvat/viiri.webp?v=20261009a" width="340" height="322" alt="Pizza Love – every pizza counts">
+    <div class="verkko-osa alku-paa" data-osa="paa">
       <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). -->
       <div class="pelivalinta"></div>
-      <button id="bvPelaa" type="button" class="as-valinta ensisijainen"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
-      <button id="bvMoninpeli" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
-      <!-- Paluu sivustolle, kuten Partyn valikossa (osoite: pelivalinta.js). -->
-      <!-- Ulos vievät kuten pelin valikossa (Marko 9.10.2026: «Muuta myös tämän
-           valikon tyyli tuon toisen valikon mukaiseksi»): hiusviiva, sitten
-           sivusto reunaviivalla ja kauppa täytettynä. -->
+      <div class="alku-ruudut">
+        <button id="alkuPelaa" type="button" class="alku-ruutu ensisijainen">
+          <svg class="apina-ikoni" viewBox="0 0 64 54" aria-hidden="true"><circle class="apina-paa" cx="8" cy="29" r="7"/><circle class="apina-paa" cx="56" cy="29" r="7"/><circle class="apina-paa" cx="32" cy="29" r="22"/><path class="apina-viiva" d="M14 30C15 17 28 13 32 21C36 13 49 17 50 30"/><circle class="apina-piste" cx="25" cy="27" r="3.2"/><circle class="apina-piste" cx="39" cy="27" r="3.2"/><circle class="apina-piste" cx="30" cy="34.5" r="1.3"/><circle class="apina-piste" cx="34" cy="34.5" r="1.3"/><path class="apina-viiva" d="M21 38Q32 51 43 38"/></svg>
+          <b data-t="valikko.pelaa">Pelaa</b>
+        </button>
+        <button id="alkuMoninpeli" type="button" class="alku-ruutu" data-ta="valikko.moninpeli">
+          <svg class="puhelin-ikoni" viewBox="0 0 64 54" aria-hidden="true"><rect x="9" y="6" width="22" height="40" rx="5"/><rect x="33" y="10" width="22" height="40" rx="5"/><path d="M17 40h6M41 44h6"/></svg>
+          <b data-t="valikko.moninpeliLyhyt">Moninpeli</b>
+        </button>
+      </div>
       <hr class="valikko-viiva">
       <div class="valikko-ala">
-        <a class="valikko-nappi reuna" href="../" data-sivustolle data-t="valikko.sivustolle">Takaisin sivustolle</a>
-        <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+        <a class="valikko-nappi reuna pieni" href="../" data-sivustolle data-ta="valikko.sivustolle">&#8592; pizzalove.fi</a>
+        <a class="valikko-nappi reuna pieni" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
       </div>
     </div>
     <div class="verkko-osa" data-osa="moninpeli" hidden>
@@ -479,6 +490,7 @@
       <p class="verkko-virhe bv-virhe" hidden></p>
       <button id="bvAulaPois" type="button" class="toinen-nappi"></button>
     </div>
+    <img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten">
   </div>
 </div>
 <p id="bvViesti" class="bv-viesti" hidden role="status"></p>
@@ -495,7 +507,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261009c"></script>
+<script src="kielet.js?v=20261009d"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
@@ -510,6 +522,6 @@
 <script src="basso-saannot.js?v=20261006b"></script>
 <script src="basso.js?v=20261009d"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="basso-verkko.js?v=20261009a"></script>
+<script src="basso-verkko.js?v=20261009b"></script>
 </body>
 </html>

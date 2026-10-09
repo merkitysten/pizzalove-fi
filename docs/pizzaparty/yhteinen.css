@@ -98,6 +98,73 @@
 /* Pelin valinta kuosin päällä: umpinainen pohja, ettei kuosi näy tekstin läpi. */
 .valikko-laatikko .pelivalinta{background:#fff;border:2px solid var(--orange, #F47920)}
 
+/* --- ALOITUSRUUTU KOKO RUUDUN (🔵 Marko 9.10.2026: «Pitäisikö alkuvalikko olla koko
+ * ruudun mittainen, jolloin siihen jäisi tilaa myös sille pizza love etiketille? —
+ * Sekä alas merkitysten-logolle.») ---
+ * Peite ei enää himmennä peliä vaan on itse ruutu: viiri ylhäällä, valinnat
+ * keskellä (enintään 360 px), Merkitysten-logo alhaalla. Sama laatikko kantaa
+ * moninpelin alasivut (luo, liity, aula), joten ne ovat samassa kehyksessä.
+ * Tarkkuus .peite > .aloitusruutu (0,2,0) voittaa peli.css:n .verkko-laatikon. */
+.peite:has(> .aloitusruutu){padding:0;background:var(--ground)}
+.peite > .aloitusruutu{width:100%;max-width:none;height:100vh;height:100dvh;max-height:none;
+  border-radius:0;box-shadow:none;overflow:auto;box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
+.aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
+/* Viiri riippuu yläreunasta kuten painettu viiri pakkauksessa. */
+.alku-viiri{width:auto;height:clamp(84px, 19vh, 168px);flex:none;margin-top:-14px}
+.alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85}
+/* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
+.aloitusruutu:has(.alku-paa[hidden]) .alku-viiri{height:clamp(56px, 10vh, 84px)}
+/* Viiriä ei käännetä: oranssi PIZZA muuttuisi siniseksi. Musta viiri erottuu tummasta pohjasta. */
+@media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
+
+/* Pelin valinta: valittu reunaviivalla eikä täytettynä (🔵 Marko 9.10.2026:
+ * «vain Pelaa täytetty») — yksi täytetty oranssi kertoo mistä aloitetaan. */
+.aloitusruutu .pelivalinta{border:1px solid rgba(60,34,12,.22);gap:6px}
+.aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
+.aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
+
+/* Kaksi neliötä: kuvake kertoo, sana nimeää. Koko teksti on aria-labelissa. */
+.alku-ruudut{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.alku-ruutu{--ruutu-pohja:#fff;aspect-ratio:1;border-radius:16px;border:2px solid var(--orange, #F47920);
+  background:var(--ruutu-pohja);color:var(--orange, #F47920);cursor:pointer;font:inherit;padding:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 3px 8px rgba(60,40,20,.12)}
+.alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #F47920);color:#fff}
+.alku-ruutu b{font-size:18px;line-height:1.15;color:var(--ink);text-align:center}
+.alku-ruutu.ensisijainen b{color:#fff}
+.alku-ruutu svg{width:58%;height:auto}
+.alku-ruutu:active{transform:scale(.97)}
+.alku-ruutu:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.apina-paa{fill:currentColor}
+.apina-piste{fill:var(--ruutu-pohja)}
+.apina-viiva{fill:none;stroke:var(--ruutu-pohja);stroke-width:3;stroke-linecap:round}
+.puhelin-ikoni rect, .puhelin-ikoni path{fill:none;stroke:currentColor;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+.puhelin-ikoni rect + rect{fill:var(--ruutu-pohja)}
+.valikko-nappi.pieni{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;font-size:14px}
+.pieni-ikoni{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+/* Matala vaakanäyttö (puhelin vaakatasossa, 375 px): neliöt eivät mahdu —
+ * mitattu 9.10.2026: 476 px sisältöä 375 px:n ruudussa. Kuvake sanan viereen. */
+@media (orientation:landscape) and (max-height:540px){
+  .peite > .aloitusruutu{gap:8px}
+  .alku-viiri{height:64px}
+  .aloitusruutu:has(.alku-paa[hidden]) .alku-viiri{height:48px}
+  .alku-logo{width:84px}
+  .alku-ruutu{aspect-ratio:auto;flex-direction:row;padding:10px 12px;min-height:68px}
+  .alku-ruutu svg{width:44px}
+}
+@media (prefers-color-scheme:dark){
+  .alku-ruutu{--ruutu-pohja:var(--ground)}
+  .alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #F47920)}
+  .aloitusruutu .pelivalinta-nappi{color:var(--ink)}
+  .aloitusruutu .pelivalinta-nappi.valittu{background:var(--ground)}
+  /* Valkoinen pohja + tumman tilan vaalea teksti = näkymätön (mitattu 9.10.2026,
+   * koski myös pelin valikon reunanappeja). */
+  .valikko-nappi.reuna, .valikko-laatikko .toinen-nappi,
+  .valikko-laatikko .pelivalinta{background:var(--ground)}
+}
+
 /* --- ASETUKSET (uudelleen järjestetty 9.10.2026) ---
  * Kaksi listaa samalla sivulla (Pelaajat: ihmiset ja apinat) erotetaan
  * hiusviivalla eikä otsikolla: listojen omat rivit kertovat mistä on kyse.
