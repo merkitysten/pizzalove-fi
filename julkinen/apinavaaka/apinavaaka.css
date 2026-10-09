@@ -260,7 +260,7 @@
 .av__opasnapit .nappi--toinen{border:0;cursor:pointer;font-weight:700}
 
 /* noppa piiloon, kun sitä ei enää tarvita (tornit vaa'alla tai pizzavaihe) */
-.av--noppapois .av__nopparivi{visibility:hidden;pointer-events:none}
+.av--noppapois .av__noppa{visibility:hidden;pointer-events:none}
 .av__rivi-alku{display:block;font-size:14px;font-weight:600;color:var(--soft,#6E6357);margin-bottom:2px}
 .av__kortti--katso{animation:av-kortti .8s ease-in-out infinite}
 
@@ -287,3 +287,15 @@
 .av__tasot button.nyt{background:var(--orange,#F47920);color:#fff}
 /* nopeat napautukset eivät zoomaa ruutua (tuplanapautuszoomaus pois), nipistyszoomaus säilyy */
 .av,.av *{touch-action:manipulation}
+
+/* ---- Pystynäyttö: apina seisoo linjaston takana, viesti ja päätoiminto (noppa / Vie) alhaalla peukalon alla ---- */
+.av__nopparivi{position:relative}
+.av__vie-paikka{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.av__vie-paikka>*{pointer-events:auto}
+@media not all and (orientation:landscape) and (max-height:520px){
+  .av__nopparivi{margin:2px 0 0;min-height:84px;align-items:center}
+  .av__hyllyt{margin-top:-6px;position:relative;z-index:2}      /* apinan rajattu alareuna linjaston yläreunaan */
+  .av__rivi{margin:8px 0 0;height:46px;font-size:16px}
+  .av--opas .av__rivi,.av--pulmat .av__rivi{height:76px;min-height:76px;gap:4px}
+  .av--apinat:not(.av--opas):not(.av--pulmat) .av__rivi{height:46px;margin:8px 0 0}
+}

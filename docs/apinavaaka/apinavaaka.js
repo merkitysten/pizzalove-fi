@@ -423,8 +423,10 @@
     var noppa3d = window.Noppa3D(noppaEl.querySelector('.av__d10'), KANSIO + 'noppa/');
     ylapalkki.appendChild(infoNappi); ylapalkki.appendChild(pisteet); ylapalkki.appendChild(boksiEl);
     juuri.appendChild(ylapalkki);
-    var noppaRivi = el('div', 'av__nopparivi');      // noppa keskellä apinan alapuolella
+    var noppaRivi = el('div', 'av__nopparivi');      // päätoiminto alhaalla keskellä kuin kameran laukaisin: noppa tai Vie
     noppaRivi.appendChild(noppaEl);
+    var vieSlot = el('div', 'av__vie-paikka');
+    noppaRivi.appendChild(vieSlot);
 
     // --- näyttämö
     var nayttamo = el('div', 'av__nayttamo');
@@ -481,6 +483,9 @@
     var varastoEl = el('div', 'av__hylly'), linjastoEl = el('div', 'av__hylly av__hylly--linjasto');
     hyllyt.appendChild(linjastoEl); hyllyt.appendChild(varastoEl);   // linjasto pizzojen lähellä, varasto alimpana peukalon alla
     juuri.appendChild(hyllyt);
+    // pystynäytössä järjestys: apina linjaston päällä, hyllyt, viesti ja alimpana päätoiminto peukalon alla
+    juuri.appendChild(rivi);
+    juuri.appendChild(noppaRivi);
 
     // --- opastuksen väliruutu (siirtotavan esittely / harjoituksen aloitus / loppu)
     var ot = OPAS[kieli] || OPAS.en;
@@ -1168,6 +1173,7 @@
 
       // viestirivi: joko lyhyt teksti tai yksi nappi
       rivi.innerHTML = '';
+      vieSlot.innerHTML = '';
       rivi.className = 'av__rivi';
       var ov = opas && vaihe(), oteksti = ov ? (ot[ov.tapa] || {}) : null;
       if (pulmat) {
@@ -1175,7 +1181,7 @@
         else if (tila.vaihe === 'odota') { rivi.textContent = pt.hyva; rivi.classList.add('av__rivi--ok'); }
         else if (tila.valmis) {
           rivi.appendChild(el('span', 'av__rivi-teksti', pt.ok));
-          nappi(rivi, tila.vasen.length ? ot.vie : t.vie, 'av__vie', vieSiirto);
+          nappi(vieSlot, tila.vasen.length ? ot.vie : t.vie, 'av__vie', vieSiirto);
           rivi.classList.add('av__rivi--ok');
         } else {
           var pv = pEiPizza ? pt.eiPizza : tila.vihje ? pt.hohto : tila.pVinkki ? pt.vinkki[pulma().helpoin - 1] : (tila.pizzat.length > 1 ? pt.kysyMonta : pt.kysy);
@@ -1193,7 +1199,7 @@
         rivi.textContent = t.heita;
       } else if (opas && tila.valmis) {
         lauseet(ov.ohjattu ? oteksti.ok : ot.itseOk).forEach(function (x) { rivi.appendChild(el('span', 'av__rivi-teksti', x)); });
-        nappi(rivi, ov.tapa === 'C' ? ot.vie : t.vie, 'av__vie', vieSiirto);   // erotussiirrossa tornit menevät kahteen suuntaan
+        nappi(vieSlot, ov.tapa === 'C' ? ot.vie : t.vie, 'av__vie', vieSiirto);   // erotussiirrossa tornit menevät kahteen suuntaan
         rivi.classList.add('av__rivi--ok');
       } else if (opas) {
         var viesti, alku = '';
@@ -1217,7 +1223,8 @@
         rivi.textContent = tila.vaihe === 'odota' && tila.vuoronPizzat ? t.hyva : '';
         if (tila.vuoronPizzat) rivi.classList.add('av__rivi--ok');
       } else if (tila.valmis) {
-        nappi(rivi, (tila.havikki ? t.vieV : t.vie), 'av__vie' + (tila.havikki ? ' av__vie--varasto' : ''), vieSiirto);
+        rivi.textContent = ot.itseOk; rivi.classList.add('av__rivi--ok');
+        nappi(vieSlot, (tila.havikki ? t.vieV : t.vie), 'av__vie' + (tila.havikki ? ' av__vie--varasto' : ''), vieSiirto);
       } else if (tila.siirretty) {
         rivi.textContent = t.hyva; rivi.classList.add('av__rivi--ok');
       } else if (!heitetty) {
