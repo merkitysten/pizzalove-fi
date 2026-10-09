@@ -143,7 +143,7 @@
 .av__kortti--ok{box-shadow:0 0 0 0 transparent,0 6px 16px rgba(244,121,32,.55);animation:av-kortti 1s ease-in-out infinite}
 @keyframes av-kortti{50%{transform:translateY(-4px) scale(1.05)}}
 
-.av__loppu{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;z-index:7;
+.av__loppu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;z-index:7;
   width:min(86%,320px);background:var(--surface,#fff);border-radius:18px;padding:16px 16px 18px;text-align:center;
   box-shadow:0 10px 30px rgba(60,30,0,.3);transition:transform .45s cubic-bezier(.3,1.7,.5,1),opacity .2s}
 .av__loppu.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
@@ -238,7 +238,7 @@
 .av__sydan{position:absolute;right:-5px;bottom:-5px;width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .av__sydan img{width:68%;height:auto}
 .av__laatikko{display:block;width:110px;margin:-46px auto 2px}
-.av__loppu{padding-top:10px}
+.av__loppu{padding-top:10px;margin-top:24px}
 
 /* ---- opastettu harjoitus ---- */
 .av__paikka--himmea{opacity:.28;filter:grayscale(.6);pointer-events:none}
@@ -272,3 +272,5 @@
 .av__paikka--kulho{cursor:pointer}
 @keyframes av-vihje{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.12);filter:brightness(1.18) drop-shadow(0 0 8px rgba(255,255,255,.95))}}
 @media (prefers-reduced-motion:reduce){.av__paikka--vihje{animation-duration:2.2s}}
+
+.av--apinat .av__kortit{min-height:58px}   /* uuni pysyy hihnalla, vaikka kortit loppuvat */
