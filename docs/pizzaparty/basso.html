@@ -48,7 +48,7 @@
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261009a">
-<link rel="stylesheet" href="yhteinen.css?v=20261009l">
+<link rel="stylesheet" href="yhteinen.css?v=20261009n">
 <link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
 <body>
@@ -427,12 +427,17 @@
     <div class="verkko-osa" data-osa="paa">
       <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). -->
       <div class="pelivalinta"></div>
-      <button id="bvPelaa" type="button" class="as-valinta"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
+      <button id="bvPelaa" type="button" class="as-valinta ensisijainen"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
       <button id="bvMoninpeli" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
       <!-- Paluu sivustolle, kuten Partyn valikossa (osoite: pelivalinta.js). -->
-      <a class="toinen-nappi valikko-sivustolle" href="../" data-sivustolle data-t="valikko.sivustolle">Takaisin sivustolle</a>
-      <!-- Kauppa myös alkuvalikossa (Marko 9.10.2026: «Kauppaan voisi ohjata myös pelin päävalikosta»). -->
-      <a class="toinen-nappi valikko-sivustolle valikko-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      <!-- Ulos vievät kuten pelin valikossa (Marko 9.10.2026: «Muuta myös tämän
+           valikon tyyli tuon toisen valikon mukaiseksi»): hiusviiva, sitten
+           sivusto reunaviivalla ja kauppa täytettynä. -->
+      <hr class="valikko-viiva">
+      <div class="valikko-ala">
+        <a class="valikko-nappi reuna" href="../" data-sivustolle data-t="valikko.sivustolle">Takaisin sivustolle</a>
+        <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      </div>
     </div>
     <div class="verkko-osa" data-osa="moninpeli" hidden>
       <button id="bvLuoAvaa" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>

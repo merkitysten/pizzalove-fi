@@ -69,7 +69,8 @@
 .valikko-ikoni:active{transform:scale(.95)}
 .valikko-ikoni:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 #taukoPeite .valikko-jatka{width:84px}
-.valikko-viiva{align-self:stretch;width:100%;border:0;border-top:1px solid var(--raja);margin:2px 0 0}
+/* Viiva hukkui kuosin viivoihin var(--raja)-värillä (mitattu 9.10.2026): tummempi. */
+.valikko-viiva{align-self:stretch;width:100%;border:0;border-top:1px solid rgba(60,34,12,.28);margin:2px 0 0}
 .valikko-ala{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;width:100%}
 /* Pyöristetty suorakaide (12 px, ei pilleri — CLAUDE.md:n muotokieli). */
 /* Tasaleveät rinnakkain; jos sana ei mahdu (320 px, pitkä käännös), allekkain. */
@@ -80,8 +81,22 @@
 .valikko-nappi.tausta{background:var(--orange, #F47920);color:#fff}
 .valikko-nappi:active{transform:scale(.97)}
 .valikko-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-/* Kauppa alkuvalikossa: toinen katkoviivanappi «Takaisin sivustolle» -napin alle. */
-.valikko-kauppa{margin-top:8px}
+/* --- ALKUVALIKKO SAMAAN TYYLIIN KUIN PELIN VALIKKO (🔵 Marko 9.10.2026: «Muuta
+ * myös tämän valikon tyyli tuon toisen valikon mukaiseksi») ---
+ * Kuosi taustalla, täytetty oranssi = päätoiminto (Pelaa), oranssi reunaviiva =
+ * muut. Koskee molempien pelien alkuvalikkoa ja sen alasivuja (moninpeli, luo,
+ * liity), koska ne ovat samassa laatikossa. */
+.valikko-laatikko{position:relative}
+.valikko-laatikko::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.35}
+@media (prefers-color-scheme:dark){.valikko-laatikko::before{display:none}}
+.valikko-laatikko > *{position:relative}
+.valikko-laatikko .as-valinta{border-color:var(--orange, #F47920)}
+.valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #F47920);color:#fff}
+.valikko-laatikko .as-valinta.ensisijainen small{color:rgba(255,255,255,.92)}
+.valikko-laatikko .toinen-nappi{border:2px solid var(--orange, #F47920);background:#fff;font-weight:700}
+/* Pelin valinta kuosin päällä: umpinainen pohja, ettei kuosi näy tekstin läpi. */
+.valikko-laatikko .pelivalinta{background:#fff;border:2px solid var(--orange, #F47920)}
 
 /* --- ASETUKSET (uudelleen järjestetty 9.10.2026) ---
  * Kaksi listaa samalla sivulla (Pelaajat: ihmiset ja apinat) erotetaan
