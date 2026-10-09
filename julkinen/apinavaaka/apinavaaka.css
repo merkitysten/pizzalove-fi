@@ -8,7 +8,7 @@
 /* yläpalkki */
 .av__ylapalkki{position:relative;z-index:95;display:flex;justify-content:space-between;align-items:center;height:64px;margin-bottom:-58px;pointer-events:none}
 .av__ylapalkki>*{pointer-events:auto}
-.av__nopparivi{display:flex;justify-content:center;margin:-6px 0 -10px;position:relative;z-index:4}
+.av__nopparivi{display:flex;justify-content:center;margin:14px 0 -10px;position:relative;z-index:4}
 .av__info{position:relative;width:52px;height:52px;border-radius:50%;border:0;padding:0;cursor:pointer;flex:none;
   background:#F1EBBC;box-shadow:inset 0 0 0 2.5px #fff,0 2px 6px rgba(60,30,0,.25)}
 /* apina on ympyrää isompi: kasvot keskellä, tukka ja kyynärpää yli reunan */
@@ -38,7 +38,7 @@
   background:radial-gradient(closest-side,rgba(40,20,0,.55),rgba(40,20,0,0));transform:translateX(-50%)}
 
 /* näyttämö */
-.av__nayttamo{position:relative;width:100%;--pala:8px;--leveys:34px}
+.av__nayttamo{position:relative;width:100%;margin-top:6px;--pala:8px;--leveys:34px}
 .av__nayttamo>img{position:absolute;height:auto;pointer-events:none;max-width:none}
 .av__vasen,.av__oikea{transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
 .av__kieli{transition:transform .6s cubic-bezier(.3,1.9,.5,1)}
@@ -202,7 +202,7 @@
     grid-template-areas:"yla yla hyllyt" "apina apina hyllyt" "noppa rivi hyllyt";
     grid-template-rows:auto auto 1fr;column-gap:14px;align-items:start;padding:8px 12px 10px}
   .av__ylapalkki{grid-area:yla}
-  .av__nayttamo{grid-area:apina}
+  .av__nayttamo{grid-area:apina;margin-top:0}
   .av__nopparivi{grid-area:noppa;margin:0;align-self:center}
   .av__rivi{grid-area:rivi;margin:0;height:auto;min-height:60px;align-self:center;font-size:15px}
   .av .av__vie{font-size:15px;padding:10px 16px}
