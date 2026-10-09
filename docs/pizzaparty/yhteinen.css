@@ -163,7 +163,20 @@
 @media (orientation:landscape) and (max-height:540px){
   .peite > .aloitusruutu{gap:8px}
   .alku-viiri{width:64px}
-  .alku-maskotit{display:none}
+  /* Vaakatasossa maskotit KURKKAAVAT RUUDUN SIVUISTA vinossa (Marko 9.10.2026:
+   * «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei tarvitse
+   * mahtua kokonaan ruutuun — — se hieman vinosta katsominen on usein hauskempi tapa
+   * kuvata basso, joka on vauhdikas ja hauska hahmo.»).
+   * position:fixed: reuna on RUUDUN reuna eikä sarakkeen, ja ruutu leikkaa kuvan
+   * itse (ei vaakavieritystä). Sijainti lasketaan sarakkeen (360 px) viereen; jos
+   * tila ei riitä, kuva menee neliöiden ALLE (z-index), ei päälle.
+   * Leveydet: Basso ≈ 0,93 × korkeus, laatikko = korkeus. */
+  .alku-maskotit{margin:0;z-index:0}
+  .alku-paa > :not(.alku-maskotit){position:relative;z-index:1}
+  .alku-basso{position:fixed;height:66vh;height:66dvh;bottom:-6vh;
+    left:min(-40px, calc(50vw - 188px - 61vh));transform:rotate(16deg);transform-origin:50% 100%}
+  .alku-laatikko{position:fixed;height:50vh;height:50dvh;top:14vh;margin:0;
+    right:min(-30px, calc(50vw - 188px - 50vh));transform:rotate(-14deg)}
   .alku-logo{width:84px}
   .alku-ruutu{aspect-ratio:auto;flex-direction:row;padding:10px 12px;min-height:68px}
   .alku-ruutu svg{width:44px}
