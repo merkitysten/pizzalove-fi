@@ -313,3 +313,16 @@
 .av__pisteet{align-items:center}
 .av--pulmat .av__ylapalkki .av__boksi{margin-left:10px}
 .av__tasot button:disabled{opacity:.35;cursor:default}
+
+/* lamppu nopan vasemmalla puolella, boksi yksin oikeassa yläkulmassa; noppa isompana */
+.av--pulmat .av__ylapalkki .av__boksi{margin-left:auto}
+.av--pulmat .av__vihjenappi{position:absolute;left:6px;top:50%;transform:translateY(-50%);margin:0;z-index:2}
+.av__noppa{transform:scale(1.35);transform-origin:50% 50%}
+@media not all and (orientation:landscape) and (max-height:520px){
+  .av__nopparivi{min-height:112px}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .av__noppa{transform:scale(1.15)}
+  .av--pulmat .av__vihjenappi{left:auto;right:-58px;top:auto;bottom:0;transform:none;width:44px;height:44px}
+  .av--pulmat .av__vihjenappi img{width:26px}
+}

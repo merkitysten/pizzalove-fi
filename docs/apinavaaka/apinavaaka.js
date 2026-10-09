@@ -384,12 +384,13 @@
     var vihjeNappi = el('button', 'av__vihjenappi');   // pulmapeli: valinnainen vihje (siirtotapa)
     vihjeNappi.type = 'button';
     vihjeNappi.innerHTML = '<img src="' + KANSIO + 'lamppu.webp" alt="">';
-    ylapalkki.appendChild(infoNappi); ylapalkki.appendChild(pisteet); ylapalkki.appendChild(vihjeNappi); ylapalkki.appendChild(boksiEl);
+    ylapalkki.appendChild(infoNappi); ylapalkki.appendChild(pisteet); ylapalkki.appendChild(boksiEl);
     juuri.appendChild(ylapalkki);
     var noppaRivi = el('div', 'av__nopparivi');      // päätoiminto alhaalla keskellä kuin kameran laukaisin: noppa tai Vie
     noppaRivi.appendChild(noppaEl);
     var vieSlot = el('div', 'av__vie-paikka');
     noppaRivi.appendChild(vieSlot);
+    noppaRivi.appendChild(vihjeNappi);   // pulmapelin lamppu nopan vieressä
 
     // --- näyttämö
     var nayttamo = el('div', 'av__nayttamo');
@@ -770,9 +771,11 @@
     }
     function pulmaPizzanNapautus(pz, k) {
       if (tila.vaihe !== 'heitto' || tila.siirretty) return;
-      if (tila.valmis) return tonaise(k);
+      if (tila.valmis) return vieSiirto();               // tasapainossa pizza vie täytteet paikoilleen
       var x = pz.filter(function (n) { return tila.paikka[n] === 'varasto'; })[0];
       if (x) return napauta(x, 'varasto');
+      var kadessa = pz.filter(function (n) { return tila.paikka[n] === 'oikea'; }).pop();
+      if (kadessa) return palauta(kadessa);
       tonaise(k);
     }
     function seuraavaPulma() {
@@ -959,7 +962,8 @@
       if (tila.vaihe !== 'heitto' || tila.eiRiita) return;
       if (!tila.heitetty) return tonaise(noppaEl);
       if (tila.siirretty) return;
-      if (tila.paikka[n] === 'varasto' && !tila.havikki && !tila.valmis) return napauta(n, 'varasto');
+      if (tila.valmis) return vieSiirto();               // tasapainossa pizza vie täytteet paikoilleen
+      if (tila.paikka[n] === 'varasto' && !tila.havikki) return napauta(n, 'varasto');
       if (tila.paikka[n] === 'oikea' && !tila.valmis) return palauta(n);
       tonaise(k);
     }
