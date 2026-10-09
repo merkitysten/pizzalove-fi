@@ -48,7 +48,7 @@
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261009a">
-<link rel="stylesheet" href="yhteinen.css?v=20261009i">
+<link rel="stylesheet" href="yhteinen.css?v=20261009l">
 <link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
 <body>
@@ -385,15 +385,19 @@
       <button id="jatka" class="jatka-nappi valikko-jatka" data-ta="tauko.jatka" aria-label="Jatka">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
       </button>
-      <button id="taukoAsetukset" class="valikko-ikoni valikko-ratas" data-ta="tulos.asetukset" aria-label="Asetukset">&#9881;</button>
+      <!-- Ratas piirroksena eikä merkkinä ⚙: iPhone näyttää merkin värillisenä
+           emojina (harmaa 3D-ratas), jota CSS ei voi värittää oranssiksi. -->
+      <button id="taukoAsetukset" class="valikko-ikoni valikko-ratas" data-ta="tulos.asetukset" aria-label="Asetukset">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.47.47 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+      </button>
     </div>
     <hr class="valikko-viiva">
     <!-- Ulos vievät: alkuvalikko ja kauppa (Marko 9.10.2026: «Kauppaan voisi laittaa
          heti siihen samaan valikkoon»). Pelkkä sana — kotelokuva oli rivin reunassa
          liian pieni ja «ruma». Kauppa aukeaa uuteen välilehteen, peli jää odottamaan. -->
     <div class="valikko-ala">
-      <button id="taukoValikkoon" class="valikko-alkuun" data-t="valikko.alkuun">Alkuvalikkoon</button>
-      <a class="valikko-alkuun" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      <button id="taukoValikkoon" class="valikko-nappi reuna" data-t="valikko.alkuun">Alkuvalikkoon</button>
+      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
     </div>
   </div>
 </div>

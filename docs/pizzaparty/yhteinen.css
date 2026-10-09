@@ -49,20 +49,37 @@
  * .peite-kerroksia (z 5), ja valikko on sivulla myöhemmin. */
 #asetusPeite{z-index:6}
 /* VALIKKOIKKUNA KUVAKKEIN (Marko 9.10.2026: «liikaa tekstiä»): ↻ · ▶ · ⚙ yhdessä
- * rivissä, ▶ isona keskellä; hiusviivan alla Alkuvalikkoon tekstinä. ⏸-merkki
- * poistui («Kaikki ymmärtää, että peli ei jatku taustalla»). */
-.valikko-ikkuna{gap:14px;padding:22px 20px 14px}
+ * rivissä, ▶ isona keskellä; hiusviivan alla Alkuvalikkoon ja Kauppaan. ⏸-merkki
+ * poistui («Kaikki ymmärtää, että peli ei jatku taustalla»).
+ * 🔵 BRÄNDIN MUKAAN (Marko 9.10.2026: «nuolelle ja asetukset rattaalle oranssi
+ * ympyrä ulkopuolelle — — Alkuvalikkoon oranssilla reunaviivalla ja kauppaan
+ * oranssilla taustalla — — tämän ikkunan taustalle myös sitä täytekuosia»).
+ * Kaksi tasoa, sama pari kummassakin rivissä: TÄYTETTY oranssi = päätoiminto
+ * (▶, Kauppaan), ORANSSI ÄÄRIVIIVA = sivutoiminto (↻, ⚙, Alkuvalikkoon). */
+.valikko-ikkuna{gap:14px;padding:22px 18px 18px;position:relative;overflow:hidden;max-width:340px}
+.valikko-ikkuna::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.35}
+@media (prefers-color-scheme:dark){.valikko-ikkuna::before{display:none}}
+.valikko-ikkuna > *{position:relative}
 .valikko-toiminnot{display:flex;align-items:center;justify-content:center;gap:clamp(18px, 7vw, 30px)}
 .valikko-ikoni{width:58px;aspect-ratio:1;border-radius:50%;padding:0;cursor:pointer;display:grid;place-items:center;
-  background:#fff;color:var(--ink);border:2px solid var(--raja);font:inherit;font-size:28px;line-height:1}
-.valikko-ikoni svg{width:52%;height:52%;fill:currentColor}
+  background:#fff;color:var(--orange, #F47920);border:3px solid var(--orange, #F47920);font:inherit;line-height:1;
+  box-shadow:0 3px 8px rgba(60,40,20,.15)}
+.valikko-ikoni svg{width:54%;height:54%;fill:currentColor}
 .valikko-ikoni:active{transform:scale(.95)}
-.valikko-ikoni:focus-visible{outline:3px solid var(--orange, #F47920);outline-offset:3px}
+.valikko-ikoni:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 #taukoPeite .valikko-jatka{width:84px}
 .valikko-viiva{align-self:stretch;width:100%;border:0;border-top:1px solid var(--raja);margin:2px 0 0}
-.valikko-ala{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
-.valikko-alkuun{border:0;background:none;padding:8px 14px;cursor:pointer;font:inherit;font-size:16px;color:var(--ink);
-  text-decoration:none}
+.valikko-ala{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;width:100%}
+/* Pyöristetty suorakaide (12 px, ei pilleri — CLAUDE.md:n muotokieli). */
+/* Tasaleveät rinnakkain; jos sana ei mahdu (320 px, pitkä käännös), allekkain. */
+.valikko-nappi{flex:1 1 0;min-width:max-content;padding:11px 14px;border-radius:12px;cursor:pointer;
+  font:inherit;font-size:15px;font-weight:700;text-align:center;text-decoration:none;line-height:1.2;
+  border:2px solid var(--orange, #F47920);box-sizing:border-box}
+.valikko-nappi.reuna{background:#fff;color:var(--ink)}
+.valikko-nappi.tausta{background:var(--orange, #F47920);color:#fff}
+.valikko-nappi:active{transform:scale(.97)}
+.valikko-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 /* Kauppa alkuvalikossa: toinen katkoviivanappi «Takaisin sivustolle» -napin alle. */
 .valikko-kauppa{margin-top:8px}
 
@@ -75,7 +92,6 @@
 .as-selite p{margin:0}
 .as-selite p + p{margin-top:8px}
 .as-selite .ohje-otsikko{display:block;margin:14px 0 6px;font-size:16px}
-.valikko-alkuun:focus-visible{outline:3px solid var(--orange, #F47920);border-radius:10px}
 
 /* --- HAHMO OMALLA VÄRILLÄÄN (Marko 6.10.2026: «kaikilla pelaajilla olisi
  * sekä hahmo että väri») — pelissä, pallilla, radalla ja asetuksissa. --- */
