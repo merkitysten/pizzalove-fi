@@ -122,6 +122,14 @@
   display:flex;flex-direction:column;align-items:center;gap:14px;
   padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
+/* KAKSI OSAA: YLHÄÄLLÄ TUNNELMA, ALHAALLA NAPIT (Marko 9.10.2026: «yläosa on pelin
+ * tunnelmaan virittävää grafiikkaa ja sitten on selkeästi ne napit. Nyt yläosassa on
+ * pirusti tyhjää tilaa ja sitten alaosa on tosi ahdas.»). Syy oli keskitys: maskotit ja
+ * napit olivat yksi keskitetty ryhmä, joten isompi Basso työnsi kaiken alas ja tyhjä jäi
+ * viirin ja maskottien väliin. Nyt aloitussivu venyy, maskottialue (flex:1) täyttää
+ * yläosan ja maskottien koko lasketaan SIITÄ; napit ovat alhaalla omalla koollaan. */
+.aloitusruutu > .alku-paa{flex:1 1 auto;margin-block:0;display:flex;flex-direction:column;
+  align-items:stretch;gap:10px;min-height:0}
 /* YLÄLAITA KUTEN PELILAATIKON KANNESSA JA pizzalove.fi:ssä: oranssi palkki koko leveydeltä,
  * musta viiri riippuu sen päältä vasemmassa reunassa, kielivalinta oikealla (Marko 9.10.2026).
  * Viirin korkeus = 0,85 × leveys (viewBox 100 × 85, iskulause LOVEn alla); palkki ≥ 52 px, jotta kielinapin
@@ -189,16 +197,18 @@
  * negatiivinen marginaali vie kuvan ruudun reunan yli, ja .aloitusruutu leikkaa sen
  * (overflow-x:hidden). Kuvat ovat pelivalinnan ALLA (z-index), joten ne kurkkaavat
  * sen takaa eivätkä peitä tekstiä. */
-.alku-maskotit{--sivu:max(16px, calc(50vw - 180px));position:relative;z-index:0;display:flex;
-  justify-content:space-between;align-items:flex-end;width:100%;margin-bottom:-26px;pointer-events:none}
+.alku-maskotit{--sivu:max(16px, calc(50vw - 180px));position:relative;z-index:0;flex:1 1 auto;
+  min-height:120px;width:100%;margin-bottom:-26px;pointer-events:none}
 .alku-paa > :not(.alku-maskotit){position:relative;z-index:1}
 /* Valkoinen tarrareuna kuten lautapelilaatikon kyljessä: erottaa hahmon kuosista. */
 .alku-basso, .alku-laatikko{filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
-.alku-basso{--k:clamp(150px, 30vh, 250px);height:var(--k);width:auto;
-  margin-right:calc(-1 * var(--sivu) - var(--k) * .24);transform:rotate(-14deg);transform-origin:50% 100%}
-.alku-laatikko{--k:clamp(100px, 18vh, 150px);height:var(--k);width:auto;align-self:flex-start;
-  margin-left:calc(-1 * var(--sivu) - var(--k) * .22);transform:rotate(12deg)}
+/* Koko alueen korkeudesta (%), ei kiinteä. Siirto ruudun reunan yli translateX:llä, koska
+ * sen prosentti on kuvan OMASTA leveydestä: Basso 24 % ja laatikko 22 % reunan takana. */
+.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(100%, 330px);width:auto;
+  transform:translateX(24%) rotate(-14deg);transform-origin:50% 100%}
+.alku-laatikko{position:absolute;top:2%;left:calc(-1 * var(--sivu));height:min(56%, 170px);width:auto;
+  transform:translateX(-22%) rotate(12deg)}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */
@@ -249,11 +259,9 @@
 .valikko-nappi.pieni{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;font-size:14px}
 .pieni-ikoni{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 /* Matala pystynäyttö (320 × 568): kauppanapin ja hiusviivan jälkeen sisältöä oli 29 px liikaa
- * (mitattu 9.10.2026). Maskotit ja napit pienemmiksi; maskotit kurkkaavat yhä reunoista. */
+ * (mitattu 9.10.2026). Napit matalammiksi; maskotit mitoittuvat jäljelle jäävästä tilasta. */
 @media (orientation:portrait) and (max-height:640px){
   .peite > .aloitusruutu{gap:10px}
-  .alku-basso{--k:128px}
-  .alku-laatikko{--k:86px}
   .alku-ruutu{min-height:62px;padding:6px 16px}
   .alku-ruutu svg{width:58px}
   .alku-kauppa{min-height:42px}
@@ -277,12 +285,13 @@
    * tila ei riitä, kuva menee neliöiden ALLE (z-index), ei päälle.
    * Leveydet: Basso ≈ 0,84 × korkeus (basso-syo.webp 438×520), laatikko = korkeus.
    * Basso oikealla, laatikko vasemmalla viirin alla (paikat vaihdettu 9.10.2026). */
-  .alku-maskotit{margin:0}
+  .aloitusruutu > .alku-paa{flex:none;margin-block:auto;gap:8px}
+  .alku-maskotit{flex:none;min-height:0;height:0;margin:0}
   .alku-basso, .alku-laatikko{margin:0}
   .alku-basso{position:fixed;height:74vh;height:74dvh;bottom:-8vh;
-    right:min(-40px, calc(50vw - 188px - 62vh));transform:rotate(-16deg);transform-origin:50% 100%}
+    right:min(-40px, calc(50vw - 188px - 62vh));left:auto;top:auto;transform:rotate(-16deg);transform-origin:50% 100%}
   .alku-laatikko{position:fixed;height:46vh;height:46dvh;top:30vh;margin:0;
-    left:min(-30px, calc(50vw - 188px - 46vh));transform:rotate(14deg)}
+    left:min(-30px, calc(50vw - 188px - 46vh));right:auto;transform:rotate(14deg)}
   .alku-logo{width:72px}
   .alku-ruutu{min-height:48px;padding:4px 14px;gap:12px}
   .alku-ruutu svg{width:46px}
