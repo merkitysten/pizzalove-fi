@@ -273,7 +273,7 @@
       intro: 'Basso tarvitsee apua! Valmista pizza yhdellä siirrolla.',
       kuvaus: ['Perussiirto', 'Summasiirto', 'Kahden täytteen pizza', 'Erotussiirto', 'Kaksi täytettä kerralla',
         'Summa ja erotus yhdessä', 'Kolmen täytteen pizza', 'Varo ansaa!', 'Monta pizzaa', 'Mestaritaso'],
-      kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?',
+      kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?', valitse: 'Valitse taso',
       eiPizza: 'Tasapaino, mutta pizza ei valmistu. Katso pizzaa!', ok: 'Tasapaino!', pizza: 'Valmista pizza!', hyva: 'Hienoa!',
       vinkki: ['Vihje: perussiirto.', 'Vihje: summasiirto.', 'Vihje: erotussiirto.', 'Vihje: summa ja erotus yhdessä.'],
       hohto: 'Katso hohtavia täytteitä.', tasoValmis: 'Taso {n} valmis!', loppu: ['Mestaripizzaiolo!', 'Ratkaisit kaikki pulmat.'] },
@@ -281,7 +281,7 @@
       intro: 'Basso behöver hjälp! Gör pizzan med en flytt.',
       kuvaus: ['Basflytt', 'Summaflytt', 'Pizza med två fyllningar', 'Skillnadsflytt', 'Två fyllningar på en gång',
         'Summa och skillnad tillsammans', 'Pizza med tre fyllningar', 'Akta fällan!', 'Många pizzor', 'Mästarnivå'],
-      kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?',
+      kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?', valitse: 'Välj nivå',
       eiPizza: 'Balans, men pizzan blir inte klar. Titta på pizzan!', ok: 'Balans!', pizza: 'Gör pizzan!', hyva: 'Bra!',
       vinkki: ['Tips: basflytt.', 'Tips: summaflytt.', 'Tips: skillnadsflytt.', 'Tips: summa och skillnad tillsammans.'],
       hohto: 'Titta på de lysande fyllningarna.', tasoValmis: 'Nivå {n} klar!', loppu: ['Mästarpizzaiolo!', 'Du löste alla gåtor.'] },
@@ -289,7 +289,7 @@
       intro: 'Basso needs help! Make the pizza with one move.',
       kuvaus: ['Basic move', 'Sum move', 'Two-topping pizza', 'Difference move', 'Two toppings at once',
         'Sum and difference together', 'Three-topping pizza', 'Watch out for the trap!', 'Many pizzas', 'Master level'],
-      kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?',
+      kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?', valitse: 'Choose a level',
       eiPizza: 'Balanced, but the pizza isn’t ready. Look at the pizza!', ok: 'Balanced!', pizza: 'Make the pizza!', hyva: 'Well done!',
       vinkki: ['Hint: basic move.', 'Hint: sum move.', 'Hint: difference move.', 'Hint: sum and difference together.'],
       hohto: 'Look at the glowing toppings.', tasoValmis: 'Level {n} done!', loppu: ['Master pizzaiolo!', 'You solved every puzzle.'] },
@@ -297,7 +297,7 @@
       intro: 'Basso braucht Hilfe! Back die Pizza mit einem Zug.',
       kuvaus: ['Grundzug', 'Summenzug', 'Pizza mit zwei Zutaten', 'Differenzzug', 'Zwei Zutaten auf einmal',
         'Summe und Differenz zusammen', 'Pizza mit drei Zutaten', 'Vorsicht, Falle!', 'Viele Pizzen', 'Meisterstufe'],
-      kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?',
+      kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', valitse: 'Stufe wählen',
       eiPizza: 'Gleichgewicht, aber die Pizza wird nicht fertig. Schau auf die Pizza!', ok: 'Gleichgewicht!', pizza: 'Back die Pizza!', hyva: 'Super!',
       vinkki: ['Tipp: Grundzug.', 'Tipp: Summenzug.', 'Tipp: Differenzzug.', 'Tipp: Summe und Differenz zusammen.'],
       hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Meister-Pizzaiolo!', 'Du hast alle Rätsel gelöst.'] }
@@ -656,11 +656,32 @@
       tila.boksi = []; tila.loppu = false; tila.valitsee = false;
       loppuEl.classList.remove('on');
       asetaPulma();
-      if (hiljaa) { opasRuutu.hidden = true; return ajastaPulmaVihje(); }
+      if (hiljaa) { opasRuutu.hidden = true; return heitaPulma(); }
+      // tason voi valita itse: kaikki tasot ovat auki
+      var valinta = '<p class="av__tasot-otsikko">' + pt.valitse + '</p><div class="av__tasot">';
+      for (var i = 0; i < PULMATASOT.length; i++) valinta += '<button type="button" data-taso="' + i + '"' + (i === tila.pTaso ? ' class="nyt"' : '') + '>' + (i + 1) + '</button>';
+      valinta += '</div>';
       naytaRuutu('<small>' + pt.nimi + '</small><h2>' + pt.taso + ' ' + (tila.pTaso + 1) + ' / ' + PULMATASOT.length + '</h2>' +
-        '<p class="av__lainaus">' + pt.kuvaus[tila.pTaso] + '</p>' + (tila.pTaso === 0 ? '<p>' + pt.intro + '</p>' : ''),
-        pt.aloita, function () { opasRuutu.hidden = true; ajastaPulmaVihje(); },
-        tila.pTaso > 0 ? [pt.alusta, function () { tallennaTaso(0); aloitaPulmat(0); }] : null);
+        '<p class="av__lainaus">' + pt.kuvaus[tila.pTaso] + '</p>' + (tila.pTaso === 0 ? '<p>' + pt.intro + '</p>' : '') + valinta,
+        pt.aloita, function () { opasRuutu.hidden = true; heitaPulma(); });
+      Array.prototype.forEach.call(opasRuutu.querySelectorAll('.av__tasot button'), function (b) {
+        b.addEventListener('click', function () { var n = +b.getAttribute('data-taso'); tallennaTaso(n); aloitaPulmat(n); });
+      });
+    }
+    // noppa pyörähtää ja lukittuu pulman lukuun: uusi erä alkaa
+    function heitaPulma() {
+      if (tila.muoto !== 'pulmat' || tila.heitetty || pyorii) return;
+      pyorii = true;
+      noppaEl.classList.remove('av__noppa--odottaa');
+      var teht = tila.tehtava;
+      noppa3d.heita(teht.noppa, function () {
+        pyorii = false;
+        if (tila.muoto !== 'pulmat') return;
+        if (tila.tehtava !== teht) return heitaPulma();   // pulma vaihtui kesken pyörimisen
+        tila.heitetty = true; tila.uusiHeitto = true; tila.heittoAika = Date.now();
+        piirra();
+        ajastaPulmaVihje();
+      }, vahennaLiike);
     }
     function asetaPulma() {
       var p = pulma();
@@ -670,10 +691,6 @@
       tila.laudalla = []; tila.pakka = [];
       tila.tehtava = { tapa: 'P', noppa: p.d }; tila.havikki = false;
       nollaa(); tila.vihje = null; tila.pVinkki = false;
-      // pulmassa noppa on jo heitetty: se näyttää pulman luvun
-      noppaEl.classList.remove('av__noppa--odottaa');
-      noppa3d.heita(p.d, null, true);
-      tila.heitetty = true; tila.uusiHeitto = true;
       piirra();
     }
     function pizzaValmiina(pz) { return pz.every(function (x) { return tila.paikka[x] === 'linjasto'; }); }
@@ -738,7 +755,7 @@
     function seuraavaPulma() {
       if (tila.muoto !== 'pulmat') return;
       tila.pNro++;
-      if (tila.pNro < PULMIA_TASOLLA) { asetaPulma(); return ajastaPulmaVihje(); }
+      if (tila.pNro < PULMIA_TASOLLA) { asetaPulma(); return heitaPulma(); }
       var seur = tila.pTaso + 1, laatikko = '<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt="">';
       if (seur < PULMATASOT.length) {
         tallennaTaso(seur);
@@ -1013,6 +1030,7 @@
       var ennen = paikat();
       piirraNyt();
       liu(ennen);
+      if (typeof sovitaPian === 'function') sovitaPian();   // korkeus voi muuttua (pelimuoto, tornit)
     }
 
     // --- piirto
@@ -1287,15 +1305,23 @@
     // Omalla sivulla (data-koko) peli kutistetaan mahtumaan näkyvään alueeseen, kun selaimen
     // osoite- ja välilehtipalkit vievät tilaa (erityisesti puhelin poikittain).
     var sovitusAjastin = null;
+    // alareunan turva-alue (esim. Safarin kelluva työkalupalkki tai kotipalkki) mitataan apuelementillä
+    var alaMitta = el('div');
+    alaMitta.style.cssText = 'position:fixed;left:0;bottom:0;width:0;visibility:hidden;pointer-events:none;height:env(safe-area-inset-bottom,0px)';
+    document.body.appendChild(alaMitta);
     function sovita() {
       if (!juuri.classList.contains('av--koko')) return;
-      juuri.style.zoom = '';
-      if (window.innerWidth <= window.innerHeight) return;   // pystyssä vieritetään mieluummin kuin pienennetään torneja
-      var vv = window.visualViewport, kork = vv ? vv.height : window.innerHeight;
+      juuri.style.zoom = ''; juuri.style.width = '';
+      var vv = window.visualViewport, kork = (vv ? vv.height : window.innerHeight) - alaMitta.offsetHeight;
       var yla = juuri.getBoundingClientRect().top + (window.scrollY || 0);
-      var tarve = juuri.offsetHeight, tila_ = kork - Math.max(0, yla) - 6;
+      var ala = Math.max(0, document.documentElement.scrollHeight - (juuri.getBoundingClientRect().bottom + (window.scrollY || 0)));   // sivun alamarginaali
+      var tarve = juuri.offsetHeight, tila_ = kork - Math.max(0, yla) - ala - 2;
       var z = Math.min(1, tila_ / tarve);
-      if (z < 0.98) juuri.style.zoom = Math.max(0.55, z).toFixed(3);
+      if (z >= 0.995) return;
+      // Peli pienennetään kokonaisena, jotta koko pelilauta mahtuu ruudulle ilman vieritystä.
+      // Pystyssä leveys lukitaan ensin, muuten leveyteen sidottu näyttämö kasvaisi takaisin.
+      if (window.innerWidth <= window.innerHeight) juuri.style.width = juuri.offsetWidth + 'px';
+      juuri.style.zoom = Math.max(0.5, z).toFixed(3);
     }
     function sovitaPian() { clearTimeout(sovitusAjastin); sovitusAjastin = setTimeout(sovita, 120); }
     window.addEventListener('resize', sovitaPian);
