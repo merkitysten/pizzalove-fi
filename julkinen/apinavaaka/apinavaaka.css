@@ -274,3 +274,9 @@
 @media (prefers-reduced-motion:reduce){.av__paikka--vihje{animation-duration:2.2s}}
 
 .av--apinat .av__kortit{min-height:58px}   /* uuni pysyy hihnalla, vaikka kortit loppuvat */
+
+/* Auta Bassoa: pulmat */
+.av--pulmat .av__boksi{display:none}
+.av--pulmat .av__rivi{height:118px;min-height:118px;flex-direction:column;justify-content:center;gap:6px;overflow:hidden}
+.av__kortti-pizza.av__kortti-pizza--monta{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:1px;padding:4px;box-sizing:border-box}
+.av__kortti-pizza.av__kortti-pizza--monta i{width:19px;height:19px;box-shadow:0 0 0 1.5px #fff}
