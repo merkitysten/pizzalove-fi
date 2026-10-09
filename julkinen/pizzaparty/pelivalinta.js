@@ -15,7 +15,9 @@
  * peli muistetaan, ja index.html:n alussa oleva rivi avaa sen (`./`).
  *
  * Merkintä: .pelivalinta (valikossa, painikerivi) ja #pelivalintaLista
- * (asetusten «Peli»-sivulla, valintalista); valikkorivin arvo #arvoPeli. */
+ * (asetusten «Peli»-sivulla, valintalista); valikkorivin arvo #arvoPeli.
+ * Lisäksi aloitusruudun palkin kielivalinta (.alku-kielet), koska sekin on molempien
+ * pelien yhteinen. */
 
 const PELIVALINTA_AVAIN = 'pizzapeli-peli';
 /* Nimet ovat tuotenimiä eivätkä käänny. Uusi pelimuoto = uusi rivi tähän. */
@@ -89,7 +91,68 @@ function pelivalintaPiirra() {
   });
 }
 
+/* KIELIVALINTA ALOITUSRUUDUN PALKISSA, kuten pizzalove.fi:ssä (Marko 9.10.2026: «Olisiko
+ * sen paikka kumminkin siellä oranssissa palkissa yläkulmassa? käy katsomassa
+ * pizzalove.fi -sivuston toteutus»): maapallo, kielen nimi ja nuoli; avautuu listaksi.
+ * Valkoinen oranssin päällä (yhteinen.css).
+ * ⚠️ VAIHTO ON SIVUNVAIHTO ?kieli=-parametrilla, ei tilan vaihto: kielet.js tallentaa sen
+ * yhteisiin asetuksiin, ja sama polku toimii molemmissa peleissä. Pelin oma vaihto
+ * (⚙ › Kieli) kutsuu kummankin pelin omia piirtofunktioita; aloitusruudussa peli on
+ * lepotilassa, joten uudelleenlataus ei hukkaa mitään. */
+const KIELIVALINTA_PALLO = '<svg class="kielet-pallo" viewBox="0 0 24 24" aria-hidden="true">' +
+  '<circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 ' +
+  '9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z"/></svg>';
+const KIELIVALINTA_NUOLI = '<svg class="kielet-nuoli" viewBox="0 0 12 12" aria-hidden="true">' +
+  '<path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+
+function kielivalintaVaihda(k) {
+  if (k === KIELI) return;
+  const haku = new URLSearchParams(location.search);
+  haku.set('kieli', k);
+  location.replace(location.pathname + '?' + haku.toString().replace(/=(?=&|$)/g, ''));
+}
+
+function kielivalintaPiirra() {
+  [].forEach.call(document.querySelectorAll('.alku-kielet'), function (paikka) {
+    const d = document.createElement('details');
+    d.className = 'kielet';
+    const yhteenveto = document.createElement('summary');
+    yhteenveto.setAttribute('aria-label', t('as.kieli') + ': ' + kielenNimi(KIELI));
+    yhteenveto.innerHTML = KIELIVALINTA_PALLO + '<span></span>' + KIELIVALINTA_NUOLI;
+    yhteenveto.querySelector('span').textContent = kielenNimi(KIELI);
+    const lista = document.createElement('ul');
+    lista.className = 'kielet-lista';
+    valmiitKielet().forEach(function (k) {
+      const li = document.createElement('li');
+      const nappi = document.createElement('button');
+      nappi.type = 'button';
+      nappi.lang = k;
+      nappi.textContent = kielenNimi(k);
+      if (k === KIELI) nappi.setAttribute('aria-current', 'true');
+      nappi.onclick = function () { d.open = false; kielivalintaVaihda(k); };
+      li.appendChild(nappi);
+      lista.appendChild(li);
+    });
+    d.appendChild(yhteenveto);
+    d.appendChild(lista);
+    paikka.innerHTML = '';
+    paikka.appendChild(d);
+  });
+}
+
+/* Avoin lista sulkeutuu napautuksesta muualle ja Escistä, kuten sivustolla (sivu.js). */
+document.addEventListener('click', function (e) {
+  [].forEach.call(document.querySelectorAll('.alku-kielet details[open]'), function (d) {
+    if (!d.contains(e.target)) d.open = false;
+  });
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  [].forEach.call(document.querySelectorAll('.alku-kielet details[open]'), function (d) { d.open = false; });
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   peliMuista(peliNyt());
   pelivalintaPiirra();
+  kielivalintaPiirra();
 });

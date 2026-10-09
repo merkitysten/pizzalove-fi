@@ -66,6 +66,9 @@ function valikkoKytke() {
     if (e.key !== 'Escape' || valikkoEl('valikkoPeite').hidden) return;
     e.preventDefault();
     e.stopImmediatePropagation();
+    /* Avoin kielilista (pelivalinta.js) sulkeutuu ensin: sen oma kuuntelija ei saa Esciä. */
+    const kielet = document.querySelector('.alku-kielet details[open]');
+    if (kielet) { kielet.open = false; return; }
     if (!valikkoEl('valikkoMoninpeli').hidden) valikkoSivu('paa');
   }, true);
 }

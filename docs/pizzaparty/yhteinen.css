@@ -122,29 +122,49 @@
   display:flex;flex-direction:column;align-items:center;gap:14px;
   padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
-/* YLÄLAITA KUTEN PELILAATIKON KANNESSA: oranssi palkki koko leveydeltä, musta viiri
- * riippuu sen päältä vasemmassa reunassa (Marko 9.10.2026: «Sen paikka on siellä», ja
- * kansi referenssinä). Mitat viirin leveydestä: palkki = 0,25 × leveys (kannen suhde),
- * viirin korkeus = 0,76 × leveys (viewBox 100 × 76).
- * Negatiivinen marginaali vie ylälaidan .aloitusruudun täytteen yli reunoihin asti. */
-.alku-yla{--viiri-l:clamp(112px, 36vw, 200px);--viiri-x:max(16px, 4vw);--palkki:calc(var(--viiri-l) * .25);
-  --yla-turva:env(safe-area-inset-top, 0px);
+/* YLÄLAITA KUTEN PELILAATIKON KANNESSA JA pizzalove.fi:ssä: oranssi palkki koko leveydeltä,
+ * musta viiri riippuu sen päältä vasemmassa reunassa, kielivalinta oikealla (Marko 9.10.2026).
+ * Viirin korkeus = 0,76 × leveys (viewBox 100 × 76); palkki ≥ 40 px, jotta kielinappi mahtuu.
+ * ⚠️ iPhonessa sivu jatkuu tilapalkin alle (viewport-fit=cover): palkki ja viirin musta
+ * jatkuvat ruudun yläreunaan asti. 9.10. viiri «katkesi rumasti» (Markon kuvakaappaus),
+ * koska mustan jatkeen piirsi ::before joka jäi oranssin palkin ALLE. Nyt jatke on viirin
+ * oma ::before, ja viiri on DOMissa palkin jälkeen. */
+.alku-yla{--viiri-l:clamp(112px, 36vw, 200px);--viiri-x:max(16px, 4vw, env(safe-area-inset-left, 0px));
+  --palkki:max(40px, calc(var(--viiri-l) * .25));--yla-turva:env(safe-area-inset-top, 0px);
   flex:none;align-self:stretch;z-index:2;
   margin:calc(-1 * (var(--yla-turva) + 14px)) -16px 0;
   height:calc(var(--yla-turva) + var(--viiri-l) * .76)}
 .alku-palkki{position:absolute;left:0;right:0;top:0;height:calc(var(--yla-turva) + var(--palkki));
-  background:var(--orange, #F47920);display:flex;align-items:flex-end;box-sizing:border-box;
-  padding:0 12px 0 calc(var(--viiri-x) + var(--viiri-l) + 12px)}
-/* Iskulause kuten kannessa: DIN-kapea, isot kirjaimet ≈ 37 % palkin korkeudesta
- * (kannen suhde). D-DIN:n isot = 0,69 em → koko ≈ 0,54 × palkki; kirjainväli tiivistää
- * D-DIN:n 8 %:n lisäleveyttä kohti pakkauksen fonttia. */
-.alku-palkki span{flex:1;height:var(--palkki);display:flex;align-items:center;justify-content:center;
-  color:#fff;white-space:nowrap;font-family:'D-DIN Condensed', 'Poppins', sans-serif;font-weight:700;
-  letter-spacing:-.01em;font-size:max(12px, calc(var(--palkki) * .56));padding-top:.08em}
-.alku-viiri{position:absolute;left:var(--viiri-x);top:var(--yla-turva);width:var(--viiri-l);height:auto;display:block}
-/* Ilmoituspalkin alle (kotivalikosta avattu peli): viiri jatkuu ylös reunaan asti. */
-.alku-yla::before{content:"";position:absolute;top:0;left:var(--viiri-x);width:var(--viiri-l);
-  height:var(--yla-turva);background:#111}
+  background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;
+  box-sizing:border-box;padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 0}
+.alku-kielet{height:var(--palkki);display:flex;align-items:center}
+.alku-viiri{position:absolute;left:var(--viiri-x);top:var(--yla-turva);width:var(--viiri-l);display:block;line-height:0}
+.alku-viiri svg{width:100%;height:auto;display:block}
+.alku-viiri::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:var(--yla-turva);background:#000002}
+.alku-viiri:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+/* Kielivalinta kuten pizzalove.fi:ssä, mutta VALKOINEN oranssin päällä (Marko 9.10.2026:
+ * «Musta oranssin päällä on aina vähän tunkkaisen näköinen»). */
+.alku-kielet .kielet{position:relative}
+.alku-kielet summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:700;color:#fff;padding:6px 10px;border-radius:10px;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6);user-select:none;-webkit-user-select:none}
+.alku-kielet summary::-webkit-details-marker{display:none}
+.alku-kielet summary:hover, .alku-kielet details[open] > summary{box-shadow:inset 0 0 0 1.5px #fff}
+.alku-kielet summary:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.kielet-pallo{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
+.kielet-nuoli{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;
+  stroke-linejoin:round;transition:transform .15s}
+.alku-kielet details[open] .kielet-nuoli{transform:rotate(180deg)}
+.kielet-lista{position:absolute;right:0;top:calc(100% + 8px);z-index:3;margin:0;padding:6px;list-style:none;
+  min-width:160px;background:#fff;border:1px solid rgba(60,34,12,.15);border-radius:12px;
+  box-shadow:0 8px 24px rgba(60,34,12,.18)}
+.kielet-lista button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;
+  padding:10px 12px;border:0;border-radius:8px;background:none;font:inherit;font-weight:600;font-size:15px;
+  color:var(--ink);text-align:left;cursor:pointer}
+.kielet-lista button:hover{background:rgba(244,121,32,.12)}
+.kielet-lista button[aria-current="true"]::after{content:"\2713";color:var(--orange, #F47920);font-weight:800}
+@media (prefers-color-scheme:dark){.kielet-lista{background:var(--ground);border-color:rgba(255,255,255,.15)}}
 .alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85}
 /* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
 @media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
@@ -174,18 +194,29 @@
   margin-left:calc(-1 * var(--sivu) - var(--k) * .26);transform:rotate(14deg);transform-origin:50% 100%}
 .alku-laatikko{--k:clamp(108px, 20vh, 164px);height:var(--k);width:auto;margin-bottom:14px;
   margin-right:calc(-1 * var(--sivu) - var(--k) * .22);transform:rotate(-12deg)}
-/* Kaksi neliötä: kuvake kertoo, sana nimeää. Koko teksti on aria-labelissa. */
-.alku-ruudut{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.alku-ruutu{--ruutu-pohja:#fff;aspect-ratio:1;border-radius:16px;border:2px solid var(--orange, #F47920);
-  background:var(--ruutu-pohja);color:var(--orange, #F47920);cursor:pointer;font:inherit;padding:10px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+/* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
+ * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
+ * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */
+.alku-ruudut{display:grid;grid-template-columns:1fr;gap:10px;width:100%}
+.alku-ruutu{--ruutu-pohja:#fff;border-radius:16px;border:2px solid var(--orange, #F47920);
+  background:var(--ruutu-pohja);color:var(--orange, #F47920);cursor:pointer;font:inherit;padding:10px 18px;
+  min-height:76px;display:flex;align-items:center;gap:16px;
   box-shadow:0 3px 8px rgba(60,40,20,.12)}
 .alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #F47920);color:#fff}
-.alku-ruutu b{font-size:18px;line-height:1.15;color:var(--ink);text-align:center}
+.alku-ruutu b{font-size:19px;line-height:1.15;color:var(--ink);text-align:left}
 .alku-ruutu.ensisijainen b{color:#fff}
-.alku-ruutu svg{width:70%;height:auto}
+.alku-ruutu svg{width:68px;height:auto;flex:none}
 /* Laitekuvake: puhelimen runko ruudun tekstin värillä (valkoinen / oranssi). */
 .laite-runko{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linejoin:round}
+/* Puhelimen kotiviiva: se tekee suorakaiteesta puhelimen (Marko 9.10.2026). */
+.laite-viiva{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+
+/* Kauppa hiljaisena linkkinä: ei kolmas nappirivi. */
+.alku-kauppa{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;margin-top:2px;
+  color:var(--ink);font-weight:700;font-size:15px;text-decoration:none;border-radius:10px}
+.alku-kauppa .pieni-ikoni{color:var(--orange, #F47920)}
+.alku-kauppa:hover{text-decoration:underline}
+.alku-kauppa:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .alku-ruutu:active{transform:scale(.97)}
 .alku-ruutu:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 /* Apinan naama: Markon vektori (kuvat/apinanaama_vektori.svg, 9.10.2026),
@@ -207,7 +238,9 @@
 /* Matala vaakanäyttö (puhelin vaakatasossa, 375 px): neliöt eivät mahdu —
  * mitattu 9.10.2026: 476 px sisältöä 375 px:n ruudussa. Kuvake sanan viereen. */
 @media (orientation:landscape) and (max-height:540px){
-  .peite > .aloitusruutu{gap:8px}
+  /* Ylälaita on pois virrasta, joten sisältö alkaa palkin (40 px) alapuolelta: 568 × 320:ssa
+   * palkki peitti pelivalinnan yläreunan ja ruutu vieritti 10 px (mitattu 9.10.2026). */
+  .peite > .aloitusruutu{gap:6px;padding-top:calc(env(safe-area-inset-top, 0px) + 48px);padding-bottom:4px}
   /* Ylälaita pois virrasta: korkeus kuuluu valinnoille. Viiri mahtuu sarakkeen vasemmalle
    * puolelle myös 568 px:n leveydellä (16 + 84 < 104). */
   .alku-yla{--viiri-l:84px;position:absolute;top:0;left:0;right:0;margin:0}
@@ -225,9 +258,10 @@
     left:min(-40px, calc(50vw - 188px - 56vh));transform:rotate(16deg);transform-origin:50% 100%}
   .alku-laatikko{position:fixed;height:50vh;height:50dvh;top:14vh;margin:0;
     right:min(-30px, calc(50vw - 188px - 50vh));transform:rotate(-14deg)}
-  .alku-logo{width:84px}
-  .alku-ruutu{aspect-ratio:auto;flex-direction:row;padding:10px 12px;min-height:68px}
-  .alku-ruutu svg{width:56px}
+  .alku-logo{width:72px}
+  .alku-ruutu{min-height:54px;padding:6px 14px;gap:12px}
+  .alku-ruutu svg{width:50px}
+  .alku-kauppa{padding:4px 10px;margin:0}
 }
 @media (prefers-color-scheme:dark){
   .alku-ruutu{--ruutu-pohja:var(--ground)}
