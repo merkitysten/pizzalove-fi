@@ -107,7 +107,7 @@
  * Tarkkuus .peite > .aloitusruutu (0,2,0) voittaa peli.css:n .verkko-laatikon. */
 .peite:has(> .aloitusruutu){padding:0;background:var(--ground)}
 .peite > .aloitusruutu{width:100%;max-width:none;height:100vh;height:100dvh;max-height:none;
-  border-radius:0;box-shadow:none;overflow:auto;box-sizing:border-box;
+  border-radius:0;box-shadow:none;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;
   display:flex;flex-direction:column;align-items:center;gap:14px;
   padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
@@ -128,12 +128,22 @@
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
 .aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
 
-/* Maskotit pelivalinnan yläpuolella: Basso nojaa kyynärpäällään valinnan reunaan
- * (kuvan alaosa menee reunan yli), rakastunut pizzalaatikko oikealla. */
-.alku-maskotit{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;
-  width:100%;margin-bottom:-22px;pointer-events:none}
-.alku-basso{height:clamp(108px, 21vh, 168px);width:auto}
-.alku-laatikko{height:clamp(96px, 18vh, 148px);width:auto;margin-bottom:8px}
+/* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
+ * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
+ * tarvitse mahtua kokonaan ruutuun — — se hieman vinosta katsominen on usein hauskempi
+ * tapa kuvata basso»). Basso vasemmalta — pizzaa syövä, virallinen maskottikuva
+ * (Marko 9.10.2026) — ja rakastunut pizzalaatikko oikealta.
+ * --sivu = sarakkeen etäisyys ruudun reunasta (sarake enintään 360 px, reunat 16 px):
+ * negatiivinen marginaali vie kuvan ruudun reunan yli, ja .aloitusruutu leikkaa sen
+ * (overflow-x:hidden). Kuvat ovat pelivalinnan ALLA (z-index), joten ne kurkkaavat
+ * sen takaa eivätkä peitä tekstiä. */
+.alku-maskotit{--sivu:max(16px, calc(50vw - 180px));position:relative;z-index:0;display:flex;
+  justify-content:space-between;align-items:flex-end;width:100%;margin-bottom:-26px;pointer-events:none}
+.alku-paa > :not(.alku-maskotit){position:relative;z-index:1}
+.alku-basso{--k:clamp(124px, 24vh, 196px);height:var(--k);width:auto;
+  margin-left:calc(-1 * var(--sivu) - var(--k) * .26);transform:rotate(14deg);transform-origin:50% 100%}
+.alku-laatikko{--k:clamp(108px, 20vh, 164px);height:var(--k);width:auto;margin-bottom:14px;
+  margin-right:calc(-1 * var(--sivu) - var(--k) * .22);transform:rotate(-12deg)}
 /* Kaksi neliötä: kuvake kertoo, sana nimeää. Koko teksti on aria-labelissa. */
 .alku-ruudut{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
 .alku-ruutu{--ruutu-pohja:#fff;aspect-ratio:1;border-radius:16px;border:2px solid var(--orange, #F47920);
@@ -170,11 +180,11 @@
    * position:fixed: reuna on RUUDUN reuna eikä sarakkeen, ja ruutu leikkaa kuvan
    * itse (ei vaakavieritystä). Sijainti lasketaan sarakkeen (360 px) viereen; jos
    * tila ei riitä, kuva menee neliöiden ALLE (z-index), ei päälle.
-   * Leveydet: Basso ≈ 0,93 × korkeus, laatikko = korkeus. */
-  .alku-maskotit{margin:0;z-index:0}
-  .alku-paa > :not(.alku-maskotit){position:relative;z-index:1}
+   * Leveydet: Basso ≈ 0,84 × korkeus (basso-syo.webp 438×520), laatikko = korkeus. */
+  .alku-maskotit{margin:0}
+  .alku-basso, .alku-laatikko{margin:0}
   .alku-basso{position:fixed;height:66vh;height:66dvh;bottom:-6vh;
-    left:min(-40px, calc(50vw - 188px - 61vh));transform:rotate(16deg);transform-origin:50% 100%}
+    left:min(-40px, calc(50vw - 188px - 56vh));transform:rotate(16deg);transform-origin:50% 100%}
   .alku-laatikko{position:fixed;height:50vh;height:50dvh;top:14vh;margin:0;
     right:min(-30px, calc(50vw - 188px - 50vh));transform:rotate(-14deg)}
   .alku-logo{width:84px}
