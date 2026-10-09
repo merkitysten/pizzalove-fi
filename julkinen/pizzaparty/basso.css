@@ -1,0 +1,222 @@
+/* Pizza Basso — vain se mikä eroaa Pizza Partysta. Kaikki muu on peli.css:ssä.
+ * ⚠️ url() ratkeaa TÄHÄN tiedostoon nähden; basso.css on juuressa kuten
+ * peli.css, joten kuvat/… toimii. */
+
+/* --- PIZZAA! (Marko 6.10.2026: animaatio, ääni ja Basso-apinan kuva) --- */
+.basso-pizzaa{
+  position:fixed;inset:0;z-index:60;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+}
+.basso-pizzaa[hidden]{display:none}
+.basso-pizzaa img{width:min(46vw, 46vh, 260px);height:auto;
+  filter:drop-shadow(0 8px 18px rgba(60,40,20,.35))}
+.basso-pizzaa b{
+  font-size:min(14vw, 13vh, 84px);line-height:1;font-weight:800;letter-spacing:.02em;
+  color:#fff;background:var(--orange);padding:.12em .4em .16em;border-radius:16px;
+  box-shadow:0 6px 20px rgba(60,40,20,.30);
+}
+/* Apinan huuto: sama hetki, musta pohja kuten apinan laatikko. */
+/* Huudon pohja on huutajan oma väri (basso.js asettaa --pelaaja-vari). */
+.basso-pizzaa b{background:var(--pelaaja-vari, var(--orange));color:var(--pelaaja-teksti, #fff)}
+.basso-pizzaa.nakyy img{animation:basso-hyppy 1.7s cubic-bezier(.2,.9,.3,1.3) both}
+.basso-pizzaa.nakyy b{animation:basso-huuto 1.7s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes basso-hyppy{
+  0%{transform:translateY(60px) scale(.3) rotate(-12deg);opacity:0}
+  18%{transform:translateY(-14px) scale(1.08) rotate(6deg);opacity:1}
+  30%{transform:translateY(0) scale(1) rotate(-4deg)}
+  42%{transform:rotate(4deg)} 54%{transform:rotate(-3deg)} 66%{transform:rotate(0)}
+  88%{transform:scale(1);opacity:1}
+  100%{transform:scale(.9);opacity:0}
+}
+@keyframes basso-huuto{
+  0%,8%{transform:scale(.2);opacity:0}
+  24%{transform:scale(1.18);opacity:1}
+  34%{transform:scale(.96)} 44%{transform:scale(1.04)} 54%{transform:scale(1)}
+  88%{opacity:1}
+  100%{transform:scale(1.1);opacity:0}
+}
+@media (prefers-reduced-motion: reduce){
+  .basso-pizzaa.nakyy img, .basso-pizzaa.nakyy b{animation:basso-hiljaa 1.7s linear both}
+  @keyframes basso-hiljaa{0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0}}
+}
+
+
+/* Sydänpizza on Partyssa 2 pistettä. Bassossa pizza ei anna pisteitä
+ * (voittaja saa muiden käsikortit), joten merkki kertoisi väärin. */
+#pizzaSydan{display:none!important}
+
+/* Oranssi kuten ykkösaskelma: vihreä ei ole brändiväri (Marko 7.10.2026). */
+.palli-lisays{font-size:clamp(22px, 4vh, 30px);color:#fff;background:var(--orange);
+  padding:4px 14px;border-radius:12px;line-height:1.2;box-shadow:0 2px 6px rgba(60,34,12,.18);
+  animation:palli-pomppu .6s .2s cubic-bezier(.2,.9,.3,1.4) both}
+@keyframes palli-pomppu{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* Jääneet kortit viuhkana askelman alla (sijainnit JS:stä).
+ * ⚠️ KIINTEÄ korkeus eikä min-height: voittajalla ei ole kortteja, ja
+ * min-heightillä hänen alaosansa jäi muita matalammaksi — jolloin
+ * ykkösaskelman alareuna valui muiden alapuolelle (Markon kuva 6.10.2026:
+ * «palkintokorokkeet menee ihan hassusti»). */
+.palli{--mk:clamp(44px, 8vh, 58px)}
+/* Muu asettelu (pohjaviiva, pehmuste) on yhteinen.css:ssä — vain korkeus tässä. */
+.palli-ala{height:calc(var(--mk) * 1.52 + 52px)}
+.palli-ala.voitti{justify-content:center;padding-top:0}
+.palli-kortit{position:relative;width:100%;height:calc(var(--mk) * 1.52)}
+/* ⚠️ KORTTIKUVASSA ON LEIKKUUVARA (Markon havainto 6.10.2026: «korteilla on ne
+ * rumat reunat»). Kuva on 26 % korttia leveämpi; peli rajaa sen samoilla
+ * muuttujilla (--kuva-*, peli.css) kortin muotoiseen laatikkoon. Tässä sama. */
+.basso-minikortti{position:absolute;top:0;left:0;width:var(--mk);aspect-ratio:var(--kortti-suhde);
+  overflow:hidden;border-radius:calc(var(--mk) * .055);
+  box-shadow:0 1px 4px rgba(60,40,20,.3), 0 0 0 1px rgba(60,40,20,.07);
+  transform:rotate(var(--kulma, 0deg));transform-origin:50% 120%}
+.basso-minikortti img{position:absolute;display:block;max-width:none;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla)}
+.basso-minikortti small{position:absolute;left:50%;bottom:3px;transform:translateX(-50%);
+  background:var(--ink);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:0 4px}
+.basso-summa{font-size:clamp(18px, 3vh, 22px);color:var(--ink);white-space:nowrap;margin-top:6px}
+
+/* --- JUOKSUKILPAILU kohti pisterajaa --- */
+/* ⚠️ Radan korkeus ja alkukohta lasketaan HAHMON koosta (Marko 7.10.2026:
+ * «Alempi laatikko on liian ahdas»). Mitattu 375 × 667: rata 34 px, hahmo
+ * ~37 px → 0-pisteiset hahmot päällekkäin ja yli laatikon reunan. */
+.basso-kisa{--kisa-hahmo:clamp(30px, 5vh, 40px);--rata-alku:calc(var(--kisa-hahmo) / 2 + 10px);
+  --rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);
+  position:relative;width:min(100%, 560px);padding-top:calc(22px + var(--pala) * .6 + 8px)}
+.basso-kisa:empty{display:none}
+/* Maaliviiva: ruutukuvio radan loppukohdassa. */
+.basso-kisa::after{content:"";position:absolute;top:calc(22px + var(--pala) * .6 + 4px);bottom:0;
+  right:var(--rata-loppu);width:8px;transform:translateX(50%);border-radius:2px;
+  background:repeating-conic-gradient(var(--ink) 0 25%, #fff 0 50%) 0 0/8px 8px}
+/* Maalissa pizzapala VAAKASUORASSA, kärki kohti juoksijoita (Marko 6.10.2026:
+ * «Pitäisikö se pizzanpala olla kuitenkin vaakasuunnassa?» — rata kulkee
+ * vaakaan, ja pystyssä pala luki lipputankona). Pisteraja palan yläpuolella.
+ * Nollaleveä ankkuri maaliviivan kohdalla: molemmat keskitetään siihen.
+ * Kuva on pystykuva (leveys 0,6 × korkeus), joten kääntö 90° vie sen
+ * pystymitasta 0,6 — siksi top siirtyy −0,2 × korkeus. */
+.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);width:0;height:calc(22px + var(--pala) * .6)}
+.kisa-maali b{position:absolute;top:0;left:0;transform:translateX(-50%);font-size:20px;line-height:22px;color:var(--ink)}
+.kisa-maali img{position:absolute;top:calc(22px - var(--pala) * .2);left:0;height:var(--pala);width:auto;
+  max-width:none;display:block;transform:translateX(-50%) rotate(90deg);
+  filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
+.kisa-rata{position:relative;height:calc(var(--kisa-hahmo) + 12px)}
+/* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
+.kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
+  top:50%;height:12px;transform:translateY(-50%);border-radius:6px;background:rgba(60,34,12,.12)}
+.kisa-palkki{position:absolute;left:var(--rata-alku);top:50%;height:12px;transform:translateY(-50%);
+  border-radius:6px;background:var(--pelaaja-vari);width:0}
+.kisa-juoksija{position:absolute;top:50%;left:var(--rata-alku);transform:translate(-50%, -50%);
+  display:flex;align-items:center;gap:4px;z-index:1}
+.kisa-juoksija .hahmo{--koko:var(--kisa-hahmo)}
+.kisa-juoksija b{position:absolute;left:100%;margin-left:6px;font-size:clamp(17px, 3vh, 21px);
+  color:var(--ink);background:var(--ground);padding:0 5px;border-radius:6px;line-height:1.3}
+.kisa-rata.oma .kisa-juoksija b{box-shadow:0 0 0 2px var(--pelaaja-vari)}
+.kisa-rata.liikkuu .kisa-palkki{transition:width 1.3s cubic-bezier(.3,.7,.3,1)}
+.kisa-rata.liikkuu .kisa-juoksija{transition:left 1.3s cubic-bezier(.3,.7,.3,1)}
+.kisa-rata.liikkuu .kisa-juoksija .hahmo{animation:kisa-hypy .26s ease-in-out 5}
+@keyframes kisa-hypy{50%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion: reduce){
+  .kisa-rata.liikkuu .kisa-palkki, .kisa-rata.liikkuu .kisa-juoksija{transition:none}
+  .kisa-rata.liikkuu .kisa-juoksija .hahmo{animation:none}
+}
+
+
+
+/* Maalin pala on syöty ottelun voiton jälkeen. */
+.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
+  transition:opacity .4s, transform .4s}
+
+/* --- VUORONVAIHTO SAMALLA LAITTEELLA ---
+ * Seuraavan pelaajan väri koko ruudulla ja hänen hahmonsa isona; kortit
+ * piilossa kunnes hän napauttaa. Sama pinta kuin voittojuhlassa (väri +
+ * kuosi), mutta rauhallisempi: tämä toistuu joka vuorolla. */
+.basso-vaihto{position:fixed;inset:0;z-index:65;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px, 3vh, 28px);
+  background:var(--pelaaja-vari)}
+.basso-vaihto[hidden]{display:none}
+.basso-vaihto::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
+  opacity:.22;mix-blend-mode:multiply}
+.basso-vaihto > *{position:relative}
+.basso-vaihto-hahmo .hahmo{--koko:min(46vw, 34vh, 220px);
+  box-shadow:0 0 0 8px #fff, 0 10px 28px rgba(0,0,0,.3)}
+/* 🔵 Ei emojia (Marko 6.10.2026: «Pelkkä apinakuvakkeen sykkiminen tai
+ * sellainen pieni pomppiminen on riittävä ja ehkä pieni taustahehku»).
+ * Hahmo saapuu ponnahtaen ja jää sitten hengittämään: pieni pomppu ja sen
+ * takana sykkivä valkoinen hehku — kutsu napauttaa ilman sanaa tai merkkiä. */
+.basso-vaihto-hahmo{position:relative;display:grid;place-items:center}
+.basso-vaihto-hahmo::before{content:"";position:absolute;inset:-34%;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(255,255,255,.75), rgba(255,255,255,.28) 55%, rgba(255,255,255,0));
+  animation:vaihto-hehku 1.8s ease-in-out infinite}
+.basso-vaihto-hahmo .hahmo{position:relative}
+.basso-vaihto:not([hidden]) .basso-vaihto-hahmo .hahmo{
+  animation:juhla-pomppu .45s cubic-bezier(.2,.9,.3,1.4) both, vaihto-pomppu 1.8s .45s ease-in-out infinite}
+@keyframes vaihto-pomppu{0%,100%{transform:translateY(0) scale(1)} 30%{transform:translateY(-12px) scale(1.04)}
+  50%{transform:translateY(0) scale(.98, 1.02)} 60%{transform:translateY(-4px) scale(1)}}
+@keyframes vaihto-hehku{0%,100%{opacity:.55;transform:scale(.9)} 50%{opacity:1;transform:scale(1.08)}}
+.basso-vaihto-nimi{font-size:min(9vw, 5vh, 40px);line-height:1.1;font-weight:800;
+  color:var(--pelaaja-teksti, #fff);text-align:center;max-width:90vw;overflow-wrap:anywhere}
+.basso-vaihto-nimi:empty{display:none}
+@media (prefers-reduced-motion: reduce){
+  .basso-vaihto:not([hidden]) .basso-vaihto-hahmo .hahmo, .basso-vaihto-hahmo::before{animation:none}
+}
+
+.bv-pelaaja{display:flex;flex-direction:column;align-items:center;gap:4px}
+.bv-pelaaja small{font-size:12px;font-weight:700;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bv-pelaaja small:empty{display:none}
+
+/* --- VERKKOPELI: valikko, aula ja ilmoitukset (basso-verkko.js) ---
+ * Laatikko, napit ja kentät ovat Partyn alkuvalikon luokkia (peli.css);
+ * tässä vain Basson omat lisät. */
+.bv-otsikko{display:block;text-align:center;font-size:17px;margin:2px 0 4px}
+#bassoValikko .hahmo-varit{padding:4px 0 8px}
+#bassoValikko .hahmo-valinta .hahmo{--koko:44px}
+.bv-pelaajat{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:48px}
+.bv-pelaajat .hahmo{--koko:46px}
+.bv-pelaajat .hahmo.oma{box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--ink)}
+/* Ilmoitus ruudun yläreunassa (yhteyskatkos, peli päättyi). */
+.bv-viesti{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 8px);left:50%;transform:translateX(-50%);
+  z-index:80;max-width:min(92vw, 420px);margin:0;padding:8px 14px;border-radius:12px;
+  background:var(--ink);color:var(--ground);font-size:15px;text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.bv-viesti[hidden]{display:none}
+/* Verkossa ei ole taukoa (peli.js saakoPitaaTauon), joten yläkulman nappi
+ * näkyy vain lausekevaiheessa, jossa se ottaa kortit takaisin. */
+.basso-verkossa #peliRuutu:not(.selitys) #alusta{visibility:hidden}
+/* Tulosruudulla muut kuin perustaja odottavat seuraavaa jakoa. */
+.basso-odota{font-size:clamp(40px, 8vh, 64px);line-height:1;animation:odota-kaanto 2s ease-in-out infinite}
+.basso-odota[hidden]{display:none}
+@keyframes odota-kaanto{0%,40%{transform:rotate(0)} 50%,90%{transform:rotate(180deg)} 100%{transform:rotate(180deg)}}
+@media (prefers-reduced-motion: reduce){.basso-odota{animation:none}}
+
+/* Napin «työn alla» -tila: palvelinpyyntö on matkalla. Ilman tätä
+ * odottava nappi näytti vain harmaalta eikä kertonut mitään. */
+#bassoValikko .iso-nappi.odottaa{position:relative;color:transparent}
+#bassoValikko .iso-nappi.odottaa::after{content:"";position:absolute;left:50%;top:50%;width:22px;height:22px;
+  margin:-11px 0 0 -11px;border-radius:50%;border:3px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:bv-pyori .8s linear infinite}
+@keyframes bv-pyori{to{transform:rotate(360deg)}}
+/* ?diag=1: palvelinpyyntöjen loki ruudun alareunassa. */
+.bv-diag{position:fixed;left:0;right:0;bottom:0;z-index:90;margin:0;max-height:40vh;overflow:auto;
+  padding:6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);background:rgba(0,0,0,.85);color:#9f9;
+  font:11px/1.35 ui-monospace, Menlo, monospace;white-space:pre-wrap;pointer-events:none}
+
+/* Juoksukilpailun laatikko: sama .tulos-laatikko kuin pallilla (yhteinen.css).
+ * Kaksi laatikkoa, koska ne kertovat eri asiaa: KIERROS (palli + jääneet
+ * kortit) ja OTTELU (juoksukilpailu) — Marko 7.10.2026. */
+#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:8px;width:min(100% - 24px, 600px)}
+
+/* Matala ruutu (puhelin vaakatasossa): yhteinen.css asettaa pallin vasemmalle
+ * ja napit oikealle; Basso lisää juoksukilpailun napin yläpuolelle.
+ * ⚠️ Lohkot ovat TIEDOSTON LOPUSSA, koska ne ylikirjoittavat samantarkkuuksisia
+ * sääntöjä — muualla ne häviäisivät hiljaa. */
+@media (max-height: 500px){
+  #tulosRuutu:not([hidden]){grid-template-rows:auto auto;grid-template-areas:"palli kisa" "palli napit"}
+  .basso-kisa{grid-area:kisa;width:100%;max-width:420px}
+  .basso-summa{margin-top:2px}
+}
+
+/* Puhelin pystyssä selaimen palkkien kanssa (iPhone + Safari ≈ 667 px):
+ * mitattu 375 × 667, ▶ päättyi 694 px:iin. Pienemmät kortit ja pala. */
+@media (min-height: 501px) and (max-height: 740px){
+  .palli{--mk:clamp(36px, 6vh, 58px)}
+  .basso-kisa{--pala:48px;--kisa-hahmo:32px}
+}

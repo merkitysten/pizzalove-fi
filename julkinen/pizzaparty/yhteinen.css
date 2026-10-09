@@ -1,0 +1,223 @@
+/* Pizza Love — HAHMO, TULOSRUUTU, JUHLA JA PELIN VALINTA kaikille pelimuodoille.
+ *
+ * 🔵 Marko 9.10.2026: «pizza basso on nyt pidemmälle viety tyylien suhteen jos
+ * ajatellaan voittoruutuja ja tulosruutuja jne. Eli ota siitä mallia, kun
+ * yhtenäistät tyylejä.» Siirretty basso.css:stä; jokaisen säännön perustelu
+ * (Markon palaute 6.–7.10.2026) kulkee mukana.
+ *
+ * Ladataan peli.css:n JÄLKEEN ja pelin oman tiedoston (basso.css) EDELLÄ: pelin
+ * oma tiedosto saa ylikirjoittaa samantarkkuuksisen säännön.
+ * ⚠️ url() ratkeaa TÄHÄN tiedostoon nähden (juuressa), joten kuvat/… toimii. */
+
+/* --- PELIN VALINTA alkuvalikossa (pelivalinta.js) --- */
+.pelivalinta{display:flex;gap:4px;padding:4px;margin:0 0 4px;border-radius:12px;
+  width:100%;box-sizing:border-box;align-self:stretch;
+  background:rgba(60,34,12,.08)}
+.pelivalinta-nappi{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:10px 6px;cursor:pointer;
+  font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink);white-space:nowrap}
+.pelivalinta-nappi.valittu{background:var(--orange);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
+.pelivalinta-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+/* --- HAHMO OMALLA VÄRILLÄÄN (Marko 6.10.2026: «kaikilla pelaajilla olisi
+ * sekä hahmo että väri») — pelissä, pallilla, radalla, asetuksissa, juhlassa. --- */
+.hahmo{--koko:40px;display:grid;place-items:center;width:var(--koko);height:var(--koko);
+  border-radius:50%;background:var(--pelaaja-vari);flex:0 0 auto;
+  box-shadow:0 0 0 3px #fff, 0 3px 8px rgba(60,40,20,.25)}
+.hahmo img{width:82%;height:auto;display:block}
+
+/* Pizzaa syövä hahmo: ympyrä rajaa sivut ja alaosan, tukka nousee yli.
+ * 🔵 Marko 7.10.2026: «apina saisi olla hiukan vieläkin isompi — ruokalappu
+ * leikkaantuu kevyesti alhaalta — kädet saa rajautua myös enemmän. Näin se
+ * pizza tulee isommaksi keskellä.» → kuva 125 % ympyrän leveydestä, pizza
+ * ympyrän keskelle. Laskettu kuvan mitoista (438 × 520; pizza ~58 %, tukan
+ * latva ~6 %, ruokalapun alareuna ~90 % kuvan korkeudesta):
+ *   kuvan korkeus 1,48 D; kuvan yläreuna 0,36 D ympyrän yläpuolella
+ *   → pizza 0,50 D (keskellä), ruokalappu 0,97 D (leikkautuu kevyesti),
+ *     tukka 0,27 D ympyrän yläpuolella.
+ * Kehys on siksi 30 % ympyrää korkeampi; ympyrän keskipiste on
+ * 0,80 / 1,30 = 61,5 % kehyksen korkeudesta. Tukan tila varataan marginaalilla. */
+.hahmo.syo{position:relative;overflow:visible;margin-top:calc(var(--koko) * .30)}
+.hahmo.syo .syo-kehys{position:absolute;left:0;right:0;bottom:0;top:-30%;
+  -webkit-mask:radial-gradient(circle at 50% 61.5%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 61.5% no-repeat;
+          mask:radial-gradient(circle at 50% 61.5%, #000 calc(var(--koko) * .5 - .5px), transparent calc(var(--koko) * .5)),
+    linear-gradient(#000, #000) top / 100% 61.5% no-repeat}
+.hahmo.syo img{position:absolute;top:calc(var(--koko) * -.06);left:-12.5%;width:125%;height:auto;max-width:none}
+
+/* Nimi pelaajalaatikossa hahmon alla (väri tekstille JS:stä, kontrastin mukaan). */
+.laatikkonimi{display:block;font-size:11px;font-weight:700;line-height:1.1;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
+.laatikkonimi:empty{display:none}
+
+/* Asetus «Hahmo»: kymmenen väriä Merkitysten järjestyksessä 1–10, viisi per
+ * rivi. Useammalla ihmisellä ensin kenen hahmo, sitten väri. */
+.hahmo-varit{display:grid;grid-template-columns:repeat(5, auto);gap:6px 8px;justify-content:center;padding:12px 0}
+.hahmo-valinta{background:none;border:0;padding:6px;border-radius:50%;cursor:pointer}
+.hahmo-valinta .hahmo{--koko:46px}
+.hahmo-valinta.valittu .hahmo{box-shadow:0 0 0 3px #fff, 0 0 0 7px var(--ink)}
+.hahmo-valinta:disabled{opacity:.25;cursor:default}
+.hahmo-pallo{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle}
+.as-arvo .hahmo-pallo + .hahmo-pallo{margin-left:4px}
+.hahmo-kuka{display:flex;gap:8px;justify-content:center;padding:4px 0 10px;
+  border-bottom:2px solid var(--raja);margin-bottom:6px}
+.hahmo-kuka[hidden]{display:none}
+.hahmo-nimikentta{display:block;width:100%;max-width:280px;margin:6px auto 8px}
+
+/* --- TULOSRUUTU: kuosi + palkintopalli (Marko 6.10.2026) ---
+ * Täytekuosi on sama kuin pizzalove.fi:ssä (julkinen/kuosi.svg, sama koko ja
+ * peittävyys), ja tummassa teemassa se on pois kuten sivustollakin. Kaikki
+ * yhdessä keskitetyssä sarakkeessa (peli.css:n asettelussa ▶ jäi leveällä
+ * näytöllä vasempaan laitaan). */
+#tulosRuutu:not([hidden]){display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:clamp(8px, 1.6vh, 16px);min-height:100vh;min-height:100dvh;
+  position:relative;overflow-x:hidden;cursor:pointer;
+  /* ⚙ on yläkulmassa: sisältö alkaa sen rivin alta, ettei se peitä laatikkoa. */
+  padding:calc(env(safe-area-inset-top, 0px) + 64px) 0 calc(env(safe-area-inset-bottom, 0px) + 12px);
+  /* Varalla vieritys: jos sisältö ei jollain laitteella mahdu, ▶ ei saa jäädä
+   * ulottumattomiin (overflow:hidden leikkasi sen 667 px:n korkeudella). */
+  overflow-y:auto}
+#tulosRuutu::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.45}
+@media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
+/* ⚠️ KUOSI NÄKYY MYÖS PUHELIMESSA (Marko 7.10.2026: «Tulosruudun taustalla
+ * saisi olla sitä täytekuosia»). */
+#tulosRuutu > *{position:relative;z-index:1}
+#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100% - 24px, 600px);
+  padding:12px 10px 8px}
+
+/* --- TULOSRUUDUN LAATIKOT kuosin päällä (Marko 7.10.2026: «Pitäisikö näille
+ * eri elementeillä olla omat rajatut alueensa taustakuosin päällä?») ---
+ * Sama ratkaisu kuin pizzalove.fi:ssä: arvot sivuston .laatikko-tyylistä
+ * (julkinen/tyyli.css): valkoinen pinta, reuna #E7DCCA, pyöristys 18 px, sama
+ * varjo. Pelin muut laatikot (Bassossa juoksukilpailu) käyttävät .tulos-laatikko-
+ * luokkaa. ▶ ja ⚙ jäävät kuosin päälle. */
+#tulosPisteet, .tulos-laatikko{background:var(--tulos-pinta, #fff);border:1px solid var(--tulos-reuna, #E7DCCA);
+  border-radius:18px;box-shadow:0 1px 2px rgba(60,34,12,.06), 0 8px 24px rgba(60,34,12,.08)}
+@media (prefers-color-scheme:dark){
+  #tulosPisteet, .tulos-laatikko{--tulos-pinta:#221D18;--tulos-reuna:#38302A}
+}
+
+/* PALKINTOPALLI. Askelma: 1. sija korkein ja brändioranssi, muut lämmintä sävyä. */
+.palli{display:flex;align-items:stretch;justify-content:center;width:100%;gap:6px}
+.palli-paikka{flex:1 1 0;max-width:150px;min-width:0;display:flex;flex-direction:column;align-items:center}
+.palli-yla{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  gap:6px;padding-bottom:8px}
+.palli-hahmo{position:relative}
+.palli-hahmo .hahmo{--koko:clamp(40px, 6.5vh, 64px)}
+.sija-1 .palli-hahmo .hahmo{--koko:clamp(48px, 8vh, 78px)}
+.palli-nimi{display:block;text-align:center;font-size:13px;font-weight:700;line-height:1.2;margin:0 auto 4px;
+  max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.palli-askel{width:100%;display:flex;align-items:flex-start;justify-content:center;
+  border-radius:12px 12px 0 0;background:#F6D9BF;color:#9A4A0A;
+  box-shadow:inset 0 -6px 0 rgba(60,34,12,.08)}
+.palli-askel b{font-size:clamp(24px, 5vh, 40px);line-height:1;margin-top:8px}
+.sija-1 .palli-askel{height:clamp(70px, 12vh, 130px);background:var(--orange);color:#fff}
+.sija-2 .palli-askel{height:clamp(50px, 8.5vh, 94px)}
+.sija-3 .palli-askel{height:clamp(36px, 6vh, 66px)}
+.sija-4 .palli-askel{height:clamp(26px, 4vh, 44px)}
+/* Askelman alla pelin oma sisältö. Pohjaviiva yhdistää askelmat lattiaksi. */
+.palli-ala{width:100%;display:flex;flex-direction:column;align-items:center;padding-top:10px;
+  border-top:4px solid rgba(60,34,12,.18)}
+/* Partyn pisteet askelman alla: kerätyt pizzat pisteinä. */
+.palli-pisteet{font-size:clamp(24px, 4.4vh, 34px);line-height:1;color:var(--ink)}
+.palli-pisteet small{display:block;font-size:12px;font-weight:600;color:var(--himmea, #6b5a4a);
+  text-align:center;margin-top:2px}
+
+/* ▶ pelkkänä nappina: brändioranssi ympyrä, valkoinen kolmio piirroksena
+ * (ei tekstimerkkiä, jonka muoto vaihtelee fontin mukaan). 🔵 Marko 7.10.2026:
+ * «tuon play-napin alta apina pois». */
+.tulos-napit{display:flex;align-items:center;justify-content:center;gap:18px}
+.jatka-nappi{width:clamp(64px, 10vh, 84px);aspect-ratio:1;border:0;border-radius:50%;padding:0;cursor:pointer;
+  display:grid;place-items:center;background:var(--orange);color:#fff;
+  box-shadow:0 0 0 5px #fff, 0 8px 20px rgba(60,40,20,.28);transition:transform .15s}
+.jatka-nappi svg{width:46%;height:46%;fill:currentColor;margin-left:8%}
+.jatka-nappi:hover{transform:scale(1.05)}
+.jatka-nappi:active{transform:scale(.96)}
+.jatka-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
+.jatka-nappi[hidden]{display:none}
+/* ⚙ oikeaan yläkulmaan, samaan paikkaan kuin pelinäkymässä (Marko 7.10.2026:
+ * «Asetukset ensinnäkin yläkulmaan»). */
+#tulosRuutu > .tulos-asetukset{position:absolute;z-index:3;
+  top:calc(env(safe-area-inset-top, 0px) + 12px);right:calc(env(safe-area-inset-right, 0px) + 12px)}
+
+/* Konfetti (kun ihminen voitti). */
+.konfetti{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.konfetti span{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;
+  animation:konfetti linear both}
+@keyframes konfetti{
+  from{transform:translate(0, 0) rotate(0)}
+  to{transform:translate(var(--sivu), 105vh) rotate(var(--kierto))}
+}
+
+/* --- VOITTAJAN JUHLA: oma hahmo syö pizzaa voittajan värisellä pohjalla ---
+ * Juhlaruutu saa täyden väripinnan (juhlaruudut ovat hetkiä eivätkä työkaluja).
+ * Kuosi päällä vaaleana, jotta pinta on Pizza Lovea eikä pelkkä väri. */
+.juhla{position:fixed;inset:0;z-index:70;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px, 2vh, 18px);
+  background:var(--pelaaja-vari)}
+.juhla[hidden]{display:none}
+.juhla::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
+  opacity:.22;mix-blend-mode:multiply}
+.juhla > *{position:relative}
+.juhla.nakyy{animation:juhla-sisaan .35s ease-out both}
+@keyframes juhla-sisaan{from{opacity:0}to{opacity:1}}
+@keyframes juhla-pomppu{from{transform:scale(.3) translateY(80px)}to{transform:scale(1) translateY(0)}}
+/* Voittaja: OMA hahmo pizza suussa, iso. 🔵 Marko 7.10.2026: kruunu pois
+ * («mauton») ja heiluminen pois («heiluu kummallisesti» — koko kuva kiertyi
+ * ±3°). Tilalle kerran ponnahdus ja hiljainen hengitys (vain koko, ei kiertoa). */
+.juhla-hahmo{display:flex;gap:clamp(10px, 4vw, 28px);justify-content:center}
+.juhla-hahmo .hahmo{--koko:min(58vw, 34vh, 280px);
+  box-shadow:0 0 0 8px #fff, 0 12px 30px rgba(0,0,0,.3)}
+/* Tasapeli: kärjessä olevat rinnakkain, pienempinä. */
+.juhla-hahmo.monta .hahmo{--koko:min(36vw, 26vh, 200px)}
+.juhla.nakyy .juhla-hahmo .hahmo{
+  animation:juhla-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both, juhla-hengitys 2.4s .8s ease-in-out infinite}
+@keyframes juhla-hengitys{0%,100%{transform:scale(1)} 50%{transform:scale(1.035)}}
+.juhla-nimi{font-size:min(9vw, 5vh, 40px);line-height:1.1;font-weight:800;
+  color:var(--pelaaja-teksti, #fff);text-align:center;max-width:90vw;overflow-wrap:anywhere}
+.juhla-nimi:empty{display:none}
+.juhla-pisteet{font-size:min(14vw, 8vh, 64px);line-height:1;font-weight:800;color:var(--pelaaja-teksti, #fff)}
+/* Muut pistejärjestyksessä: vaaleat rivit, jotta teksti erottuu millä
+ * voittajan värillä tahansa. */
+.juhla-muut{list-style:none;margin:clamp(4px, 1.5vh, 14px) 0 0;padding:0;display:flex;flex-direction:column;
+  gap:6px;width:min(80vw, 300px)}
+.juhla-muut:empty{display:none}
+.juhla-muut li{display:flex;align-items:center;gap:10px;padding:5px 14px 5px 6px;border-radius:12px;
+  background:rgba(255,255,255,.88);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.juhla-muut li .hahmo{--koko:34px;box-shadow:0 0 0 2px #fff}
+.juhla-muu-nimi{flex:1 1 auto;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.juhla-muut b{font-size:20px}
+.juhla.nakyy .juhla-muut li{animation:juhla-rivi .4s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes juhla-rivi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .juhla.nakyy, .juhla.nakyy .juhla-hahmo .hahmo, .juhla.nakyy .juhla-muut li{animation:none}
+}
+
+/* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390 Bassossa, sarakkeena
+ * sisältö vei 418 px. Palli vasemmalle, napit oikealle. Basso lisää kolmannen
+ * alueen (kisa) omassa tiedostossaan.
+ * ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa yllä olevia
+ * samantarkkuuksisia sääntöjä — muualla se hävisi hiljaa. */
+@media (max-height: 500px){
+  #tulosRuutu:not([hidden]){display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:"palli napit";
+    align-content:center;align-items:center;column-gap:28px;row-gap:12px;
+    /* oikealla tila ⚙:lle */
+    padding:8px 64px 8px 16px}
+  #tulosPisteet{grid-area:palli;width:100%;max-width:440px;justify-self:end;gap:4px}
+  .tulos-napit{grid-area:napit;flex-direction:row;justify-self:center}
+  .palli-yla{gap:3px;padding-bottom:4px}
+  .palli-ala{padding-top:4px}
+  .juhla{gap:4px}
+  .juhla-hahmo .hahmo{--koko:min(40vw, 30vh, 220px)}
+  .juhla-hahmo.monta .hahmo{--koko:min(28vw, 24vh, 160px)}
+  .juhla-muut{flex-direction:row;flex-wrap:wrap;justify-content:center;width:auto}
+}
+
+/* Puhelin pystyssä selaimen palkkien kanssa (iPhone + Safari ≈ 667 px). */
+@media (min-height: 501px) and (max-height: 740px){
+  #tulosRuutu:not([hidden]){padding-top:calc(env(safe-area-inset-top, 0px) + 60px);gap:8px}
+  .palli-ala{padding-top:8px}
+  .jatka-nappi{width:60px}
+}

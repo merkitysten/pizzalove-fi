@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="fi" data-peli="party">
 <head>
 <meta charset="utf-8">
+<!-- Viimeksi valittu peli avautuu (pelivalinta.js, Marko 9.10.2026: «käyttäjä
+     voisi vaihtaa peliä lennosta»). Vain paljaassa osoitteessa tai pelkällä
+     ?kieli=-parametrilla: ?liity (verkkopeli) jää aina tälle sivulle. -->
+<script>try{var q=new URLSearchParams(location.search),k=[];q.forEach(function(v,n){k.push(n)});
+if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-peli')==='basso')location.replace('basso.html'+location.search)}catch(e){}</script>
 <!-- ⚠️ maximum-scale=1 + user-scalable=no ON TASSA TOINEN VYO, EI AINOA.
      Kaksoisnapautuksen zoomin torjuu ensisijaisesti peli.css:n
      touch-action (jokaisessa napautuskohteessa erikseen — se ei periydy).
@@ -40,7 +45,12 @@
 <title>Pizza Party — näin sitä pelataan</title>
 <meta name="description" content="Pizza Love -korttipelin Pizza Party selaimessa. Opi mekaniikka kahdessa minuutissa.">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
+<!-- Tulosruudun kuosi ja voittajan kuva esiladataan: ilman sitä puhelimessa
+     näkyi hetken tyhjä pohja ja tyhjä ympyrä pallilla (mitattu 9.10.2026). -->
+<link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
+<link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261006b">
+<link rel="stylesheet" href="yhteinen.css?v=20261009a">
 </head>
 <body>
 
@@ -112,17 +122,19 @@
 <section id="tulosRuutu" class="ruutu" hidden>
   <!-- ⚠️ JS tayttaa taman molemmissa pelimuodoissa. Kaksi eri merkintaa
        (yksin / moninpeli) olisi kaksi paikkaa joihin sama korjaus pitaisi
-       muistaa tehda. -->
+       muistaa tehda.
+       🔵 9.10.2026: sama tulosruutu kuin Pizza Bassossa (Marko: «ota siitä
+       mallia»): palli kuosin päällä laatikossa, ⚙ yläkulmassa, ▶ pelkkä nappi
+       ilman apinaa (Marko 7.10.2026: «tuon play-napin alta apina pois»).
+       ⌂ on piilossa — alkuvalikkoon ja toiseen peliin pääsee ⚙:sta. Elementti
+       jää, koska valikko.js kytkee sen. -->
   <div class="tulos-pisteet" id="tulosPisteet"></div>
-
-  <button id="uudelleen" class="apinanappi pieni" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
-    <img src="kuvat/apina.webp?v=20260910a" alt="">
-    <span class="apinanappi-teksti" aria-hidden="true">▶</span>
-  </button>
-
-  <div class="aloitus-linkit">
-    <button id="asetuksiin" class="kuvake-nappi" data-ta="tulos.asetukset" aria-label="Asetukset">⚙</button>
-    <button id="tulosValikkoon" class="kuvake-nappi" data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
+  <button id="asetuksiin" class="kulmanappi tulos-asetukset" data-ta="tulos.asetukset" aria-label="Asetukset">&#9881;</button>
+  <div class="tulos-napit">
+    <button id="uudelleen" class="jatka-nappi" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+    </button>
+    <button id="tulosValikkoon" class="kuvake-nappi" hidden data-ta="valikko.alkuun" aria-label="Alkuvalikkoon">⌂</button>
   </div>
 </section>
 
@@ -143,12 +155,18 @@
         <button id="asetusKiinni" class="as-kulma" data-ta="as.sulje" aria-label="Sulje asetukset">&#10005;</button>
       </div>
       <nav class="as-valikko">
+        <!-- Peli: Party ↔ Basso (pelivalinta.js, Marko 9.10.2026). -->
+        <button class="as-rivi" data-avaa="peli">
+          <span data-t="as.peli">Peli</span><b class="as-arvo" id="arvoPeli"></b></button>
         <button class="as-rivi" data-avaa="kieli">
           <span data-t="as.kieli">Kieli</span><b class="as-arvo" id="arvoKieli"></b></button>
         <button class="as-rivi" data-avaa="taso">
           <span data-t="as.taso">Vaikeusaste</span><b class="as-arvo" id="arvoTaso"></b></button>
         <button class="as-rivi" data-avaa="pelaajat">
           <span data-t="as.pelaajat">Pelaajat</span><b class="as-arvo" id="arvoPelaajat"></b></button>
+        <!-- Hahmo: sama väri ja nimi kuin Bassossa (hahmot.js). -->
+        <button class="as-rivi" data-avaa="vari">
+          <span data-t="as.vari">Hahmo</span><b class="as-arvo" id="arvoVari"></b></button>
         <button class="as-rivi" data-avaa="tapa">
           <span data-t="as.tapa">Pelimuoto</span><b class="as-arvo" id="arvoTapa"></b></button>
         <button class="as-rivi" data-avaa="ajat">
@@ -161,7 +179,7 @@
            target="_blank" rel="noopener" data-ta="as.kauppaAria">
           <span data-t="as.kauppa">Kauppaan</span>
           <img class="as-kotelo" src="kuvat/kotelo.webp?v=20260911a" alt=""></a>
-        <a class="as-rivi" id="asSivustolle" href="../">
+        <a class="as-rivi" id="asSivustolle" href="../" data-sivustolle>
           <span data-t="valikko.sivustolle">Takaisin sivustolle</span><b class="as-arvo"></b></a>
       </nav>
     </section>
@@ -259,6 +277,31 @@
         <label class="lupa"><input type="checkbox" data-lupa="log"><span>log</span></label>
         <label class="lupa"><input type="checkbox" data-lupa="sulut" checked><span>( )</span></label>
       </div>
+    </section>
+
+    <!-- PELI: Party ↔ Basso (pelivalinta.js). Vaihto lataa toisen pelin sivun. -->
+    <section class="as-sivu" data-sivu="peli" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.peli">Peli</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.peli"></p>
+      <div id="pelivalintaLista" class="as-lista"></div>
+    </section>
+
+    <!-- HAHMO (hahmot.js): sama kuin Bassossa. Useammalla pelaajalla ensin kenen. -->
+    <section class="as-sivu" data-sivu="vari" hidden>
+      <div class="as-ylapalkki">
+        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
+        <span class="as-nimi" data-t="as.vari">Hahmo</span>
+        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
+      </div>
+      <p class="as-selite" hidden data-t="selite.vari"></p>
+      <div id="hahmoVariKuka" class="hahmo-kuka"></div>
+      <input id="hahmoNimiKentta" class="verkko-kentta hahmo-nimikentta" autocomplete="off"
+             data-tp="bverkko.nimi" data-ta="bverkko.nimi">
+      <div id="hahmoVarit" class="hahmo-varit"></div>
     </section>
 
     <!-- 7 · LISÄTIETOJA — tämä sivu ON selitys, siksi ei i-nappia -->
@@ -412,6 +455,16 @@
   </div>
 </div>
 
+<!-- VOITTAJAN JUHLA (tulos.js, 🔵 Marko 9.10.2026: juhla joka Party-pelin
+     lopussa, kuten Bassossa). Voittaja pizza suussa omalla värillään, nimi ja
+     pisteet; muut alla pistejärjestyksessä. Napautus aloittaa uuden pelin. -->
+<div id="juhla" class="juhla" hidden role="button" tabindex="0" data-ta="tauko.jatka">
+  <span id="juhlaHahmo" class="juhla-hahmo"></span>
+  <b id="juhlaNimi" class="juhla-nimi"></b>
+  <b id="juhlaPisteet" class="juhla-pisteet"></b>
+  <ol id="juhlaMuut" class="juhla-muut"></ol>
+</div>
+
 <!-- ALKUVALIKKO (valikko.js). Marko 11.9.2026: *"yksi linkki pizzaparty-peliin,
      josta voisi sitten pelata yksinpeliä tai moninpeliä"*. Näkyy osoitteessa
      ./ ilman ?liity-parametria; peli on sen alla lepotilassa (ei ajastimia).
@@ -420,12 +473,14 @@
   <div class="tauko-laatikko verkko-laatikko valikko-laatikko">
     <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
     <div id="valikkoPaa" class="verkko-osa">
+      <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). -->
+      <div class="pelivalinta"></div>
       <button id="valikkoPalaa" type="button" class="iso-nappi" hidden></button>
       <button id="valikkoPelaa" type="button" class="as-valinta"><b data-t="valikko.pelaa"></b><small data-t="valikko.pelaaSelite"></small></button>
       <button id="valikkoMoninpeliin" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
       <!-- Paluu sivustolle (Marko 6.10.2026: «nyt kun sinne päätyy, niin jää jumiin peliin»).
            Osoitteen asettaa valikko.js: pizzalove.fi:ssä oman kielen sivu, varainhankinnassa sen etusivu. -->
-      <a id="valikkoSivustolle" class="toinen-nappi valikko-sivustolle" href="../" data-t="valikko.sivustolle">Takaisin sivustolle</a>
+      <a id="valikkoSivustolle" class="toinen-nappi valikko-sivustolle" href="../" data-sivustolle data-t="valikko.sivustolle">Takaisin sivustolle</a>
     </div>
     <div id="valikkoMoninpeli" class="verkko-osa" hidden>
       <button id="valikkoLuo" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>
@@ -436,17 +491,20 @@
   </div>
 </div>
 
-<script src="kielet.js?v=20261006c"></script>
+<script src="kielet.js?v=20261009a"></script>
 <script src="kortit.js?v=20260912b"></script>
-<script src="ratkoja.js?v=20260909b"></script>
+<script src="hahmot.js?v=20261009a"></script>
+<script src="tulos.js?v=20261009a"></script>
+<script src="pelivalinta.js?v=20261009a"></script>
+<script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
 <script src="kierros.js?v=20260914b"></script>
 <script src="yhteys.js?v=20261006a"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="isannointi.js?v=20260920a"></script>
-<script src="peli.js?v=20261006b"></script>
+<script src="peli.js?v=20261009a"></script>
 <script src="pelaaja.js?v=20260918a"></script>
 <script src="pelaavaisanta.js?v=20260920d"></script>
-<script src="valikko.js?v=20261006a"></script>
+<script src="valikko.js?v=20261009a"></script>
 </body>
 </html>

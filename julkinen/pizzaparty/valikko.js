@@ -48,19 +48,10 @@ function valikkoNayta() {
   valikkoEl('valikkoPeite').hidden = false;
 }
 
-/* Paluu sivustolle. pizzalove.fi:ssä (ja github.io-testiosoitteessa) peli on
- * kansiossa /pizzaparty/, ja sivut ovat kielikansioissa: ../fi/, ../sv/ …
- * Varainhankintasivustolla paluu vie sen etusivulle. */
-function sivustonOsoite() {
-  if (/(^|\.)merkitysten\.fi$/.test(location.hostname)) return '/';
-  return '../' + (typeof KIELI === 'string' ? KIELI : 'fi') + '/';
-}
+/* Paluu sivustolle: pelivalinta.js asettaa jokaisen [data-sivustolle]-linkin
+ * osoitteen (sivustonOsoite), koska Bassokin tarvitsee sen. */
 
 function valikkoKytke() {
-  ['valikkoSivustolle', 'asSivustolle'].forEach(function (id) {
-    const a = valikkoEl(id);
-    if (a) a.href = sivustonOsoite();
-  });
   valikkoEl('valikkoPelaa').addEventListener('click', function () { valikkoEl('valikkoPeite').hidden = true; });
   valikkoEl('valikkoMoninpeliin').addEventListener('click', function () { valikkoSivu('moninpeli'); });
   valikkoEl('valikkoTakaisin').addEventListener('click', function () { valikkoSivu('paa'); });

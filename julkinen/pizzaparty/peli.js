@@ -119,12 +119,11 @@ const KADEN_KOKO = 5;
  * Kaksi lukua ajautuisi erilleen, ja silloin nakyva kello nayttaisi eri
  * aikaa kuin se jota mitataan.
  *
- * Varit ovat pelin omia korttivareja (BRAND.md): punainen, sininen,
- * vihrea, violetti. Brandioranssi EI ole mukana — se on pizzan vari, ja
- * pelaajan vari joka on sama kuin pizzan olisi juuri se sekaannus jota
- * varilla yritetaan valttaa.
+ * Varit ovat pelaajien HAHMOJEN varit (hahmot.js, 9.10.2026): jokainen
+ * valitsee omansa Merkitysten kymmenesta, ja oletuksena ne ovat Partyn
+ * vanhat neljä (punainen, sininen, vihrea, violetti). Ennen tassa oli
+ * kiintea PELAAJAVARIT-lista — sama hahmo kulkee nyt Partyn ja Basson valilla.
  * ============================================================ */
-const PELAAJAVARIT = ['#E62448', '#1072B9', '#16A74F', '#824292'];
 
 function cssAika(nimi, oletus) {
   const s = getComputedStyle(document.documentElement)
@@ -1233,6 +1232,7 @@ function lopetaKesken() {
 
 function lopetaKierros(syy) {
   tila.paattymisSyy = syy || null;
+  tila.juhlittu = false;
   tila.pizza = null;
   pysaytaKaikkiAjastimet();
   piirraTulos();
@@ -1596,8 +1596,11 @@ function laatikkoRivi() {
   }
   if (tila.moninpeli) {
     const lista = [];
+    /* Värit ovat pelaajien hahmojen värit (hahmot.js, 9.10.2026) — sama
+     * hahmo kuin tulosruudussa ja Bassossa. */
+    const varit = partyVarit();
     for (let i = 0; i < tila.pelaajia; i++) {
-      lista.push({ avain: 'p' + i, luokka: '', vari: PELAAJAVARIT[i], kuva: true,
+      lista.push({ avain: 'p' + i, luokka: '', vari: varit[i], kuva: true,
         pisteet: tila.pisteet[i], aria: t('pelaaja.nappi', { n: i + 1 }),
         painettava: true, indeksi: i });
     }
@@ -1625,7 +1628,8 @@ function piirraPelaajat() {
   /* ⚠️ Tunniste sisaltaa PELIMUODON eika vain maaran: yksinpelissa ja
    * kahden pelaajan pelissa on molemmissa kaksi laatikkoa, ja pelkka
    * maara jattaisi rivin rakentamatta pelimuodon vaihtuessa. */
-  const tunniste = (tila.moninpeli ? 'moni' : 'yksin') + lista.length;
+  const tunniste = (tila.moninpeli ? 'moni' : 'yksin') + lista.length +
+    lista.map(function (v) { return v.vari || ''; }).join('');
   if (rivi.dataset.tila !== tunniste) {
     rivi.dataset.tila = tunniste;
     rivi.innerHTML = '';
@@ -1633,10 +1637,14 @@ function piirraPelaajat() {
       const el = document.createElement(v.painettava ? 'button' : 'div');
       el.className = 'pelaajanappi' + (v.luokka ? ' ' + v.luokka : '');
       if (v.vari) el.style.setProperty('--pelaaja-vari', v.vari);
+      /* Vaalealla hahmovärillä valkoinen luku katoaisi (keltainen, turkoosi). */
+      if (v.vari && v.painettava) el.style.color = hahmoTekstiVari(v.vari);
       if (!v.kuva) el.className += ' ei-kuvaa';
       el.setAttribute('aria-label', v.aria);
       el.innerHTML =
         (v.kuva ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
+        /* Hahmon nimi kuten Bassossa (tyhjä nimi ei vie tilaa). */
+        (v.painettava ? '<small class="laatikkonimi"></small>' : '') +
         '<b class="pelaajanappi-pisteet">0</b>' +
         (v.painettava ? '<span class="pelaajanappi-kello"></span>' : '');
       if (v.painettava) {
@@ -1648,6 +1656,8 @@ function piirraPelaajat() {
   [].forEach.call(rivi.children, function (el, i) {
     const v = lista[i];
     el.querySelector('.pelaajanappi-pisteet').textContent = v.pisteet;
+    const nimi = el.querySelector('.laatikkonimi');
+    if (nimi) nimi.textContent = hahmoAsetukset.nimet[v.indeksi] || '';
     el.setAttribute('aria-label', v.aria + ': ' + v.pisteet);
     if (!v.painettava) return;
     const ulkona = tila.lukitut.indexOf(v.indeksi) >= 0;
@@ -1809,37 +1819,112 @@ function fantasiaAuki() { return !document.getElementById('fantasiaValitsin').hi
 
 function suljeFantasia() { document.getElementById('fantasiaValitsin').hidden = true; }
 
-/* Tulosruutu on kaksi lukua ja apinan naama — ei otsikkoa eikä selitystä.
- * ⚠️ Päättymissyy oli tekstiä ja se poistui: se oli hyödyllinen mutta
- * kielisidonnainen, ja kierroksen päättyminen näkyy jo siitä että pakat
- * ovat tyhjät. Jos syy halutaan takaisin, se kuuluu Ohje-paneeliin. */
-/* ⚠️ YKSI LAHDE MOLEMMILLE PELIMUODOILLE. Erillinen moninpelin tulosruutu
- * olisi toinen paikka johon sama korjaus pitaisi muistaa tehda. */
+/* TULOSRUUTU (9.10.2026): sama palli ja juhla kuin Pizza Bassossa (tulos.js).
+ * 🔵 Marko 9.10.2026: «pizza basso on nyt pidemmälle viety tyylien suhteen jos
+ * ajatellaan voittoruutuja ja tulosruutuja jne. Eli ota siitä mallia». Ennen
+ * tässä oli kaksi lukua ja apinan naama — sama ruutu jonka Marko Bassossa
+ * sanoi «liian karuksi».
+ *
+ * Askelmien järjestys pisteiden mukaan, tasapisteet jakavat sijan. Askelman
+ * alla pisteet (Partyssa ei ole pisterajaa eikä käsikorttipisteitä, joten
+ * juoksukilpailu ja jääneet kortit jäävät Bassolle).
+ * ⚠️ YKSI LÄHDE yksin- ja moninpelille samalla laitteella. Verkkopelin tulos
+ * on pelaaja.js:ssä ja isännän näytöllä. */
+/* Montako hahmoa asetuksissa näytetään ja mitä piirretään kun väri tai nimi
+ * vaihtuu. ⚠️ basso.js korvaa molemmat samoilla nimillä (Bassossa määrä on
+ * ihmispelaajat, ei Partyn pelaajamäärä). */
+function hahmojenMaara() { return tila.pelaajia; }
+function hahmoMuuttui() {
+  if (tila.pizza) piirraPelaajat();
+  if (!document.getElementById('tulosRuutu').hidden) piirraTulos();
+}
+
+function partyVarit() {
+  return hahmoVarit(tila.moninpeli
+    ? tila.pisteet.map(function () { return 'ihminen'; })
+    : ['ihminen', 'apina']);
+}
+
+function partyRivit() {
+  const varit = partyVarit();
+  let rivit;
+  if (tila.moninpeli) {
+    rivit = tila.pisteet.map(function (pisteet, i) {
+      const oma = hahmoAsetukset.nimet[i] || '';
+      return { i: i, pisteet: pisteet, vari: varit[i], nimi: oma,
+               aria: oma || t('pelaaja.nimi', { n: i + 1 }), ihminen: true };
+    });
+  } else {
+    const oma = hahmoAsetukset.nimet[0] || '';
+    rivit = [{ i: 0, pisteet: tila.omatPisteet, vari: varit[0], nimi: oma,
+               aria: oma || t('pisteet.omat'), ihminen: true }];
+    /* Harjoittelussa apina ei pelaa, joten se ei myöskään seiso pallilla. */
+    if (tila.taso && tila.taso.kerroin) {
+      rivit.push({ i: 1, pisteet: tila.apinanPisteet, vari: varit[1], nimi: '',
+                   aria: t('taso.' + tila.taso.avain), ihminen: false });
+    }
+  }
+  rivit.sort(function (a, b) { return (b.pisteet - a.pisteet) || (a.i - b.i); });
+  return tulosSijat(rivit);
+}
+
+/* Voittajat = korkein pistemäärä, jos se on yli nollan. Tasapelissä kaikki
+ * kärjessä olevat — tasapeli on tulos eikä puuttuva voittaja. */
+function partyVoittajat(rivit) {
+  const paras = rivit.length ? rivit[0].pisteet : 0;
+  return paras > 0 ? rivit.filter(function (r) { return r.pisteet === paras; }) : [];
+}
+
 function piirraTulos() {
   const sailio = document.getElementById('tulosPisteet');
   if (!sailio) return;
   sailio.innerHTML = '';
-  const rivit = tila.moninpeli
-    ? tila.pisteet.map(function (pisteet, i) {
-        return { pisteet: pisteet, vari: PELAAJAVARIT[i],
-                 nimi: t('pelaaja.nimi', { n: i + 1 }) };
-      })
-    : [{ pisteet: tila.omatPisteet, luokka: 'oma' },
-       { pisteet: tila.apinanPisteet, luokka: 'apina', apina: true }];
-  const paras = rivit.reduce(function (m, r) { return Math.max(m, r.pisteet); }, -1);
-  /* Korkein pistemaara korostetaan. Jos useampi on tasoissa, korostetaan
-   * kaikki — tasapeli on tulos eika puuttuva voittaja. */
-  rivit.forEach(function (r) {
-    const laatikko = document.createElement('div');
-    laatikko.className = 'pisteet iso ' + (r.luokka || 'pelaaja') +
-      (r.pisteet === paras ? ' voittaja' : '');
-    if (r.vari) laatikko.style.setProperty('--pelaaja-vari', r.vari);
-    laatikko.innerHTML =
-      (r.apina || r.vari ? '<img src="kuvat/apina.webp?v=20260910a" alt="">' : '') +
-      '<b>' + r.pisteet + '</b>';
-    if (r.nimi) laatikko.setAttribute('aria-label', r.nimi + ': ' + r.pisteet);
-    sailio.appendChild(laatikko);
-  });
+  const rivit = partyRivit();
+  const voittajat = partyVoittajat(rivit);
+  const juhlii = !tila.keskeytetty && voittajat.length > 0;
+  sailio.appendChild(tulosPalli(rivit.map(function (r) {
+    const ala = document.createElement('b');
+    ala.className = 'palli-pisteet';
+    ala.textContent = r.pisteet;
+    return { sija: r.sija, vari: r.vari, nimi: r.nimi, aria: r.aria,
+             syo: juhlii && voittajat.indexOf(r) >= 0, voitti: false, ala: ala };
+  })));
+  const jatko = document.getElementById('uudelleen');
+  if (jatko) jatko.setAttribute('aria-label', t('tulos.uudelleen'));
+  /* Konfetti kun ihminen on voittajien joukossa. */
+  if (juhlii && voittajat.some(function (r) { return r.ihminen; })) juhlaKonfetti();
+}
+
+/* Tulosruudun napautus (missä tahansa, ⚙ pois lukien) tai ▶ (Marko
+ * 7.10.2026 Bassossa: «Tulosruutu voisi mennä pois vasta ruutua
+ * napauttamalla»). Pelin loppu → voittajan juhla (🔵 Marko 9.10.2026: juhla
+ * joka Party-pelin lopussa) → uusi peli. Keskeytetty peli ei juhli.
+ * ⚠️ basso.js korvaa nämä kaksi samoilla nimillä. */
+function tulosEteenpain() {
+  if (document.getElementById('tulosRuutu').hidden || juhlaAuki()) return;
+  if (!tila.keskeytetty && !tila.verkko && !tila.juhlittu) {
+    const rivit = partyRivit(), voittajat = partyVoittajat(rivit);
+    if (voittajat.length) {
+      tila.juhlittu = true;
+      return juhlaAvaa({
+        /* Tasapelissä jokaisen nimi näkyy (apinalla vaikeusasteen nimi): pelkkä
+         * «Marko» luettiin kuin hän olisi voittanut yksin. */
+        voittajat: voittajat.map(function (r) {
+          return { vari: r.vari, nimi: voittajat.length > 1 ? (r.nimi || r.aria) : r.nimi };
+        }),
+        pisteet: voittajat[0].pisteet,
+        aria: voittajat.map(function (r) { return r.aria; }).join(' & '),
+        muut: rivit.filter(function (r) { return voittajat.indexOf(r) < 0; }).map(function (r) {
+          return { vari: r.vari, nimi: r.nimi || r.aria, pisteet: r.pisteet, aria: r.aria };
+        }),
+      });
+    }
+  }
+  aloitaPeli(tila.taso, tila.apinanTapa);
+}
+function juhlaNapautus() {
+  juhlaKiinni();
+  aloitaPeli(tila.taso, tila.apinanTapa);
 }
 
 /* ---------- käynnistys ---------- */
@@ -1890,6 +1975,7 @@ function kytke() {
   }
 
   function paivitaArvot() {
+    hahmoPiirraArvo(hahmojenMaara());
     document.getElementById('arvoKieli').textContent = kielenNimi(KIELI);
     document.getElementById('arvoTaso').textContent = t('taso.' + tila.taso.avain);
     document.getElementById('arvoPelaajat').textContent = tila.pelaajia < 2
@@ -1958,6 +2044,8 @@ function kytke() {
       n.checked = !!tila.sallitut[n.dataset.lupa];
     });
 
+    /* Hahmo (väri ja nimi) on yhteinen kaikille peleille: hahmot.js. */
+    hahmoPiirraAsetus(hahmojenMaara(), hahmoMuuttui);
     paivitaArvot();
   }
 
@@ -2084,9 +2172,25 @@ function kytke() {
   const lopetaNappi = document.getElementById('lopeta');
   if (lopetaNappi) lopetaNappi.onclick = lopetaKesken;
 
-  document.getElementById('uudelleen').onclick = function () {
-    aloitaPeli(tila.taso, tila.apinanTapa);
+  /* ▶ ja koko tulosruutu vievät eteenpäin, ja voittajan juhla napautuksesta
+   * uuteen peliin (tulos.js). Kytketään NIMIIN tulosEteenpain / juhlaNapautus,
+   * jotka basso.js korvaa — yksi kytkentä molemmille peleille. */
+  document.getElementById('uudelleen').onclick = function (e) {
+    e.stopPropagation();
+    tulosEteenpain();
   };
+  document.getElementById('tulosRuutu').addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input')) return;
+    tulosEteenpain();
+  });
+  const juhla = document.getElementById('juhla');
+  if (juhla) {
+    juhla.addEventListener('click', function () { juhlaNapautus(); });
+    juhla.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); juhlaNapautus(); }
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); juhlaKiinni(); }
+    });
+  }
   document.getElementById('asetuksiin').onclick = function () {
     naytaSivu('valikko'); piirraAsetukset(); asetus.hidden = false;
   };

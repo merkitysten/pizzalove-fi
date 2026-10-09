@@ -37,9 +37,15 @@ function korttienArvot(kasi) {
  *
  * Palauttaa {kortit:[{i,arvo}], merkit:[op], ryhma:{alku,loppu}|null}
  * tai null jos ratkaisua ei ole. */
-function etsiRatkaisu(kasi, kohde, sallitut, tarveN) {
+/* ⚠️ `solmukatto` on VALINNAINEN ja vain Pizza Basson apinan käytössä
+ * (6.10.2026). HAARAKATTO laskee vain valmiit lausekkeet, ei karsittuja
+ * polkuja — mitattu: 13 kortin Basso-kädellä haku kesti 30 s JXA:ssa
+ * katkeamatta. Pizza Party ei anna tätä, joten sen päättymissääntö
+ * («pystyykö kukaan») on ennallaan. */
+function etsiRatkaisu(kasi, kohde, sallitut, tarveN, solmukatto) {
   const ops = ratkojanOperaattorit(sallitut);
   const arvot = korttienArvot(kasi);
+  let solmuja = 0;
   /* ⚠️ Koko käsi on käytettävissä: yhden täytteen pizzan voi tehdä viidellä
    * kortilla (1+1+1+1). Tässä oli `Math.min(4, ...)`, joka oli oikein vain
    * väärän säännön alla. */
@@ -87,6 +93,7 @@ function etsiRatkaisu(kasi, kohde, sallitut, tarveN) {
 
   function kavele(kaytetyt, kortit, merkit) {
     if (loydetty || katkesi) return;
+    if (solmukatto && ++solmuja > solmukatto) { katkesi = true; return; }
     if (kortit.length) kokeile(kortit, merkit);
     /* Karsinta: eri arvoja ei saa olla enempää kuin pizzassa on täytteitä,
      * eikä lisäkortti voi enää vähentää niitä. */
