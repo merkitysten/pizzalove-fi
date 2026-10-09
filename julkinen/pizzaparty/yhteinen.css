@@ -135,11 +135,15 @@
 .alku-ruutu b{font-size:18px;line-height:1.15;color:var(--ink);text-align:center}
 .alku-ruutu.ensisijainen b{color:#fff}
 .alku-ruutu svg{width:58%;height:auto}
+.alku-ruutu .apina-ikoni{width:64%}
 .alku-ruutu:active{transform:scale(.97)}
 .alku-ruutu:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.apina-paa{fill:currentColor}
-.apina-piste{fill:var(--ruutu-pohja)}
-.apina-viiva{fill:none;stroke:var(--ruutu-pohja);stroke-width:3;stroke-linecap:round}
+/* Apinan naama: Markon vektori (kuvat/apinanaama_vektori.svg, 9.10.2026) upotettuna
+ * omilla väreillään — valkoinen pinta, tummat viivat — kuten kotelon apina.
+ * Väri on kiinteä eikä --ink: tummassa teemassa vaalea viiva katoaisi valkoiselle. */
+.apina-pinta{fill:#fff}
+.apina-viiva{fill:none;stroke:#1A1A1A;stroke-width:.8;stroke-linecap:round}
+.apina-piste{fill:#1A1A1A}
 .puhelin-ikoni rect, .puhelin-ikoni path{fill:none;stroke:currentColor;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
 .puhelin-ikoni rect + rect{fill:var(--ruutu-pohja)}
 .valikko-nappi.pieni{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;font-size:14px}
@@ -153,6 +157,7 @@
   .alku-logo{width:84px}
   .alku-ruutu{aspect-ratio:auto;flex-direction:row;padding:10px 12px;min-height:68px}
   .alku-ruutu svg{width:44px}
+  .alku-ruutu .apina-ikoni{width:50px}
 }
 @media (prefers-color-scheme:dark){
   .alku-ruutu{--ruutu-pohja:var(--ground)}
