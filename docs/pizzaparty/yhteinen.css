@@ -48,8 +48,34 @@
 /* Asetukset avataan valikosta, joten ne ovat sen PÄÄLLÄ: molemmat ovat
  * .peite-kerroksia (z 5), ja valikko on sivulla myöhemmin. */
 #asetusPeite{z-index:6}
-/* ⏸ vain kun peli on oikeasti tauolla (laskun aikana valikko aukeaa ilman taukoa). */
-#taukoPeite:not(.tauolla) .tauko-merkki{display:none}
+/* VALIKKOIKKUNA KUVAKKEIN (Marko 9.10.2026: «liikaa tekstiä»): ↻ · ▶ · ⚙ yhdessä
+ * rivissä, ▶ isona keskellä; hiusviivan alla Alkuvalikkoon tekstinä. ⏸-merkki
+ * poistui («Kaikki ymmärtää, että peli ei jatku taustalla»). */
+.valikko-ikkuna{gap:14px;padding:22px 20px 14px}
+.valikko-toiminnot{display:flex;align-items:center;justify-content:center;gap:clamp(18px, 7vw, 30px)}
+.valikko-ikoni{width:58px;aspect-ratio:1;border-radius:50%;padding:0;cursor:pointer;display:grid;place-items:center;
+  background:#fff;color:var(--ink);border:2px solid var(--raja);font:inherit;font-size:28px;line-height:1}
+.valikko-ikoni svg{width:52%;height:52%;fill:currentColor}
+.valikko-ikoni:active{transform:scale(.95)}
+.valikko-ikoni:focus-visible{outline:3px solid var(--orange, #F47920);outline-offset:3px}
+#taukoPeite .valikko-jatka{width:84px}
+.valikko-viiva{align-self:stretch;width:100%;border:0;border-top:1px solid var(--raja);margin:2px 0 0}
+.valikko-ala{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+.valikko-alkuun{border:0;background:none;padding:8px 14px;cursor:pointer;font:inherit;font-size:16px;color:var(--ink);
+  text-decoration:none}
+/* Kauppa alkuvalikossa: toinen katkoviivanappi «Takaisin sivustolle» -napin alle. */
+.valikko-kauppa{margin-top:8px}
+
+/* --- ASETUKSET (uudelleen järjestetty 9.10.2026) ---
+ * Kaksi listaa samalla sivulla (Pelaajat: ihmiset ja apinat) erotetaan
+ * hiusviivalla eikä otsikolla: listojen omat rivit kertovat mistä on kyse.
+ * Selite voi olla useampi kappale (i-napin takana). */
+.as-viiva{border:0;border-top:1px solid var(--raja);margin:12px 0}
+.as-viiva[hidden]{display:none}
+.as-selite p{margin:0}
+.as-selite p + p{margin-top:8px}
+.as-selite .ohje-otsikko{display:block;margin:14px 0 6px;font-size:16px}
+.valikko-alkuun:focus-visible{outline:3px solid var(--orange, #F47920);border-radius:10px}
 
 /* --- HAHMO OMALLA VÄRILLÄÄN (Marko 6.10.2026: «kaikilla pelaajilla olisi
  * sekä hahmo että väri») — pelissä, pallilla, radalla ja asetuksissa. --- */

@@ -191,7 +191,9 @@
 .basso-verkossa #peliRuutu:not(.selitys) #alusta{visibility:hidden}
 /* Valikko verkkopelissä: «Aloita alusta» ja «Alkuvalikkoon» katkaisisivat
  * yhteisen pelin. Jatka ja Asetukset jäävät (asetuksissa on Lopeta). */
-.basso-verkossa #alustaPeli, .basso-verkossa #taukoValikkoon{display:none}
+/* ↻ piilotetaan visibilityllä, jotta ▶ pysyy rivin keskellä. Kauppa jää. */
+.basso-verkossa #alustaPeli{visibility:hidden}
+.basso-verkossa #taukoValikkoon{display:none}
 /* Tulosruudulla muut kuin perustaja odottavat seuraavaa jakoa. */
 .basso-odota{font-size:clamp(40px, 8vh, 64px);line-height:1;animation:odota-kaanto 2s ease-in-out infinite}
 .basso-odota[hidden]{display:none}

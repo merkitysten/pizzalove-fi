@@ -636,7 +636,7 @@ function pysaytaPeli() {
  * alusta · Alkuvalikkoon. Pelin aikana se pysäyttää pelin kun tauko on sallittu
  * (saakoPitaaTauon) — muuten valikko aukeaa pelin päälle kuten ⚙ ennen, esim.
  * laskun aikana jolloin kello käy. Tulosruudussa ei ole pysäytettävää.
- * ⏸-merkki näkyy vain kun peli on oikeasti tauolla. */
+ * (⏸-merkki poistui 9.10.2026; luokka `tauolla` jää tilan merkiksi.) */
 function avaaValikko() {
   const peite = document.getElementById('taukoPeite');
   if (document.getElementById('tulosRuutu').hidden && saakoPitaaTauon()) pysaytaPeli();
@@ -1964,19 +1964,31 @@ function kytke() {
         .map(function (k) { return m[k]; })).join(' ');
   }
 
+  /* ⚠️ RIVIT VOIVAT PUUTTUA (9.10.2026): asetukset järjestettiin uudelleen, ja
+   * Partyn «Vaikeusaste» on nyt Pelaajat-sivulla. Bassossa Partyn rivit ovat
+   * piilossa. Kirjoitus olemattomaan elementtiin heittäisi ja tappaisi kaiken
+   * sen jälkeisen — siksi jokainen arvo kulkee tämän kautta. */
+  function arvo(id, teksti) { const n = document.getElementById(id); if (n) n.textContent = teksti; }
   function paivitaArvot() {
     hahmoPiirraArvo(hahmojenMaara());
-    document.getElementById('arvoKieli').textContent = kielenNimi(KIELI);
-    document.getElementById('arvoTaso').textContent = t('taso.' + tila.taso.avain);
-    document.getElementById('arvoPelaajat').textContent = tila.pelaajia < 2
-      ? t('pelaajat.yksin') : t('pelaajat.monta', { n: tila.pelaajia });
-    document.getElementById('arvoTapa').textContent =
-      t(tila.apinanTapa ? 'tapa.vaikea' : 'tapa.helppo');
-    document.getElementById('arvoLuvat').textContent = lupamerkit();
-    document.getElementById('arvoAjat').textContent =
-      aikaTekstina(valintaAika()) + ' \u00B7 ' + aikaTekstina(lausekeAika());
-    document.getElementById('arvoValinta').textContent = aikaTekstina(valintaAika());
-    document.getElementById('arvoLauseke').textContent = aikaTekstina(lausekeAika());
+    arvo('arvoKieli', kielenNimi(KIELI));
+    arvo('arvoTaso', t('taso.' + tila.taso.avain));
+    /* Pelaajat-rivi: yksin pelatessa vastustaja (apinan nimi kertoo nopeuden),
+     * muuten pelaajamäärä. Apinalista ja Aikarajat näkyvät vain kun ne
+     * vaikuttavat: moninpelissä apinaa ei ole, yksin pelatessa vuorokelloa ei. */
+    arvo('arvoPelaajat', tila.pelaajia < 2
+      ? t('taso.' + tila.taso.avain) : t('pelaajat.monta', { n: tila.pelaajia }));
+    ['tasot', 'tasotViiva'].forEach(function (id) {
+      const n = document.getElementById(id);
+      if (n) n.hidden = tila.pelaajia >= 2;
+    });
+    const ajatRivi = document.getElementById('ajatRivi');
+    if (ajatRivi) ajatRivi.hidden = tila.pelaajia < 2;
+    arvo('arvoTapa', t(tila.apinanTapa ? 'tapa.vaikea' : 'tapa.helppo'));
+    arvo('arvoLuvat', lupamerkit());
+    arvo('arvoAjat', aikaTekstina(valintaAika()) + ' \u00B7 ' + aikaTekstina(lausekeAika()));
+    arvo('arvoValinta', aikaTekstina(valintaAika()));
+    arvo('arvoLauseke', aikaTekstina(lausekeAika()));
     [].forEach.call(document.querySelectorAll('.as-askel[data-aika]'), function (n) {
       const nyt = haeAika(n.dataset.aika);
       const suunta = Number(n.dataset.askel);

@@ -719,11 +719,10 @@ function bassoPizzaa(kuka) {
 function bassoPaivitaAsetusarvot() {
   const a = bassoAsetukset;
   hahmoPiirraArvo(a.ihmisia);
+  /* Yksi «Pelaajat»-rivi (9.10.2026): ihmiset ja apinat samalla sivulla. */
   const ih = document.getElementById('arvoIhmiset');
-  if (ih) ih.textContent = a.ihmisia === 1 ? t('ihmiset.yksi') : t('ihmiset.monta', { n: a.ihmisia });
-  const ap = document.getElementById('arvoApinat');
-  if (ap) ap.textContent = a.apinoita === 0 ? t('apinat.ei')
-    : a.apinoita === 1 ? t('apinat.yksi') : t('apinat.monta', { n: a.apinoita });
+  if (ih) ih.textContent = (a.ihmisia === 1 ? t('ihmiset.yksi') : t('ihmiset.monta', { n: a.ihmisia })) +
+    (a.apinoita ? ' \u00B7 ' + (a.apinoita === 1 ? t('apinat.yksi') : t('apinat.monta', { n: a.apinoita })) : '');
   const p = document.getElementById('arvoPisteraja');
   if (p) p.textContent = t('pisteraja.n', { n: a.tavoite });
 }

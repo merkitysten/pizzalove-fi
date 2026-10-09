@@ -48,8 +48,8 @@
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261009a">
-<link rel="stylesheet" href="yhteinen.css?v=20261009g">
-<link rel="stylesheet" href="basso.css?v=20261009d">
+<link rel="stylesheet" href="yhteinen.css?v=20261009i">
+<link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
 <body>
 
@@ -166,43 +166,32 @@
         <span class="as-nimi" data-t="as.otsikko">Asetukset</span>
         <button id="asetusKiinni" class="as-kulma" data-ta="as.sulje" aria-label="Sulje asetukset">&#10005;</button>
       </div>
+      <!-- 🔵 ASETUKSET UUDELLEEN JÄRJESTETTYNÄ (Marko 9.10.2026, ks. index.html).
+           Sama järjestys kuin Partyssa. Ihmispelaajat + Apinat → yksi «Pelaajat»-sivu,
+           Lisätietoja → Laskutoimitusten i-napin taakse, Kauppaan → valikkoon,
+           Takaisin sivustolle → alkuvalikossa jo. -->
       <nav class="as-valikko">
-        <!-- Peli: Party ↔ Basso (pelivalinta.js, Marko 9.10.2026). -->
         <button class="as-rivi" data-avaa="peli">
           <span data-t="as.peli">Peli</span><b class="as-arvo" id="arvoPeli"></b></button>
-        <button class="as-rivi" data-avaa="kieli">
-          <span data-t="as.kieli">Kieli</span><b class="as-arvo" id="arvoKieli"></b></button>
-        <button class="as-rivi" data-avaa="taso" hidden>
-          <span data-t="as.taso">Vaikeusaste</span><b class="as-arvo" id="arvoTaso"></b></button>
-        <button class="as-rivi" data-avaa="pelaajat" hidden>
-          <span data-t="as.pelaajat">Pelaajat</span><b class="as-arvo" id="arvoPelaajat"></b></button>
-        <button class="as-rivi" data-avaa="tapa" hidden>
-          <span data-t="as.tapa">Pelimuoto</span><b class="as-arvo" id="arvoTapa"></b></button>
-        <button class="as-rivi" data-avaa="ajat" hidden>
-          <span data-t="as.ajat">Aikarajat</span><b class="as-arvo" id="arvoAjat"></b></button>
-        <!-- BASSO: Partyn taso, pelaajat, tapa ja ajat ovat piilossa mutta OLEMASSA —
-             peli.js:n paivitaArvot ja kytkentävahti kirjoittavat niihin. -->
         <button class="as-rivi" data-avaa="ihmiset">
-          <span data-t="as.ihmiset">Ihmispelaajat</span><b class="as-arvo" id="arvoIhmiset"></b></button>
+          <span data-t="as.pelaajat">Pelaajat</span><b class="as-arvo" id="arvoIhmiset"></b></button>
         <button class="as-rivi" data-avaa="vari">
-          <span data-t="as.vari">Oma väri</span><b class="as-arvo" id="arvoVari"></b></button>
-        <button class="as-rivi" data-avaa="apinat">
-          <span data-t="as.apinat">Apinat</span><b class="as-arvo" id="arvoApinat"></b></button>
+          <span data-t="as.vari">Hahmo</span><b class="as-arvo" id="arvoVari"></b></button>
         <button class="as-rivi" data-avaa="pisteraja">
           <span data-t="as.pisteraja">Pisteraja</span><b class="as-arvo" id="arvoPisteraja"></b></button>
         <button class="as-rivi" data-avaa="luvat">
           <span data-t="as.luvat">Laskutoimitukset</span><b class="as-arvo" id="arvoLuvat"></b></button>
-        <button class="as-rivi" data-avaa="ohje">
-          <span data-t="as.ohje">Lisätietoja</span><b class="as-arvo"></b></button>
-        <a class="as-rivi" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/"
-           target="_blank" rel="noopener" data-ta="as.kauppaAria">
-          <span data-t="as.kauppa">Kauppaan</span>
-          <img class="as-kotelo" src="kuvat/kotelo.webp?v=20260911a" alt=""></a>
+        <button class="as-rivi" data-avaa="kieli">
+          <span data-t="as.kieli">Kieli</span><b class="as-arvo" id="arvoKieli"></b></button>
         <!-- Verkkopelissä: perustaja lopettaa pelin kaikilta, muut poistuvat. -->
         <button class="as-rivi" id="asVerkkoLopeta" hidden>
           <span id="asVerkkoLopetaTeksti"></span><b class="as-arvo"></b></button>
-        <a class="as-rivi" id="asSivustolle" href="../" data-sivustolle>
-          <span data-t="valikko.sivustolle">Takaisin sivustolle</span><b class="as-arvo"></b></a>
+        <!-- BASSO: Partyn rivit ovat piilossa mutta OLEMASSA — peli.js:n paivitaArvot
+             ja kytkentävahti kirjoittavat niihin (arvot ja aikarajasäätimet). -->
+        <button class="as-rivi" data-avaa="taso" hidden><b class="as-arvo" id="arvoTaso"></b></button>
+        <button class="as-rivi" data-avaa="pelaajat" hidden><b class="as-arvo" id="arvoPelaajat"></b></button>
+        <button class="as-rivi" data-avaa="tapa" hidden><b class="as-arvo" id="arvoTapa"></b></button>
+        <button class="as-rivi" data-avaa="ajat" hidden><b class="as-arvo" id="arvoAjat"></b></button>
       </nav>
     </section>
 
@@ -299,11 +288,13 @@
     <section class="as-sivu" data-sivu="ihmiset" hidden>
       <div class="as-ylapalkki">
         <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
-        <span class="as-nimi" data-t="as.ihmiset">Ihmispelaajat</span>
+        <span class="as-nimi" data-t="as.pelaajat">Pelaajat</span>
         <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
       </div>
-      <p class="as-selite" hidden data-t="selite.ihmiset"></p>
+      <div class="as-selite" hidden><p data-t="selite.ihmiset"></p><p data-t="selite.apinat"></p></div>
       <div id="bassoIhmiset" class="as-lista"></div>
+      <hr class="as-viiva">
+      <div id="bassoApinat" class="as-lista"></div>
     </section>
 
     <!-- HAHMO (Marko 6.10.2026: «kaikilla pelaajilla olisi sekä hahmo että
@@ -311,7 +302,7 @@
     <section class="as-sivu" data-sivu="vari" hidden>
       <div class="as-ylapalkki">
         <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
-        <span class="as-nimi" data-t="as.vari">Oma väri</span>
+        <span class="as-nimi" data-t="as.vari">Hahmo</span>
         <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
       </div>
       <p class="as-selite" hidden data-t="selite.vari"></p>
@@ -323,16 +314,6 @@
       <div id="hahmoVarit" class="hahmo-varit"></div>
     </section>
 
-    <!-- BASSO · APINAT -->
-    <section class="as-sivu" data-sivu="apinat" hidden>
-      <div class="as-ylapalkki">
-        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
-        <span class="as-nimi" data-t="as.apinat">Apinat</span>
-        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
-      </div>
-      <p class="as-selite" hidden data-t="selite.apinat"></p>
-      <div id="bassoApinat" class="as-lista"></div>
-    </section>
 
     <!-- BASSO · PISTERAJA -->
     <section class="as-sivu" data-sivu="pisteraja" hidden>
@@ -352,23 +333,9 @@
         <span class="as-nimi" data-t="as.luvat">Laskutoimitukset</span>
         <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
       </div>
-      <p class="as-selite" hidden data-t="selite.luvat"></p>
-      <div id="sallitut" class="sallitut">
-        <label class="lupa"><input type="checkbox" data-lupa="kerto" checked><span>&#215;</span></label>
-        <label class="lupa"><input type="checkbox" data-lupa="jako" checked><span>&#247;</span></label>
-        <label class="lupa"><input type="checkbox" data-lupa="potenssi"><span>x<sup>y</sup></span></label>
-        <label class="lupa"><input type="checkbox" data-lupa="log"><span>log</span></label>
-        <label class="lupa"><input type="checkbox" data-lupa="sulut" checked><span>( )</span></label>
-      </div>
-    </section>
-
-    <!-- 7 · LISÄTIETOJA — tämä sivu ON selitys, siksi ei i-nappia -->
-    <section class="as-sivu" data-sivu="ohje" hidden>
-      <div class="as-ylapalkki">
-        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
-        <span class="as-nimi" data-t="ohje.otsikko">Mitä laskutoimitus kysyy?</span>
-        <span class="as-kulma as-tyhja" aria-hidden="true"></span>
-      </div>
+      <!-- Selitys + entinen «Lisätietoja»-sivu («Mitä laskutoimitus kysyy?») -->
+      <div class="as-selite" hidden><p data-t="selite.luvat"></p>
+      <b class="ohje-otsikko" data-t="ohje.otsikko">Mitä laskutoimitus kysyy?</b>
       <p class="ohje-johdanto" data-th="ohje.johdanto"></p>
       <dl class="ohje-lista">
         <dt>2 + 3</dt>      <dd data-th="ohje.plus"></dd>
@@ -384,7 +351,16 @@
           <br><span class="ohje-lisa" data-th="ohje.sulutLisa"></span></dd>
       </dl>
       <p class="ohje-lopetus" data-th="ohje.lopetus"></p>
+      </div>
+      <div id="sallitut" class="sallitut">
+        <label class="lupa"><input type="checkbox" data-lupa="kerto" checked><span>&#215;</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="jako" checked><span>&#247;</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="potenssi"><span>x<sup>y</sup></span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="log"><span>log</span></label>
+        <label class="lupa"><input type="checkbox" data-lupa="sulut" checked><span>( )</span></label>
+      </div>
     </section>
+
 
   </div>
 </div>
@@ -393,12 +369,32 @@
      jopa aloittamaan kokonaan uudelleen. Ylakulman nuolinappi voisi olla
      looginen pausenapin paikka." -->
 <div id="taukoPeite" class="peite" hidden>
-  <div class="tauko-laatikko" onclick="event.stopPropagation()">
-    <div class="tauko-merkki" aria-hidden="true">&#9208;</div>
-    <button id="jatka" class="iso-nappi" data-t="tauko.jatka">Jatka</button>
-    <button id="taukoAsetukset" class="toinen-nappi" data-t="tulos.asetukset">Asetukset</button>
-    <button id="alustaPeli" class="toinen-nappi" data-t="tauko.alusta">Aloita alusta</button>
-    <button id="taukoValikkoon" class="toinen-nappi" data-t="valikko.alkuun">Alkuvalikkoon</button>
+  <!-- 🔵 VALIKKO KUVAKKEIN (Marko 9.10.2026: «pausenappi on nyt random. Ota se
+       pois — — tässä on nyt liikaa tekstiä. Asetukset voisi hyvin olla rattaan
+       kuva — — "jatka" ja "aloita alusta" — ikonit, kuten play-nappi ja sitten
+       sellainen kierretty nuoli — — Alkuvalikkoon voisi olla selkeästi erillään
+       muista esim. hiusviivan kanssa erotettuna»).
+       Yksi rivi: ↻ · ▶ · ⚙ — ▶ isona keskellä, koska se on se mitä useimmiten
+       halutaan. Kuvakkeiden nimet ovat aria-labeleissa (ruudunlukija). Alkuvalikkoon
+       jää tekstiksi: se vie toiseen paikkaan, ja paikka on nimettävä. -->
+  <div class="tauko-laatikko valikko-ikkuna" onclick="event.stopPropagation()">
+    <div class="valikko-toiminnot">
+      <button id="alustaPeli" class="valikko-ikoni" data-ta="tauko.alusta" aria-label="Aloita alusta">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1.5L7 6.5l5 5V8a6 6 0 1 1-6 6H4a8 8 0 1 0 8-9z"/></svg>
+      </button>
+      <button id="jatka" class="jatka-nappi valikko-jatka" data-ta="tauko.jatka" aria-label="Jatka">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+      </button>
+      <button id="taukoAsetukset" class="valikko-ikoni valikko-ratas" data-ta="tulos.asetukset" aria-label="Asetukset">&#9881;</button>
+    </div>
+    <hr class="valikko-viiva">
+    <!-- Ulos vievät: alkuvalikko ja kauppa (Marko 9.10.2026: «Kauppaan voisi laittaa
+         heti siihen samaan valikkoon»). Pelkkä sana — kotelokuva oli rivin reunassa
+         liian pieni ja «ruma». Kauppa aukeaa uuteen välilehteen, peli jää odottamaan. -->
+    <div class="valikko-ala">
+      <button id="taukoValikkoon" class="valikko-alkuun" data-t="valikko.alkuun">Alkuvalikkoon</button>
+      <a class="valikko-alkuun" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+    </div>
   </div>
 </div>
 
@@ -431,6 +427,8 @@
       <button id="bvMoninpeli" type="button" class="as-valinta"><b data-t="valikko.moninpeli"></b><small data-t="valikko.moninpeliSelite"></small></button>
       <!-- Paluu sivustolle, kuten Partyn valikossa (osoite: pelivalinta.js). -->
       <a class="toinen-nappi valikko-sivustolle" href="../" data-sivustolle data-t="valikko.sivustolle">Takaisin sivustolle</a>
+      <!-- Kauppa myös alkuvalikossa (Marko 9.10.2026: «Kauppaan voisi ohjata myös pelin päävalikosta»). -->
+      <a class="toinen-nappi valikko-sivustolle valikko-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
     </div>
     <div class="verkko-osa" data-osa="moninpeli" hidden>
       <button id="bvLuoAvaa" type="button" class="as-valinta"><b data-t="isanta.luo"></b><small data-t="valikko.luoSelite"></small></button>
@@ -488,7 +486,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261009b"></script>
+<script src="kielet.js?v=20261009c"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
@@ -499,9 +497,9 @@
 <!-- ⚠️ peli.js ladataan SELLAISENAAN, ja basso.js korvaa sen vuoroon liittyvät
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
-<script src="peli.js?v=20261009c"></script>
+<script src="peli.js?v=20261009e"></script>
 <script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261009c"></script>
+<script src="basso.js?v=20261009d"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="basso-verkko.js?v=20261009a"></script>
 </body>
