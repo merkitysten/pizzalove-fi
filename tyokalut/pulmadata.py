@@ -71,6 +71,36 @@ for ti,T in enumerate(TASOT):
             if len(loydetyt)>=3: break
             jousto[x]=('koko' if kD else 'koko+D')+('' if kP else '+aihe')
         val+=loydetyt
+    # Sydänpizza (summa 10) antaa lisäpalan, joten sen pulmat ovat tason vaikeimmasta neljänneksestä
+    # ja niissä on enintään kaksi ratkaisua.
+    sydan=lambda v:any(sum(p)==10 for p in v[3])
+    tavalliset=sorted(v[0] for v in val if not sydan(v))
+    kynnys=tavalliset[int(len(tavalliset)*0.75)] if tavalliset else 0
+    def vahva(v):
+        a=arvioi(v[1],v[2],v[3]); return a['D']>=kynnys and a['ratk']<=2
+    poistetut=[v for v in val if sydan(v) and not vahva(v)]
+    val=[v for v in val if not sydan(v) or vahva(v)]
+    lisat=[]; rnd=random.Random(4242+ti); tr=0
+    while len(lisat)<4 and tr<300000:
+        tr+=1
+        n=T['n'] if isinstance(T['n'],int) else (rnd.choice(T['n']) if T['n'] else rnd.choice([1,2,2,3]))
+        piz=arvo_pizzat(rnd,n,T['koot'] if tr<150000 else [1,2,3,4])
+        if not any(sum(p)==10 for p in piz) or sum(map(len,piz))>6: continue
+        d=rnd.randint(1,10); L=sorted(rnd.sample(range(1,11),rnd.randint(*T['lin'])))
+        if any(set(p)<=set(L) for p in piz): continue
+        a=arvioi(d,L,piz)
+        if not a or not T['perus'](a) or a['D']<kynnys or a['ratk']>2: continue
+        avain=(d,tuple(L),tuple(sorted(piz)))
+        if avain in nahty: continue
+        nahty.add(avain); lisat.append((a['D'],d,L,[list(p) for p in piz]))
+    val+=lisat
+    # jos jokin täyte jäi kokonaan pois (esim. 10 on aina sydänpizzassa), palautetaan vaikein poistettu
+    for x in range(1,11):
+        if not any(x in p for v in val for p in v[3]):
+            ehd=[v for v in poistetut if any(x in p for p in v[3])]
+            if ehd: val.append(max(ehd,key=lambda v:v[0]))
+    sydanD=[v[0] for v in val if sydan(v)]
+    print('   sydänpulmia',len(sydanD),'kynnys',kynnys,'D',sorted(sydanD))
     val.sort(key=lambda v:v[0])
     data.append([dict(d=v[1],lin=v[2],pizzat=v[3],D=v[0]) for v in val])
     Ds=[v[0] for v in val]
