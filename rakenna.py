@@ -164,7 +164,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <html lang="%s">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>%s</title>
 <meta name="description" content="%s">
 <meta name="theme-color" content="#F47920">
