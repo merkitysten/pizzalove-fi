@@ -703,14 +703,12 @@
     // vihjeet: ensin siirtotapa sanana, sitten yhden ratkaisun täytteet hohtavat
     function ajastaPulmaVihje() {
       clearTimeout(pulmaAjastin);
-      if (tila.muoto !== 'pulmat' || tila.siirretty) return;
+      if (tila.muoto !== 'pulmat' || tila.siirretty || tila.pVinkki) return;
       pulmaAjastin = setTimeout(function () {
         if (tila.muoto !== 'pulmat' || !opasRuutu.hidden || tila.siirretty) return;
-        if (!tila.pVinkki) { tila.pVinkki = true; piirra(); return ajastaPulmaVihje(); }
-        var r = pulma().rat.slice().sort(function (a, b) { return siirronTapa(a) - siirronTapa(b) || a.oikea.length - b.oikea.length; })[0];   // yksinkertaisin ratkaisu
-        tila.vihje = r.oikea.concat(r.vasen);
-        piirra();
-      }, tila.pVinkki ? 12000 : 10000);
+        // oikea pulmapeli: Basso kertoo vain siirtotavan, ratkaisua ei näytetä
+        if (!tila.pVinkki) { tila.pVinkki = true; piirra(); }
+      }, 10000);
     }
     function pulmaToiminta() { if (tila.muoto === 'pulmat') { tila.vihje = null; ajastaPulmaVihje(); } }
     function pulmaVie() {
