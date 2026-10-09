@@ -31,41 +31,49 @@ def arvo_pizzat(rnd,n,koot):
         if any(set(p)&set(q) for q in piz): continue
         piz.append(p)
     return piz
+# perus = tason aihe (siirtotapa ym.), D = vaikeusikkuna
 TASOT=[
- dict(n=1,koot=[1],lin=(0,2),ehto=lambda a,p:a['helpoin']==1 and a['D']<=2),
- dict(n=1,koot=[1],lin=(0,2),ehto=lambda a,p:a['helpoin']==2 and a['D']<=4),
- dict(n=1,koot=[2],lin=(1,3),ehto=lambda a,p:a['puuttuu']==1 and a['helpoin']<=2 and 1<=a['D']<=5),
- dict(n=1,koot=[1,2],lin=(1,3),ehto=lambda a,p:a['helpoin']==3 and a['puuttuu']==1 and 3<=a['D']<=6),
- dict(n=1,koot=[2],lin=(0,3),ehto=lambda a,p:a['puuttuu']==2 and a['helpoin']==2 and 3<=a['D']<=7),
- dict(n=1,koot=[3],lin=(1,4),ehto=lambda a,p:a['helpoin']<=2 and 5<=a['D']<=9),
- dict(n=1,koot=[1,2],lin=(1,4),ehto=lambda a,p:a['helpoin']==4 and 5<=a['D']<=8),
- dict(n=2,koot=[1,2],lin=(0,3),ehto=lambda a,p:a['oudot']>=1 and 7<=a['D']<=10),
- dict(n=1,koot=[2,3],lin=(2,4),ehto=lambda a,p:a['ansat']>=3 and a['ratk']<=2 and 9<=a['D']<=12),
- dict(n=3,koot=[1,2],lin=(0,3),ehto=lambda a,p:a['oudot']>=1 and 10<=a['D']<=13),
- dict(n=None,koot=[1,2,3,4],lin=(1,4),ehto=lambda a,p:a['ratk']==1 and 12.5<=a['D']<15),
- dict(n=None,koot=[1,2,3],lin=(1,4),ehto=lambda a,p:a['ratk']==1 and a['D']>=15),
+ dict(n=1,koot=[1],lin=(0,2),perus=lambda a:a['helpoin']==1,D=(0,2)),
+ dict(n=1,koot=[1],lin=(0,2),perus=lambda a:a['helpoin']==2,D=(0,5)),
+ dict(n=1,koot=[2],lin=(1,3),perus=lambda a:a['puuttuu']==1 and a['helpoin']<=2,D=(1,5)),
+ dict(n=1,koot=[1,2],lin=(1,3),perus=lambda a:a['helpoin']==3 and a['puuttuu']==1,D=(3,6)),
+ dict(n=1,koot=[2],lin=(0,3),perus=lambda a:a['puuttuu']==2 and a['helpoin']==2,D=(3,7)),
+ dict(n=1,koot=[3],lin=(1,4),perus=lambda a:a['helpoin']<=2,D=(5,9)),
+ dict(n=1,koot=[1,2],lin=(1,4),perus=lambda a:a['helpoin']==4,D=(5,9)),
+ dict(n=(2,3),koot=[1,2],lin=(0,3),perus=lambda a:a['oudot']>=1,D=(7,12)),
+ dict(n=1,koot=[2,3],lin=(2,4),perus=lambda a:a['ansat']>=3 and a['ratk']<=2,D=(9,12.5)),
+ dict(n=None,koot=[1,2,3,4],lin=(1,4),perus=lambda a:a['ratk']==1,D=(12.5,99)),
 ]
-data=[]
-for ti,T in enumerate(TASOT):
-    rnd=random.Random(500+ti); ehd=[]; nahty=set(); tr=0
-    while len(ehd)<60 and tr<400000:
+PER_TAYTE=6
+def hae(T,ti,x,koot,kayta_D,tarve,nahty,kayta_perus=True):
+    rnd=random.Random(900+ti*31+x*7+len(koot)*1000+kayta_D); out=[]; tr=0
+    while len(out)<tarve and tr<120000:
         tr+=1
-        n=T['n'] or rnd.choice([1,2,2,3])
-        piz=arvo_pizzat(rnd,n,T['koot'])
-        if sum(map(len,piz))>6: continue
+        n=T['n'] if isinstance(T['n'],int) else (rnd.choice(T['n']) if T['n'] else rnd.choice([1,2,2,3]))
+        piz=arvo_pizzat(rnd,n,koot)
+        if not any(x in p for p in piz) or sum(map(len,piz))>6: continue
         d=rnd.randint(1,10); L=sorted(rnd.sample(range(1,11),rnd.randint(*T['lin'])))
         if any(set(p)<=set(L) for p in piz): continue
         a=arvioi(d,L,piz)
-        if not a or not T['ehto'](a,piz): continue
+        if not a or (kayta_perus and not T['perus'](a)): continue
+        if kayta_D and not (T['D'][0]<=a['D']<=T['D'][1]): continue
         avain=(d,tuple(L),tuple(sorted(piz)))
         if avain in nahty: continue
-        nahty.add(avain); ehd.append((a['D'],d,L,[list(p) for p in piz],a))
-    ehd.sort(key=lambda x:x[0])
-    # viisi pulmaa tasaisesti vaikeusjakaumasta, helpoimmasta vaikeimpaan
-    val=[ehd[round(k*(len(ehd)-1)/4)] for k in range(5)] if len(ehd)>=5 else ehd
+        nahty.add(avain); out.append((a['D'],d,L,[list(p) for p in piz]))
+    return out
+data=[]
+for ti,T in enumerate(TASOT):
+    nahty=set(); val=[]; jousto={}
+    for x in range(1,11):
+        loydetyt=[]
+        for koot,kD,kP in [(T['koot'],True,True),([1,2,3,4],True,True),([1,2,3,4],False,True),([1,2,3,4],True,False),([1,2,3,4],False,False)]:
+            loydetyt+=hae(T,ti,x,koot,kD,PER_TAYTE-len(loydetyt),nahty,kP)
+            if len(loydetyt)>=3: break
+            jousto[x]=('koko' if kD else 'koko+D')+('' if kP else '+aihe')
+        val+=loydetyt
+    val.sort(key=lambda v:v[0])
     data.append([dict(d=v[1],lin=v[2],pizzat=v[3],D=v[0]) for v in val])
     Ds=[v[0] for v in val]
-    print('taso',ti+1,'ehdokkaita',len(ehd),'D',Ds,'keskim.',round(sum(Ds)/len(Ds),1))
-    for v in val[-1:]: print('    vaikein: noppa',v[1],'lin',v[2],'pizzat',v[3],'ratk',v[4]['ratk'],'ansat',v[4]['ansat'])
+    print('taso',ti+1,'pulmia',len(val),'D %.1f–%.1f keskim. %.1f'%(min(Ds),max(Ds),sum(Ds)/len(Ds)),'joustettu:',jousto)
 import os
 json.dump(data,open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'pulmadata.json'),'w'))
