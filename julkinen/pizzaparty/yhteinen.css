@@ -111,11 +111,14 @@
   display:flex;flex-direction:column;align-items:center;gap:14px;
   padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
-/* Viiri riippuu yläreunasta kuten painettu viiri pakkauksessa. */
-.alku-viiri{width:auto;height:clamp(84px, 19vh, 168px);flex:none;margin-top:-14px}
+/* Viiri riippuu yläreunasta VASEMMASSA reunassa, kuten pizzalove.fi:n palkissa
+ * (Marko 9.10.2026: «Laita se pizza love -etiketti enemmän vasempaan reunaan. Sen
+ * paikka on siellä.»). Leveys sama kuin sivustolla: 84 / 104 / 124 px. */
+.alku-viiri{width:84px;height:auto;flex:none;margin-top:-14px;align-self:flex-start}
+@media (min-width:600px){.alku-viiri{width:104px}}
+@media (min-width:1000px){.alku-viiri{width:124px}}
 .alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85}
 /* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
-.aloitusruutu:has(.alku-paa[hidden]) .alku-viiri{height:clamp(56px, 10vh, 84px)}
 /* Viiriä ei käännetä: oranssi PIZZA muuttuisi siniseksi. Musta viiri erottuu tummasta pohjasta. */
 @media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
 
@@ -125,6 +128,12 @@
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
 .aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
 
+/* Maskotit pelivalinnan yläpuolella: Basso nojaa kyynärpäällään valinnan reunaan
+ * (kuvan alaosa menee reunan yli), rakastunut pizzalaatikko oikealla. */
+.alku-maskotit{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;
+  width:100%;margin-bottom:-22px;pointer-events:none}
+.alku-basso{height:clamp(108px, 21vh, 168px);width:auto}
+.alku-laatikko{height:clamp(96px, 18vh, 148px);width:auto;margin-bottom:8px}
 /* Kaksi neliötä: kuvake kertoo, sana nimeää. Koko teksti on aria-labelissa. */
 .alku-ruudut{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
 .alku-ruutu{--ruutu-pohja:#fff;aspect-ratio:1;border-radius:16px;border:2px solid var(--orange, #F47920);
@@ -138,12 +147,13 @@
 .alku-ruutu .apina-ikoni{width:64%}
 .alku-ruutu:active{transform:scale(.97)}
 .alku-ruutu:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-/* Apinan naama: Markon vektori (kuvat/apinanaama_vektori.svg, 9.10.2026) upotettuna
- * omilla väreillään — valkoinen pinta, tummat viivat — kuten kotelon apina.
- * Väri on kiinteä eikä --ink: tummassa teemassa vaalea viiva katoaisi valkoiselle. */
+/* Apinan naama: Markon vektori (kuvat/apinanaama_vektori.svg, 9.10.2026),
+ * valko-oranssina (Marko: «Pitäisikö se kumminkin olla valko-oranssi?»): valkoinen
+ * pinta, oranssit viivat. Oranssi on sama kuin ruudun pohja, joten naama erottuu
+ * valkoisena ja piirteet näkyvät pohjan värisinä. */
 .apina-pinta{fill:#fff}
-.apina-viiva{fill:none;stroke:#1A1A1A;stroke-width:.8;stroke-linecap:round}
-.apina-piste{fill:#1A1A1A}
+.apina-viiva{fill:none;stroke:var(--orange, #F47920);stroke-width:.8;stroke-linecap:round}
+.apina-piste{fill:var(--orange, #F47920)}
 .puhelin-ikoni rect, .puhelin-ikoni path{fill:none;stroke:currentColor;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
 .puhelin-ikoni rect + rect{fill:var(--ruutu-pohja)}
 .valikko-nappi.pieni{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;font-size:14px}
@@ -152,8 +162,8 @@
  * mitattu 9.10.2026: 476 px sisältöä 375 px:n ruudussa. Kuvake sanan viereen. */
 @media (orientation:landscape) and (max-height:540px){
   .peite > .aloitusruutu{gap:8px}
-  .alku-viiri{height:64px}
-  .aloitusruutu:has(.alku-paa[hidden]) .alku-viiri{height:48px}
+  .alku-viiri{width:64px}
+  .alku-maskotit{display:none}
   .alku-logo{width:84px}
   .alku-ruutu{aspect-ratio:auto;flex-direction:row;padding:10px 12px;min-height:68px}
   .alku-ruutu svg{width:44px}
