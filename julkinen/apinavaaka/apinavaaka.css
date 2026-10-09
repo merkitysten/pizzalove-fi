@@ -171,7 +171,7 @@
 
 /* linjasto: täytekulhot – takaosa, torni ja etuosa päällekkäin, jolloin torni on kulhon sisällä */
 .av__hylly--linjasto .av__paikka{min-height:0;justify-content:flex-end}
-.av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:40px}
+.av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:56px}   /* tilaa kymmenen tornille */
 .av__kulho img{position:absolute;left:0;top:0;width:100%;height:auto;pointer-events:none}
 .av__kulho-takana{z-index:0}.av__kulho-edessa{z-index:2}
 .av__kulho .av__hylly-torni{position:absolute;left:50%;bottom:80%;transform:translateX(-50%);z-index:1;width:auto;padding:0}
@@ -214,7 +214,7 @@
   .av__hylly-torni .av__torni i{width:24px}
   .av__hylly-torni .av__tarra{width:26px;height:26px}
   .av__paikka{min-height:86px}
-  .av__kulho{max-width:48px;margin-top:52px}
+  .av__kulho{max-width:48px;margin-top:74px}
   .av--apinat .av__kortit{grid-template-columns:repeat(4,60px)}
   .av__uuni{width:60px}
 }
