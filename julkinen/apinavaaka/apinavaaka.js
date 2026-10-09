@@ -531,8 +531,9 @@
     function oikeaTapa() {
       var v = vaihe();
       if (v.tapa === 'A') return tila.oikea.length === 1 && !tila.vasen.length;
-      if (v.tapa === 'B') return tila.oikea.length >= 2 && !tila.vasen.length;
-      return tila.vasen.length === 1;
+      // yhdistelmäsiirto (esim. 7 + 2 = 4 + 5) on yhtä aikaa summa- ja erotussiirto: kelpaa kummankin harjoitukseen
+      if (v.tapa === 'B') return tila.oikea.length >= 2;
+      return tila.vasen.length >= 1;
     }
     // omalla vuorolla: jos 6 sekuntiin ei tapahdu mitään, oikeat tornit alkavat hohtaa
     function ajastaVihje() {
@@ -907,6 +908,11 @@
               if ((salK && salK.varasto.indexOf(n) >= 0) || (hintti && tila.vihje.indexOf(n) >= 0)) paikka.classList.add('av__paikka--vihje');
               else if (salK || hintti) paikka.classList.add('av__paikka--hamara');   // muut kulhot himmenevät kuten varaston täytteet
             }
+          } else if (kulho && (tila.paikka[n] === 'oikea' || tila.paikka[n] === 'vasen') && !tila.siirretty) {
+            // täyte on apinan kädessä: kulhon napautus vie siirron linjastolle (kun tasapaino), muuten palauttaa täytteen
+            (function (n) { paikka.addEventListener('click', function () { if (tila.valmis) vieSiirto(); else palauta(n); }); })(n);
+            paikka.classList.add('av__paikka--kulho');
+            if (tila.valmis && tila.lahde[n] === 'varasto') paikka.classList.add('av__paikka--vihje');   // kulho kutsuu täytettä kotiin
           }
           if (tila.paikka[n] === nimi) {
             var b = el('button', 'av__hylly-torni');
