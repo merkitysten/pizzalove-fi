@@ -138,6 +138,14 @@
   background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;
   box-sizing:border-box;padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 0}
 .alku-kielet{height:var(--palkki);display:flex;align-items:center}
+/* MUSTA TILAPALKKI (Marko 9.10.2026, valinta «Musta tilapalkki»). Safari-selaimessa tilapalkki
+ * ei kuulu sivuun: Safari värittää sen yhdellä värillä, jonka se poimii sivun YLÄREUNAN
+ * pikseleistä ensimmäisellä maalauksella (mitattu Norsussa 2.9.2026, memory/
+ * palkit-ja-turva-alueet.md). Musta raita koko leveydellä ylimpänä → tilapalkki mustaksi,
+ * ja viiri jatkuu siihen saumatta. Kotivalikosta avattuna (turva-alue > 0) raita peittää
+ * koko tilapalkin alueen. ⚠️ Toimiiko poiminta 4 px:n raidasta, on todennettava iPhonella. */
+.alku-palkki::before{content:"";position:absolute;left:0;right:0;top:0;
+  height:calc(var(--yla-turva) + 4px);background:#000002}
 .alku-viiri{position:absolute;left:var(--viiri-x);top:var(--yla-turva);width:var(--viiri-l);display:block;line-height:0}
 .alku-viiri svg{width:100%;height:auto;display:block}
 /* Iskulause viirissä LOVEn alla, kuten pizzalove.fi:n viirissä (Marko 9.10.2026: «Muuta
