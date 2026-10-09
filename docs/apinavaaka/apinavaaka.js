@@ -679,6 +679,16 @@
       tila.viesti = '';
       piirra();
     }
+    // Pizzan napautus: tuo pizzan täytteen varastosta apinan käteen (tai palauttaa sen kädestä).
+    // Se on vain yksi tapa valita täyte – tasapainon keksiminen jää pelaajalle.
+    function pizzanNapautus(n, k) {
+      if (tila.vaihe !== 'heitto' || tila.eiRiita) return;
+      if (!tila.heitetty) return tonaise(noppaEl);
+      if (tila.siirretty) return;
+      if (tila.paikka[n] === 'varasto' && !tila.havikki && !tila.valmis) return napauta(n, 'varasto');
+      if (tila.paikka[n] === 'oikea' && !tila.valmis) return palauta(n);
+      tonaise(k);
+    }
     function palauta(n) {
       if (tila.siirretty) return;
       if (tila.muoto === 'opas') { if (vaihe().ohjattu) return; ajastaVihje(); }
@@ -817,7 +827,12 @@
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
           k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i></span>' +
             (n === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');   // sydänpizza
-          k.addEventListener('click', function () { if (ok) valmista(n, k); else if (tila.vaihe === 'heitto') tonaise(noppaEl); });
+          k.addEventListener('click', function () { if (ok) valmista(n, k); else pizzanNapautus(n, k); });
+          // pizza on täytteen kolmas "kahva" (torni, kippo, pizza): ohjeen tai vihjeen täyte hohtaa myös pizzassa
+          if (opas && tila.heitetty && !tila.siirretty && tila.paikka[n] === 'varasto') {
+            var salP = sallitut();
+            if ((salP && salP.varasto.indexOf(n) >= 0) || (!salP && tila.vihje && tila.vihje.indexOf(n) >= 0)) k.classList.add('av__paikka--vihje');
+          }
           kortitEl.appendChild(k);
         });
         tila.uusiKortti = null;
