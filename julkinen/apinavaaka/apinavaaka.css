@@ -174,7 +174,8 @@
 .av__kulho{position:relative;width:100%;max-width:38px;aspect-ratio:200/169;margin-top:56px}   /* tilaa kymmenen tornille */
 .av__kulho img{position:absolute;left:0;top:0;width:100%;height:auto;pointer-events:none}
 .av__kulho-takana{z-index:0}.av__kulho-edessa{z-index:2}
-.av__kulho .av__hylly-torni{position:absolute;left:50%;bottom:80%;transform:translateX(-50%);z-index:1;width:auto;padding:0}
+/* keskitys ilman transformia: siirtoanimaatio käyttää transformia, ja translateX(-50%) siirsi tornia ohi kupista */
+.av__kulho .av__hylly-torni{position:absolute;left:0;right:0;margin:0 auto;bottom:80%;z-index:1;width:max-content;padding:0}
 .av__hylly--linjasto .av__paikka--tyhja::before{display:none}
 
 /* Nälkäiset apinat: liukuhihna kulkee uunin läpi, molemmat linjaston taustalla */

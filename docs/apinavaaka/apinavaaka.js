@@ -1022,7 +1022,7 @@
         var an = x.animate([
           { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')', transformOrigin: '50% 100%' },
           { transform: 'none', transformOrigin: '50% 100%' }
-        ], { duration: 950, easing: 'cubic-bezier(.3,.7,.3,1.05)' });
+        ], { duration: 950, easing: 'cubic-bezier(.3,.7,.3,1)' });   // ei ylilyöntiä: torni pysähtyy suoraan paikalleen
         an.onfinish = function () { x.classList.remove('av__lentaa'); };
       });
     }
