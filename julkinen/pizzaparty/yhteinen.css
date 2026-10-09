@@ -183,8 +183,8 @@
 /* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
  * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
  * tarvitse mahtua kokonaan ruutuun — — se hieman vinosta katsominen on usein hauskempi
- * tapa kuvata basso»). Basso vasemmalta — pizzaa syövä, virallinen maskottikuva
- * (Marko 9.10.2026) — ja rakastunut pizzalaatikko oikealta.
+ * tapa kuvata basso»). Pizzalaatikko vasemmalta viirin alta, Basso — pizzaa syövä,
+ * virallinen maskottikuva — isompana oikealta (Marko 9.10.2026: paikat vaihdettiin).
  * --sivu = sarakkeen etäisyys ruudun reunasta (sarake enintään 360 px, reunat 16 px):
  * negatiivinen marginaali vie kuvan ruudun reunan yli, ja .aloitusruutu leikkaa sen
  * (overflow-x:hidden). Kuvat ovat pelivalinnan ALLA (z-index), joten ne kurkkaavat
@@ -195,10 +195,10 @@
 /* Valkoinen tarrareuna kuten lautapelilaatikon kyljessä: erottaa hahmon kuosista. */
 .alku-basso, .alku-laatikko{filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
-.alku-basso{--k:clamp(124px, 24vh, 196px);height:var(--k);width:auto;
-  margin-left:calc(-1 * var(--sivu) - var(--k) * .26);transform:rotate(14deg);transform-origin:50% 100%}
-.alku-laatikko{--k:clamp(108px, 20vh, 164px);height:var(--k);width:auto;margin-bottom:14px;
-  margin-right:calc(-1 * var(--sivu) - var(--k) * .22);transform:rotate(-12deg)}
+.alku-basso{--k:clamp(150px, 30vh, 250px);height:var(--k);width:auto;
+  margin-right:calc(-1 * var(--sivu) - var(--k) * .24);transform:rotate(-14deg);transform-origin:50% 100%}
+.alku-laatikko{--k:clamp(100px, 18vh, 150px);height:var(--k);width:auto;align-self:flex-start;
+  margin-left:calc(-1 * var(--sivu) - var(--k) * .22);transform:rotate(12deg)}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */
@@ -252,8 +252,8 @@
  * (mitattu 9.10.2026). Maskotit ja napit pienemmiksi; maskotit kurkkaavat yhä reunoista. */
 @media (orientation:portrait) and (max-height:640px){
   .peite > .aloitusruutu{gap:10px}
-  .alku-basso{--k:104px}
-  .alku-laatikko{--k:92px}
+  .alku-basso{--k:128px}
+  .alku-laatikko{--k:86px}
   .alku-ruutu{min-height:62px;padding:6px 16px}
   .alku-ruutu svg{width:58px}
   .alku-kauppa{min-height:42px}
@@ -275,13 +275,14 @@
    * position:fixed: reuna on RUUDUN reuna eikä sarakkeen, ja ruutu leikkaa kuvan
    * itse (ei vaakavieritystä). Sijainti lasketaan sarakkeen (360 px) viereen; jos
    * tila ei riitä, kuva menee neliöiden ALLE (z-index), ei päälle.
-   * Leveydet: Basso ≈ 0,84 × korkeus (basso-syo.webp 438×520), laatikko = korkeus. */
+   * Leveydet: Basso ≈ 0,84 × korkeus (basso-syo.webp 438×520), laatikko = korkeus.
+   * Basso oikealla, laatikko vasemmalla viirin alla (paikat vaihdettu 9.10.2026). */
   .alku-maskotit{margin:0}
   .alku-basso, .alku-laatikko{margin:0}
-  .alku-basso{position:fixed;height:66vh;height:66dvh;bottom:-6vh;
-    left:min(-40px, calc(50vw - 188px - 56vh));transform:rotate(16deg);transform-origin:50% 100%}
-  .alku-laatikko{position:fixed;height:50vh;height:50dvh;top:14vh;margin:0;
-    right:min(-30px, calc(50vw - 188px - 50vh));transform:rotate(-14deg)}
+  .alku-basso{position:fixed;height:74vh;height:74dvh;bottom:-8vh;
+    right:min(-40px, calc(50vw - 188px - 62vh));transform:rotate(-16deg);transform-origin:50% 100%}
+  .alku-laatikko{position:fixed;height:46vh;height:46dvh;top:30vh;margin:0;
+    left:min(-30px, calc(50vw - 188px - 46vh));transform:rotate(14deg)}
   .alku-logo{width:72px}
   .alku-ruutu{min-height:48px;padding:4px 14px;gap:12px}
   .alku-ruutu svg{width:46px}
