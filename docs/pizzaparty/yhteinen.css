@@ -124,13 +124,14 @@
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
 /* YLÄLAITA KUTEN PELILAATIKON KANNESSA JA pizzalove.fi:ssä: oranssi palkki koko leveydeltä,
  * musta viiri riippuu sen päältä vasemmassa reunassa, kielivalinta oikealla (Marko 9.10.2026).
- * Viirin korkeus = 0,85 × leveys (viewBox 100 × 85, iskulause LOVEn alla); palkki ≥ 40 px, jotta kielinappi mahtuu.
+ * Viirin korkeus = 0,85 × leveys (viewBox 100 × 85, iskulause LOVEn alla); palkki ≥ 52 px, jotta kielinapin
+ * ympärille jää tilaa (Marko 9.10.2026: «Nyt se on ihan puristuksissa tuolla»; 40 px oli liian matala).
  * ⚠️ iPhonessa sivu jatkuu tilapalkin alle (viewport-fit=cover): palkki ja viirin musta
  * jatkuvat ruudun yläreunaan asti. 9.10. viiri «katkesi rumasti» (Markon kuvakaappaus),
  * koska mustan jatkeen piirsi ::before joka jäi oranssin palkin ALLE. Nyt jatke on viirin
  * oma ::before, ja viiri on DOMissa palkin jälkeen. */
 .alku-yla{--viiri-l:clamp(112px, 36vw, 200px);--viiri-x:max(16px, 4vw, env(safe-area-inset-left, 0px));
-  --palkki:max(40px, calc(var(--viiri-l) * .25));--yla-turva:env(safe-area-inset-top, 0px);
+  --palkki:max(52px, calc(var(--viiri-l) * .3));--yla-turva:env(safe-area-inset-top, 0px);
   flex:none;align-self:stretch;z-index:2;
   margin:calc(-1 * (var(--yla-turva) + 14px)) -16px 0;
   height:calc(var(--yla-turva) + var(--viiri-l) * .85)}
@@ -261,12 +262,12 @@
 /* Matala vaakanäyttö (puhelin vaakatasossa, 375 px): neliöt eivät mahdu —
  * mitattu 9.10.2026: 476 px sisältöä 375 px:n ruudussa. Kuvake sanan viereen. */
 @media (orientation:landscape) and (max-height:540px){
-  /* Ylälaita on pois virrasta, joten sisältö alkaa palkin (40 px) alapuolelta: 568 × 320:ssa
+  /* Ylälaita on pois virrasta, joten sisältö alkaa palkin (vaakatasossa 46 px) alapuolelta: 568 × 320:ssa
    * palkki peitti pelivalinnan yläreunan ja ruutu vieritti 10 px (mitattu 9.10.2026). */
-  .peite > .aloitusruutu{gap:6px;padding-top:calc(env(safe-area-inset-top, 0px) + 48px);padding-bottom:4px}
+  .peite > .aloitusruutu{gap:4px;padding-top:calc(env(safe-area-inset-top, 0px) + 50px);padding-bottom:4px}
   /* Ylälaita pois virrasta: korkeus kuuluu valinnoille. Viiri mahtuu sarakkeen vasemmalle
    * puolelle myös 568 px:n leveydellä (16 + 84 < 104). */
-  .alku-yla{--viiri-l:84px;position:absolute;top:0;left:0;right:0;margin:0}
+  .alku-yla{--viiri-l:84px;--palkki:46px;position:absolute;top:0;left:0;right:0;margin:0}
   /* Vaakatasossa maskotit KURKKAAVAT RUUDUN SIVUISTA vinossa (Marko 9.10.2026:
    * «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei tarvitse
    * mahtua kokonaan ruutuun — — se hieman vinosta katsominen on usein hauskempi tapa
