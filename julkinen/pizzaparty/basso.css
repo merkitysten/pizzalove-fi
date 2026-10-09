@@ -77,27 +77,34 @@
 /* --- JUOKSUKILPAILU kohti pisterajaa --- */
 /* ⚠️ Radan korkeus ja alkukohta lasketaan HAHMON koosta (Marko 7.10.2026:
  * «Alempi laatikko on liian ahdas»). Mitattu 375 × 667: rata 34 px, hahmo
- * ~37 px → 0-pisteiset hahmot päällekkäin ja yli laatikon reunan. */
+ * ~37 px → 0-pisteiset hahmot päällekkäin ja yli laatikon reunan.
+ * 🔵 Ja uudelleen 9.10.2026: «alempi maaliviivaruutu on liian ahdas. Tuo 30 on
+ * liian kiinni kortin yläreunassa.» → --kisa-yla: tilaa laatikon yläreunan ja
+ * pisterajan väliin, ja radat korkeammiksi. */
 .basso-kisa{--kisa-hahmo:clamp(30px, 5vh, 40px);--rata-alku:calc(var(--kisa-hahmo) / 2 + 10px);
-  --rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);
-  position:relative;width:min(100%, 560px);padding-top:calc(22px + var(--pala) * .6 + 8px)}
+  --rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);--kisa-yla:14px;
+  position:relative;width:min(100%, 560px);padding-top:calc(var(--kisa-yla) + 22px + var(--pala) * .6 + 8px)}
 .basso-kisa:empty{display:none}
 /* Maaliviiva: ruutukuvio radan loppukohdassa. */
-.basso-kisa::after{content:"";position:absolute;top:calc(22px + var(--pala) * .6 + 4px);bottom:0;
+.basso-kisa::after{content:"";position:absolute;top:calc(var(--kisa-yla) + 22px + var(--pala) * .6 + 4px);bottom:12px;
   right:var(--rata-loppu);width:8px;transform:translateX(50%);border-radius:2px;
   background:repeating-conic-gradient(var(--ink) 0 25%, #fff 0 50%) 0 0/8px 8px}
 /* Maalissa pizzapala VAAKASUORASSA, kärki kohti juoksijoita (Marko 6.10.2026:
  * «Pitäisikö se pizzanpala olla kuitenkin vaakasuunnassa?» — rata kulkee
  * vaakaan, ja pystyssä pala luki lipputankona). Pisteraja palan yläpuolella.
  * Nollaleveä ankkuri maaliviivan kohdalla: molemmat keskitetään siihen.
- * Kuva on pystykuva (leveys 0,6 × korkeus), joten kääntö 90° vie sen
- * pystymitasta 0,6 — siksi top siirtyy −0,2 × korkeus. */
-.kisa-maali{position:absolute;top:0;right:var(--rata-loppu);width:0;height:calc(22px + var(--pala) * .6)}
+ * Kuva on pystykuva (leveys 0,6 × korkeus), joten kääntö vie sen
+ * pystymitasta noin 0,6 — siksi top siirtyy −0,2 × korkeus.
+ * 🔵 KULMA 79° EIKÄ 90° (Marko 9.10.2026: «Käännä Pizzanpalaa hieman vasemmalle —
+ * pizzan kärki saisi olla suunnilleen samassa tasossa kuin kaaren keskikohta»).
+ * Mitattu kuvasta (144 × 240): kärki (20, 217), reunan kaaren keskikohta (60, 17)
+ * → niiden välinen linja on −78,7°, joten 79° kääntö tekee siitä vaakasuoran. */
+.kisa-maali{--pala-kulma:79deg;position:absolute;top:var(--kisa-yla);right:var(--rata-loppu);width:0;height:calc(22px + var(--pala) * .6)}
 .kisa-maali b{position:absolute;top:0;left:0;transform:translateX(-50%);font-size:20px;line-height:22px;color:var(--ink)}
 .kisa-maali img{position:absolute;top:calc(22px - var(--pala) * .2);left:0;height:var(--pala);width:auto;
-  max-width:none;display:block;transform:translateX(-50%) rotate(90deg);
+  max-width:none;display:block;transform:translateX(-50%) rotate(var(--pala-kulma));
   filter:drop-shadow(0 2px 3px rgba(60,40,20,.25))}
-.kisa-rata{position:relative;height:calc(var(--kisa-hahmo) + 12px)}
+.kisa-rata{position:relative;height:calc(var(--kisa-hahmo) + 16px)}
 /* Rata: vaalea ura, jonka päällä palkki kasvaa pelaajan värillä. */
 .kisa-rata::before{content:"";position:absolute;left:var(--rata-alku);right:var(--rata-loppu);
   top:50%;height:12px;transform:translateY(-50%);border-radius:6px;background:rgba(60,34,12,.12)}
@@ -121,12 +128,12 @@
 
 
 /* Maalin pala on syöty ottelun voiton jälkeen. */
-.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(90deg) scale(.2);
+.basso-kisa.syoty .kisa-maali img{opacity:0;transform:translateX(-50%) rotate(var(--pala-kulma)) scale(.2);
   transition:opacity .4s, transform .4s}
 
 /* --- VUORONVAIHTO SAMALLA LAITTEELLA ---
  * Seuraavan pelaajan väri koko ruudulla ja hänen hahmonsa isona; kortit
- * piilossa kunnes hän napauttaa. Sama pinta kuin voittojuhlassa (väri +
+ * piilossa kunnes hän napauttaa. Sama pinta kuin voittoruudussa (väri +
  * kuosi), mutta rauhallisempi: tämä toistuu joka vuorolla. */
 .basso-vaihto{position:fixed;inset:0;z-index:65;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px, 3vh, 28px);
@@ -148,7 +155,8 @@
   animation:vaihto-hehku 1.8s ease-in-out infinite}
 .basso-vaihto-hahmo .hahmo{position:relative}
 .basso-vaihto:not([hidden]) .basso-vaihto-hahmo .hahmo{
-  animation:juhla-pomppu .45s cubic-bezier(.2,.9,.3,1.4) both, vaihto-pomppu 1.8s .45s ease-in-out infinite}
+  animation:vaihto-sisaan .45s cubic-bezier(.2,.9,.3,1.4) both, vaihto-pomppu 1.8s .45s ease-in-out infinite}
+@keyframes vaihto-sisaan{from{transform:scale(.3) translateY(80px)}to{transform:scale(1) translateY(0)}}
 @keyframes vaihto-pomppu{0%,100%{transform:translateY(0) scale(1)} 30%{transform:translateY(-12px) scale(1.04)}
   50%{transform:translateY(0) scale(.98, 1.02)} 60%{transform:translateY(-4px) scale(1)}}
 @keyframes vaihto-hehku{0%,100%{opacity:.55;transform:scale(.9)} 50%{opacity:1;transform:scale(1.08)}}
@@ -181,6 +189,9 @@
 /* Verkossa ei ole taukoa (peli.js saakoPitaaTauon), joten yläkulman nappi
  * näkyy vain lausekevaiheessa, jossa se ottaa kortit takaisin. */
 .basso-verkossa #peliRuutu:not(.selitys) #alusta{visibility:hidden}
+/* Valikko verkkopelissä: «Aloita alusta» ja «Alkuvalikkoon» katkaisisivat
+ * yhteisen pelin. Jatka ja Asetukset jäävät (asetuksissa on Lopeta). */
+.basso-verkossa #alustaPeli, .basso-verkossa #taukoValikkoon{display:none}
 /* Tulosruudulla muut kuin perustaja odottavat seuraavaa jakoa. */
 .basso-odota{font-size:clamp(40px, 8vh, 64px);line-height:1;animation:odota-kaanto 2s ease-in-out infinite}
 .basso-odota[hidden]{display:none}
@@ -202,21 +213,31 @@
 /* Juoksukilpailun laatikko: sama .tulos-laatikko kuin pallilla (yhteinen.css).
  * Kaksi laatikkoa, koska ne kertovat eri asiaa: KIERROS (palli + jääneet
  * kortit) ja OTTELU (juoksukilpailu) — Marko 7.10.2026. */
-#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:8px;width:min(100% - 24px, 600px)}
+#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:12px;width:min(100% - 24px, 600px)}
 
 /* Matala ruutu (puhelin vaakatasossa): yhteinen.css asettaa pallin vasemmalle
- * ja napit oikealle; Basso lisää juoksukilpailun napin yläpuolelle.
+ * Basso: palli vasemmalle, juoksukilpailu oikealle (napit ovat kulmissa).
  * ⚠️ Lohkot ovat TIEDOSTON LOPUSSA, koska ne ylikirjoittavat samantarkkuuksisia
  * sääntöjä — muualla ne häviäisivät hiljaa. */
 @media (max-height: 500px){
-  #tulosRuutu:not([hidden]){grid-template-rows:auto auto;grid-template-areas:"palli kisa" "palli napit"}
+  #tulosRuutu:not([hidden]){grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);grid-template-areas:"palli kisa"}
+  #tulosPisteet{justify-self:end}
   .basso-kisa{grid-area:kisa;width:100%;max-width:420px}
   .basso-summa{margin-top:2px}
 }
 
-/* Puhelin pystyssä selaimen palkkien kanssa (iPhone + Safari ≈ 667 px):
+/* Puhelin pystyssä (501–900 px; raja oli 740, ks. yhteinen.css) — alun perin
  * mitattu 375 × 667, ▶ päättyi 694 px:iin. Pienemmät kortit ja pala. */
-@media (min-height: 501px) and (max-height: 740px){
+@media (min-height: 501px) and (max-height: 900px){
   .palli{--mk:clamp(36px, 6vh, 58px)}
-  .basso-kisa{--pala:48px;--kisa-hahmo:32px}
+  .palli-ala{height:calc(var(--mk) * 1.52 + 44px)}
+  .basso-kisa{--pala:48px;--kisa-hahmo:32px;--kisa-yla:10px}
+  .kisa-rata{height:calc(var(--kisa-hahmo) + 12px)}
+}
+
+/* Matalin puhelin pystyssä (≤ 700 px, esim. iPhone SE + Safarin palkit):
+ * mitattu 375 × 667 voittoruudulla ▶ päättyi 663:een eli 4 px reunasta.
+ * Pienempi juoksija ja rata = 12 px lisää. ⚠️ Tiedoston lopussa (ks. yllä). */
+@media (min-height: 501px) and (max-height: 700px){
+  .basso-kisa{--kisa-hahmo:28px}
 }

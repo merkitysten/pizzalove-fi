@@ -47,9 +47,9 @@
      näkyi hetken tyhjä pohja ja tyhjä ympyrä pallilla (mitattu 9.10.2026). -->
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
-<link rel="stylesheet" href="peli.css?v=20261006b">
-<link rel="stylesheet" href="yhteinen.css?v=20261009a">
-<link rel="stylesheet" href="basso.css?v=20261009a">
+<link rel="stylesheet" href="peli.css?v=20261009a">
+<link rel="stylesheet" href="yhteinen.css?v=20261009g">
+<link rel="stylesheet" href="basso.css?v=20261009d">
 </head>
 <body>
 
@@ -63,7 +63,12 @@
   <header class="palkki">
     <!-- Peruuta on vasemmassa ylakulmassa ja nakyy vain lausekevaiheessa:
          valintavaiheessa ei ole mitaan peruttavaa. -->
-    <button id="alusta" class="kulmanappi" data-ta="palkki.alusta" aria-label="Ota kortit takaisin">&#8630;</button>
+    <!-- 🔵 VALIKKO VASEMMASSA YLÄKULMASSA (Marko 9.10.2026: «asetukset / valikko
+         vasemmassa yläkulmassa ja sitten se "jatka" -nappi oikeaan yläkulmaan, jolloin
+         vain siellä olisi nappeja»). Sama miettivä Basso ≡-merkillä kuin lautapelin
+         digiversiossa (pizzalove-fi/julkinen/apinavaaka). Avaa valikon ja pysäyttää
+         pelin kun tauko on sallittu — erillistä taukonappia ei enää ole. -->
+    <button id="valikkoAuki" class="valikko-apina" data-ta="palkki.valikko" aria-label="Valikko"><img src="kuvat/basso-nappi.webp?v=20261009a" alt=""><span class="valikko-merkki" aria-hidden="true"><i></i><i></i><i></i></span></button>
     <!-- ⚠️ Pizzalaskuri poistettu: pizzat eivat lopu kesken, joten luku ei
          kerro mitaan (Marko 9.9.2026). Taytepakka on palkki eika numero:
          kortin selkapuolia tiiviissa rivissa, ja rivi lyhenee sita mukaa
@@ -76,7 +81,9 @@
       <span id="verkkoPalkkiKierros"></span>
       <b id="verkkoPalkkiPisteet" data-ta="pisteet.omat"></b>
     </div>
-    <button id="asetuksetAuki" class="kulmanappi" data-ta="palkki.asetukset" aria-label="Asetukset">&#9881;</button>
+    <!-- Oikea yläkulma = toiminto. Pelissä se on «ota kortit takaisin», ja se näkyy
+         vain laskun aikana (muulloin peruttavaa ei ole). -->
+    <button id="alusta" class="kulmanappi" data-ta="palkki.alusta" aria-label="Ota kortit takaisin">&#8630;</button>
   </header>
 
   <div class="pelialue">
@@ -132,7 +139,8 @@
   <!-- 🔵 Marko 7.10.2026: «Asetukset ensinnäkin yläkulmaan ja tuon play-napin
        alta apina pois. Se on jäänne ajalta, kun pelissä ei ollut vielä apinan
        kuvia muualla.» ⚙ samaan paikkaan kuin pelinäkymässä, ▶ pelkkä nappi. -->
-  <button id="asetuksiin" class="kulmanappi tulos-asetukset" data-ta="tulos.asetukset" aria-label="Asetukset">&#9881;</button>
+  <button id="tulosValikkoAuki" class="valikko-apina tulos-valikko" data-ta="palkki.valikko" aria-label="Valikko"><img src="kuvat/basso-nappi.webp?v=20261009a" alt=""><span class="valikko-merkki" aria-hidden="true"><i></i><i></i><i></i></span></button>
+  <!-- ▶ oikeassa yläkulmassa (Marko 9.10.2026); verkossa sen tilalla ⏳. -->
   <div class="tulos-napit">
     <button id="uudelleen" class="jatka-nappi" data-ta="tulos.uudelleen" aria-label="Pelaa uudelleen">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
@@ -388,8 +396,9 @@
   <div class="tauko-laatikko" onclick="event.stopPropagation()">
     <div class="tauko-merkki" aria-hidden="true">&#9208;</div>
     <button id="jatka" class="iso-nappi" data-t="tauko.jatka">Jatka</button>
+    <button id="taukoAsetukset" class="toinen-nappi" data-t="tulos.asetukset">Asetukset</button>
     <button id="alustaPeli" class="toinen-nappi" data-t="tauko.alusta">Aloita alusta</button>
-    <button id="taukoValikkoon" class="toinen-nappi" hidden data-t="valikko.alkuun">Alkuvalikkoon</button>
+    <button id="taukoValikkoon" class="toinen-nappi" data-t="valikko.alkuun">Alkuvalikkoon</button>
   </div>
 </div>
 
@@ -408,17 +417,6 @@
 
 <!-- PIZZAA! (Marko 6.10.2026: «Animaatio, ääni ja animaatioon yhdistettynä
      Basso-apinan kuva.»). Huuto on sivuston sääntötekstistä, kielittäin. -->
-<!-- OTTELUN VOITTO (Marko 6.10.2026: «kyllä se syöminen voisi olla hauska
-     juttu, ja siihen taustalle sitten se voittaneen pelaajan väri»). Koko
-     ruutu voittajan värissä, Basso syö maalin pizzapalan. Napautus sulkee. -->
-<div id="juhla" class="juhla" hidden role="button" tabindex="0" data-ta="tauko.jatka">
-  <!-- Voittaja pizza suussa omalla värillään, nimi ja pisteet; muut alla
-       pistejärjestyksessä (Marko 7.10.2026). Yhteinen Partyn kanssa: tulos.js. -->
-  <span id="juhlaHahmo" class="juhla-hahmo"></span>
-  <b id="juhlaNimi" class="juhla-nimi"></b>
-  <b id="juhlaPisteet" class="juhla-pisteet"></b>
-  <ol id="juhlaMuut" class="juhla-muut"></ol>
-</div>
 
 <!-- ALKUVALIKKO JA VERKKOPELI (basso-verkko.js, Marko 6.10.2026: «aloita se
      netissä pelaaminen ihmistä vastaan»). Rakenne ja tekstit kuten Partyn
@@ -490,10 +488,10 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261009a"></script>
+<script src="kielet.js?v=20261009b"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
-<script src="tulos.js?v=20261009a"></script>
+<script src="tulos.js?v=20261009b"></script>
 <script src="pelivalinta.js?v=20261009a"></script>
 <script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
@@ -501,9 +499,9 @@
 <!-- ⚠️ peli.js ladataan SELLAISENAAN, ja basso.js korvaa sen vuoroon liittyvät
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
-<script src="peli.js?v=20261009a"></script>
+<script src="peli.js?v=20261009c"></script>
 <script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261009a"></script>
+<script src="basso.js?v=20261009c"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="basso-verkko.js?v=20261009a"></script>
 </body>

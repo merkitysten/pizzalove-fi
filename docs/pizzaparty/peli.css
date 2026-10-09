@@ -1140,7 +1140,7 @@ h2{font-size:17px;margin:26px 0 6px}
  * kierroksen kello. Asetukset ja täytepakka piilotetaan: asetukset tulevat
  * isännältä, ja pakkaa ei ole — jokainen kierros on tuore jako.
  * ============================================================ */
-body.verkkopeli #asetuksetAuki,
+body.verkkopeli #valikkoAuki,
 body.verkkopeli #taytepalkki,
 body.verkkopeli #alusta:disabled{visibility:hidden}
 

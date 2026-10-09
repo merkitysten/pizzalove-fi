@@ -632,6 +632,18 @@ function pysaytaPeli() {
   document.getElementById('taukoPeite').hidden = false;
 }
 
+/* VALIKKO (vasemman yläkulman Basso, 9.10.2026): Jatka · Asetukset · Aloita
+ * alusta · Alkuvalikkoon. Pelin aikana se pysäyttää pelin kun tauko on sallittu
+ * (saakoPitaaTauon) — muuten valikko aukeaa pelin päälle kuten ⚙ ennen, esim.
+ * laskun aikana jolloin kello käy. Tulosruudussa ei ole pysäytettävää.
+ * ⏸-merkki näkyy vain kun peli on oikeasti tauolla. */
+function avaaValikko() {
+  const peite = document.getElementById('taukoPeite');
+  if (document.getElementById('tulosRuutu').hidden && saakoPitaaTauon()) pysaytaPeli();
+  else peite.hidden = false;
+  peite.classList.toggle('tauolla', !!tila.tauko);
+}
+
 function jatkaPelia() {
   const t = tila.tauko;
   document.getElementById('taukoPeite').hidden = true;
@@ -1232,7 +1244,6 @@ function lopetaKesken() {
 
 function lopetaKierros(syy) {
   tila.paattymisSyy = syy || null;
-  tila.juhlittu = false;
   tila.pizza = null;
   pysaytaKaikkiAjastimet();
   piirraTulos();
@@ -1558,20 +1569,16 @@ function piirraLauseke() {
   sulut.hidden = !tila.sallitut.sulut;
   sulut.disabled = !selitysvaihe || tila.valitut.length < 3;
   sulut.classList.toggle('kesken', !!tila.ryhmitysKesken);
-  /* ⚠️ YLAKULMAN NUOLI ON KAKSI NAPPIA VAIHEEN MUKAAN (Marko 9.9.2026:
-   * "ylakulman nuolinappi voisi olla looginen pausenapin paikka").
-   * Lausekevaiheessa siina EI voi olla taukoa — kello kay ja kortit ovat
-   * pelissa — ja juuri silloin tarvitaan peruminen. Muulloin peruttavaa
-   * ei ole, ja sama kulma on vapaa tauolle. Yksi nappi, kaksi merkitysta,
-   * eika kumpikaan ole koskaan yhta aikaa tarpeen. */
+  /* ⚠️ OIKEAN YLÄKULMAN NUOLI ON VAIN «OTA KORTIT TAKAISIN» (9.10.2026).
+   * 9.9.2026 sama nappi oli vasemmassa kulmassa myös tauko (⏸) silloin kun
+   * peruttavaa ei ollut. Nyt tauko on valikkonapin takana vasemmalla (Marko
+   * 9.10.2026: «asetukset / valikko vasemmassa yläkulmassa»), ja nuoli näkyy
+   * vain lausekevaiheessa. visibility eikä hidden: palkin keskikohta ei saa
+   * siirtyä vaiheen mukana. */
   const alustaNappi = document.getElementById('alusta');
   const selitysvaiheessa = tila.vaihe === 'selitys';
-  alustaNappi.innerHTML = selitysvaiheessa ? '\u21B6' : '\u23F8';
-  alustaNappi.setAttribute('aria-label',
-    t(selitysvaiheessa ? 'palkki.alusta' : 'palkki.tauko'));
-  alustaNappi.disabled = selitysvaiheessa
-    ? (!tila.valitut.length || tila.lukossa)
-    : !saakoPitaaTauon();
+  alustaNappi.style.visibility = selitysvaiheessa ? '' : 'hidden';
+  alustaNappi.disabled = !selitysvaiheessa || !tila.valitut.length || tila.lukossa;
 }
 
 /* Pelaajanapit. Rakennetaan uudelleen vain kun pelaajamaara muuttuu —
@@ -1891,39 +1898,22 @@ function piirraTulos() {
   })));
   const jatko = document.getElementById('uudelleen');
   if (jatko) jatko.setAttribute('aria-label', t('tulos.uudelleen'));
+  /* 🔵 VOITTO TULOSRUUDUSSA (Marko 9.10.2026: «Yhdistetään nämä kaksi ruutua,
+   * kun voittaja on selvillä»): tausta voittajan värillä, voittaja isompana.
+   * Tasapelissä pinta on ensimmäisen kärjessä olevan värinen. */
+  tulosVoitto(juhlii ? voittajat[0].vari : null);
+  if (juhlii) juhlaHuuto();
   /* Konfetti kun ihminen on voittajien joukossa. */
   if (juhlii && voittajat.some(function (r) { return r.ihminen; })) juhlaKonfetti();
 }
 
 /* Tulosruudun napautus (missä tahansa, ⚙ pois lukien) tai ▶ (Marko
  * 7.10.2026 Bassossa: «Tulosruutu voisi mennä pois vasta ruutua
- * napauttamalla»). Pelin loppu → voittajan juhla (🔵 Marko 9.10.2026: juhla
- * joka Party-pelin lopussa) → uusi peli. Keskeytetty peli ei juhli.
- * ⚠️ basso.js korvaa nämä kaksi samoilla nimillä. */
+ * napauttamalla») → uusi peli. Voitto näkyy jo tulosruudussa (9.10.2026),
+ * joten erillistä juhlaruutua ei ole.
+ * ⚠️ basso.js korvaa tämän samalla nimellä. */
 function tulosEteenpain() {
-  if (document.getElementById('tulosRuutu').hidden || juhlaAuki()) return;
-  if (!tila.keskeytetty && !tila.verkko && !tila.juhlittu) {
-    const rivit = partyRivit(), voittajat = partyVoittajat(rivit);
-    if (voittajat.length) {
-      tila.juhlittu = true;
-      return juhlaAvaa({
-        /* Tasapelissä jokaisen nimi näkyy (apinalla vaikeusasteen nimi): pelkkä
-         * «Marko» luettiin kuin hän olisi voittanut yksin. */
-        voittajat: voittajat.map(function (r) {
-          return { vari: r.vari, nimi: voittajat.length > 1 ? (r.nimi || r.aria) : r.nimi };
-        }),
-        pisteet: voittajat[0].pisteet,
-        aria: voittajat.map(function (r) { return r.aria; }).join(' & '),
-        muut: rivit.filter(function (r) { return voittajat.indexOf(r) < 0; }).map(function (r) {
-          return { vari: r.vari, nimi: r.nimi || r.aria, pisteet: r.pisteet, aria: r.aria };
-        }),
-      });
-    }
-  }
-  aloitaPeli(tila.taso, tila.apinanTapa);
-}
-function juhlaNapautus() {
-  juhlaKiinni();
+  if (document.getElementById('tulosRuutu').hidden) return;
   aloitaPeli(tila.taso, tila.apinanTapa);
 }
 
@@ -2097,9 +2087,11 @@ function kytke() {
     };
   });
 
-  document.getElementById('asetuksetAuki').onclick = function () {
-    naytaSivu('valikko'); piirraAsetukset(); asetus.hidden = false;
-  };
+  /* Asetukset avataan valikosta. Ne ovat valikon PÄÄLLÄ (yhteinen.css), joten
+   * sulkeminen palaa valikkoon — ja peli jatkuu vasta «Jatka»-napista. */
+  function avaaAsetukset() { naytaSivu('valikko'); piirraAsetukset(); asetus.hidden = false; }
+  document.getElementById('valikkoAuki').onclick = avaaValikko;
+  document.getElementById('taukoAsetukset').onclick = avaaAsetukset;
   function suljeAsetukset() {
     asetus.hidden = true;
     /* Taso ja tapa vaikuttavat jakoon, joten lepotilassa jaetaan uudelleen.
@@ -2140,8 +2132,7 @@ function kytke() {
   document.getElementById('sulut').onclick = aloitaRyhmitys;
 
   document.getElementById('alusta').onclick = function () {
-    if (tila.vaihe === 'selitys') return palautaKortit();
-    pysaytaPeli();
+    if (tila.vaihe === 'selitys') palautaKortit();
   };
   const tauko = document.getElementById('taukoPeite');
   document.getElementById('jatka').onclick = jatkaPelia;
@@ -2172,9 +2163,8 @@ function kytke() {
   const lopetaNappi = document.getElementById('lopeta');
   if (lopetaNappi) lopetaNappi.onclick = lopetaKesken;
 
-  /* ▶ ja koko tulosruutu vievät eteenpäin, ja voittajan juhla napautuksesta
-   * uuteen peliin (tulos.js). Kytketään NIMIIN tulosEteenpain / juhlaNapautus,
-   * jotka basso.js korvaa — yksi kytkentä molemmille peleille. */
+  /* ▶ ja koko tulosruutu vievät eteenpäin. Kytketään NIMEEN tulosEteenpain,
+   * jonka basso.js korvaa — yksi kytkentä molemmille peleille. */
   document.getElementById('uudelleen').onclick = function (e) {
     e.stopPropagation();
     tulosEteenpain();
@@ -2183,17 +2173,7 @@ function kytke() {
     if (e.target.closest('button, a, input')) return;
     tulosEteenpain();
   });
-  const juhla = document.getElementById('juhla');
-  if (juhla) {
-    juhla.addEventListener('click', function () { juhlaNapautus(); });
-    juhla.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); juhlaNapautus(); }
-      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); juhlaKiinni(); }
-    });
-  }
-  document.getElementById('asetuksiin').onclick = function () {
-    naytaSivu('valikko'); piirraAsetukset(); asetus.hidden = false;
-  };
+  document.getElementById('tulosValikkoAuki').onclick = avaaValikko;
 
   /* ⚠️ Peli on lepotilassa heti latauksesta: yksi ruutu, jossa kortit
    * odottavat kaannettavaksi. Aloitusnappia ei ole. */
@@ -2281,8 +2261,8 @@ function lataaAsetukset() {
  * naky on halpa; hiljainen kuollut nappi ei ole. */
 function tarkistaKytkennat() {
   const vaaditut = ['#operaattorit .op[data-op]', '#sulut', '#pizzaKortti',
-    '#alusta', '#asetuksetAuki', '#asetusKiinni', '#uudelleen', '#asetuksiin',
-    '#jatka', '#alustaPeli', '.as-askel[data-aika]', '#ajatOletus'];
+    '#alusta', '#valikkoAuki', '#asetusKiinni', '#uudelleen', '#tulosValikkoAuki',
+    '#jatka', '#taukoAsetukset', '#alustaPeli', '.as-askel[data-aika]', '#ajatOletus'];
   /* Peittotarkistus koskee vain sita mita pelin aikana painetaan — ei
    * asetuspaneelin nappeja, jotka ovat peitteen alla tarkoituksella. */
   const kohteet = '#operaattorit .op:not([hidden]), .aukko, #pizzaKortti, .pelaajanappi';

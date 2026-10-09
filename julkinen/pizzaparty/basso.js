@@ -25,10 +25,10 @@
  *
  * Korvatut: aloitaPeli, enOsaa, tarkistaLasku, mietiApina, kaynnistaApina,
  *           piirraKaikki, piirraPelaajat, piirraTulos, tallennaAsetukset,
- *           tulosEteenpain, juhlaNapautus, hahmojenMaara, hahmoMuuttui.
+ *           tulosEteenpain, hahmojenMaara, hahmoMuuttui.
  *
  * Yhteiset kaikille pelimuodoille (9.10.2026): hahmot.js (väri, nimi, hahmo),
- * tulos.js (palli, juhla, konfetti), pelivalinta.js (Party ↔ Basso).
+ * tulos.js (palli, voitto, konfetti), pelivalinta.js (Party ↔ Basso).
  */
 
 const BASSO_ASETUSAVAIN = 'pizzabasso-asetukset';
@@ -160,7 +160,6 @@ function bassoAloitaKierros() {
  * ja muut laitteet saavat valmiin kierroksen palvelimelta. */
 function bassoNaytaKierros() {
   pysaytaKaikkiAjastimet();
-  juhlaKiinni();
   bassoVaihtoKiinni();
   bassoKatsoja = bassoVerkossa ? bassoVerkossa.oma
     : bassoIhmisia() > 1 ? null : basso.pelaajat.map(function (p) { return p.laji; }).indexOf('ihminen');
@@ -560,7 +559,7 @@ function piirraTulos() {
   sailio.innerHTML = '';
   const k = basso.kierros;
   const varit = bassoVarit();
-  /* Ottelun voittaja pallilla pizza suussa, kuten juhlassa. */
+  /* Ottelun voittaja pallilla isompana ja pizza suussa (tulosVoitto alla). */
   sailio.appendChild(tulosPalli(bassoSijat().map(function (r) {
     return { sija: r.sija, vari: varit[r.i], nimi: bassoOmaNimi(r.i), aria: bassoNimi(r.i),
              syo: basso.voittaja === r.i, voitti: r.voitti, ala: bassoPallinAla(r) };
@@ -585,23 +584,28 @@ function piirraTulos() {
    * Verkossa kaikki ovat ihmisiä: konfetti vain omalle voitolle. */
   if (k && k.voittaja !== null && (bassoVerkossa ? k.voittaja === bassoVerkossa.oma
     : bassoOnIhminen(k.voittaja))) juhlaKonfetti();
-  /* ⚠️ VOITTORUUTU EI AVAUDU ITSESTÄÄN (Marko 7.10.2026: «Se tulosruutu meni
-   * aivan liian nopeasti, jotta sitä olisi ehtinyt katsoa — — Tulosruutu
-   * voisi mennä pois vasta ruutua napauttamalla»). Napautus vie eteenpäin:
-   * tulosEteenpain. */
+  /* 🔵 OTTELUN VOITTO ON TÄSSÄ RUUDUSSA (Marko 9.10.2026: «Nyt viimeinen
+   * "tulosruutu" on vähän turha. Yhdistetään nämä kaksi ruutua, kun voittaja on
+   * selvillä. Eli maalaa tuo tausta voittajan värillä ja tee voittajan apinasta
+   * isompi kuin muiden pelaajien.»). Pala syödään kun juoksija on ehtinyt
+   * maaliin (kisan viive 450 ms + liike 1 300 ms). */
+  const voitto = basso.voittaja !== null && !tila.keskeytetty;
+  tulosVoitto(voitto ? varit[basso.voittaja] : null);
+  if (voitto) {
+    juhlaHuuto();
+    setTimeout(function () {
+      const kisa = document.getElementById('bassoKisa');
+      if (kisa && basso && basso.voittaja !== null &&
+          !document.getElementById('tulosRuutu').hidden) kisa.classList.add('syoty');
+    }, 1800);
+  }
 }
 
-/* ⚠️ KORVAA peli.js:n tulosEteenpain/juhlaNapautus (peli.js kytkee napautuksen
- * näihin NIMIIN). Tulosruudun napautus tai ▶:
- *   kierros päättyi   → seuraava kierros (verkossa jakaa perustaja)
- *   ottelu päättyi    → voittajan juhla; sen napautus → uusi ottelu */
+/* ⚠️ KORVAA peli.js:n tulosEteenpain (peli.js kytkee napautuksen tähän NIMEEN).
+ * Tulosruudun napautus tai ▶: seuraava kierros, tai ottelun päätyttyä uusi
+ * ottelu (verkossa jakaa perustaja). Voitto näkyy jo tulosruudussa. */
 function tulosEteenpain() {
-  if (!basso || document.getElementById('tulosRuutu').hidden || juhlaAuki()) return;
-  if (basso.voittaja !== null && !tila.keskeytetty) return bassoJuhla();
-  bassoJatka();
-}
-function juhlaNapautus() {
-  juhlaKiinni();
+  if (!basso || document.getElementById('tulosRuutu').hidden) return;
   bassoJatka();
 }
 
@@ -615,26 +619,6 @@ function bassoJatka() {
   bassoAloitaKierros();
 }
 
-/* OTTELUN VOITTO: voittajan oma hahmo pizza suussa, muut alla pistejärjestyksessä
- * (tulos.js). Maalin pizzapala on silloin syöty. */
-function bassoJuhla() {
-  const varit = bassoVarit(), v = basso.voittaja;
-  juhlaAvaa({
-    voittajat: [{ vari: varit[v], nimi: bassoOmaNimi(v) }],
-    pisteet: basso.pelaajat[v].pisteet,
-    aria: bassoNimi(v),
-    muut: basso.pelaajat.map(function (p, i) { return { i: i, pisteet: p.pisteet }; })
-      .filter(function (r) { return r.i !== v; })
-      .sort(function (a, b) { return (b.pisteet - a.pisteet) || (a.i - b.i); })
-      .map(function (r) {
-        /* Nimetön (apina tai nimeämätön ihminen): «Apina 1» / «Pelaaja 2». */
-        return { vari: varit[r.i], nimi: bassoOmaNimi(r.i) || bassoNimi(r.i),
-                 pisteet: r.pisteet, aria: bassoNimi(r.i) };
-      }),
-  });
-  document.getElementById('bassoKisa').classList.add('syoty');   // pala syöty
-}
-
 /* JUOKSUKILPAILU KOHTI PISTERAJAA (Marko 6.10.2026: «eri pelaajat etenevät
  * sinne kohti ja samalla niiden alla palkki kasvaa»). Rata per pelaaja
  * pelaajajärjestyksessä, hahmo palkin kärjessä ja pisteet sen vieressä,
@@ -646,6 +630,8 @@ function bassoPiirraKisa(varit) {
   const kisa = document.getElementById('bassoKisa');
   if (!kisa) return;
   const k = basso.kierros, tavoite = basso.tavoite;
+  /* ⚠️ Syöty pala palaa maaliin uudessa ottelussa: luokka jäi ennen pysyväksi. */
+  kisa.classList.remove('syoty');
   kisa.innerHTML = '<div class="kisa-maali" aria-hidden="true">' +
     '<img src="kuvat/pizzapala.webp?v=20261006a" alt=""><b>' + tavoite + '</b></div>';
   kisa.setAttribute('aria-label', t('as.pisteraja') + ': ' + tavoite);
@@ -805,7 +791,8 @@ function bassoAsetuksetSuljettu() {
 document.addEventListener('DOMContentLoaded', function () {
   bassoLataaAsetukset();
   bassoPiirraAsetukset();
-  ['asetuksetAuki', 'asetuksiin'].forEach(function (id) {
+  /* Asetukset avataan valikosta (9.10.2026): päivitetään Basson rivit samalla. */
+  ['taukoAsetukset'].forEach(function (id) {
     const n = document.getElementById(id);
     if (n) n.addEventListener('click', bassoPiirraAsetukset);
   });
@@ -825,12 +812,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* Juhla, ▶ ja tulosruudun napautus kytketään peli.js:n kytke()ssä nimiin
-   * tulosEteenpain / juhlaNapautus, jotka tämä tiedosto korvaa. */
+  /* ▶ ja tulosruudun napautus kytketään peli.js:n kytke()ssä nimeen
+   * tulosEteenpain, jonka tämä tiedosto korvaa. */
 
-  /* ⌂-napit (tulos ja tauko) ovat basso.html:ssä piilossa: Bassolla ei ole
-   * omaa valikkoa, ja Partyn valikkoon vievä nappi heitti pelaajan pois
-   * pelistä (Marko 6.10.2026). */
+  /* VALIKON «Alkuvalikkoon» avaa Basson oman alkuvalikon (pelin valinta,
+   * moninpeli). 6.10.2026 nappi oli piilossa, koska se vei Partyn valikkoon ja
+   * heitti pelaajan pois pelistä. Verkkopelissä se on piilossa (basso.css):
+   * se katkaisisi yhteisen pelin. Tulosruudun ⌂ jää piiloon. */
+  const alkuun = document.getElementById('taukoValikkoon');
+  if (alkuun) alkuun.addEventListener('click', function () {
+    jatkaPelia();
+    bvOsa('paa');
+  });
 
   /* Vahti (sama henki kuin peli.js:n tarkistaKytkennat): Basso nojaa
    * peli.js:n ja yhteisten tiedostojen nimiin, ja kadonnut nimi on muuten hiljainen. */
@@ -838,7 +831,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'piirraPizza', 'piirraKasi', 'piirraLauseke', 'piirraOhje', 'piirraPisteet', 'lopetaKierros',
     'naytaRuutu', 'pysaytaKaikkiAjastimet', 'apinanKuva', 'kierrosLauseke', 'laske', 'osuuko',
     /* yhteiset tiedostot */
-    'hahmoKuva', 'hahmoVarit', 'hahmoPiirraAsetus', 'tulosPalli', 'tulosSijat', 'juhlaAvaa', 'juhlaKiinni']
+    'hahmoKuva', 'hahmoVarit', 'hahmoPiirraAsetus', 'tulosPalli', 'tulosSijat', 'tulosVoitto']
     .filter(function (f) { return typeof window[f] !== 'function'; });
   if (typeof tila !== 'object' || !tila) puuttuu.push('tila');
   if (puuttuu.length) {

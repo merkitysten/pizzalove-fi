@@ -4,13 +4,17 @@
  * 🔵 Marko 9.10.2026: «pizza basso on nyt pidemmälle viety tyylien suhteen jos
  * ajatellaan voittoruutuja ja tulosruutuja jne. Eli ota siitä mallia, kun
  * yhtenäistät tyylejä.» Siksi tämä on yksi tiedosto: Party ja Basso antavat
- * rivit, piirto ja juhla ovat tässä. Kaksi kopiota olisi kaksi paikkaa, joihin
+ * rivit, piirto ja voitto ovat tässä. Kaksi kopiota olisi kaksi paikkaa, joihin
  * sama korjaus pitäisi muistaa tehdä.
  *
  * Tyylit: yhteinen.css. Merkintä sivulla: #tulosRuutu (#tulosPisteet,
- * #uudelleen, #asetuksiin) ja #juhla (#juhlaHahmo, #juhlaNimi, #juhlaPisteet,
- * #juhlaMuut). Kytkennät tekee peli.js:n kytke(): napautus kutsuu NIMELLÄ
- * tulosEteenpain() ja juhlaNapautus(), jotka kukin peli määrittelee. */
+ * #uudelleen, #asetuksiin). Kytkennät tekee peli.js:n kytke(): napautus kutsuu
+ * NIMELLÄ tulosEteenpain(), jonka kukin peli määrittelee.
+ *
+ * 🔵 VOITTORUUTU ON TULOSRUUTU (Marko 9.10.2026: «Nyt viimeinen "tulosruutu" on
+ * vähän turha. Yhdistetään nämä kaksi ruutua, kun voittaja on selvillä. Eli
+ * maalaa tuo tausta voittajan värillä ja tee voittajan apinasta isompi kuin
+ * muiden pelaajien.»). Erillinen juhlaruutu (#juhla, 7.10.2026) poistui. */
 
 /* Pallin järjestys ruudulla vasemmalta: 2 · 1 · 3 · 4 (sijaindeksit). */
 const PALLIN_JARJESTYS = [1, 0, 2, 3];
@@ -37,7 +41,8 @@ function tulosPalli(rivit) {
   PALLIN_JARJESTYS.filter(function (n) { return n < rivit.length; }).forEach(function (n) {
     const r = rivit[n];
     const paikka = document.createElement('div');
-    paikka.className = 'palli-paikka sija-' + Math.min(r.sija, 4) + (r.voitti ? ' voitti' : '');
+    paikka.className = 'palli-paikka sija-' + Math.min(r.sija, 4) + (r.voitti ? ' voitti' : '') +
+      (r.syo ? ' syo' : '');
     const yla = document.createElement('div');
     yla.className = 'palli-yla';
     const hahmo = document.createElement('div');
@@ -62,51 +67,21 @@ function tulosPalli(rivit) {
   return palli;
 }
 
-/* VOITTAJAN JUHLA: koko ruutu voittajan värissä, oma hahmo pizza suussa,
- * nimi ja pisteet; muut alla pistejärjestyksessä (Marko 7.10.2026: «Voittaja
- * isoimpana ja tosiaan pizza suussa»). Kruunu ja heiluminen ovat poissa
- * («kruunu on mauton», «heiluu kummallisesti»).
- *   o = { voittajat: [{ vari, nimi }], pisteet, aria,
- *         muut: [{ vari, nimi, pisteet, aria }] }
- * Tasapelissä kärjessä olevat syövät rinnakkain; pinta on ensimmäisen värinen. */
-function juhlaAvaa(o) {
-  const el = document.getElementById('juhla');
-  if (!el || !o.voittajat.length) return;
-  const vari = o.voittajat[0].vari;
-  el.style.setProperty('--pelaaja-vari', vari);
-  el.style.setProperty('--pelaaja-teksti', hahmoTekstiVari(vari));
-  const hahmot = document.getElementById('juhlaHahmo');
-  hahmot.classList.toggle('monta', o.voittajat.length > 1);
-  hahmot.innerHTML = o.voittajat.map(function (v) { return hahmoSyoKuva(v.vari); }).join('');
-  document.getElementById('juhlaNimi').textContent = o.voittajat
-    .map(function (v) { return v.nimi; }).filter(Boolean).join(' & ');
-  document.getElementById('juhlaPisteet').textContent = o.pisteet;
-  const muut = document.getElementById('juhlaMuut');
-  muut.innerHTML = '';
-  o.muut.forEach(function (r, n) {
-    const li = document.createElement('li');
-    li.style.animationDelay = (0.55 + n * 0.12).toFixed(2) + 's';
-    li.innerHTML = hahmoKuva(r.vari) + '<span class="juhla-muu-nimi"></span><b></b>';
-    li.querySelector('.juhla-muu-nimi').textContent = r.nimi;
-    li.querySelector('b').textContent = r.pisteet;
-    li.setAttribute('aria-label', r.aria + ': ' + r.pisteet);
-    muut.appendChild(li);
-  });
-  el.setAttribute('aria-label', o.aria + ': ' + o.pisteet + ' · ' + t('tauko.jatka'));
-  el.hidden = false;
-  el.classList.remove('nakyy');
-  void el.offsetWidth;
-  el.classList.add('nakyy');
-  juhlaHuuto();
-  el.focus();
-}
-function juhlaKiinni() {
-  const el = document.getElementById('juhla');
-  if (el) { el.hidden = true; el.classList.remove('nakyy'); }
-}
-function juhlaAuki() {
-  const el = document.getElementById('juhla');
-  return !!el && !el.hidden;
+/* VOITTO: tulosruudun tausta voittajan värillä (kuosi päällä), ja voittaja
+ * pallilla isompana pizza suussa (r.syo → .palli-paikka.syo, yhteinen.css).
+ * vari = null palauttaa tavallisen tulosruudun (kierroksen loppu, keskeytys).
+ * Huuto kerran voiton hetkellä, kuten ennen juhlassa. */
+function tulosVoitto(vari) {
+  const ruutu = document.getElementById('tulosRuutu');
+  if (!ruutu) return;
+  ruutu.classList.toggle('voitto', !!vari);
+  if (vari) {
+    ruutu.style.setProperty('--pelaaja-vari', vari);
+    ruutu.style.setProperty('--pelaaja-teksti', hahmoTekstiVari(vari));
+  } else {
+    ruutu.style.removeProperty('--pelaaja-vari');
+    ruutu.style.removeProperty('--pelaaja-teksti');
+  }
 }
 
 /* Konfetti täytteiden väreillä, kun ihminen voitti. Kerran, kevyesti.

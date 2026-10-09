@@ -18,8 +18,41 @@
 .pelivalinta-nappi.valittu{background:var(--orange);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
 .pelivalinta-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 
+/* --- VALIKKONAPPI vasemmassa yläkulmassa (🔵 Marko 9.10.2026: «asetukset /
+ * valikko vasemmassa yläkulmassa ja sitten se "jatka", "eteenpäin" tai "play"
+ * -nappi tulla kin oikeaan yläkulmaan, jolloin vain siellä olisi nappeja» ja
+ * «korttipelissä voisi hyödyntää samaa ikonia»). Sama kuin lautapelin
+ * digiversiossa (pizzalove-fi/julkinen/apinavaaka, .av__info): miettivä Basso
+ * kermaisessa ympyrässä, tukka ja kyynärpää reunan yli, oranssi ≡-merkki.
+ * Mitat suhteutettuna kokoon --k (52 px → kuva 52 px, merkki 19 px).
+ * ⚠️ KUVAN LEVEYS MITATTU LIVESTÄ (pizzalove.fi/apinavaaka-testi, 9.10.2026):
+ * 52 px. Gitin apinavaaka.css sanoo 76 px (aamun muutos, ei vielä livessä), ja
+ * sillä kasvot valuivat oikealle alas ja ≡ peitti suun. Markon kuvakaappaus on
+ * 52 px:n versiosta. --- */
+.valikko-apina{--k:52px;position:relative;width:var(--k);height:var(--k);flex:none;
+  border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:#F1EBBC;box-shadow:inset 0 0 0 2.5px #fff, 0 2px 6px rgba(60,30,0,.25)}
+.valikko-apina img{position:absolute;left:calc(var(--k) * -.115);top:calc(var(--k) * -.02);
+  width:var(--k);height:auto;max-width:none;pointer-events:none;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.15))}
+.valikko-merkki{position:absolute;right:-2px;bottom:-2px;width:calc(var(--k) * .365);height:calc(var(--k) * .365);
+  border-radius:50%;background:var(--orange, #F47920);box-shadow:0 0 0 2px #fff;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
+.valikko-merkki i{display:block;width:calc(var(--k) * .17);height:2px;border-radius:1px;background:#1A1A1A}
+.valikko-apina:active img{transform:scale(.95)}
+.valikko-apina:focus-visible{outline:3px solid var(--orange, #F47920);outline-offset:2px}
+/* Vaakatasossa kulmanapit kasvavat korttien mukana (peli.css); valikko samoin. */
+@media (orientation:landscape){
+  .palkki .valikko-apina{--k:max(52px, calc(var(--kortti-lev) * .42))}
+}
+/* Asetukset avataan valikosta, joten ne ovat sen PÄÄLLÄ: molemmat ovat
+ * .peite-kerroksia (z 5), ja valikko on sivulla myöhemmin. */
+#asetusPeite{z-index:6}
+/* ⏸ vain kun peli on oikeasti tauolla (laskun aikana valikko aukeaa ilman taukoa). */
+#taukoPeite:not(.tauolla) .tauko-merkki{display:none}
+
 /* --- HAHMO OMALLA VÄRILLÄÄN (Marko 6.10.2026: «kaikilla pelaajilla olisi
- * sekä hahmo että väri») — pelissä, pallilla, radalla, asetuksissa, juhlassa. --- */
+ * sekä hahmo että väri») — pelissä, pallilla, radalla ja asetuksissa. --- */
 .hahmo{--koko:40px;display:grid;place-items:center;width:var(--koko);height:var(--koko);
   border-radius:50%;background:var(--pelaaja-vari);flex:0 0 auto;
   box-shadow:0 0 0 3px #fff, 0 3px 8px rgba(60,40,20,.25)}
@@ -126,19 +159,26 @@
 /* ▶ pelkkänä nappina: brändioranssi ympyrä, valkoinen kolmio piirroksena
  * (ei tekstimerkkiä, jonka muoto vaihtelee fontin mukaan). 🔵 Marko 7.10.2026:
  * «tuon play-napin alta apina pois». */
-.tulos-napit{display:flex;align-items:center;justify-content:center;gap:18px}
-.jatka-nappi{width:clamp(64px, 10vh, 84px);aspect-ratio:1;border:0;border-radius:50%;padding:0;cursor:pointer;
+/* ▶ OIKEASSA YLÄKULMASSA (Marko 9.10.2026), valikkonappi vasemmassa: ruudun
+ * alaosa vapautuu sisällölle. Napautus mihin tahansa vie yhä eteenpäin; ▶ on
+ * merkki siitä (ja näppäimistön tie), verkossa ⏳ sen tilalla. */
+/* ⚠️ #tulosRuutu-etuliite on pakollinen: `#tulosRuutu > *{position:relative}`
+ * on ID-tasolla, ja pelkkä luokka hävisi sille — ▶ jäi keskelle (mitattu). */
+#tulosRuutu > .tulos-napit{position:absolute;z-index:3;display:flex;align-items:center;
+  top:calc(env(safe-area-inset-top, 0px) + 12px);right:calc(env(safe-area-inset-right, 0px) + 12px)}
+#tulosRuutu > .tulos-valikko{position:absolute;z-index:3;
+  top:calc(env(safe-area-inset-top, 0px) + 12px);left:calc(env(safe-area-inset-left, 0px) + 12px)}
+.jatka-nappi{width:52px;aspect-ratio:1;border:0;border-radius:50%;padding:0;cursor:pointer;
   display:grid;place-items:center;background:var(--orange);color:#fff;
-  box-shadow:0 0 0 5px #fff, 0 8px 20px rgba(60,40,20,.28);transition:transform .15s}
-.jatka-nappi svg{width:46%;height:46%;fill:currentColor;margin-left:8%}
+  box-shadow:0 0 0 3px #fff, 0 3px 10px rgba(60,40,20,.28);transition:transform .15s}
+.jatka-nappi svg{width:46%;height:46%;fill:currentColor}
+/* ⚠️ Kolmio on jo optisesti keskellä: sen painopiste on viewBoxin keskellä
+ * (polku M8 5.5 v13 l11-6.5). Ennen tässä oli lisäksi margin-left 8 %, ja kolmio
+ * näkyi oikealla (Marko 9.10.2026: «Play-nappi ei ole keskellä ympyrää»). */
 .jatka-nappi:hover{transform:scale(1.05)}
 .jatka-nappi:active{transform:scale(.96)}
 .jatka-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
 .jatka-nappi[hidden]{display:none}
-/* ⚙ oikeaan yläkulmaan, samaan paikkaan kuin pelinäkymässä (Marko 7.10.2026:
- * «Asetukset ensinnäkin yläkulmaan»). */
-#tulosRuutu > .tulos-asetukset{position:absolute;z-index:3;
-  top:calc(env(safe-area-inset-top, 0px) + 12px);right:calc(env(safe-area-inset-right, 0px) + 12px)}
 
 /* Konfetti (kun ihminen voitti). */
 .konfetti{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
@@ -149,75 +189,56 @@
   to{transform:translate(var(--sivu), 105vh) rotate(var(--kierto))}
 }
 
-/* --- VOITTAJAN JUHLA: oma hahmo syö pizzaa voittajan värisellä pohjalla ---
- * Juhlaruutu saa täyden väripinnan (juhlaruudut ovat hetkiä eivätkä työkaluja).
- * Kuosi päällä vaaleana, jotta pinta on Pizza Lovea eikä pelkkä väri. */
-.juhla{position:fixed;inset:0;z-index:70;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px, 2vh, 18px);
-  background:var(--pelaaja-vari)}
-.juhla[hidden]{display:none}
-.juhla::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;
-  opacity:.22;mix-blend-mode:multiply}
-.juhla > *{position:relative}
-.juhla.nakyy{animation:juhla-sisaan .35s ease-out both}
-@keyframes juhla-sisaan{from{opacity:0}to{opacity:1}}
-@keyframes juhla-pomppu{from{transform:scale(.3) translateY(80px)}to{transform:scale(1) translateY(0)}}
-/* Voittaja: OMA hahmo pizza suussa, iso. 🔵 Marko 7.10.2026: kruunu pois
- * («mauton») ja heiluminen pois («heiluu kummallisesti» — koko kuva kiertyi
- * ±3°). Tilalle kerran ponnahdus ja hiljainen hengitys (vain koko, ei kiertoa). */
-.juhla-hahmo{display:flex;gap:clamp(10px, 4vw, 28px);justify-content:center}
-.juhla-hahmo .hahmo{--koko:min(58vw, 34vh, 280px);
-  box-shadow:0 0 0 8px #fff, 0 12px 30px rgba(0,0,0,.3)}
-/* Tasapeli: kärjessä olevat rinnakkain, pienempinä. */
-.juhla-hahmo.monta .hahmo{--koko:min(36vw, 26vh, 200px)}
-.juhla.nakyy .juhla-hahmo .hahmo{
-  animation:juhla-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both, juhla-hengitys 2.4s .8s ease-in-out infinite}
-@keyframes juhla-hengitys{0%,100%{transform:scale(1)} 50%{transform:scale(1.035)}}
-.juhla-nimi{font-size:min(9vw, 5vh, 40px);line-height:1.1;font-weight:800;
-  color:var(--pelaaja-teksti, #fff);text-align:center;max-width:90vw;overflow-wrap:anywhere}
-.juhla-nimi:empty{display:none}
-.juhla-pisteet{font-size:min(14vw, 8vh, 64px);line-height:1;font-weight:800;color:var(--pelaaja-teksti, #fff)}
-/* Muut pistejärjestyksessä: vaaleat rivit, jotta teksti erottuu millä
- * voittajan värillä tahansa. */
-.juhla-muut{list-style:none;margin:clamp(4px, 1.5vh, 14px) 0 0;padding:0;display:flex;flex-direction:column;
-  gap:6px;width:min(80vw, 300px)}
-.juhla-muut:empty{display:none}
-.juhla-muut li{display:flex;align-items:center;gap:10px;padding:5px 14px 5px 6px;border-radius:12px;
-  background:rgba(255,255,255,.88);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
-.juhla-muut li .hahmo{--koko:34px;box-shadow:0 0 0 2px #fff}
-.juhla-muu-nimi{flex:1 1 auto;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.juhla-muut b{font-size:20px}
-.juhla.nakyy .juhla-muut li{animation:juhla-rivi .4s cubic-bezier(.2,.9,.3,1.2) both}
-@keyframes juhla-rivi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){
-  .juhla.nakyy, .juhla.nakyy .juhla-hahmo .hahmo, .juhla.nakyy .juhla-muut li{animation:none}
-}
+/* --- VOITTO TULOSRUUDUSSA (🔵 Marko 9.10.2026: «Yhdistetään nämä kaksi ruutua,
+ * kun voittaja on selvillä. Eli maalaa tuo tausta voittajan värillä ja tee
+ * voittajan apinasta isompi kuin muiden pelaajien.») ---
+ * Erillinen juhlaruutu (7.10.2026) poistui. Täysi väripinta on sallittu, koska
+ * voitto on hetki eikä työkalu; kuosi jää pinnan päälle tummempana kuten
+ * entisessä juhlassa, ja laatikot pysyvät valkoisina, joten luvut erottuvat
+ * millä voittajan värillä tahansa. */
+#tulosRuutu.voitto{background:var(--pelaaja-vari)}
+#tulosRuutu.voitto::before{display:block;opacity:.22;mix-blend-mode:multiply}
+/* Voittaja pallilla: OMA hahmo pizza suussa, selvästi muita isompi. Kruunu ja
+ * heiluminen ovat poissa (Marko 7.10.2026: «kruunu on mauton», «heiluu
+ * kummallisesti») — kerran ponnahdus ja hiljainen hengitys, vain koko. */
+.palli-paikka.syo .palli-hahmo .hahmo{--koko:clamp(78px, 14vh, 132px)}
+.palli-paikka.syo .palli-nimi{max-width:none;font-size:15px}
+#tulosRuutu.voitto .palli-paikka.syo .hahmo{
+  animation:voitto-pomppu .7s cubic-bezier(.2,.9,.3,1.4) both, voitto-hengitys 2.4s .8s ease-in-out infinite}
+@keyframes voitto-pomppu{from{transform:scale(.3) translateY(40px)}to{transform:scale(1) translateY(0)}}
+@keyframes voitto-hengitys{0%,100%{transform:scale(1)} 50%{transform:scale(1.035)}}
+@media (prefers-reduced-motion: reduce){#tulosRuutu.voitto .palli-paikka.syo .hahmo{animation:none}}
 
 /* Matala ruutu (puhelin vaakatasossa): mitattu 844 × 390 Bassossa, sarakkeena
- * sisältö vei 418 px. Palli vasemmalle, napit oikealle. Basso lisää kolmannen
- * alueen (kisa) omassa tiedostossaan.
+ * sisältö vei 418 px. Napit ovat kulmissa (9.10.2026), joten Partyssa palli on
+ * keskellä; Basso lisää toisen sarakkeen (kisa) omassa tiedostossaan.
  * ⚠️ Lohko on TIEDOSTON LOPUSSA, koska se ylikirjoittaa yllä olevia
  * samantarkkuuksisia sääntöjä — muualla se hävisi hiljaa. */
 @media (max-height: 500px){
-  #tulosRuutu:not([hidden]){display:grid;grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas:"palli napit";
+  #tulosRuutu:not([hidden]){display:grid;grid-template-columns:minmax(0, 1fr);
+    grid-template-areas:"palli";
     align-content:center;align-items:center;column-gap:28px;row-gap:12px;
-    /* oikealla tila ⚙:lle */
-    padding:8px 64px 8px 16px}
-  #tulosPisteet{grid-area:palli;width:100%;max-width:440px;justify-self:end;gap:4px}
-  .tulos-napit{grid-area:napit;flex-direction:row;justify-self:center}
+    /* kulmanapeille tila molemmin puolin */
+    padding:8px 76px 8px 76px}
+  #tulosPisteet{grid-area:palli;width:100%;max-width:440px;justify-self:center;gap:4px}
   .palli-yla{gap:3px;padding-bottom:4px}
   .palli-ala{padding-top:4px}
-  .juhla{gap:4px}
-  .juhla-hahmo .hahmo{--koko:min(40vw, 30vh, 220px)}
-  .juhla-hahmo.monta .hahmo{--koko:min(28vw, 24vh, 160px)}
-  .juhla-muut{flex-direction:row;flex-wrap:wrap;justify-content:center;width:auto}
+  .palli-paikka.syo .palli-hahmo .hahmo{--koko:clamp(60px, 18vh, 96px)}
 }
 
-/* Puhelin pystyssä selaimen palkkien kanssa (iPhone + Safari ≈ 667 px). */
-@media (min-height: 501px) and (max-height: 740px){
+/* Puhelin pystyssä (501–900 px). Raja oli 740 px; 9.10.2026 mitattu voittoruudulla:
+ * 760 px:llä ▶ päättyi 843:een ja 852 px:llä 892:een, koska tavalliset mitat
+ * kasvavat korkeuden mukana. Tiivis tila kattaa nyt kaikki puhelimet pystyssä. */
+@media (min-height: 501px) and (max-height: 900px){
   #tulosRuutu:not([hidden]){padding-top:calc(env(safe-area-inset-top, 0px) + 60px);gap:8px}
   .palli-ala{padding-top:8px}
-  .jatka-nappi{width:60px}
+  /* Voittoruutu (9.10.2026): mitattu 375 × 667, isompi voittaja vei ▶:n 62 px
+   * ruudun alle. Kun ▶ siirtyi oikeaan yläkulmaan, tilaa vapautui ≈ 64 px, ja
+   * voittaja sai osan takaisin (13vh: 667 → 87 px, 852 → 111 px). Askelmat
+   * pysyvät matalampina, joten sijajärjestys erottuu yhä. */
+  .palli-paikka.syo .palli-hahmo .hahmo{--koko:clamp(64px, 13vh, 124px)}
+  .sija-1 .palli-askel{height:clamp(52px, 9.5vh, 130px)}
+  .sija-2 .palli-askel{height:clamp(40px, 7vh, 94px)}
+  .sija-3 .palli-askel{height:clamp(30px, 5vh, 66px)}
+  .sija-4 .palli-askel{height:clamp(22px, 3.5vh, 44px)}
 }
