@@ -156,9 +156,20 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   margin:calc(-1 * (var(--yla-turva) + 14px)) -16px 0;
   height:calc(var(--yla-turva) + var(--viiri-l) * .85)}
 .alku-palkki{position:absolute;left:0;right:0;top:0;height:calc(var(--yla-turva) + var(--palkki));
-  background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;
+  background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;
   box-sizing:border-box;padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 0}
 .alku-kielet{height:var(--palkki);display:flex;align-items:center}
+/* ALASIVUT (luo, liity, aula; Partyssa moninpelin valinnat): pelin nimi palkkiin viirin
+ * tilalle, ja ylälaita kutistuu palkin korkuiseksi — tila jää sisällölle (Marko 10.10.2026:
+ * «Tässä ruudussa se pelimuoto olisi tärkeämpi, kuin tuo pizzaloven etiketti»). */
+.alku-pelinimi{display:none;flex:1;min-width:0;height:var(--palkki);align-items:center;
+  padding-left:var(--viiri-x);color:#fff;font-size:21px;font-weight:700;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.aloitusruutu:has(.alku-paa[hidden]) .alku-pelinimi{display:flex}
+.aloitusruutu:has(.alku-paa[hidden]) .alku-viiri{display:none}
+.aloitusruutu:has(.alku-paa[hidden]) .alku-yla{height:calc(var(--yla-turva) + var(--palkki))}
+/* Nimikentän ohje («Hahmon nimi (ei pakollinen)») katkesi 320 px:n ruudulla 22 px:n fontilla. */
+#bvLuoNimi, #bvLiityNimi{font-size:clamp(17px, 5.4vw, 22px)}
 .alku-viiri{position:absolute;left:var(--viiri-x);top:var(--yla-turva);width:var(--viiri-l);display:block;line-height:0}
 .alku-viiri svg{width:100%;height:auto;display:block}
 /* Iskulause viirissä LOVEn alla, kuten pizzalove.fi:n viirissä (Marko 9.10.2026: «Muuta
@@ -283,6 +294,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   .alku-ruutu svg{width:58px}
   .alku-kauppa{min-height:42px}
   .alku-logo{width:96px}
+  /* Alasivut: odotusaula vieritti 116 px 320 × 568:ssa (mitattu 10.10.2026). Logo pois,
+   * QR ja koodi pienemmiksi — koodi, kuvio ja Aloita pysyvät samassa näkymässä. */
+  .aloitusruutu:has(.alku-paa[hidden]) .alku-logo{display:none}
+  .aloitusruutu .verkko-isanta-qr{width:min(220px, 62vw, 29vh)}
+  .aloitusruutu .verkko-isanta-koodi{font-size:44px}
 }
 /* Matala vaakanäyttö (puhelin vaakatasossa, 375 px): neliöt eivät mahdu —
  * mitattu 9.10.2026: 476 px sisältöä 375 px:n ruudussa. Kuvake sanan viereen. */

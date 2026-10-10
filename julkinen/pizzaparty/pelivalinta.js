@@ -84,8 +84,11 @@ function pelivalintaPiirra() {
       lista.appendChild(nappi);
     });
   }
+  const nimi = PELIT.filter(function (p) { return p.avain === nyt; })[0].nimi;
   const arvo = document.getElementById('arvoPeli');
-  if (arvo) arvo.textContent = PELIT.filter(function (p) { return p.avain === nyt; })[0].nimi;
+  if (arvo) arvo.textContent = nimi;
+  /* Aloitusruudun alasivuilla palkissa näkyy pelin nimi viirin tilalla. */
+  [].forEach.call(document.querySelectorAll('.alku-pelinimi'), function (b) { b.textContent = nimi; });
   [].forEach.call(document.querySelectorAll('[data-sivustolle]'), function (a) {
     a.href = sivustonOsoite();
   });

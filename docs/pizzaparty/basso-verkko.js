@@ -163,7 +163,10 @@ function bvViesti(teksti, kesto) {
   if (kesto) bvViestiAjastin = setTimeout(function () { p.hidden = true; }, kesto);
 }
 
-/* Värivalitsin: varatut himmeinä. Napautus valitsee (luo) tai liittyy (liity). */
+/* Värivalitsin: varatut himmeinä. Napautus VALITSEE; peliin mennään napista (Luo peli /
+ * Liity peliin). Ennen 10.10.2026 liittymisessä värin napautus liitti heti, ja nimikenttä
+ * jäi huomaamatta (Marko: «sen helposti missaa, kun painaa sen värin. Värin valinnan
+ * jälkeen pitäisi olla vielä liity peliin nappi»). */
 function bvVarit(sailio, varatut, valittu, valitse) {
   sailio.innerHTML = '';
   TAYTTEET.forEach(function (x) {
@@ -267,16 +270,28 @@ async function bvKoodiJatka() {
     if (!j.tilaa) return bvNaytaVirhe({ virhe: 'taynna' });
     bv.koodi = koodi;
     bvEl('bvLiityNimi').value = hahmoAsetukset.nimet[0] || '';
-    bvVarit(bvEl('bvLiityVarit'), j.varatut, null, bvLiity);
+    /* Valmiiksi valittu: oma väri jos se on vapaa, muuten ensimmäinen vapaa. */
+    const vapaat = TAYTTEET.map(function (x) { return x.arvo; })
+      .filter(function (n) { return j.varatut.indexOf(n) < 0; });
+    const oma = hahmoAsetukset.variNrot[0];
+    bv.vari = vapaat.indexOf(oma) >= 0 ? oma : vapaat[0];
+    const piirra = function () {
+      bvVarit(bvEl('bvLiityVarit'), j.varatut, bv.vari, function (n) { bv.vari = n; piirra(); });
+    };
+    piirra();
     bvOsa('liity');
   } catch (e) { bvNaytaVirhe(e); }
 }
 
-async function bvLiity(vari) {
+async function bvLiity() {
+  const nappi = bvEl('bvLiity');
+  if (nappi.disabled || !bv.vari) return;
   const nimi = bvNimi('bvLiityNimi');
   if (nimi === null) return;
+  nappi.disabled = true;
+  nappi.classList.add('odottaa');
   try {
-    const j = await bvApi('liity', { koodi: bv.koodi, vari: vari, nimi: nimi });
+    const j = await bvApi('liity', { koodi: bv.koodi, vari: bv.vari, nimi: nimi });
     bv.avain = j.avain;
     bvTallenna();
     bvSovella(j.tila);
@@ -286,6 +301,8 @@ async function bvLiity(vari) {
     /* Väri ehti mennä toiselle: haetaan tuore tilanne ja näytetään uudelleen. */
     if (e.virhe === 'variVarattu') bvKoodiJatka();
   }
+  nappi.disabled = false;
+  nappi.classList.remove('odottaa');
 }
 
 /* ---------- aula ---------- */
@@ -549,7 +566,8 @@ document.addEventListener('DOMContentLoaded', function () {
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuo').onclick = bvLuo;
   bvNimiKentta('bvLuoNimi', bvLuo);
-  bvNimiKentta('bvLiityNimi', null);
+  bvEl('bvLiity').onclick = bvLiity;
+  bvNimiKentta('bvLiityNimi', bvLiity);
   bvEl('bvKoodiJatka').onclick = bvKoodiJatka;
   bvEl('bvKoodi').addEventListener('keydown', function (e) { if (e.key === 'Enter') bvKoodiJatka(); });
   bvEl('bvAloita').onclick = bvJaa;
