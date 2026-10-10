@@ -20,6 +20,18 @@
   src:url('fontit/d-din-condensed-700.woff2?v=20261009a') format('woff2');
 }
 
+/* --- TILAPALKKI KOTIVALIKKOSOVELLUKSESSA (Marko 10.10.2026) ---
+ * black-translucent (sivupohja.html): sivu jatkuu tilapalkin alle ja tilapalkin teksti on
+ * valkoinen. Oranssi raita turva-alueen korkeudelta pitää kellon luettavana kaikissa
+ * näkymissä; aloitusruudun oma palkki ja viiri (z 5) peittävät sen. Safarissa ja
+ * vaakatasossa turva-alue on 0, joten raitaa ei ole. Peitteet (tauko, asetukset,
+ * verkkopeli) väistävät tilapalkin, etteivät pitkät laatikot nouse sen alle. */
+body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top, 0px);
+  background:var(--orange, #F47920);z-index:4;pointer-events:none}
+.peite{padding:max(20px, calc(env(safe-area-inset-top, 0px) + 8px)) max(20px, env(safe-area-inset-right, 0px))
+  max(20px, calc(env(safe-area-inset-bottom, 0px) + 8px)) max(20px, env(safe-area-inset-left, 0px))}
+.verkko-laatikko{max-height:calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}
+
 /* --- PELIN VALINTA alkuvalikossa (pelivalinta.js) --- */
 .pelivalinta{display:flex;gap:4px;padding:4px;margin:0 0 4px;border-radius:12px;
   width:100%;box-sizing:border-box;align-self:stretch;
@@ -178,7 +190,10 @@
 .kielet-lista button:hover{background:rgba(244,121,32,.12)}
 .kielet-lista button[aria-current="true"]::after{content:"\2713";color:var(--orange, #F47920);font-weight:800}
 @media (prefers-color-scheme:dark){.kielet-lista{background:var(--ground);border-color:rgba(255,255,255,.15)}}
-.alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85}
+/* Logolle tilaa (Marko 10.10.2026: «Nyt kun kaikki on liian alhaalla, niin merkitysten
+ * logokin on puristuksissa»): väli yllä ja alla kasvaa ruudun korkeuden mukana, jolloin
+ * napit nousevat ja kuvitus antaa tilaa. */
+.alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85;margin:clamp(6px, 2.5vh, 26px) 0 clamp(8px, 3vh, 34px)}
 /* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
 @media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
 
@@ -205,10 +220,12 @@
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
 /* Koko alueen korkeudesta (%), ei kiinteä. Siirto ruudun reunan yli translateX:llä, koska
  * sen prosentti on kuvan OMASTA leveydestä: Basso 24 % ja laatikko 22 % reunan takana. */
-.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(100%, 330px);width:auto;
-  transform:translateX(24%) rotate(-14deg);transform-origin:50% 100%}
-.alku-laatikko{position:absolute;top:2%;left:calc(-1 * var(--sivu));height:min(56%, 170px);width:auto;
-  transform:translateX(-22%) rotate(12deg)}
+/* Marko 10.10.2026: «basso isompana ja enemmän piiloon ruudun sivuun. Pizzalaatikko ehkä
+ * vähän enemmän näkymään.» Basso saa nousta alueen yli (115 %) palkin alle asti. */
+.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(115%, 420px);width:auto;
+  transform:translateX(34%) rotate(-14deg);transform-origin:50% 100%}
+.alku-laatikko{position:absolute;top:0;left:calc(-1 * var(--sivu));height:min(54%, 170px);width:auto;
+  transform:translateX(-8%) rotate(10deg)}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */
@@ -297,7 +314,7 @@
   .alku-ruutu svg{width:46px}
   .alku-kauppa{min-height:36px;padding:2px 12px}
   .alku-viiva{margin:0}
-  .alku-logo{width:64px}
+  .alku-logo{width:64px;margin:0}
 }
 @media (prefers-color-scheme:dark){
   .alku-ruutu{--ruutu-pohja:var(--ground)}
