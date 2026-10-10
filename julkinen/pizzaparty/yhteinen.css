@@ -305,7 +305,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 @media (orientation:landscape) and (max-height:540px){
   /* Ylälaita on pois virrasta, joten sisältö alkaa palkin (vaakatasossa 46 px) alapuolelta: 568 × 320:ssa
    * palkki peitti pelivalinnan yläreunan ja ruutu vieritti 10 px (mitattu 9.10.2026). */
-  .peite > .aloitusruutu{gap:4px;padding-top:calc(env(safe-area-inset-top, 0px) + 50px);padding-bottom:4px}
+  /* Logo nousee irti alareunasta (Marko 10.10.2026: «Vaakanäytöllä merkitysten logo on liian
+   * alhaalla»): turva-alue (kotiviiva) + väli joka kasvaa korkeuden mukana. */
+  .peite > .aloitusruutu{gap:4px;padding-top:calc(env(safe-area-inset-top, 0px) + 50px);
+    padding-bottom:calc(env(safe-area-inset-bottom, 0px) + clamp(4px, 6vh - 14px, 22px))}
   /* Ylälaita pois virrasta: korkeus kuuluu valinnoille. Viiri mahtuu sarakkeen vasemmalle
    * puolelle myös 568 px:n leveydellä (16 + 84 < 104). */
   .alku-yla{--viiri-l:84px;--palkki:46px;position:absolute;top:0;left:0;right:0;margin:0}
@@ -321,10 +324,14 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   .aloitusruutu > .alku-paa{flex:none;margin-block:auto;gap:8px}
   .alku-maskotit{flex:none;min-height:0;height:0;margin:0}
   .alku-basso, .alku-laatikko{margin:0}
-  .alku-basso{position:fixed;height:74vh;height:74dvh;bottom:-8vh;
-    right:min(-40px, calc(50vw - 188px - 62vh));left:auto;top:auto;transform:rotate(-16deg);transform-origin:50% 100%}
-  .alku-laatikko{position:fixed;height:46vh;height:46dvh;top:30vh;margin:0;
-    left:min(-30px, calc(50vw - 188px - 46vh));right:auto;transform:rotate(14deg)}
+  /* Marko 10.10.2026 vaakanäytöstä: «Rakastunut pizzalaatikko on liian reunassa. Laske sitä
+   * alemmas ja suurenna hieman. Basso on liian vinossa ja liian lähellä nappeja.»
+   * Laatikko keskitetään sarakkeen vasemmalle puolelle jäävään tilaan (enintään 12 vh reunan
+   * yli, jos tilaa ei ole); Basso suoremmaksi (−7°) ja vähintään 70 px reunan taakse. */
+  .alku-basso{position:fixed;height:72vh;height:72dvh;bottom:-8vh;
+    right:min(-70px, calc(50vw - 200px - 60vh));left:auto;top:auto;transform:rotate(-7deg);transform-origin:50% 100%}
+  .alku-laatikko{position:fixed;height:54vh;height:54dvh;top:36vh;margin:0;
+    left:max(-12vh, calc((50vw - 190px - 54vh) / 2));right:auto;transform:rotate(10deg)}
   .alku-logo{width:72px}
   .alku-ruutu{min-height:48px;padding:4px 14px;gap:12px}
   .alku-ruutu svg{width:46px}
