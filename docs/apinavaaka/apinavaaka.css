@@ -119,7 +119,7 @@
   font-size:24px;line-height:1;cursor:pointer}
 
 .av--ei-liiketta *{transition:none!important;animation:none!important}
-@media (prefers-color-scheme:dark){.av__torni i[style*="#090A0D"]{box-shadow:inset 0 0 0 1px #666}}
+
 
 /* ---- Nälkäiset apinat ---- */
 .av__boksi{display:none}
@@ -326,3 +326,10 @@
   .av--pulmat .av__vihjenappi{left:auto;right:-58px;top:auto;bottom:0;transform:none;width:44px;height:44px}
   .av--pulmat .av__vihjenappi img{width:26px}
 }
+
+/* Kiinteät värit: selaimen tumma tai vaalea teema ei vaikuta peliin (sivuston tyyli.css vaihtaa
+   muuttujat tummassa teemassa, joten peli määrittää omansa). */
+.av{color-scheme:light;color:#1A1A1A;--ground:#FAF6EE;--surface:#FFFFFF;--warm:#FFF3E9;--ink:#1A1A1A;--soft:#6E6357;
+  --line:#E7DCCA;--line2:#D6C7AF;--orange:#F47920;--deep:#C2580C;--radius:18px;
+  --shadow:0 1px 2px rgba(60,34,12,.06),0 8px 24px rgba(60,34,12,.08)}
+.av--koko{background:#FAF6EE}

@@ -9,7 +9,9 @@ def siirrot(d,L):
     for k in range(1,len(V)+1):
         for S in C(V,k):
             for t in [0]+list(L):
-                if sum(S)==d+t: out.append((frozenset(S),t))
+                if sum(S)!=d+t: continue
+                if d in S and (len(S)>1 or t): continue   # perussiirtoon ei saa yhdistää muita siirtoja
+                out.append((frozenset(S),t))
     return out
 def tapa(S,t): return (4 if len(S)>1 else 3) if t else (2 if len(S)>1 else 1)
 def arvioi(d,L,piz):
