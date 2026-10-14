@@ -492,6 +492,51 @@ a{display:block;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1
 ''' % (OSOITE, OSOITE, json.dumps(KIELET), OLETUSKIELI, linkit)
 
 
+def varainhankinta_ohjaus(kaikki):
+    """pizzalove.fi/varainhankinta → varainhankinta.merkitysten.fi
+
+    🔵 Marko 14.10.2026: «olisi kätevää, että se löytyisi myös sivulta
+    pizzalove.fi/varainhankinta».
+
+    ⚠️ TÄMÄ ON OHJAUS EIKÄ KOPIO, JA SYY ON RAKENTEELLINEN. pizzalove.fi on
+    GitHub Pages — staattisia tiedostoja, ei PHP:tä. Varainhankinta on
+    PHP-sovellus (ryhmät, tilaukset, admin, sähköpostit), joten sitä ei voi
+    tarjoilla täältä. Osoite voi siis olla pizzalove.fi:n alla, mutta sisältö
+    tulee toiselta palvelimelta ja osoiterivi vaihtuu.
+
+    ⚠️ VALIKON VÄLILEHTI OSOITTAA EDELLEEN SUORAAN kohteeseen: tämä sivu on
+    kirjoitettua ja jaettua osoitetta varten, eikä klikkaukseen kannata
+    lisätä ylimääräistä hyppyä.
+
+    ⚠️ Ohjaus tehdään sekä `meta refresh`illä että JS:llä, ja sivulla on
+    näkyvä linkki: jos kumpikin estetään, käyttäjä ei saa tyhjää ruutua.
+    `noindex` estää hakukonetta indeksoimasta välisivua. """
+    kohde = 'https://varainhankinta.merkitysten.fi/'
+    t = kaikki['fi']
+    teksti = t['etusivu']['varainhankinta']
+    return """<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=%s">
+<link rel="canonical" href="%s">
+<title>%s</title>
+<style>body{font-family:system-ui,sans-serif;background:#FAF6EE;color:#1A1A1A;
+  display:grid;place-items:center;min-height:100vh;margin:0;padding:24px;text-align:center}
+a{color:#C2580C}</style>
+</head>
+<body>
+<p>%s<br><a href="%s">%s</a></p>
+<script>location.replace(%s);</script>
+</body>
+</html>
+""" % (kohde, kohde, e(teksti.get('otsikko', 'Varainhankinta')),
+       e(teksti.get('otsikko', 'Varainhankinta')), kohde, kohde,
+       json.dumps(kohde))
+
+
 def main():
     kaikki = {k: lue(k) for k in KIELET if os.path.exists(os.path.join(SISALTO, k + '.json'))}
     puuttuu = [k for k in KIELET if k not in kaikki]
@@ -511,6 +556,9 @@ def main():
         for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli)):
             with open(os.path.join(ULOS, k, nimi), 'w', encoding='utf-8') as out:
                 out.write(f(t, kaikki))
+    os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)
+    with open(os.path.join(ULOS, 'varainhankinta', 'index.html'), 'w', encoding='utf-8') as out:
+        out.write(varainhankinta_ohjaus(kaikki))
     with open(os.path.join(ULOS, 'index.html'), 'w', encoding='utf-8') as out:
         out.write(juurisivu(kaikki))
     with open(os.path.join(ULOS, '404.html'), 'w', encoding='utf-8') as out:
