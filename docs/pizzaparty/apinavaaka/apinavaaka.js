@@ -128,25 +128,25 @@
   };
   var VINKIT = {
     fi: { valikko: 'Valikko', muodot: 'Pelimuodot', kieli: 'Kieli',
-      nimet: { harjoitus: 'Harjoittele', vapaa: 'Vapaa peli', apinat: 'Nälkäiset apinat', pulmat: 'Auta Bassoa' },
+      nimet: { harjoitus: 'Apinavaaka tutuksi', vapaa: 'Vapaa peli', apinat: 'Nälkäiset apinat', pulmat: 'Auta Bassoa' },
       harjoitus: ['Tee tornit yhtä korkeiksi.', 'Lamppu syttyy, kun siirto on oikein.', 'Torni liikkuu aina kokonaisena.'],
       vapaa: ['Siirto onnistuu aina – etsi se!', 'Liian iso noppa? Vie torneja takaisin varastoon.'],
       apinat: ['Tuo pizzan täyte kulhoon.', 'Napauta pizzaa – se paistuu uunissa.', 'Jos pizzaa ei synny, apinat syövät palat!'],
       pulmat: ['Valmista pizza yhdellä siirrolla.', 'Pizzan kaikki täytteet pitää saada linjastolle.', 'Jumissa? Lamppu kertoo siirtotavan.'] },
     sv: { valikko: 'Meny', muodot: 'Spellägen', kieli: 'Språk',
-      nimet: { harjoitus: 'Träna', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
+      nimet: { harjoitus: 'Lär känna apavågen', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
       harjoitus: ['Gör tornen lika höga.', 'Lampan tänds när flytten är rätt.', 'Ett torn flyttas alltid helt.'],
       vapaa: ['Det finns alltid en flytt – hitta den!', 'För högt tal? Flytta torn tillbaka till lagret.'],
       apinat: ['För pizzans fyllning till skålen.', 'Tryck på pizzan – den gräddas i ugnen.', 'Blir det ingen pizza äter aporna bitarna!'],
       pulmat: ['Gör pizzan med en flytt.', 'Alla pizzans fyllningar ska till linjen.', 'Fast? Lampan berättar vilken flytt.'] },
     en: { valikko: 'Menu', muodot: 'Game modes', kieli: 'Language',
-      nimet: { harjoitus: 'Practise', vapaa: 'Free play', apinat: 'Hungry monkeys', pulmat: 'Help Basso' },
+      nimet: { harjoitus: 'Get to know the scales', vapaa: 'Free play', apinat: 'Hungry monkeys', pulmat: 'Help Basso' },
       harjoitus: ['Make the towers equally high.', 'The lamp lights up when the move is right.', 'A tower always moves as a whole.'],
       vapaa: ['There is always a move – find it!', 'Dice too high? Move towers back to the storage.'],
       apinat: ['Bring the pizza’s topping into its bowl.', 'Tap the pizza – it bakes in the oven.', 'No pizza? The monkeys eat the slices!'],
       pulmat: ['Make the pizza with one move.', 'All of the pizza’s toppings must reach the line.', 'Stuck? The lamp tells you the type of move.'] },
     de: { valikko: 'Menü', muodot: 'Spielarten', kieli: 'Sprache',
-      nimet: { harjoitus: 'Üben', vapaa: 'Freies Spiel', apinat: 'Hungrige Affen', pulmat: 'Hilf Basso' },
+      nimet: { harjoitus: 'Die Affenwaage kennenlernen', vapaa: 'Freies Spiel', apinat: 'Hungrige Affen', pulmat: 'Hilf Basso' },
       harjoitus: ['Mach die Türme gleich hoch.', 'Die Lampe leuchtet, wenn der Zug stimmt.', 'Ein Turm bewegt sich immer ganz.'],
       vapaa: ['Es gibt immer einen Zug – finde ihn!', 'Würfel zu hoch? Bring Türme zurück ins Lager.'],
       apinat: ['Bring die Zutat der Pizza in ihre Schüssel.', 'Tippe auf die Pizza – sie backt im Ofen.', 'Keine Pizza? Die Affen essen die Stücke!'],
@@ -503,7 +503,22 @@
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
     nappi(ikkunaNapit, vk.nimet.harjoitus, 'nappi--toinen', function () { sulje(); aloitaOpas(0); }).setAttribute('data-muoto', 'harjoitus');
-    nappi(ikkunaNapit, vk.nimet.vapaa, 'nappi--toinen', function () { sulje(); tila.muoto = 'harjoitus'; aloitaVapaa(); }).setAttribute('data-muoto', 'vapaa');
+    /* ⚠️ VAPAA PELI EI OLE VALITSIMESSA (Marko 14.10.2026: «kolme varsinaista
+       pelimuotoa ja sitten vielä vapaa peli. Tämä vapaa peli on ehkä turha?»).
+
+       📐 Mitattu: se ei ollut neljäs pelimuoto vaan harjoittelun LOPPUTILA —
+       `aloitaVapaa` asettaa `tila.muoto = 'harjoitus'` ja merkitsee tehtävät
+       tehdyiksi (`tila.nro = TEHTAVAT.length`). Samaan tilaan päätyy
+       pelaamalla kymmenes tehtävä loppuun. Valitsin lupasi siis neljää
+       pelimuotoa, joista kolme oli pelimuoto ja yksi oli tila.
+
+       ⚠️ EI SILTI POISTETTU PELISTÄ, koska se olisi maksanut yhden asian:
+       vapaa peli on ainoa reitti hiekkalaatikkoon, ja ilman nappia se
+       siirtyisi kymmenen tehtävän taakse. Nyt se tarjotaan siellä minne se
+       kuuluu — harjoittelun päätteeksi (`opasJatka`).
+
+       ⚠️ `vk.nimet.vapaa` ja `vk.vapaa` JÄÄVÄT: vinkkipaneeli lukee ne yhä
+       `nykyMuoto()`in kautta, kun pelaaja on vapaassa pelissä. */
     nappi(ikkunaNapit, vk.nimet.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); }).setAttribute('data-muoto', 'apinat');
     nappi(ikkunaNapit, vk.nimet.pulmat, 'nappi--toinen', function () { sulje(); aloitaPulmat(); }).setAttribute('data-muoto', 'pulmat');
 
@@ -826,11 +841,18 @@
       nollaa(); tila.vihje = null; tila.oVirheet = 0; tila.oVirheNyt = false; piirra();
     }
     function kaynnistaVaihe() { opasRuutu.hidden = true; ajastaVihje(); }
-    function naytaRuutu(html, napinTeksti, f, toinen) {
+    /* `muut` on yksi pari [teksti, fn] tai lista pareja. Lista tuli tarpeeseen
+       14.10.2026, kun harjoittelun loppuruutu sai kolmannen vaihtoehdon
+       (vapaa peli); vanhat kutsupaikat antavat yhä yhden parin. */
+    function naytaRuutu(html, napinTeksti, f, muut) {
       opasRuutu.innerHTML = '<div class="av__opaskortti">' + html + '<div class="av__opasnapit"></div></div>';
       var np = opasRuutu.querySelector('.av__opasnapit');
       nappi(np, napinTeksti, 'av__vie', f);
-      if (toinen) nappi(np, toinen[0], 'nappi--toinen', toinen[1]);
+      if (muut) {
+        (Array.isArray(muut[0]) ? muut : [muut]).forEach(function (pari) {
+          nappi(np, pari[0], 'nappi--toinen', pari[1]);
+        });
+      }
       opasRuutu.hidden = false;
     }
     // ohjatussa vaiheessa sallitut tornit päätellään tilanteesta
@@ -897,7 +919,9 @@
       if (tila.oVaihe < OPAS_VAIHEET.length - 1) return aloitaOpas(tila.oVaihe + 1);
       tila.oVaihe = OPAS_VAIHEET.length;
       naytaRuutu('<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt=""><h2>' + ot.loppu[0] + '</h2><p>' + ot.loppu[1] + '</p>',
-        ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); }, [ot.uudelleen, function () { aloitaOpas(0); }]);
+        ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); },
+        [[vk.nimet.vapaa, function () { tila.muoto = 'harjoitus'; aloitaVapaa(); }],
+         [ot.uudelleen, function () { aloitaOpas(0); }]]);
     }
 
     function valmistettavat() {
