@@ -10,7 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Apinavaaka">
-<link rel="apple-touch-icon" href="../apinavaaka/basso-paa.webp">
+<link rel="apple-touch-icon" href="../pizzaparty/apinavaaka/basso-paa.webp">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Apinavaaka</title>
 <link rel="stylesheet" href="../tyyli.css">
@@ -35,9 +35,9 @@ av.setAttribute("data-tila", q.get("tila") || "harjoitus");
 av.setAttribute("data-kieli", k);
 // testisivulla aina tuoreimmat tiedostot (ei selaimen välimuistia)
 var v = Date.now();
-var css = document.createElement("link"); css.rel = "stylesheet"; css.href = "../apinavaaka/apinavaaka.css?v=" + v; document.head.appendChild(css);
+var css = document.createElement("link"); css.rel = "stylesheet"; css.href = "../pizzaparty/apinavaaka/apinavaaka.css?v=" + v; document.head.appendChild(css);
 function lataa(src, f) { var s = document.createElement("script"); s.src = src + "?v=" + v; s.onload = f; document.body.appendChild(s); }
-lataa("../apinavaaka/noppa3d.js", function () { lataa("../apinavaaka/apinavaaka.js"); });
+lataa("../pizzaparty/apinavaaka/noppa3d.js", function () { lataa("../pizzaparty/apinavaaka/apinavaaka.js"); });
 </script>
 </body>
 </html>

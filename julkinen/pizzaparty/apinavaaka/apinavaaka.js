@@ -14,7 +14,11 @@
  */
 (function () {
   'use strict';
-  var KANSIO = document.currentScript ? document.currentScript.src.replace(/[^/]*$/, '') : '../apinavaaka/';
+  /* ⚠️ VARAPOLKU SEURAA MUUTTOA (14.10.2026). Kansio luetaan normaalisti
+     skriptin omasta osoitteesta, joten muutto ei vaikuta siihen — mutta
+     varapolku on kovakoodattu, ja vanhaksi jäänyt varapolku olisi ansa
+     joka laukeaa vain siellä missä `currentScript` puuttuu. */
+  var KANSIO = document.currentScript ? document.currentScript.src.replace(/[^/]*$/, '') : '../pizzaparty/apinavaaka/';
 
   // ---------------------------------------------------------------- kuvan geometria
   // PSD:n pikseleitä; ylhäältä leikattu 250 px, alhaalta rajattu ruokalapun alle.

@@ -45,7 +45,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * valikko vasemmassa yläkulmassa ja sitten se "jatka", "eteenpäin" tai "play"
  * -nappi tulla kin oikeaan yläkulmaan, jolloin vain siellä olisi nappeja» ja
  * «korttipelissä voisi hyödyntää samaa ikonia»). Sama kuin lautapelin
- * digiversiossa (pizzalove-fi/julkinen/apinavaaka, .av__info): miettivä Basso
+ * digiversiossa (apinavaaka/, .av__info): miettivä Basso
  * kermaisessa ympyrässä, tukka ja kyynärpää reunan yli, oranssi ≡-merkki.
  * Mitat suhteutettuna kokoon --k (52 px → kuva 52 px, merkki 19 px).
  * ⚠️ KUVAN LEVEYS MITATTU LIVESTÄ (pizzalove.fi/apinavaaka-testi, 9.10.2026):
