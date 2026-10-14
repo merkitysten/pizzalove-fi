@@ -4,33 +4,74 @@
 <meta charset="utf-8">
 <!-- ⚠️ TÄTÄ SIVUA EI TEE `sivut.py`. `index.html` ja `basso.html` syntyvät
      `sivupohja.html`:stä, koska ne ovat sama korttipeli kahdella säännöstöllä.
-     Lautapeli on eri peli: sen runko on yksi komponenttidiv, ei pelilauta,
-     joten pohjan jakaminen olisi tarkoittanut melkein koko bodyn käärimistä
-     merkintöihin. Jaettavaa on valitsin, ei sivupohja. -->
+     Lautapeli on eri peli: sen runko on yksi komponenttidiv, ei pelilauta.
+
+     ⚠️ JA 14.10.2026 TÄMÄ SAI OMAN PÄÄVALIKKONSA (Marko: «Tee lautapelille oma
+     päävalikko»). Valikko on sama `.aloitusruutu` kuin korttipelillä — sama
+     oranssi palkki, sama viiri, sama valkoinen lajipalkki — mutta sisältö on
+     lautapelin: iso apinavaaka-kuva ja kolme pelimuotoa. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#FAF6EE">
+<meta name="theme-color" content="#F47920">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Apinavaaka">
 <link rel="apple-touch-icon" href="apinavaaka/basso-paa.webp">
 <title>Apinavaaka</title>
-<link rel="stylesheet" href="pelivalinta.css?v=20261014b">
-<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261014b">
+<link rel="preload" as="font" type="font/woff2" href="fontit/poppins-700.woff2?v=20260911a" crossorigin>
+<link rel="stylesheet" href="yhteinen.css?v=20261015a">
+<link rel="stylesheet" href="pelivalinta.css?v=20261015a">
+<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015a">
 <style>
+  /* Komponenttisivu saa vierittää: `peli.css`:ää ei ladata (ks. yhteinen.css,
+     siirretty-lohko). Pelinäkymän omat reunat kuten ennen. */
   html,body{touch-action:manipulation;color-scheme:light}
   body{background:#FAF6EE;margin:0;font-family:Poppins,system-ui,sans-serif}
-  main{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right))
+  #lautaPeli{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right))
        8px max(6px,env(safe-area-inset-left))}
+  /* Lautapelissä ei ole «Tällä laitteella / Omilla laitteilla» vaan kolme
+     pelimuotoa, joten napissa on vain teksti — ikonin paikkaa ei jätetä auki. */
+  /* Kolme nappia kahden sijaan: matalampi nappi jättää apinalle tilaa.
+     📐 Mitattu: vakiokorkeudella kuva leikkautui ensimmäisen napin alle 23 px. */
+  .lauta-muoto{justify-content:center;text-align:center;padding:13px 12px;min-height:0}
+  .lauta-muoto b{text-align:center;font-size:17px}
 </style>
 </head>
 <body>
-<main>
-<div class="apinavaaka" id="av" data-koko></div>
-</main>
-<script src="kielet.js?v=20261014b"></script>
-<script src="pelivalinta.js?v=20261014b"></script>
+
+<!-- PÄÄVALIKKO -->
+<div class="peite" id="lautaPeite">
+  <div class="tauko-laatikko verkko-laatikko valikko-laatikko aloitusruutu" data-paavalikko>
+    <div class="alku-yla">
+      <div class="alku-palkki"><b class="alku-pelinimi"></b><div class="alku-kielet"></div></div>
+      <div class="alku-lajipalkki"><div class="pelivalinta" data-vain="laji"></div></div>
+      <!-- Viirin vektori on `pelivalinta.js`:ssä yhtenä lähteenä. -->
+      <a class="alku-viiri" href="../" data-sivustolle data-ta="valikko.sivustolle"></a>
+    </div>
+    <div class="verkko-osa alku-paa">
+      <!-- 🔵 Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla siinä
+           lautapelin päävalikossa ylhäällä tyhjässä tilassa» — ja koko kuvan
+           vaihtuminen on se mistä käyttäjä huomaa, että laji todella vaihtui. -->
+      <div class="alku-maskotit" aria-hidden="true">
+        <img class="alku-lauta" src="apinavaaka/vaaka-kansi.webp?v=20261015a" width="718" height="525" alt="">
+      </div>
+      <div class="alku-ruudut" id="lautaMuodot"></div>
+      <hr class="valikko-viiva alku-viiva">
+      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-lautapeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span id="lautaKauppa">Kauppaan</span></a>
+    </div>
+    <img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten">
+  </div>
+</div>
+
+<!-- PELI. Saa `apinavaaka`-luokkansa vasta kun pelimuoto on valittu: ilman sitä
+     komponentti käynnistyisi piilossa ja mittaisi näyttämönsä nollaan. -->
+<div id="lautaPeli" hidden><div id="av" data-koko></div></div>
+
+<script src="kielet.js?v=20261015a"></script>
+<script src="pelivalinta.js?v=20261015a"></script>
+<script src="apinavaaka/noppa3d.js?v=20261015a"></script>
+<script src="apinavaaka/apinavaaka.js?v=20261015a"></script>
 <script>
 /* KIELI ON YHTEINEN MOLEMMILLE PELEILLE (14.10.2026).
    Lähde on sama kuin korttipelissä: ?kieli= → tallennetut asetukset
@@ -39,12 +80,7 @@
    📐 Mitattu 14.10.2026: pelkkä `KIELI` ei riitä. `kielet.js` kirjoittaa
    siihen vain osoitteessa tulleen kielen, koska korttipelissä tallennetun
    lukee `peli.js` omassa vaiheessaan — ruotsiksi pelannut sai `KIELI === 'fi'`
-   ja tallennetuissa 'sv'. Siksi tallennettu luetaan erikseen.
-
-   ⚠️ OLETUS 'fi' OLI SE JOKA KATKAISI KIELEN PELIEN VÄLILLÄ: ruotsiksi
-   pelannut sai lautapelin suomeksi, koska osoitteessa ei ollut ?kieli=.
-   Toinen suunta toimii itsestään — apinavaaan oma kielivalinta lataa sivun
-   ?kieli=-parametrilla, ja `kielet.js` kirjoittaa sen yhteisiin asetuksiin. */
+   ja tallennetuissa 'sv'. Siksi tallennettu luetaan erikseen. */
 var q = new URLSearchParams(location.search);
 var k = q.get('kieli') ||
         (typeof tallennettuKieli === 'function' && tallennettuKieli()) ||
@@ -55,11 +91,43 @@ document.documentElement.lang = k;
    ei päädy (ks. kielet.js). 📐 Mitattu: ruotsinkielisessä valikossa luki
    «SPEL», mutta kytkimessä «Korttipeli / Lautapeli». */
 if (typeof KIELI === 'string' && KIELI !== k) KIELI = k;
+
 var av = document.getElementById('av');
 av.setAttribute('data-kieli', k);
-if (q.get('tila')) av.setAttribute('data-tila', q.get('tila'));
+
+/* PELIMUODOT PÄÄVALIKKOON. Nimet tulevat `apinavaaka.js`:stä (apinavaakaNimet),
+   ei tästä tiedostosta: sama nimi kahdessa paikassa ajautuu erilleen. */
+var MUODOT = [['harjoitus', 'harjoitus'], ['apinat', 'apinat'], ['pulmat', 'pulmat']];
+var nimet = (typeof apinavaakaNimet === 'function') ? apinavaakaNimet(k) : {};
+var lista = document.getElementById('lautaMuodot');
+MUODOT.forEach(function (m, i) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'alku-ruutu lauta-muoto' + (i === 0 ? ' ensisijainen' : '');
+  b.innerHTML = '<b></b>';
+  b.querySelector('b').textContent = nimet[m[0]] || m[0];
+  b.onclick = function () { aloitaMuoto(m[1]); };
+  lista.appendChild(b);
+});
+
+var KAUPPA = { fi: 'Kauppaan', sv: 'Till butiken', en: 'To the shop', de: 'Zum Shop' };
+document.getElementById('lautaKauppa').textContent = KAUPPA[k] || KAUPPA.en;
+
+/* Pelimuoto käynnistää komponentin: päävalikko pois, luokka päälle, käynnistys.
+   ⚠️ Paluu päävalikkoon on sivun lataus (pelivalinta.js: paavalikkoon) — tämä
+   sivu kertoo siitä `data-paavalikko`-attribuutilla. */
+function aloitaMuoto(tila) {
+  av.setAttribute('data-tila', tila);
+  document.getElementById('lautaPeite').hidden = true;
+  var kuori = document.getElementById('lautaPeli');
+  kuori.hidden = false;
+  av.className = 'apinavaaka';
+  if (typeof apinavaakaKaynnista === 'function') apinavaakaKaynnista();
+}
+
+/* Osoitteen `?tila=` ohittaa valikon: apinavaaan oma kielivalinta lataa sivun
+   sillä parametrilla, eikä pelaajaa saa pudottaa takaisin valikkoon kesken. */
+if (q.get('tila')) aloitaMuoto(q.get('tila'));
 </script>
-<script src="apinavaaka/noppa3d.js?v=20261014b"></script>
-<script src="apinavaaka/apinavaaka.js?v=20261014b"></script>
 </body>
 </html>

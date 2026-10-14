@@ -102,7 +102,16 @@ function peliVaihda(avain) {
  * tässä koko asia — kytkin lupaa pelin vaihdon, tämä lupaa ulospääsyn. */
 function paavalikkoon() {
   const kieli = new URLSearchParams(location.search).get('kieli');
-  location.assign('./' + (kieli ? '?kieli=' + encodeURIComponent(kieli) : ''));
+  const haku = kieli ? '?kieli=' + encodeURIComponent(kieli) : '';
+  /* ⚠️ SIVU LADATAAN UUDELLEEN EIKÄ RUUTUA PALAUTETA KÄSIN. Lautapeli on
+     komponentti, joka rakentaa näyttämönsä kerran käynnistyessään; paluu
+     keskeltä peliä vaatisi purun, jota ei ole. Lataus on sama tila kuin
+     ensimmäisellä kerralla, eikä siinä ole mitään arvattavaa. */
+  if (document.querySelector('[data-paavalikko]')) {
+    location.assign(location.pathname + haku);
+    return;
+  }
+  location.assign('./' + haku);
 }
 
 function sivustonOsoite() {
@@ -183,13 +192,18 @@ function pelivalintaPiirra() {
   const laji = lajiNyt();
   const lajinPelit = PELIT.filter(function (p) { return p.laji === laji; });
 
+  /* ⚠️ SAMA KOMPONENTTI, KAKSI PAIKKAA (14.10.2026). Aloitusruudussa laji on
+     ylimmässä valkoisessa palkissa ja pelit sisällön seassa, joten osat ovat
+     eri paikoissa sivulla. `data-vain` kertoo kumpi osa tähän kuuluu; ilman
+     sitä molemmat piirtyvät peräkkäin (pelin valikko, lautapelin ikkuna). */
   [].forEach.call(document.querySelectorAll('.pelivalinta'), function (paikka) {
+    const vain = paikka.getAttribute('data-vain');
     paikka.innerHTML = '';
     paikka.setAttribute('aria-label', t('peli.valitse'));
 
-    paikka.appendChild(lajikytkin(laji));
+    if (vain !== 'pelit') paikka.appendChild(lajikytkin(laji));
 
-    if (lajinPelit.length > 1) {
+    if (vain !== 'laji' && lajinPelit.length > 1) {
       const pelirivi = valitsinRyhma(t(lajiAvain(laji)));
       pelirivi.className += ' pelivalinta-ryhma--pelit';
       lajinPelit.forEach(function (p) {
@@ -222,6 +236,22 @@ function pelivalintaPiirra() {
   [].forEach.call(document.querySelectorAll('.alku-pelinimi'), function (b) { b.textContent = nimi; });
   [].forEach.call(document.querySelectorAll('[data-sivustolle]'), function (a) {
     a.href = sivustonOsoite();
+  });
+}
+
+/* PIZZA LOVE -VIIRI YHTENÄ LÄHTEENÄ (14.10.2026).
+ * ⚠️ Vektori oli `sivupohja.html`:ssä, josta `sivut.py` tekee korttipelin
+ * kaksi sivua. Lautapeli on oma sivunsa eikä synny siitä pohjasta, joten
+ * kopioiminen olisi tehnyt samasta vektorista kaksi — ja ne ajautuvat
+ * erilleen ensimmäisestä logomuutoksesta. Tässä se on yksi, ja molemmat
+ * sivut kirjoittavat vain tyhjän `<a class="alku-viiri">`-paikan.
+ * ⚠️ Teksti on `<text>` eikä polku, koska iskulause käyttää D-DIN
+ * Condensedia `yhteinen.css`:stä — ulkoisena kuvana fontti ei latautuisi. */
+const VIIRI_SVG = "<svg viewBox=\"0 0 100 85\" role=\"img\" aria-label=\"Pizza Love – every pizza counts\"><path fill=\"#000002\" d=\"M0 0H100V79L50 85L0 79Z\"/><g transform=\"translate(6.65 -6.5)\"><path fill=\"#EE7203\" d=\"M10.3,35.1c0,1.1-.2,1.9-.5,2.5s-.9.8-1.6.8-1.3-.3-1.6-.8c-.4-.5-.5-1.4-.5-2.5v-14c0-1.2.2-2.1.7-2.6.4-.5,1.2-.7,2.3-.7h3.9c2.1,0,3.8.6,5.1,1.9,1.2,1.2,1.9,2.9,1.9,5s-.6,3.8-1.7,5.1c-1.2,1.2-2.8,1.8-4.8,1.8h-2.9v3.5ZM10.3,27.4h1.9c1,0,1.7-.2,2.2-.7.5-.5.7-1.1.7-2s-.2-1.6-.7-2c-.5-.4-1.2-.6-2.2-.6h-1.9v5.3Z\"/><path fill=\"#EE7203\" d=\"M27.2,35.1c0,1.1-.2,1.9-.5,2.5-.4.5-.9.8-1.6.8s-1.3-.3-1.6-.8-.5-1.4-.5-2.5v-14.3c0-1.1.2-1.9.5-2.5.4-.5.9-.8,1.6-.8s1.3.3,1.6.8c.4.5.5,1.4.5,2.5v14.3Z\"/><path fill=\"#EE7203\" d=\"M41.9,33.9c1,0,1.8.2,2.3.5.5.4.8.9.8,1.6s-.3,1.3-.8,1.6c-.5.4-1.3.5-2.3.5h-8.7c-1,0-1.8-.2-2.3-.6s-.7-1-.7-1.7,0-.8.2-1.2.5-.9,1-1.6l7.7-11h-5.6c-1.1,0-1.8-.2-2.3-.5-.5-.3-.7-.9-.7-1.6s.3-1.2.8-1.6c.5-.4,1.3-.5,2.3-.5h7.3c1.3,0,2.2.2,2.8.5s.9.9.9,1.7-.4,1.6-1.2,2.7h0c0,.1-7.5,11.1-7.5,11.1h6.1Z\"/><path fill=\"#EE7203\" d=\"M58.7,33.9c1,0,1.8.2,2.3.5.5.4.8.9.8,1.6s-.3,1.3-.8,1.6c-.5.4-1.3.5-2.3.5h-8.7c-1,0-1.8-.2-2.3-.6s-.7-1-.7-1.7,0-.8.2-1.2.5-.9,1-1.6l7.7-11h-5.6c-1.1,0-1.8-.2-2.3-.5-.5-.3-.7-.9-.7-1.6s.3-1.2.8-1.6c.5-.4,1.3-.5,2.3-.5h7.3c1.3,0,2.2.2,2.8.5s.9.9.9,1.7-.4,1.6-1.2,2.7h0c0,.1-7.5,11.1-7.5,11.1h6.1Z\"/><path fill=\"#EE7203\" d=\"M68.8,34.3l-.7,2.1c-.2.7-.5,1.2-.8,1.6-.4.4-.8.5-1.2.5s-1.1-.2-1.5-.6c-.4-.4-.6-1-.6-1.6s0-.5,0-.7c0-.2,0-.4.2-.6l4.9-14.4c.4-1,.8-1.8,1.3-2.3.5-.5,1.2-.7,2-.7s1.4.2,1.9.7c.5.5,1,1.1,1.3,2l4.8,14.6c0,.3.2.6.2.8s0,.5,0,.6c0,.6-.2,1.2-.6,1.6-.4.4-.9.6-1.5.6s-1-.2-1.4-.6-.7-.9-.9-1.7l-.5-1.9h-7ZM70,30.1h4.5l-2.2-7.5-2.3,7.5Z\"/><path fill=\"#fff\" d=\"M13,47.4c0-1.1.2-1.9.5-2.5.4-.5.9-.8,1.6-.8s1.3.3,1.6.8.5,1.4.5,2.5v13h3.6c1,0,1.8.2,2.3.5.5.4.8.9.8,1.6s-.3,1.3-.8,1.6c-.5.4-1.3.5-2.3.5h-5c-1.1,0-1.9-.2-2.3-.6-.4-.4-.6-1.2-.6-2.3v-14.4Z\"/><path fill=\"#fff\" d=\"M24,54.6c0-3.2.9-5.8,2.6-7.8,1.7-2,4-3,6.7-3s5,1,6.8,3c1.7,2,2.6,4.6,2.6,7.8s-.9,5.8-2.6,7.8c-1.7,2-4,3-6.8,3s-5-1-6.7-3c-1.7-2-2.6-4.6-2.6-7.8ZM28.7,54.6c0,1.9.4,3.4,1.3,4.6.8,1.1,2,1.7,3.3,1.7s2.5-.6,3.3-1.7c.8-1.1,1.3-2.7,1.3-4.6s-.4-3.5-1.2-4.7-2-1.7-3.4-1.7-2.5.6-3.4,1.7-1.2,2.7-1.2,4.7Z\"/><path fill=\"#fff\" d=\"M49.7,63.4l-5.8-15.6c0-.2-.1-.4-.2-.6,0-.2,0-.5,0-.7,0-.7.2-1.2.6-1.6s1-.7,1.6-.7.9.2,1.2.5.6.8.8,1.5l4,11.5,3.7-11.4c.3-.8.5-1.4.9-1.7s.7-.5,1.3-.5,1.2.2,1.5.6c.4.4.6.9.6,1.6s0,.5,0,.8-.1.5-.2.8l-5.6,15.3c-.3.7-.5,1.2-.9,1.5s-.8.4-1.3.4-.9-.1-1.2-.4c-.3-.3-.6-.7-.8-1.3Z\"/><path fill=\"#fff\" d=\"M69.6,44.4c1,0,1.8.2,2.3.5s.8.9.8,1.6-.3,1.3-.8,1.6c-.5.4-1.3.5-2.3.5h-3.5v3.6h3c1,0,1.8.2,2.3.5.5.4.8.9.8,1.6s-.3,1.3-.8,1.6c-.5.3-1.3.5-2.3.5h-3v3.8h3.6c1,0,1.8.2,2.3.5.5.4.8.9.8,1.6s-.3,1.3-.8,1.6c-.5.4-1.3.5-2.3.5h-5c-1.1,0-1.9-.2-2.3-.6-.4-.4-.6-1.2-.6-2.3v-14.2c0-1.2.2-2.1.7-2.6.4-.5,1.2-.7,2.3-.7h4.9Z\"/><path fill=\"#fff\" d=\"M78,46.2c0,1-.8,1.7-1.7,1.7s-1.7-.8-1.7-1.7.8-1.7,1.8-1.7,1.7.8,1.7,1.7ZM74.9,46.2c0,.8.6,1.4,1.4,1.4s1.4-.6,1.4-1.4-.6-1.4-1.3-1.4-1.4.6-1.4,1.4ZM76,46.9c0,.2,0,.3-.2.3s-.2,0-.2-.1c0,0,0,0,0-.2v-1.3c0-.2.1-.3.3-.3h.4c.4,0,.7.2.7.6s-.1.5-.4.5l.4.4c0,0,.1.1.1.2,0,.1-.1.2-.2.2s-.1,0-.2-.1l-.5-.6v.5ZM76.3,46.1c.1,0,.2,0,.2-.2s-.1-.2-.2-.2h-.3v.4h.3Z\"/></g><text class=\"viiri-iskulause\" x=\"50\" y=\"69.2\" text-anchor=\"middle\" textLength=\"57\" lengthAdjust=\"spacing\">EVERY PIZZA COUNTS</text></svg>";
+
+function viiriPiirra() {
+  [].forEach.call(document.querySelectorAll('.alku-viiri'), function (a) {
+    if (!a.querySelector('svg')) a.innerHTML = VIIRI_SVG;
   });
 }
 
@@ -287,6 +317,7 @@ document.addEventListener('keydown', function (e) {
 
 document.addEventListener('DOMContentLoaded', function () {
   peliMuista(peliNyt());
+  viiriPiirra();
   pelivalintaPiirra();
   kielivalintaPiirra();
 });

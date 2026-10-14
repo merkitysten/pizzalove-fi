@@ -99,6 +99,23 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .valikko-nappi.tausta{background:var(--orange, #F47920);color:#fff}
 .valikko-nappi:active{transform:scale(.97)}
 .valikko-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* --- PEITE JA LAATIKKO: SIIRRETTY `peli.css`:STÄ 14.10.2026 ---
+ * ⚠️ Nämä kolme ovat yleisiä asettelusääntöjä, eivät korttipelin pelilaudan
+ * tyyliä, ja lautapelin oma sivu tarvitsee samat. `peli.css`:n lataaminen
+ * `apinavaaka.html`:lle olisi tuonut mukana `html,body{height:100%;
+ * overflow:hidden}`, joka katkaisee komponenttisivun vierityksen —
+ * mitattu, ei arvattu. Siksi siirto eikä kopio. --- */
+.peite{position:fixed;inset:0;background:rgba(26,26,26,.55);display:grid;place-items:center;padding:20px;z-index:5}
+/* ⚠️ `display:grid` VOITTAA `hidden`-ATTRIBUUTIN, joten piilotus on
+   kirjoitettava näkyviin. 📐 Mitattu 14.10.2026: lautapelin päävalikko jäi
+   pelin päälle vaikka `hidden` oli asetettu — peli käynnistyi oikein sen
+   alla, eikä mikään kertonut mitään. Sama kuvio kuin muilla [hidden]-
+   säännöillä tässä tiedostossa. */
+.peite[hidden]{display:none}
+.tauko-laatikko{background:var(--ground);border-radius:16px;padding:22px 20px;
+  max-width:300px;width:100%;display:grid;gap:10px;justify-items:center}
+.verkko-osa{display:grid;grid-template-columns:minmax(0, 1fr);gap:10px;justify-items:center;width:100%}
+
 /* --- ALKUVALIKKO SAMAAN TYYLIIN KUIN PELIN VALIKKO (🔵 Marko 9.10.2026: «Muuta
  * myös tämän valikon tyyli tuon toisen valikon mukaiseksi») ---
  * Kuosi taustalla, täytetty oranssi = päätoiminto (Pelaa), oranssi reunaviiva =
@@ -157,6 +174,31 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;
   box-sizing:border-box;padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 0}
 .alku-kielet{height:var(--palkki);display:flex;align-items:center}
+
+/* 🔵 LAJI YLIMMÄSSÄ PALKISSA, KUTEN pizzalove.fi:n `.sivurivi` (Marko 14.10.2026:
+ * «Pitäisikö se korttipeli/lautapeli -valinta olla siellä ylhäällä oranssin palkin
+ * alapuolella valkoisessa palkissa? Siis samankaltaisessa paikassa, kuin
+ * pizzalove.fi-sivustollakin valitaan että mitä tehdään?»)
+ *
+ * Kyllä, kolmesta syystä: laji on ylin päätös ja ohjaa kaiken alla olevan ·
+ * sama paikka ja sama valkoinen palkki kuin sivustolla, joten peli luetaan
+ * saman tuotteen osaksi · ja se vapauttaa keskialueen isolle kuvalle, joka
+ * vaihtuu lajin mukana — «jotta käyttäjä tietää, että jotain oikeasti muuttuu».
+ *
+ * ⚠️ PALKKI TÄYTTÄÄ TASAN SEN TILAN JOKA ON JO OLEMASSA: `.alku-yla` on
+ * `viiri-l * .85` korkea ja oranssi palkki `palkki` korkea, joten väliin jää
+ * ~63 px 375 px:n ruudulla. Siinä tila oli ennen tyhjää kuosia.
+ * Viiri riippuu palkin päälle vasemmassa reunassa, ja sisältö alkaa viirin
+ * oikealta puolelta — täsmälleen kuten `.sivurivi` tekee. */
+.alku-lajipalkki{position:absolute;left:0;right:0;bottom:0;
+  top:calc(var(--yla-turva) + var(--palkki));
+  background:var(--surface, #fff);border-bottom:1px solid var(--line, #E7DCCA);
+  display:flex;align-items:center;box-sizing:border-box;
+  padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 calc(var(--viiri-x) + var(--viiri-l) + 10px)}
+.alku-lajipalkki .pelivalinta{margin:0}
+/* Alasivuilla (luo, liity, aula) viiri on piilossa ja palkki kutistuu — silloin
+   lajipalkkia ei ole, koska laji on jo valittu ja ruudussa on työ kesken. */
+.aloitusruutu:has(.alku-paa[hidden]) .alku-lajipalkki{display:none}
 /* ALASIVUT (luo, liity, aula; Partyssa moninpelin valinnat): pelin nimi palkkiin viirin
  * tilalle, ja ylälaita kutistuu palkin korkuiseksi — tila jää sisällölle (Marko 10.10.2026:
  * «Tässä ruudussa se pelimuoto olisi tärkeämpi, kuin tuo pizzaloven etiketti»). */
@@ -214,6 +256,12 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .aloitusruutu .pelivalinta-liuku{background:var(--warm,#FFF3E9)}
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
 .aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
+/* Valkoisessa palkissa ura on vaalean harmaa ja nappula valkoinen: palkki on jo
+   valkoinen, joten reunaviiva tekisi laatikon laatikon sisään. */
+.alku-lajipalkki .pelivalinta-kytkin{background:rgba(60,34,12,.09);border:0;padding:3px}
+.alku-lajipalkki .pelivalinta-liuku{background:#fff;box-shadow:0 1px 4px rgba(60,34,12,.28);left:3px;top:3px;bottom:3px;
+  width:calc((100% - 6px) / var(--n,2))}
+.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:14px;padding:8px 4px}
 
 /* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
  * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
@@ -234,10 +282,20 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * sen prosentti on kuvan OMASTA leveydestä: Basso 24 % ja laatikko 22 % reunan takana. */
 /* Marko 10.10.2026: «basso isompana ja enemmän piiloon ruudun sivuun. Pizzalaatikko ehkä
  * vähän enemmän näkymään.» Basso saa nousta alueen yli (115 %) palkin alle asti. */
-.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(115%, 420px);width:auto;
-  transform:translateX(34%) rotate(-14deg);transform-origin:50% 100%}
-.alku-laatikko{position:absolute;top:0;left:calc(-1 * var(--sivu));height:min(54%, 170px);width:auto;
-  transform:translateX(-8%) rotate(10deg)}
+/* ⚠️ ISOMMIKSI 14.10.2026 (Marko: «Apina ja rakastunut pizzalaatikko ovat
+   säälittävän pieniä»). Lajipalkki vei kuosista tyhjän kaistaleen, joten
+   maskoteille jäi tilaa kasvaa ilman että napit laskevat. */
+.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(140%, 520px);width:auto;
+  transform:translateX(30%) rotate(-14deg);transform-origin:50% 100%}
+.alku-laatikko{position:absolute;top:0;left:calc(-1 * var(--sivu));height:min(76%, 240px);width:auto;
+  transform:translateX(-10%) rotate(10deg)}
+
+/* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
+   siinä lautapelin päävalikossa ylhäällä tyhjässä tilassa»). Keskellä ja iso:
+   lajia vaihtaessa koko kuva vaihtuu, ja juuri se kertoo että jotain tapahtui. */
+.alku-lauta{position:absolute;left:50%;bottom:0;height:min(100%, 300px);width:auto;
+  transform:translateX(-50%);filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
+  drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */

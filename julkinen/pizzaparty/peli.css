@@ -805,9 +805,8 @@ h2{font-size:17px;margin:26px 0 6px}
 .valahdys.ei-kukaan{background:var(--himmea)}
 
 /* --- fantasiatäytteen arvonvalinta --- */
-.peite{position:fixed;inset:0;background:rgba(26,26,26,.55);display:grid;place-items:center;padding:20px;z-index:5}
-.tauko-laatikko{background:var(--ground);border-radius:16px;padding:22px 20px;
-  max-width:300px;width:100%;display:grid;gap:10px;justify-items:center}
+/* siirretty yhteinen.css:ään 14.10.2026 (lautapelin sivu tarvitsee samat) */
+/* siirretty yhteinen.css:ään 14.10.2026 (lautapelin sivu tarvitsee samat) */
 .tauko-merkki{font-size:44px;line-height:1;margin-bottom:2px}
 .tauko-laatikko .toinen-nappi{margin:0}
 /* --- X-kortin valinta (Marko 13.9.2026) ---
@@ -1159,7 +1158,7 @@ body.verkkopeli #pelaajarivi{display:none}
 /* minmax(0, 1fr): yksi katkeamaton teksti ei saa levittää saraketta — ja
  * sen mukana 100 %-levyisiä nappeja — laatikon yli (mitattu 11.9.2026:
  * tuotannon osoite teki sarakkeesta 455 px 340 px:n laatikossa). */
-.verkko-osa{display:grid;grid-template-columns:minmax(0, 1fr);gap:10px;justify-items:center;width:100%}
+/* siirretty yhteinen.css:ään 14.10.2026 (lautapelin sivu tarvitsee samat) */
 .verkko-apina{width:92px;height:auto}
 .verkko-kentta{
   width:100%;box-sizing:border-box;font:inherit;font-size:22px;font-weight:700;text-align:center;

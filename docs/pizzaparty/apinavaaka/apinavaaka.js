@@ -1434,4 +1434,18 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', kaynnista);
   else kaynnista();
+
+  /* ⚠️ KAKSI GLOBAALIA, JOTTA PELIMUOTOJEN NIMIÄ EI KIRJOITETA KAHDESTI
+     (14.10.2026). `apinavaaka.html`:n oma päävalikko tarvitsee samat nimet
+     neljällä kielellä kuin tämän tiedoston valikko. Kopio olisi kahdennus,
+     joka ajautuu erilleen ensimmäisestä nimenmuutoksesta — ja niitä on jo
+     tehty (“Harjoittele” → “Apinavaaka tutuksi”).
+
+     `apinavaakaKaynnista` on olemassa siksi, että päävalikosta tultaessa
+     komponenttia ei ole DOMissa käynnistyshetkellä: se saa `apinavaaka`-
+     luokkansa vasta kun pelimuoto on valittu. */
+  window.apinavaakaNimet = function (kieli) {
+    return (VINKIT[kieli] || VINKIT.en).nimet;
+  };
+  window.apinavaakaKaynnista = kaynnista;
 })();
