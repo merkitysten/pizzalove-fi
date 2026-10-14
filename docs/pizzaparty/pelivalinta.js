@@ -32,9 +32,12 @@ const PELIVALINTA_AVAIN = 'pizzapeli-peli';
    (Apinavaaka tutuksi · Nälkäiset apinat · Auta Bassoa) valitaan sen omasta
    valikosta, koska ne eivät ole sivuja vaan saman sivun tiloja. Tämä
    valitsin vaihtaa PELIN (sivunvaihto), ei muotoa. */
+/* ⚠️ LAJIN NIMI ON SUOMEA EIKÄ TUOTENIMI, JOTEN SE KÄÄNTYY (14.10.2026).
+   «Pizza Party» ei käänny, «Korttipeli» kääntyy — siksi laji kantaa
+   käännösavainta ja peli merkkijonoa. */
 const LAJIT = [
-  { avain: 'kortti', nimi: 'Korttipeli' },
-  { avain: 'lauta',  nimi: 'Lautapeli' },
+  { avain: 'kortti', ta: 'peli.kortti' },
+  { avain: 'lauta',  ta: 'peli.lauta' },
 ];
 const PELIT = [
   { avain: 'party',      sivu: './',              nimi: 'Pizza Party',  laji: 'kortti' },
@@ -47,7 +50,32 @@ function peliNyt() {
 }
 
 function peliMuista(avain) {
-  try { localStorage.setItem(PELIVALINTA_AVAIN, avain); } catch (e) { /* yksityinen selaus */ }
+  const peli = PELIT.filter(function (p) { return p.avain === avain; })[0];
+  try {
+    localStorage.setItem(PELIVALINTA_AVAIN, avain);
+    /* ⚠️ LAJIKOHTAINEN MUISTI ON ERI ASIA KUIN VIIMEKSI PELATTU. «Korttipeli»
+       vie siihen korttipeliin jota pelasit — ilman tätä se veisi aina
+       Pizza Partyyn, ja Basson pelaaja menettäisi valintansa joka kerta. */
+    if (peli) localStorage.setItem(PELIVALINTA_AVAIN + '-' + peli.laji, avain);
+  } catch (e) { /* yksityinen selaus */ }
+}
+
+function lajiNyt() {
+  const peli = PELIT.filter(function (p) { return p.avain === peliNyt(); })[0];
+  return peli ? peli.laji : LAJIT[0].avain;
+}
+
+function lajiAvain(laji) {
+  const l = LAJIT.filter(function (x) { return x.avain === laji; })[0];
+  return l ? l.ta : 'peli.valitse';
+}
+
+function lajinPeli(laji) {
+  const pelit = PELIT.filter(function (p) { return p.laji === laji; });
+  let muistettu = null;
+  try { muistettu = localStorage.getItem(PELIVALINTA_AVAIN + '-' + laji); } catch (e) { /* yksityinen selaus */ }
+  const osuma = pelit.filter(function (p) { return p.avain === muistettu; })[0];
+  return (osuma || pelit[0]).avain;
 }
 
 /* Kielivalinta kulkee osoitteessa vain jos se tuli osoitteessa; muuten se on
@@ -64,55 +92,120 @@ function peliVaihda(avain) {
  * kansiossa, ja sivut ovat kielikansioissa: ../fi/, ../sv/ … Varainhankinta-
  * sivustolla paluu vie sen etusivulle. (Siirretty valikko.js:stä, jotta
  * Bassokin osaa sen.) */
+/* PÄÄVALIKKO = korttipelin aloitusruutu (`index.html`), jossa valitaan peli,
+ * kieli ja pelitapa. Marko 14.10.2026: «Miten pääsen takaisin siihen
+ * päävalikkoon?» — lautapelistä ei ollut ulospääsyä muuta kuin selaimen
+ * takaisin-napilla.
+ *
+ * ⚠️ TÄMÄ VIE SAMAAN PAIKKAAN KUIN KYTKIMEN «Korttipeli», eikä sitä väitetä
+ * muuksi: korttipeli avautuu aloitusruutuunsa. Ero on nimessä, ja nimi on
+ * tässä koko asia — kytkin lupaa pelin vaihdon, tämä lupaa ulospääsyn. */
+function paavalikkoon() {
+  const kieli = new URLSearchParams(location.search).get('kieli');
+  location.assign('./' + (kieli ? '?kieli=' + encodeURIComponent(kieli) : ''));
+}
+
 function sivustonOsoite() {
   if (/(^|\.)merkitysten\.fi$/.test(location.hostname)) return '/';
   return '../' + (typeof KIELI === 'string' ? KIELI : 'fi') + '/';
 }
 
+/* ⚠️ KAKSI ASKELTA, EI YHTÄ LISTAA (Marko 14.10.2026: «Se korttipelin tai
+   lautapelin valinta pitäisi muuttaa niitä alempia valintoja ja siis
+   käytännössä koko ruutua. Eikä niin, että kokoajan on kaikki ruudulla.»
+   Ja samana iltana lautapelin puolelta: «ei tarvita valikkoon korttipelin
+   pelimuotoja»).
+
+   Askel 1 on LAJI, askel 2 on sen lajin pelit. Ruudulla on vain valitun
+   lajin pelit — ja jos lajissa on yksi peli, toista riviä ei ole lainkaan:
+   yhden napin valintalista ei ole valinta.
+
+   📐 Ennen tätä molempien lajien kaikki pelit olivat yhtä aikaa ruudulla
+   kahtena otsikoituna ryhmänä, ja lautapelin valikossa puolet näkyvästä
+   oli korttipelin sivuja. */
+function valitsinNappi(teksti, valittu, f) {
+  const nappi = document.createElement('button');
+  nappi.type = 'button';
+  nappi.className = 'pelivalinta-nappi' + (valittu ? ' valittu' : '');
+  nappi.setAttribute('role', 'radio');
+  nappi.setAttribute('aria-checked', valittu ? 'true' : 'false');
+  nappi.textContent = teksti;
+  nappi.onclick = f;
+  return nappi;
+}
+
+function valitsinRyhma(nimi) {
+  const ryhma = document.createElement('div');
+  ryhma.className = 'pelivalinta-ryhma';
+  ryhma.setAttribute('role', 'radiogroup');
+  ryhma.setAttribute('aria-label', nimi);
+  return ryhma;
+}
+
+/* 🔵 LAJI ON LIUKUKYTKIN (Marko 14.10.2026: «se valinta pitäisi ensin tehdä
+   korttipelin ja lautapelin välillä. Esim. liukukytkin. Siitä riippuu sitten
+   mitä muuta ruudulla näkyy.»).
+
+   Kytkin on kaksi painiketta ja niiden alla liukuva nappula (`--i` kertoo
+   kummalla puolella se on). ⚠️ Nappulaa ei piirretä napin omaksi taustaksi:
+   silloin siirtymä olisi välähdys eikä liuku, eikä kytkin eroaisi
+   painikeparista mitenkään. */
+function lajikytkin(laji) {
+  const kytkin = document.createElement('div');
+  kytkin.className = 'pelivalinta-kytkin';
+  kytkin.setAttribute('role', 'radiogroup');
+  kytkin.setAttribute('aria-label', t('peli.valitse'));
+  const nakyvat = LAJIT.filter(function (l) {
+    return PELIT.filter(function (p) { return p.laji === l.avain; }).length > 0;
+  });
+  kytkin.style.setProperty('--n', nakyvat.length);
+  const liuku = document.createElement('span');
+  liuku.className = 'pelivalinta-liuku';
+  liuku.setAttribute('aria-hidden', 'true');
+  kytkin.appendChild(liuku);
+  nakyvat.forEach(function (l, i) {
+    const valittu = l.avain === laji;
+    if (valittu) kytkin.style.setProperty('--i', i);
+    const nappi = document.createElement('button');
+    nappi.type = 'button';
+    nappi.className = 'pelivalinta-kytkin-nappi' + (valittu ? ' valittu' : '');
+    nappi.setAttribute('role', 'radio');
+    nappi.setAttribute('aria-checked', valittu ? 'true' : 'false');
+    nappi.textContent = t(l.ta);
+    nappi.onclick = function () { peliVaihda(lajinPeli(l.avain)); };
+    kytkin.appendChild(nappi);
+  });
+  return kytkin;
+}
+
 function pelivalintaPiirra() {
   const nyt = peliNyt();
-  /* Valikossa: painikerivi, valittu korostettuna. */
-  [].forEach.call(document.querySelectorAll('.pelivalinta'), function (rivi) {
-    rivi.innerHTML = '';
-    rivi.setAttribute('aria-label', t('peli.valitse'));
-    /* Jokainen laji on oma radiogroup: ruudunlukija kuulee «Korttipeli,
-       2 vaihtoehtoa», ei yhtä viiden kohdan listaa. */
-    LAJIT.forEach(function (laji) {
-      const pelit = PELIT.filter(function (p) { return p.laji === laji.avain; });
-      if (!pelit.length) return;
-      const otsikko = document.createElement('h4');
-      otsikko.className = 'pelivalinta-laji';
-      otsikko.textContent = laji.nimi;
-      rivi.appendChild(otsikko);
-      const ryhma = document.createElement('div');
-      ryhma.className = 'pelivalinta-ryhma';
-      ryhma.setAttribute('role', 'radiogroup');
-      ryhma.setAttribute('aria-label', laji.nimi);
-      pelit.forEach(function (p) {
-        const nappi = document.createElement('button');
-        nappi.type = 'button';
-        nappi.className = 'pelivalinta-nappi' + (p.avain === nyt ? ' valittu' : '');
-        nappi.setAttribute('role', 'radio');
-        nappi.setAttribute('aria-checked', p.avain === nyt ? 'true' : 'false');
-        nappi.textContent = p.nimi;
-        nappi.onclick = function () { peliVaihda(p.avain); };
-        ryhma.appendChild(nappi);
+  const laji = lajiNyt();
+  const lajinPelit = PELIT.filter(function (p) { return p.laji === laji; });
+
+  [].forEach.call(document.querySelectorAll('.pelivalinta'), function (paikka) {
+    paikka.innerHTML = '';
+    paikka.setAttribute('aria-label', t('peli.valitse'));
+
+    paikka.appendChild(lajikytkin(laji));
+
+    if (lajinPelit.length > 1) {
+      const pelirivi = valitsinRyhma(t(lajiAvain(laji)));
+      pelirivi.className += ' pelivalinta-ryhma--pelit';
+      lajinPelit.forEach(function (p) {
+        pelirivi.appendChild(valitsinNappi(p.nimi, p.avain === nyt, function () { peliVaihda(p.avain); }));
       });
-      rivi.appendChild(ryhma);
-    });
+      paikka.appendChild(pelirivi);
+    }
   });
-  /* Asetuksissa: sama valintalista kuin muilla asetussivuilla. */
+
+  /* Asetuksissa: sama kaksi askelta, pelit asetussivujen valintalistana. */
   const lista = document.getElementById('pelivalintaLista');
   if (lista) {
     lista.innerHTML = '';
-    LAJIT.forEach(function (laji) {
-      const pelit = PELIT.filter(function (p) { return p.laji === laji.avain; });
-      if (!pelit.length) return;
-      const otsikko = document.createElement('h4');
-      otsikko.className = 'pelivalinta-laji';
-      otsikko.textContent = laji.nimi;
-      lista.appendChild(otsikko);
-      pelit.forEach(function (p) {
+    lista.appendChild(lajikytkin(laji));
+    if (lajinPelit.length > 1) {
+      lajinPelit.forEach(function (p) {
         const nappi = document.createElement('button');
         nappi.className = 'as-valinta' + (p.avain === nyt ? ' valittu' : '');
         nappi.innerHTML = '<b></b>';
@@ -120,7 +213,7 @@ function pelivalintaPiirra() {
         nappi.onclick = function () { peliVaihda(p.avain); };
         lista.appendChild(nappi);
       });
-    });
+    }
   }
   const nimi = PELIT.filter(function (p) { return p.avain === nyt; })[0].nimi;
   const arvo = document.getElementById('arvoPeli');

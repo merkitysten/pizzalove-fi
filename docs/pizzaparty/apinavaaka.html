@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="Apinavaaka">
 <link rel="apple-touch-icon" href="apinavaaka/basso-paa.webp">
 <title>Apinavaaka</title>
-<link rel="stylesheet" href="pelivalinta.css?v=20261014a">
-<link rel="stylesheet" href="apinavaaka/apinavaaka.css">
+<link rel="stylesheet" href="pelivalinta.css?v=20261014b">
+<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261014b">
 <style>
   html,body{touch-action:manipulation;color-scheme:light}
   body{background:#FAF6EE;margin:0;font-family:Poppins,system-ui,sans-serif}
@@ -29,18 +29,37 @@
 <main>
 <div class="apinavaaka" id="av" data-koko></div>
 </main>
-<script src="kielet.js"></script>
-<script src="pelivalinta.js"></script>
+<script src="kielet.js?v=20261014b"></script>
+<script src="pelivalinta.js?v=20261014b"></script>
 <script>
-/* Kieli kulkee osoitteessa samoin kuin korttipelissä (pelivalinta.js vie sen
-   mukana), ja apinavaaka lukee sen omasta data-attribuutistaan. */
-var q = new URLSearchParams(location.search), k = q.get('kieli') || 'fi';
+/* KIELI ON YHTEINEN MOLEMMILLE PELEILLE (14.10.2026).
+   Lähde on sama kuin korttipelissä: ?kieli= → tallennetut asetukset
+   (`pizzapeli-asetukset`) → `kielet.js`:n päättelemä kieli → fi.
+
+   📐 Mitattu 14.10.2026: pelkkä `KIELI` ei riitä. `kielet.js` kirjoittaa
+   siihen vain osoitteessa tulleen kielen, koska korttipelissä tallennetun
+   lukee `peli.js` omassa vaiheessaan — ruotsiksi pelannut sai `KIELI === 'fi'`
+   ja tallennetuissa 'sv'. Siksi tallennettu luetaan erikseen.
+
+   ⚠️ OLETUS 'fi' OLI SE JOKA KATKAISI KIELEN PELIEN VÄLILLÄ: ruotsiksi
+   pelannut sai lautapelin suomeksi, koska osoitteessa ei ollut ?kieli=.
+   Toinen suunta toimii itsestään — apinavaaan oma kielivalinta lataa sivun
+   ?kieli=-parametrilla, ja `kielet.js` kirjoittaa sen yhteisiin asetuksiin. */
+var q = new URLSearchParams(location.search);
+var k = q.get('kieli') ||
+        (typeof tallennettuKieli === 'function' && tallennettuKieli()) ||
+        (typeof KIELI === 'string' ? KIELI : 'fi');
 document.documentElement.lang = k;
+/* ⚠️ JA KIELI ON KERROTTAVA MYÖS `pelivalinta.js`:LLE. Se piirtää lajikytkimen
+   `t()`:llä, joka lukee `KIELI`-muuttujaa — ja juuri siihen tallennettu kieli
+   ei päädy (ks. kielet.js). 📐 Mitattu: ruotsinkielisessä valikossa luki
+   «SPEL», mutta kytkimessä «Korttipeli / Lautapeli». */
+if (typeof KIELI === 'string' && KIELI !== k) KIELI = k;
 var av = document.getElementById('av');
 av.setAttribute('data-kieli', k);
 if (q.get('tila')) av.setAttribute('data-tila', q.get('tila'));
 </script>
-<script src="apinavaaka/noppa3d.js"></script>
-<script src="apinavaaka/apinavaaka.js"></script>
+<script src="apinavaaka/noppa3d.js?v=20261014b"></script>
+<script src="apinavaaka/apinavaaka.js?v=20261014b"></script>
 </body>
 </html>

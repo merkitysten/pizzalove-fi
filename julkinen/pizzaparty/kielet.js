@@ -266,6 +266,8 @@ const KIELET = {
     'as.peli':                'Peli',
     'palkki.valikko':         'Valikko',
     'peli.valitse':           'Valitse peli',
+    'peli.kortti':            'Korttipeli',
+    'peli.lauta':             'Lautapeli',
     'selite.peli':            'Pizza Partyssa kaikki yrittävät tehdä samaa pizzaa, ja nopein saa sen. Pizza Bassossa pelataan vuorotellen omista korteista, ja kierroksen voittaa se, jonka kädestä kortit loppuvat ensin. Kieli, laskutoimitukset ja hahmo säilyvät pelistä toiseen.',
   } },
 
@@ -474,6 +476,8 @@ const KIELET = {
     'as.peli':                'Spel',
     'palkki.valikko':         'Meny',
     'peli.valitse':           'Välj spel',
+    'peli.kortti':            'Kortspel',
+    'peli.lauta':             'Brädspel',
     'selite.peli':            'I Pizza Party försöker alla göra samma pizza, och den snabbaste får den. I Pizza Basso spelar man i tur och ordning med sina egna kort, och rundan vinns av den som först blir av med sina kort. Språk, räknesätt och figur följer med från spel till spel.',
   } },
 
@@ -680,6 +684,8 @@ const KIELET = {
     'as.peli':                'Game',
     'palkki.valikko':         'Menu',
     'peli.valitse':           'Choose a game',
+    'peli.kortti':            'Card game',
+    'peli.lauta':             'Board game',
     'selite.peli':            'In Pizza Party everyone tries to make the same pizza, and the fastest gets it. In Pizza Basso players take turns with their own cards, and the round is won by whoever runs out of cards first. Language, operations and character carry over from game to game.',
   } },
 
@@ -886,6 +892,8 @@ const KIELET = {
     'as.peli':                'Spiel',
     'palkki.valikko':         'Menü',
     'peli.valitse':           'Spiel wählen',
+    'peli.kortti':            'Kartenspiel',
+    'peli.lauta':             'Brettspiel',
     'selite.peli':            'Bei Pizza Party versuchen alle, dieselbe Pizza zu machen, und der Schnellste bekommt sie. Bei Pizza Basso spielt man reihum mit den eigenen Karten, und die Runde gewinnt, wer zuerst keine Karten mehr hat. Sprache, Rechenarten und Figur bleiben von Spiel zu Spiel erhalten.',
   } },
 };
@@ -899,9 +907,27 @@ let KIELI = 'fi';
  * 2. Jos kieltä ei ole koskaan valittu, käytetään selaimen kieltä. Tämä koskee
  *    erityisesti QR-koodilla liittyvää pelaajaa: hänen linkissään ei ole ?kieli=.
  * ⚠️ Avain 'pizzapeli-asetukset' on sama kuin peli.js:n ASETUSAVAIN. */
+/* ⚠️ TALLENNETTU KIELI EI PÄÄDY TÄHÄN `KIELI`-MUUTTUJAAN, JA SE ON TARKOITUS
+ * (mitattu 14.10.2026): korttipelissä `peli.js` ja `isanta.js` lukevat sen
+ * omassa `lataaAsetukset`-vaiheessaan. Osoitteessa tullut kieli kirjoitetaan
+ * tässä, tallennettua ei lueta takaisin.
+ *
+ * Lautapelillä ei ole sitä vaihetta — se on yksi komponentti, joka lukee
+ * kielen kerran käynnistyessään. Siksi lukija on oma funktionsa eikä
+ * apinavaaan omaa `localStorage`-kutsua: avain saa olla vain yhdessä
+ * paikassa, ja «onko kieli valmis» on sama kysymys molemmille. */
+const KIELI_ASETUSAVAIN = 'pizzapeli-asetukset';
+
+function tallennettuKieli() {
+  try {
+    var a = JSON.parse(localStorage.getItem(KIELI_ASETUSAVAIN) || 'null') || {};
+    return (a.kieli && KIELET[a.kieli] && KIELET[a.kieli].valmis) ? a.kieli : '';
+  } catch (e) { return ''; /* yksityinen selaus */ }
+}
+
 (function () {
   try {
-    var AVAIN = 'pizzapeli-asetukset';
+    var AVAIN = KIELI_ASETUSAVAIN;
     var a = JSON.parse(localStorage.getItem(AVAIN) || 'null') || {};
     var k = new URLSearchParams(location.search).get('kieli');
     if (!(k && KIELET[k] && KIELET[k].valmis) && !a.kieli) {

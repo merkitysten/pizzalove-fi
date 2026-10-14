@@ -113,8 +113,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #F47920);color:#fff}
 .valikko-laatikko .as-valinta.ensisijainen small{color:rgba(255,255,255,.92)}
 .valikko-laatikko .toinen-nappi{border:2px solid var(--orange, #F47920);background:#fff;font-weight:700}
-/* Pelin valinta kuosin päällä: umpinainen pohja, ettei kuosi näy tekstin läpi. */
-.valikko-laatikko .pelivalinta{background:#fff;border:2px solid var(--orange, #F47920)}
+/* Pelin valinta kuosin päällä: umpinainen pohja, ettei kuosi näy tekstin läpi.
+   ⚠️ POHJA ON RIVILLÄ EIKÄ SÄILIÖLLÄ (14.10.2026): valitsin on nyt kaksi riviä
+   (laji · pelit), ja säiliö on pelkkä pystysuunta niiden välissä. */
+.valikko-laatikko .pelivalinta-ryhma,
+.valikko-laatikko .pelivalinta-kytkin{background:#fff;border:2px solid var(--orange, #F47920)}
 
 /* --- ALOITUSRUUTU KOKO RUUDUN (🔵 Marko 9.10.2026: «Pitäisikö alkuvalikko olla koko
  * ruudun mittainen, jolloin siihen jäisi tilaa myös sille pizza love etiketille? —
@@ -205,7 +208,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 
 /* Pelin valinta: valittu reunaviivalla eikä täytettynä (🔵 Marko 9.10.2026:
  * «vain Pelaa täytetty») — yksi täytetty oranssi kertoo mistä aloitetaan. */
-.aloitusruutu .pelivalinta{border:1px solid rgba(60,34,12,.22);gap:6px}
+.aloitusruutu .pelivalinta-ryhma{border:1px solid rgba(60,34,12,.22)}
+/* Kytkimen ura on läpikuultava; kuosin päällä se tarvitsee umpinaisen pohjan. */
+.aloitusruutu .pelivalinta-kytkin{background:#fff;border:1px solid rgba(60,34,12,.22)}
+.aloitusruutu .pelivalinta-liuku{background:var(--warm,#FFF3E9)}
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
 .aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
 
@@ -342,7 +348,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   /* Valkoinen pohja + tumman tilan vaalea teksti = näkymätön (mitattu 9.10.2026,
    * koski myös pelin valikon reunanappeja). */
   .valikko-nappi.reuna, .valikko-laatikko .toinen-nappi,
-  .valikko-laatikko .pelivalinta{background:var(--ground)}
+  .valikko-laatikko .pelivalinta-ryhma,
+  .valikko-laatikko .pelivalinta-kytkin{background:var(--ground)}
+  .aloitusruutu .pelivalinta-kytkin{background:var(--ground)}
+  .aloitusruutu .pelivalinta-liuku,.pelivalinta-liuku{background:var(--surface)}
 }
 
 /* --- ASETUKSET (uudelleen järjestetty 9.10.2026) ---

@@ -25,6 +25,20 @@
 
 /* Apinavaaka-pikkupeli. Mahtuu yhdelle puhelimen ruudulle (~560 px korkea, 360 px leveä).
  * Värit tulevat sivuston tyyli.css:n muuttujista, oletukset tässä. */
+/* ⚠️ KOMPONENTTI EI SAA NOJATA SIVUSTON GLOBAALEIHIN SÄÄNTÖIHIN (14.10.2026).
+   Nämä kaksi tulivat pizzalove.fi:n `tyyli.css`:stä, ja apinavaaka on nyt myös
+   sivulla joka ei lataa sitä (`pizzaparty/apinavaaka.html`).
+
+   📐 Mitattu ero valikon apinassa: pizzalove.fi 52 × 66 px, uusi sivu
+   76 × 96 px — +46 %, koska `img{max-width:100%}` puuttui. Marko näki sen
+   puhelimesta ennen kuin yksikään tarkistin sanoi mitään: molemmat sivut
+   toimivat, toinen vain näytti rikkinäiseltä.
+
+   ⚠️ Ja tämä on se vikalaji joka toistuu: komponentti testattiin AINA
+   sivulla joka antoi nämä säännöt, joten riippuvuutta ei näkynyt. */
+.av,.av *,.av *::before,.av *::after{box-sizing:border-box}
+.av img{max-width:100%;height:auto;display:block}
+
 .av{position:relative;max-width:440px;margin:0 auto;background:var(--surface,#fff);border:1px solid var(--line,#E7DCCA);
   border-radius:var(--radius,18px);padding:12px 14px 16px;box-shadow:var(--shadow,none);
   -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;font-family:Poppins,"Helvetica Neue",Arial,sans-serif}
@@ -140,6 +154,8 @@
 .av__tavat dd{margin:0;align-self:center}
 .av__ikkuna-napit{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .av__ikkuna-napit .nappi{border:0;cursor:pointer;font-weight:700;font-size:15px}
+.av__paavalikko{display:block;width:100%;margin:14px 0 0;border:0;border-radius:12px;padding:11px 8px;
+  cursor:pointer;font:inherit;font-weight:700;font-size:14px;background:var(--warm,#FFF3E9);color:var(--deep,#C2580C)}
 .av__sulje{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:var(--warm,#FFF3E9);
   font-size:24px;line-height:1;cursor:pointer}
 

@@ -13,22 +13,50 @@
  * Kontekstisäännöt (`.valikko-laatikko .pelivalinta`, `.aloitusruutu
  * .pelivalinta`) jäivät `yhteinen.css`:ään: ne koskevat korttipelin omia
  * säiliöitä eivätkä valitsinta itseään. */
-/* --- PELIN VALINTA alkuvalikossa (pelivalinta.js) --- */
-/* ⚠️ RIVISTÄ TULI PYSTY, KOSKA LAJEJA ON KAKSI (14.10.2026). Ennen tämä oli
-   yksi vaakarivi, jossa jokainen peli oli vierekkäin. Nyt sisällä on kaksi
-   ryhmää otsikoineen (Korttipeli · Lautapeli), joten ulompi on pystysuunta ja
-   napit ovat vaakarivissä ryhmän sisällä. */
-.pelivalinta{display:flex;flex-direction:column;gap:2px;padding:4px;margin:0 0 4px;border-radius:12px;
-  width:100%;box-sizing:border-box;align-self:stretch;
+
+/* --- KAKSI RIVIÄ, EI KAHTA OTSIKOITUA RYHMÄÄ (14.10.2026) ---------------
+ * Ylärivi on laji (Korttipeli · Lautapeli), alarivi sen lajin pelit. Alarivi
+ * on olemassa vain jos lajissa on useampi peli, joten lautapelin puolella
+ * rivejä on yksi.
+ *
+ * ⚠️ OTSIKOT POISTUIVAT, EIVÄT SIIRTYNEET. `.pelivalinta-laji` oli pieni
+ * versaaliotsikko kummankin ryhmän yllä; kun ruudulla on vain yhden lajin
+ * pelit, otsikko kertoisi sen minkä valittu laji jo sanoo. */
+/* --- LAJIN LIUKUKYTKIN (Marko 14.10.2026) -------------------------------
+ * Ura, jonka päällä nappula liukuu. Nappula on oma elementtinsä eikä napin
+ * tausta: vain niin siirtymän näkee liukuna.
+ * ⚠️ Nappula on valkoinen eikä oranssi, koska aloitusruudussa on voimassa
+ * Markon 9.10. sääntö «vain Pelaa täytetty» — yksi täytetty oranssi kertoo
+ * mistä aloitetaan, ja kytkin kertoo missä ollaan. */
+.pelivalinta-kytkin{position:relative;display:grid;grid-template-columns:repeat(var(--n,2),1fr);
+  gap:0;padding:4px;border-radius:999px;background:rgba(60,34,12,.10);--i:0}
+.pelivalinta-liuku{position:absolute;left:4px;top:4px;bottom:4px;
+  width:calc((100% - 8px) / var(--n,2));border-radius:999px;background:var(--surface,#fff);
+  box-shadow:0 2px 6px rgba(60,34,12,.22);
+  transform:translateX(calc(var(--i) * 100%));transition:transform .22s ease}
+@media (prefers-reduced-motion:reduce){.pelivalinta-liuku{transition:none}}
+.pelivalinta-kytkin-nappi{position:relative;z-index:1;border:0;background:transparent;cursor:pointer;
+  padding:10px 6px;border-radius:999px;font:inherit;font-weight:700;font-size:15px;
+  color:rgba(26,26,26,.55);white-space:nowrap;transition:color .22s ease}
+.pelivalinta-kytkin-nappi.valittu{color:var(--deep,#C2580C)}
+.pelivalinta-kytkin-nappi:focus-visible{outline:3px solid var(--ink,#1A1A1A);outline-offset:2px}
+
+.pelivalinta{display:flex;flex-direction:column;gap:6px;margin:0 0 4px;
+  width:100%;box-sizing:border-box;align-self:stretch}
+.pelivalinta-ryhma{display:flex;gap:4px;padding:4px;border-radius:12px;
   background:rgba(60,34,12,.08)}
-.pelivalinta-ryhma{display:flex;gap:4px}
-/* Otsikko on nimilappu eikä painike: pieni, hillitty ja ryhmänsä yläpuolella. */
-.pelivalinta-laji{margin:2px 0 0 6px;font-size:11px;font-weight:700;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--soft,#6E6357)}
-.pelivalinta-laji:first-child{margin-top:0}
 .pelivalinta-nappi{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:10px 6px;cursor:pointer;
-  font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink);white-space:nowrap}
-.pelivalinta-nappi.valittu{background:var(--orange);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
-.pelivalinta-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-#pelivalintaLista .pelivalinta-laji{margin:10px 0 4px}
-#pelivalintaLista .pelivalinta-laji:first-child{margin-top:0}
+  font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink,#1A1A1A);
+  white-space:nowrap}
+.pelivalinta-nappi.valittu{background:var(--orange,#F47920);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
+.pelivalinta-nappi:focus-visible{outline:3px solid var(--ink,#1A1A1A);outline-offset:2px}
+
+/* Alarivi on alisteinen: kevyempi pohja ja reunakorostus täyden värin sijaan,
+   jotta oranssi sanoo ruudulla yhden asian — minkä lajin sisällä ollaan. */
+.pelivalinta-ryhma--pelit{background:rgba(60,34,12,.05)}
+.pelivalinta-ryhma--pelit .pelivalinta-nappi{font-size:14px;padding:8px 6px}
+.pelivalinta-ryhma--pelit .pelivalinta-nappi.valittu{background:var(--surface,#fff);color:var(--ink,#1A1A1A);
+  box-shadow:inset 0 0 0 2px var(--orange,#F47920)}
+
+/* Asetussivulla lajirivin alle jää ilmaa ennen pelien valintalistaa. */
+#pelivalintaLista .pelivalinta-ryhma{margin:0 0 10px}
