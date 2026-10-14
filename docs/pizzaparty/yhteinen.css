@@ -32,14 +32,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   max(20px, calc(env(safe-area-inset-bottom, 0px) + 8px)) max(20px, env(safe-area-inset-left, 0px))}
 .verkko-laatikko{max-height:calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}
 
-/* --- PELIN VALINTA alkuvalikossa (pelivalinta.js) --- */
-.pelivalinta{display:flex;gap:4px;padding:4px;margin:0 0 4px;border-radius:12px;
-  width:100%;box-sizing:border-box;align-self:stretch;
-  background:rgba(60,34,12,.08)}
-.pelivalinta-nappi{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:10px 6px;cursor:pointer;
-  font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink);white-space:nowrap}
-.pelivalinta-nappi.valittu{background:var(--orange);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
-.pelivalinta-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* PELIN VALINTA: säännöt ovat `pelivalinta.css`:ssä (14.10.2026) —
+   lautapelin sivu lataa valitsimen mutta ei tätä tiedostoa. */
+
 
 /* --- VALIKKONAPPI vasemmassa yläkulmassa (🔵 Marko 9.10.2026: «asetukset /
  * valikko vasemmassa yläkulmassa ja sitten se "jatka", "eteenpäin" tai "play"

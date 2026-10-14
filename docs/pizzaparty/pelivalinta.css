@@ -1,0 +1,34 @@
+/* PELIN VALINTA — oma tiedostonsa 14.10.2026.
+ *
+ * ⚠️ NÄMÄ OLIVAT `yhteinen.css`:ssä, ja se riitti niin kauan kuin valitsin oli
+ * vain korttipelin sivuilla. Lautapeli on nyt kolmas peli omalla sivullaan
+ * (`apinavaaka.html`), joka EI lataa `yhteinen.css`:ää — se on korttipelin
+ * tyyli, ja sen body- ja asettelusäännöt eivät kuulu komponenttisivulle.
+ *
+ * 📐 Mitattu: ilman tätä valitsin piirtyi apinavaaan valikkoon ilman
+ * ryhmälaatikkoa ja ilman valitun oranssia korostusta — toimi, näytti
+ * rikkinäiseltä. Kopiointi `apinavaaka.css`:ään olisi tehnyt samasta
+ * säännöstä kaksi; yksi tiedosto, jonka molemmat lataavat, pitää ne yhtenä.
+ *
+ * Kontekstisäännöt (`.valikko-laatikko .pelivalinta`, `.aloitusruutu
+ * .pelivalinta`) jäivät `yhteinen.css`:ään: ne koskevat korttipelin omia
+ * säiliöitä eivätkä valitsinta itseään. */
+/* --- PELIN VALINTA alkuvalikossa (pelivalinta.js) --- */
+/* ⚠️ RIVISTÄ TULI PYSTY, KOSKA LAJEJA ON KAKSI (14.10.2026). Ennen tämä oli
+   yksi vaakarivi, jossa jokainen peli oli vierekkäin. Nyt sisällä on kaksi
+   ryhmää otsikoineen (Korttipeli · Lautapeli), joten ulompi on pystysuunta ja
+   napit ovat vaakarivissä ryhmän sisällä. */
+.pelivalinta{display:flex;flex-direction:column;gap:2px;padding:4px;margin:0 0 4px;border-radius:12px;
+  width:100%;box-sizing:border-box;align-self:stretch;
+  background:rgba(60,34,12,.08)}
+.pelivalinta-ryhma{display:flex;gap:4px}
+/* Otsikko on nimilappu eikä painike: pieni, hillitty ja ryhmänsä yläpuolella. */
+.pelivalinta-laji{margin:2px 0 0 6px;font-size:11px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--soft,#6E6357)}
+.pelivalinta-laji:first-child{margin-top:0}
+.pelivalinta-nappi{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:10px 6px;cursor:pointer;
+  font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink);white-space:nowrap}
+.pelivalinta-nappi.valittu{background:var(--orange);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
+.pelivalinta-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+#pelivalintaLista .pelivalinta-laji{margin:10px 0 4px}
+#pelivalintaLista .pelivalinta-laji:first-child{margin-top:0}

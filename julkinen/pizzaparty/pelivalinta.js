@@ -21,9 +21,25 @@
 
 const PELIVALINTA_AVAIN = 'pizzapeli-peli';
 /* Nimet ovat tuotenimiä eivätkä käänny. Uusi pelimuoto = uusi rivi tähän. */
+/* ⚠️ LAJI ON OMA TASONSA, EI NELJÄS RIVI LISTASSA (Marko 14.10.2026: «pitää
+   olla erikseen valinta korttipelin ja lautapelin välillä»).
+
+   Korttipelin muodot ovat saman pakan eri säännöstöjä; lautapeli on eri peli
+   eri välineillä. Tasalistassa ne näyttäisivät vertailukelpoisilta, ja
+   valinta «Pizza Basso vai Apinavaaka» on kysymys jota kukaan ei esitä.
+
+   ⚠️ LAUTAPELIN PELIMUODOT EIVÄT OLE TÄÄLLÄ. Apinavaaan kolme muotoa
+   (Apinavaaka tutuksi · Nälkäiset apinat · Auta Bassoa) valitaan sen omasta
+   valikosta, koska ne eivät ole sivuja vaan saman sivun tiloja. Tämä
+   valitsin vaihtaa PELIN (sivunvaihto), ei muotoa. */
+const LAJIT = [
+  { avain: 'kortti', nimi: 'Korttipeli' },
+  { avain: 'lauta',  nimi: 'Lautapeli' },
+];
 const PELIT = [
-  { avain: 'party', sivu: './', nimi: 'Pizza Party' },
-  { avain: 'basso', sivu: 'basso.html', nimi: 'Pizza Basso' },
+  { avain: 'party',      sivu: './',              nimi: 'Pizza Party',  laji: 'kortti' },
+  { avain: 'basso',      sivu: 'basso.html',      nimi: 'Pizza Basso',  laji: 'kortti' },
+  { avain: 'apinavaaka', sivu: 'apinavaaka.html', nimi: 'Apinavaaka',   laji: 'lauta'  },
 ];
 
 function peliNyt() {
@@ -58,30 +74,52 @@ function pelivalintaPiirra() {
   /* Valikossa: painikerivi, valittu korostettuna. */
   [].forEach.call(document.querySelectorAll('.pelivalinta'), function (rivi) {
     rivi.innerHTML = '';
-    rivi.setAttribute('role', 'radiogroup');
     rivi.setAttribute('aria-label', t('peli.valitse'));
-    PELIT.forEach(function (p) {
-      const nappi = document.createElement('button');
-      nappi.type = 'button';
-      nappi.className = 'pelivalinta-nappi' + (p.avain === nyt ? ' valittu' : '');
-      nappi.setAttribute('role', 'radio');
-      nappi.setAttribute('aria-checked', p.avain === nyt ? 'true' : 'false');
-      nappi.textContent = p.nimi;
-      nappi.onclick = function () { peliVaihda(p.avain); };
-      rivi.appendChild(nappi);
+    /* Jokainen laji on oma radiogroup: ruudunlukija kuulee «Korttipeli,
+       2 vaihtoehtoa», ei yhtä viiden kohdan listaa. */
+    LAJIT.forEach(function (laji) {
+      const pelit = PELIT.filter(function (p) { return p.laji === laji.avain; });
+      if (!pelit.length) return;
+      const otsikko = document.createElement('h4');
+      otsikko.className = 'pelivalinta-laji';
+      otsikko.textContent = laji.nimi;
+      rivi.appendChild(otsikko);
+      const ryhma = document.createElement('div');
+      ryhma.className = 'pelivalinta-ryhma';
+      ryhma.setAttribute('role', 'radiogroup');
+      ryhma.setAttribute('aria-label', laji.nimi);
+      pelit.forEach(function (p) {
+        const nappi = document.createElement('button');
+        nappi.type = 'button';
+        nappi.className = 'pelivalinta-nappi' + (p.avain === nyt ? ' valittu' : '');
+        nappi.setAttribute('role', 'radio');
+        nappi.setAttribute('aria-checked', p.avain === nyt ? 'true' : 'false');
+        nappi.textContent = p.nimi;
+        nappi.onclick = function () { peliVaihda(p.avain); };
+        ryhma.appendChild(nappi);
+      });
+      rivi.appendChild(ryhma);
     });
   });
   /* Asetuksissa: sama valintalista kuin muilla asetussivuilla. */
   const lista = document.getElementById('pelivalintaLista');
   if (lista) {
     lista.innerHTML = '';
-    PELIT.forEach(function (p) {
-      const nappi = document.createElement('button');
-      nappi.className = 'as-valinta' + (p.avain === nyt ? ' valittu' : '');
-      nappi.innerHTML = '<b></b>';
-      nappi.querySelector('b').textContent = p.nimi;
-      nappi.onclick = function () { peliVaihda(p.avain); };
-      lista.appendChild(nappi);
+    LAJIT.forEach(function (laji) {
+      const pelit = PELIT.filter(function (p) { return p.laji === laji.avain; });
+      if (!pelit.length) return;
+      const otsikko = document.createElement('h4');
+      otsikko.className = 'pelivalinta-laji';
+      otsikko.textContent = laji.nimi;
+      lista.appendChild(otsikko);
+      pelit.forEach(function (p) {
+        const nappi = document.createElement('button');
+        nappi.className = 'as-valinta' + (p.avain === nyt ? ' valittu' : '');
+        nappi.innerHTML = '<b></b>';
+        nappi.querySelector('b').textContent = p.nimi;
+        nappi.onclick = function () { peliVaihda(p.avain); };
+        lista.appendChild(nappi);
+      });
     });
   }
   const nimi = PELIT.filter(function (p) { return p.avain === nyt; })[0].nimi;

@@ -1,3 +1,28 @@
+/* ⚠️ APINAVAAKA TUO OMAN TYPOGRAFIANSA (14.10.2026). Kun komponentti asui
+   pizzalove-fi:ssä, fontit tulivat sivuston `tyyli.css`:stä. Pelin puolella
+   sellaista ei ole — `yhteinen.css` ei määrittele yhtäkään sivuston tokenia
+   eikä Poppinsia, ja `peli.css` on korttipelin oma 1 296 rivin tyyli, jota
+   tämä ei voi ladata.
+
+   📐 Mitattu: apinavaaka käyttää painoja 600, 700 ja 800, mutta pelin
+   `fontit/`-kansiossa oli vain 400 ja 700. Ilman tätä selain olisi
+   syntetisoinut 600:n ja 800:n — ei virhe jonka huomaa, vaan hieman väärä
+   kirjasinpaino. 600 ja 800 kopioitiin pizzalove-fi:n fonteista.
+
+   ⚠️ Värit eivät tarvitse mitään: jokaisella sivuston tokenilla on
+   apinavaaassa jo varapolku (`var(--ink,#1A1A1A)` jne.), joten komponentti
+   näyttää oikealta myös ilman `tyyli.css`:ää. Vain `--i`, `--leveys` ja
+   `--pala` ovat ilman varapolkua, ja ne ovat komponentin omia, JS:n
+   asettamia. */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;
+  src:url('../fontit/poppins-400.woff2') format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:600;font-display:swap;
+  src:url('../fontit/poppins-600.woff2') format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;
+  src:url('../fontit/poppins-700.woff2') format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800;font-display:swap;
+  src:url('../fontit/poppins-800.woff2') format('woff2')}
+
 /* Apinavaaka-pikkupeli. Mahtuu yhdelle puhelimen ruudulle (~560 px korkea, 360 px leveä).
  * Värit tulevat sivuston tyyli.css:n muuttujista, oletukset tässä. */
 .av{position:relative;max-width:440px;margin:0 auto;background:var(--surface,#fff);border:1px solid var(--line,#E7DCCA);

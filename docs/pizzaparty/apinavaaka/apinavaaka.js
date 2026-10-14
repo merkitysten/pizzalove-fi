@@ -127,25 +127,25 @@
     en: ['Basic move', 'Sum move', 'Difference move'], de: ['Grundzug', 'Summenzug', 'Differenzzug']
   };
   var VINKIT = {
-    fi: { valikko: 'Valikko', muodot: 'Pelimuodot', kieli: 'Kieli',
+    fi: { valikko: 'Valikko', peli: 'Peli', muodot: 'Pelimuodot', kieli: 'Kieli',
       nimet: { harjoitus: 'Apinavaaka tutuksi', vapaa: 'Vapaa peli', apinat: 'Nälkäiset apinat', pulmat: 'Auta Bassoa' },
       harjoitus: ['Tee tornit yhtä korkeiksi.', 'Lamppu syttyy, kun siirto on oikein.', 'Torni liikkuu aina kokonaisena.'],
       vapaa: ['Siirto onnistuu aina – etsi se!', 'Liian iso noppa? Vie torneja takaisin varastoon.'],
       apinat: ['Tuo pizzan täyte kulhoon.', 'Napauta pizzaa – se paistuu uunissa.', 'Jos pizzaa ei synny, apinat syövät palat!'],
       pulmat: ['Valmista pizza yhdellä siirrolla.', 'Pizzan kaikki täytteet pitää saada linjastolle.', 'Jumissa? Lamppu kertoo siirtotavan.'] },
-    sv: { valikko: 'Meny', muodot: 'Spellägen', kieli: 'Språk',
+    sv: { valikko: 'Meny', peli: 'Spel', muodot: 'Spellägen', kieli: 'Språk',
       nimet: { harjoitus: 'Lär känna apavågen', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
       harjoitus: ['Gör tornen lika höga.', 'Lampan tänds när flytten är rätt.', 'Ett torn flyttas alltid helt.'],
       vapaa: ['Det finns alltid en flytt – hitta den!', 'För högt tal? Flytta torn tillbaka till lagret.'],
       apinat: ['För pizzans fyllning till skålen.', 'Tryck på pizzan – den gräddas i ugnen.', 'Blir det ingen pizza äter aporna bitarna!'],
       pulmat: ['Gör pizzan med en flytt.', 'Alla pizzans fyllningar ska till linjen.', 'Fast? Lampan berättar vilken flytt.'] },
-    en: { valikko: 'Menu', muodot: 'Game modes', kieli: 'Language',
+    en: { valikko: 'Menu', peli: 'Game', muodot: 'Game modes', kieli: 'Language',
       nimet: { harjoitus: 'Get to know the scales', vapaa: 'Free play', apinat: 'Hungry monkeys', pulmat: 'Help Basso' },
       harjoitus: ['Make the towers equally high.', 'The lamp lights up when the move is right.', 'A tower always moves as a whole.'],
       vapaa: ['There is always a move – find it!', 'Dice too high? Move towers back to the storage.'],
       apinat: ['Bring the pizza’s topping into its bowl.', 'Tap the pizza – it bakes in the oven.', 'No pizza? The monkeys eat the slices!'],
       pulmat: ['Make the pizza with one move.', 'All of the pizza’s toppings must reach the line.', 'Stuck? The lamp tells you the type of move.'] },
-    de: { valikko: 'Menü', muodot: 'Spielarten', kieli: 'Sprache',
+    de: { valikko: 'Menü', peli: 'Spiel', muodot: 'Spielarten', kieli: 'Sprache',
       nimet: { harjoitus: 'Die Affenwaage kennenlernen', vapaa: 'Freies Spiel', apinat: 'Hungrige Affen', pulmat: 'Hilf Basso' },
       harjoitus: ['Mach die Türme gleich hoch.', 'Die Lampe leuchtet, wenn der Zug stimmt.', 'Ein Turm bewegt sich immer ganz.'],
       vapaa: ['Es gibt immer einen Zug – finde ihn!', 'Würfel zu hoch? Bring Türme zurück ins Lager.'],
@@ -469,7 +469,15 @@
     ikkuna.setAttribute('aria-modal', 'true');
     var vk = VINKIT[kieli] || VINKIT.en, tavat = TAVAT_DL[kieli] || TAVAT_DL.en;
     ikkuna.innerHTML = '<div class="av__ikkuna-sisus"><img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
-      '<div class="av__vinkit"></div><h3 class="av__muodot-otsikko">' + vk.muodot + '</h3><div class="av__ikkuna-napit"></div>' +
+      '<div class="av__vinkit"></div>' +
+      /* ⚠️ PELIN VAIHTO VAIN PELISSÄ (14.10.2026). Apinavaaka on myös oma
+         sivunsa (pizzalove.fi/apinavaaka-testi), jossa ei ole muita pelejä —
+         siellä `pelivalinta.js`:ää ei ole ladattu, eikä tyhjää «PELI»-otsikkoa
+         saa näkyä. Siksi lohko syntyy vain kun valitsin on olemassa, eikä
+         komponentti tiedä pelistä mitään muuta. */
+      (typeof pelivalintaPiirra === 'function'
+        ? '<h3 class="av__muodot-otsikko">' + vk.peli + '</h3><div class="pelivalinta"></div>' : '') +
+      '<h3 class="av__muodot-otsikko">' + vk.muodot + '</h3><div class="av__ikkuna-napit"></div>' +
       '<h3 class="av__muodot-otsikko">' + vk.kieli + '</h3><div class="av__kielet">' + KIELET.map(function (k) {
         return '<button type="button" data-k="' + k[0] + '"' + (k[0] === kieli ? ' class="nyt"' : '') + '>' + k[1] + '</button>'; }).join('') + '</div>' +
       '<button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
@@ -496,7 +504,12 @@
         location.search = q.toString();
       });
     });
-    function avaa() { taytaVinkit(); ikkuna.hidden = false; ikkuna.querySelector('.av__sulje').focus(); }
+    function avaa() {
+      taytaVinkit();
+      /* Valitsin piirtää itse nykyisen pelin korostuksen ja hoitaa vaihdon. */
+      if (typeof pelivalintaPiirra === 'function') { try { pelivalintaPiirra(); } catch (e) {} }
+      ikkuna.hidden = false; ikkuna.querySelector('.av__sulje').focus();
+    }
     function sulje() { ikkuna.hidden = true; infoNappi.focus(); }
     infoNappi.addEventListener('click', avaa);
     ikkuna.querySelector('.av__sulje').addEventListener('click', sulje);
