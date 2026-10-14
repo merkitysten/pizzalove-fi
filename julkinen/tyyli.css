@@ -86,8 +86,20 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .kielet__lista a:hover{background:var(--tint)}
 .kielet__lista a[aria-current="true"]::after{content:"✓";color:var(--deep);font-weight:800}
 
-.sivurivi{background:color-mix(in srgb,var(--ground) 92%,transparent);
-  backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);
+/* ⚠️ SIVURIVI ON VALKOINEN, EI LÄPIKUULTAVA (Marko 14.10.2026: «se pitäisi
+   olla valkoinen, jotta se erottuisi taustasta»). Tässä luki
+   `color-mix(--ground 92%, transparent)` + `blur(8px)`, eli palkki oli 92 %
+   samaa beigeä kuin sivun tausta ja päästi täytekuosin läpi — kiinnitetyssä
+   palkissa se on tyylikäs ratkaisu, mutta se tekee palkista saman värisen
+   kuin se mistä sen pitäisi erottua.
+
+   ⚠️ Ja sumennus poistetaan samalla: läpinäkymättömän taustan takana
+   `backdrop-filter` ei voi tehdä mitään. Jättäminen ei näkyisi ruudulla
+   mutta pitäisi yllä oman kompositointikerroksensa — kuollutta koodia joka
+   maksaa puhelimella. `--surface` on oikea avain (valkoinen, tummassa
+   tilassa #221D18), ei kovakoodattu #fff: muuten tumma tila saisi
+   valkoisen palkin. */
+.sivurivi{background:var(--surface);
   border-bottom:1px solid var(--line);
   padding:0 max(16px,env(safe-area-inset-right,0px),calc((100% - 1040px)/2));
   padding-left:calc(max(16px,env(safe-area-inset-left,0px),calc((100% - 1040px)/2)) + var(--viiri-w) + 10px)}

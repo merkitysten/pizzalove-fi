@@ -333,3 +333,8 @@
   --line:#E7DCCA;--line2:#D6C7AF;--orange:#F47920;--deep:#C2580C;--radius:18px;
   --shadow:0 1px 2px rgba(60,34,12,.06),0 8px 24px rgba(60,34,12,.08)}
 .av--koko{background:#FAF6EE}
+
+/* opas: tekstin vaihtuessa pieni välähdys, jotta muutos huomataan */
+@keyframes av-valahdys{0%{opacity:.2;transform:scale(.96)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
+.av__rivi--uusi{animation:av-valahdys .42s ease-out}
+@media (prefers-reduced-motion:reduce){.av__rivi--uusi{animation:none}}

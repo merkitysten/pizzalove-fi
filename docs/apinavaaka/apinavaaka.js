@@ -178,7 +178,7 @@
         ok: 'Totta! 1 + 2 = 3.', pizza: 'Nyt oliivipizzan voi valmistaa!' },
       C: { kysy: 'Tuo katkarapu (5).', liikaa: 'Oho, liian painava! Mikä linjaston täyte tuo tasapainon?',
         ok: 'Aivan! 3 + 2 = 5. Tomaatti palaa varastoon ja katkarapu menee linjastolle.', pizza: 'Linjasto kasvoi 5 − 2 = 3. Nyt katkarapupizzan voi valmistaa!' },
-      katso: 'Katso, mitä täytettä pizzat tarvitsevat.', eiPizzaa: 'Tasapaino, mutta yksikään pizza ei tarvitse tätä täytettä. Katso pizzoja!', vie: 'Vie', itseOk: 'Tasapaino!', pizzaItse: 'Valmista pizza!', vihje: 'Katso hohtavia täytteitä.',
+      katso: 'Katso, mitä täytettä pizzat tarvitsevat.', eiPizzaa: 'Tasapaino, mutta yksikään pizza ei tarvitse tätä täytettä. Katso pizzoja!', vie: 'Vie', jatka: 'Jatka', itseOk: 'Tasapaino!', pizzaItse: 'Valmista pizza!', vihje: 'Katso hohtavia täytteitä.',
       vaara: { A: 'Tasapaino, mutta perussiirto tehdään yhdellä täytteellä.', B: 'Tasapaino, mutta summasiirrossa käytetään useaa pientä täytettä.',
         C: 'Tasapaino, mutta erotussiirrossa yksi täyte lähtee linjastolta.' }
     },
@@ -197,7 +197,7 @@
         ok: 'Rätt! 1 + 2 = 3.', pizza: 'Nu kan olivpizzan göras!' },
       C: { kysy: 'Hämta räkan (5).', liikaa: 'Oj, för tungt! Vilken fyllning på linjen ger balans?',
         ok: 'Precis! 3 + 2 = 5. Tomaten går tillbaka till lagret och räkan till linjen.', pizza: 'Linjen växte 5 − 2 = 3. Nu kan räkpizzan göras!' },
-      katso: 'Titta vilken fyllning pizzorna behöver.', eiPizzaa: 'Balans, men ingen pizza behöver den här fyllningen. Titta på pizzorna!', vie: 'Flytta', itseOk: 'Balans!', pizzaItse: 'Gör pizzan!', vihje: 'Titta på de lysande fyllningarna.',
+      katso: 'Titta vilken fyllning pizzorna behöver.', eiPizzaa: 'Balans, men ingen pizza behöver den här fyllningen. Titta på pizzorna!', vie: 'Flytta', jatka: 'Fortsätt', itseOk: 'Balans!', pizzaItse: 'Gör pizzan!', vihje: 'Titta på de lysande fyllningarna.',
       vaara: { A: 'Balans, men en basflytt görs med en fyllning.', B: 'Balans, men i en summaflytt används flera små fyllningar.',
         C: 'Balans, men i en skillnadsflytt lämnar en fyllning linjen.' }
     },
@@ -216,7 +216,7 @@
         ok: 'Right! 1 + 2 = 3.', pizza: 'Now the olive pizza can be made!' },
       C: { kysy: 'Bring the shrimp (5).', liikaa: 'Oops, too heavy! Which topping on the line brings balance?',
         ok: 'Exactly! 3 + 2 = 5. The tomato goes back to the storage and the shrimp to the line.', pizza: 'The line grew by 5 − 2 = 3. Now the shrimp pizza can be made!' },
-      katso: 'Look at which topping the pizzas need.', eiPizzaa: 'Balanced, but no pizza needs this topping. Look at the pizzas!', vie: 'Move', itseOk: 'Balanced!', pizzaItse: 'Make the pizza!', vihje: 'Look at the glowing toppings.',
+      katso: 'Look at which topping the pizzas need.', eiPizzaa: 'Balanced, but no pizza needs this topping. Look at the pizzas!', vie: 'Move', jatka: 'Continue', itseOk: 'Balanced!', pizzaItse: 'Make the pizza!', vihje: 'Look at the glowing toppings.',
       vaara: { A: 'Balanced, but a basic move uses one topping.', B: 'Balanced, but a sum move uses several small toppings.',
         C: 'Balanced, but in a difference move one topping leaves the line.' }
     },
@@ -235,7 +235,7 @@
         ok: 'Richtig! 1 + 2 = 3.', pizza: 'Jetzt kann die Olivenpizza gebacken werden!' },
       C: { kysy: 'Bring die Garnele (5).', liikaa: 'Hoppla, zu schwer! Welche Zutat auf der Linie bringt das Gleichgewicht?',
         ok: 'Genau! 3 + 2 = 5. Die Tomate geht zurück ins Lager, die Garnele auf die Linie.', pizza: 'Die Linie ist um 5 − 2 = 3 gewachsen. Jetzt kann die Garnelenpizza gebacken werden!' },
-      katso: 'Schau, welche Zutat die Pizzen brauchen.', eiPizzaa: 'Gleichgewicht, aber keine Pizza braucht diese Zutat. Schau auf die Pizzen!', vie: 'Los', itseOk: 'Gleichgewicht!', pizzaItse: 'Back die Pizza!', vihje: 'Schau auf die leuchtenden Zutaten.',
+      katso: 'Schau, welche Zutat die Pizzen brauchen.', eiPizzaa: 'Gleichgewicht, aber keine Pizza braucht diese Zutat. Schau auf die Pizzen!', vie: 'Los', jatka: 'Weiter', itseOk: 'Gleichgewicht!', pizzaItse: 'Back die Pizza!', vihje: 'Schau auf die leuchtenden Zutaten.',
       vaara: { A: 'Gleichgewicht, aber ein Grundzug braucht eine Zutat.', B: 'Gleichgewicht, aber ein Summenzug braucht mehrere kleine Zutaten.',
         C: 'Gleichgewicht, aber beim Differenzzug verlässt eine Zutat die Linie.' }
     }
@@ -800,7 +800,7 @@
       }).join('') + '</span>' + (summa(tops) === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');
     }
     // ---- opastettu harjoitus
-    var vihjeAjastin = null, PINO_MAX = 12;   // korkein pino täysikokoisena; korkeammat pienennetään
+    var vihjeAjastin = null, PINO_MAX = 12, riviMuisti = { teksti: '', aika: 0 };   // korkein pino täysikokoisena; korkeammat pienennetään
     function vaihe() { return OPAS_VAIHEET[tila.oVaihe]; }
     function aloitaOpas(nro) {
       tila.muoto = 'opas'; tila.oVaihe = nro; tila.boksi = []; tila.loppu = false; tila.valitsee = false;
@@ -819,7 +819,7 @@
       for (var i = 1; i <= 10; i++) tila.paikka[i] = v.linjasto.indexOf(i) >= 0 ? 'linjasto' : 'varasto';
       tila.laudalla = v.kortit.slice(); tila.pakka = [];
       tila.tehtava = { tapa: v.tapa, noppa: v.noppa }; tila.havikki = false;
-      nollaa(); tila.vihje = null; piirra();
+      nollaa(); tila.vihje = null; tila.oVirheet = 0; tila.oVirheNyt = false; piirra();
     }
     function kaynnistaVaihe() { opasRuutu.hidden = true; ajastaVihje(); }
     function naytaRuutu(html, napinTeksti, f, toinen) {
@@ -857,19 +857,20 @@
       if (v.tapa === 'B') return tila.oikea.length >= 2;
       return tila.vasen.length >= 1;
     }
-    // omalla vuorolla: jos 6 sekuntiin ei tapahdu mitään, oikeat tornit alkavat hohtaa
+    // omalla vuorolla: heittämätön noppa tönäistään muistutukseksi. Hohtavat täytteet tulevat esiin vasta,
+    // kun pelaaja on kokeillut väärää kaksi kertaa (ks. opasYritys) – ei kiirettä lukea.
     function ajastaVihje() {
       clearTimeout(vihjeAjastin);
       if (tila.muoto !== 'opas' || vaihe().ohjattu) return;
-      tila.vihje = null;
       vihjeAjastin = setTimeout(function () {
         if (tila.muoto !== 'opas' || !opasRuutu.hidden) return;
         if (!tila.heitetty) { tonaise(noppaEl); return ajastaVihje(); }
-        if (tila.siirretty) return;
-        var rk = vaihe().ratkaisu;
-        tila.vihje = rk.oikea.concat(rk.vasen).filter(function (n) { return tila.oikea.indexOf(n) < 0 && tila.vasen.indexOf(n) < 0; });
-        piirra();
       }, 6000);
+    }
+    function opasYritys() {
+      if (++tila.oVirheet < 2 || tila.vihje || tila.siirretty) return;
+      var rk = vaihe().ratkaisu;
+      tila.vihje = rk.oikea.concat(rk.vasen);
     }
     function opasVie() {
       var v = vaihe();
@@ -884,13 +885,15 @@
     }
     function opasValmis() {
       tila.vaihe = 'odota'; clearTimeout(vihjeAjastin);
-      piirra();
-      setTimeout(function () {
-        if (tila.oVaihe < OPAS_VAIHEET.length - 1) return aloitaOpas(tila.oVaihe + 1);
-        tila.oVaihe = OPAS_VAIHEET.length;
-        naytaRuutu('<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt=""><h2>' + ot.loppu[0] + '</h2><p>' + ot.loppu[1] + '</p>',
-          ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); }, [ot.uudelleen, function () { aloitaOpas(0); }]);
-      }, 1100);
+      piirra();                                    // teksti jää näkyviin, kunnes pelaaja painaa Jatka
+    }
+    function opasJatka() {
+      if (tila.muoto !== 'opas' || tila.vaihe !== 'odota') return;
+      tila.vaihe = 'jatkettu';
+      if (tila.oVaihe < OPAS_VAIHEET.length - 1) return aloitaOpas(tila.oVaihe + 1);
+      tila.oVaihe = OPAS_VAIHEET.length;
+      naytaRuutu('<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt=""><h2>' + ot.loppu[0] + '</h2><p>' + ot.loppu[1] + '</p>',
+        ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); }, [ot.uudelleen, function () { aloitaOpas(0); }]);
     }
 
     function valmistettavat() {
@@ -978,7 +981,7 @@
     }
     function palauta(n) {
       if (tila.siirretty) return;
-      if (tila.muoto === 'opas') { if (vaihe().ohjattu) return; ajastaVihje(); }
+      if (tila.muoto === 'opas') { if (vaihe().ohjattu) return; ajastaVihje(); if (!tila.oVirheNyt) opasYritys(); }
       pulmaToiminta();
       if (tila.paikka[n] === 'oikea') tila.oikea.splice(tila.oikea.indexOf(n), 1);
       else tila.vasen = [];
@@ -1065,6 +1068,11 @@
       var eiPizzaa = opas && tasapaino && oikeaTapa() && !vaihe().ohjattu && !pizzaSyntyy();
       var pEiPizza = pulmat && tasapaino && !pulmaSyntyy();
       tila.valmis = tasapaino && !perusYhdistetty && (pulmat ? !pEiPizza : (!opas || (oikeaTapa() && !eiPizzaa)));
+      if (opas && vaihe() && !vaihe().ohjattu) {
+        var oVirhe = tasapaino && !tila.valmis;
+        if (oVirhe && !tila.oVirheNyt) opasYritys();
+        tila.oVirheNyt = oVirhe;
+      }
       var jatko = voiJatkaa();
       juuri.classList.toggle('av--noppapois', !jatko && heitetty && (tila.oikea.length > 0 || tila.vasen.length > 0 || tila.siirretty));
       if (jatko && !noppaEl.classList.contains('av__noppa--odottaa')) { noppa3d.odota(); noppaEl.classList.add('av__noppa--odottaa'); }
@@ -1216,6 +1224,7 @@
         rivi.classList.add('av__rivi--ok');
       } else if (opas && tila.vaihe === 'odota') {
         rivi.textContent = t.hyva; rivi.classList.add('av__rivi--ok');
+        nappi(vieSlot, ot.jatka, 'av__vie', opasJatka);
       } else if (opas && !heitetty) {
         rivi.textContent = t.heita;
       } else if (opas && tila.valmis) {
@@ -1258,6 +1267,11 @@
       if (perusYhdistetty) {
         rivi.innerHTML = ''; vieSlot.innerHTML = '';
         rivi.textContent = t.eiYhdistaPerus; rivi.className = 'av__rivi av__rivi--havikki';
+      }
+      if (opas) {
+        var rt = rivi.textContent, nyt = Date.now();
+        if (rt !== riviMuisti.teksti) { void rivi.offsetWidth; riviMuisti.teksti = rt; riviMuisti.aika = nyt; }
+        if (rt && nyt - riviMuisti.aika < 450) rivi.classList.add('av__rivi--uusi');
       }
 
       // hyllyt
