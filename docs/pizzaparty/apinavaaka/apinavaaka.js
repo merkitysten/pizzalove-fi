@@ -1546,4 +1546,13 @@
     return (VINKIT[kieli] || VINKIT.en).nimet;
   };
   window.apinavaakaKaynnista = kaynnista;
+
+  /* ⚠️ GEOMETRIA YHDESTÄ LÄHTEESTÄ (15.10.2026). Päävalikon apina kootaan
+     samoista kerroksista ja samoilla PSD-koordinaateilla kuin pelin apina.
+     Jos nämä luvut kopioitaisiin sivulle, kaksi apinaa ajautuisi erilleen
+     ensimmäisestä kuvamuutoksesta — ja ne ovat sama apina. */
+  window.apinavaakaKuvat = {
+    W: W, H: H, OSAT: OSAT, NIVEL_V: NIVEL_V, NIVEL_O: NIVEL_O,
+    KIELI_NIVEL: KIELI_NIVEL, KANSIO: KANSIO
+  };
 })();

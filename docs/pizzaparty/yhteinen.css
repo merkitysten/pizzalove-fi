@@ -320,9 +320,42 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 /* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
    siinä lautapelin päävalikossa ylhäällä tyhjässä tilassa»). Keskellä ja iso:
    lajia vaihtaessa koko kuva vaihtuu, ja juuri se kertoo että jotain tapahtui. */
-.alku-lauta{position:absolute;left:50%;bottom:5%;width:min(126%, 470px);height:auto;
-  transform:translateX(-50%);filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
+/* 🔵 ELÄVÄ VALIKKOAPINA (Marko 15.10.2026). Sama kerrosrakenne kuin pelissä,
+   mutta ilman pelin sääntöjä: palkki keinuu hiljaa ja kieli seuraa perässä.
+   Napautus (`heilahtaa`) antaa yhden isomman keinahduksen, lamppu välähtää.
+   ⚠️ Valkoinen tarrareuna on RYHMÄLLÄ eikä kerroksilla: kerroksittain se
+   piirtäisi reunan myös kerrosten väliin, ja apina halkeaisi saumoistaan. */
+/* 📐 Leveys on mitattu eikä arvattu: lamppu nostaa kuvan korkeutta, ja
+   126 % / 470 px työnsi sen 33 px valkoisen palkin alle. 108 % / 400 px
+   mahtuu palkin ja ensimmäisen napin väliin 375 × 715 -ruudulla. */
+.alku-vaaka{position:absolute;left:50%;bottom:4%;width:min(108%, 400px);
+  transform:translateX(-50%);
+  filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
+.alku-vaaka{overflow:hidden}
+.alku-vaaka-kangas{position:absolute;left:0;width:100%}
+.alku-vaaka-osa{position:absolute;height:auto;max-width:none;pointer-events:none}
+/* Palkki on yksi kappale: molemmat kädet kiertyvät samaan suuntaan, kuten
+   pelissä (`kasiV.style.transform = kasiO.style.transform`). */
+.alku-vaaka-kasi{animation:alku-keinu 5.5s ease-in-out infinite}
+.alku-vaaka-kieli{animation:alku-kieli 5.5s ease-in-out infinite}
+.alku-vaaka-lamppu, .alku-vaaka-saihkeet{opacity:0;transition:opacity .25s}
+@keyframes alku-keinu{0%,100%{transform:rotate(-2.4deg)}50%{transform:rotate(2.4deg)}}
+@keyframes alku-kieli{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-7deg)}}
+
+/* Napautus: isompi keinahdus ja lamppu päälle. */
+.alku-vaaka.heilahtaa{animation:alku-tarina .9s ease-out}
+.alku-vaaka.heilahtaa .alku-vaaka-kasi{animation:alku-keinahda .9s cubic-bezier(.3,1.6,.5,1)}
+.alku-vaaka.heilahtaa .alku-vaaka-kieli{animation:alku-kielahda .9s cubic-bezier(.3,1.6,.5,1)}
+.alku-vaaka.heilahtaa .alku-vaaka-lamppu,
+.alku-vaaka.heilahtaa .alku-vaaka-saihkeet{opacity:1}
+@keyframes alku-tarina{0%,100%{transform:translateX(-50%)}30%{transform:translateX(-50%) translateY(-6px)}}
+@keyframes alku-keinahda{0%{transform:rotate(0)}35%{transform:rotate(-8deg)}70%{transform:rotate(6deg)}100%{transform:rotate(0)}}
+@keyframes alku-kielahda{0%{transform:rotate(0)}35%{transform:rotate(14deg)}70%{transform:rotate(-20deg)}100%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){
+  .alku-vaaka-kasi,.alku-vaaka-kieli,.alku-vaaka.heilahtaa,
+  .alku-vaaka.heilahtaa .alku-vaaka-kasi,.alku-vaaka.heilahtaa .alku-vaaka-kieli{animation:none}
+}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */

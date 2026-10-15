@@ -29,7 +29,7 @@
      overflow:hidden}` katkaisee komponenttisivun vierityksen. Kumous on
      alla omassa <style>-lohkossa, joka ladataan tämän jälkeen. -->
 <link rel="stylesheet" href="peli.css?v=20261015d">
-<link rel="stylesheet" href="yhteinen.css?v=20261015j">
+<link rel="stylesheet" href="yhteinen.css?v=20261015p">
 <link rel="stylesheet" href="pelivalinta.css?v=20261015d">
 <link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015n">
 <style>
@@ -66,7 +66,7 @@
            lautapelin päävalikossa ylhäällä tyhjässä tilassa» — ja koko kuvan
            vaihtuminen on se mistä käyttäjä huomaa, että laji todella vaihtui. -->
       <div class="alku-maskotit" aria-hidden="true">
-        <img class="alku-lauta" src="apinavaaka/vaaka-kansi.webp?v=20261015b" width="1092" height="521" alt="">
+        <div class="alku-vaaka" id="alkuVaaka"></div>
       </div>
       <div class="alku-ruudut" id="lautaMuodot"></div>
       <hr class="valikko-viiva alku-viiva">
@@ -83,7 +83,7 @@
 <script src="kielet.js?v=20261015b"></script>
 <script src="pelivalinta.js?v=20261015d"></script>
 <script src="apinavaaka/noppa3d.js?v=20261015b"></script>
-<script src="apinavaaka/apinavaaka.js?v=20261015k"></script>
+<script src="apinavaaka/apinavaaka.js?v=20261015p"></script>
 <script>
 /* KIELI ON YHTEINEN MOLEMMILLE PELEILLE (14.10.2026).
    Lähde on sama kuin korttipelissä: ?kieli= → tallennetut asetukset
@@ -106,6 +106,70 @@ if (typeof KIELI === 'string' && KIELI !== k) KIELI = k;
 
 var av = document.getElementById('av');
 av.setAttribute('data-kieli', k);
+
+/* 🔵 ELÄVÄ VALIKKOAPINA (Marko 15.10.2026: «Saisiko apinan kädet ja kielen
+   liikkumaan tässä alkuvalikossa?»). Apina kootaan samoista kerroksista ja
+   samoilla PSD-koordinaateilla kuin pelissä (`apinavaakaKuvat`) — ei kopioita
+   lukuja, koska se on sama apina.
+
+   ⚠️ TÄMÄ EI OLE PELI VAAN KUVA JOKA LIIKKUU. Vaa'an sääntö (punnukset,
+   tasapaino, lamppu syttyy) on pelissä, ja toinen toteutus valikossa olisi
+   sama sääntö kahdessa paikassa. Napautus antaa yhden rajatun reaktion:
+   palkki keinahtaa, lamppu välähtää ja kieli heilahtaa — ei tilaa, ei
+   sääntöä, ei mitään opittavaa ohi pelin. */
+(function () {
+  var g = window.apinavaakaKuvat;
+  var paikka = document.getElementById('alkuVaaka');
+  if (!g || !paikka) return;
+  var pros = function (a, b) { return (a / b * 100).toFixed(4) + '%'; };
+  /* ⚠️ PSD-KANKAASSA ON TYHJÄÄ LAMPUN YLÄPUOLELLA, ja se tekisi apinasta
+     matalan: koko kangas on 3210 × 2422, mutta sisältö alkaa vasta lampun
+     kohdalta. Ikkuna rajaa tyhjän pois, ja kerrokset piirretään sen sisään
+     koko kankaan kokoisina — niin koordinaatit pysyvät pelin omina.
+     150 on juuri lampun (y 210) yläpuolella; säihkeet (y 22) näkyvät vain
+     napautuksessa ja saavat jäädä osittain rajauksen ulkopuolelle. */
+  var YLA = 150, KH = g.H - YLA;
+  paikka.style.aspectRatio = g.W + ' / ' + KH;
+  var kangas = document.createElement('div');
+  kangas.className = 'alku-vaaka-kangas';
+  kangas.style.top = '-' + (YLA / KH * 100).toFixed(4) + '%';
+  kangas.style.aspectRatio = g.W + ' / ' + g.H;
+  paikka.appendChild(kangas);
+
+  function kerros(nimi, tiedosto, luokka) {
+    var o = g.OSAT[nimi], i = document.createElement('img');
+    i.src = g.KANSIO + (tiedosto || nimi) + '.webp';
+    i.alt = ''; i.draggable = false;
+    i.className = 'alku-vaaka-osa' + (luokka ? ' ' + luokka : '');
+    i.style.left = pros(o[0], g.W); i.style.top = pros(o[1], g.H); i.style.width = pros(o[2], g.W);
+    kangas.appendChild(i);
+    return i;
+  }
+  function nivelle(el, nimi, nivel) {
+    var o = g.OSAT[nimi];
+    el.style.transformOrigin = pros(nivel[0] - o[0], o[2]) + ' ' + pros(nivel[1] - o[1], o[3]);
+  }
+  /* Järjestys kuten pelissä: kädet vartalon alle, kieli sen päälle. */
+  var kasiV = kerros('vasen', null, 'alku-vaaka-kasi');
+  var kasiO = kerros('oikea', null, 'alku-vaaka-kasi');
+  nivelle(kasiV, 'vasen', g.NIVEL_V); nivelle(kasiO, 'oikea', g.NIVEL_O);
+  kerros('vartalo');
+  var kieliEl = kerros('kieli', null, 'alku-vaaka-kieli');
+  nivelle(kieliEl, 'kieli', g.KIELI_NIVEL);
+  kerros('saihkeet', null, 'alku-vaaka-saihkeet');
+  kerros('lamppu', 'lamppu-pois');
+  kerros('lamppu', 'lamppu', 'alku-vaaka-lamppu');
+
+  /* Napautus: yksi keinahdus. Uusi napautus kesken animaation aloittaa alusta. */
+  paikka.addEventListener('click', function () {
+    paikka.classList.remove('heilahtaa');
+    void paikka.offsetWidth;          // pakottaa animaation alkuun
+    paikka.classList.add('heilahtaa');
+  });
+  paikka.addEventListener('animationend', function (e) {
+    if (e.target === paikka) paikka.classList.remove('heilahtaa');
+  });
+})();
 
 /* PELIMUODOT PÄÄVALIKKOON. Nimet tulevat `apinavaaka.js`:stä (apinavaakaNimet),
    ei tästä tiedostosta: sama nimi kahdessa paikassa ajautuu erilleen. */
