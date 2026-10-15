@@ -389,7 +389,10 @@ h2{font-size:17px;margin:26px 0 6px}
 .as-nimi{text-align:center;font-weight:700;font-size:17px}
 .as-kulma{
   font:inherit;font-size:20px;line-height:1;width:40px;height:40px;cursor:pointer;
-  background:none;color:var(--himmea);border:2px solid var(--raja);border-radius:11px;
+  /* ⚠️ OMA REUNA EIKÄ KALPEA (Marko 15.10.2026: «ei ole nyt brändin mukainen
+     ja se on hailakka»). Oranssi reuna on sama ele kuin aloitusruudun napeissa;
+     muoto on pyöristetty nelikulmio, ei ympyrä. */
+  background:#fff;color:var(--ink);border:2px solid var(--orange, #F47920);border-radius:11px;
   display:grid;place-items:center;padding:0;
 }
 .as-kulma:hover{color:var(--ink);border-color:var(--orange)}

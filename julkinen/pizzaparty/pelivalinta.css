@@ -22,21 +22,25 @@
  * ⚠️ OTSIKOT POISTUIVAT, EIVÄT SIIRTYNEET. `.pelivalinta-laji` oli pieni
  * versaaliotsikko kummankin ryhmän yllä; kun ruudulla on vain yhden lajin
  * pelit, otsikko kertoisi sen minkä valittu laji jo sanoo. */
-/* --- LAJIN LIUKUKYTKIN (Marko 14.10.2026) -------------------------------
+/* ⚠️ EI PILLEREITÄ (Marko 15.10.2026: «Täysin pyöreä pillerin pääty ei ole
+ * brändin mukainen vaan se on aina pyöristetty nelikulmio»). 📐 Mitattu:
+ * korttipelin omissa tyyleissä `999px` esiintyy nolla kertaa — pillerit
+ * tulivat tänne minun kanssani eilen. Nyt 12 px / 9 px, kuten muuallakin.
+ * --- LAJIN LIUKUKYTKIN (Marko 14.10.2026) -------------------------------
  * Ura, jonka päällä nappula liukuu. Nappula on oma elementtinsä eikä napin
  * tausta: vain niin siirtymän näkee liukuna.
  * ⚠️ Nappula on valkoinen eikä oranssi, koska aloitusruudussa on voimassa
  * Markon 9.10. sääntö «vain Pelaa täytetty» — yksi täytetty oranssi kertoo
  * mistä aloitetaan, ja kytkin kertoo missä ollaan. */
 .pelivalinta-kytkin{position:relative;display:grid;grid-template-columns:repeat(var(--n,2),1fr);
-  gap:0;padding:4px;border-radius:999px;background:rgba(60,34,12,.10);--i:0}
+  gap:0;padding:4px;border-radius:12px;background:rgba(60,34,12,.10);--i:0}
 .pelivalinta-liuku{position:absolute;left:4px;top:4px;bottom:4px;
-  width:calc((100% - 8px) / var(--n,2));border-radius:999px;background:var(--surface,#fff);
+  width:calc((100% - 8px) / var(--n,2));border-radius:9px;background:var(--surface,#fff);
   box-shadow:0 2px 6px rgba(60,34,12,.22);
   transform:translateX(calc(var(--i) * 100%));transition:transform .22s ease}
 @media (prefers-reduced-motion:reduce){.pelivalinta-liuku{transition:none}}
 .pelivalinta-kytkin-nappi{position:relative;z-index:1;border:0;background:transparent;cursor:pointer;
-  padding:10px 6px;border-radius:999px;font:inherit;font-weight:700;font-size:15px;
+  padding:10px 6px;border-radius:9px;font:inherit;font-weight:700;font-size:15px;
   color:rgba(26,26,26,.55);white-space:nowrap;transition:color .22s ease}
 .pelivalinta-kytkin-nappi.valittu{color:var(--deep,#C2580C)}
 .pelivalinta-kytkin-nappi:focus-visible{outline:3px solid var(--ink,#1A1A1A);outline-offset:2px}

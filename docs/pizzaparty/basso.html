@@ -53,9 +53,9 @@
      näkyi hetken tyhjä pohja ja tyhjä ympyrä pallilla (mitattu 9.10.2026). -->
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
-<link rel="stylesheet" href="peli.css?v=20261015b">
-<link rel="stylesheet" href="yhteinen.css?v=20261015c">
-<link rel="stylesheet" href="pelivalinta.css?v=20261015b">
+<link rel="stylesheet" href="peli.css?v=20261015d">
+<link rel="stylesheet" href="yhteinen.css?v=20261015d">
+<link rel="stylesheet" href="pelivalinta.css?v=20261015d">
 <link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
 <body>
@@ -178,8 +178,10 @@
            Lisätietoja → Laskutoimitusten i-napin taakse, Kauppaan → valikkoon,
            Takaisin sivustolle → alkuvalikossa jo. -->
       <nav class="as-valikko">
-        <button class="as-rivi" data-avaa="peli">
-          <span data-t="as.peli">Peli</span><b class="as-arvo" id="arvoPeli"></b></button>
+<!-- ⚠️ «Peli»-rivi poistettu 15.10.2026 (Marko: «se peli (kortti- vai
+             lautapeli) pitäisi pystyä valitsemaan vain päävalikossa»). Sama
+             päätös koskee lautapelin omaa valikkoa. Valitsin elää
+             aloitusruudun ylänavigaatiossa. -->
         <button class="as-rivi" data-avaa="ihmiset">
           <span data-t="as.pelaajat">Pelaajat</span><b class="as-arvo" id="arvoIhmiset"></b></button>
         <button class="as-rivi" data-avaa="vari">
@@ -280,16 +282,6 @@
       <button id="ajatOletus" class="toinen-nappi" data-t="aika.oletus">Palauta oletukset</button>
     </section>
 
-    <!-- PELI: Party ↔ Basso (pelivalinta.js). Vaihto lataa toisen pelin sivun. -->
-    <section class="as-sivu" data-sivu="peli" hidden>
-      <div class="as-ylapalkki">
-        <button class="as-kulma as-takaisin" data-ta="as.takaisin" aria-label="Takaisin">&#8249;</button>
-        <span class="as-nimi" data-t="as.peli">Peli</span>
-        <button class="as-kulma as-info" data-ta="as.info" aria-label="Mitä tämä tarkoittaa?">i</button>
-      </div>
-      <p class="as-selite" hidden data-t="selite.peli"></p>
-      <div id="pelivalintaLista" class="as-lista"></div>
-    </section>
 
     <!-- BASSO · IHMISPELAAJAT samalla laitteella (Marko 6.10.2026) -->
     <section class="as-sivu" data-sivu="ihmiset" hidden>
@@ -561,7 +553,7 @@
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
-<script src="pelivalinta.js?v=20261015b"></script>
+<script src="pelivalinta.js?v=20261015d"></script>
 <script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
 <script src="kierros.js?v=20260914b"></script>

@@ -127,25 +127,25 @@
     en: ['Basic move', 'Sum move', 'Difference move'], de: ['Grundzug', 'Summenzug', 'Differenzzug']
   };
   var VINKIT = {
-    fi: { valikko: 'Valikko', peli: 'Peli', muodot: 'Pelimuodot', kieli: 'Kieli', paavalikko: 'Päävalikko',
+    fi: { valikko: 'Valikko', peli: 'Peli', muodot: 'Pelimuodot', kieli: 'Kieli', paavalikko: 'Alkuvalikkoon', takaisin: 'Takaisin',
       nimet: { harjoitus: 'Apinavaaka tutuksi', vapaa: 'Vapaa peli', apinat: 'Nälkäiset apinat', pulmat: 'Auta Bassoa' },
       harjoitus: ['Tee tornit yhtä korkeiksi.', 'Lamppu syttyy, kun siirto on oikein.', 'Torni liikkuu aina kokonaisena.'],
       vapaa: ['Siirto onnistuu aina – etsi se!', 'Liian iso noppa? Vie torneja takaisin varastoon.'],
       apinat: ['Tuo pizzan täyte kulhoon.', 'Napauta pizzaa – se paistuu uunissa.', 'Jos pizzaa ei synny, apinat syövät palat!'],
       pulmat: ['Valmista pizza yhdellä siirrolla.', 'Pizzan kaikki täytteet pitää saada linjastolle.', 'Jumissa? Lamppu kertoo siirtotavan.'] },
-    sv: { valikko: 'Meny', peli: 'Spel', muodot: 'Spellägen', kieli: 'Språk', paavalikko: 'Huvudmeny',
+    sv: { valikko: 'Meny', peli: 'Spel', muodot: 'Spellägen', kieli: 'Språk', paavalikko: 'Till startmenyn', takaisin: 'Tillbaka',
       nimet: { harjoitus: 'Lär känna apavågen', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
       harjoitus: ['Gör tornen lika höga.', 'Lampan tänds när flytten är rätt.', 'Ett torn flyttas alltid helt.'],
       vapaa: ['Det finns alltid en flytt – hitta den!', 'För högt tal? Flytta torn tillbaka till lagret.'],
       apinat: ['För pizzans fyllning till skålen.', 'Tryck på pizzan – den gräddas i ugnen.', 'Blir det ingen pizza äter aporna bitarna!'],
       pulmat: ['Gör pizzan med en flytt.', 'Alla pizzans fyllningar ska till linjen.', 'Fast? Lampan berättar vilken flytt.'] },
-    en: { valikko: 'Menu', peli: 'Game', muodot: 'Game modes', kieli: 'Language', paavalikko: 'Main menu',
+    en: { valikko: 'Menu', peli: 'Game', muodot: 'Game modes', kieli: 'Language', paavalikko: 'Main menu', takaisin: 'Back',
       nimet: { harjoitus: 'Get to know the scales', vapaa: 'Free play', apinat: 'Hungry monkeys', pulmat: 'Help Basso' },
       harjoitus: ['Make the towers equally high.', 'The lamp lights up when the move is right.', 'A tower always moves as a whole.'],
       vapaa: ['There is always a move – find it!', 'Dice too high? Move towers back to the storage.'],
       apinat: ['Bring the pizza’s topping into its bowl.', 'Tap the pizza – it bakes in the oven.', 'No pizza? The monkeys eat the slices!'],
       pulmat: ['Make the pizza with one move.', 'All of the pizza’s toppings must reach the line.', 'Stuck? The lamp tells you the type of move.'] },
-    de: { valikko: 'Menü', peli: 'Spiel', muodot: 'Spielarten', kieli: 'Sprache', paavalikko: 'Hauptmenü',
+    de: { valikko: 'Menü', peli: 'Spiel', muodot: 'Spielarten', kieli: 'Sprache', paavalikko: 'Zum Startmenü', takaisin: 'Zurück',
       nimet: { harjoitus: 'Die Affenwaage kennenlernen', vapaa: 'Freies Spiel', apinat: 'Hungrige Affen', pulmat: 'Hilf Basso' },
       harjoitus: ['Mach die Türme gleich hoch.', 'Die Lampe leuchtet, wenn der Zug stimmt.', 'Ein Turm bewegt sich immer ganz.'],
       vapaa: ['Es gibt immer einen Zug – finde ihn!', 'Würfel zu hoch? Bring Türme zurück ins Lager.'],
@@ -468,80 +468,133 @@
     ikkuna.setAttribute('role', 'dialog');
     ikkuna.setAttribute('aria-modal', 'true');
     var vk = VINKIT[kieli] || VINKIT.en, tavat = TAVAT_DL[kieli] || TAVAT_DL.en;
-    ikkuna.innerHTML = '<div class="av__ikkuna-sisus"><img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
+    /* Kielen nimi komponentin omasta listasta: `kielet.js` on korttipelin
+       tiedosto eikä sitä voi olettaa ladatuksi. */
+    function kielenNimiAv(k) {
+      var osuma = KIELET.filter(function (x) { return x[0] === k; })[0];
+      return osuma ? osuma[1] : k;
+    }
+    /* ⚠️ VALIKKO PUHUU KORTTIPELIN KIELTÄ (Marko 15.10.2026: «Katso mallia
+       korttipelin valikosta. Nämä valikot pitäisi olla yhtenevät.»).
+
+       Sanasto on `yhteinen.css`:n: `.as-rivi` (nimi + arvo + ›), `.as-valinta`
+       (valkoinen, 2 px reuna, valittu oranssi) ja `.valikko-nappi.reuna`.
+       Omia `.av__`-tyylejä on vain se mitä korttipelissä ei ole.
+
+       ⚠️ PELIN VALINTA (kortti/lauta) EI OLE TÄÄLLÄ — Marko: «se peli pitäisi
+       pystyä valitsemaan vain päävalikossa». Sama koskee korttipelin
+       asetusten «Peli»-riviä.
+
+       ⚠️ EI PILLEREITÄ: «Täysin pyöreä pillerin pääty ei ole brändin mukainen
+       vaan se on aina pyöristetty nelikulmio.» Korttipelissä `999px` esiintyy
+       nolla kertaa — mitattu. */
+    ikkuna.innerHTML = '<div class="av__ikkuna-sisus">' +
+      '<button type="button" class="as-kulma av__sulje" aria-label="' + t.sulje + '">\u2715</button>' +
+      '<img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
       '<div class="av__vinkit"></div>' +
-      /* ⚠️ PELIN VAIHTO VAIN PELISSÄ (14.10.2026). Apinavaaka on myös oma
-         sivunsa (pizzalove.fi/apinavaaka-testi), jossa ei ole muita pelejä —
-         siellä `pelivalinta.js`:ää ei ole ladattu, eikä tyhjää «PELI»-otsikkoa
-         saa näkyä. Siksi lohko syntyy vain kun valitsin on olemassa, eikä
-         komponentti tiedä pelistä mitään muuta. */
-      (typeof pelivalintaPiirra === 'function'
-        ? '<h3 class="av__muodot-otsikko">' + vk.peli + '</h3><div class="pelivalinta"></div>' : '') +
-      '<h3 class="av__muodot-otsikko">' + vk.muodot + '</h3><div class="av__ikkuna-napit"></div>' +
-      '<h3 class="av__muodot-otsikko">' + vk.kieli + '</h3><div class="av__kielet">' + KIELET.map(function (k) {
-        return '<button type="button" data-k="' + k[0] + '"' + (k[0] === kieli ? ' class="nyt"' : '') + '>' + k[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="av__taso av__taso--paa">' +
+        '<button type="button" class="as-rivi" data-avaa="muoto">' +
+          '<span>' + vk.muodot + '</span><b class="as-arvo av__arvo-muoto"></b></button>' +
+        '<button type="button" class="as-rivi" data-avaa="kieli">' +
+          '<span>' + vk.kieli + '</span><b class="as-arvo">' + kielenNimiAv(kieli) + '</b></button>' +
+      '</div>' +
+      '<div class="av__taso av__taso--muoto" hidden></div>' +
+      '<div class="av__taso av__taso--kieli" hidden>' + KIELET.map(function (k) {
+        return '<button type="button" class="as-valinta' + (k[0] === kieli ? ' valittu' : '') +
+          '" data-k="' + k[0] + '"><b>' + k[1] + '</b></button>'; }).join('') +
+        '<button type="button" class="valikko-nappi reuna av__takaisin">' + vk.takaisin + '</button></div>' +
       /* Ulospääsy vain silloin kun on minne mennä: omalla sivullaan
-         (pizzalove.fi/apinavaaka-testi) `pelivalinta.js`:ää ei ole ladattu
-         eikä korttipelin aloitusruutua ole olemassa. Sama ehto kuin
-         PELI-lohkolla, ja samasta syystä. */
+         `pelivalinta.js`:ää ei ole ladattu eikä aloitusruutua ole olemassa. */
       (typeof paavalikkoon === 'function'
-        ? '<button type="button" class="av__paavalikko">\u2190 ' + vk.paavalikko + '</button>' : '') +
-      '<button type="button" class="av__sulje" aria-label="' + t.sulje + '">×</button></div>';
+        ? '<button type="button" class="valikko-nappi reuna av__paavalikko">' + vk.paavalikko + '</button>' : '') +
+      '</div>';
     juuri.appendChild(ikkuna);
-    var ikkunaNapit = ikkuna.querySelector('.av__ikkuna-napit'), vinkitEl = ikkuna.querySelector('.av__vinkit');
+    var vinkitEl = ikkuna.querySelector('.av__vinkit');
+    var tasoPaa = ikkuna.querySelector('.av__taso--paa');
+    var tasoMuoto = ikkuna.querySelector('.av__taso--muoto');
+    var tasoKieli = ikkuna.querySelector('.av__taso--kieli');
+    var arvoMuoto = ikkuna.querySelector('.av__arvo-muoto');
+    var paavalikkoNappi = ikkuna.querySelector('.av__paavalikko');
+    var bassoKuva = ikkuna.querySelector('.av__ikkuna-basso');
+
     function nykyMuoto() { return tila.muoto === 'apinat' ? 'apinat' : tila.muoto === 'pulmat' ? 'pulmat' : tila.muoto === 'opas' ? 'harjoitus' : 'vapaa'; }
+
+    /* PELIMUODON VALINNAT: samat `.as-valinta`-napit kuin korttipelin
+       asetuksissa, ja «vapaa peli» ei ole niiden joukossa (ks. alla). */
+    var MUODOT = [['harjoitus', function () { aloitaOpas(0); }],
+                  ['apinat',    function () { aloitaApinat(); }],
+                  ['pulmat',    function () { aloitaPulmat(); }]];
+    MUODOT.forEach(function (m) {
+      var b = el('button', 'as-valinta');
+      b.type = 'button';
+      b.setAttribute('data-muoto', m[0]);
+      b.innerHTML = '<b></b>';
+      b.querySelector('b').textContent = vk.nimet[m[0]];
+      b.addEventListener('click', function () { sulje(); m[1](); });
+      tasoMuoto.appendChild(b);
+    });
+    var muotoTakaisin = el('button', 'valikko-nappi reuna', vk.takaisin);
+    muotoTakaisin.type = 'button';
+    muotoTakaisin.addEventListener('click', function () { naytaTaso('paa'); });
+    tasoMuoto.appendChild(muotoTakaisin);
+
+    /* ⚠️ VAPAA PELI EI OLE VALITSIMESSA (Marko 14.10.2026: «kolme varsinaista
+       pelimuotoa ja sitten vielä vapaa peli. Tämä vapaa peli on ehkä turha?»).
+       📐 Mitattu: se ei ollut neljäs pelimuoto vaan harjoittelun LOPPUTILA —
+       `aloitaVapaa` asettaa `tila.muoto = 'harjoitus'` ja merkitsee tehtävät
+       tehdyiksi. Se tarjotaan siellä minne se kuuluu, harjoittelun päätteeksi
+       (`opasJatka`). `vk.nimet.vapaa` ja `vk.vapaa` jäävät, koska vinkkipaneeli
+       lukee ne yhä `nykyMuoto()`in kautta. */
+
+    function naytaTaso(nimi) {
+      tasoPaa.hidden = nimi !== 'paa';
+      tasoMuoto.hidden = nimi !== 'muoto';
+      tasoKieli.hidden = nimi !== 'kieli';
+      /* Vinkit ja ulospääsy kuuluvat päätasolle: alavalikossa ruudulla on
+         yksi kysymys kerrallaan, kuten korttipelin asetuksissa. */
+      vinkitEl.hidden = nimi !== 'paa';
+      /* Basso kelluu oikealla ja kaventaisi alavalikon napit puolikkaiksi. */
+      bassoKuva.hidden = nimi !== 'paa';
+      if (paavalikkoNappi) paavalikkoNappi.hidden = nimi !== 'paa';
+    }
+
     function taytaVinkit() {
       var m = nykyMuoto(), h = '<h2>' + vk.nimet[m] + '</h2><ul>';
       vk[m].forEach(function (x) { h += '<li>' + x + '</li>'; });
       h += '</ul>';
       vinkitEl.innerHTML = h;
-      Array.prototype.forEach.call(ikkunaNapit.children, function (b) { b.classList.toggle('av__muoto--nyt', b.getAttribute('data-muoto') === m); });
+      arvoMuoto.textContent = vk.nimet[m];
+      Array.prototype.forEach.call(tasoMuoto.querySelectorAll('.as-valinta'), function (b) {
+        b.classList.toggle('valittu', b.getAttribute('data-muoto') === m);
+      });
     }
-    function nappi(kohde, teksti, luokka, f) {
-      var x = el('button', 'nappi' + (luokka ? ' ' + luokka : ''), teksti);
-      x.type = 'button'; x.addEventListener('click', f); kohde.appendChild(x);
-      return x;
-    }
-    var paluuNappi = ikkuna.querySelector('.av__paavalikko');
-    if (paluuNappi) paluuNappi.addEventListener('click', function () { paavalikkoon(); });
-    Array.prototype.forEach.call(ikkuna.querySelectorAll('.av__kielet button'), function (b) {
+
+    Array.prototype.forEach.call(ikkuna.querySelectorAll('.as-rivi'), function (r) {
+      r.addEventListener('click', function () { naytaTaso(r.getAttribute('data-avaa')); });
+    });
+    if (paavalikkoNappi) paavalikkoNappi.addEventListener('click', function () { paavalikkoon(); });
+    ikkuna.querySelector('.av__takaisin').addEventListener('click', function () { naytaTaso('paa'); });
+    Array.prototype.forEach.call(tasoKieli.querySelectorAll('[data-k]'), function (b) {
       b.addEventListener('click', function () {
         // kieli vaihtuu sivun uudelleenlatauksella; pelimuoto säilyy
         var q = new URLSearchParams(location.search);
-        q.set('kieli', b.getAttribute('data-k')); q.set('tila', tila.muoto === 'apinat' || tila.muoto === 'pulmat' ? tila.muoto : 'harjoitus');
+        q.set('kieli', b.getAttribute('data-k'));
+        q.set('tila', tila.muoto === 'apinat' || tila.muoto === 'pulmat' ? tila.muoto : 'harjoitus');
         location.search = q.toString();
       });
     });
+
     function avaa() {
       taytaVinkit();
-      /* Valitsin piirtää itse nykyisen pelin korostuksen ja hoitaa vaihdon. */
-      if (typeof pelivalintaPiirra === 'function') { try { pelivalintaPiirra(); } catch (e) {} }
-      ikkuna.hidden = false; ikkuna.querySelector('.av__sulje').focus();
+      naytaTaso('paa');
+      ikkuna.hidden = false;
+      ikkuna.querySelector('.av__sulje').focus();
     }
     function sulje() { ikkuna.hidden = true; infoNappi.focus(); }
     infoNappi.addEventListener('click', avaa);
     ikkuna.querySelector('.av__sulje').addEventListener('click', sulje);
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
-    nappi(ikkunaNapit, vk.nimet.harjoitus, 'nappi--toinen', function () { sulje(); aloitaOpas(0); }).setAttribute('data-muoto', 'harjoitus');
-    /* ⚠️ VAPAA PELI EI OLE VALITSIMESSA (Marko 14.10.2026: «kolme varsinaista
-       pelimuotoa ja sitten vielä vapaa peli. Tämä vapaa peli on ehkä turha?»).
-
-       📐 Mitattu: se ei ollut neljäs pelimuoto vaan harjoittelun LOPPUTILA —
-       `aloitaVapaa` asettaa `tila.muoto = 'harjoitus'` ja merkitsee tehtävät
-       tehdyiksi (`tila.nro = TEHTAVAT.length`). Samaan tilaan päätyy
-       pelaamalla kymmenes tehtävä loppuun. Valitsin lupasi siis neljää
-       pelimuotoa, joista kolme oli pelimuoto ja yksi oli tila.
-
-       ⚠️ EI SILTI POISTETTU PELISTÄ, koska se olisi maksanut yhden asian:
-       vapaa peli on ainoa reitti hiekkalaatikkoon, ja ilman nappia se
-       siirtyisi kymmenen tehtävän taakse. Nyt se tarjotaan siellä minne se
-       kuuluu — harjoittelun päätteeksi (`opasJatka`).
-
-       ⚠️ `vk.nimet.vapaa` ja `vk.vapaa` JÄÄVÄT: vinkkipaneeli lukee ne yhä
-       `nykyMuoto()`in kautta, kun pelaaja on vapaassa pelissä. */
-    nappi(ikkunaNapit, vk.nimet.apinat, 'nappi--toinen', function () { sulje(); aloitaApinat(); }).setAttribute('data-muoto', 'apinat');
-    nappi(ikkunaNapit, vk.nimet.pulmat, 'nappi--toinen', function () { sulje(); aloitaPulmat(); }).setAttribute('data-muoto', 'pulmat');
 
     // --- täytteen tarra: värillinen ympyrä, valkoinen reuna ja Markon täytekuva (tayte/1–10.webp)
     function tarra(luku) {

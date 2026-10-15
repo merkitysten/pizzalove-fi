@@ -20,13 +20,25 @@
 <link rel="apple-touch-icon" href="apinavaaka/basso-paa.webp">
 <title>Apinavaaka</title>
 <link rel="preload" as="font" type="font/woff2" href="fontit/poppins-700.woff2?v=20260911a" crossorigin>
-<link rel="stylesheet" href="yhteinen.css?v=20261015c">
-<link rel="stylesheet" href="pelivalinta.css?v=20261015b">
-<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015c">
+<!-- ⚠️ KORTTIPELIN TYYLIT MYÖS TÄÄLLÄ (15.10.2026, Marko: «Nämä valikot
+     pitäisi olla yhtenevät»). Asetusvalikon sanasto (.as-rivi, .as-arvo,
+     .as-valinta, .as-kulma) asuu `peli.css`:ssä 30 sääntönä, jotka ovat
+     57 muun säännön lomassa — siirto olisi ollut kahden tiedoston
+     kaskadileikkaus. Lataus on sama lopputulos ilman sitä riskiä.
+     ⚠️ Yksi asia on kumottava: `peli.css`:n `html,body{height:100%;
+     overflow:hidden}` katkaisee komponenttisivun vierityksen. Kumous on
+     alla omassa <style>-lohkossa, joka ladataan tämän jälkeen. -->
+<link rel="stylesheet" href="peli.css?v=20261015d">
+<link rel="stylesheet" href="yhteinen.css?v=20261015d">
+<link rel="stylesheet" href="pelivalinta.css?v=20261015d">
+<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015f">
 <style>
   /* Komponenttisivu saa vierittää: `peli.css`:ää ei ladata (ks. yhteinen.css,
      siirretty-lohko). Pelinäkymän omat reunat kuten ennen. */
-  html,body{touch-action:manipulation;color-scheme:light}
+  /* 📐 Mitattu: `peli.css` lukitsee sivun korkeuden (`height:100%;
+     overflow:hidden`), koska korttipeli mahtuu aina ruudulle. Lautapeli
+     vierittyy. Kumotaan tasan nämä kaksi. */
+  html,body{touch-action:manipulation;color-scheme:light;height:auto;overflow:visible}
   body{background:#FAF6EE;margin:0;font-family:Poppins,system-ui,sans-serif}
   #lautaPeli{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right))
        8px max(6px,env(safe-area-inset-left))}
@@ -69,9 +81,9 @@
 <div id="lautaPeli" hidden><div id="av" data-koko></div></div>
 
 <script src="kielet.js?v=20261015b"></script>
-<script src="pelivalinta.js?v=20261015b"></script>
+<script src="pelivalinta.js?v=20261015d"></script>
 <script src="apinavaaka/noppa3d.js?v=20261015b"></script>
-<script src="apinavaaka/apinavaaka.js?v=20261015b"></script>
+<script src="apinavaaka/apinavaaka.js?v=20261015e"></script>
 <script>
 /* KIELI ON YHTEINEN MOLEMMILLE PELEILLE (14.10.2026).
    Lähde on sama kuin korttipelissä: ?kieli= → tallennetut asetukset
