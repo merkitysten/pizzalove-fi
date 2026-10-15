@@ -29,7 +29,12 @@
     oikea:   [1911, 1601, 1299, 513],
     saihkeet:[1162, 22, 1131, 681],
     lamppu:  [1475, 210, 403, 672],
-    kieli:   [1443, 1720, 253, 441]
+    kieli:   [1443, 1720, 253, 441],
+    /* ⚠️ SILMÄT OVAT OMA TASONSA PSD:SSÄ (Marko 15.10.2026) ja vain
+       päävalikon käytössä — pelin `vartalo.webp` sisältää silmät yhä.
+       Valikko käyttää siksi `vartalo-silmaton.webp`:iä. Luvut tässä, koska
+       geometrialla on yksi lähde. */
+    silmat:  [1377, 1436, 344, 71]
   };
   var NIVEL_V = [1240, 1790], NIVEL_O = [1925, 1775];   // olkapäät
   var SYMB_V = [508, 1655],  SYMB_O = [2700, 1668];     // symbaalien keskikohta
@@ -1551,8 +1556,15 @@
      samoista kerroksista ja samoilla PSD-koordinaateilla kuin pelin apina.
      Jos nämä luvut kopioitaisiin sivulle, kaksi apinaa ajautuisi erilleen
      ensimmäisestä kuvamuutoksesta — ja ne ovat sama apina. */
+  /* 📐 SILMIEN LIIKKUMAVARA ON MITATTU KUVASTA, EI ARVATTU (15.10.2026):
+     valkuaisten ja pupillien rajat luettiin PSD:n tasoista pikseleittäin.
+     Tiukempi silmä ratkaisee: vasemmalle 21 px, oikealle 32 px, ylös 114 px.
+     Alas 0, koska pupillit on piirretty valmiiksi alareunaan — apina katsoo
+     levossa alas, eli kohti valikon nappeja. Tähän jätetty pieni marginaali. */
+  var SILMA_VARA = { vasen: -18, oikea: 28, ylos: -100, alas: 0 };
+
   window.apinavaakaKuvat = {
     W: W, H: H, OSAT: OSAT, NIVEL_V: NIVEL_V, NIVEL_O: NIVEL_O,
-    KIELI_NIVEL: KIELI_NIVEL, KANSIO: KANSIO
+    KIELI_NIVEL: KIELI_NIVEL, KANSIO: KANSIO, SILMA_VARA: SILMA_VARA
   };
 })();

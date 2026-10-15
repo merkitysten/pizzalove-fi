@@ -341,6 +341,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    pelissä (`kasiV.style.transform = kasiO.style.transform`). */
 .alku-vaaka-kasi{animation:alku-keinu 5.5s ease-in-out infinite}
 .alku-vaaka-kieli{animation:alku-kieli 5.5s ease-in-out infinite}
+/* Pupillit seuraavat osoitinta pehmeästi (apinavaaka.html). Siirtymä on
+   silmänräpäystä hitaampi, jotta katse tuntuu katseelta eikä nykäisyltä. */
+.alku-vaaka-silmat{transition:transform .32s cubic-bezier(.25,.9,.3,1)}
 .alku-vaaka-lamppu, .alku-vaaka-saihkeet{opacity:0;transition:opacity .25s}
 @keyframes alku-keinu{0%,100%{transform:rotate(-2.4deg)}50%{transform:rotate(2.4deg)}}
 @keyframes alku-kieli{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-7deg)}}
