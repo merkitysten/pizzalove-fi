@@ -1401,6 +1401,20 @@
         rivi.innerHTML = ''; vieSlot.innerHTML = '';
         rivi.textContent = t.eiYhdistaPerus; rivi.className = 'av__rivi av__rivi--havikki';
       }
+
+      /* 🔵 LAMPPU ON NAPAUTETTAVA VAIN KUN SILLÄ ON TEHTÄVÄ (Marko 15.10.2026:
+         «Nälkäiset apinat pelimuodossa se lampun painaminen ei ainakaan
+         toiminut»).
+
+         📐 Mitattu: se toimi — siirto tapahtui. Vika oli sen JÄLKEEN:
+         `av--valo` on päällä myös kun `tila.siirretty`, joten apinoissa
+         lamppu jäi palamaan siirron jälkeen («Ei pizzaa vielä. Heitä
+         uudelleen!»), eikä `vieSlot`issa ollut enää nappia. Pelaaja painoi
+         palavaa lamppua eikä mitään tapahtunut — ja se on sama asia kuin
+         rikki, vaikka koodi teki mitä pyydettiin.
+
+         Siksi osoitin ja napautettavuus seuraavat NAPPIA eivätkä valoa. */
+      juuri.classList.toggle('av--vie', !!vieSlot.querySelector('button'));
       if (opas) {
         var rt = rivi.textContent, nyt = Date.now();
         if (rt !== riviMuisti.teksti) { void rivi.offsetWidth; riviMuisti.teksti = rt; riviMuisti.aika = nyt; }
