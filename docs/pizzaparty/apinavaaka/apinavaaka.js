@@ -509,6 +509,24 @@
         ? '<button type="button" class="valikko-nappi reuna av__paavalikko">' + vk.paavalikko + '</button>' : '') +
       '</div>';
     juuri.appendChild(ikkuna);
+    /* ⚠️ TÄMÄ EI OLE VALIKON APURI VAAN PELIN (palautettu 15.10.2026).
+       `nappi()` tekee pelin omat napit — «Vie linjastolle», «Jatka», «Uusi
+       peli» — ja sitä kutsutaan seitsemästä kohdasta. Se sattui asumaan
+       valikkolohkon sisällä, ja kun kirjoitin valikon uudelleen, se hävisi
+       mukana: `naytaRuutu` heitti `ReferenceError`in, opasruutu jäi
+       piirtämättä ja koko lauta jäi rakentamatta.
+
+       📐 Ja oma varmistukseni ei nähnyt sitä: avasin valikon ja mittasin
+       valikon. Opasruutu, joka kaatui, oli valikon takana — enkä lukenut
+       konsolia. Sama oppi kuin CLAUDE.md:n «kun korvaat lohkon, lue koko
+       lohko loppuun»: vertasin valikkoa valikkoon kun olisi pitänyt kysyä
+       mitä muuta lohkossa oli. */
+    function nappi(kohde, teksti, luokka, f) {
+      var x = el('button', 'nappi' + (luokka ? ' ' + luokka : ''), teksti);
+      x.type = 'button'; x.addEventListener('click', f); kohde.appendChild(x);
+      return x;
+    }
+
     var vinkitEl = ikkuna.querySelector('.av__vinkit');
     var tasoPaa = ikkuna.querySelector('.av__taso--paa');
     var tasoMuoto = ikkuna.querySelector('.av__taso--muoto');
