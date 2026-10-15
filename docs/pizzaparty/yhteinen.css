@@ -256,12 +256,21 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .aloitusruutu .pelivalinta-liuku{background:var(--warm,#FFF3E9)}
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
 .aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
-/* Valkoisessa palkissa ura on vaalean harmaa ja nappula valkoinen: palkki on jo
-   valkoinen, joten reunaviiva tekisi laatikon laatikon sisään. */
-.alku-lajipalkki .pelivalinta-kytkin{background:rgba(60,34,12,.09);border:0;padding:3px}
-.alku-lajipalkki .pelivalinta-liuku{background:#fff;box-shadow:0 1px 4px rgba(60,34,12,.28);left:3px;top:3px;bottom:3px;
-  width:calc((100% - 6px) / var(--n,2))}
-.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:14px;padding:8px 4px}
+/* 🔵 VÄLILEHDET, EI LIUKUKYTKINTÄ (Marko 14.10.2026: «tuo pelin valitsemis-
+   liukusäädin on nyt huonon näköinen, koska se on ahtaassa paikassa. Eli laita
+   sama tyyli, kuin muutenkin napeilla on valkoisella taustalla
+   ylänavigaatiossa»). Arvot ovat pizzalove.fi:n `.sivurivi a` -säännöstä:
+   14,5 px / 600 / padding 12px 10px, ja valitulla 3 px oranssi viiva alla.
+   ⚠️ Liuku piilotetaan eikä poisteta JS:stä: sama kytkin on yhä peli-ikkunassa
+   ja asetuksissa, joissa ahtautta ei ole. */
+.alku-lajipalkki .pelivalinta-kytkin{display:flex;background:none;border:0;padding:0;gap:2px}
+.alku-lajipalkki .pelivalinta-liuku{display:none}
+.alku-lajipalkki .pelivalinta-kytkin-nappi{flex:none;border-radius:0;padding:12px 10px;
+  font-size:14.5px;font-weight:600;color:var(--soft, #6E6357);transition:color .15s}
+.alku-lajipalkki .pelivalinta-kytkin-nappi.valittu{color:var(--ink, #1A1A1A)}
+.alku-lajipalkki .pelivalinta-kytkin-nappi.valittu::after{content:"";position:absolute;
+  left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--orange, #F47920)}
+@media (max-width:520px){.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:13.5px;padding:11px 8px}}
 
 /* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
  * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
@@ -293,7 +302,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 /* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
    siinä lautapelin päävalikossa ylhäällä tyhjässä tilassa»). Keskellä ja iso:
    lajia vaihtaessa koko kuva vaihtuu, ja juuri se kertoo että jotain tapahtui. */
-.alku-lauta{position:absolute;left:50%;bottom:0;height:min(100%, 300px);width:auto;
+.alku-lauta{position:absolute;left:50%;bottom:5%;width:min(126%, 470px);height:auto;
   transform:translateX(-50%);filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
