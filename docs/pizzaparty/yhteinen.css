@@ -326,9 +326,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    ⚠️ Valkoinen tarrareuna on RYHMÄLLÄ eikä kerroksilla: kerroksittain se
    piirtäisi reunan myös kerrosten väliin, ja apina halkeaisi saumoistaan. */
 /* 📐 Leveys on mitattu eikä arvattu: lamppu nostaa kuvan korkeutta, ja
-   126 % / 470 px työnsi sen 33 px valkoisen palkin alle. 108 % / 400 px
-   mahtuu palkin ja ensimmäisen napin väliin 375 × 715 -ruudulla. */
-.alku-vaaka{position:absolute;left:50%;bottom:4%;width:min(108%, 400px);
+   126 % / 470 px työnsi sen 33 px valkoisen palkin alle. Ja kun rajausta
+   väljennettiin säihkeen vuoksi (20 px lampun 150 px:n sijaan), kuva kasvoi
+   17 px korkeammaksi — se otettiin leveydestä. 102 % / 380 px mahtuu palkin
+   ja ensimmäisen napin väliin 375 × 715 -ruudulla. */
+.alku-vaaka{position:absolute;left:50%;bottom:4%;width:min(102%, 380px);
   transform:translateX(-50%);
   filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
@@ -347,14 +349,37 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .alku-vaaka.heilahtaa{animation:alku-tarina .9s ease-out}
 .alku-vaaka.heilahtaa .alku-vaaka-kasi{animation:alku-keinahda .9s cubic-bezier(.3,1.6,.5,1)}
 .alku-vaaka.heilahtaa .alku-vaaka-kieli{animation:alku-kielahda .9s cubic-bezier(.3,1.6,.5,1)}
-.alku-vaaka.heilahtaa .alku-vaaka-lamppu,
-.alku-vaaka.heilahtaa .alku-vaaka-saihkeet{opacity:1}
+/* Napautus on ISKUNSILMÄYS: lamppu vilkaisee, mutta säihke jää pois.
+   Säihke on varattu sille hetkelle kun pelaaja on oikeasti valinnut (alla). */
+.alku-vaaka.heilahtaa .alku-vaaka-lamppu{opacity:1}
 @keyframes alku-tarina{0%,100%{transform:translateX(-50%)}30%{transform:translateX(-50%) translateY(-6px)}}
 @keyframes alku-keinahda{0%{transform:rotate(0)}35%{transform:rotate(-8deg)}70%{transform:rotate(6deg)}100%{transform:rotate(0)}}
 @keyframes alku-kielahda{0%{transform:rotate(0)}35%{transform:rotate(14deg)}70%{transform:rotate(-20deg)}100%{transform:rotate(0)}}
+/* 🔵 LAMPPU SYTTYY KUN PELAAJA VALITSEE PELIN (Marko 15.10.2026: «Lamppuun
+   pitäisi saada se säihke myös — — vaikka välkehtii tai vähän välähdelleen
+   alkaa palamaan. Tai sitten niin, että kun pelaaja valitsee pelin, niin
+   sitten lamppu syttyy.»)
+
+   Molemmat: välkähtely on se MITEN, valinta on se MILLOIN.
+
+   ⚠️ Ja syy miksi näin päin: pelissä lamppu tarkoittaa «siirto on oikein».
+   Jos se välkkyisi valikossa itsekseen, se tarkoittaisi ei-mitään juuri
+   siinä paikassa jossa lapsi oppii sen merkityksen. Nyt se vastaa
+   valintaan — ja säihke tulee vain silloin. */
+.alku-vaaka.syttyy .alku-vaaka-lamppu{animation:alku-syty .72s linear forwards}
+.alku-vaaka.syttyy .alku-vaaka-saihkeet{animation:alku-saihke .72s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes alku-syty{0%,14%{opacity:0}20%{opacity:1}28%{opacity:.1}36%{opacity:1}44%{opacity:.25}52%,100%{opacity:1}}
+@keyframes alku-saihke{0%,46%{opacity:0;transform:scale(.6)}75%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+/* Valikko väistyy vasta kun lamppu on syttynyt, jotta se ehditään nähdä. */
+#lautaPeite{transition:opacity .22s ease}
+#lautaPeite.lahtee{opacity:0}
+
 @media (prefers-reduced-motion:reduce){
   .alku-vaaka-kasi,.alku-vaaka-kieli,.alku-vaaka.heilahtaa,
   .alku-vaaka.heilahtaa .alku-vaaka-kasi,.alku-vaaka.heilahtaa .alku-vaaka-kieli{animation:none}
+  /* Lamppu syttyy yhä, mutta ilman välkettä. */
+  .alku-vaaka.syttyy .alku-vaaka-lamppu,
+  .alku-vaaka.syttyy .alku-vaaka-saihkeet{animation:none;opacity:1}
 }
 /* YKSI SARAKE (Marko 9.10.2026: «vielä kun ne on noin kahdessa sarakkeessa, niin jotenkin
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake

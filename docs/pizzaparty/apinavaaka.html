@@ -29,7 +29,7 @@
      overflow:hidden}` katkaisee komponenttisivun vierityksen. Kumous on
      alla omassa <style>-lohkossa, joka ladataan tämän jälkeen. -->
 <link rel="stylesheet" href="peli.css?v=20261015d">
-<link rel="stylesheet" href="yhteinen.css?v=20261015p">
+<link rel="stylesheet" href="yhteinen.css?v=20261015r">
 <link rel="stylesheet" href="pelivalinta.css?v=20261015d">
 <link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015n">
 <style>
@@ -126,9 +126,11 @@ av.setAttribute('data-kieli', k);
      matalan: koko kangas on 3210 × 2422, mutta sisältö alkaa vasta lampun
      kohdalta. Ikkuna rajaa tyhjän pois, ja kerrokset piirretään sen sisään
      koko kankaan kokoisina — niin koordinaatit pysyvät pelin omina.
-     150 on juuri lampun (y 210) yläpuolella; säihkeet (y 22) näkyvät vain
-     napautuksessa ja saavat jäädä osittain rajauksen ulkopuolelle. */
-  var YLA = 150, KH = g.H - YLA;
+     ⚠️ RAJA ON SÄIHKEEN MUKAAN, EI LAMPUN. Ensin rajasin lampun yläpuolelta
+     (y 150), ja säihkeestä (y 22) leikkautui **19 %** — ylösnousevat säteet
+     katkesivat suoraan viivaan. Nyt raja on 20, eli säihke mahtuu kokonaan;
+     korkeutta se maksoi 17 px, jonka otin leveydestä. */
+  var YLA = 20, KH = g.H - YLA;
   paikka.style.aspectRatio = g.W + ' / ' + KH;
   var kangas = document.createElement('div');
   kangas.className = 'alku-vaaka-kangas';
@@ -192,7 +194,7 @@ document.getElementById('lautaKauppa').textContent = KAUPPA[k] || KAUPPA.en;
 /* Pelimuoto käynnistää komponentin: päävalikko pois, luokka päälle, käynnistys.
    ⚠️ Paluu päävalikkoon on sivun lataus (pelivalinta.js: paavalikkoon) — tämä
    sivu kertoo siitä `data-paavalikko`-attribuutilla. */
-function aloitaMuoto(tila) {
+function kaynnista(tila) {
   av.setAttribute('data-tila', tila);
   document.getElementById('lautaPeite').hidden = true;
   var kuori = document.getElementById('lautaPeli');
@@ -201,9 +203,34 @@ function aloitaMuoto(tila) {
   if (typeof apinavaakaKaynnista === 'function') apinavaakaKaynnista();
 }
 
+/* 🔵 LAMPPU SYTTYY VALINNASTA, JA PELI ODOTTAA SEN AJAN (Marko 15.10.2026:
+   «Silloin tarvittaisiin toki pieni aika ja siirtymä, jotta pelaaja ehtii
+   näkemään sen lampun syttymisen.»)
+
+   📐 Aika on mitattu animaatiosta eikä arvattu: `alku-syty` kestää 0,72 s,
+   ja valikko alkaa väistyä 0,46 s kohdalla — siis vasta kun välkähtely on
+   ohi ja lamppu jää palamaan. Peli käynnistyy 0,72 s kohdalla.
+
+   ⚠️ OSOITTEESTA TULTAESSA EI ODOTETA. `?tila=` on apinavaaan oman
+   kielivalinnan paluureitti: siinä pelaaja on jo pelissä, eikä valikkoa
+   näytetä lainkaan — odotus olisi tyhjää tuijotusta.
+
+   ⚠️ Eikä kahta kertaa: nopea tuplanapautus käynnistäisi pelin kahdesti. */
+var valintaKesken = false;
+function aloitaMuoto(tila, heti) {
+  if (heti) { kaynnista(tila); return; }
+  if (valintaKesken) return;
+  valintaKesken = true;
+  var vaaka = document.getElementById('alkuVaaka');
+  var peite = document.getElementById('lautaPeite');
+  if (vaaka) { vaaka.classList.remove('heilahtaa'); vaaka.classList.add('syttyy'); }
+  setTimeout(function () { peite.classList.add('lahtee'); }, 460);
+  setTimeout(function () { kaynnista(tila); }, 720);
+}
+
 /* Osoitteen `?tila=` ohittaa valikon: apinavaaan oma kielivalinta lataa sivun
    sillä parametrilla, eikä pelaajaa saa pudottaa takaisin valikkoon kesken. */
-if (q.get('tila')) aloitaMuoto(q.get('tila'));
+if (q.get('tila')) aloitaMuoto(q.get('tila'), true);
 </script>
 </body>
 </html>
