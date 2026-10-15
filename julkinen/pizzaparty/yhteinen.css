@@ -190,7 +190,15 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * ~63 px 375 px:n ruudulla. Siinä tila oli ennen tyhjää kuosia.
  * Viiri riippuu palkin päälle vasemmassa reunassa, ja sisältö alkaa viirin
  * oikealta puolelta — täsmälleen kuten `.sivurivi` tekee. */
-.alku-lajipalkki{position:absolute;left:0;right:0;bottom:0;
+/* ⚠️ KORKEUS TULEE SISÄLLÖSTÄ, EI PALKIN JA VIIRIN EROSTA (Marko 15.10.2026:
+   «Valkoinen palkki on liian korkea, ota mallia pizzalove.fi -sivuston
+   muotoilusta»). 📐 Mitattu sivustolta 375 px:ssä: oranssi 52 px, valkoinen
+   **45 px**, linkki `11px 8px` / 13,5 px. Meillä valkoinen venyi `.alku-ylan`
+   pohjaan asti eli 63 px:iin, koska sen korkeuden määräsi viiri eikä teksti.
+   Nyt `bottom` on auki ja korkeus syntyy välilehdistä, kuten sivustolla.
+   Viiri jää riippumaan palkin alareunan yli — se on sama ele kuin sivustolla,
+   jossa viiri (80 px) ulottuu valkoisen palkin sisään. */
+.alku-lajipalkki{position:absolute;left:0;right:0;
   top:calc(var(--yla-turva) + var(--palkki));
   background:var(--surface, #fff);border-bottom:1px solid var(--line, #E7DCCA);
   display:flex;align-items:center;box-sizing:border-box;
@@ -265,12 +273,12 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    ja asetuksissa, joissa ahtautta ei ole. */
 .alku-lajipalkki .pelivalinta-kytkin{display:flex;background:none;border:0;padding:0;gap:2px}
 .alku-lajipalkki .pelivalinta-liuku{display:none}
-.alku-lajipalkki .pelivalinta-kytkin-nappi{flex:none;border-radius:0;padding:12px 10px;
-  font-size:14.5px;font-weight:600;color:var(--soft, #6E6357);transition:color .15s}
+.alku-lajipalkki .pelivalinta-kytkin-nappi{flex:none;border-radius:0;padding:11px 8px;
+  font-size:13.5px;font-weight:600;color:var(--soft, #6E6357);transition:color .15s}
 .alku-lajipalkki .pelivalinta-kytkin-nappi.valittu{color:var(--ink, #1A1A1A)}
 .alku-lajipalkki .pelivalinta-kytkin-nappi.valittu::after{content:"";position:absolute;
   left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--orange, #F47920)}
-@media (max-width:520px){.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:13.5px;padding:11px 8px}}
+@media (min-width:521px){.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:14.5px;padding:12px 10px}}
 
 /* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
  * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
