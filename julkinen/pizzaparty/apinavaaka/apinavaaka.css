@@ -36,8 +36,21 @@
 
    ⚠️ Ja tämä on se vikalaji joka toistuu: komponentti testattiin AINA
    sivulla joka antoi nämä säännöt, joten riippuvuutta ei näkynyt. */
-.av,.av *,.av *::before,.av *::after{box-sizing:border-box}
-.av img{max-width:100%;height:auto;display:block}
+:where(.av, .av *, .av *::before, .av *::after){box-sizing:border-box}
+:where(.av img){max-width:100%;height:auto;display:block}
+
+/* ⚠️ `:where()` EI OLE TYYLISEIKKA VAAN KORJAUS (15.10.2026). Ensimmäinen
+   versio oli `.av img{...}` (tarkkuus 0,1,1), ja se voitti komponentin omat
+   säännöt — mitä sivuston `img{...}` (0,0,1) ei koskaan tehnyt.
+
+   📐 Mitattu: 3D-nopan tahkot katosivat. `noppa3d.js` asettaa leveyden
+   inline-tyylinä (148,8 px), mutta `max-width:100%` lasketaan vanhemmasta
+   `.n3d__kappale{width:0}` — eli nollasta. `.n3d__tahko{max-width:none}`
+   oli olemassa juuri tätä varten, mutta hävisi tarkkuudessa. Laskettu
+   leveys oli **0 px**, eikä mikään kaatunut: noppa vain ei näkynyt.
+
+   `:where()` antaa tarkkuudeksi 0,0,0, joten jokainen komponentin oma
+   sääntö voittaa — tasan kuten sivustolla, jossa tämä toimi vuosia. */
 
 .av{position:relative;max-width:440px;margin:0 auto;background:var(--surface,#fff);border:1px solid var(--line,#E7DCCA);
   border-radius:var(--radius,18px);padding:12px 14px 16px;box-shadow:var(--shadow,none);
