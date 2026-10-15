@@ -113,7 +113,12 @@
 .av__uusi .av__torni i{animation:av-punnus .3s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i)*110ms)}
 @keyframes av-punnus{from{transform:translateY(-300%);opacity:0}}
 
-.av__luku{position:absolute;transform:translate(-50%,0);z-index:4;background:var(--surface,#fff);border-radius:999px;
+/* ⚠️ PYÖRISTETTY NELIKULMIO, EI PILLERI (Marko 15.10.2026: «Ympyrä on brändin
+   mukainen muoto, mutta sellainen ellipsi tai ns. oikea pilleri ei, vaan
+   silloin aina pyöristetty nelikulmio»). Tämä on aina tekstiä leveämpi kuin
+   korkea (`padding:1px 10px`, `nowrap`), joten 999px teki siitä pillerin —
+   toisin kuin laudan ympyränmuotoiset merkit, jotka ovat neliöitä. */
+.av__luku{position:absolute;transform:translate(-50%,0);z-index:4;background:var(--surface,#fff);border-radius:9px;
   padding:1px 10px;font-weight:800;font-size:clamp(16px,5vw,20px);font-variant-numeric:tabular-nums;white-space:nowrap;
   box-shadow:0 1px 4px rgba(60,30,0,.25);transition:left .5s cubic-bezier(.3,1.5,.5,1),top .5s cubic-bezier(.3,1.5,.5,1)}
 .av__juhla{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.3);opacity:0;z-index:6;
@@ -211,7 +216,8 @@
   display:grid;place-items:center;transition:transform .2s}
 .av__kortti-pizza{width:48px;height:48px;border-radius:50%;background:#E9B95A;box-shadow:inset 0 0 0 4px #D49A3C;display:grid;place-items:center}
 .av__kortti-pizza i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
-.av__kortti b{position:absolute;right:4px;bottom:2px;font-size:14px;font-weight:800;background:#fff;border-radius:999px;padding:0 5px;line-height:18px;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+/* Sama syy: kaksinumeroisena (10) tämä on 24 × 18 px eli pilleri. */
+.av__kortti b{position:absolute;right:4px;bottom:2px;font-size:14px;font-weight:800;background:#fff;border-radius:6px;padding:0 5px;line-height:18px;box-shadow:0 1px 2px rgba(0,0,0,.2)}
 .av__kortti--ok{box-shadow:0 0 0 0 transparent,0 6px 16px rgba(244,121,32,.55);animation:av-kortti 1s ease-in-out infinite}
 @keyframes av-kortti{50%{transform:translateY(-4px) scale(1.05)}}
 
