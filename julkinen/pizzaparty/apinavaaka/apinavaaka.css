@@ -230,13 +230,28 @@
 .av__kortti--ok{box-shadow:0 0 0 0 transparent,0 6px 16px rgba(244,121,32,.55);animation:av-kortti 1s ease-in-out infinite}
 @keyframes av-kortti{50%{transform:translateY(-4px) scale(1.05)}}
 
+/* 🔵 HIMMENNYS KORTIN TAAKSE (Marko 15.10.2026: «tuo palkintoviesti ei oikein
+   erotu taustastaan, koska kaikki on yhtä kirkkaita»). Opasruudulla
+   (`.av__opasruutu`) himmennys on ollut alusta asti; loppukortilta se puuttui,
+   ja valkoinen kortti kellui kirkkaan laudan päällä.
+
+   ⚠️ PEITE ON `box-shadow`, EI OMA ELEMENTTI — JA SE ON MITATTU VALINTA.
+   Kokeilin ensin `::before`-peitettä `z-index:-1`:llä, ja se maalautui kortin
+   PÄÄLLE: pinoamiskontekstissa elementin oma tausta maalataan ensin ja
+   negatiivisen z-indexin lapset vasta sen jälkeen, joten kortti itse harmaantui.
+   `position:fixed` ei myöskään käy, koska `.av__loppu` on muunnettu
+   (`translate… scale()`) ja muunnettu esi-isä sitoo jälkeläisen `fixed`-
+   asemoinnin itseensä. Valtava varjon levitys maalautuu elementin ULKOPUOLELLE,
+   joten kumpikaan ansa ei koske sitä. Sama väri kuin opasruudulla. */
 .av__loppu{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;z-index:7;
   width:min(86%,320px);background:var(--surface,#fff);border-radius:18px;padding:16px 16px 18px;text-align:center;
-  box-shadow:0 10px 30px rgba(60,30,0,.3);transition:transform .45s cubic-bezier(.3,1.7,.5,1),opacity .2s}
+  box-shadow:0 10px 30px rgba(60,30,0,.3), 0 0 0 100vmax rgba(20,12,4,.38);
+  transition:transform .45s cubic-bezier(.3,1.7,.5,1),opacity .2s}
 .av__loppu.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
 .av__loppu b{display:block;font-size:30px;font-weight:800}
 .av__loppu span{display:block;font-size:17px;font-weight:600;margin:4px 0 14px}
-.av__loppu.voitto{background:#FFF6D6;box-shadow:0 0 0 4px #FFDF00,0 10px 30px rgba(60,30,0,.3)}
+/* Voittokortti: keltainen kehys, mutta himmennys on sama. */
+.av__loppu.voitto{background:#FFF6D6;box-shadow:0 0 0 4px #FFDF00,0 10px 30px rgba(60,30,0,.3), 0 0 0 100vmax rgba(20,12,4,.38)}
 
 /* apinat-tilassa tiiviimpi, jotta korttirivi mahtuu samalle ruudulle */
 
