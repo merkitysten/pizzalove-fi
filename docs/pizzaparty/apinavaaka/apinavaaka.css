@@ -96,7 +96,9 @@
 .av__kieli{transition:transform .6s cubic-bezier(.3,1.9,.5,1)}
 .av__lamppu--paalla,.av__saihkeet{opacity:0;transition:opacity .3s}
 .av__saihkeet{transform:scale(.6);transition:opacity .3s,transform .5s cubic-bezier(.3,1.8,.5,1)}
-.av--valo .av__lamppu--paalla{opacity:1}
+/* Sytytetty lamppu on myös napautuskohde (ks. apinavaaka.js). `.av__nayttamo>img`
+   on `pointer-events:none`, joten se on avattava tälle yhdelle kuvalle. */
+.av--valo .av__lamppu--paalla{opacity:1;pointer-events:auto;cursor:pointer}
 .av--valo .av__saihkeet{opacity:1;transform:scale(1);animation:av-valo 1.6s ease-in-out .5s infinite}
 @keyframes av-valo{50%{transform:scale(1.06);opacity:.75}}
 

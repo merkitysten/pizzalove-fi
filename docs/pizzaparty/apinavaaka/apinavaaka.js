@@ -279,28 +279,28 @@
       kysy: 'Tuo pizzan täytteet linjastolle yhdellä siirrolla.', kysyMonta: 'Yhden pizzan voi valmistaa. Minkä?', kysyKaikki: 'Valmista kaikki pizzat yhdellä siirrolla.', eiKaikki: 'Tasapaino, mutta kaikki pizzat eivät valmistu.', pizzat: 'Valmista pizzat!', valitse: 'Valitse taso', vihjeNappi: 'Vihje',
       eiPizza: 'Tasapaino, mutta pizza ei valmistu. Katso pizzaa!', ok: 'Tasapaino!', pizza: 'Valmista pizza!', hyva: 'Hienoa!',
       vinkki: ['Vihje: perussiirto.', 'Vihje: summasiirto.', 'Vihje: erotussiirto.', 'Vihje: summa ja erotus yhdessä.'],
-      hohto: 'Katso hohtavia täytteitä.', tasoValmis: 'Taso {n} valmis!', loppu: ['Mestaripizzaiolo!', 'Ratkaisit kaikki pulmat.'] },
+      hohto: 'Katso hohtavia täytteitä.', tasoValmis: 'Taso {n} valmis!', loppu: ['Pizzamestari!', 'Ratkaisit kaikki pulmat.'] },
     sv: { boksiTaynna: 'Boxen är full!', vihjeellaEi: 'Pizzan är klar – med tips blir det ingen bit.', lukossa: 'Fyll förra nivåns box', nimi: 'Hjälp Basso', taso: 'Nivå', aloita: 'Börja', seuraava: 'Nästa nivå', alusta: 'Börja om',
       intro: 'Basso behöver hjälp! Gör pizzan med en flytt.',
       kuvaus: ['Basflytt', 'Summaflytt', 'Pizza med två fyllningar', 'Skillnadsflytt', 'Två fyllningar på en gång', 'Stora pizzor', 'Summa och skillnad tillsammans', 'Många pizzor med en flytt', 'Akta fällan!', 'Mästarnivå'],
       kysy: 'För pizzans fyllningar till linjen med en flytt.', kysyMonta: 'En pizza kan göras. Vilken?', kysyKaikki: 'Gör alla pizzor med en flytt.', eiKaikki: 'Balans, men alla pizzor blir inte klara.', pizzat: 'Gör pizzorna!', valitse: 'Välj nivå', vihjeNappi: 'Tips',
       eiPizza: 'Balans, men pizzan blir inte klar. Titta på pizzan!', ok: 'Balans!', pizza: 'Gör pizzan!', hyva: 'Bra!',
       vinkki: ['Tips: basflytt.', 'Tips: summaflytt.', 'Tips: skillnadsflytt.', 'Tips: summa och skillnad tillsammans.'],
-      hohto: 'Titta på de lysande fyllningarna.', tasoValmis: 'Nivå {n} klar!', loppu: ['Mästarpizzaiolo!', 'Du löste alla gåtor.'] },
+      hohto: 'Titta på de lysande fyllningarna.', tasoValmis: 'Nivå {n} klar!', loppu: ['Pizzamästare!', 'Du löste alla gåtor.'] },
     en: { boksiTaynna: 'The box is full!', vihjeellaEi: 'Pizza done – no slice when you use a hint.', lukossa: 'Fill the previous level’s box', nimi: 'Help Basso', taso: 'Level', aloita: 'Start', seuraava: 'Next level', alusta: 'Start over',
       intro: 'Basso needs help! Make the pizza with one move.',
       kuvaus: ['Basic move', 'Sum move', 'Two-topping pizza', 'Difference move', 'Two toppings at once', 'Big pizzas', 'Sum and difference together', 'Many pizzas with one move', 'Watch out for the trap!', 'Master level'],
       kysy: 'Bring the pizza’s toppings to the line with one move.', kysyMonta: 'One pizza can be made. Which one?', kysyKaikki: 'Make all the pizzas with one move.', eiKaikki: 'Balanced, but not every pizza is ready.', pizzat: 'Make the pizzas!', valitse: 'Choose a level', vihjeNappi: 'Hint',
       eiPizza: 'Balanced, but the pizza isn’t ready. Look at the pizza!', ok: 'Balanced!', pizza: 'Make the pizza!', hyva: 'Well done!',
       vinkki: ['Hint: basic move.', 'Hint: sum move.', 'Hint: difference move.', 'Hint: sum and difference together.'],
-      hohto: 'Look at the glowing toppings.', tasoValmis: 'Level {n} done!', loppu: ['Master pizzaiolo!', 'You solved every puzzle.'] },
+      hohto: 'Look at the glowing toppings.', tasoValmis: 'Level {n} done!', loppu: ['Pizza master!', 'You solved every puzzle.'] },
     de: { boksiTaynna: 'Die Box ist voll!', vihjeellaEi: 'Pizza fertig – mit Tipp gibt es kein Stück.', lukossa: 'Füll die Box der vorigen Stufe', nimi: 'Hilf Basso', taso: 'Stufe', aloita: 'Los', seuraava: 'Nächste Stufe', alusta: 'Von vorn',
       intro: 'Basso braucht Hilfe! Back die Pizza mit einem Zug.',
       kuvaus: ['Grundzug', 'Summenzug', 'Pizza mit zwei Zutaten', 'Differenzzug', 'Zwei Zutaten auf einmal', 'Große Pizzen', 'Summe und Differenz zusammen', 'Viele Pizzen mit einem Zug', 'Vorsicht, Falle!', 'Meisterstufe'],
       kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', kysyKaikki: 'Back alle Pizzen mit einem Zug.', eiKaikki: 'Gleichgewicht, aber nicht alle Pizzen werden fertig.', pizzat: 'Back die Pizzen!', valitse: 'Stufe wählen', vihjeNappi: 'Tipp',
       eiPizza: 'Gleichgewicht, aber die Pizza wird nicht fertig. Schau auf die Pizza!', ok: 'Gleichgewicht!', pizza: 'Back die Pizza!', hyva: 'Super!',
       vinkki: ['Tipp: Grundzug.', 'Tipp: Summenzug.', 'Tipp: Differenzzug.', 'Tipp: Summe und Differenz zusammen.'],
-      hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Meister-Pizzaiolo!', 'Du hast alle Rätsel gelöst.'] }
+      hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Pizzameister!', 'Du hast alle Rätsel gelöst.'] }
   };
 
   // ---------------------------------------------------------------- Auta Bassoa: pulmat
@@ -414,6 +414,19 @@
     });
     var lamppuPaalla = kuva('lamppu');
     lamppuPaalla.classList.add('av__lamppu--paalla');
+    /* 🔵 VALAISTUA LAMPPUA VOI NAPAUTTAA (Marko 15.10.2026). Lamppu on se
+       merkki joka kertoo siirron olevan oikein, joten se on luontevin paikka
+       napauttaa — katsetta ei tarvitse siirtää napin luo.
+
+       ⚠️ EI OMAA LOGIIKKAA VAAN SAMA NAPPI. Pelimuodot tekevät siirrosta eri
+       asioita (`vieSiirto`, `opasJatka`, hävikki varastoon), ja oma toteutus
+       olisi neljäs kopio samasta säännöstä. Lamppu napauttaa sitä nappia joka
+       `vieSlot`issa kulloinkin on — siis tasan sitä mitä pelaaja muutenkin
+       painaisi. Tyhjänä (ei nappia) napautus ei tee mitään. */
+    lamppuPaalla.addEventListener('click', function () {
+      var v = vieSlot.querySelector('button');
+      if (v && !v.disabled) v.click();
+    });
     nayttamo.appendChild(kasiV); nayttamo.appendChild(kasiO);
     nayttamo.appendChild(kuva('vartalo'));
     var kieliEl = kuva('kieli');
