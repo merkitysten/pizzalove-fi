@@ -501,7 +501,7 @@
        ⚠️ EI PILLEREITÄ: «Täysin pyöreä pillerin pääty ei ole brändin mukainen
        vaan se on aina pyöristetty nelikulmio.» Korttipelissä `999px` esiintyy
        nolla kertaa — mitattu. */
-    ikkuna.innerHTML = '<div class="av__ikkuna-sisus">' +
+    ikkuna.innerHTML = '<div class="av__ikkuna-sisus valikko-laatikko">' +
       '<button type="button" class="as-kulma av__sulje" aria-label="' + t.sulje + '">\u2715</button>' +
       '<img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
       '<div class="av__vinkit"></div>' +

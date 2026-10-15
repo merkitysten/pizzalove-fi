@@ -130,6 +130,16 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #F47920);color:#fff}
 .valikko-laatikko .as-valinta.ensisijainen small{color:rgba(255,255,255,.92)}
 .valikko-laatikko .toinen-nappi{border:2px solid var(--orange, #F47920);background:#fff;font-weight:700}
+/* 🔵 RAIKKAUS SYNTYY KAHDESTA KERROKSESTA (Marko 15.10.2026: «Muuta tämä
+   valikko sellaiseksi raikkaaksi, kuten korttipelin perusvalikkokin on»):
+   kuosi taustalla ja VALKOINEN pinta sen päällä. Pelkkä hiekanvärinen pohja
+   ilman kumpaakaan on se «hailakka» jota vastaan tämä on.
+   Luettelo nousee siis omaksi valkoiseksi kortikseen, kuten perusvalikon
+   napit. Sama sääntö lautapelin valikossa (apinavaaka.css, .av__taso--paa). */
+.valikko-laatikko .as-valikko{background:var(--surface, #fff);border-radius:14px;
+  padding:0 14px;box-shadow:0 1px 3px rgba(60,34,12,.10)}
+/* Viimeisen rivin alaviiva on kortin reunalla turha. */
+.valikko-laatikko .as-valikko .as-rivi:last-child{border-bottom:0}
 /* Pelin valinta kuosin päällä: umpinainen pohja, ettei kuosi näy tekstin läpi.
    ⚠️ POHJA ON RIVILLÄ EIKÄ SÄILIÖLLÄ (14.10.2026): valitsin on nyt kaksi riviä
    (laji · pelit), ja säiliö on pelkkä pystysuunta niiden välissä. */

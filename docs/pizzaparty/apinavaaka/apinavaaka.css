@@ -189,7 +189,11 @@
 /* VALIKON TASOT: päätaso (rivit) ja alavalikot. Yksi kysymys kerrallaan,
    kuten korttipelin asetuksissa. */
 .av__taso{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.av__taso--paa{gap:0}
+/* Sama kaksikerroksisuus kuin korttipelin valikossa: kuosi arkin taustalla
+   (`valikko-laatikko`) ja rivit valkoisella kortilla sen päällä. */
+.av__taso--paa{gap:0;background:var(--surface,#fff);border-radius:14px;
+  padding:0 14px;box-shadow:0 1px 3px rgba(60,34,12,.10)}
+.av__taso--paa .as-rivi:last-child{border-bottom:0}
 .av__taso[hidden]{display:none}
 .av__taso .valikko-nappi{margin-top:4px}
 /* Alavalikossa otsikko ja vinkit ovat piilossa, joten ensimmäinen nappi
