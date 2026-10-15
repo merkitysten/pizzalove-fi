@@ -36,6 +36,12 @@
        geometrialla on yksi lähde. */
     silmat:  [1377, 1436, 344, 71]
   };
+  /* 📐 SILMIEN LIIKKUMAVARA ON MITATTU KUVASTA, EI ARVATTU (15.10.2026):
+     valkuaisten ja pupillien rajat luettiin PSD:n tasoista pikseleittäin.
+     Tiukempi silmä ratkaisee: vasemmalle 21 px, oikealle 32 px, ylös 114 px.
+     Alas 0, koska pupillit on piirretty valmiiksi alareunaan — apina katsoo
+     levossa alas, eli kohti lautaa. Tähän jätetty pieni marginaali. */
+  var SILMA_VARA = { vasen: -18, oikea: 28, ylos: -100, alas: 0 };
   var NIVEL_V = [1240, 1790], NIVEL_O = [1925, 1775];   // olkapäät
   var SYMB_V = [508, 1655],  SYMB_O = [2700, 1668];     // symbaalien keskikohta
   // Kieli on vaa'an kieli: osoittaa ruokalapun merkkiin < = >. Kääntöpiste suussa.
@@ -433,7 +439,11 @@
       if (v && !v.disabled) v.click();
     });
     nayttamo.appendChild(kasiV); nayttamo.appendChild(kasiO);
-    nayttamo.appendChild(kuva('vartalo'));
+    /* 🔵 SILMÄT OMANA TASONAAN MYÖS PELISSÄ (Marko 15.10.2026: «Tee silmät
+       myös peliin»). Vartalo on silmätön versio ja pupillit sen päällä. */
+    nayttamo.appendChild(kuva('vartalo', 'vartalo-silmaton'));
+    var silmatEl = kuva('silmat'); silmatEl.classList.add('av__silmat');
+    nayttamo.appendChild(silmatEl);
     var kieliEl = kuva('kieli');
     kieliEl.style.transformOrigin = pros(KIELI_NIVEL[0] - OSAT.kieli[0], OSAT.kieli[2]) + ' ' + pros(KIELI_NIVEL[1] - OSAT.kieli[1], OSAT.kieli[3]);
     nayttamo.appendChild(kieliEl);
@@ -1302,6 +1312,25 @@
       }
       var muunnos = 'rotate(' + kulma + 'deg)';
       kasiV.style.transform = muunnos; kasiO.style.transform = muunnos;
+
+      /* 🔵 APINA KATSOO VAAKAANSA. Kaksi sääntöä, ei enempää:
+           · palkki kallistuu → katse painavampaan eli alempaan puoleen
+           · lamppu syttyy    → katse nousee lamppuun
+
+         ⚠️ Siirto on PROSENTTIA KUVAN OMASTA KOOSTA eikä pikseleitä:
+         silloin sama luku pätee puhelimella ja isolla ruudulla, eikä
+         `sovita()`n zoomi tai ikkunan koon muutos jätä katsetta jälkeen.
+
+         📐 Vara on mitattu PSD:n tasoista (ks. SILMA_VARA): vasemmalle 18,
+         oikealle 28, ylös 100 — alas 0, koska pupillit on piirretty
+         valkuaisten alareunaan. Levossa apina siis katsoo lautaa. */
+      var sx = kulma >= 0 ? (kulma / MAKSIMIKULMA) * SILMA_VARA.oikea
+                          : (-kulma / MAKSIMIKULMA) * SILMA_VARA.vasen;
+      var sy = 0;
+      if (tila.valmis || tila.siirretty) { sx *= 0.3; sy = SILMA_VARA.ylos; }
+      silmatEl.style.transform = 'translate(' +
+        (sx / OSAT.silmat[2] * 100).toFixed(2) + '%,' +
+        (sy / OSAT.silmat[3] * 100).toFixed(2) + '%)';
       var pV = kierra(SYMB_V, NIVEL_V, kulma), pO = kierra(SYMB_O, NIVEL_O, kulma);
       [[pinoV, pV, 0], [pinoO, pO, 0], [lukuV, pV, 330], [lukuO, pO, 330]].forEach(function (x) {
         x[0].style.left = pros(x[1][0], W); x[0].style.top = pros(x[1][1] + x[2], H);
@@ -1556,13 +1585,6 @@
      samoista kerroksista ja samoilla PSD-koordinaateilla kuin pelin apina.
      Jos nämä luvut kopioitaisiin sivulle, kaksi apinaa ajautuisi erilleen
      ensimmäisestä kuvamuutoksesta — ja ne ovat sama apina. */
-  /* 📐 SILMIEN LIIKKUMAVARA ON MITATTU KUVASTA, EI ARVATTU (15.10.2026):
-     valkuaisten ja pupillien rajat luettiin PSD:n tasoista pikseleittäin.
-     Tiukempi silmä ratkaisee: vasemmalle 21 px, oikealle 32 px, ylös 114 px.
-     Alas 0, koska pupillit on piirretty valmiiksi alareunaan — apina katsoo
-     levossa alas, eli kohti valikon nappeja. Tähän jätetty pieni marginaali. */
-  var SILMA_VARA = { vasen: -18, oikea: 28, ylos: -100, alas: 0 };
-
   window.apinavaakaKuvat = {
     W: W, H: H, OSAT: OSAT, NIVEL_V: NIVEL_V, NIVEL_O: NIVEL_O,
     KIELI_NIVEL: KIELI_NIVEL, KANSIO: KANSIO, SILMA_VARA: SILMA_VARA

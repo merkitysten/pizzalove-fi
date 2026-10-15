@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="peli.css?v=20261015d">
 <link rel="stylesheet" href="yhteinen.css?v=20261015s">
 <link rel="stylesheet" href="pelivalinta.css?v=20261015d">
-<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015n">
+<link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261015t">
 <style>
   /* Komponenttisivu saa vierittää: `peli.css`:ää ei ladata (ks. yhteinen.css,
      siirretty-lohko). Pelinäkymän omat reunat kuten ennen. */
@@ -83,7 +83,7 @@
 <script src="kielet.js?v=20261015b"></script>
 <script src="pelivalinta.js?v=20261015d"></script>
 <script src="apinavaaka/noppa3d.js?v=20261015b"></script>
-<script src="apinavaaka/apinavaaka.js?v=20261015s"></script>
+<script src="apinavaaka/apinavaaka.js?v=20261015t"></script>
 <script>
 /* KIELI ON YHTEINEN MOLEMMILLE PELEILLE (14.10.2026).
    Lähde on sama kuin korttipelissä: ?kieli= → tallennetut asetukset
@@ -181,9 +181,14 @@ av.setAttribute('data-kieli', k);
   var vara = g.SILMA_VARA || { vasen: -18, oikea: 28, ylos: -100, alas: 0 };
   var katseAika = 0, katseLukossa = false;
 
+  /* ⚠️ SIIRTO ON PROSENTTIA KUVAN OMASTA KOOSTA EIKÄ PIKSELEITÄ. Ensin
+     laskin pikselit kuvan senhetkisestä leveydestä, ja se jää jälkeen heti
+     kun ikkuna muuttuu — prosentti skaalautuu itsestään. Sama tekniikka
+     kuin pelissä (apinavaaka.js). */
+  var SIL = g.OSAT.silmat;
   function katso(dx, dy) {
-    var k = paikka.getBoundingClientRect().width / g.W;   // kuvapikseliä per PSD-piste
-    silmat.style.transform = 'translate(' + (dx * k).toFixed(2) + 'px,' + (dy * k).toFixed(2) + 'px)';
+    silmat.style.transform = 'translate(' + (dx / SIL[2] * 100).toFixed(2) + '%,' +
+      (dy / SIL[3] * 100).toFixed(2) + '%)';
   }
   function katsoKohti(x, y) {
     if (katseLukossa) return;
