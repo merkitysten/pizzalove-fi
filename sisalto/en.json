@@ -35,7 +35,19 @@
     "pelaa_teksti": "On your own, on one device, or with friends – everyone on their own phone.",
     "pelaa_nappi": "Play now",
     "kauppa_otsikko": "Want more?",
-    "kauppa_teksti": "Pizza Love® games are available in the Merkitysten online shop."
+    "kauppa_teksti": "Pizza Love® games are available in the Merkitysten online shop.",
+    "brandedition": {
+      "otsikko": "For clubs and companies: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition is the same game in your organisation’s own box and colours. As a gift, an award or fan merchandise. The minimum order is 100 games.",
+      "nappi": "Ask for a quote",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    },
+    "jalleenmyyjat": {
+      "otsikko": "For shops and distributors",
+      "teksti": "The Pizza Love® card game and board game are available for retail and distribution. The rules are in Finnish, Swedish and English. Contact us for wholesale prices and terms: info@merkitysten.fi · +358 44 023 0688.",
+      "nappi": "Contact us",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20%E2%80%93%20retail%20and%20distribution"
+    }
   },
   "korttipeli": {
     "title": "Pizza Love® card game – rules and videos",

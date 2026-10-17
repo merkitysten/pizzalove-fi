@@ -35,7 +35,13 @@
     "pelaa_teksti": "Ensam, på samma enhet eller med kompisar – var och en på sin egen telefon.",
     "pelaa_nappi": "Spela nu",
     "kauppa_otsikko": "Vill du ha fler?",
-    "kauppa_teksti": "Pizza Love®-spelen finns i Merkitystens webbutik."
+    "kauppa_teksti": "Pizza Love®-spelen finns i Merkitystens webbutik.",
+    "brandedition": {
+      "otsikko": "För föreningar och företag: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition är samma spel i er organisations egna askar och färger. Som gåva, pris eller fanprodukt. Minsta beställning är 100 spel.",
+      "nappi": "Be om en offert",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    }
   },
   "korttipeli": {
     "title": "Pizza Love® kortspel – regler och videor",

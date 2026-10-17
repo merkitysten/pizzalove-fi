@@ -35,7 +35,19 @@
     "pelaa_teksti": "Allein, an einem Gerät oder mit Freunden – jeder auf seinem eigenen Handy.",
     "pelaa_nappi": "Jetzt spielen",
     "kauppa_otsikko": "Lust auf mehr?",
-    "kauppa_teksti": "Die Pizza Love®-Spiele gibt es im Onlineshop von Merkitysten."
+    "kauppa_teksti": "Die Pizza Love®-Spiele gibt es im Onlineshop von Merkitysten.",
+    "brandedition": {
+      "otsikko": "Für Vereine und Unternehmen: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition ist dasselbe Spiel in der eigenen Schachtel und den Farben Ihrer Organisation. Als Geschenk, Preis oder Fanartikel. Die Mindestbestellmenge beträgt 100 Spiele.",
+      "nappi": "Angebot anfragen",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    },
+    "jalleenmyyjat": {
+      "otsikko": "Für Händler und Vertriebspartner",
+      "teksti": "Das Pizza Love® Kartenspiel und Brettspiel sind für den Handel und Vertrieb erhältlich. Die Spielregeln liegen auf Finnisch, Schwedisch und Englisch bei. Kontaktieren Sie uns für Händlerpreise und Konditionen: info@merkitysten.fi · +358 44 023 0688.",
+      "nappi": "Kontakt aufnehmen",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20%E2%80%93%20Handel%20und%20Vertrieb"
+    }
   },
   "korttipeli": {
     "title": "Pizza Love® Kartenspiel – Regeln und Videos",

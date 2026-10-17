@@ -42,6 +42,12 @@
       "teksti": "Luokka tai joukkue myy Pizza Love® -korttipelejä ja pitää itse 9 € jokaisesta myydystä pelistä. Ei ennakkomaksua eikä riskiä.",
       "nappi": "Lue lisää varainhankinnasta",
       "url": "https://varainhankinta.merkitysten.fi/"
+    },
+    "brandedition": {
+      "otsikko": "Seuroille ja yrityksille: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition on sama peli organisaationne omissa koteloissa ja väreissä. Lahjaksi, palkinnoksi tai faniesineeksi. Vähimmäistilaus on 100 peliä. Pienemmälle ryhmälle sopii varainhankinta.",
+      "nappi": "Lue lisää Brand Editionista",
+      "url": "https://merkitysten.fi/brandedition/"
     }
   },
   "korttipeli": {
