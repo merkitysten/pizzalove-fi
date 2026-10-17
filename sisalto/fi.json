@@ -30,7 +30,7 @@
     "ingressi": "Täältä löydät Pizza Love® -pelien säännöt ja ohjevideot. Valitse pelisi, niin pääset pelaamaan muutamassa minuutissa.",
     "valitse": "Valitse pelisi",
     "korttipeli_tiedot": "2–5 pelaajaa · 6+ · 3 tapaa pelata",
-    "lautapeli_tiedot": "2–4 pelaajaa · 4+ · 3 tapaa pelata",
+    "lautapeli_tiedot": "2–4 pelaajaa · 6+ · 3 tapaa pelata",
     "avaa": "Säännöt ja videot →",
     "pelaa_otsikko": "Pelaa Pizza Partya verkossa",
     "pelaa_teksti": "Yksin, samalla laitteella tai kavereiden kanssa jokainen omalla puhelimellaan.",
@@ -127,7 +127,7 @@
     "ingressi": "Valmista boksien lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa – niin voitat!",
     "tiedot": [
       "2–4 pelaajaa",
-      "4+",
+      "6+",
       "3 tapaa pelata"
     ],
     "hyppy": {
@@ -179,7 +179,7 @@
       },
       {
         "nimi": "Nälkäiset apinat",
-        "kuvaus": "Yhteistyöpeli, n. 4–5-vuotiaille",
+        "kuvaus": "Yhteistyöpeli. Jo 4-vuotiaan kanssa voi leikkiä peliä yhdessä ja tutustua lukumääriin.",
         "html": "<p>Helpoin tapa aloittaa. Pelaatte yhdessä ja täytätte yhteistä boksia. Täyttämällä boksin 10 erilaisella palalla voitatte pelin. Mutta varokaa: nälkäiset apinat syövät palansa heti, jos uusia ei tule!</p>"
       },
       {
