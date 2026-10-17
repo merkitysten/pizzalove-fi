@@ -29,7 +29,7 @@
     "ingressi": "Här hittar du reglerna och instruktionsvideorna för Pizza Love®-spelen. Välj ditt spel, så är du igång på några minuter.",
     "valitse": "Välj ditt spel",
     "korttipeli_tiedot": "2–5 spelare · 6+ · 3 sätt att spela",
-    "lautapeli_tiedot": "2–4 spelare · 4+ · 3 sätt att spela",
+    "lautapeli_tiedot": "2–4 spelare · 6+ · 3 sätt att spela",
     "avaa": "Regler och videor →",
     "pelaa_otsikko": "Spela Pizza Party online",
     "pelaa_teksti": "Ensam, på samma enhet eller med kompisar – var och en på sin egen telefon.",
@@ -120,7 +120,7 @@
     "ingressi": "Tillaga pizzakartongernas favoritpizzor och samla först 10 olika bitar – så vinner du!",
     "tiedot": [
       "2–4 spelare",
-      "4+",
+      "6+",
       "3 sätt att spela"
     ],
     "hyppy": {
@@ -172,7 +172,7 @@
       },
       {
         "nimi": "Hungriga apor",
-        "kuvaus": "Samarbetsspel, för ca 4–5-åringar",
+        "kuvaus": "Samarbetsspel. Redan med en 4-åring kan ni leka spelet tillsammans och bekanta er med antal.",
         "html": "<p>Det enklaste sättet att börja. Ni spelar tillsammans och fyller en gemensam box. Fyll boxen med 10 olika bitar så vinner ni. Men se upp: de hungriga aporna äter upp sina bitar direkt om inga nya kommer!</p>"
       },
       {
