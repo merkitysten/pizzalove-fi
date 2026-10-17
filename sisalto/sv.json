@@ -32,7 +32,7 @@
     "lautapeli_tiedot": "2–4 spelare · 6+ · 3 sätt att spela",
     "avaa": "Regler och videor →",
     "pelaa_otsikko": "Spela Pizza Love online",
-    "pelaa_teksti": "Pizza Party och Pizza Basso från kortspelet, Apavågen och Hungriga apor från brädspelet. Kortspelen kan du också spela med kompisar – var och en på sin egen telefon.",
+    "pelaa_teksti": "Pizza Party och Pizza Basso från kortspelet, Apvågen och Hungriga apor från brädspelet. Kortspelen kan du också spela med kompisar – var och en på sin egen telefon.",
     "pelaa_nappi": "Spela nu",
     "kauppa_otsikko": "Vill du ha fler?",
     "kauppa_teksti": "Pizza Love®-spelen finns i Merkitystens webbutik.",
@@ -157,7 +157,7 @@
     "vaiheet": [
       {
         "otsikko": "Kasta tärningen och flytta brickorna",
-        "html": "<p>Den som senast åt pizza börjar genom att kasta tärningen. Tärningen avgör hur många brickor som flyttas mellan lagret och linjen. Brickor med samma färg flyttas alltid som ett torn. Om du inte kan göra en förflyttning, slutar din speltur.</p><p class=\"pieni\">Apavågen och vikterna hjälper barn att förstå förflyttningarna. <b>De behöver inte användas.</b></p>"
+        "html": "<p>Den som senast åt pizza börjar genom att kasta tärningen. Tärningen avgör hur många brickor som flyttas mellan lagret och linjen. Brickor med samma färg flyttas alltid som ett torn. Om du inte kan göra en förflyttning, slutar din speltur.</p><p class=\"pieni\">Apvågen och vikterna hjälper barn att förstå förflyttningarna. <b>De behöver inte användas.</b></p>"
       },
       {
         "otsikko": "Tillaga pizza",
@@ -196,6 +196,6 @@
       "salatut": "Hemliga pizzor – hela regelboken"
     },
     "pelaa_otsikko": "Öva online",
-    "pelaa_teksti": "I Apavågen lär du känna brädspelets våg, matar hungriga apor och hjälper Basso med kluriga uppgifter."
+    "pelaa_teksti": "I Apvågen lär du känna brädspelets våg, matar hungriga apor och hjälper Basso med kluriga uppgifter."
   }
 }
