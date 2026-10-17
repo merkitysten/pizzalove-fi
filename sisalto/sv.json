@@ -24,15 +24,15 @@
   },
   "etusivu": {
     "title": "Pizza Love® – regler, videor och onlinespel",
-    "kuvaus": "Regler och instruktionsvideor för Pizza Love® kortspel och brädspel, samt onlinespelet Pizza Party.",
+    "kuvaus": "Regler och instruktionsvideor för Pizza Love® kortspel och brädspel, samt onlinespel.",
     "h1": "Välkommen till pizzafabriken!",
     "ingressi": "Här hittar du reglerna och instruktionsvideorna för Pizza Love®-spelen. Välj ditt spel, så är du igång på några minuter.",
     "valitse": "Välj ditt spel",
     "korttipeli_tiedot": "2–5 spelare · 6+ · 3 sätt att spela",
     "lautapeli_tiedot": "2–4 spelare · 6+ · 3 sätt att spela",
     "avaa": "Regler och videor →",
-    "pelaa_otsikko": "Spela Pizza Party online",
-    "pelaa_teksti": "Ensam, på samma enhet eller med kompisar – var och en på sin egen telefon.",
+    "pelaa_otsikko": "Spela Pizza Love online",
+    "pelaa_teksti": "Pizza Party och Pizza Basso från kortspelet, Apavågen och Hungriga apor från brädspelet. Kortspelen kan du också spela med kompisar – var och en på sin egen telefon.",
     "pelaa_nappi": "Spela nu",
     "kauppa_otsikko": "Vill du ha fler?",
     "kauppa_teksti": "Pizza Love®-spelen finns i Merkitystens webbutik.",
@@ -117,7 +117,7 @@
     "lataa_teksti": "Det tryckta regelbladet på finska, svenska och engelska.",
     "lataa_tiedosto": "Kortspelets regler (FI · SV · EN)",
     "pelaa_otsikko": "Öva online",
-    "pelaa_teksti": "Pizza Party fungerar också i webbläsaren. Prova före ditt första spel, eller spela med kompisar på era egna telefoner."
+    "pelaa_teksti": "Pizza Party och Pizza Basso fungerar också i webbläsaren. Prova före första spelet eller spela med kompisar på era egna telefoner."
   },
   "lautapeli": {
     "title": "Pizza Love® brädspel – regler och videor",
@@ -194,6 +194,8 @@
       "peruspeli": "Grundspel – hela regelboken",
       "apinat": "Hungriga apor – hela regelboken",
       "salatut": "Hemliga pizzor – hela regelboken"
-    }
+    },
+    "pelaa_otsikko": "Öva online",
+    "pelaa_teksti": "I Apavågen lär du känna brädspelets våg, matar hungriga apor och hjälper Basso med kluriga uppgifter."
   }
 }

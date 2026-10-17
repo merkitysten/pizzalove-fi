@@ -47,6 +47,7 @@ KAUPPA_KIELI = {
            'lautapeli': 'https://merkitysten.fi/en/tuote/pizza-love-board-game/'},
 }
 KAUPPA_KIELI['de'] = KAUPPA_KIELI['en']
+MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp
 
 
 def kauppa(t, tuote):
@@ -443,6 +444,15 @@ def lautapeli(t, kaikki):
 <p>%s</p>
 %s
 
+<div class="pelaa-banneri" style="margin-top:28px">
+  <img src="../kuvat/basso-miettii.webp" width="%s" height="%s" alt="">
+  <div>
+    <strong>%s</strong>
+    <span>%s</span>
+    <a class="nappi" href="../pizzaparty/apinavaaka.html?kieli=%s">%s →</a>
+  </div>
+</div>
+
 <h2 id="lataa">%s</h2>
 <p>%s</p>
 %s
@@ -453,6 +463,7 @@ def lautapeli(t, kaikki):
        e(s['valmistelut_otsikko']), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
+       MIETTII_W, MIETTII_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
        kauppa(t, 'lautapeli'), e(t['ui']['kauppaan']))

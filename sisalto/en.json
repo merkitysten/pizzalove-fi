@@ -23,16 +23,16 @@
     "ohita": "Skip to content"
   },
   "etusivu": {
-    "title": "Pizza Love® – rules, videos and online game",
-    "kuvaus": "Rules and how-to videos for the Pizza Love® card game and board game, plus the Pizza Party online game.",
+    "title": "Pizza Love® – rules, videos and online games",
+    "kuvaus": "Rules and how-to videos for the Pizza Love® card game and board game, plus online games.",
     "h1": "Welcome to the pizza factory!",
     "ingressi": "Here you’ll find the rules and how-to videos for the Pizza Love® games. Choose your game and you’ll be playing in a few minutes.",
     "valitse": "Choose your game",
     "korttipeli_tiedot": "2–5 players · 6+ · 3 ways to play",
     "lautapeli_tiedot": "2–4 players · 6+ · 3 ways to play",
     "avaa": "Rules and videos →",
-    "pelaa_otsikko": "Play Pizza Party online",
-    "pelaa_teksti": "On your own, on one device, or with friends – everyone on their own phone.",
+    "pelaa_otsikko": "Play Pizza Love online",
+    "pelaa_teksti": "Pizza Party and Pizza Basso from the card game, Monkey Scales and Hungry Monkeys from the board game. You can also play the card games with friends – everyone on their own phone.",
     "pelaa_nappi": "Play now",
     "kauppa_otsikko": "Want more?",
     "kauppa_teksti": "Pizza Love® games are available in the Merkitysten online shop.",
@@ -123,7 +123,7 @@
     "lataa_teksti": "The printed rules sheet in Finnish, Swedish and English.",
     "lataa_tiedosto": "Card game rules (FI · SV · EN)",
     "pelaa_otsikko": "Practise online",
-    "pelaa_teksti": "Pizza Party also works in your browser. Try it before your first game, or play with friends on your own phones."
+    "pelaa_teksti": "Pizza Party and Pizza Basso also work in your browser. Try them before your first game, or play with friends on your own phones."
   },
   "lautapeli": {
     "title": "Pizza Love® board game – rules and videos",
@@ -200,6 +200,8 @@
       "peruspeli": "Basic game – full rules",
       "apinat": "Hungry Monkeys – full rules",
       "salatut": "Secret Pizzas – full rules"
-    }
+    },
+    "pelaa_otsikko": "Practise online",
+    "pelaa_teksti": "In Monkey Scales you get to know the board game’s scales, feed hungry monkeys and help Basso solve puzzles."
   }
 }

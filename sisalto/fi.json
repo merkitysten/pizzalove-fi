@@ -24,16 +24,16 @@
     "nav_varainhankinta": "Varainhankinta"
   },
   "etusivu": {
-    "title": "Pizza Love® – säännöt, videot ja verkkopeli",
-    "kuvaus": "Pizza Love® -korttipelin ja -lautapelin säännöt, ohjevideot ja Pizza Party -verkkopeli.",
+    "title": "Pizza Love® – säännöt, videot ja verkkopelit",
+    "kuvaus": "Pizza Love® -korttipelin ja -lautapelin säännöt, ohjevideot ja verkkopelit.",
     "h1": "Tervetuloa pizzatehtaalle!",
     "ingressi": "Täältä löydät Pizza Love® -pelien säännöt ja ohjevideot. Valitse pelisi, niin pääset pelaamaan muutamassa minuutissa.",
     "valitse": "Valitse pelisi",
     "korttipeli_tiedot": "2–5 pelaajaa · 6+ · 3 tapaa pelata",
     "lautapeli_tiedot": "2–4 pelaajaa · 6+ · 3 tapaa pelata",
     "avaa": "Säännöt ja videot →",
-    "pelaa_otsikko": "Pelaa Pizza Partya verkossa",
-    "pelaa_teksti": "Yksin, samalla laitteella tai kavereiden kanssa jokainen omalla puhelimellaan.",
+    "pelaa_otsikko": "Pelaa Pizza Lovea verkossa",
+    "pelaa_teksti": "Korttipelistä Pizza Party ja Pizza Basso, lautapelistä Apinavaaka ja Nälkäiset apinat. Korttipelejä voi pelata myös kavereiden kanssa, jokainen omalla puhelimellaan.",
     "pelaa_nappi": "Pelaa nyt",
     "kauppa_otsikko": "Lisää peliä?",
     "kauppa_teksti": "Pizza Love® -pelit löytyvät Merkitysten verkkokaupasta.",
@@ -115,7 +115,7 @@
     "lataa_teksti": "Painettu sääntöarkki suomeksi, ruotsiksi ja englanniksi.",
     "lataa_tiedosto": "Korttipelin säännöt (FI · SV · EN)",
     "pelaa_otsikko": "Harjoittele verkossa",
-    "pelaa_teksti": "Pizza Party toimii myös selaimessa. Kokeile ennen ensimmäistä peliä tai pelaa kavereiden kanssa omilla puhelimilla.",
+    "pelaa_teksti": "Pizza Party ja Pizza Basso toimivat myös selaimessa. Kokeile ennen ensimmäistä peliä tai pelaa kavereiden kanssa omilla puhelimilla.",
     "videot": {
       "party_en": "Pizza Party – näin pelataan",
       "party_fi": "Pizza Party – näin pelataan",
@@ -201,6 +201,8 @@
       "peruspeli": "Peruspeli – koko ohje",
       "apinat": "Nälkäiset apinat – koko ohje",
       "salatut": "Salatut pizzat – koko ohje"
-    }
+    },
+    "pelaa_otsikko": "Harjoittele verkossa",
+    "pelaa_teksti": "Apinavaa’assa tutustut lautapelin vaakaan, ruokit nälkäisiä apinoita ja autat Bassoa pulmissa."
   }
 }

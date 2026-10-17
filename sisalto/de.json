@@ -23,16 +23,16 @@
     "ohita": "Zum Inhalt springen"
   },
   "etusivu": {
-    "title": "Pizza Love® – Regeln, Videos und Online-Spiel",
-    "kuvaus": "Regeln und Erklärvideos zum Pizza Love® Kartenspiel und Brettspiel sowie das Online-Spiel Pizza Party.",
+    "title": "Pizza Love® – Regeln, Videos und Online-Spiele",
+    "kuvaus": "Regeln und Erklärvideos zum Pizza Love® Kartenspiel und Brettspiel sowie Online-Spiele.",
     "h1": "Willkommen in der Pizzafabrik!",
     "ingressi": "Hier findest du die Regeln und Erklärvideos zu den Pizza Love®-Spielen. Wähle dein Spiel – in wenigen Minuten kann es losgehen.",
     "valitse": "Wähle dein Spiel",
     "korttipeli_tiedot": "2–5 Spieler · ab 6 · 3 Spielvarianten",
     "lautapeli_tiedot": "2–4 Spieler · ab 6 · 3 Spielvarianten",
     "avaa": "Regeln und Videos →",
-    "pelaa_otsikko": "Pizza Party online spielen",
-    "pelaa_teksti": "Allein, an einem Gerät oder mit Freunden – jeder auf seinem eigenen Handy.",
+    "pelaa_otsikko": "Pizza Love online spielen",
+    "pelaa_teksti": "Pizza Party und Pizza Basso aus dem Kartenspiel, Affenwaage und Hungrige Affen aus dem Brettspiel. Die Kartenspiele könnt ihr auch mit Freunden spielen – jeder auf seinem eigenen Handy.",
     "pelaa_nappi": "Jetzt spielen",
     "kauppa_otsikko": "Lust auf mehr?",
     "kauppa_teksti": "Die Pizza Love®-Spiele gibt es im Onlineshop von Merkitysten.",
@@ -123,7 +123,7 @@
     "lataa_teksti": "Das gedruckte Regelblatt auf Finnisch, Schwedisch und Englisch.",
     "lataa_tiedosto": "Regeln Kartenspiel (FI · SV · EN)",
     "pelaa_otsikko": "Online üben",
-    "pelaa_teksti": "Pizza Party läuft auch im Browser. Probiere es vor dem ersten Spiel aus oder spiele mit Freunden auf euren eigenen Handys."
+    "pelaa_teksti": "Pizza Party und Pizza Basso laufen auch im Browser. Probiere sie vor dem ersten Spiel aus oder spiele mit Freunden auf euren eigenen Handys."
   },
   "lautapeli": {
     "title": "Pizza Love® Brettspiel – Regeln und Videos",
@@ -200,6 +200,8 @@
       "peruspeli": "Grundspiel – vollständige Anleitung",
       "apinat": "Hungrige Affen – vollständige Anleitung",
       "salatut": "Geheime Pizzas – vollständige Anleitung"
-    }
+    },
+    "pelaa_otsikko": "Online üben",
+    "pelaa_teksti": "In der Affenwaage lernst du die Waage des Brettspiels kennen, fütterst hungrige Affen und hilfst Basso bei Rätseln."
   }
 }
