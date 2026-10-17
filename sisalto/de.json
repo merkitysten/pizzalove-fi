@@ -29,7 +29,7 @@
     "ingressi": "Hier findest du die Regeln und Erklärvideos zu den Pizza Love®-Spielen. Wähle dein Spiel – in wenigen Minuten kann es losgehen.",
     "valitse": "Wähle dein Spiel",
     "korttipeli_tiedot": "2–5 Spieler · ab 6 · 3 Spielvarianten",
-    "lautapeli_tiedot": "2–4 Spieler · ab 4 · 3 Spielvarianten",
+    "lautapeli_tiedot": "2–4 Spieler · ab 6 · 3 Spielvarianten",
     "avaa": "Regeln und Videos →",
     "pelaa_otsikko": "Pizza Party online spielen",
     "pelaa_teksti": "Allein, an einem Gerät oder mit Freunden – jeder auf seinem eigenen Handy.",
@@ -120,7 +120,7 @@
     "ingressi": "Bereite die Lieblingspizzas der Pizzakartons zu und sammle als Erster 10 verschiedene Stücke – dann hast du gewonnen!",
     "tiedot": [
       "2–4 Spieler",
-      "ab 4",
+      "ab 6",
       "3 Spielvarianten"
     ],
     "hyppy": {
@@ -172,7 +172,7 @@
       },
       {
         "nimi": "Hungrige Affen",
-        "kuvaus": "Kooperatives Spiel, für etwa 4- bis 5-Jährige",
+        "kuvaus": "Kooperatives Spiel. Schon mit einem 4-jährigen Kind könnt ihr es gemeinsam spielen und Mengen entdecken.",
         "html": "<p>Der leichteste Einstieg. Ihr spielt zusammen und füllt eine gemeinsame Box. Füllt sie mit 10 verschiedenen Stücken, dann habt ihr gewonnen. Aber Vorsicht: Die hungrigen Affen essen ihre Stücke sofort auf, wenn keine neuen kommen!</p>"
       },
       {
