@@ -37,6 +37,20 @@ KAUPPA = {
     'korttipeli': 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
     'lautapeli': 'https://merkitysten.fi/tuote/pizza-love-lautapeli/',
 }
+# Kielikohtaiset tuotesivut merkitysten.fi:ssä (Polylang for WooCommerce, 17.10.2026).
+# DE:llä ei ole omaa kauppaa, joten se käyttää EN-tuotesivuja.
+KAUPPA_KIELI = {
+    'fi': KAUPPA,
+    'sv': {'korttipeli': 'https://merkitysten.fi/sv/tuote/pizza-love-familjeutgava-kortspel/',
+           'lautapeli': 'https://merkitysten.fi/sv/tuote/pizza-love-bradspel/'},
+    'en': {'korttipeli': 'https://merkitysten.fi/en/tuote/pizza-love-card-game/',
+           'lautapeli': 'https://merkitysten.fi/en/tuote/pizza-love-board-game/'},
+}
+KAUPPA_KIELI['de'] = KAUPPA_KIELI['en']
+
+
+def kauppa(t, tuote):
+    return KAUPPA_KIELI.get(t['lang'], KAUPPA)[tuote]
 
 # Videot: (YouTube-tunnus, puhutun/kirjoitetun tekstin kieli, muoto)
 # muoto 'pysty' = Shorts (9:16), 'vaaka' = tavallinen video (16:9)
@@ -143,7 +157,7 @@ def alaosa(t):
     <p class="alaosa__pieni">%s © Merkitysten Oy</p>
   </div>
 </footer>''' % (e(ui['alaosa_teksti']), e(ui['alaosa_yhteys']), SAHKOPOSTI, SAHKOPOSTI,
-                e(ui['alaosa_yritys']), KAUPPA['korttipeli'], e(ui['kauppaan']), varain,
+                e(ui['alaosa_yritys']), kauppa(t, 'korttipeli'), e(ui['kauppaan']), varain,
                 e(ui['alaosa_tavaramerkki']))
 
 
@@ -232,8 +246,8 @@ def lataukset(avaimet, nimet, polut):
 
 # ---------------------------------------------------------------- sivut
 
-def varainhankinta_osio(s):
-    v = s.get('varainhankinta')
+def varainhankinta_osio(s, avain='varainhankinta'):
+    v = s.get(avain)
     if not v:
         return ''
     return '''<section class="laatikko varain" style="margin-top:20px">
@@ -295,10 +309,10 @@ def etusivu(t, kaikki):
        e(t['ui']['nav_korttipeli']), e(s['korttipeli_tiedot']), e(s['avaa']),
        e(t['ui']['nav_lautapeli']), e(s['lautapeli_tiedot']), e(s['avaa']),
        lang, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), e(s['pelaa_nappi']),
-       varainhankinta_osio(s),
+       varainhankinta_osio(s) + varainhankinta_osio(s, 'brandedition') + varainhankinta_osio(s, 'jalleenmyyjat'),
        e(s['kauppa_otsikko']), e(s['kauppa_teksti']),
-       KAUPPA['korttipeli'], e(t['ui']['kauppaan']), e(t['ui']['nav_korttipeli']),
-       KAUPPA['lautapeli'], e(t['ui']['kauppaan']), e(t['ui']['nav_lautapeli']))
+       kauppa(t, 'korttipeli'), e(t['ui']['kauppaan']), e(t['ui']['nav_korttipeli']),
+       kauppa(t, 'lautapeli'), e(t['ui']['kauppaan']), e(t['ui']['nav_lautapeli']))
     return kehys(t, kaikki, 'etusivu', s['title'], s['kuvaus'], runko)
 
 
@@ -386,7 +400,7 @@ def korttipeli(t, kaikki):
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']}, PDF),
-       KAUPPA['korttipeli'], e(t['ui']['kauppaan']))
+       kauppa(t, 'korttipeli'), e(t['ui']['kauppaan']))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
 
@@ -441,7 +455,7 @@ def lautapeli(t, kaikki):
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
-       KAUPPA['lautapeli'], e(t['ui']['kauppaan']))
+       kauppa(t, 'lautapeli'), e(t['ui']['kauppaan']))
     return kehys(t, kaikki, 'lautapeli', s['title'], s['kuvaus'], runko)
 
 
