@@ -263,6 +263,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * logokin on puristuksissa»): väli yllä ja alla kasvaa ruudun korkeuden mukana, jolloin
  * napit nousevat ja kuvitus antaa tilaa. */
 .alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85;margin:clamp(6px, 2.5vh, 26px) 0 clamp(8px, 3vh, 34px)}
+/* Logo vie merkitysten.fi:hin (Marko 18.10.2026). Linkki on flex-alkio logon sijaan;
+ * leveys ja marginaalit pysyvät kuvalla, linkki vain kietoo sen. */
+.alku-logo-linkki{flex:none;display:block;line-height:0;border-radius:8px}
+.alku-logo-linkki:focus-visible{outline:2px solid var(--orange, #F47920);outline-offset:4px}
 /* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
 @media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
 

@@ -989,6 +989,11 @@ function kauppaOsoite(tuote, kieli) {
   return kieliKartta[tuote] || KAUPPA_OSOITTEET.fi[tuote];
 }
 
+const KOTI_OSOITTEET = { fi: 'https://merkitysten.fi/', sv: 'https://merkitysten.fi/sv/', en: 'https://merkitysten.fi/en/' };
+function kotiOsoite(kieli) {
+  return KOTI_OSOITTEET[kieli || KIELI] || KOTI_OSOITTEET.en;
+}
+
 function kaannaSivu(juuri) {
   const j = juuri || document;
   [].forEach.call(j.querySelectorAll('[data-t]'), function (n) {
@@ -1015,6 +1020,10 @@ function kaannaSivu(juuri) {
    * aina suomenkieliseen kauppaan. Samat osoitteet kuin rakenna.py:n KAUPPA_KIELI. */
   [].forEach.call(j.querySelectorAll('[data-kauppa]'), function (n) {
     n.setAttribute('href', kauppaOsoite(n.dataset.kauppa));
+  });
+  /* Merkitysten-logo vie merkitysten.fi:n kielen mukaiselle etusivulle. */
+  [].forEach.call(j.querySelectorAll('[data-koti]'), function (n) {
+    n.setAttribute('href', kotiOsoite());
   });
   document.documentElement.lang = KIELI;
 }
