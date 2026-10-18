@@ -172,6 +172,19 @@ ul.lista li,ol.lista li{margin:4px 0}
 .pelaa-banneri span{display:block;font-size:14.5px;opacity:.8;margin-top:4px}
 .pelaa-banneri .nappi{margin-top:10px;opacity:1;display:inline-flex;font-size:16px}
 
+/* Kauppaan ohjaava laatikko (18.10.2026): etusivun "Lisää peliä?" ja pelisivujen
+ * loppu, jossa tarjotaan toista peliä. Vaalea pinta, ettei sekoitu oranssiin pelaa-banneriin. */
+.kauppa-banneri{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;
+  margin:32px 0 8px;padding:18px;border-radius:var(--radius);background:var(--surface);
+  border:1px solid var(--line);box-shadow:var(--shadow)}
+.kauppa-banneri img{width:110px;height:auto}
+.kauppa-banneri h2{margin:0;font-size:21px;line-height:1.25}
+.kauppa-banneri p{margin:6px 0 0;font-size:15px}
+.kauppa-banneri .napit{margin:14px 0 0}
+.kauppa-banneri__linkki{font-weight:700}
+.kauppa-banneri__linkki a{color:var(--deep)}
+@media (max-width:480px){.kauppa-banneri{grid-template-columns:1fr}.kauppa-banneri img{width:140px}}
+
 /* ---------- Pelisivu ---------- */
 .pelin-tiedot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
 .pelin-tiedot li{background:var(--tint);color:var(--ink);font-weight:600;font-size:14px;

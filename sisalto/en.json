@@ -20,7 +20,10 @@
     "alaosa_tavaramerkki": "Pizza Love® and Merkitysten® are registered trademarks of Merkitysten Oy.",
     "alaosa_yritys": "Merkitysten Oy",
     "alaosa_varainhankinta": "Fundraising",
-    "ohita": "Skip to content"
+    "ohita": "Skip to content",
+    "kauppa_korttipeli": "Card game in the shop",
+    "kauppa_lautapeli": "Board game in the shop",
+    "kauppa_molemmat": "Both games"
   },
   "etusivu": {
     "title": "Pizza Love® – rules, videos and online games",
@@ -123,7 +126,10 @@
     "lataa_teksti": "The printed rules sheet in Finnish, Swedish and English.",
     "lataa_tiedosto": "Card game rules (FI · SV · EN)",
     "pelaa_otsikko": "Practise online",
-    "pelaa_teksti": "Pizza Party and Pizza Basso also work in your browser. Try them before your first game, or play with friends on your own phones."
+    "pelaa_teksti": "Pizza Party and Pizza Basso also work in your browser. Try them before your first game, or play with friends on your own phones.",
+    "ristiin_otsikko": "Next: the Pizza Love® board game",
+    "ristiin_teksti": "The same pizza world on a game board: make the pizza boxes’ favourite pizzas and be the first to collect 10 different slices. Three ways to play, including a cooperative game.",
+    "ristiin_saannot": "Board game rules"
   },
   "lautapeli": {
     "title": "Pizza Love® board game – rules and videos",
@@ -202,6 +208,9 @@
       "salatut": "Secret Pizzas – full rules"
     },
     "pelaa_otsikko": "Practise online",
-    "pelaa_teksti": "In Monkey Scales you get to know the board game’s scales, feed hungry monkeys and help Basso solve puzzles."
+    "pelaa_teksti": "In Monkey Scales you get to know the board game’s scales, feed hungry monkeys and help Basso solve puzzles.",
+    "ristiin_otsikko": "Next: the Pizza Love® card game",
+    "ristiin_teksti": "The same pizzas and toppings as a card game: make a pizza from your topping cards and say the calculation out loud. Three games with one deck.",
+    "ristiin_saannot": "Card game rules"
   }
 }

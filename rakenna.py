@@ -36,22 +36,57 @@ KAYTA_OMAA_DOMAINIA = True
 KAUPPA = {
     'korttipeli': 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
     'lautapeli': 'https://merkitysten.fi/tuote/pizza-love-lautapeli/',
+    'molemmat': 'https://merkitysten.fi/tuote/pizza-love-bundle/',
 }
 # Kielikohtaiset tuotesivut merkitysten.fi:ssä (Polylang for WooCommerce, 17.10.2026).
 # DE:llä ei ole omaa kauppaa, joten se käyttää EN-tuotesivuja.
 KAUPPA_KIELI = {
     'fi': KAUPPA,
     'sv': {'korttipeli': 'https://merkitysten.fi/sv/tuote/pizza-love-familjeutgava-kortspel/',
-           'lautapeli': 'https://merkitysten.fi/sv/tuote/pizza-love-bradspel/'},
+           'lautapeli': 'https://merkitysten.fi/sv/tuote/pizza-love-bradspel/',
+           'molemmat': 'https://merkitysten.fi/sv/tuote/pizza-love-paket/'},
     'en': {'korttipeli': 'https://merkitysten.fi/en/tuote/pizza-love-card-game/',
-           'lautapeli': 'https://merkitysten.fi/en/tuote/pizza-love-board-game/'},
+           'lautapeli': 'https://merkitysten.fi/en/tuote/pizza-love-board-game/',
+           'molemmat': 'https://merkitysten.fi/en/tuote/pizza-love-both-games/'},
 }
 KAUPPA_KIELI['de'] = KAUPPA_KIELI['en']
 MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp
 
 
-def kauppa(t, tuote):
-    return KAUPPA_KIELI.get(t['lang'], KAUPPA)[tuote]
+def kauppa(t, tuote, paikka=None):
+    """Tuotesivu merkitysten.fi:ssä sivun kielellä. `paikka` lisää seurantatunnisteen
+    (18.10.2026): WooCommercen tilauksessa näkyy, mistä pizzalove.fi:n linkistä ostaja tuli."""
+    osoite = KAUPPA_KIELI.get(t['lang'], KAUPPA)[tuote]
+    if paikka:
+        osoite += ('?utm_source=pizzalove.fi&utm_medium=referral&utm_campaign=pizzalove-%s&utm_content=%s'
+                   % (t['lang'], paikka))
+    return osoite
+
+
+def kauppa_banneri(t, kuva, kuva_l, kuva_k, otsikko, teksti, napit, alalinkki=''):
+    """Kauppaan ohjaava laatikko: kuva, otsikko, yksi lause, napit (18.10.2026)."""
+    nappi_html = ''.join('<a class="nappi%s" href="%s">%s →</a>' % ('' if i == 0 else ' nappi--toinen', e(h), e(x))
+                         for i, (h, x) in enumerate(napit))
+    return '''
+<section class="kauppa-banneri">
+  <img src="../kuvat/%s" width="%d" height="%d" alt="">
+  <div>
+    <h2>%s</h2>
+    <p>%s</p>
+    <div class="napit">%s</div>%s
+  </div>
+</section>''' % (kuva, kuva_l, kuva_k, e(otsikko), e(teksti), nappi_html, alalinkki)
+
+
+def ristiinmyynti(t, tuote, paikka):
+    """Pelisivun loppuun toinen peli: lukija omistaa jo tämän sivun pelin."""
+    ui = t['ui']
+    oma = 'korttipeli' if tuote == 'lautapeli' else 'lautapeli'
+    s = t[oma]
+    kuva = ('lautapeli-kansi.webp', 240, 284) if tuote == 'lautapeli' else ('tuote-pakkaus.webp', 900, 686)
+    return kauppa_banneri(t, kuva[0], kuva[1], kuva[2], s['ristiin_otsikko'], s['ristiin_teksti'],
+                          [(kauppa(t, tuote, paikka), ui['kauppa_' + tuote]),
+                           (tuote + '.html', s['ristiin_saannot'])])
 
 # Videot: (YouTube-tunnus, puhutun/kirjoitetun tekstin kieli, muoto)
 # muoto 'pysty' = Shorts (9:16), 'vaaka' = tavallinen video (16:9)
@@ -158,7 +193,7 @@ def alaosa(t):
     <p class="alaosa__pieni">%s © Merkitysten Oy</p>
   </div>
 </footer>''' % (e(ui['alaosa_teksti']), e(ui['alaosa_yhteys']), SAHKOPOSTI, SAHKOPOSTI,
-                e(ui['alaosa_yritys']), kauppa(t, 'korttipeli'), e(ui['kauppaan']), varain,
+                e(ui['alaosa_yritys']), e(kauppa(t, 'korttipeli', 'alaosa')), e(ui['kauppaan']), varain,
                 e(ui['alaosa_tavaramerkki']))
 
 
@@ -300,20 +335,16 @@ def etusivu(t, kaikki):
 </a>
 
 %s
-<h2>%s</h2>
-<p>%s</p>
-<div class="napit">
-  <a class="nappi nappi--toinen" href="%s">%s – %s</a>
-  <a class="nappi nappi--toinen" href="%s">%s – %s</a>
-</div>
+%s
 ''' % (e(s['h1']), s['ingressi'], e(s['valitse']),
        e(t['ui']['nav_korttipeli']), e(s['korttipeli_tiedot']), e(s['avaa']),
        e(t['ui']['nav_lautapeli']), e(s['lautapeli_tiedot']), e(s['avaa']),
        lang, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), e(s['pelaa_nappi']),
        varainhankinta_osio(s) + varainhankinta_osio(s, 'brandedition') + varainhankinta_osio(s, 'jalleenmyyjat'),
-       e(s['kauppa_otsikko']), e(s['kauppa_teksti']),
-       kauppa(t, 'korttipeli'), e(t['ui']['kauppaan']), e(t['ui']['nav_korttipeli']),
-       kauppa(t, 'lautapeli'), e(t['ui']['kauppaan']), e(t['ui']['nav_lautapeli']))
+       kauppa_banneri(t, 'tuote-pakkaus.webp', 900, 686, s['kauppa_otsikko'], s['kauppa_teksti'],
+                      [(kauppa(t, 'korttipeli', 'etusivu'), t['ui']['kauppa_korttipeli']),
+                       (kauppa(t, 'lautapeli', 'etusivu'), t['ui']['kauppa_lautapeli']),
+                       (kauppa(t, 'molemmat', 'etusivu'), t['ui']['kauppa_molemmat'])]))
     return kehys(t, kaikki, 'etusivu', s['title'], s['kuvaus'], runko)
 
 
@@ -389,7 +420,7 @@ def korttipeli(t, kaikki):
 <h2 id="lataa">%s</h2>
 <p>%s</p>
 %s
-<div class="napit"><a class="nappi nappi--toinen" href="%s">%s →</a></div>
+%s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['perusteet_otsikko']), e(s['perusteet_ingressi']),
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
@@ -401,7 +432,7 @@ def korttipeli(t, kaikki):
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']}, PDF),
-       kauppa(t, 'korttipeli'), e(t['ui']['kauppaan']))
+       ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
 
@@ -456,7 +487,7 @@ def lautapeli(t, kaikki):
 <h2 id="lataa">%s</h2>
 <p>%s</p>
 %s
-<div class="napit"><a class="nappi nappi--toinen" href="%s">%s →</a></div>
+%s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
        e(s['peli_otsikko']), e(s['voittaminen_otsikko']), s['voittaminen'],
@@ -466,7 +497,7 @@ def lautapeli(t, kaikki):
        MIETTII_W, MIETTII_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
-       kauppa(t, 'lautapeli'), e(t['ui']['kauppaan']))
+       ristiinmyynti(t, 'korttipeli', 'lautapelisivu'))
     return kehys(t, kaikki, 'lautapeli', s['title'], s['kuvaus'], runko)
 
 

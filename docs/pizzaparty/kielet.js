@@ -986,7 +986,11 @@ const KAUPPA_OSOITTEET = {
 function kauppaOsoite(tuote, kieli) {
   const k = kieli || KIELI;
   const kieliKartta = KAUPPA_OSOITTEET[k] || KAUPPA_OSOITTEET.en;
-  return kieliKartta[tuote] || KAUPPA_OSOITTEET.fi[tuote];
+  /* Seurantatunniste: WooCommercen tilauksessa näkyy, mistä pelistä ostaja tuli. */
+  const sivu = (location.pathname.split('/').pop() || 'index.html').replace('.html', '');
+  const paikka = 'verkkopeli-' + (sivu === 'index' || sivu === '' ? 'pizzaparty' : sivu);
+  return (kieliKartta[tuote] || KAUPPA_OSOITTEET.fi[tuote]) +
+    '?utm_source=pizzalove.fi&utm_medium=referral&utm_campaign=pizzalove-' + k + '&utm_content=' + paikka;
 }
 
 const KOTI_OSOITTEET = { fi: 'https://merkitysten.fi/', sv: 'https://merkitysten.fi/sv/', en: 'https://merkitysten.fi/en/' };

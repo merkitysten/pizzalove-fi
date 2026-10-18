@@ -21,7 +21,10 @@
     "alaosa_yritys": "Merkitysten Oy",
     "alaosa_varainhankinta": "Varainhankinta luokille ja joukkueille",
     "ohita": "Siirry sisältöön",
-    "nav_varainhankinta": "Varainhankinta"
+    "nav_varainhankinta": "Varainhankinta",
+    "kauppa_korttipeli": "Korttipeli kaupassa",
+    "kauppa_lautapeli": "Lautapeli kaupassa",
+    "kauppa_molemmat": "Molemmat pelit"
   },
   "etusivu": {
     "title": "Pizza Love® – säännöt, videot ja verkkopelit",
@@ -124,7 +127,10 @@
       "party_ei_valmistu": "Kun pizzaa ei voi valmistaa",
       "party_basso_tapa": "Basso-apinan tapa",
       "basso_fi": "Pizza Basso – näin pelataan"
-    }
+    },
+    "ristiin_otsikko": "Seuraavaksi: Pizza Love® -lautapeli",
+    "ristiin_teksti": "Sama pizzamaailma pelilaudalla: valmista boksien lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa. Kolme tapaa pelata, myös yhteistyönä.",
+    "ristiin_saannot": "Lautapelin säännöt"
   },
   "lautapeli": {
     "title": "Pizza Love® -lautapeli – säännöt ja videot",
@@ -203,6 +209,9 @@
       "salatut": "Salatut pizzat – koko ohje"
     },
     "pelaa_otsikko": "Harjoittele verkossa",
-    "pelaa_teksti": "Apinavaa’assa tutustut lautapelin vaakaan, ruokit nälkäisiä apinoita ja autat Bassoa pulmissa."
+    "pelaa_teksti": "Apinavaa’assa tutustut lautapelin vaakaan, ruokit nälkäisiä apinoita ja autat Bassoa pulmissa.",
+    "ristiin_otsikko": "Seuraavaksi: Pizza Love® -korttipeli",
+    "ristiin_teksti": "Samat pizzat ja täytteet korttipelinä: tee pizza täytekorteistasi ja sano lasku ääneen. Kolme peliä samalla pakalla.",
+    "ristiin_saannot": "Korttipelin säännöt"
   }
 }

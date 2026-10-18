@@ -20,7 +20,10 @@
     "alaosa_tavaramerkki": "Pizza Love® und Merkitysten® sind eingetragene Marken der Merkitysten Oy.",
     "alaosa_yritys": "Merkitysten Oy",
     "alaosa_varainhankinta": "Spendenaktionen",
-    "ohita": "Zum Inhalt springen"
+    "ohita": "Zum Inhalt springen",
+    "kauppa_korttipeli": "Kartenspiel im Shop",
+    "kauppa_lautapeli": "Brettspiel im Shop",
+    "kauppa_molemmat": "Beide Spiele"
   },
   "etusivu": {
     "title": "Pizza Love® – Regeln, Videos und Online-Spiele",
@@ -123,7 +126,10 @@
     "lataa_teksti": "Das gedruckte Regelblatt auf Finnisch, Schwedisch und Englisch.",
     "lataa_tiedosto": "Regeln Kartenspiel (FI · SV · EN)",
     "pelaa_otsikko": "Online üben",
-    "pelaa_teksti": "Pizza Party und Pizza Basso laufen auch im Browser. Probiere sie vor dem ersten Spiel aus oder spiele mit Freunden auf euren eigenen Handys."
+    "pelaa_teksti": "Pizza Party und Pizza Basso laufen auch im Browser. Probiere sie vor dem ersten Spiel aus oder spiele mit Freunden auf euren eigenen Handys.",
+    "ristiin_otsikko": "Als Nächstes: das Pizza Love® Brettspiel",
+    "ristiin_teksti": "Dieselbe Pizzawelt auf dem Spielbrett: Bereite die Lieblingspizzas der Pizzakartons zu und sammle als Erster 10 verschiedene Stücke. Drei Spielvarianten, auch kooperativ.",
+    "ristiin_saannot": "Regeln des Brettspiels"
   },
   "lautapeli": {
     "title": "Pizza Love® Brettspiel – Regeln und Videos",
@@ -202,6 +208,9 @@
       "salatut": "Geheime Pizzas – vollständige Anleitung"
     },
     "pelaa_otsikko": "Online üben",
-    "pelaa_teksti": "In der Affenwaage lernst du die Waage des Brettspiels kennen, fütterst hungrige Affen und hilfst Basso bei Rätseln."
+    "pelaa_teksti": "In der Affenwaage lernst du die Waage des Brettspiels kennen, fütterst hungrige Affen und hilfst Basso bei Rätseln.",
+    "ristiin_otsikko": "Als Nächstes: das Pizza Love® Kartenspiel",
+    "ristiin_teksti": "Dieselben Pizzas und Beläge als Kartenspiel: Bereite eine Pizza mit deinen Belagkarten zu und sage die Rechnung laut. Drei Spiele mit einem Kartenstapel.",
+    "ristiin_saannot": "Regeln des Kartenspiels"
   }
 }
