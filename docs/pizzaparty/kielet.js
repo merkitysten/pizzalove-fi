@@ -974,6 +974,21 @@ function valmiitKielet() {
 
 /* Kääntää kaiken minkä merkintä osoittaa. Ajetaan latauksessa ja kielen
  * vaihdossa — ei muualla, jotta käännös on yhdessä paikassa eikä siroteltuna. */
+/* Tuotesivut merkitysten.fi:ssä kielittäin; DE käyttää englantia (ei omaa kauppaa). */
+const KAUPPA_OSOITTEET = {
+  fi: { korttipeli: 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
+        lautapeli:  'https://merkitysten.fi/tuote/pizza-love-lautapeli/' },
+  sv: { korttipeli: 'https://merkitysten.fi/sv/tuote/pizza-love-familjeutgava-kortspel/',
+        lautapeli:  'https://merkitysten.fi/sv/tuote/pizza-love-bradspel/' },
+  en: { korttipeli: 'https://merkitysten.fi/en/tuote/pizza-love-card-game/',
+        lautapeli:  'https://merkitysten.fi/en/tuote/pizza-love-board-game/' }
+};
+function kauppaOsoite(tuote, kieli) {
+  const k = kieli || KIELI;
+  const kieliKartta = KAUPPA_OSOITTEET[k] || KAUPPA_OSOITTEET.en;
+  return kieliKartta[tuote] || KAUPPA_OSOITTEET.fi[tuote];
+}
+
 function kaannaSivu(juuri) {
   const j = juuri || document;
   [].forEach.call(j.querySelectorAll('[data-t]'), function (n) {
@@ -995,6 +1010,11 @@ function kaannaSivu(juuri) {
   /* Kenttien paikkamerkkiteksti on käyttöliittymätekstiä siinä missä muukin. */
   [].forEach.call(j.querySelectorAll('[data-tp]'), function (n) {
     n.setAttribute('placeholder', t(n.dataset.tp));
+  });
+  /* Kauppalinkki kielen mukaiselle tuotesivulle (18.10.2026). Ennen linkki vei
+   * aina suomenkieliseen kauppaan. Samat osoitteet kuin rakenna.py:n KAUPPA_KIELI. */
+  [].forEach.call(j.querySelectorAll('[data-kauppa]'), function (n) {
+    n.setAttribute('href', kauppaOsoite(n.dataset.kauppa));
   });
   document.documentElement.lang = KIELI;
 }

@@ -359,7 +359,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
          liian pieni ja «ruma». Kauppa aukeaa uuteen välilehteen, peli jää odottamaan. -->
     <div class="valikko-ala">
       <button id="taukoValikkoon" class="valikko-nappi reuna" data-t="valikko.alkuun">Alkuvalikkoon</button>
-      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" data-kauppa="korttipeli" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
     </div>
   </div>
 </div>
@@ -550,7 +550,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
            Kauppa omana nappinaan hiusviivan alla (Marko: «Kauppaan on nyt tosi pieni ja
            taustaan hukkuva teksti. Kyllä silläkin pitää olla reunukset.»). -->
       <hr class="valikko-viiva alku-viiva">
-      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
+      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" data-kauppa="korttipeli" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
     </div>
     <div id="valikkoMoninpeli" class="verkko-osa" hidden>
       <!-- Liity ensin: neljän pelaajan pelissä yksi luo ja kolme liittyy (Marko 9.10.2026). -->
@@ -563,7 +563,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
   </div>
 </div>
 
-<script src="kielet.js?v=20261015b"></script>
+<script src="kielet.js?v=20261018a"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
