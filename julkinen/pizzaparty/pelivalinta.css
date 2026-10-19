@@ -52,7 +52,7 @@
 .pelivalinta-nappi{flex:1 1 0;min-width:0;border:0;border-radius:9px;padding:10px 6px;cursor:pointer;
   font:inherit;font-weight:700;font-size:15px;background:transparent;color:var(--ink,#1A1A1A);
   white-space:nowrap}
-.pelivalinta-nappi.valittu{background:var(--orange,#F47920);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
+.pelivalinta-nappi.valittu{background:var(--orange, #EE7203);color:#fff;box-shadow:0 2px 6px rgba(60,34,12,.2)}
 .pelivalinta-nappi:focus-visible{outline:3px solid var(--ink,#1A1A1A);outline-offset:2px}
 
 /* Alarivi on alisteinen: kevyempi pohja ja reunakorostus täyden värin sijaan,
@@ -60,7 +60,7 @@
 .pelivalinta-ryhma--pelit{background:rgba(60,34,12,.05)}
 .pelivalinta-ryhma--pelit .pelivalinta-nappi{font-size:14px;padding:8px 6px}
 .pelivalinta-ryhma--pelit .pelivalinta-nappi.valittu{background:var(--surface,#fff);color:var(--ink,#1A1A1A);
-  box-shadow:inset 0 0 0 2px var(--orange,#F47920)}
+  box-shadow:inset 0 0 0 2px var(--orange, #EE7203)}
 
 /* Asetussivulla lajirivin alle jää ilmaa ennen pelien valintalistaa. */
 #pelivalintaLista .pelivalinta-ryhma{margin:0 0 10px}

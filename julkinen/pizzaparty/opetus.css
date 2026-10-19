@@ -25,12 +25,12 @@
  * pizzaa, joka on ylempänä molemmissa asennoissa. */
 .opetus-kortti{
   position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-  width:min(560px, calc(100% - 24px));margin-bottom:12px;
+  width:min(560px, calc(100% - 24px));margin-bottom:8px;
   pointer-events:auto;box-sizing:border-box;
   background:#fff;border:2px solid var(--raja);border-radius:16px;
-  padding:14px 16px;box-shadow:0 6px 20px rgba(60,40,20,.22);
+  padding:11px 16px;box-shadow:0 6px 20px rgba(60,40,20,.22);
 }
-.opetus-teksti{margin:0 0 10px;font-size:17px;line-height:1.35;color:var(--ink)}
+.opetus-teksti{margin:0 0 8px;font-size:17px;line-height:1.3;color:var(--ink)}
 .opetus-rivi{display:flex;align-items:center;gap:10px}
 .opetus-askeleet{font-size:14px;color:var(--himmea);font-variant-numeric:tabular-nums;
   flex:0 0 auto}
@@ -68,7 +68,21 @@
  * pahempi kuin ei saantoa - siksi se on poistettu eika jatetty
  * «varmuuden vuoksi».
  *
- * Valinta on siis kumpi peittyy, ja opetus koskee kortteja. */
+ * Valinta on siis kumpi peittyy, ja opetus koskee kortteja.
+ *
+ * ⚠️ KORJATTU 19.10.2026 (Marko puhelimella: «nyt tuo tekstilaatikko
+ * peittää pisteet»). Kaksi asiaa yhdessä:
+ *   1. tekstit lyhenivät yhdelle tai kahdelle riville (kortti 132 -> 105…127 px)
+ *   2. pistelaatikoiden YLÄVÄLI kutistetaan opetuksen ajaksi 30 px -> 4 px,
+ *      jolloin rivi NOUSEE ja alle jää 135 px. Ylävälin pienentäminen
+ *      siirtää riviä; alaväli ei siirtänyt sitä lainkaan (ks. yllä).
+ * 📐 Mitattu 375 x 812: rivi 611-699 -> 585-673, kortti 677-804.
+ * ⚠️ RAJA: kolmerivinen teksti ei mahdu tähänkään (127 px on kahden rivin
+ * mitta). Jos teksti pitenee, se peittää rivin uudelleen - lyhyys on osa
+ * tätä ratkaisua eikä makuasia. */
+@media (orientation:portrait){
+  body.opetus-paalla #pelaajarivi{margin-top:4px}
+}
 
 /* Alkuvalikon nappi: oma rivinsä kahden laiteruudun alla. */
 .alku-opetus{

@@ -137,6 +137,19 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
  * yha `none`n: ne raahataan, ja `manipulation` antaisi selaimen kaapata
  * eleen. Ne valitsimet ovat tarkempia, joten ne voittavat taman. */
 button, .pizza-kortti{touch-action:manipulation}
+/* ⚠️ TÄYTEKUOSI KOKO PELIN TAUSTALLE (Marko 19.10.2026: «tuolla aivan
+ * taustalla voisi hyvin olla sitä täytekuosia, jota on käytetty»).
+ * Sama kuosi ja sama koko kuin valikkoikkunassa ja Basson tulosruudussa
+ * (yhteinen.css, basso.css) - YKSI kuvio, ei kolmatta tapaa.
+ * Peitto on .14 eikä .35: valikossa kuosi on ikkunan oma pinta, tässä se
+ * on korttien takana eikä saa kilpailla niiden kanssa.
+ * `position:fixed` ja `z-index:-1`: kuosi ei vieri sisällön mukana eikä
+ * ole yhdenkään napautuksen tiellä. Tummassa tilassa pois, kuten
+ * valikossakin. */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.14}
+@media (prefers-color-scheme:dark){body::before{display:none}}
+
 body{
   background:var(--ground); color:var(--ink);
   font-family:Poppins,"Helvetica Neue",Arial,sans-serif;
@@ -270,8 +283,7 @@ h2{font-size:17px;margin:26px 0 6px}
  * oudolta. Isolla ruudulla se saa kasvaa kortin mukana. */
 .kulmanappi{
   display:grid;place-items:center;padding:0;font:inherit;line-height:1;
-  width:44px;height:44px;font-size:21px;border-radius:12px;
-  background:#fff;color:var(--himmea);border:2px solid var(--raja);cursor:pointer;
+  width:44px;height:44px;font-size:21px;border-radius:12px;cursor:pointer;
 }
 /* Pakkalaskurit venyvat keskelle, jolloin omat pisteet jaavat vasempaan
  * laitaan ja apina + napit oikeaan. Ilman tata nelja ryhmaa jakautuivat
@@ -397,7 +409,10 @@ h2{font-size:17px;margin:26px 0 6px}
 .pelialue{display:block}
 /* ⚠️ RIVI, EI SARAKE: pakka ja pizzakortti vierekkain kuten poydalla. */
 .pizza-alue{display:flex;flex-direction:row;align-items:center;justify-content:center;
-  gap:calc(var(--kortti-lev) * .10);
+  /* Marko 19.10.2026 puhelimella: «apinakorttipakka ja pizzakortti saisi olla
+     hiukan kauempana toisistaan». Pystyssä tilaa on; vaakatasossa väli on
+     leveysbudjetissa, ks. --kortti-lev. */
+  gap:calc(var(--kortti-lev) * .20);
   /* Pizzakortti ja käsi erotetaan taustan värillä: pizza lepää omalla
    * läpikuultavalla oranssilla pinnallaan, käsi sivun omalla. Väri on
    * brändioranssi #EE7203 matalalla peitolla — ei tummennusta. */
@@ -453,15 +468,26 @@ h2{font-size:17px;margin:26px 0 6px}
 .as-ylapalkki{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
   gap:6px;margin:0 0 12px}
 .as-nimi{text-align:center;font-weight:700;font-size:17px}
+/* ⚠️ KULMANAPPIEN ILME ON YKSI PAATOS, EI KAKSI. Marko sanoi 15.10.2026
+ * asetusten sulkunapista «ei ole nyt brändin mukainen ja se on hailakka»,
+ * ja korjaus tehtiin VAIN siihen. 19.10.2026 hän sanoi SANATARKASTI saman
+ * peliruudun paluunuolesta (.kulmanappi), jossa oli yhä `color:--himmea`
+ * ja `border:2px solid --raja`. Se on tämän projektin toistuvin vikaluokka:
+ * sama asia monessa paikassa, korjaus osuu yhteen niistä.
+ * Väri on nyt yhdessä säännössä molemmille. KOKO ei ole: sulkunappi on
+ * valikon kontrolli (40 px) ja paluunuoli peliruudun oma, joka skaalautuu
+ * kortin mukana - ne ovat eri päätöksiä ja saavat erota. */
+.as-kulma,.kulmanappi{
+  /* ⚠️ OMA REUNA EIKÄ KALPEA. Oranssi reuna on sama ele kuin aloitusruudun
+     napeissa; muoto on pyöristetty nelikulmio, ei ympyrä. */
+  background:#fff;color:var(--ink);border:2px solid var(--orange, #EE7203);
+}
+.as-kulma:hover,.kulmanappi:hover{color:var(--ink);border-color:var(--orange)}
+
 .as-kulma{
   font:inherit;font-size:20px;line-height:1;width:40px;height:40px;cursor:pointer;
-  /* ⚠️ OMA REUNA EIKÄ KALPEA (Marko 15.10.2026: «ei ole nyt brändin mukainen
-     ja se on hailakka»). Oranssi reuna on sama ele kuin aloitusruudun napeissa;
-     muoto on pyöristetty nelikulmio, ei ympyrä. */
-  background:#fff;color:var(--ink);border:2px solid var(--orange, #F47920);border-radius:11px;
-  display:grid;place-items:center;padding:0;
+  border-radius:11px;display:grid;place-items:center;padding:0;
 }
-.as-kulma:hover{color:var(--ink);border-color:var(--orange)}
 .as-info{font-weight:700;font-size:17px;font-style:italic}
 .as-info.auki{color:#fff;background:var(--orange);border-color:var(--orange)}
 .as-tyhja{border:0;background:none}
@@ -1025,7 +1051,10 @@ h2{font-size:17px;margin:26px 0 6px}
      * oli vapaana (korkeus sitoo), mutta 667 x 375 kaytti 623 px eli vain
      * 44 px oli vapaana (leveys sitoo) - ja pakka tarvitsee 101 px.
      * Korkeuden sitomilla laitteilla min() pitaa arvon ennallaan. */
-    --kortti-lev: min(calc(var(--leveys) * .122), calc(var(--korkeus) * .26), 174px);
+    /* 19.10.2026: pakan ja pizzakortin väli kaksinkertaistui (.06 -> .12
+     * kortin leveydestä, Markon pyyntö), joten leveystarve on 7,69 ja
+     * kerroin .122 olisi tasan rajalla. .120 jättää pelivaran. */
+    --kortti-lev: min(calc(var(--leveys) * .120), calc(var(--korkeus) * .26), 174px);
     --vali: calc(var(--kortti-lev) * .06);
   }
 
@@ -1067,7 +1096,7 @@ h2{font-size:17px;margin:26px 0 6px}
 
   /* --- pizzasarake --- */
   .pizza-alue{flex:0 0 auto;display:flex;flex-direction:row;align-items:center;
-    gap:var(--vali);padding:var(--vali);border-radius:calc(var(--kortti-lev) * .14)}
+    gap:calc(var(--vali) * 2);padding:var(--vali);border-radius:calc(var(--kortti-lev) * .14)}
   .pizza-kortti{width:calc(var(--kortti-lev) * 1.15);height:auto;margin:0;
     aspect-ratio:var(--kortti-suhde)}
 

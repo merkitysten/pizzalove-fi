@@ -65,14 +65,14 @@
   background:#F1EBBC;box-shadow:inset 0 0 0 2.5px #fff,0 2px 6px rgba(60,30,0,.25)}
 /* apina on ympyrää isompi: kasvot keskellä, tukka ja kyynärpää yli reunan */
 .av__info img{position:absolute;left:-6px;top:-1px;width:76px;height:auto;pointer-events:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.15))}
-.av__info-merkki{position:absolute;right:-2px;bottom:-2px;width:19px;height:19px;border-radius:50%;background:var(--orange,#F47920);
+.av__info-merkki{position:absolute;right:-2px;bottom:-2px;width:19px;height:19px;border-radius:50%;background:var(--orange, #EE7203);
   display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;box-shadow:0 0 0 2px #fff}
 .av__info-merkki i{display:block;width:9px;height:2px;border-radius:1px;background:#1A1A1A}
 .av__info:active img{transform:scale(.95)}
 .av__pisteet{position:absolute;left:50%;top:6px;transform:translateX(-50%);display:flex;justify-content:center;gap:6px}
 .av__ylapalkki .av__boksi{margin-left:auto}
 .av__pisteet i{width:10px;height:10px;border-radius:50%;background:var(--line,#E7DCCA);transition:background .3s,transform .3s}
-.av__pisteet i.nyt{background:var(--orange,#F47920);transform:scale(1.3)}
+.av__pisteet i.nyt{background:var(--orange, #EE7203);transform:scale(1.3)}
 .av__pisteet i.tehty{background:#C2580C}
 .av__noppa{border:0;background:none;padding:0;cursor:pointer;border-radius:16px}
 .av__noppa:disabled{cursor:default}
@@ -135,14 +135,14 @@
   padding:1px 10px;font-weight:800;font-size:clamp(16px,5vw,20px);font-variant-numeric:tabular-nums;white-space:nowrap;
   box-shadow:0 1px 4px rgba(60,30,0,.25);transition:left .5s cubic-bezier(.3,1.5,.5,1),top .5s cubic-bezier(.3,1.5,.5,1)}
 .av__juhla{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.3);opacity:0;z-index:6;
-  background:var(--orange,#F47920);color:#1A1A1A;font-weight:800;font-size:clamp(22px,7vw,30px);padding:8px 18px;border-radius:16px;
+  background:var(--orange, #EE7203);color:#1A1A1A;font-weight:800;font-size:clamp(22px,7vw,30px);padding:8px 18px;border-radius:16px;
   box-shadow:0 6px 20px rgba(60,30,0,.3);transition:transform .45s cubic-bezier(.3,1.8,.5,1),opacity .2s;pointer-events:none;white-space:nowrap}
 .av__juhla.on{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-4deg)}
 
 /* viestirivi */
 .av__rivi{height:60px;margin:10px 0 14px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:16px;line-height:1.2;padding:0 6px}
 .av .av__vie{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;font-weight:700;font-size:18px;
-  padding:12px 26px;border-radius:14px;background:var(--orange,#F47920);color:#fff;box-shadow:0 4px 0 #C2580C,0 8px 18px rgba(244,121,32,.35);
+  padding:12px 26px;border-radius:14px;background:var(--orange, #EE7203);color:#fff;box-shadow:0 4px 0 #C2580C,0 8px 18px rgba(244,121,32,.35);
   animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1),av-kehota 1.6s ease-in-out .6s infinite}
 .av__vie span{font-size:20px;line-height:1}
 .av__vie:active{transform:translateY(2px);box-shadow:0 2px 0 #C2580C}
@@ -156,7 +156,7 @@
 .av__hyllyt{display:grid;gap:10px}
 .av__hylly{position:relative;background:#F1EBBC;border-radius:14px;padding:8px 8px 6px}   /* pelilaudan keltainen */
 .av__hylly--linjasto{background:#CDE9F0}   /* pelilaudan vaaleansininen */
-.av--havikki .av__hylly--linjasto{box-shadow:inset 0 0 0 2px var(--orange,#F47920)}
+.av--havikki .av__hylly--linjasto{box-shadow:inset 0 0 0 2px var(--orange, #EE7203)}
 .av__hylly-nimi{position:absolute;left:12px;top:7px;z-index:3;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#6B6438;line-height:1.4}
 .av__hylly--linjasto .av__hylly-nimi{color:#4E6670}
 .av__hylly-nimi b{color:var(--ink,#1A1A1A);margin-left:3px}
@@ -168,7 +168,7 @@
 .av__hylly-torni:active:not(:disabled){transform:scale(.92)}
 .av__hylly-torni:disabled{cursor:default}
 .av__hylly-torni .av__torni i{width:18px}
-.av__hylly-torni:focus-visible,.av__pino-osa:focus-visible,.av__info:focus-visible,.av__noppa:focus-visible{outline:3px solid var(--orange,#F47920);outline-offset:2px}
+.av__hylly-torni:focus-visible,.av__pino-osa:focus-visible,.av__info:focus-visible,.av__noppa:focus-visible{outline:3px solid var(--orange, #EE7203);outline-offset:2px}
 
 /* ohjeikkuna */
 .av__ikkuna{position:fixed;inset:0;z-index:100;background:rgba(20,12,4,.45);display:grid;place-items:center;padding:16px}
@@ -185,7 +185,7 @@
 .av__ikkuna li{margin:3px 0}
 .av__ikkuna p{margin:0 0 8px}
 .av__tavat{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0 0 10px;clear:both}
-.av__tavat dt{width:24px;height:24px;border-radius:50%;background:var(--orange,#F47920);color:#1A1A1A;font-weight:800;text-align:center;line-height:24px;font-size:13px}
+.av__tavat dt{width:24px;height:24px;border-radius:50%;background:var(--orange, #EE7203);color:#1A1A1A;font-weight:800;text-align:center;line-height:24px;font-size:13px}
 .av__tavat dd{margin:0;align-self:center}
 
 
@@ -284,7 +284,7 @@
 .av__hylly-torni .av__tarra{width:20px;height:20px;margin-bottom:-3px;box-shadow:0 0 0 1.5px #fff,0 1px 2px rgba(0,0,0,.3)}
 .av__kortti-pizza i{display:grid;place-items:center;width:34px;height:34px}
 .av__kortti-pizza i img{width:66%;height:66%;object-fit:contain}
-.av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--orange,#F47920),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
+.av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--orange, #EE7203),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av--apinat .av__kortit--valinta{grid-template-columns:repeat(auto-fit,38px);gap:8px;min-height:64px;align-content:center}
 .av__valinta{border:0;background:none;padding:0;cursor:pointer;--leveys:40px;--pala:8px;animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av__valinta .av__tarra{width:38px;height:38px;margin:0;animation:av-kortti 1.2s ease-in-out infinite}
@@ -406,7 +406,7 @@
 .av__tasot-otsikko{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--soft,#6E6357);margin:14px 0 6px}
 .av__tasot{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 4px}
 .av__tasot button{width:38px;height:38px;border-radius:10px;border:0;background:#F1EBBC;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
-.av__tasot button.nyt{background:var(--orange,#F47920);color:#fff}
+.av__tasot button.nyt{background:var(--orange, #EE7203);color:#fff}
 /* nopeat napautukset eivät zoomaa ruutua (tuplanapautuszoomaus pois), nipistyszoomaus säilyy */
 .av,.av *{touch-action:manipulation}
 
@@ -453,7 +453,7 @@
 /* Kiinteät värit: selaimen tumma tai vaalea teema ei vaikuta peliin (sivuston tyyli.css vaihtaa
    muuttujat tummassa teemassa, joten peli määrittää omansa). */
 .av{color-scheme:light;color:#1A1A1A;--ground:#FAF6EE;--surface:#FFFFFF;--warm:#FFF3E9;--ink:#1A1A1A;--soft:#6E6357;
-  --line:#E7DCCA;--line2:#D6C7AF;--orange:#F47920;--deep:#C2580C;--radius:18px;
+  --line:#E7DCCA;--line2:#D6C7AF;--orange:#EE7203;--deep:#C2580C;--radius:18px;
   --shadow:0 1px 2px rgba(60,34,12,.06),0 8px 24px rgba(60,34,12,.08)}
 .av--koko{background:#FAF6EE}
 

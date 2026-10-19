@@ -27,7 +27,7 @@
  * vaakatasossa turva-alue on 0, joten raitaa ei ole. Peitteet (tauko, asetukset,
  * verkkopeli) väistävät tilapalkin, etteivät pitkät laatikot nouse sen alle. */
 body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top, 0px);
-  background:var(--orange, #F47920);z-index:4;pointer-events:none}
+  background:var(--orange, #EE7203);z-index:4;pointer-events:none}
 .peite{padding:max(20px, calc(env(safe-area-inset-top, 0px) + 8px)) max(20px, env(safe-area-inset-right, 0px))
   max(20px, calc(env(safe-area-inset-bottom, 0px) + 8px)) max(20px, env(safe-area-inset-left, 0px))}
 .verkko-laatikko{max-height:calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}
@@ -54,11 +54,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   width:var(--k);height:auto;max-width:none;pointer-events:none;
   filter:drop-shadow(0 1px 1px rgba(0,0,0,.15))}
 .valikko-merkki{position:absolute;right:-2px;bottom:-2px;width:calc(var(--k) * .365);height:calc(var(--k) * .365);
-  border-radius:50%;background:var(--orange, #F47920);box-shadow:0 0 0 2px #fff;
+  border-radius:50%;background:var(--orange, #EE7203);box-shadow:0 0 0 2px #fff;
   display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
 .valikko-merkki i{display:block;width:calc(var(--k) * .17);height:2px;border-radius:1px;background:#1A1A1A}
 .valikko-apina:active img{transform:scale(.95)}
-.valikko-apina:focus-visible{outline:3px solid var(--orange, #F47920);outline-offset:2px}
+.valikko-apina:focus-visible{outline:3px solid var(--orange, #EE7203);outline-offset:2px}
 /* Vaakatasossa kulmanapit kasvavat korttien mukana (peli.css); valikko samoin. */
 @media (orientation:landscape){
   .palkki .valikko-apina{--k:max(52px, calc(var(--kortti-lev) * .42))}
@@ -81,7 +81,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .valikko-ikkuna > *{position:relative}
 .valikko-toiminnot{display:flex;align-items:center;justify-content:center;gap:clamp(18px, 7vw, 30px)}
 .valikko-ikoni{width:58px;aspect-ratio:1;border-radius:50%;padding:0;cursor:pointer;display:grid;place-items:center;
-  background:#fff;color:var(--orange, #F47920);border:3px solid var(--orange, #F47920);font:inherit;line-height:1;
+  background:#fff;color:var(--orange, #EE7203);border:3px solid var(--orange, #EE7203);font:inherit;line-height:1;
   box-shadow:0 3px 8px rgba(60,40,20,.15)}
 .valikko-ikoni svg{width:54%;height:54%;fill:currentColor}
 .valikko-ikoni:active{transform:scale(.95)}
@@ -94,9 +94,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 /* Tasaleveät rinnakkain; jos sana ei mahdu (320 px, pitkä käännös), allekkain. */
 .valikko-nappi{flex:1 1 0;min-width:max-content;padding:11px 14px;border-radius:12px;cursor:pointer;
   font:inherit;font-size:15px;font-weight:700;text-align:center;text-decoration:none;line-height:1.2;
-  border:2px solid var(--orange, #F47920);box-sizing:border-box}
+  border:2px solid var(--orange, #EE7203);box-sizing:border-box}
 .valikko-nappi.reuna{background:#fff;color:var(--ink)}
-.valikko-nappi.tausta{background:var(--orange, #F47920);color:#fff}
+.valikko-nappi.tausta{background:var(--orange, #EE7203);color:#fff}
 .valikko-nappi:active{transform:scale(.97)}
 .valikko-nappi:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 /* --- PEITE JA LAATIKKO: SIIRRETTY `peli.css`:STÄ 14.10.2026 ---
@@ -126,10 +126,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.35}
 @media (prefers-color-scheme:dark){.valikko-laatikko::before{display:none}}
 .valikko-laatikko > *{position:relative}
-.valikko-laatikko .as-valinta{border-color:var(--orange, #F47920)}
-.valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #F47920);color:#fff}
+.valikko-laatikko .as-valinta{border-color:var(--orange, #EE7203)}
+.valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #EE7203);color:#fff}
 .valikko-laatikko .as-valinta.ensisijainen small{color:rgba(255,255,255,.92)}
-.valikko-laatikko .toinen-nappi{border:2px solid var(--orange, #F47920);background:#fff;font-weight:700}
+.valikko-laatikko .toinen-nappi{border:2px solid var(--orange, #EE7203);background:#fff;font-weight:700}
 /* 🔵 RAIKKAUS SYNTYY KAHDESTA KERROKSESTA (Marko 15.10.2026: «Muuta tämä
    valikko sellaiseksi raikkaaksi, kuten korttipelin perusvalikkokin on»):
    kuosi taustalla ja VALKOINEN pinta sen päällä. Pelkkä hiekanvärinen pohja
@@ -144,7 +144,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    ⚠️ POHJA ON RIVILLÄ EIKÄ SÄILIÖLLÄ (14.10.2026): valitsin on nyt kaksi riviä
    (laji · pelit), ja säiliö on pelkkä pystysuunta niiden välissä. */
 .valikko-laatikko .pelivalinta-ryhma,
-.valikko-laatikko .pelivalinta-kytkin{background:#fff;border:2px solid var(--orange, #F47920)}
+.valikko-laatikko .pelivalinta-kytkin{background:#fff;border:2px solid var(--orange, #EE7203)}
 
 /* --- ALOITUSRUUTU KOKO RUUDUN (🔵 Marko 9.10.2026: «Pitäisikö alkuvalikko olla koko
  * ruudun mittainen, jolloin siihen jäisi tilaa myös sille pizza love etiketille? —
@@ -181,7 +181,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   margin:calc(-1 * (var(--yla-turva) + 14px)) -16px 0;
   height:calc(var(--yla-turva) + var(--viiri-l) * .85)}
 .alku-palkki{position:absolute;left:0;right:0;top:0;height:calc(var(--yla-turva) + var(--palkki));
-  background:var(--orange, #F47920);display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;
+  background:var(--orange, #EE7203);display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;
   box-sizing:border-box;padding:0 max(12px, env(safe-area-inset-right, 0px)) 0 0}
 .alku-kielet{height:var(--palkki);display:flex;align-items:center}
 
@@ -257,16 +257,12 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   padding:10px 12px;border:0;border-radius:8px;background:none;font:inherit;font-weight:600;font-size:15px;
   color:var(--ink);text-align:left;cursor:pointer}
 .kielet-lista button:hover{background:rgba(244,121,32,.12)}
-.kielet-lista button[aria-current="true"]::after{content:"\2713";color:var(--orange, #F47920);font-weight:800}
+.kielet-lista button[aria-current="true"]::after{content:"\2713";color:var(--orange, #EE7203);font-weight:800}
 @media (prefers-color-scheme:dark){.kielet-lista{background:var(--ground);border-color:rgba(255,255,255,.15)}}
 /* Logolle tilaa (Marko 10.10.2026: «Nyt kun kaikki on liian alhaalla, niin merkitysten
  * logokin on puristuksissa»): väli yllä ja alla kasvaa ruudun korkeuden mukana, jolloin
  * napit nousevat ja kuvitus antaa tilaa. */
 .alku-logo{width:clamp(96px, 30vw, 132px);height:auto;flex:none;opacity:.85;margin:clamp(6px, 2.5vh, 26px) 0 clamp(8px, 3vh, 34px)}
-/* Logo vie merkitysten.fi:hin (Marko 18.10.2026). Linkki on flex-alkio logon sijaan;
- * leveys ja marginaalit pysyvät kuvalla, linkki vain kietoo sen. */
-.alku-logo-linkki{flex:none;display:block;line-height:0;border-radius:8px}
-.alku-logo-linkki:focus-visible{outline:2px solid var(--orange, #F47920);outline-offset:4px}
 /* Alasivulla (luo, aula: QR ja lista) tila menee sisällölle. */
 @media (prefers-color-scheme:dark){.alku-logo{filter:invert(1)}}
 
@@ -277,7 +273,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .aloitusruutu .pelivalinta-kytkin{background:#fff;border:1px solid rgba(60,34,12,.22)}
 .aloitusruutu .pelivalinta-liuku{background:var(--warm,#FFF3E9)}
 .aloitusruutu .pelivalinta-nappi{color:rgba(26,26,26,.62)}
-.aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #F47920)}
+.aloitusruutu .pelivalinta-nappi.valittu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--orange, #EE7203)}
 /* 🔵 VÄLILEHDET, EI LIUKUKYTKINTÄ (Marko 14.10.2026: «tuo pelin valitsemis-
    liukusäädin on nyt huonon näköinen, koska se on ahtaassa paikassa. Eli laita
    sama tyyli, kuin muutenkin napeilla on valkoisella taustalla
@@ -291,7 +287,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   font-size:13.5px;font-weight:600;color:var(--soft, #6E6357);transition:color .15s}
 .alku-lajipalkki .pelivalinta-kytkin-nappi.valittu{color:var(--ink, #1A1A1A)}
 .alku-lajipalkki .pelivalinta-kytkin-nappi.valittu::after{content:"";position:absolute;
-  left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--orange, #F47920)}
+  left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--orange, #EE7203)}
 @media (min-width:521px){.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:14.5px;padding:12px 10px}}
 
 /* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
@@ -392,11 +388,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * tuntuu siltä, että siinä on kaksi eri puolta»): kaksi leveää nappia allekkain, kuvake
  * vasemmalla. Täytetty = tällä laitteella, reunaviiva = omilla laitteilla. */
 .alku-ruudut{display:grid;grid-template-columns:1fr;gap:10px;width:100%}
-.alku-ruutu{--ruutu-pohja:#fff;border-radius:16px;border:2px solid var(--orange, #F47920);
-  background:var(--ruutu-pohja);color:var(--orange, #F47920);cursor:pointer;font:inherit;padding:10px 18px;
+.alku-ruutu{--ruutu-pohja:#fff;border-radius:16px;border:2px solid var(--orange, #EE7203);
+  background:var(--ruutu-pohja);color:var(--orange, #EE7203);cursor:pointer;font:inherit;padding:10px 18px;
   min-height:76px;display:flex;align-items:center;gap:16px;
   box-shadow:0 3px 8px rgba(60,40,20,.12)}
-.alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #F47920);color:#fff}
+.alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #EE7203);color:#fff}
 .alku-ruutu b{font-size:19px;line-height:1.15;color:var(--ink);text-align:left}
 .alku-ruutu.ensisijainen b{color:#fff}
 .alku-ruutu svg{width:68px;height:auto;flex:none}
@@ -410,9 +406,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * siihen pieni hiusviiva noiden pelinappuloiden ja kauppaan väliin.»). */
 .alku-viiva{margin:6px 0 0}
 .alku-kauppa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;
-  min-height:48px;padding:10px 16px;border:2px solid var(--orange, #F47920);border-radius:12px;background:#fff;
+  min-height:48px;padding:10px 16px;border:2px solid var(--orange, #EE7203);border-radius:12px;background:#fff;
   color:var(--ink);font-weight:700;font-size:16px;text-decoration:none}
-.alku-kauppa .pieni-ikoni{color:var(--orange, #F47920)}
+.alku-kauppa .pieni-ikoni{color:var(--orange, #EE7203)}
 .alku-kauppa:active{transform:scale(.98)}
 .alku-kauppa:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 @media (prefers-color-scheme:dark){.alku-kauppa{background:var(--ground)}}
@@ -424,8 +420,8 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * valkoisena ja piirteet näkyvät pohjan värisinä. */
 .apina-pinta{fill:#fff}
 /* Kuvakkeessa naama on pienennetty (0,7–0,95), joten viivaa paksunnetaan samassa suhteessa. */
-.apina-viiva{fill:none;stroke:var(--orange, #F47920);stroke-width:1.2;stroke-linecap:round}
-.apina-piste{fill:var(--orange, #F47920)}
+.apina-viiva{fill:none;stroke:var(--orange, #EE7203);stroke-width:1.2;stroke-linecap:round}
+.apina-piste{fill:var(--orange, #EE7203)}
 /* Hiukset ovat naaman ULKOPUOLELLA ruudun pohjalla, joten pohjan värisinä ne katosivat
  * (Marko 9.10.2026: «Apinalta muuten puuttuu nyt ne hiukset — — Pitäisikö ne olla
  * valkoiset?»). Ruudun tekstin väri: oranssilla valkoinen, valkoisella oranssi. */
@@ -492,7 +488,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 }
 @media (prefers-color-scheme:dark){
   .alku-ruutu{--ruutu-pohja:var(--ground)}
-  .alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #F47920)}
+  .alku-ruutu.ensisijainen{--ruutu-pohja:var(--orange, #EE7203)}
   .aloitusruutu .pelivalinta-nappi{color:var(--ink)}
   .aloitusruutu .pelivalinta-nappi.valittu{background:var(--ground)}
   /* Valkoinen pohja + tumman tilan vaalea teksti = näkymätön (mitattu 9.10.2026,

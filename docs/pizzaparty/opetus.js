@@ -189,13 +189,24 @@ function opetusTaytesaanto() {
 }
 
 function opetusPartyAskeleet() {
+  /* ⚠️ TOINEN KIERROS EI OPETA TAYTESAANTOA, JA SE ON MARKON KORJAUS
+   * 19.10.2026: «siellä puhutaan esim., että nyt tarvitset "kolme
+   * korttia". Säännöissä ei oteta kantaa korttien lukumäärään.»
+   *
+   * Hän on oikeassa kahdesti. Ensinnäkään korttien lukumäärä ei ole
+   * sääntö missään pelitavassa. Ja toiseksi: PARTYN OLETUSTAVASSA
+   * (helppo) täytteitä ei tarkisteta lainkaan, joten «kaksi eri
+   * täytettä» ei ole siellä sääntö vaan kuva. Ensimmäinen versio opetti
+   * siis Basson sääntöä Partyn opetuksessa - ja Bassolla on oma
+   * opetuksensa, kuten Marko huomautti.
+   *
+   * Nyt toinen kierros on vain toinen pizza, eikä se väitä mitään. */
   return [
     { avain: 'opetus.tervetuloa' },
     { avain: 'opetus.pizza', kohde: '#pizzaKortti' },
     /* ⚠️ KAANTO ON KAKSI NAPAUTUSTA, EI YHTA. Mitattu: pizzan painallus
      * lepotilassa kutsuu `kaannaKortit('pizza')` (peli.js), eli kaantaa
      * VAIN pizzan - kierros alkaa vasta kun myos kasi on kaannetty.
-     * Ensimmainen versio sanoi "paina pizzaa" ja jai jumiin siihen.
      * Valo seuraa sita puolta joka on viela kaantamatta. */
     { avain: 'opetus.kaanna',
       kohde: function () { return tila.kaannetty.pizza ? '#kasi' : '#pizzaKortti'; },
@@ -204,11 +215,26 @@ function opetusPartyAskeleet() {
     { avain: 'opetus.valitse', kohde: '#kasi',
       arvot: function () { return { arvo: tila.pizza ? tila.pizza.arvo : '' }; },
       valmis: function () { return tila.valitut.length >= 2; } },
+    /* ⚠️ VAIN VETAMINEN, EI «tai paina pizzaa» (Marko 19.10.2026:
+     * «tekstissä lukee nyt – tai paina pizzaa, vaikka oikeasti sitä
+     * pizzaa pitää painaa, kun on täytteet pelattu pizzan päälle»).
+     * Molemmat toimivat, mutta pizzan painallus on se TEKO joka
+     * opetetaan viimeisena - sen tarjoaminen tassa sekoittaa kaksi eri
+     * hetkea. Yksi teko per askel. */
     { avain: 'opetus.pizzalle', kohde: '#pizzaKortti',
       valmis: function () { return tila.vaihe === 'selitys'; } },
+    /* ⚠️ LASKUA EI TARVITSE «LÄHETTÄÄ» - SE LÄHTEE ITSE, ja siksi tässä
+     * ei ole enää askelta «paina pizzaa».
+     * 📐 Mitattu: `paivitaJaTarkista` (peli.js) kutsuu `tarkistaLasku`a heti
+     * kun `lausekeValmis()`, eli viimeinen laskumerkki lähettää laskun.
+     * Ja `pelaaPizzalle` palaa heti jos vaihe ei ole 'valinta' - eli
+     * pizzan painallus lausekevaiheessa EI TEE MITÄÄN. Ohje «paina
+     * pizzaa, kun lasku on valmis» ei siis ollut vain tarpeeton vaan
+     * väärä: se neuvoi napautuksen joka ei vastaa mihinkään.
+     * (Marko 19.10.2026 huomasi saman toisesta päästä: «oikeasti sitä
+     * pizzaa pitää painaa, kun on täytteet pelattu pizzan päälle» - eli
+     * painallus kuuluu KESKIVAIHEESEEN, ei loppuun.) */
     { avain: 'opetus.merkit', kohde: '#operaattorit',
-      valmis: function () { return tila.merkit.some(function (m) { return !!m; }); } },
-    { avain: 'opetus.paina', kohde: '#pizzaKortti',
       valmis: function () { return opetus.pizzojaAlussa !== undefined && opetusPizzoja() > opetus.pizzojaAlussa; } },
     { avain: 'opetus.sait' },
     { avain: opetusTaytesaanto(), kohde: '#pizzaKortti' },
@@ -218,6 +244,7 @@ function opetusPartyAskeleet() {
     { avain: 'opetus.valmis' },
   ];
 }
+
 
 /* ---------- askeleet: Pizza Basso ---------- */
 
@@ -243,12 +270,12 @@ function opetusBassoAskeleet() {
       valmis: function () { return tila.valitut.length >= 2; } },
     { avain: 'opetus.pizzalle', kohde: '#pizzaKortti',
       valmis: function () { return tila.vaihe === 'selitys'; } },
-    { avain: 'opetus.merkit', kohde: '#operaattorit',
-      valmis: function () { return tila.merkit.some(function (m) { return !!m; }); } },
-    /* ⚠️ KASI VOI MYOS KASVAA. Bassossa pizzan painallus ilman kortteja
+    /* Sama kuin Partyssa: viimeinen laskumerkki lähettää laskun itse,
+     * eikä pizzan painallus lausekevaiheessa tee mitään.
+     * ⚠️ KASI VOI MYOS KASVAA. Bassossa pizzan painallus ilman kortteja
      * on NOSTO (basso.js), ja se on yhta kelvollinen vuoro kuin pizzan
      * tekeminen - opetus ei saa jumittua siihen etta kaden on lyhennyttava. */
-    { avain: 'opetus.painaBasso', kohde: '#pizzaKortti',
+    { avain: 'opetus.merkit', kohde: '#operaattorit',
       valmis: function () {
         return opetus.kadessaAlussa !== undefined && tila.kasi.length !== opetus.kadessaAlussa;
       } },
