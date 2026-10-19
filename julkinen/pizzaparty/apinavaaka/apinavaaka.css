@@ -179,10 +179,25 @@
 /* ohjeikkuna */
 .av__ikkuna{position:fixed;inset:0;z-index:100;background:rgba(20,12,4,.45);display:grid;place-items:center;padding:16px}
 .av__ikkuna[hidden]{display:none}
+/* Ylapehmuste tekee tilaa Bassolle: han on ylanurkassa ja vinkkikortti
+   alkaa hanen leukansa kohdalta. */
 .av__ikkuna-sisus{position:relative;background:var(--ground,#FAF6EE);border-radius:18px;max-width:380px;width:100%;max-height:90vh;overflow:auto;
-  padding:18px 18px 16px;box-shadow:0 12px 40px rgba(0,0,0,.3);font-size:15px;line-height:1.45;-webkit-user-select:text;user-select:text}
+  padding:104px 18px 16px;box-shadow:0 12px 40px rgba(0,0,0,.3);font-size:15px;line-height:1.45;-webkit-user-select:text;user-select:text}
 /* Basso väistää sulkunapin: se on nyt oikeassa yläkulmassa. */
-.av__ikkuna-basso{float:right;width:64px;margin:34px 10px 4px 8px}
+/* ⚠️ BASSO ON VALIKON YLAREUNASSA ISONA, EI KELLUMASSA TEKSTIN SEASSA
+ * (Marko 19.10.2026: «myöskään tuo pieni miettivä apina ei ole hyvä
+ * tuossa. Se pitäisi olla esim. tämän valikon yläreunassa tosi isona,
+ * että se näkyy sieltä takaa»).
+ * 📐 Ennen: `float:right; width:64px` keskella luetteloa, jolloin
+ * ranskalaiset viivat kiersivat sen ja rivit katkesivat eri kohdista.
+ * Nyt se on 150 px ylanurkassa JA VINKKIKORTIN TAKANA (z-index 0 vs 1),
+ * eli siita nakyy se osa joka jaa kortin ulkopuolelle - juuri
+ * «nakyy sielta takaa».
+ * ⚠️ Ei negatiivista `top`ia: `.av__ikkuna-sisus` on `overflow:auto`,
+ * joten laatikon ulkopuolelle tyonnetty osa leikkautuisi pois. */
+.av__ikkuna-basso{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:164px;float:none;margin:0;z-index:0;pointer-events:none;display:block;
+  filter:drop-shadow(0 3px 5px rgba(60,30,0,.2))}
 /* ⚠️ `[hidden]` ON KIRJOITETTAVA NÄKYVIIN: `:where(.av img){display:block}`
    on tekijän sääntö ja voittaa selaimen oman `[hidden]{display:none}`:n. */
 .av__ikkuna-basso[hidden]{display:none}
@@ -213,9 +228,11 @@
 .av__taso--paa .as-rivi:last-child{border-bottom:0}
 .av__taso[hidden]{display:none}
 .av__taso .valikko-nappi{margin-top:4px}
-/* Alavalikossa otsikko ja vinkit ovat piilossa, joten ensimmäinen nappi
-   nousisi sulkunapin alle. 📐 Mitattu: päällekkäisyys 18 px. */
-.av__taso--muoto:not([hidden]), .av__taso--kieli:not([hidden]){margin-top:42px}
+/* ⚠️ VANHA 42 px:N YLAMARGINAALI POISTETTU. Se oli siella koska
+   alavalikossa otsikko ja vinkit ovat piilossa ja ensimmainen nappi
+   nousi sulkunapin alle (mitattu paallekkaisyys 18 px). Nyt laatikolla
+   on 92 px ylapehmuste Bassoa varten, joten sama marginaali painaisi
+   alavalikon 134 px alas. */
 .av__paavalikko{width:100%;margin-top:12px}
 
 .av--ei-liiketta *{transition:none!important;animation:none!important}
@@ -400,9 +417,23 @@
 @media (orientation:landscape) and (max-height:520px){.av--koko{max-width:940px}}
 
 /* valikko */
-.av__vinkit h2{margin:0 0 8px;font-size:19px;padding-right:70px}
-.av__vinkit ul{margin:0 0 10px;padding-left:18px}
+/* ⚠️ VINKIT OMALLE VALKOISELLE PINNALLE, KUTEN RIVIT (Marko 19.10.2026:
+ * «tämä valikko on epäselvä ja huonosti luettava»).
+ * 📐 Mitattu syy: paneelissa oli KAKSI ERI SAANTOA. `.av__taso--paa`
+ * (Pelimuodot / Kieli) on valkoisella kortilla - kuten valikon oma
+ * kommentti sanoo, «kuosi arkin taustalla ja rivit valkoisella kortilla
+ * sen päällä» - mutta otsikko ja ranskalaiset viivat olivat suoraan
+ * kuosin paalla, joka on opacity .35. Musta teksti .35-kuosin paalla on
+ * se mita Marko luki huonosti. Nyt koko paneeli noudattaa sita saantoa
+ * joka siina jo oli. */
+.av__vinkit{position:relative;z-index:1;background:var(--surface,#fff);
+  border-radius:14px;padding:12px 14px 10px;margin:0 0 8px;
+  box-shadow:0 1px 3px rgba(60,34,12,.10)}
+.av__vinkit h2{margin:0 0 8px;font-size:19px;padding-right:46px}
+.av__vinkit ul{margin:0;padding-left:18px}
 .av__vinkit li{margin:5px 0}
+/* Rivit ja alavalikot apinan paalle. */
+.av__taso{position:relative;z-index:1}
 
 
 

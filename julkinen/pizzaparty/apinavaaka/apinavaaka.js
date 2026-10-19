@@ -451,7 +451,15 @@
     var pinoV = el('div', 'av__pino'), pinoO = el('div', 'av__pino');
     var lukuV = el('span', 'av__luku'), lukuO = el('span', 'av__luku');
     [pinoV, pinoO, lukuV, lukuO].forEach(function (x) { nayttamo.appendChild(x); });
-    var juhla = el('div', 'av__palajuhla');
+    /* ⚠️ TAMA ON «PIZZAA!» -HUUTO, EI PALAJUHLA. Nimet ovat kaksi eri
+       asiaa, ja 19.10.2026 ne menivat sekaisin: annoin uudelle
+       palajuhlalle nimen `av__juhla` joka oli jo tassa, ja kun korjasin
+       torman nimeamalla uuden uudelleen, korvasin MOLEMMAT esiintymat
+       kerralla. Talloin tama huuto sai kokoruudun tumman peitteen
+       tyylin - peli nayttI pysyvasti pimealta (Marko: «peli on nyt
+       tällä lailla tosi pimeä»). Uudelleennimeaminen kuviolla osui
+       kahteen eri asiaan; esiintymat olisi pitanyt kayda erikseen. */
+    var juhla = el('div', 'av__juhla');
     nayttamo.appendChild(juhla);
     var loppuEl = el('div', 'av__loppu');
     nayttamo.appendChild(loppuEl);
@@ -518,7 +526,12 @@
        nolla kertaa — mitattu. */
     ikkuna.innerHTML = '<div class="av__ikkuna-sisus valikko-laatikko">' +
       '<button type="button" class="as-kulma av__sulje" aria-label="' + t.sulje + '">\u2715</button>' +
-      '<img class="av__ikkuna-basso" src="' + KANSIO + 'basso.webp" alt="">' +
+      /* ⚠️ VALMIIKSI ALAREUNASTA RAJATTU KUVA (Marko 19.10.2026: «tämä on
+         sitten olemassa jo tällä lailla valmiiksi rajattuna»). Siksi se
+         voi istua valikon ylareunassa ilman omaa leikkausmaskia: kuvan
+         oma alareuna ON se leikkaus. `basso.webp` on kokovartalo eika
+         rajaudu mihinkaan. */
+      '<img class="av__ikkuna-basso" src="' + KANSIO + 'basso-miettii.webp" alt="">' +
       '<div class="av__vinkit"></div>' +
       '<div class="av__taso av__taso--paa">' +
         '<button type="button" class="as-rivi" data-avaa="muoto">' +
