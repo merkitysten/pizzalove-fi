@@ -584,6 +584,7 @@ function piirraTulos() {
   /* Viuhka mitoitetaan vasta kun ruutu on näkyvissä: piirto tapahtuu ennen
    * naytaRuutu-kutsua, ja piilossa olevan leveys on nolla. */
   requestAnimationFrame(bassoLevitaViuhkat);
+  requestAnimationFrame(bassoKisaLuvut);        // leveys on 0 ennen kuin ruutu näkyy
   /* Konfetti kun IHMINEN voitti kierroksen (kuka tahansa ihmisistä).
    * Verkossa kaikki ovat ihmisiä: konfetti vain omalle voitolle. */
   if (k && k.voittaja !== null && (bassoVerkossa ? k.voittaja === bassoVerkossa.oma
@@ -664,10 +665,55 @@ function bassoPiirraKisa(varit) {
 
 /* Palkin pituus ja hahmon paikka samasta osuudesta. Radan reunat ovat
  * CSS-muuttujissa, jotta JS ja tyyli eivät laske eri rataa. */
+/* ⚠️ PISTELAATIKKO KÄÄNTYY MAALIVIIVAN KOHDALLA (Marko 19.10.2026).
+ * Luku on juoksijan OIKEALLA puolella (`left:100%` + 6 px), joten lähellä
+ * maalia se meni maaliviivan ruutukuvion päälle ja ulottui laatikon reunaa
+ * kohti. Maalissa se kääntyy hahmon vasemmalle puolelle (.kaantynyt), missä
+ * rata on jo juostu eikä sen päällä ole mitään.
+ *
+ * ⚠️ RAJA MITATAAN, EI ARVATA: luvun leveys riippuu numerosta (7 vs. 140) ja
+ * fonttikoko on `clamp(17px, 3vh, 21px)`. Siksi käännöskohta lasketaan
+ * elementin omista mitoista joka kerta.
+ * ⚠️ JA SE LASKETAAN KOHDEPAIKASTA, EI NYKYISESTÄ: `left` siirtyy 1,3 s
+ * siirtymällä, joten nykyinen sijainti kertoisi menneestä. Luokka asetetaan
+ * samaan aikaan kuin liike alkaa, jolloin luku on oikealla puolella koko
+ * matkan ajan eikä pompahda kesken. */
 function bassoKisaKohta(rata, osuus) {
   rata.querySelector('.kisa-palkki').style.width = 'calc((100% - var(--rata-alku) - var(--rata-loppu)) * ' + osuus + ')';
-  rata.querySelector('.kisa-juoksija').style.left =
+  const juoksija = rata.querySelector('.kisa-juoksija');
+  juoksija.style.left =
     'calc(var(--rata-alku) + (100% - var(--rata-alku) - var(--rata-loppu)) * ' + osuus + ')';
+  bassoKisaLuku(rata, osuus);
+}
+
+/* Kääntyykö luku? Mitataan radan todellisista pikseleistä. Jos rata ei ole
+   näkyvissä, leveys on 0 - silloin ei päätellä mitään, vaan jätetään ennalleen
+   ja lasketaan uudelleen kun ruutu näytetään (bassoKisaLuvut). */
+function bassoKisaLuku(rata, osuus) {
+  const juoksija = rata.querySelector('.kisa-juoksija');
+  const luku = juoksija.querySelector('b');
+  if (!luku) return;
+  const leveys = rata.offsetWidth;
+  if (!leveys) return;
+  const tyyli = getComputedStyle(rata);
+  const alku = parseFloat(tyyli.getPropertyValue('--rata-alku')) || 0;
+  const loppu = parseFloat(tyyli.getPropertyValue('--rata-loppu')) || 0;
+  const maali = leveys - loppu;
+  const x = alku + (leveys - alku - loppu) * osuus;          // juoksijan keskikohta
+  /* Luvun oikea reuna oikealla puolella: keskikohta + hahmon puolikas + väli
+     + luvun leveys. Käännetään, jos se ylittäisi maaliviivan. */
+  const oikeaReuna = x + juoksija.offsetWidth / 2 + 6 + luku.offsetWidth;
+  rata.classList.toggle('kaantynyt', oikeaReuna > maali);
+}
+
+/* Kaikkien ratojen luvut uudelleen: leveys on 0 niin kauan kuin tulosruutu on
+   piilossa, joten ensimmäinen laskenta tehdään vasta kun se näkyy. */
+function bassoKisaLuvut() {
+  [].forEach.call(document.querySelectorAll('#bassoKisa .kisa-rata'), function (rata) {
+    const juoksija = rata.querySelector('.kisa-juoksija');
+    const m = /\* *([\d.]+)\)\s*$/.exec(juoksija.style.left || '');
+    if (m) bassoKisaLuku(rata, parseFloat(m[1]));
+  });
 }
 
 /* Kortit limittyvät vain sen verran kuin on pakko: pari korttia rinnakkain,
@@ -729,7 +775,9 @@ function bassoLevitaViuhkat() {
   });
 }
 window.addEventListener('resize', function () {
-  if (!document.getElementById('tulosRuutu').hidden) bassoLevitaViuhkat();
+  if (document.getElementById('tulosRuutu').hidden) return;
+  bassoLevitaViuhkat();
+  bassoKisaLuvut();
 });
 
 /* Välähdys omalla kestollaan. peli.js:n valahda() pitää aina 900 ms, ja
