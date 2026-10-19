@@ -165,7 +165,18 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * napit olivat yksi keskitetty ryhmä, joten isompi Basso työnsi kaiken alas ja tyhjä jäi
  * viirin ja maskottien väliin. Nyt aloitussivu venyy, maskottialue (flex:1) täyttää
  * yläosan ja maskottien koko lasketaan SIITÄ; napit ovat alhaalla omalla koollaan. */
-.aloitusruutu > .alku-paa{flex:1 1 auto;margin-block:0;display:flex;flex-direction:column;
+/* ⚠️ `flex-shrink:0` EIKÄ 1, JA SE ON MITATTU VIKA (20.10.2026). `1 1 auto`
+ * antoi lohkon kutistua sisältöään pienemmäksi, jolloin sisältö EI vieritä
+ * vaan VUOTAA ULOS laatikostaan ja piirtyy alapuolisen päälle.
+ * 📐 Mitattu 375 x 667 viiden rivin valikolla: `.alku-paa` 129…563, mutta
+ * «Kauppaan» 627…675 - siis 64 px oman lohkonsa ALAPUOLELLA, ja Merkitysten-
+ * logo (594…633) jäi sen alle. Ruutu ylittyi 8 px.
+ * Nyt lohko pitää luontaisen korkeutensa ja `.aloitusruutu` (overflow:auto)
+ * vierittää. Vieritys on huono, päällekkäisyys on rikki.
+ * ⚠️ Tämä EI korvaa sitä että valikossa on liikaa rivejä (Marko 20.10.2026:
+ * «Tässä alkuvalikossa on nyt liikaa kaikkea») - se on vartija sille ettei
+ * seuraava rivi riko asettelua äänettömästi. */
+.aloitusruutu > .alku-paa{flex:1 0 auto;margin-block:0;display:flex;flex-direction:column;
   align-items:stretch;gap:10px;min-height:0}
 /* YLÄLAITA KUTEN PELILAATIKON KANNESSA JA pizzalove.fi:ssä: oranssi palkki koko leveydeltä,
  * musta viiri riippuu sen päältä vasemmassa reunassa, kielivalinta oikealla (Marko 9.10.2026).
