@@ -82,7 +82,7 @@
       hyva: 'Bra!', party: 'Pizzaparty!',
       varasto: 'Lager', linjasto: 'Linje', noppa: 'Tärning', ohjeet: 'Instruktioner', sulje: 'Stäng',
       alusta: 'Börja om', vapaa: 'Fritt spel',
-      info: '<h2>Apvågen</h2><ol><li>Kasta tärningen. Vikterna hamnar i apans vänstra hand.</li>' +
+      info: '<h2>Apavågen</h2><ol><li>Kasta tärningen. Vikterna hamnar i apans vänstra hand.</li>' +
         '<li>Tryck på tornen. Gör tornen lika höga.</li><li>När lampan tänds, flytta tornen till linjen.</li></ol>' +
         '<p>Ett torn flyttas alltid helt. Tornets höjd är fyllningens tal.</p>' +
         '<dl class="av__tavat"><dt>A</dt><dd>Basflytt <b>3 = 3</b></dd><dt>B</dt><dd>Summaflytt <b>1 + 2 = 3</b></dd>' +
@@ -145,7 +145,7 @@
       apinat: ['Tuo pizzan täyte kulhoon.', 'Napauta pizzaa – se paistuu uunissa.', 'Jos pizzaa ei synny, apinat syövät palat!'],
       pulmat: ['Valmista pizza yhdellä siirrolla.', 'Pizzan kaikki täytteet pitää saada linjastolle.', 'Jumissa? Lamppu kertoo siirtotavan.'] },
     sv: { valikko: 'Meny', peli: 'Spel', muodot: 'Spellägen', kieli: 'Språk', paavalikko: 'Till startmenyn', takaisin: 'Tillbaka',
-      nimet: { harjoitus: 'Lär känna apvågen', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
+      nimet: { harjoitus: 'Lär känna apavågen', vapaa: 'Fritt spel', apinat: 'Hungriga apor', pulmat: 'Hjälp Basso' },
       harjoitus: ['Gör tornen lika höga.', 'Lampan tänds när flytten är rätt.', 'Ett torn flyttas alltid helt.'],
       vapaa: ['Det finns alltid en flytt – hitta den!', 'För högt tal? Flytta torn tillbaka till lagret.'],
       apinat: ['För pizzans fyllning till skålen.', 'Tryck på pizzan – den gräddas i ugnen.', 'Blir det ingen pizza äter aporna bitarna!'],
@@ -668,14 +668,41 @@
     function voiJatkaa() {
       return tila.muoto === 'apinat' && tila.vaihe === 'pizza' && tila.vuoronPizzat > 0 && !tila.valitsee && !tila.paistuu && !tila.loppu;
     }
+    /* ⚠️ NOPPA ISOKSI HEITON AJAKSI (Marko 19.10.2026: «isommin ruudun
+       paalla esim. nopan heitto»).
+       📐 Mitattu: noppa on 80 x 76 px ruudun alalaidassa (vaakatilassa
+       1,35-kertaisena), eli se on ruudun pienin asia samaan aikaan kun se
+       on se mita odotetaan. Heiton ajaksi se nostetaan muun paalle ja
+       2,6-kertaiseksi (208 px) ja lasketaan takaisin tuloksen jalkeen.
+       ⛔ EI himmennysta muun paalle: nopan luku luetaan yhdessa apinan
+       punnusten ja linjaston kanssa, joten taustan piilottaminen veisi
+       juuri sen mihin lukua verrataan.
+       Luokka on `.av__nopparivi .av__noppa--iso` (0,2,0), koska
+       media queryjen `.av__noppa{transform:scale(…)}` on 0,1,0 - samalla
+       tarkkuudella voittaja ratkeaisi jarjestyksesta. */
+    var isoAjastin = null;
+    function nostaNoppa() {
+      if (isoAjastin) { clearTimeout(isoAjastin); isoAjastin = null; }
+      noppaEl.classList.add('av__noppa--iso');
+    }
+    function laskeNoppa() {
+      if (isoAjastin) clearTimeout(isoAjastin);
+      isoAjastin = setTimeout(function () {
+        isoAjastin = null;
+        noppaEl.classList.remove('av__noppa--iso');
+      }, 900);
+    }
+
     function heita() {
       if (!pyorii && voiJatkaa()) { tila.vaihe = 'odota'; tila.ensimmainen = false; uusiKierros(); }
       if (pyorii || tila.heitetty || !tila.tehtava) return;
       pyorii = true;
       noppaEl.classList.remove('av__noppa--odottaa');
       rivi.textContent = '';
+      nostaNoppa();
       noppa3d.heita(tila.tehtava.noppa, function () {
         pyorii = false; tila.heitetty = true; tila.uusiHeitto = true; tila.heittoAika = Date.now();
+        laskeNoppa();
         piirra();
         if (tila.muoto === 'opas') ajastaVihje();
         if (tila.muoto === 'apinat' && !tila.ensimmainen && !pizzaMahdollinen()) {
@@ -799,10 +826,12 @@
       pyorii = true;
       noppaEl.classList.remove('av__noppa--odottaa');
       var teht = tila.tehtava;
+      nostaNoppa();
       noppa3d.heita(teht.noppa, function () {
         pyorii = false;
-        if (tila.muoto !== 'pulmat') return;
+        if (tila.muoto !== 'pulmat') return laskeNoppa();
         if (tila.tehtava !== teht) return heitaPulma();   // pulma vaihtui kesken pyörimisen
+        laskeNoppa();
         tila.heitetty = true; tila.uusiHeitto = true; tila.heittoAika = Date.now();
         piirra();
         ajastaPulmaVihje();
@@ -933,7 +962,35 @@
           vk.nimet.apinat, function () { opasRuutu.hidden = true; aloitaApinat(); }, [pt.alusta, function () { aloitaPulmat(0); }]);
       }
     }
+    /* ⚠️ YHDEN TAYTTEEN PIZZA ON KORTTIPELIN OIKEA PAINETTU PIZZA
+     * (Marko 19.10.2026: «uusi pelaaja ei ymmartanyt aluksi, etta ne
+     * linjastolla olleet pizzat ovat pizzoja. Han luuli, etta ne on hanen
+     * resurssiaan» + «niita pelin oikeita pizzakortteja voisi ehka
+     * hyodyntaa»).
+     *
+     * 📐 Mitattu miksi ne menivat sekaisin: ruudulla oli KOLME riviä samaa
+     * kuviota - varaston torni (39 px), linjaston kulho (31 px) ja pizza
+     * (48 px) - ja jokainen kantoi SAMAA `tayte/n.webp` -kuvaketta
+     * varillisella ympyralla. Pizzassa ei ollut mitaan mika erottaisi sen
+     * tayteesta paitsi kullanvarinen rengas sen ympärillä.
+     *
+     * 📐 Ja oikea kuva on jo olemassa: korttipelin pizzapakan yhden
+     * tayttehen kortit ovat `kuvat/pizza-13 … pizza-22`, jarjestyksessa
+     * tayte 1-10 (tarkistettu kuvista: 13 = oliivi, 15 = ananas,
+     * 22 = kala). Kartta on siis `12 + n`. Uutta grafiikkaa ei tarvittu.
+     *
+     * ⚠️ MONEN TAYTTEEN PIZZA (pulmat) PITAA VANHAN ULKOASUNSA. Sen
+     * korttikuvan numero riippuu painetun pakan jarjestyksesta
+     * (`pizzapakka` / `osajoukot`, kortit.js), jota Apinavaaka ei lataa -
+     * ja saannon kopioiminen tanne olisi toinen lahde samalle
+     * jarjestykselle. Yhden tayttehen kartta `12 + n` ei ole kopio
+     * jarjestyksesta vaan mitattu fakta kymmenesta kuvasta. */
     function pizzaKuva(tops) {
+      if (tops.length === 1) {
+        return '<span class="av__kortti-pizza av__kortti-pizza--oikea" style="background-image:url(' +
+          KANSIO + '../kuvat/pizza-' + (12 + tops[0]) + '.webp)"></span>' +
+          (tops[0] === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');
+      }
       return '<span class="av__kortti-pizza' + (tops.length > 1 ? ' av__kortti-pizza--monta' : '') + '">' + tops.map(function (n) {
         return '<i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i>';
       }).join('') + '</span>' + (summa(tops) === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');
@@ -1290,8 +1347,10 @@
           var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : '') + (tila.uusiKortti === n ? ' av__kortti--uusi' : '') + (eiPizzaa ? ' av__kortti--katso' : ''));
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
-          k.innerHTML = '<span class="av__kortti-pizza"><i style="background:' + VARIT[n - 1] + '"><img src="' + KANSIO + 'tayte/' + n + '.webp" alt=""></i></span>' +
-            (n === 10 ? '<span class="av__sydan"><img src="' + KANSIO + 'sydan.webp" alt=""></span>' : '');   // sydänpizza
+          /* ⚠️ SAMA PIIRTAJA KUIN PULMISSA. Tassa oli oma kopionsa
+             pizzan ulkoasusta, ja sydanpizzan ehto oli kirjoitettu
+             kahdesti (`n === 10` ja `summa(tops) === 10`). */
+          k.innerHTML = pizzaKuva([n]);
           k.addEventListener('click', function () { if (ok) valmista(n, k); else pizzanNapautus(n, k); });
           // pizza on täytteen kolmas "kahva" (torni, kippo, pizza): ohjeen tai vihjeen täyte hohtaa myös pizzassa
           if (opas && tila.heitetty && !tila.siirretty && tila.paikka[n] === 'varasto') {

@@ -76,6 +76,12 @@
 .av__pisteet i.tehty{background:#C2580C}
 .av__noppa{border:0;background:none;padding:0;cursor:pointer;border-radius:16px}
 .av__noppa:disabled{cursor:default}
+/* Heiton ajan noppa on muun paalla ja isona - ks. nostaNoppa (apinavaaka.js). */
+.av__nopparivi .av__noppa--iso{
+  position:relative;z-index:30;transform:scale(2.6);
+  filter:drop-shadow(0 10px 18px rgba(60,30,0,.35));
+  transition:transform .28s cubic-bezier(.2,1.25,.4,1), filter .28s ease-out}
+.av__nopparivi .av__noppa{transition:transform .35s ease-out, filter .35s ease-out}
 .av__d10{display:block;width:80px;height:76px}
 .av__noppa--odottaa .av__d10{animation:av-kutsu 1.8s ease-in-out infinite}
 @keyframes av-kutsu{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.12)}90%{transform:scale(.97)}}
@@ -226,6 +232,18 @@
   background:var(--warm,#FFF3E9);box-shadow:inset 0 0 0 1.5px var(--line2,#D6C7AF),0 2px 4px rgba(60,30,0,.12);
   display:grid;place-items:center;transition:transform .2s}
 .av__kortti-pizza{width:48px;height:48px;border-radius:50%;background:#E9B95A;box-shadow:inset 0 0 0 4px #D49A3C;display:grid;place-items:center}
+/* ⚠️ OIKEA PAINETTU PIZZAKORTTI YHDEN TAYTTEEN PIZZASSA (Marko 19.10.2026).
+ * Naytetaan vain pizza, ei koko korttia: kortti on pystysuora (439 x 620) ja
+ * paikka on pyorea 48 px.
+ * 📐 Rajaus on MITATTU kuvan pikseleista eika arvattu (pizza-15.webp,
+ * punaiset ja keltaiset pikselit): pizzan keskipiste on (220, 309) eli
+ * (50,1 %, 49,8 %) kuvasta, ja halkaisija 264 px - valkean reunuksen kanssa
+ * noin 280 px. Kun kuvan leveys on 157 % paikasta, pizza on tasan paikan
+ * levyinen: 439 / 280 = 1,568.
+ * Taustavari jaa alle, joten kuvan lapinakyva reuna ei nayta reialta. */
+.av__kortti-pizza--oikea{
+  background-repeat:no-repeat;background-position:50.1% 49.8%;background-size:157% auto;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.9), 0 1px 3px rgba(60,30,0,.25)}
 .av__kortti-pizza i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
 /* Sama syy: kaksinumeroisena (10) tämä on 24 × 18 px eli pilleri. */
 .av__kortti b{position:absolute;right:4px;bottom:2px;font-size:14px;font-weight:800;background:#fff;border-radius:6px;padding:0 5px;line-height:18px;box-shadow:0 1px 2px rgba(0,0,0,.2)}
