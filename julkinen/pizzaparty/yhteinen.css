@@ -833,9 +833,15 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * mahtuva laatikko olisi 44 px; 0,30 W:llä se on 53 px. Kuplan KOKO ja
  * PYSTYSUHDE ovat PSD:stä koskemattomina.
  *
- * ⚠️ KUPLA ON DOMISSA ENNEN VARTTA, jotta varsi piirtyy sen PÄÄLLE: kupla
- * nousee vieterin taakse, kuten ajatus nousee hahmon takaa. Toisin päin
- * valkoinen kupla peittäisi vieteristä palasen. */
+ * ⚠️ KUPLA (ja laatikko) ON DOMISSA VARREN JÄLKEEN, jotta se piirtyy vieterin
+ * PÄÄLLE - Marko 20.10.2026: «laita se ajatuskupla vieteritason päälle».
+ * Tässä luki ensin päinvastoin, perusteena «ajatus nousee hahmon takaa».
+ * ⚠️ JÄRJESTYS ON DOMISSA EIKÄ `z-index`issä, ja se on pakko: `.vieteri__riippu`
+ * on animoitu `transform`illa, mikä tekee siitä PINOAMISKONTEKSTIN - kuplan
+ * oma `z-index` ei siis yltäisi sen ulkopuolelle varren yli.
+ * Laatikko tulee samalla varren päälle, ja se on oikein: varren alapään hahlo
+ * on leikattu laatikon kuvaan (leikkaus tehtiin kapeimmasta nivelestä), joten
+ * hahlon kuuluukin peittää varren pää. */
 .vieteri__kupla{position:absolute;
   left:calc(var(--vieteri-laatikko) * .013);
   top:calc(var(--vieteri-laatikko) * -.6348);
