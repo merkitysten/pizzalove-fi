@@ -573,9 +573,15 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 @media (prefers-color-scheme:dark){#tulosRuutu::before{display:none}}
 /* ⚠️ KUOSI NÄKYY MYÖS PUHELIMESSA (Marko 7.10.2026: «Tulosruudun taustalla
  * saisi olla sitä täytekuosia»). */
+#tulosRuutu{--tulos-reunus:clamp(16px, 4.5vw, 24px)}
 #tulosRuutu > *{position:relative;z-index:1}
-#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100% - 24px, 600px);
-  padding:12px 10px 8px}
+/* ⚠️ LAATIKKO LEVEAMMAKSI (Marko 19.10.2026: «Valkoiset alueet pitaisi olla
+ * isommat, jotta niiden sisalla olevat asiat mahtuvat paremmin.»)
+ * 📐 Mitattu 375 x 812: laatikko oli 12…363 eli 351 px, ja sija-3:n viimeinen
+ * kortti ulottui 354:aan - 9 px reunasta. Nyt reunus on 8 px, joten pallille
+ * jaa 8 px enemman, ja viuhka pysyy askelman levyisena (basso.js). */
+#tulosPisteet{flex-direction:column;align-items:center;gap:12px;margin:0;width:min(100% - 16px, 620px);
+  padding:14px 10px 10px}
 
 /* --- TULOSRUUDUN LAATIKOT kuosin päällä (Marko 7.10.2026: «Pitäisikö näille
  * eri elementeillä olla omat rajatut alueensa taustakuosin päällä?») ---
@@ -602,7 +608,17 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .palli-askel{width:100%;display:flex;align-items:flex-start;justify-content:center;
   border-radius:12px 12px 0 0;background:#F6D9BF;color:#9A4A0A;
   box-shadow:inset 0 -6px 0 rgba(60,34,12,.08)}
+/* ⚠️ NUMERO ON MITOITETTAVA ASKELMAAN (Marko 19.10.2026: «3-podiumin kolmonen
+ * on sen alareunan varjon paalla»). 📐 Mitattu 375 x 812: sija-3:n askelma on
+ * 40 px korkea, mutta numero oli clamp(24px, 5vh, 40px) = 40 px + 8 px
+ * ylamarginaali = 48 px. Se ei vain koskettanut varjoa vaan ylitti koko
+ * askelman. Alempi sija = matalampi askelma, joten numerokin pienenee -
+ * samalla se kertoo jarjestyksen. Varjo on `inset 0 -6px`, ja jokaiselle
+ * jaa sen verran tilaa alareunaan. */
 .palli-askel b{font-size:clamp(24px, 5vh, 40px);line-height:1;margin-top:8px}
+.sija-2 .palli-askel b{font-size:clamp(20px, 4vh, 32px);margin-top:6px}
+.sija-3 .palli-askel b{font-size:clamp(16px, 3vh, 26px);margin-top:4px}
+.sija-4 .palli-askel b{font-size:clamp(14px, 2.4vh, 20px);margin-top:3px}
 .sija-1 .palli-askel{height:clamp(70px, 12vh, 130px);background:var(--orange);color:#fff}
 .sija-2 .palli-askel{height:clamp(50px, 8.5vh, 94px)}
 .sija-3 .palli-askel{height:clamp(36px, 6vh, 66px)}
@@ -623,10 +639,16 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * merkki siitä (ja näppäimistön tie), verkossa ⏳ sen tilalla. */
 /* ⚠️ #tulosRuutu-etuliite on pakollinen: `#tulosRuutu > *{position:relative}`
  * on ID-tasolla, ja pelkkä luokka hävisi sille — ▶ jäi keskelle (mitattu). */
+/* ⚠️ REUNUS ON ISOMPI KUIN MILTA NAYTTAA (Marko 19.10.2026: «Ylareunan napit
+ * on liian reunoissa»). Valikkoapinan KUVA tyontyy napin laatikon ULKOPUOLELLE
+ * vasemmalle 11,5 % napin leveydesta (.valikko-apina img), eli 52 px:n napilla
+ * 6 px. 📐 12 px:n reunuksella kuva alkoi siis x=6:sta. */
 #tulosRuutu > .tulos-napit{position:absolute;z-index:3;display:flex;align-items:center;
-  top:calc(env(safe-area-inset-top, 0px) + 12px);right:calc(env(safe-area-inset-right, 0px) + 12px)}
+  top:calc(env(safe-area-inset-top, 0px) + var(--tulos-reunus));
+  right:calc(env(safe-area-inset-right, 0px) + var(--tulos-reunus))}
 #tulosRuutu > .tulos-valikko{position:absolute;z-index:3;
-  top:calc(env(safe-area-inset-top, 0px) + 12px);left:calc(env(safe-area-inset-left, 0px) + 12px)}
+  top:calc(env(safe-area-inset-top, 0px) + var(--tulos-reunus));
+  left:calc(env(safe-area-inset-left, 0px) + var(--tulos-reunus))}
 .jatka-nappi{width:52px;aspect-ratio:1;border:0;border-radius:50%;padding:0;cursor:pointer;
   display:grid;place-items:center;background:var(--orange);color:#fff;
   box-shadow:0 0 0 3px #fff, 0 3px 10px rgba(60,40,20,.28);transition:transform .15s}

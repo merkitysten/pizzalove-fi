@@ -82,7 +82,14 @@
  * liian kiinni kortin yläreunassa.» → --kisa-yla: tilaa laatikon yläreunan ja
  * pisterajan väliin, ja radat korkeammiksi. */
 .basso-kisa{--kisa-hahmo:clamp(30px, 5vh, 40px);--rata-alku:calc(var(--kisa-hahmo) / 2 + 10px);
-  --rata-loppu:58px;--pala:clamp(56px, 9vh, 76px);--kisa-yla:14px;
+  /* ⚠️ `--rata-loppu` VARAA TILAA MYOS MAALIIN EHTINEEN PISTELAATIKOLLE
+     (Marko 19.10.2026: «Maaliin tulleen pisteet on ihan valkoisen alueen
+     reunassa kiinni»). Juoksijan luku on hahmon OIKEALLA puolella
+     (`left:100%` + 6 px), joten maalissa se ulottuu maaliviivasta
+     hahmon puolikkaan + 6 px + laatikon leveyden verran oikealle.
+     📐 Mitattu 375 x 812 arvolla 58px: luvun oikea reuna oli 358 ja
+     laatikon 363 - viisi pikselia. */
+  --rata-loppu:74px;--pala:clamp(56px, 9vh, 76px);--kisa-yla:14px;
   position:relative;width:min(100%, 560px);padding-top:calc(var(--kisa-yla) + 22px + var(--pala) * .6 + 8px)}
 .basso-kisa:empty{display:none}
 /* Maaliviiva: ruutukuvio radan loppukohdassa. */
@@ -215,7 +222,7 @@
 /* Juoksukilpailun laatikko: sama .tulos-laatikko kuin pallilla (yhteinen.css).
  * Kaksi laatikkoa, koska ne kertovat eri asiaa: KIERROS (palli + jääneet
  * kortit) ja OTTELU (juoksukilpailu) — Marko 7.10.2026. */
-#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:12px;width:min(100% - 24px, 600px)}
+#bassoKisa:not(:empty){padding-left:6px;padding-right:6px;padding-bottom:12px;width:min(100% - 16px, 620px)}
 
 /* Matala ruutu (puhelin vaakatasossa): yhteinen.css asettaa pallin vasemmalle
  * Basso: palli vasemmalle, juoksukilpailu oikealle (napit ovat kulmissa).

@@ -671,16 +671,61 @@ function bassoKisaKohta(rata, osuus) {
 }
 
 /* Kortit limittyvät vain sen verran kuin on pakko: pari korttia rinnakkain,
- * neljätoista tiiviinä viuhkana askelman levyisenä. */
+ * neljätoista tiiviinä viuhkana askelman levyisenä.
+ *
+ * ⚠️ `getBoundingClientRect` ANTAA KIERRETYN KORTIN LAATIKON, EI KORTIN LEVEYTTÄ
+ * (Marko 19.10.2026: «Kortit ei ole keskitetty podiumien suhteen»). Jokainen
+ * kortti on `rotate(var(--kulma))`, ja rect on sen AKSELINSUUNTAINEN peittävä
+ * laatikko — siis leveämpi kuin kortti. Liian suuri `kortti` pienensi `alku`a,
+ * ja viuhka siirtyi VASEMMALLE. 📐 Mitattu 375 x 812: sija-2 −3,5 px, sija-3
+ * −4,5 px askelman keskikohdasta, ja ryhmä oli 9–13 px askelmaa leveämpi.
+ *
+ * Korjaus on kaksivaiheinen, koska kierto ei ole laskettavissa `--kulma`sta
+ * yksin (`transform-origin` on kortin ALAPUOLELLA, 50 % 120 %):
+ *   1. `offsetWidth` = kiertämätön leveys → askelväli ja alustava sijoitus
+ *   2. MITATAAN ryhmän todellinen laajuus ja korjataan: kavennetaan jos se
+ *      ylittää askelman, ja siirretään keskelle.
+ * Mittaus kestää kierron muuttumisen; laskenta ei. */
 function bassoLevitaViuhkat() {
   [].forEach.call(document.querySelectorAll('#tulosPisteet .palli-kortit'), function (v) {
     const kortit = v.children, n = kortit.length;
     if (!n) return;
-    const leveys = v.getBoundingClientRect().width;
-    const kortti = kortit[0].getBoundingClientRect().width;
-    const askel = n > 1 ? Math.min(kortti + 3, (leveys - kortti) / (n - 1)) : 0;
-    const alku = (leveys - (kortti + askel * (n - 1))) / 2;
-    [].forEach.call(kortit, function (el, j) { el.style.left = (alku + askel * j).toFixed(1) + 'px'; });
+    const laatikko = v.getBoundingClientRect();
+    const leveys = laatikko.width;
+    const kortti = kortit[0].offsetWidth;                    // ⚠️ ei rect: ks. yllä
+    let askel = n > 1 ? Math.max(0, Math.min(kortti + 3, (leveys - kortti) / (n - 1))) : 0;
+    function aseta() {
+      const alku = (leveys - (kortti + askel * (n - 1))) / 2;
+      [].forEach.call(kortit, function (el, j) { el.style.left = (alku + askel * j).toFixed(1) + 'px'; });
+    }
+    function laajuus() {
+      let vas = Infinity, oik = -Infinity;
+      [].forEach.call(kortit, function (el) {
+        const b = el.getBoundingClientRect();
+        if (b.left < vas) vas = b.left;
+        if (b.right > oik) oik = b.right;
+      });
+      return [vas, oik];
+    }
+    aseta();
+    let raja = laajuus();
+    /* Kavennetaan kunnes kierretty ryhmä mahtuu askelmalle. Enintään kolme
+       kierrosta: kierron oma leveys ei katoa kaventamalla, joten tämä
+       lähestyy rajaa eikä saavuta sitä aina. */
+    for (let kierros = 0; kierros < 3 && n > 1; kierros++) {
+      const yli = (raja[1] - raja[0]) - leveys;
+      if (yli <= 0.5) break;
+      askel = Math.max(0, askel - yli / (n - 1));
+      aseta();
+      raja = laajuus();
+    }
+    /* Keskitys mitatusta laajuudesta, ei lasketusta. */
+    const siirto = (laatikko.left + leveys / 2) - (raja[0] + raja[1]) / 2;
+    if (Math.abs(siirto) > 0.5) {
+      [].forEach.call(kortit, function (el) {
+        el.style.left = (parseFloat(el.style.left) + siirto).toFixed(1) + 'px';
+      });
+    }
   });
 }
 window.addEventListener('resize', function () {
