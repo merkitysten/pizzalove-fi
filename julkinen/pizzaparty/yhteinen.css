@@ -759,20 +759,42 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * korkeuden verran ruudun yläreunan YLÄPUOLELTA, joten levossa se on näkyvän
  * alueen ulkopuolella ilman leikkausta. */
 .vieteri{
-  --vieteri-lev: clamp(32px, 9vw, 52px);                        /* varren leveys */
+  /* ⚠️ LEVEYS ON SIDOTTU RUUTUUN, KOSKA SEN ON MAHDUTTAVA QR:N VASEMMALLE.
+     📐 Mitattu 375 x 812: QR-kortin vasen reuna on x=78, ja heilahtava laatikko
+     on noin 1,14 x leveytensä verran leveä (kierto −8°). 9vw antoi 71 px eli
+     81 px kierrettynä - laatikko meni 9 px QR:n päälle ja heilahduksessa 2 px
+     ruudun vasemmalta reunalta ulos. 8vw antaa 30 px varren ja 63 px laatikon. */
+  --vieteri-lev: clamp(26px, 8vw, 52px);                        /* varren leveys */
   /* Luonnollinen pituus, mutta enintään 46 % ruudun korkeudesta. 📐 Mitattu
      812 x 375 (vaaka): ilman kattoa laatikon alareuna oli 366 eli 9 px ruudun
      pohjasta. Lyhennetty varsi EI ole väärin - saksivarsi näyttää silloin
      vain vajaasti ojennetulta, mikä on sen oikea välimuoto. */
-  --vieteri-matka: min(calc(var(--vieteri-lev) * 1100 / 158), 46vh);
+  /* Matka on 1,35 x varren luonnollinen pituus: saksivarsi VENYY, eli timantit
+     pitenevät ja kapenevat - juuri niin oikea vieteri tekee ojentuessaan.
+     📐 Ilman venytystä laatikko jäi 375 x 812:ssa riviin y 133…211, eli QR:n
+     (194…414) yläreunan tasolle; venytettynä se on sen vierellä. */
+  --vieteri-matka: min(calc(var(--vieteri-lev) * 1100 / 158 * 1.35), 46vh);
   --vieteri-laatikko: calc(var(--vieteri-lev) * 2.1);
   --vieteri-kork: calc(var(--vieteri-laatikko) * 360 / 324);
-  /* ⚠️ `right` LASKETAAN LAATIKON LEVEYDESTÄ, EI SILMÄMÄÄRÄISESTI: ankkuri on
-     nivelessä, ja laatikkoa on sen OIKEALLA puolella 71,3 % sen leveydestä.
-     📐 Mitattu kiinteällä 7vw:llä 375 px:n ruudulla: laatikon oikea reuna 388 eli
-     13 px ruudun ulkopuolella. Tämä pitää marginaalin samana joka koossa. */
-  position:absolute;top:calc(-1 * var(--vieteri-kork));
-  right:calc(var(--vieteri-laatikko) * .713 + clamp(8px, 3vw, 26px));
+  /* Matka ulos oikeasta reunasta: koko ruudun leveys + laatikko, jotta se on
+     varmasti poissa myös silloin kun ankkuri on kaukana vasemmalla. */
+  --vieteri-ulos: calc(100vw + var(--vieteri-laatikko));
+  /* ⚠️ `left` LASKETAAN LAATIKON LEVEYDESTÄ, EI SILMÄMÄÄRÄISESTI: ankkuri on
+     nivelessä, ja laatikkoa on sen VASEMMALLA puolella 28,7 % sen leveydestä.
+     Näin laatikon vasen reuna on aina saman verran ruudun reunasta.
+     📐 Bassossa QR-kortin vasen reuna on 375 px:n ruudulla x=84, ja laatikko
+     on 76 px leveä - se mahtuu sen vasemmalle puolelle juuri ja juuri. */
+  /* ⚠️ `fixed` EIKÄ `absolute`, JA SE ON MITATTU VIRHE. Absoluuttisena ankkuri
+     oli lähin asemoitu esi-isä, ja se on ERI KAHDESSA PELISSÄ: Partyssa
+     `#verkkoPeite` (ruudun yläreuna), Bassossa `.verkko-osa`, joka on
+     `position:relative` ja alkaa 📐 y=128:sta. Lepotila `top:-korkeus` oli siis
+     Bassossa ruudun SISÄLLÄ: laatikko roikkui näkyvissä y 49…128 koko sen ajan
+     kun sen piti olla piilossa. `fixed` tekee ankkurista saman molemmissa.
+     ⚠️ Jos jokin esi-isä saa joskus `transform`in, `filter`in tai
+     `backdrop-filter`in, se kaappaa myös `fixed`in - silloin tämä on mitattava
+     uudelleen (nyt ketjussa ei ole yhtäkään). */
+  position:fixed;top:calc(-1 * var(--vieteri-kork));
+  left:calc(var(--vieteri-laatikko) * .287 + clamp(8px, 2.5vw, 24px));
   width:0;height:0;pointer-events:none;z-index:1;display:none;
 }
 .on-aula .vieteri{display:block}
@@ -782,23 +804,43 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .vieteri img{position:absolute;top:0;display:block;max-width:none}
 .vieteri__varsi{left:calc(var(--vieteri-lev) * -.565);
   width:var(--vieteri-lev);height:var(--vieteri-matka);
-  transform-origin:top center;animation:vieteri-varsi 7.5s infinite}
+  transform-origin:top center;animation:vieteri-varsi 9s infinite}
 .vieteri__laatikko{left:calc(var(--vieteri-laatikko) * -.287);
   width:var(--vieteri-laatikko);height:var(--vieteri-kork);
-  transform-origin:28.7% 0;animation:vieteri-laatikko 7.5s infinite}
-/* 0-6 % piilossa · 6-34 % laskeutuu · 34-62 % roikkuu ja heiluu · 62-100 % ylös */
+  transform-origin:28.7% 0;animation:vieteri-laatikko 9s infinite}
+
+/* ⚠️ LIIKERATA ON MARKON (19.10.2026): «se saisi tulla tuon qr-koodin
+ * vasemmalla puolella alas, vähän heilahtaa ja liikkua kuvassa oikeasta
+ * reunasta ulos liukumalla.» Siksi se ei ole enää ylös-alas vaan nelivaiheinen:
+ *   0-4 %    piilossa ruudun yläpuolella
+ *   4-24 %   laskeutuu QR:n vasemmalle
+ *   24-44 %  heilahtaa (vain laatikko; varsi pitää paikkansa)
+ *   44-64 %  liukuu oikealle ulos kuvasta, kiihtyen
+ *   64-100 % poissa - tauko ennen seuraavaa kierrosta
+ *
+ * ⚠️ PALUU ALKUUN TAPAHTUU NÄKYMÄTTÖMISSÄ. Kohdassa 64 % se on ruudun
+ * OIKEALLA puolella ulkona ja hyppää lepotilaan, joka on ruudun YLÄPUOLELLA -
+ * molemmat näkymättömiä, joten hyppyä ei näe. Jos lepotiloja muuttaa, tämä on
+ * tarkistettava: väärässä paikassa hyppy näkyy välähdyksenä.
+ *
+ * ⚠️ KALLISTUS LIU'USSA ON POSITIIVINEN. `rotate()` on myötäpäivään, ja
+ * kiertokeskipiste on laatikon YLÄREUNASSA (28,7 % 0), joten positiivinen
+ * kulma vie laatikon alareunan VASEMMALLE - eli jälkeen jääden, kuten
+ * roikkuva kuorma kun kannatin liikkuu oikealle. */
 @keyframes vieteri-varsi{
-  0%, 6%    {transform:scaleY(0);   animation-timing-function:cubic-bezier(.3,.7,.3,1)}
-  34%, 62%  {transform:scaleY(1);   animation-timing-function:cubic-bezier(.6,0,.7,.4)}
-  92%, 100% {transform:scaleY(0)}
+  0%, 4%    {transform:translateX(0) scaleY(0); animation-timing-function:cubic-bezier(.3,.7,.3,1)}
+  24%, 44%  {transform:translateX(0) scaleY(1); animation-timing-function:cubic-bezier(.5,0,.75,.2)}
+  64%       {transform:translateX(var(--vieteri-ulos)) scaleY(1)}
+  65%, 100% {transform:translateX(0) scaleY(0)}
 }
 @keyframes vieteri-laatikko{
-  0%, 6%    {transform:translateY(0) rotate(0deg); animation-timing-function:cubic-bezier(.3,.7,.3,1)}
-  34%       {transform:translateY(var(--vieteri-matka)) rotate(-5deg)}
-  44%       {transform:translateY(var(--vieteri-matka)) rotate(4deg)}
-  53%       {transform:translateY(var(--vieteri-matka)) rotate(-2deg)}
-  62%       {transform:translateY(var(--vieteri-matka)) rotate(0deg); animation-timing-function:cubic-bezier(.6,0,.7,.4)}
-  92%, 100% {transform:translateY(0) rotate(0deg)}
+  0%, 4%    {transform:translateX(0) translateY(0) rotate(0deg); animation-timing-function:cubic-bezier(.3,.7,.3,1)}
+  24%       {transform:translateX(0) translateY(var(--vieteri-matka)) rotate(-8deg)}
+  30%       {transform:translateX(0) translateY(var(--vieteri-matka)) rotate(6deg)}
+  36%       {transform:translateX(0) translateY(var(--vieteri-matka)) rotate(-3deg)}
+  44%       {transform:translateX(0) translateY(var(--vieteri-matka)) rotate(0deg); animation-timing-function:cubic-bezier(.5,0,.75,.2)}
+  64%       {transform:translateX(var(--vieteri-ulos)) translateY(var(--vieteri-matka)) rotate(9deg)}
+  65%, 100% {transform:translateX(0) translateY(0) rotate(0deg)}
 }
 /* Liike ON tämän kuvan koko sisältö, joten vähennetyssä liikkeessä se jää pois
    kokonaan - paikallaan roikkuva laatikko olisi vain este ruudun yläreunassa. */
