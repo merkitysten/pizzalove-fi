@@ -270,6 +270,33 @@
   animation:av-palajuhla-sisaan .42s cubic-bezier(.2,1.5,.4,1) both}
 @keyframes av-palajuhla-sisaan{from{transform:scale(.25) rotate(-12deg);opacity:0}}
 
+/* --- boksi isona keskelle (Marko 19.10.2026) ---
+ * «Tämä voisi tulla myös aivan keskelle ruutua ja isona, jolloin pelaaja
+ * voisi käydä katsomassa oman tilanteensa.»
+ * ⚠️ Puuttuvat palat ovat boksin ULKOPUOLELLA eivätkä harmaina lohkoina
+ * sen sisällä: ulkopuolella ne ovat yhä paloja joita voi saada, sisällä
+ * ne näyttäisivät siltä kuin pizza olisi jo kasassa mutta vajaa. */
+.av__boksinaky{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3vmin;padding:4vmin;cursor:pointer;
+  background:rgba(26,20,12,.62);animation:av-boksinaky .25s ease-out both}
+@keyframes av-boksinaky{from{background:rgba(26,20,12,0)}}
+/* ⚠️ VALITSIN ON KAKSIOSAINEN (0,2,0) EIKA `.av__boksi--iso` (0,1,0),
+ * ja se on mitattu virhe: `.av__boksi{display:none}` ja
+ * `.av--apinat .av__boksi{display:flex}` ovat ylempana, ja iso nakyma
+ * ripustetaan bodyyn eli `.av--apinat`in ULKOPUOLELLE. Yhden luokan
+ * saanto havisi `display:none`lle ja laatikko oli 0 x 0 px - nakyma
+ * aukesi, mutta siina ei ollut mitaan. Samalla tarkkuudella voittaja
+ * ratkeaisi jarjestyksesta; tarkkuus kestaa siirtamisen. */
+.av__boksinaky .av__boksi--iso{display:block;position:relative;
+  width:min(74vmin, 420px);height:min(74vmin, 420px);flex:0 0 auto;
+  animation:av-boksinaky-sisaan .34s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes av-boksinaky-sisaan{from{transform:scale(.4);opacity:0}}
+/* Puuttuvat rivissa boksin alla: tunnistettavia mutta selvasti «ei vielä». */
+.av__boksinaky-puuttuu{display:flex;flex-wrap:wrap;justify-content:center;gap:1.4vmin;
+  max-width:min(86vmin, 520px);animation:av-boksinaky-sisaan .34s cubic-bezier(.2,1.3,.4,1) .1s both}
+.av__boksinaky-puuttuu img{display:block;height:11vmin;max-height:72px;width:auto;
+  opacity:.5;filter:grayscale(.55) drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+
 .av__boksi{position:relative;width:68px;height:68px;flex:0 0 auto;
   filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
 .av__boksi-pohja{position:absolute;inset:0;width:100%;height:100%;display:block}

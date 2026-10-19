@@ -391,8 +391,12 @@
     // Markon miettivä apina: kasvot ympyrässä, tukka ja kyynärpää tulevat ympyrän yli
     infoNappi.innerHTML = '<img src="' + KANSIO + 'basso-nappi.webp" alt=""><span class="av__info-merkki" aria-hidden="true"><i></i><i></i><i></i></span>';
     var pisteet = el('div', 'av__pisteet');
-    var boksiEl = el('div', 'av__boksi');          // Nälkäiset apinat: yhteinen boksi (10 palaa)
-    boksiEl.setAttribute('role', 'img');
+    /* ⚠️ BOKSI ON NAPPI (Markon kysymys 19.10.2026: «kun nurkan
+       pizzaboksia painaa, niin tuleeko se siihen ruudulle isona ja nakee
+       mita paloja on boksissa ja mita puuttuu?»). Mitattu: ei tullut -
+       se oli `div` jolla `role="img"`. */
+    var boksiEl = el('button', 'av__boksi');          // Nälkäiset apinat: yhteinen boksi (10 palaa)
+    boksiEl.type = 'button';
     var noppaEl = el('button', 'av__noppa');
     noppaEl.type = 'button';
     noppaEl.innerHTML = '<span class="av__d10"></span>';
@@ -724,6 +728,7 @@
         }
       }, vahennaLiike);
     }
+    boksiEl.addEventListener('click', naytaBoksiIsona);
     noppaEl.addEventListener('click', heita);
 
     // Voiko millään sallitulla siirrolla saada jonkin pelilaudan pizzan täytteen linjastolle?
@@ -896,6 +901,53 @@
         };
       });
     }
+    /* ⚠️ YKSI RAKENTAJA, KAKSI KOKOA. Boksin sisus piirretaan samasta
+     * funktiosta seka ylapalkin 68 px:n nappiin etta kokoruudun
+     * nakymaan - muuten sama ympyra olisi kahdessa paikassa ja ajautuisi
+     * erilleen heti kun palan paikkaa saadetaan. */
+    function boksinSisus(tuoreet) {
+      var sv = '<img class="av__boksi-pohja" src="' + KANSIO + 'boksi.webp" alt="">';
+      for (var j = 0; j < 10; j++) {
+        var n0 = j + 1;
+        if (tila.boksi.indexOf(n0) < 0) continue;
+        var tuore = tuoreet && (tuoreet === n0 || (tuoreet.indexOf && tuoreet.indexOf(n0) >= 0));
+        sv += '<img class="av__boksi-pala' + (tuore ? ' uusi' : '') + '" src="' +
+          KANSIO + '../kuvat/pala/' + n0 + '.webp" alt="" style="--kulma:' + (j * 36) +
+          'deg;transform:rotate(' + (j * 36) + 'deg)">';
+      }
+      return sv;
+    }
+
+    /* Boksi isona keskelle: mita on ja mita puuttuu.
+     * ⚠️ PUUTTUVAT OVAT BOKSIN ULKOPUOLELLA (Markon pyynto sanatarkasti),
+     * eivat esimerkiksi harmaina lohkoina sen sisalla. Ulkopuolella ne
+     * ovat yha paloja joita voi saada; sisalla ne nayttaisivat silta kuin
+     * pizza olisi jo kasassa mutta vajaa. */
+    function naytaBoksiIsona() {
+      var vanha = document.querySelector('.av__boksinaky');
+      if (vanha) { vanha.parentNode.removeChild(vanha); return; }
+      var peite = el('div', 'av__boksinaky');
+      var laatikko = el('div', 'av__boksi av__boksi--iso');
+      laatikko.innerHTML = boksinSisus(null);
+      peite.appendChild(laatikko);
+      var puuttuu = [];
+      for (var n = 1; n <= 10; n++) if (tila.boksi.indexOf(n) < 0) puuttuu.push(n);
+      if (puuttuu.length) {
+        var rivi = el('div', 'av__boksinaky-puuttuu');
+        puuttuu.forEach(function (n) {
+          var k = el('img');
+          k.src = KANSIO + '../kuvat/pala/' + n + '.webp';
+          k.alt = t.taytteet[n - 1] + ' ' + n;
+          rivi.appendChild(k);
+        });
+        peite.appendChild(rivi);
+      }
+      peite.addEventListener('click', function () {
+        if (peite.parentNode) peite.parentNode.removeChild(peite);
+      });
+      document.body.appendChild(peite);
+    }
+
     /* ⚠️ ANSAITTU PALA NAYTETAAN ISONA KESKELLA RUUTUA (Marko 19.10.2026:
      * «kun se pala ansaitaan, niin se pitaa nayttaa selkeasti pelaajalle
      * isompana kuvana keskella ruutua ja sitten se pizzalaatikko ja palat
@@ -1391,16 +1443,7 @@
          * karki 35,9 astetta. Kymmenen palaa = 359 astetta. Ne siis
          * ladotaan 36 asteen valein ilman rakoa tai limitysta - se ei ole
          * sattuma vaan painotiedoston oma mitta. */
-        var sv = '<img class="av__boksi-pohja" src="' + KANSIO + 'boksi.webp" alt="">';
-        for (var j = 0; j < 10; j++) {
-          var n0 = j + 1;
-          if (tila.boksi.indexOf(n0) < 0) continue;
-          var tuore = (tila.uusiPala === n0 ||
-            (tila.uusiPala && tila.uusiPala.indexOf && tila.uusiPala.indexOf(n0) >= 0));
-          sv += '<img class="av__boksi-pala' + (tuore ? ' uusi' : '') + '" src="' +
-            KANSIO + '../kuvat/pala/' + n0 + '.webp" alt="" style="--kulma:' + (j * 36) +
-            'deg;transform:rotate(' + (j * 36) + 'deg)">';
-        }
+        var sv = boksinSisus(tila.uusiPala);
         tila.uusiPala = null;
         boksiEl.innerHTML = sv;
         boksiEl.setAttribute('aria-label', t.boksi + ': ' + tila.boksi.length + '/10');
