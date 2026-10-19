@@ -759,12 +759,22 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * korkeuden verran ruudun yläreunan YLÄPUOLELTA, joten levossa se on näkyvän
  * alueen ulkopuolella ilman leikkausta. */
 .vieteri{
-  /* ⚠️ LEVEYS ON SIDOTTU RUUTUUN, KOSKA SEN ON MAHDUTTAVA QR:N VASEMMALLE.
-     📐 Mitattu 375 x 812: QR-kortin vasen reuna on x=78, ja heilahtava laatikko
-     on noin 1,14 x leveytensä verran leveä (kierto −8°). 9vw antoi 71 px eli
-     81 px kierrettynä - laatikko meni 9 px QR:n päälle ja heilahduksessa 2 px
-     ruudun vasemmalta reunalta ulos. 8vw antaa 30 px varren ja 63 px laatikon. */
-  --vieteri-lev: clamp(26px, 8vw, 52px);                        /* varren leveys */
+  /* ⚠️ LEVEYS LASKETAAN QR:N OMASTA KAAVASTA, EI ARVATA RUUDUN LEVEYDESTÄ.
+   * Tässä luki ensin `8vw`, ja se sovitettiin 375 px:n ruutuun - 📐 jolloin
+   * heilahduksen äärikohdassa laatikon kulma meni 4 px QR-kortin päälle, ja
+   * kapeammalla ruudulla enemmän. Yksi mitattu ruutuleveys ei kelpaa
+   * perustaksi, koska VÄLI EI OLE VAKIO-OSUUS RUUDUSTA:
+   *   .aloitusruutu .verkko-isanta-qr{width:min(220px, 62vw, 29vh)}
+   * eli 375 px:n ruudulla väliä on 77,5 px mutta 320 x 568:ssa 77,7 px -
+   * QR kutistuu matalalla ruudulla ja väli KASVAA. Siksi sama kaava tähän.
+   *
+   * Mitoituksen ehdot (W = laatikon leveys, H = 1,111 x W):
+   *   oikea reuna  L + W + H·sin8° ≤ väli − 4   (kierto −8° vie alareunan oikealle)
+   *   vasen reuna  L − H·sin6°     ≥ 4          (kierto +6° vie sen vasemmalle)
+   * Näistä W ≤ (väli − 8) / 1,2701 ja L = 4 + 0,1157 · W.
+   * Jakaja 2,667 alla on 1,2701 × 2,1 (laatikko = 2,1 × varsi). */
+  --vieteri-vali: calc((100vw - min(220px, 62vw, 29vh)) / 2);
+  --vieteri-lev: clamp(18px, min(8vw, (var(--vieteri-vali) - 8px) / 2.667), 52px);
   /* Luonnollinen pituus, mutta enintään 46 % ruudun korkeudesta. 📐 Mitattu
      812 x 375 (vaaka): ilman kattoa laatikon alareuna oli 366 eli 9 px ruudun
      pohjasta. Lyhennetty varsi EI ole väärin - saksivarsi näyttää silloin
@@ -794,7 +804,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
      `backdrop-filter`in, se kaappaa myös `fixed`in - silloin tämä on mitattava
      uudelleen (nyt ketjussa ei ole yhtäkään). */
   position:fixed;top:calc(-1 * var(--vieteri-kork));
-  left:calc(var(--vieteri-laatikko) * .287 + clamp(8px, 2.5vw, 24px));
+  /* Ankkuri = laatikon vasen reuna (4 px reunasta + heilahdusvara) + nivelen
+     kohta laatikossa (28,7 %). Ks. mitoituksen ehdot yllä. */
+  left:calc(4px + var(--vieteri-laatikko) * .4027);
   width:0;height:0;pointer-events:none;z-index:1;display:none;
 }
 .on-aula .vieteri{display:block}
