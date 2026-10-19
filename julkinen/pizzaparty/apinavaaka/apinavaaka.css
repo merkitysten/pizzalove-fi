@@ -154,6 +154,12 @@
 
 /* varasto ja linjasto */
 .av__hyllyt{display:grid;gap:10px}
+/* ⚠️ HYLLYT SAAVAT EROTTUA OMALLA VÄRILLÄÄN (Marko 19.10.2026,
+ * tarkennus: «minusta varasto ja linjasto saa erottua omalla
+ * värikkäällä taustallaan siitä taustakuosista»). Tulkitsin hänen
+ * edellisen viestinsä ensin niin että varaston oma väri on se haitta -
+ * se ei ollut. Haitta oli `.av--koko`n taustanvärinen suorakulmio
+ * NIIDEN ALLA, ks. alempana. */
 .av__hylly{position:relative;background:#F1EBBC;border-radius:14px;padding:8px 8px 6px}   /* pelilaudan keltainen */
 .av__hylly--linjasto{background:#CDE9F0}   /* pelilaudan vaaleansininen */
 .av--havikki .av__hylly--linjasto{box-shadow:inset 0 0 0 2px var(--orange, #EE7203)}
@@ -455,7 +461,36 @@
 .av{color-scheme:light;color:#1A1A1A;--ground:#FAF6EE;--surface:#FFFFFF;--warm:#FFF3E9;--ink:#1A1A1A;--soft:#6E6357;
   --line:#E7DCCA;--line2:#D6C7AF;--orange:#EE7203;--deep:#C2580C;--radius:18px;
   --shadow:0 1px 2px rgba(60,34,12,.06),0 8px 24px rgba(60,34,12,.08)}
-.av--koko{background:#FAF6EE}
+/* ⚠️ PELIN OMA POHJA KANTAA TÄYTEKUOSIN (Marko 19.10.2026: «kun siinä
+ * taustakuosin ja mm. varaston välissä on vielä sellainen taustan
+ * värinen suorakulmio, niin sitä mietin, että saako sen pois»).
+ * 📐 Mitattu: `.av--koko` on 832 x 374 px umpinainen #FAF6EE -laatta,
+ * joka peitti body-tason kuosin kaikkialta paitsi ohuelta reunalta -
+ * juuri se suorakulmio jonka Marko näki.
+ * ⚠️ SE EI OLE TURHA, joten sitä ei voi vain poistaa: `.av--koko` on
+ * rivillä 358 `background:transparent`, ja tämä myöhempi sääntö on
+ * siellä siksi että sivuston TUMMA teema vaihtaa `--ground`in tummaksi
+ * eikä peli saa muuttua tumman päällä. (Sama valitsin kahdesti eri
+ * sisällöllä on itsessään se järjestysansa josta CLAUDE.md varoittaa -
+ * nyt se on edes kommentoitu.)
+ * Ratkaisu: kuosi JA vaalea pohja samassa taustassa, ja päällimmäisenä
+ * läpikuultava pesu joka vastaa body-tason opacity .14:ää. Näin peli on
+ * vaalea myös tummassa teemassa eikä kuosi katoa.
+ * ⚠️ `url()` ratkeaa TÄHÄN tyylitiedostoon nähden (apinavaaka/), siksi
+ * `../kuvat/` - sama ansa on kirjattu norsu-siten CLAUDE.md:hen. */
+.av--koko{
+  background:
+    linear-gradient(rgba(250,246,238,.86), rgba(250,246,238,.86)),
+    url('../kuvat/kuosi.svg?v=20261006a') repeat;
+  background-size:auto, 286px 285px;
+  /* ⚠️ KUOSI KIINNI RUUTUUN, EI LAATIKKOON. `.av--koko` on leveällä
+   * näytöllä kapeampi kuin ruutu (mitattu 1024 px: 443 px keskitettynä),
+   * jolloin sen oma kuosi alkaisi laatikon reunasta ja body-tason kuosi
+   * ruudun reunasta - sauma. Mitattu siirtymä oli 5 px x ja 6 px y eli
+   * sattumalta lähes kohdallaan; `fixed` tekee siitä säännön. */
+  background-attachment:scroll, fixed;
+  background-color:#FAF6EE;
+}
 
 /* opas: tekstin vaihtuessa pieni välähdys, jotta muutos huomataan */
 @keyframes av-valahdys{0%{opacity:.2;transform:scale(.96)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
