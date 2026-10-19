@@ -1218,14 +1218,26 @@
     function valmistettavat() {
       return (tila.laudalla || []).filter(function (n) { return tila.paikka[n] === 'linjasto'; });
     }
-    // Nälkäiset apinat: pizzan, jonka täyte on jo linjastolla, saa tehdä milloin tahansa vuoron aikana
-    // (myös ennen siirtoa), kunhan apinan kädet ovat tyhjät. Vuoro päättyy vasta noppaa heitettäessä.
-    function voiTehdaHeti() {
-      return tila.muoto === 'apinat' && tila.vaihe === 'heitto' && !tila.oikea.length && !tila.vasen.length &&
-        !tila.eiRiita && !tila.loppu && !tila.valitsee && !pyorii;
-    }
+    /* ⚠️ PIZZAN SAA TEHDA VASTA SIIRRON JALKEEN (Marko 19.10.2026:
+     * «löysin bugin, että pystyin tekemään pizzan ennen täytteiden vientiä
+     * linjastolle. Eli kun ensin heitetään noppaa, sitten viedään täytteet
+     * ja vasta lopuksi tehdään pizzat.»)
+     *
+     * ⚠️ TAMA KUMOAA 12.10.2026 TEHDYN PAATOKSEN, joka luki tassa
+     * sanatarkasti: «pizzan, jonka täyte on jo linjastolla, saa tehdä
+     * milloin tahansa vuoron aikana (myös ennen siirtoa), kunhan apinan
+     * kädet ovat tyhjät». Ehto oli `voiTehdaHeti()`, ja se salli
+     * `vaihe === 'heitto'` eli sek ENNEN nopanheittoa etta heiton jalkeen
+     * ennen siirtoa. Edelliselta vuorolta linjastolle jaanyt tayte riitti,
+     * ja pelaaja saattoi tehda pizzan kayttamatta noppaa lainkaan.
+     *
+     * Jarjestys on nyt se jonka Marko sanoi: heitto -> siirto -> pizzat.
+     * Sen takaa `vaihe === 'pizza'`, johon paastaan vain `vieSiirto`n
+     * kautta. Jos tama paatos joskus kumotaan takaisin, ehto on tassa
+     * yhdessa paikassa eika kahdessa - myos piirto (`.av__kortti--ok`)
+     * lukee saman saannon. */
     function valmista(n, korttiEl) {
-      if ((tila.vaihe !== 'pizza' && !voiTehdaHeti()) || tila.paikka[n] !== 'linjasto' || tila.paistuu) return;
+      if (tila.vaihe !== 'pizza' || tila.paikka[n] !== 'linjasto' || tila.paistuu) return;
       // pizza liukuu hihnaa pitkin uuniin, ja vasta sitten pala menee boksiin
       if (korttiEl && !vahennaLiike && korttiEl.animate) return paista(korttiEl, function () { valmista(n); }, [n]);
       tila.paikka[n] = 'varasto';                       // käytetty täyte takaisin varastoon
@@ -1252,7 +1264,6 @@
     }
     function jatkaPizzat() {
       if (tila.boksi.length === 10) { piirra(); return setTimeout(function () { lopeta(); }, 700); }
-      if (tila.vaihe === 'heitto') return piirra();      // pizza tehtiin ennen siirtoa: vuoro jatkuu
       if (!valmistettavat().length) return vuoroLoppuu();
       piirra();
     }
@@ -1484,7 +1495,9 @@
         });
       } else if (tuot) {
         tila.laudalla.forEach(function (n) {
-          var ok = (tila.vaihe === 'pizza' || voiTehdaHeti()) && tila.paikka[n] === 'linjasto' && (!opas || !vaihe().ohjattu || n === vaihe().pizza);
+          /* Sama saanto kuin `valmista`ssa: pizzan saa tehda vasta siirron
+             jalkeen (Marko 19.10.2026). */
+          var ok = tila.vaihe === 'pizza' && tila.paikka[n] === 'linjasto' && (!opas || !vaihe().ohjattu || n === vaihe().pizza);
           var k = el('button', 'av__kortti' + (ok ? ' av__kortti--ok' : '') + (tila.uusiKortti === n ? ' av__kortti--uusi' : '') + (eiPizzaa ? ' av__kortti--katso' : ''));
           k.type = 'button';
           k.setAttribute('aria-label', t.taytteet[n - 1] + ' ' + n);
