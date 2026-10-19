@@ -162,8 +162,14 @@ function verkkoLiityNakyma(virhe) {
   verkkoPeite('liity');
 }
 
-function verkkoOdotaNakyma(tilanne) {
+/* ⚠️ `aula` ON OMA TIETONSA, EI PÄÄTELTÄVISSÄ TEKSTISTÄ. Tämä sama näkymä
+ * palvelee aulaa, kierrosten välejä, aikarajaa ja lopputulosta; vieterilaatikko
+ * kuuluu VAIN aulaan, koska vain se on auki oleva odotus (ks. yhteinen.css).
+ * Tilanteen tekstiä ei saa käyttää tunnisteena - se on käännetty, ja vertailu
+ * `t('verkko.odota')`een rikkoutuisi hiljaa kielen vaihtuessa. */
+function verkkoOdotaNakyma(tilanne, aula) {
   verkkopeli.tilanne = tilanne || '';
+  verkkoEl('verkkoOdota').classList.toggle('on-aula', !!aula);
   verkkoEl('verkkoNimiNakyy').textContent = verkkopeli.nimi || '';
   verkkoEl('verkkoKierrosRivi').textContent = verkkopeli.kierrosTeksti;
   verkkoEl('verkkoTilanne').textContent = verkkopeli.tilanne;
@@ -555,7 +561,7 @@ function verkkoKasitteleTila(s) {
   if (s.vaihe === 'aula') {
     verkkopeli.n = 0;
     verkkoLopetaPaikallisesti();
-    verkkoOdotaNakyma(t('verkko.odota'));
+    verkkoOdotaNakyma(t('verkko.odota'), true);
   } else if (s.vaihe === 'tulos') {
     verkkoTulosNakyma(s);
   } else if (s.vaihe === 'loppu') {
@@ -575,7 +581,7 @@ function verkkoOtaPelaaja(koodi, j) {
   verkkopeli.n = 0;
   verkkopeli.naytetty = null;
   verkkoTallenna();
-  verkkoOdotaNakyma(t('verkko.odota'));
+  verkkoOdotaNakyma(t('verkko.odota'), true);
   verkkoKasitteleTila(j.tila);
   verkkoAjastaKysely(0);
 }
@@ -617,7 +623,7 @@ function verkkoJatka(osoitteenKoodi, eiJatkoa) {
   verkkopeli.avain = tallessa.avain;
   verkkopeli.id = tallessa.id;
   verkkopeli.nimi = tallessa.nimi;
-  verkkoOdotaNakyma(t('verkko.odota'));
+  verkkoOdotaNakyma(t('verkko.odota'), true);
   verkkoAjastaKysely(0);
   return true;
 }

@@ -701,3 +701,83 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   .sija-3 .palli-askel{height:clamp(30px, 5vh, 66px)}
   .sija-4 .palli-askel{height:clamp(22px, 3.5vh, 44px)}
 }
+
+/* --- VIETERILAATIKKO AULAAN (Marko 19.10.2026) ---------------------------
+ * «Tätä olisi hauska käyttää joissain pelin kohdissa sellaisena latauskuvana
+ * — — että se tulee kuvan yläruudusta alas ja sitten lähtee joko oikealle tai
+ * menee takaisin ylös.» Lähde: «Vieterilaatikko kala.psd» (1440 x 4089, CMYK).
+ *
+ * 📐 MIKSI JUURI AULA: mitattu 19.10. missä pelissä on oikeasti odottamista.
+ * Aula (Party `verkko.odota`, Basso `bverkko.odotaPelaajia`) on ainoa AUKI
+ * oleva odotus - kaikki muut ovat sekunteja (vastattu, seuraava kierros), ja
+ * Apinavaaassa ei ole odotusta lainkaan. Aulassa ruudulla on vain koodi ja
+ * nimilista eikä mikään liiku.
+ *
+ * ⚠️ KUVA ON KAHDESSA OSASSA, JA JAKOKOHTA ON MITATTU EIKÄ ARVATTU.
+ * PSD:n yhtenäinen piirros jaettiin kapeimmasta nivelestä (y = 1762, leveys
+ * 87 px 2400 px:n renderissä); ajatuskupla ja pikkukuplat ovat PSD:ssä omia
+ * yhtenäisiä alueitaan, joten ne jäivät pois ilman rajausta. Nivelen keskikohta
+ * on varressa 56,5 % ja laatikossa 28,7 % kuvan leveydestä - siksi `left`-
+ * siirtymät ovat juuri nuo luvut. Jos kuvat vaihdetaan, luvut on mitattava
+ * uudelleen; silmämääräinen kohdistus näkyy saumana.
+ *
+ * ⚠️ VARSI VENYY `scaleY`:LLÄ, EI TOISTAMALLA. Oikeassa saksivarressa timantit
+ * kapenevat kun ne pitenevät, ja tasan sen `scaleY` tekee - toisto antaisi
+ * saman muotoisia timantteja lisää, mikä on väärä liike. Siksi varren korkeus
+ * on `--vieteri-matka` ja animaatio skaalaa sitä.
+ *
+ * ⚠️ KAKSI ANIMAATIOTA, SAMA KESTO - EI MUUTTUJAN ANIMOINTIA. Laatikon on
+ * pysyttävä varren päässä koko matkan. `@property`-animointi olisi yksi
+ * animaatio, mutta se ei ole kaikissa selaimissa; kaksi samankestoista
+ * avainkehystä pysyy synkassa ilman sitä. Lepotila on `scaleY(0)` +
+ * `translateY(0)` eli MOLEMMAT nollassa - jos lepotilat eroaisivat, laatikko
+ * irtoaisi varren päästä matkan puolivälissä.
+ *
+ * Säiliö on nollan kokoinen ankkuri nivelen kohdalla ja alkaa laatikon
+ * korkeuden verran ruudun yläreunan YLÄPUOLELTA, joten levossa se on näkyvän
+ * alueen ulkopuolella ilman leikkausta. */
+.vieteri{
+  --vieteri-lev: clamp(32px, 9vw, 52px);                        /* varren leveys */
+  /* Luonnollinen pituus, mutta enintään 46 % ruudun korkeudesta. 📐 Mitattu
+     812 x 375 (vaaka): ilman kattoa laatikon alareuna oli 366 eli 9 px ruudun
+     pohjasta. Lyhennetty varsi EI ole väärin - saksivarsi näyttää silloin
+     vain vajaasti ojennetulta, mikä on sen oikea välimuoto. */
+  --vieteri-matka: min(calc(var(--vieteri-lev) * 1100 / 158), 46vh);
+  --vieteri-laatikko: calc(var(--vieteri-lev) * 2.1);
+  --vieteri-kork: calc(var(--vieteri-laatikko) * 360 / 324);
+  /* ⚠️ `right` LASKETAAN LAATIKON LEVEYDESTÄ, EI SILMÄMÄÄRÄISESTI: ankkuri on
+     nivelessä, ja laatikkoa on sen OIKEALLA puolella 71,3 % sen leveydestä.
+     📐 Mitattu kiinteällä 7vw:llä 375 px:n ruudulla: laatikon oikea reuna 388 eli
+     13 px ruudun ulkopuolella. Tämä pitää marginaalin samana joka koossa. */
+  position:absolute;top:calc(-1 * var(--vieteri-kork));
+  right:calc(var(--vieteri-laatikko) * .713 + clamp(8px, 3vw, 26px));
+  width:0;height:0;pointer-events:none;z-index:1;display:none;
+}
+.on-aula .vieteri{display:block}
+/* ⚠️ `max-width:none` ON PAKOLLINEN: peli.css:161 asettaa `img{max-width:100%}`,
+   ja säiliön leveys on 0 (se on pelkkä ankkuri nivelen kohdalla) - 📐 mitattu
+   ilman tätä: laatikko 3 px leveä ja varsi 0, korkeudet oikein. */
+.vieteri img{position:absolute;top:0;display:block;max-width:none}
+.vieteri__varsi{left:calc(var(--vieteri-lev) * -.565);
+  width:var(--vieteri-lev);height:var(--vieteri-matka);
+  transform-origin:top center;animation:vieteri-varsi 7.5s infinite}
+.vieteri__laatikko{left:calc(var(--vieteri-laatikko) * -.287);
+  width:var(--vieteri-laatikko);height:var(--vieteri-kork);
+  transform-origin:28.7% 0;animation:vieteri-laatikko 7.5s infinite}
+/* 0-6 % piilossa · 6-34 % laskeutuu · 34-62 % roikkuu ja heiluu · 62-100 % ylös */
+@keyframes vieteri-varsi{
+  0%, 6%    {transform:scaleY(0);   animation-timing-function:cubic-bezier(.3,.7,.3,1)}
+  34%, 62%  {transform:scaleY(1);   animation-timing-function:cubic-bezier(.6,0,.7,.4)}
+  92%, 100% {transform:scaleY(0)}
+}
+@keyframes vieteri-laatikko{
+  0%, 6%    {transform:translateY(0) rotate(0deg); animation-timing-function:cubic-bezier(.3,.7,.3,1)}
+  34%       {transform:translateY(var(--vieteri-matka)) rotate(-5deg)}
+  44%       {transform:translateY(var(--vieteri-matka)) rotate(4deg)}
+  53%       {transform:translateY(var(--vieteri-matka)) rotate(-2deg)}
+  62%       {transform:translateY(var(--vieteri-matka)) rotate(0deg); animation-timing-function:cubic-bezier(.6,0,.7,.4)}
+  92%, 100% {transform:translateY(0) rotate(0deg)}
+}
+/* Liike ON tämän kuvan koko sisältö, joten vähennetyssä liikkeessä se jää pois
+   kokonaan - paikallaan roikkuva laatikko olisi vain este ruudun yläreunassa. */
+@media (prefers-reduced-motion: reduce){ .on-aula .vieteri{display:none} }

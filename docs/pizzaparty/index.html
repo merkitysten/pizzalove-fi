@@ -57,7 +57,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261019g">
-<link rel="stylesheet" href="yhteinen.css?v=20261019a">
+<link rel="stylesheet" href="yhteinen.css?v=20261019b">
 <link rel="stylesheet" href="pelivalinta.css?v=20261019a">
 </head>
 <body>
@@ -474,6 +474,16 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
       <button id="verkkoLuoTakaisin" type="button" class="toinen-nappi" data-t="as.takaisin"></button>
     </form>
     <div id="verkkoOdota" class="verkko-osa" hidden>
+      <!-- VIETERILAATIKKO: aulan odotus (Marko 19.10.2026). Kaksi osaa, koska
+           varsi venyy ja laatikko ei - ks. yhteinen.css (.vieteri). Säiliö on
+           `position:absolute` eikä laatikon sisällä olevassa virtauksessa,
+           joten se roikkuu peitteen yläreunasta eikä vie tilaa sisällöltä.
+           ⚠️ `aria-hidden`: tämä on koriste, ei tietoa - ruudunlukija ei saa
+           lukea odotusnäkymästä mitään uutta. -->
+      <div class="vieteri" aria-hidden="true">
+        <img class="vieteri__varsi" src="kuvat/vieteri-varsi.webp?v=20261019a" width="158" height="1100" alt="">
+        <img class="vieteri__laatikko" src="kuvat/vieteri-laatikko.webp?v=20261019a" width="324" height="360" alt="">
+      </div>
       <!-- POISTUMISTIE ON NURKASSA EIKA LEVEANA NAPPINA (Marko 19.10.2026:
            "erien valissa se tuntuu aivan cta-napilta, jolla peli jatkuisi,
            jolloin sen painaminen epahuomiossa on mahdollista"). Erien valissa
@@ -654,7 +664,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <script src="qr.js?v=20260916a"></script>
 <script src="isannointi.js?v=20260920a"></script>
 <script src="peli.js?v=20261019c"></script>
-<script src="pelaaja.js?v=20261019b"></script>
+<script src="pelaaja.js?v=20261019c"></script>
 <script src="pelaavaisanta.js?v=20261019a"></script>
 <script src="valikko.js?v=20261009c"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
