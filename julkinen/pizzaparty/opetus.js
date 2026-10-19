@@ -122,6 +122,100 @@ function opetusValoKohteeseen(valitsin) {
   valo.hidden = false;
 }
 
+/* ---------- ZOOMAUS: KOHDE RUUDUN ETEEN JA KESKELLE ----------
+ * Marko 19.10.2026: «se tavoitepizza saisi tulla aivan ruudun eteen ja
+ * keskelle, jolloin huomio on vain siinä. Sitten pizza voisi olla
+ * himmeämmällä ja numerot korostettuna. Tämän jälkeen pizzakortti
+ * palautuu omalle paikalleen.» ja «muutenkin sitä zoomausta pitäisi
+ * hyödyntää näissä opetusruuduissa, koska sillä saamme pelaajan varmasti
+ * kiinnittämään huomionsa siihen mihin haluamme.»
+ *
+ * Askel saa kentän `zoom: '<valitsin>'`, ja siksi tämä on yleinen eikä
+ * pizzakortin oma: samaa liikettä voi käyttää mihin tahansa kohteeseen.
+ *
+ * ⚠️ KLOONI, EI OIKEA ELEMENTTI. Oikean kortin siirtäminen muuttaisi
+ * pizza-alueen leveyttä ja siirtäisi kättä kesken opetuksen - sama syy
+ * kuin voittoanimaatiossa (peli.js lennataPizzaVoittajalle).
+ *
+ * ⚠️ ANIMAATIO, EI TRANSITIO, ja `both`-täyttö. Sama mitattu syy kuin
+ * nostolla: rAF ja siirtymät eivät etene taustavälilehdessä, ja
+ * transitio jättäisi kloonin puolitiehen. Animaatio päättyy aina
+ * loppuarvoonsa.
+ *
+ * ⚠️ KORKEUS 62 % PIENEMMÄSTÄ MITASTA, EI KIINTEÄ PIKSELIMÄÄRÄ: sama
+ * sääntö toimii 320 px:n puhelimessa ja 1920 px:n näytöllä. */
+const ZOOM_OSUUS = 0.62;
+
+/* ⚠️ SIIVOUSAJASTIN ON PERUTTAVA. Mitattu: kahdella perakkaisella
+ * zoom-askeleella `opetusZoomPois` jatti 420 ms:n ajastimen, ja kun
+ * seuraava askel zoomasi heti uudelleen, VANHA ajastin tyhjensi juuri
+ * luodun kloonin. Kortti katosi ruudulta kesken askeleen eika mikaan
+ * kaatunut. */
+function opetusZoomPois(heti) {
+  const kerros = opetusEl('opetusZoom');
+  if (!kerros) return;
+  if (opetus.zoomAjastin) { clearTimeout(opetus.zoomAjastin); opetus.zoomAjastin = null; }
+  opetus.zoomKohde = null;
+  if (heti || !kerros.firstChild) {
+    kerros.classList.remove('opetus-zoom--pois');
+    kerros.hidden = true; kerros.innerHTML = '';
+    return;
+  }
+  kerros.classList.add('opetus-zoom--pois');
+  /* Paluu omalle paikalleen on sama liike toisin päin. Siivous vasta sen
+   * jälkeen, jotta kortti ei katoa kesken matkan. */
+  opetus.zoomAjastin = setTimeout(function () {
+    opetus.zoomAjastin = null;
+    kerros.classList.remove('opetus-zoom--pois');
+    kerros.hidden = true;
+    kerros.innerHTML = '';
+  }, 420);
+}
+
+function opetusZoomaa(valitsin, korostaLuku) {
+  const kerros = opetusEl('opetusZoom');
+  const el = valitsin ? document.querySelector(valitsin) : null;
+  if (!kerros || !el) return;
+  /* ⚠️ SAMA KOHDE PERAKKAIN: EI UUTTA LIIKETTA. Kaksi perakkaista
+   * askelta jotka puhuvat samasta kortista ovat yksi hetki - zoomin
+   * toistaminen nykaisisi kortin pois ja takaisin keskella lausetta.
+   * Vain teksti vaihtuu. */
+  const avain = valitsin + '|' + (korostaLuku ? '1' : '0');
+  if (opetus.zoomKohde === avain && !kerros.hidden && kerros.firstChild) return;
+  if (opetus.zoomAjastin) { clearTimeout(opetus.zoomAjastin); opetus.zoomAjastin = null; }
+  kerros.classList.remove('opetus-zoom--pois');
+  opetus.zoomKohde = avain;
+  const r = el.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  kerros.innerHTML = '';
+  kerros.hidden = false;
+
+  const klooni = document.createElement('div');
+  klooni.className = 'opetus-zoom-kortti';
+  klooni.innerHTML = el.innerHTML;
+  /* Loppusijainti: keskellä ruutua, korkeus ZOOM_OSUUS näkyvästä
+   * pienemmästä mitasta - leveys seuraa kortin omaa suhdetta. */
+  const kork = Math.min(innerHeight * ZOOM_OSUUS, innerWidth * ZOOM_OSUUS * (r.height / r.width));
+  const lev = kork * (r.width / r.height);
+  klooni.style.width = Math.round(lev) + 'px';
+  klooni.style.height = Math.round(kork) + 'px';
+  /* Lähtöpaikka kerrotaan muuttujina: animaatio alkaa kortin omalta
+   * paikalta ja päättyy keskelle (transform:none). */
+  const keskiX = innerWidth / 2, keskiY = innerHeight / 2;
+  klooni.style.setProperty('--zoom-x', Math.round(r.left + r.width / 2 - keskiX) + 'px');
+  klooni.style.setProperty('--zoom-y', Math.round(r.top + r.height / 2 - keskiY) + 'px');
+  klooni.style.setProperty('--zoom-k', (r.width / lev).toFixed(4));
+
+  if (korostaLuku) {
+    klooni.classList.add('opetus-zoom-kortti--himmea');
+    const luku = document.createElement('b');
+    luku.className = 'opetus-zoom-luku';
+    luku.textContent = tila.pizza ? String(tila.pizza.arvo) : '';
+    klooni.appendChild(luku);
+  }
+  kerros.appendChild(klooni);
+}
+
 /* ---------- askelkone ---------- */
 
 function opetusAskel() { return opetus.lista[opetus.askel] || null; }
@@ -138,17 +232,25 @@ function opetusPiirra() {
    * olisi toinen tapa edetä kuin se jota juuri opetetaan. */
   const jatka = opetusEl('opetusJatka');
   if (jatka) jatka.hidden = !!a.valmis;
-  opetusValoKohteeseen(a.kohde);
+  /* Zoomin aikana valoa ei tarvita: kohde on jo yksin ruudulla. */
+  opetusValoKohteeseen(a.zoom ? null : a.kohde);
   const luku = opetusEl('opetusAskeleet');
   if (luku) luku.textContent = (opetus.askel + 1) + ' / ' + opetus.lista.length;
 }
 
 function opetusSeuraava() {
+  /* Zoomattu kortti palaa paikalleen ENNEN seuraavaa askelta - se on
+   * osa samaa liikettä eikä erillinen siivous. */
+  const seur = opetus.lista[opetus.askel + 1];
+  const sama = seur && seur.zoom && opetusAskel() && opetusAskel().zoom === seur.zoom &&
+    !!opetusAskel().korostaLuku === !!seur.korostaLuku;
+  if (!sama) opetusZoomPois();
   opetus.askel++;
   if (opetus.askel >= opetus.lista.length) return opetusLopeta(true);
   const a = opetusAskel();
   if (a && a.ennen) a.ennen();
   opetusPiirra();
+  if (a && a.zoom) opetusZoomaa(a.zoom, a.korostaLuku);
 }
 
 /* ⚠️ VAHTI ON AJASTIN EIKÄ KOUKKU PELIN FUNKTIOIHIN. Koukku pitäisi
@@ -174,7 +276,7 @@ function opetusVahti() {
   if (!opetus.paalla) return;
   const a = opetusAskel();
   if (!a) return;
-  opetusValoKohteeseen(a.kohde);
+  opetusValoKohteeseen(a.zoom ? null : a.kohde);
   if (a.valmis && a.valmis()) return opetusSeuraava();
   const seuraava = opetus.lista[opetus.askel + 1];
   if (a.valmis && seuraava && seuraava.valmis && seuraava.valmis()) opetusSeuraava();
@@ -182,68 +284,50 @@ function opetusVahti() {
 
 /* ---------- askeleet: Pizza Party ---------- */
 
-/* Täytesääntö on eri tiloissa eri — ks. tiedoston alku. Opetus kertoo sen
- * joka on NYT voimassa, ei kumpaakin «varmuuden vuoksi». */
-function opetusTaytesaanto() {
-  return (opetusOnBasso() || tila.apinanTapa) ? 'opetus.taytteetTiukka' : 'opetus.taytteetHelppo';
-}
-
 function opetusPartyAskeleet() {
-  /* ⚠️ TOINEN KIERROS EI OPETA TAYTESAANTOA, JA SE ON MARKON KORJAUS
-   * 19.10.2026: «siellä puhutaan esim., että nyt tarvitset "kolme
-   * korttia". Säännöissä ei oteta kantaa korttien lukumäärään.»
+  /* ⚠️ «VAIN NUMERO RATKAISEE» ON NYT KOLMAS ASKEL, EI YHDEKSAS
+   * (Marko 19.10.2026: «sanoisin, että 9 pitäisi kertoa jo aikaisemmin»).
+   * Se on pelin perussaanto, ei jalkihuomautus - ja juuri se tekee
+   * Partysta helpon tavan pelata. Samassa askeleessa pizzakortti tulee
+   * ruudun eteen ja keskelle (`zoom`), kortti himmenee ja luku
+   * korostuu: «silla saamme pelaajan varmasti kiinnittamaan huomionsa
+   * siihen mihin haluamme».
    *
-   * Hän on oikeassa kahdesti. Ensinnäkään korttien lukumäärä ei ole
-   * sääntö missään pelitavassa. Ja toiseksi: PARTYN OLETUSTAVASSA
-   * (helppo) täytteitä ei tarkisteta lainkaan, joten «kaksi eri
-   * täytettä» ei ole siellä sääntö vaan kuva. Ensimmäinen versio opetti
-   * siis Basson sääntöä Partyn opetuksessa - ja Bassolla on oma
-   * opetuksensa, kuten Marko huomautti.
+   * ⚠️ ZOOM VASTA KAANNON JALKEEN. Lepotilassa pizzakortti on
+   * selkapuoli ylospain, joten sita ennen zoomattaisiin kortin selka.
    *
-   * Nyt toinen kierros on vain toinen pizza, eikä se väitä mitään. */
+   * ⚠️ TOINEN KIERROS EI OPETA TAYTESAANTOA (Marko 19.10.): korttien
+   * lukumaara ei ole saanto missaan pelitavassa, eika Partyn helpossa
+   * tavassa tayteita tarkisteta lainkaan. Bassolla on oma opetuksensa. */
   return [
     { avain: 'opetus.tervetuloa' },
-    { avain: 'opetus.pizza', kohde: '#pizzaKortti' },
-    /* ⚠️ KAANTO ON KAKSI NAPAUTUSTA, EI YHTA. Mitattu: pizzan painallus
-     * lepotilassa kutsuu `kaannaKortit('pizza')` (peli.js), eli kaantaa
-     * VAIN pizzan - kierros alkaa vasta kun myos kasi on kaannetty.
-     * Valo seuraa sita puolta joka on viela kaantamatta. */
+    /* ⚠️ KAANTO ON KAKSI NAPAUTUSTA, EI YHTA: pizzan painallus
+     * lepotilassa kaantaa vain pizzan (peli.js kaannaKortit). Valo
+     * seuraa sita puolta joka on viela kaantamatta. */
     { avain: 'opetus.kaanna',
       kohde: function () { return tila.kaannetty.pizza ? '#kasi' : '#pizzaKortti'; },
       valmis: function () { return tila.vaihe !== 'lepo'; } },
+    { avain: 'opetus.numero', zoom: '#pizzaKortti', korostaLuku: true },
+    { avain: 'opetus.helpoin', zoom: '#pizzaKortti', korostaLuku: true },
     { avain: 'opetus.kasi', kohde: '#kasi' },
     { avain: 'opetus.valitse', kohde: '#kasi',
       arvot: function () { return { arvo: tila.pizza ? tila.pizza.arvo : '' }; },
       valmis: function () { return tila.valitut.length >= 2; } },
-    /* ⚠️ VAIN VETAMINEN, EI «tai paina pizzaa» (Marko 19.10.2026:
-     * «tekstissä lukee nyt – tai paina pizzaa, vaikka oikeasti sitä
-     * pizzaa pitää painaa, kun on täytteet pelattu pizzan päälle»).
-     * Molemmat toimivat, mutta pizzan painallus on se TEKO joka
-     * opetetaan viimeisena - sen tarjoaminen tassa sekoittaa kaksi eri
-     * hetkea. Yksi teko per askel. */
     { avain: 'opetus.pizzalle', kohde: '#pizzaKortti',
       valmis: function () { return tila.vaihe === 'selitys'; } },
-    /* ⚠️ LASKUA EI TARVITSE «LÄHETTÄÄ» - SE LÄHTEE ITSE, ja siksi tässä
-     * ei ole enää askelta «paina pizzaa».
-     * 📐 Mitattu: `paivitaJaTarkista` (peli.js) kutsuu `tarkistaLasku`a heti
-     * kun `lausekeValmis()`, eli viimeinen laskumerkki lähettää laskun.
-     * Ja `pelaaPizzalle` palaa heti jos vaihe ei ole 'valinta' - eli
-     * pizzan painallus lausekevaiheessa EI TEE MITÄÄN. Ohje «paina
-     * pizzaa, kun lasku on valmis» ei siis ollut vain tarpeeton vaan
-     * väärä: se neuvoi napautuksen joka ei vastaa mihinkään.
-     * (Marko 19.10.2026 huomasi saman toisesta päästä: «oikeasti sitä
-     * pizzaa pitää painaa, kun on täytteet pelattu pizzan päälle» - eli
-     * painallus kuuluu KESKIVAIHEESEEN, ei loppuun.) */
+    /* ⚠️ LASKUA EI TARVITSE «LAHETTAA» - viimeinen laskumerkki lahettaa
+     * sen itse (`paivitaJaTarkista`), ja pizzan painallus lausekevaiheessa
+     * ei tee mitaan. Siksi tassa ei ole askelta «paina pizzaa». */
     { avain: 'opetus.merkit', kohde: '#operaattorit',
       valmis: function () { return opetus.pizzojaAlussa !== undefined && opetusPizzoja() > opetus.pizzojaAlussa; } },
     { avain: 'opetus.sait' },
-    { avain: opetusTaytesaanto(), kohde: '#pizzaKortti' },
     { avain: 'opetus.toinen', ennen: function () { opetusJaaKierros(2); } },
     { avain: 'opetus.toinenOhje', kohde: '#kasi',
       valmis: function () { return opetusPizzoja() > opetus.pizzojaAlussa; } },
     { avain: 'opetus.valmis' },
   ];
 }
+
 
 
 /* ---------- askeleet: Pizza Basso ---------- */
@@ -259,8 +343,8 @@ function opetusBassoAskeleet() {
    * molemmissa tavoissa (2 eri arvoa, 2 taytetta). */
   return [
     { avain: 'opetus.tervetuloaBasso' },
-    { avain: 'opetus.pizzaBasso', kohde: '#pizzaKortti' },
-    { avain: 'opetus.taytteetTiukka', kohde: '#pizzaKortti' },
+    { avain: 'opetus.pizzaBasso', zoom: '#pizzaKortti', korostaLuku: true },
+    { avain: 'opetus.taytteetTiukka', zoom: '#pizzaKortti' },
     { avain: 'opetus.kasiBasso', kohde: '#kasi' },
     { avain: 'opetus.valitseBasso', kohde: '#kasi',
       arvot: function () {
@@ -394,6 +478,8 @@ function opetusAloita() {
   if (kerros) kerros.hidden = false;
   document.body.classList.add('opetus-paalla');
   opetusPiirra();
+  const eka = opetusAskel();
+  if (eka && eka.zoom) opetusZoomaa(eka.zoom, eka.korostaLuku);
   if (opetus.kello) clearInterval(opetus.kello);
   opetus.kello = setInterval(opetusVahti, 250);
 }
@@ -405,6 +491,7 @@ function opetusLopeta(loppuunAsti) {
   if (kerros) kerros.hidden = true;
   const valo = opetusEl('opetusValo');
   if (valo) valo.hidden = true;
+  opetusZoomPois(true);
   document.body.classList.remove('opetus-paalla');
   /* Keskeytetty opetus palaa valikkoon; loppuun pelattu jää peliin, jotta
    * pelaaja voi jatkaa samasta kädestä. */
@@ -428,7 +515,7 @@ function opetusKytke() {
  * kaataa peliä, mutta sen on näyttävä. */
 function opetusVahtiRakenne() {
   const puuttuu = [];
-  ['opetus', 'opetusValo', 'opetusTeksti', 'opetusJatka', 'opetusLopeta', 'opetusAskeleet', 'alkuOpetus']
+  ['opetus', 'opetusValo', 'opetusZoom', 'opetusTeksti', 'opetusJatka', 'opetusLopeta', 'opetusAskeleet', 'alkuOpetus']
     .forEach(function (id) { if (!opetusEl(id)) puuttuu.push('#' + id); });
   ['t', 'pizzapakka', 'taytepakka', 'sekoita', 'piirraKaikki', 'aloitaPeli']
     .forEach(function (f) { if (typeof window[f] !== 'function') puuttuu.push(f + '()'); });

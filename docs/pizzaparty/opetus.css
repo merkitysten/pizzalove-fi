@@ -12,6 +12,41 @@
 
 .opetus{position:fixed;inset:0;z-index:40;pointer-events:none}
 
+/* --- ZOOMAUS: kohde ruudun eteen ja keskelle (Marko 19.10.2026) ---
+ * Tumma pohja vie huomion pois muusta; kohde on sen päällä keskellä.
+ * ⚠️ `pointer-events:auto` VAIN pohjalla: zoomin aikana pelilautaan ei
+ * saa koskea, mutta opetuskortti on tämän päällä ja jää napautettavaksi
+ * (.opetus-kortti). Pohja nielee napautukset eikä tee mitään - zoomista
+ * edetään «Seuraava»-napilla, ei vahingossa osumalla. */
+.opetus-zoom{position:fixed;inset:0;display:grid;place-items:center;pointer-events:auto;
+  background:rgba(26,20,12,.62);animation:opetus-pohja .3s ease-out both}
+@keyframes opetus-pohja{from{background:rgba(26,20,12,0)}}
+
+/* ⚠️ ANIMAATIO JA `both`, EI TRANSITIO: rAF ja siirtymät eivät etene
+ * taustavälilehdessä, ja transitio jättäisi kloonin puolitiehen.
+ * Lähtöarvot tulevat JS:stä muuttujina (--zoom-x/y/k), loppuarvo on
+ * transform:none eli keskellä täydessä koossa. */
+@keyframes opetus-zoom-sisaan{
+  from{transform:translate(var(--zoom-x,0), var(--zoom-y,0)) scale(var(--zoom-k,.2));opacity:.4}
+}
+@keyframes opetus-zoom-ulos{
+  to{transform:translate(var(--zoom-x,0), var(--zoom-y,0)) scale(var(--zoom-k,.2));opacity:0}
+}
+.opetus-zoom-kortti{position:relative;display:grid;place-items:center;
+  animation:opetus-zoom-sisaan .42s cubic-bezier(.2,.9,.3,1) both}
+.opetus-zoom--pois{animation:opetus-pohja .4s ease-in reverse both}
+.opetus-zoom--pois .opetus-zoom-kortti{animation:opetus-zoom-ulos .4s cubic-bezier(.4,0,.8,.3) both}
+/* Kortin oma kuva täyttää kloonin; kuva on korttia isompi kuten pelissä. */
+.opetus-zoom-kortti img{position:absolute;display:block;
+  width:var(--kuva-lev);height:var(--kuva-kork);left:var(--kuva-vas);top:var(--kuva-yla);
+  max-width:none;border-radius:inherit}
+/* Pizza himmeäksi, luku korostetuksi (Markon ohje). */
+.opetus-zoom-kortti--himmea img{filter:saturate(.35) brightness(1.12);opacity:.42}
+.opetus-zoom-luku{position:relative;z-index:2;font-weight:800;
+  font-size:min(34vh, 34vw);line-height:1;color:var(--orange, #EE7203);
+  text-shadow:0 0 0 #fff, 0 6px 18px rgba(0,0,0,.35);
+  -webkit-text-stroke:min(1.2vh, 1.2vw) #fff}
+
 /* Valo: rengas kohteen ympärillä, ei varjostusta muun päälle. Pimennys
  * tekisi pelistä esittelyn; rengas jättää koko pöydän näkyviin. */
 .opetus-valo{position:fixed;border-radius:14px;pointer-events:none;
