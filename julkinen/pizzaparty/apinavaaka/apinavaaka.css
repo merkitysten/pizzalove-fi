@@ -297,6 +297,24 @@
 .av__boksinaky-puuttuu img{display:block;height:17vmin;max-height:108px;width:auto;
   opacity:.9;filter:grayscale(.15) drop-shadow(0 2px 5px rgba(0,0,0,.45))}
 
+/* SYDANPIZZAN LISAPALA SAMASSA RUUDUSSA (Marko 20.10.2026: «siina samassa
+ * ruudussa pelaaja valitsee yhden lisapalan, joka myos menee boksiin»).
+ * Rivi on sama `.av__boksinaky-puuttuu` kuin tavoitteessa - sama koko ja
+ * sama asettelu, eika toista mitoitusta.
+ * ⚠️ VALITTAVAT OVAT TAYDESSA VARISSA: ne eivat ole «ei viela» vaan juuri se
+ * mita ollaan valitsemassa. Siksi valitsin on KAKSIOSAINEN (0,2,1) eika
+ * `.av__boksinaky-valinta img` (0,1,1): jalkimmainen olisi samantarkkuuksinen
+ * kuin `.av__boksinaky-puuttuu img`, ja voittaja ratkeaisi jarjestyksesta. */
+.av__boksinaky-valinta{display:flex;flex-direction:column;align-items:center;gap:1.8vmin;
+  animation:av-boksinaky-sisaan .3s cubic-bezier(.2,1.3,.4,1) both}
+.av__boksinaky-valinta p{margin:0;color:#fff;font-weight:800;text-align:center;
+  font-size:clamp(16px, 3.4vmin, 24px);text-shadow:0 2px 8px rgba(0,0,0,.55)}
+.av__boksinaky-valinta button{border:0;background:none;padding:0;margin:0;cursor:pointer;
+  border-radius:8px;transition:transform .15s}
+.av__boksinaky-valinta button:active{transform:scale(.93)}
+.av__boksinaky-valinta button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.av__boksinaky-valinta .av__boksinaky-puuttuu img{opacity:1;filter:drop-shadow(0 3px 7px rgba(0,0,0,.5))}
+
 .av__boksi{position:relative;width:68px;height:68px;flex:0 0 auto;
   filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
 .av__boksi-pohja{position:absolute;inset:0;width:100%;height:100%;display:block}

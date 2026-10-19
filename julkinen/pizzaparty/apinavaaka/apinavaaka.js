@@ -969,9 +969,8 @@
      * ⚠️ `mittakaava` mukaan kuten paistamisessa: peli voi olla zoomattu,
      * jolloin ruutupikselit ja elementin omat pikselit eroavat.
      * ⚠️ Liikerajoitus ohittaa koko juhlan (vahennaLiike), kuten uunikin. */
-    function juhliPala(numerot, valmis) {
+    function juhliPala(numerot, valmis, valinta) {
       var lista = [].concat(numerot).filter(function (n) { return typeof n === 'number'; });
-      if (!lista.length || vahennaLiike || !document.body.animate) return valmis();
       /* ⚠️ PALA LENTAA ISOON BOKSIIN, EI NURKKAAN (Marko 19.10.2026: «Kun palan
        * saa, niin siinakin pitaisi tulla tama lahikuva, jolloin se pala menee
        * boksiin.»). Ennen pala naytettiin isona keskella ja se kutistui 68 px:n
@@ -980,50 +979,113 @@
        * ⚠️ YKSI ELEMENTTI, EI KAHTA. Pala on alusta asti se sama
        * `.av__boksi-pala` joka jaa boksiin; se vain aloittaa isona ruudun
        * keskella. Erillinen keskikuva + erillinen boksin pala olisi sama asia
-       * kahdesti, ja niiden valissa nakyisi hyppy. */
+       * kahdesti, ja niiden valissa nakyisi hyppy.
+       *
+       * ⚠️ JA SYDANPIZZAN LISAPALA VALITAAN SAMASSA RUUDUSSA (Marko 20.10.2026:
+       * «Tama lisapalan valinta pitaisi tapahtua siten, etta on saanut sen
+       * oikean pizzan taytteiden mukaisen palan ja sen jalkeen siina samassa
+       * ruudussa pelaaja valitsee yhden lisapalan, joka myos menee boksiin.
+       * Nyt tama on outoa, etta pizzan palat on linjastolla.») Ennen valinta
+       * piirtyi LINJASTOLLE pizzakorttien tilalle - paikkaan jossa on
+       * tuotantoa, ei palkintoja. Nyt koko ketju on yhdessa ruudussa:
+       * ansaittu pala lentaa boksiin -> valitse lisapala -> sekin lentaa. */
+      var voiJuhlia = !vahennaLiike && !!document.body.animate;
+      /* ⚠️ Liikerajoituksella ei ole mihin valita: juhlaruutua ei synny.
+         Silloin kaytetaan vanhaa reittia (valinta linjastolla, `tila.valitsee`),
+         joka on yha olemassa pulmatilaa varten. */
+      if (!voiJuhlia) {
+        if (valinta) { tila.valitsee = true; return piirra(); }
+        return valmis();
+      }
+      if (!lista.length && !valinta) return valmis();
+
       var naky = el('div', 'av__boksinaky av__boksinaky--juhla');
       var iso = el('div', 'av__boksi av__boksi--iso');
-      iso.innerHTML = boksinSisus(lista);
       naky.appendChild(iso);
       document.body.appendChild(naky);
-      /* `uusi`-luokan oma CSS-animaatio pois: tama polku animoi saman palan
-         itse, ja kaksi animaatiota samasta `transform`ista kilpailisi. */
-      var lentavat = [].slice.call(iso.querySelectorAll('.av__boksi-pala.uusi'));
-      lentavat.forEach(function (k) { k.classList.remove('uusi'); });
-      if (!lentavat.length) { if (naky.parentNode) naky.parentNode.removeChild(naky); return valmis(); }
 
-      /* ⚠️ MITAT RUUDULTA, EI LASKETTUNA. Boksin koko on `min(74vmin,420px)`,
-       * ja palan kiertokeskipiste on sen KESKELLA (`transform-origin:50% 100%`
-       * + `bottom:50%`). Keskityksen siirtyma lasketaan siita pisteesta. */
-      var b = iso.getBoundingClientRect();
-      var ox = b.left + b.width / 2, oy = b.top + b.height / 2;
-      var vmin = Math.min(window.innerWidth, window.innerHeight);
-      var skaala = Math.max(1, (0.46 * vmin) / Math.max(1, 0.34 * b.height));
-      var dx = window.innerWidth / 2 - ox;
-      var dy = (window.innerHeight / 2 + 0.21 * vmin) - oy;
-      var alkuMuoto = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' +
-        skaala.toFixed(3) + ') rotate(0deg)';
-
-      var naytto = 760, lento = 620, jaa = 760, jaljella = lentavat.length, ohi = false;
+      var naytto = 760, lento = 620, jaa = 760, ohi = false, valitsemassa = false;
       function sulje() {
         if (ohi) return;
         ohi = true;
         if (naky.parentNode) naky.parentNode.removeChild(naky);
         valmis();
       }
-      naky.addEventListener('click', sulje);           // napautus ohittaa juhlan
-      lentavat.forEach(function (k, i) {
-        var kulma = k.style.transform || 'rotate(0deg)';
-        var viive = i * 220;
-        k.animate([
-          { transform: alkuMuoto, offset: 0 },
-          { transform: alkuMuoto, offset: naytto / (naytto + lento) },
-          { transform: kulma, offset: 1 }
-        ], { duration: naytto + lento, delay: viive, fill: 'both',
-             easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () {
-          jaljella--;
-          if (jaljella <= 0) setTimeout(sulje, jaa);
-        };
+      /* Napautus ohittaa juhlan - mutta EI kesken valinnan: silloin se veisi
+         pelaajalta palkinnon jota han on juuri valitsemassa. */
+      naky.addEventListener('click', function () { if (!valitsemassa) sulje(); });
+
+      /* Yksi lentofunktio molemmille: ansaitut palat ja valittu lisapala.
+         Boksi piirretaan uudelleen joka kerta, jolloin aiemmin lentaneet ovat
+         jo paikoillaan ja uusi lahtee keskelta isona. */
+      function lennata(uudet, kun) {
+        iso.innerHTML = boksinSisus(uudet);
+        /* `uusi`-luokan oma CSS-animaatio pois: tama polku animoi saman palan
+           itse, ja kaksi animaatiota samasta `transform`ista kilpailisi. */
+        var lentavat = [].slice.call(iso.querySelectorAll('.av__boksi-pala.uusi'));
+        lentavat.forEach(function (k) { k.classList.remove('uusi'); });
+        if (!lentavat.length) return kun();
+        /* ⚠️ MITAT RUUDULTA, EI LASKETTUNA. Boksin koko on `min(74vmin,420px)`,
+         * ja palan kiertokeskipiste on sen KESKELLA (`transform-origin:50% 100%`
+         * + `bottom:50%`). Keskityksen siirtyma lasketaan siita pisteesta. */
+        var b = iso.getBoundingClientRect();
+        var ox = b.left + b.width / 2, oy = b.top + b.height / 2;
+        var vmin = Math.min(window.innerWidth, window.innerHeight);
+        var skaala = Math.max(1, (0.46 * vmin) / Math.max(1, 0.34 * b.height));
+        var dx = window.innerWidth / 2 - ox;
+        var dy = (window.innerHeight / 2 + 0.21 * vmin) - oy;
+        var alkuMuoto = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' +
+          skaala.toFixed(3) + ') rotate(0deg)';
+        var jaljella = lentavat.length;
+        lentavat.forEach(function (k, i) {
+          var kulma = k.style.transform || 'rotate(0deg)';
+          k.animate([
+            { transform: alkuMuoto, offset: 0 },
+            { transform: alkuMuoto, offset: naytto / (naytto + lento) },
+            { transform: kulma, offset: 1 }
+          ], { duration: naytto + lento, delay: i * 220, fill: 'both',
+               easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () {
+            jaljella--;
+            if (jaljella <= 0) kun();
+          };
+        });
+      }
+
+      /* Sydanpizza: valitse yksi puuttuva pala, ja sekin lentaa boksiin. */
+      function kysyLisapala() {
+        valitsemassa = true;
+        var osa = el('div', 'av__boksinaky-valinta');
+        var teksti = el('p', '', t.lisapala);
+        osa.appendChild(teksti);
+        var rivi = el('div', 'av__boksinaky-puuttuu');
+        for (var n = 1; n <= 10; n++) {
+          if (tila.boksi.indexOf(n) >= 0) continue;
+          (function (q) {
+            var nappi = el('button');
+            nappi.type = 'button';
+            nappi.setAttribute('aria-label', t.taytteet[q - 1] + ' ' + q);
+            var kuva = el('img');
+            kuva.src = KANSIO + '../kuvat/pala/' + q + '.webp' + PALA_V;
+            kuva.alt = '';
+            nappi.appendChild(kuva);
+            nappi.addEventListener('click', function (e) {
+              e.stopPropagation();                      // ei sulje juhlaa
+              if (!valitsemassa) return;
+              valitsemassa = false;
+              if (osa.parentNode) osa.parentNode.removeChild(osa);
+              tila.boksi.push(q); tila.uusiPala = q;
+              lennata([q], function () { setTimeout(sulje, jaa); });
+            });
+            rivi.appendChild(nappi);
+          })(n);
+        }
+        osa.appendChild(rivi);
+        naky.appendChild(osa);
+      }
+
+      lennata(lista, function () {
+        if (valinta && tila.boksi.length < 10) return kysyLisapala();
+        setTimeout(sulje, jaa);
       });
     }
 
@@ -1279,10 +1341,14 @@
       // sydänpizza (täytteet yhteensä 10): yksi vapaavalintainen lisäpala
       var jatka = function () {
         if (tila.muoto === 'opas') return opasPizza();
-        if (n === 10 && tila.boksi.length < 10) { tila.valitsee = true; return piirra(); }
         jatkaPizzat();
       };
-      juhliPala(uusi ? n : null, jatka);
+      /* ⚠️ OPPAASSA EI OLE LISAPALAA, ja se on vanha ehto eika uusi: ennen
+         `opas`-haara palautti ENNEN valintaa, joten jarjestys sailyy vain jos
+         se kirjoitetaan tahan nakyviin. Ohjatuissa kierroksissa pizzat ovat
+         3, 1 ja 5 - sydanpizzaa ei voi edes tulla, mutta ehto ei nojaa siihen. */
+      var lisapala = tila.muoto !== 'opas' && n === 10 && tila.boksi.length < 10;
+      juhliPala(uusi ? n : null, jatka, lisapala);
     }
     function valitseLisapala(k) {
       if (!tila.valitsee || tila.boksi.indexOf(k) >= 0) return;
