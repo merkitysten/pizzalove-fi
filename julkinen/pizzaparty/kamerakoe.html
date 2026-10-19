@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kamerakoe — Pizza Love</title>
+<!--
+  ⚠️ TÄMÄ EI OLE PELIN OSA VAAN MITTAUS (Marko 20.10.2026: «voisiko se nappi
+  käynnistää puhelimen kameran?»).
+
+  Kysymys jakautuu kahteen, ja vain toinen on auki:
+    1. AUKEAAKO KAMERA selaimesta? — tätä sivu mittaa
+    2. LUKEEKO JOKU KOODIN kuvasta? — `qr.js` on piirtäjä, ei lukija
+
+  Selaimen oma lukija on `BarcodeDetector`, ja Norsu-projektissa se mitattiin
+  Markon iPhonella: EI. Se mittaus on syyskuulta, ja laite ja iOS ovat voineet
+  päivittyä - siksi sitä ei oteta tässä annettuna vaan mitataan uudelleen
+  SILLÄ laitteella jolla peliä pelataan. Jos tulos on KYLLÄ, lukija on noin
+  30 riviä eikä tarvita mitään ulkopuolista.
+
+  ⚠️ Sivu ei lähetä mitään mihinkään eikä tallenna kuvia.
+-->
+<style>
+  :root{color-scheme:light dark}
+  body{font:16px/1.5 system-ui, -apple-system, sans-serif;margin:0;padding:18px;
+    max-width:560px;margin-inline:auto}
+  h1{font-size:20px;margin:0 0 4px}
+  p.alku{margin:0 0 18px;color:#666}
+  table{border-collapse:collapse;width:100%;margin-bottom:18px}
+  td{padding:7px 4px;border-bottom:1px solid #ddd;vertical-align:top}
+  td:first-child{color:#666;width:48%}
+  b.on{color:#1a7f37}b.ei{color:#c1121f}
+  button{font:inherit;width:100%;padding:13px;margin-bottom:10px;border-radius:12px;
+    border:2px solid #EE7203;background:#EE7203;color:#fff;font-weight:700}
+  button.toinen{background:#fff;color:#EE7203}
+  video{width:100%;border-radius:12px;background:#000;display:block}
+  #tulos{font-weight:700;margin:12px 0;min-height:1.5em;word-break:break-all}
+  small{color:#666;display:block;margin-top:24px}
+</style>
+</head>
+<body>
+<h1>Kamerakoe</h1>
+<p class="alku">Avaa tämä sivu sillä puhelimella jolla pelaat. Mikään ei lähde laitteelta.</p>
+
+<table id="taulu"></table>
+
+<button id="avaaKamera">Avaa kamera sivun sisään</button>
+<button id="otaKuva" class="toinen">Avaa kamera kuvan ottoon</button>
+<input id="kuvasyote" type="file" accept="image/*" capture="environment" hidden>
+<video id="video" playsinline muted hidden></video>
+<p id="tulos"></p>
+
+<small>Pizza Love · diagnostiikka, ei pelin osa</small>
+
+<script>
+(function () {
+  var taulu = document.getElementById('taulu');
+  var tulos = document.getElementById('tulos');
+
+  function rivi(nimi, arvo, hyva) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('td'); a.textContent = nimi;
+    var b = document.createElement('td');
+    var vahva = document.createElement('b');
+    vahva.textContent = arvo;
+    if (hyva === true) vahva.className = 'on';
+    if (hyva === false) vahva.className = 'ei';
+    b.appendChild(vahva);
+    tr.appendChild(a); tr.appendChild(b); taulu.appendChild(tr);
+  }
+
+  var onDetector = typeof BarcodeDetector !== 'undefined';
+  var onKamera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  var kuvasyote = document.getElementById('kuvasyote');
+  var onCapture = 'capture' in kuvasyote;
+
+  rivi('BarcodeDetector (selain lukee QR:n)', onDetector ? 'KYLLÄ' : 'EI', onDetector);
+  rivi('getUserMedia (kamera sivun sisään)', onKamera ? 'KYLLÄ' : 'EI', onKamera);
+  rivi('input capture (kamera kuvan ottoon)', onCapture ? 'KYLLÄ' : 'EI', onCapture);
+  rivi('Suojattu yhteys (vaaditaan)', window.isSecureContext ? 'KYLLÄ' : 'EI', window.isSecureContext);
+  rivi('Osoite', location.protocol + '//' + location.host, null);
+  rivi('Selain', navigator.userAgent, null);
+
+  if (onDetector && BarcodeDetector.getSupportedFormats) {
+    BarcodeDetector.getSupportedFormats().then(function (muodot) {
+      rivi('Tuetut muodot', muodot.join(', ') || '(ei yhtään)',
+        muodot.indexOf('qr_code') >= 0);
+    });
+  }
+
+  /* 1. Kamera sivun sisään + luku jos selain osaa. */
+  document.getElementById('avaaKamera').addEventListener('click', function () {
+    if (!onKamera) { tulos.textContent = 'getUserMedia puuttuu tästä selaimesta.'; return; }
+    var video = document.getElementById('video');
+    tulos.textContent = 'Pyydetään kameraa…';
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } })
+      .then(function (virta) {
+        video.srcObject = virta; video.hidden = false; video.play();
+        tulos.textContent = onDetector
+          ? 'Kamera auki. Osoita QR-koodia…'
+          : 'Kamera auki — mutta tämä selain ei osaa lukea koodia (BarcodeDetector puuttuu).';
+        if (!onDetector) return;
+        var lukija = new BarcodeDetector({ formats: ['qr_code'] });
+        var kello = setInterval(function () {
+          lukija.detect(video).then(function (osumat) {
+            if (!osumat.length) return;
+            clearInterval(kello);
+            tulos.textContent = 'LUETTU: ' + osumat[0].rawValue;
+            virta.getTracks().forEach(function (t) { t.stop(); });
+            video.hidden = true;
+          }).catch(function (e) { tulos.textContent = 'Lukuvirhe: ' + e.message; });
+        }, 300);
+      })
+      .catch(function (e) { tulos.textContent = 'Kamera ei auennut: ' + e.name + ' — ' + e.message; });
+  });
+
+  /* 2. Puhelimen oma kamera kuvan ottoon. Tämä aukeaa myös iPhonella; se
+     todistaa ETTÄ kamera aukeaa, ei sitä että koodi luetaan. */
+  document.getElementById('otaKuva').addEventListener('click', function () { kuvasyote.click(); });
+  kuvasyote.addEventListener('change', function () {
+    var tiedosto = kuvasyote.files && kuvasyote.files[0];
+    if (!tiedosto) { tulos.textContent = 'Kuvaa ei tullut.'; return; }
+    tulos.textContent = 'Kamera aukesi ja kuva saatiin: ' +
+      Math.round(tiedosto.size / 1024) + ' kt, ' + tiedosto.type +
+      (onDetector ? ' — kokeillaan lukua…' : ' — lukijaa ei ole, joten koodi jää lukematta.');
+    if (!onDetector) return;
+    createImageBitmap(tiedosto).then(function (kuva) {
+      return new BarcodeDetector({ formats: ['qr_code'] }).detect(kuva);
+    }).then(function (osumat) {
+      tulos.textContent = osumat.length ? 'LUETTU KUVASTA: ' + osumat[0].rawValue
+                                        : 'Kuvasta ei löytynyt QR-koodia.';
+    }).catch(function (e) { tulos.textContent = 'Lukuvirhe: ' + e.message; });
+  });
+})();
+</script>
+</body>
+</html>
