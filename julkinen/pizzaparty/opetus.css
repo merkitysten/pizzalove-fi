@@ -1,0 +1,83 @@
+/* Pizza Love — opetuskierrosten ulkoasu (Marko 19.10.2026)
+ *
+ * ⚠️ KERROS EI PEITÄ PELIÄ. `pointer-events:none` koko kerroksessa ja
+ * `auto` vain opetuskortissa: pelaajan on päästävä koskemaan juuri siihen
+ * korttiin jota valo osoittaa. Peite joka nielee napautukset opettaisi
+ * katsomaan eikä tekemään — ja juuri sitä Marko ei pyytänyt
+ * («kädestä pitäen näytetään miten kortteja pelataan»).
+ *
+ * Värit ja muodot ovat peli.css:n tokeneita: --orange, --ink, --raja.
+ * Täällä ei määritellä yhtään uutta väriarvoa.
+ */
+
+.opetus{position:fixed;inset:0;z-index:40;pointer-events:none}
+
+/* Valo: rengas kohteen ympärillä, ei varjostusta muun päälle. Pimennys
+ * tekisi pelistä esittelyn; rengas jättää koko pöydän näkyviin. */
+.opetus-valo{position:fixed;border-radius:14px;pointer-events:none;
+  box-shadow:0 0 0 3px var(--orange), 0 0 0 7px rgba(238,114,3,.28);
+  animation:opetus-syke 1.8s ease-in-out infinite}
+@keyframes opetus-syke{
+  50%{box-shadow:0 0 0 3px var(--orange), 0 0 0 12px rgba(238,114,3,.14)}
+}
+
+/* Kortti ruudun alareunaan: siellä se on peukalon ulottuvilla eikä peitä
+ * pizzaa, joka on ylempänä molemmissa asennoissa. */
+.opetus-kortti{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:min(560px, calc(100% - 24px));margin-bottom:12px;
+  pointer-events:auto;box-sizing:border-box;
+  background:#fff;border:2px solid var(--raja);border-radius:16px;
+  padding:14px 16px;box-shadow:0 6px 20px rgba(60,40,20,.22);
+}
+.opetus-teksti{margin:0 0 10px;font-size:17px;line-height:1.35;color:var(--ink)}
+.opetus-rivi{display:flex;align-items:center;gap:10px}
+.opetus-askeleet{font-size:14px;color:var(--himmea);font-variant-numeric:tabular-nums;
+  flex:0 0 auto}
+/* «Lopeta» ensin ja hiljaisena, «Jatka» oikealla: etenevä nappi on se
+ * jonka peukalo löytää, kuten muuallakin pelissä. */
+.opetus-lopeta{width:auto;margin:0;margin-left:auto;padding:9px 14px;font-size:15px}
+.opetus-jatka{width:auto;flex:0 0 auto;padding:10px 20px}
+.opetus-jatka[hidden]{display:none}
+
+/* ⚠️ VAAKATASOSSA KORTTI ON YLHAALLA, EI ALHAALLA. Mitattu 1024 x 768:
+ * alareunassa se PEITTI pistelaatikot (#pelaajarivi 682-768, kortti
+ * 663-760), ja ylapuolella oli 223 px tyhjaa palkin ja pelialueen valissa
+ * - sita samaa tilaa jossa palkkikin lepaa (peli.css: "Palkki EI VIE
+ * asettelun korkeutta"). Pystyasennossa tyhja tila on alhaalla, joten
+ * siella kortti pysyy alhaalla. Valikkonappi on vasemmassa reunassa ja
+ * kortti keskitetty, joten ne eivat osu toisiinsa. */
+@media (orientation:landscape){
+  .opetus-kortti{width:min(520px, calc(100% - 140px));padding:10px 14px;
+    top:10px;bottom:auto;margin:0;transform:translateX(-50%)}
+  .opetus-teksti{font-size:15px;margin:0 0 8px}
+  .opetus-lopeta{padding:7px 12px;font-size:14px}
+  .opetus-jatka{padding:8px 16px}
+}
+
+/* ⚠️ PYSTYASENNOSSA KORTTI PEITTAA PISTELAATIKOIDEN ALAREUNAN, EIKA
+ * SILLE OLE TILAA JOTA EI OTETA JOLTAIN MUULTA. Mitattu 375 x 812:
+ * kasi paattyy 581, pistelaatikot ovat 611-699 ja ruudun alla on 113 px
+ * vapaata - kaksirivinen kortti on 132 px. Kortti siis peittaa rivista
+ * 31 px, ja ylemmas siirrettyna se peittaisi KORTTEJA.
+ *
+ * ⚠️ Kirjoitin tahan ensin saannon `#pelaajarivi{margin-bottom:...}`, ja
+ * se ei siirtanyt riviä lainkaan: pystynäkymä on ylhaalta ladottu, joten
+ * rivin ALAPUOLELLE lisatty tila ei nosta sitä. Mitattu: peitto pysyi
+ * 31 px:ssa. Saanto joka nayttaa korjaukselta muttei tee mitaan on
+ * pahempi kuin ei saantoa - siksi se on poistettu eika jatetty
+ * «varmuuden vuoksi».
+ *
+ * Valinta on siis kumpi peittyy, ja opetus koskee kortteja. */
+
+/* Alkuvalikon nappi: oma rivinsä kahden laiteruudun alla. */
+.alku-opetus{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;margin-top:10px;font:inherit;font-size:16px;cursor:pointer;
+  background:#fff;color:var(--ink);border:2px solid var(--raja);
+  border-radius:12px;padding:12px;
+}
+.alku-opetus:hover{border-color:var(--orange)}
+.alku-opetus .pieni-ikoni{width:22px;height:22px;flex:0 0 auto;
+  fill:none;stroke:var(--orange);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}

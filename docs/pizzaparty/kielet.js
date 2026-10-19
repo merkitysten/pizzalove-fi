@@ -269,6 +269,33 @@ const KIELET = {
     'peli.kortti':            'Korttipeli',
     'peli.lauta':             'Lautapeli',
     'selite.peli':            'Pizza Partyssa kaikki yrittävät tehdä samaa pizzaa, ja nopein saa sen. Pizza Bassossa pelataan vuorotellen omista korteista, ja kierroksen voittaa se, jonka kädestä kortit loppuvat ensin. Kieli, laskutoimitukset ja hahmo säilyvät pelistä toiseen.',
+
+    /* --- opetuskierrokset (Marko 19.10.2026) --- */
+    'opetus.aloita':             'Opettele pelaamaan',
+    'opetus.aloitaSelite':       'Kaksi harjoituskierrosta, askel kerrallaan',
+    'opetus.jatka':              'Seuraava',
+    'opetus.lopeta':             'Lopeta',
+    'opetus.tervetuloa':         'Tehdään yksi pizza yhdessä. Kaksi harjoituskierrosta, sitten osaat.',
+    'opetus.tervetuloaBasso':    'Pelataan yksi vuoro yhdessä. Bassossa pääsee eroon korteista tekemällä pizzoja.',
+    'opetus.pizza':              'Tuo on pizzakortti. Sen numero kertoo mihin sinun pitää päästä.',
+    'opetus.pizzaBasso':         'Tuo on pöydän pizza. Sen numero kertoo mihin sinun pitää päästä.',
+    'opetus.kaanna':             'Käännä kortit: paina ensin pizzaa, sitten omia korttejasi.',
+    'opetus.kasi':               'Nämä ovat sinun korttisi. Jokaisessa on numero.',
+    'opetus.kasiBasso':          'Nämä ovat sinun korttisi. Pääset eroon niistä tekemällä pizzoja.',
+    'opetus.valitse':            'Valitse kortit joiden numeroista saat {arvo}. Napauta niitä.',
+    'opetus.valitseBasso':       'Valitse kortit joiden numeroista saat {arvo} — ja joissa on {maara} eri numeroa.',
+    'opetus.pizzalle':           'Vedä kortit pizzan päälle — tai paina pizzaa.',
+    'opetus.merkit':             'Laita laskumerkki korttien väliin.',
+    'opetus.paina':              'Paina pizzaa, kun lasku on valmis.',
+    'opetus.painaBasso':         'Paina pizzaa, kun lasku on valmis. Käytetyt kortit lähtevät kädestäsi.',
+    'opetus.sait':               'Sait pizzan! Juuri noin se tehdään.',
+    'opetus.taytteetHelppo':     'Pizzassa näkyy täytteitä. Tässä pelitavassa ne ovat kuvaa: vain numero ratkaisee.',
+    'opetus.taytteetTiukka':     'Pizzassa on kaksi eri täytettä. Se ei tarkoita kahta korttia: korteissasi pitää olla kaksi eri numeroa, ja kortteja saa olla enemmän.',
+    'opetus.toinen':             'Toinen kierros. Nyt tarvitset kolme korttia — mutta vain kaksi eri numeroa.',
+    'opetus.toinenOhje':         'Kokeile itse: valitse kortit, laita merkit ja paina pizzaa.',
+    'opetus.bassoNosto':         'Jos pizzaa ei voi tehdä, paina pizzaa ilman kortteja: saat yhden kortin lisää.',
+    'opetus.bassoTavoite':       'Kierroksen voittaa se, jonka kortit loppuvat ensin.',
+    'opetus.valmis':             'Siinä kaikki. Nyt voit pelata oikean pelin.',
   } },
 
   /* ⚠️ sv / en / de lisätty 6.10.2026 pizzalove.fi:tä varten.
@@ -479,6 +506,33 @@ const KIELET = {
     'peli.kortti':            'Kortspel',
     'peli.lauta':             'Brädspel',
     'selite.peli':            'I Pizza Party försöker alla göra samma pizza, och den snabbaste får den. I Pizza Basso spelar man i tur och ordning med sina egna kort, och rundan vinns av den som först blir av med sina kort. Språk, räknesätt och figur följer med från spel till spel.',
+
+    /* --- opetuskierrokset --- */
+    'opetus.aloita':             'Lär dig spela',
+    'opetus.aloitaSelite':       'Två övningsrundor, steg för steg',
+    'opetus.jatka':              'Nästa',
+    'opetus.lopeta':             'Avsluta',
+    'opetus.tervetuloa':         'Vi gör en pizza tillsammans. Två övningsrundor, sedan kan du det.',
+    'opetus.tervetuloaBasso':    'Vi spelar en tur tillsammans. I Basso blir du av med kort genom att göra pizzor.',
+    'opetus.pizza':              'Det där är ett pizzakort. Siffran visar vad du ska komma fram till.',
+    'opetus.pizzaBasso':         'Det där är bordets pizza. Siffran visar vad du ska komma fram till.',
+    'opetus.kaanna':             'Vänd korten: tryck först på pizzan, sedan på dina egna kort.',
+    'opetus.kasi':               'Det här är dina kort. Varje kort har en siffra.',
+    'opetus.kasiBasso':          'Det här är dina kort. Du blir av med dem genom att göra pizzor.',
+    'opetus.valitse':            'Välj kort vars siffror ger {arvo}. Tryck på dem.',
+    'opetus.valitseBasso':       'Välj kort vars siffror ger {arvo} — och som har {maara} olika siffror.',
+    'opetus.pizzalle':           'Dra korten på pizzan — eller tryck på pizzan.',
+    'opetus.merkit':             'Sätt ett räknetecken mellan korten.',
+    'opetus.paina':              'Tryck på pizzan när uträkningen är klar.',
+    'opetus.painaBasso':         'Tryck på pizzan när uträkningen är klar. Korten du använt lämnar din hand.',
+    'opetus.sait':               'Du fick pizzan! Precis så går det till.',
+    'opetus.taytteetHelppo':     'Pizzan visar fyllningar. I det här spelsättet är de bara bild: bara siffran avgör.',
+    'opetus.taytteetTiukka':     'Pizzan har två olika fyllningar. Det betyder inte två kort: dina kort ska ha två olika siffror, och korten får vara fler.',
+    'opetus.toinen':             'Andra rundan. Nu behöver du tre kort — men bara två olika siffror.',
+    'opetus.toinenOhje':         'Prova själv: välj kort, sätt tecken och tryck på pizzan.',
+    'opetus.bassoNosto':         'Om du inte kan göra en pizza, tryck på pizzan utan kort: du får ett kort till.',
+    'opetus.bassoTavoite':       'Rundan vinns av den som först blir av med sina kort.',
+    'opetus.valmis':             'Det var allt. Nu kan du spela på riktigt.',
   } },
 
   en: { nimi: 'English', valmis: true, t: {
@@ -687,6 +741,33 @@ const KIELET = {
     'peli.kortti':            'Card game',
     'peli.lauta':             'Board game',
     'selite.peli':            'In Pizza Party everyone tries to make the same pizza, and the fastest gets it. In Pizza Basso players take turns with their own cards, and the round is won by whoever runs out of cards first. Language, operations and character carry over from game to game.',
+
+    /* --- opetuskierrokset --- */
+    'opetus.aloita':             'Learn to play',
+    'opetus.aloitaSelite':       'Two practice rounds, one step at a time',
+    'opetus.jatka':              'Next',
+    'opetus.lopeta':             'Stop',
+    'opetus.tervetuloa':         'Let\'s make one pizza together. Two practice rounds and you\'ve got it.',
+    'opetus.tervetuloaBasso':    'Let\'s play one turn together. In Basso you get rid of cards by making pizzas.',
+    'opetus.pizza':              'That is a pizza card. Its number is what you need to reach.',
+    'opetus.pizzaBasso':         'That is the pizza on the table. Its number is what you need to reach.',
+    'opetus.kaanna':             'Turn the cards over: press the pizza first, then your own cards.',
+    'opetus.kasi':               'These are your cards. Each one has a number.',
+    'opetus.kasiBasso':          'These are your cards. You get rid of them by making pizzas.',
+    'opetus.valitse':            'Pick cards whose numbers make {arvo}. Tap them.',
+    'opetus.valitseBasso':       'Pick cards whose numbers make {arvo} — and that have {maara} different numbers.',
+    'opetus.pizzalle':           'Drag the cards onto the pizza — or press the pizza.',
+    'opetus.merkit':             'Put a sign between the cards.',
+    'opetus.paina':              'Press the pizza when the sum is ready.',
+    'opetus.painaBasso':         'Press the pizza when the sum is ready. The cards you used leave your hand.',
+    'opetus.sait':               'You got the pizza! That is exactly how it works.',
+    'opetus.taytteetHelppo':     'The pizza shows toppings. In this way of playing they are just a picture: only the number counts.',
+    'opetus.taytteetTiukka':     'The pizza has two different toppings. That does not mean two cards: your cards must have two different numbers, and you may use more cards.',
+    'opetus.toinen':             'Second round. Now you need three cards — but only two different numbers.',
+    'opetus.toinenOhje':         'Try it yourself: pick the cards, add the signs and press the pizza.',
+    'opetus.bassoNosto':         'If you cannot make a pizza, press the pizza with no cards: you draw one more card.',
+    'opetus.bassoTavoite':       'The round is won by whoever runs out of cards first.',
+    'opetus.valmis':             'That\'s it. Now you can play for real.',
   } },
 
   de: { nimi: 'Deutsch', valmis: true, t: {
@@ -895,6 +976,33 @@ const KIELET = {
     'peli.kortti':            'Kartenspiel',
     'peli.lauta':             'Brettspiel',
     'selite.peli':            'Bei Pizza Party versuchen alle, dieselbe Pizza zu machen, und der Schnellste bekommt sie. Bei Pizza Basso spielt man reihum mit den eigenen Karten, und die Runde gewinnt, wer zuerst keine Karten mehr hat. Sprache, Rechenarten und Figur bleiben von Spiel zu Spiel erhalten.',
+
+    /* --- opetuskierrokset --- */
+    'opetus.aloita':             'Spielen lernen',
+    'opetus.aloitaSelite':       'Zwei Überunden, Schritt für Schritt',
+    'opetus.jatka':              'Weiter',
+    'opetus.lopeta':             'Beenden',
+    'opetus.tervetuloa':         'Machen wir zusammen eine Pizza. Zwei Überunden, dann kannst du es.',
+    'opetus.tervetuloaBasso':    'Spielen wir zusammen einen Zug. Bei Basso wirst du Karten los, indem du Pizzen machst.',
+    'opetus.pizza':              'Das ist eine Pizzakarte. Ihre Zahl sagt, was du erreichen musst.',
+    'opetus.pizzaBasso':         'Das ist die Pizza auf dem Tisch. Ihre Zahl sagt, was du erreichen musst.',
+    'opetus.kaanna':             'Dreh die Karten um: erst die Pizza, dann deine eigenen Karten.',
+    'opetus.kasi':               'Das sind deine Karten. Jede hat eine Zahl.',
+    'opetus.kasiBasso':          'Das sind deine Karten. Du wirst sie los, indem du Pizzen machst.',
+    'opetus.valitse':            'Wähle Karten, deren Zahlen {arvo} ergeben. Tippe sie an.',
+    'opetus.valitseBasso':       'Wähle Karten, deren Zahlen {arvo} ergeben — und die {maara} verschiedene Zahlen haben.',
+    'opetus.pizzalle':           'Zieh die Karten auf die Pizza — oder drücke auf die Pizza.',
+    'opetus.merkit':             'Setze ein Rechenzeichen zwischen die Karten.',
+    'opetus.paina':              'Drücke auf die Pizza, wenn die Rechnung fertig ist.',
+    'opetus.painaBasso':         'Drücke auf die Pizza, wenn die Rechnung fertig ist. Die benutzten Karten verlassen deine Hand.',
+    'opetus.sait':               'Du hast die Pizza! Genau so geht es.',
+    'opetus.taytteetHelppo':     'Auf der Pizza sind Beläge zu sehen. In dieser Spielweise sind sie nur Bild: nur die Zahl zählt.',
+    'opetus.taytteetTiukka':     'Die Pizza hat zwei verschiedene Beläge. Das heißt nicht zwei Karten: deine Karten müssen zwei verschiedene Zahlen haben, und es dürfen mehr Karten sein.',
+    'opetus.toinen':             'Zweite Runde. Jetzt brauchst du drei Karten — aber nur zwei verschiedene Zahlen.',
+    'opetus.toinenOhje':         'Probier es selbst: Karten wählen, Zeichen setzen und auf die Pizza drücken.',
+    'opetus.bassoNosto':         'Wenn du keine Pizza machen kannst, drücke ohne Karten auf die Pizza: du ziehst eine Karte.',
+    'opetus.bassoTavoite':       'Die Runde gewinnt, wer zuerst keine Karten mehr hat.',
+    'opetus.valmis':             'Das war\'s. Jetzt kannst du richtig spielen.',
   } },
 };
 
@@ -974,30 +1082,6 @@ function valmiitKielet() {
 
 /* Kääntää kaiken minkä merkintä osoittaa. Ajetaan latauksessa ja kielen
  * vaihdossa — ei muualla, jotta käännös on yhdessä paikassa eikä siroteltuna. */
-/* Tuotesivut merkitysten.fi:ssä kielittäin; DE käyttää englantia (ei omaa kauppaa). */
-const KAUPPA_OSOITTEET = {
-  fi: { korttipeli: 'https://merkitysten.fi/tuote/pizza-love-korttipeli/',
-        lautapeli:  'https://merkitysten.fi/tuote/pizza-love-lautapeli/' },
-  sv: { korttipeli: 'https://merkitysten.fi/sv/tuote/pizza-love-familjeutgava-kortspel/',
-        lautapeli:  'https://merkitysten.fi/sv/tuote/pizza-love-bradspel/' },
-  en: { korttipeli: 'https://merkitysten.fi/en/tuote/pizza-love-card-game/',
-        lautapeli:  'https://merkitysten.fi/en/tuote/pizza-love-board-game/' }
-};
-function kauppaOsoite(tuote, kieli) {
-  const k = kieli || KIELI;
-  const kieliKartta = KAUPPA_OSOITTEET[k] || KAUPPA_OSOITTEET.en;
-  /* Seurantatunniste: WooCommercen tilauksessa näkyy, mistä pelistä ostaja tuli. */
-  const sivu = (location.pathname.split('/').pop() || 'index.html').replace('.html', '');
-  const paikka = 'verkkopeli-' + (sivu === 'index' || sivu === '' ? 'pizzaparty' : sivu);
-  return (kieliKartta[tuote] || KAUPPA_OSOITTEET.fi[tuote]) +
-    '?utm_source=pizzalove.fi&utm_medium=referral&utm_campaign=pizzalove-' + k + '&utm_content=' + paikka;
-}
-
-const KOTI_OSOITTEET = { fi: 'https://merkitysten.fi/', sv: 'https://merkitysten.fi/sv/', en: 'https://merkitysten.fi/en/' };
-function kotiOsoite(kieli) {
-  return KOTI_OSOITTEET[kieli || KIELI] || KOTI_OSOITTEET.en;
-}
-
 function kaannaSivu(juuri) {
   const j = juuri || document;
   [].forEach.call(j.querySelectorAll('[data-t]'), function (n) {
@@ -1019,15 +1103,6 @@ function kaannaSivu(juuri) {
   /* Kenttien paikkamerkkiteksti on käyttöliittymätekstiä siinä missä muukin. */
   [].forEach.call(j.querySelectorAll('[data-tp]'), function (n) {
     n.setAttribute('placeholder', t(n.dataset.tp));
-  });
-  /* Kauppalinkki kielen mukaiselle tuotesivulle (18.10.2026). Ennen linkki vei
-   * aina suomenkieliseen kauppaan. Samat osoitteet kuin rakenna.py:n KAUPPA_KIELI. */
-  [].forEach.call(j.querySelectorAll('[data-kauppa]'), function (n) {
-    n.setAttribute('href', kauppaOsoite(n.dataset.kauppa));
-  });
-  /* Merkitysten-logo vie merkitysten.fi:n kielen mukaiselle etusivulle. */
-  [].forEach.call(j.querySelectorAll('[data-koti]'), function (n) {
-    n.setAttribute('href', kotiOsoite());
   });
   document.documentElement.lang = KIELI;
 }
