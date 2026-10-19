@@ -1398,11 +1398,21 @@
       kortitEl.innerHTML = '';
       kortitEl.classList.toggle('av__kortit--valinta', !!((apinat || pulmat) && tila.valitsee));
       if ((apinat || pulmat) && tila.valitsee) {
+        /* ⚠️ VALITTAVANA ON PALA, JOTEN NAYTETAAN PALA (Markon kysymys
+         * 19.10.2026: «entä kun on tehnyt sydänpizzan, valitaanko silloin
+         * näistä oikeista paloista se extrapala?»).
+         * Mitattu: ei valittu - tassa oli `tarra(q)` eli 38 px:n varillinen
+         * tayteympyra, sama kuvio kuin tornissa, kulhossa ja pizzassa.
+         * Pelaaja valitsee kuitenkin PALAN boksiin, ja nyt han myos nakee
+         * sen palan jonka saa. */
         for (var q = 1; q <= 10; q++) if (tila.boksi.indexOf(q) < 0) (function (q) {
-          var v = el('button', 'av__valinta');
+          var v = el('button', 'av__valinta av__valinta--pala');
           v.type = 'button';
           v.setAttribute('aria-label', t.taytteet[q - 1] + ' ' + q);
-          v.appendChild(tarra(q));
+          var kuva = el('img');
+          kuva.src = KANSIO + '../kuvat/pala/' + q + '.webp';
+          kuva.alt = '';
+          v.appendChild(kuva);
           v.addEventListener('click', function () { valitseLisapala(q); });
           kortitEl.appendChild(v);
         })(q);

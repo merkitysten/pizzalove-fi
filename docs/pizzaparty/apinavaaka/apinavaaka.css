@@ -330,9 +330,17 @@
 .av__kortti-pizza i{display:grid;place-items:center;width:34px;height:34px}
 .av__kortti-pizza i img{width:66%;height:66%;object-fit:contain}
 .av .av__vie--toinen{background:var(--surface,#fff);color:var(--ink,#1A1A1A);box-shadow:inset 0 0 0 2px var(--orange, #EE7203),0 3px 0 rgba(0,0,0,.12);animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
-.av--apinat .av__kortit--valinta{grid-template-columns:repeat(auto-fit,38px);gap:8px;min-height:64px;align-content:center}
+/* ⚠️ VALINTARUUDUKKO ON PALAN LEVYINEN, EI YMPYRAN. Pala on 353 x 546
+ * eli kapeampi kuin korkea; 44 px leveana se on 68 px korkea ja kymmenen
+ * mahtuu yha samalle riville 375 px:n puhelimessa (10 x 44 + 9 x 6 = 494
+ * > 375, joten auto-fit rivittaa ne kahdelle rivialle - se on kunnossa,
+ * koska valinta on oma hetkensa eika pelialuetta). */
+.av--apinat .av__kortit--valinta{grid-template-columns:repeat(auto-fit,44px);gap:6px;min-height:72px;align-content:center}
 .av__valinta{border:0;background:none;padding:0;cursor:pointer;--leveys:40px;--pala:8px;animation:av-esiin .35s cubic-bezier(.3,1.6,.5,1)}
 .av__valinta .av__tarra{width:38px;height:38px;margin:0;animation:av-kortti 1.2s ease-in-out infinite}
+.av__valinta--pala img{display:block;width:44px;height:auto;
+  filter:drop-shadow(0 2px 4px rgba(60,30,0,.28));
+  animation:av-kortti 1.2s ease-in-out infinite}
 /* siirtymäanimaation aikana torni piirretään muiden päälle */
 .av__lentaa{position:relative;z-index:20}
 
