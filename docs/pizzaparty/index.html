@@ -57,7 +57,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261019g">
-<link rel="stylesheet" href="yhteinen.css?v=20261019h">
+<link rel="stylesheet" href="yhteinen.css?v=20261019j">
 <link rel="stylesheet" href="pelivalinta.css?v=20261019a">
 </head>
 <body>
@@ -481,8 +481,14 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
            ⚠️ `aria-hidden`: tämä on koriste, ei tietoa - ruudunlukija ei saa
            lukea odotusnäkymästä mitään uutta. -->
       <div class="vieteri" aria-hidden="true">
+        <div class="vieteri__riippu">
+          <span class="vieteri__kupla">
+            <img class="vieteri__kupla-kuva" src="kuvat/vieteri-kupla.webp?v=20261019a" width="361" height="420" alt="">
+            <i class="vieteri__tayte"><img src="apinavaaka/tayte/1.webp?v=20261019a" alt=""></i>
+          </span>
+          <img class="vieteri__laatikko" src="kuvat/vieteri-laatikko.webp?v=20261019a" width="324" height="360" alt="">
+        </div>
         <img class="vieteri__varsi" src="kuvat/vieteri-varsi.webp?v=20261019a" width="158" height="1100" alt="">
-        <img class="vieteri__laatikko" src="kuvat/vieteri-laatikko.webp?v=20261019a" width="324" height="360" alt="">
       </div>
       <!-- POISTUMISTIE ON NURKASSA EIKA LEVEANA NAPPINA (Marko 19.10.2026:
            "erien valissa se tuntuu aivan cta-napilta, jolla peli jatkuisi,
@@ -654,6 +660,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 
 <script src="kielet.js?v=20261019g"></script>
 <script src="kortit.js?v=20260912b"></script>
+<script src="vieteri.js?v=20261019a"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
 <script src="pelivalinta.js?v=20261015d"></script>
