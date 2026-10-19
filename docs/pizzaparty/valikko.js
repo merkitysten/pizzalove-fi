@@ -54,6 +54,9 @@ function valikkoNayta() {
 function valikkoKytke() {
   valikkoEl('alkuPelaa').addEventListener('click', function () { valikkoEl('valikkoPeite').hidden = true; });
   valikkoEl('alkuMoninpeli').addEventListener('click', function () { valikkoSivu('moninpeli'); });
+  /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026). Sama osoite kuin
+     «Omilla laitteilla» › «Liity peliin», jotta reittejä ei ole kahta. */
+  valikkoEl('alkuLiity').addEventListener('click', function () { location.assign('./?liity&uusi'); });
   valikkoEl('valikkoTakaisin').addEventListener('click', function () { valikkoSivu('paa'); });
   valikkoEl('valikkoPalaa').addEventListener('click', function () { location.assign('./?liity'); });
   valikkoEl('valikkoLuo').addEventListener('click', function () { location.assign('./?liity&luo'); });
@@ -76,7 +79,7 @@ function valikkoKytke() {
 /* ⚠️ VAHTI, EI TARKISTIN (sama kuin isantaVahti). */
 function valikkoVahti() {
   const puuttuu = [];
-  ['valikkoPeite', 'valikkoPaa', 'valikkoMoninpeli', 'valikkoPalaa', 'alkuPelaa', 'alkuMoninpeli',
+  ['valikkoPeite', 'valikkoPaa', 'valikkoMoninpeli', 'valikkoPalaa', 'alkuPelaa', 'alkuMoninpeli', 'alkuLiity',
    'valikkoLuo', 'valikkoLiity', 'valikkoIsoNaytto', 'valikkoTakaisin', 'taukoValikkoon', 'tulosValikkoon']
     .forEach(function (id) { if (!valikkoEl(id)) puuttuu.push('#' + id); });
   ['t', 'verkkoTilaan'].forEach(function (f) { if (typeof window[f] !== 'function') puuttuu.push(f + '()'); });

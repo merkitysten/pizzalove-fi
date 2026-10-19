@@ -106,6 +106,30 @@ function verkkoPeite(osa) {
   verkkoEl('verkkoLiity').hidden = osa !== 'liity';
   verkkoEl('verkkoLuo').hidden = osa !== 'luo';
   verkkoEl('verkkoOdota').hidden = osa !== 'odota';
+  verkkoEl('verkkoVarmista').hidden = osa !== 'varmista';
+}
+
+/* ⚠️ RUKSI EI POISTU VAAN KYSYY (Marko 20.10.2026). Nappi on 40 x 40 px:n
+ * kulmassa, ja sen takana on peruuttamaton teko: huoneesta poistuminen
+ * poistaa pelaajan myös palvelimelta (verkkoPoistu). Yksi harhaanosunut
+ * napautus vei pelistä ilman mitään väliaskelta.
+ *
+ * ⚠️ KYSYMYS ON ERI RIIPPUEN SIITÄ ONKO HUONETTA. Sama ruksi on erien
+ * välissä (silloin huone on) ja lopputuloksessa (silloin ei välttämättä);
+ * teksti luetaan samasta ehdosta kuin napin oma vihje (`verkkopeli.koodi`),
+ * jotta ne eivät voi sanoa eri asiaa.
+ *
+ * ⚠️ JA VARMISTUS VÄISTYY PELIN TIELTÄ: jos kierros alkaa sillä aikaa kun
+ * kysymys on auki, `verkkoKasitteleTila` vaihtaa näkymän kuten ennenkin -
+ * kysymys katoaa eikä jää pelin päälle. Se on tarkoitus: pelaaja ei jää
+ * odottamaan omaa vastaustaan kun peli on jo jatkunut. */
+function verkkoVarmistaPoistu() {
+  const huoneessa = !!verkkopeli.koodi;
+  verkkoEl('verkkoVarmistaTeksti').textContent =
+    t(huoneessa ? 'verkko.varmistaPoistu' : 'verkko.varmistaAlkuun');
+  verkkoEl('verkkoVarmistaPoistu').textContent =
+    t(huoneessa ? 'verkko.poistu' : 'valikko.alkuun');
+  verkkoPeite('varmista');
 }
 
 /* ---------- oma hahmo (vari) ----------
@@ -635,7 +659,9 @@ function verkkoAlusta() {
   pysaytaKaikkiAjastimet();
   verkkoEl('verkkoLiity').addEventListener('submit', verkkoLiity);
   verkkoEl('verkkoUusi').addEventListener('click', function () { verkkoLiityNakyma(''); });
-  verkkoEl('verkkoPoistu').addEventListener('click', verkkoPoistu);
+  verkkoEl('verkkoPoistu').addEventListener('click', verkkoVarmistaPoistu);
+  verkkoEl('verkkoVarmistaJatka').addEventListener('click', function () { verkkoPeite('odota'); });
+  verkkoEl('verkkoVarmistaPoistu').addEventListener('click', verkkoPoistu);
   verkkoEl('verkkoLiityTakaisin').addEventListener('click', valikkoAlkuun);
   /* Puhelin herää: tila heti eikä vasta seuraavalla tikillä. */
   document.addEventListener('visibilitychange', function () {

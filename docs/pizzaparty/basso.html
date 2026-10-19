@@ -530,6 +530,18 @@
            Oma rivinsa eika kolmas ruutu: ylemmat kaksi vastaavat
            kysymykseen MILLA LAITTEELLA, tama ei ole sen kysymyksen
            vastaus. -->
+      <!-- LIITY PELIIN OMANA NAPPINAAN (Marko 20.10.2026: «siinä alkuvalikossa
+           pitäisi olla oma nappi liity peliin, jolloin voisi liittyä suoraan
+           joko lukemalla qr-koodi, tai näppäilemällä liittymiskoodi»).
+           ⚠️ EI KOLMAS RUUTU vaan oma rivinsä, kuten «Opettele pelaamaan»:
+           ylemmät kaksi vastaavat kysymykseen MILLÄ LAITTEELLA, tämä ei ole
+           sen kysymyksen vastaus vaan oikotie toisen luomaan peliin.
+           Vie suoraan koodinsyöttöön - ennen se oli «Omilla laitteilla» ›
+           «Liity peliin», eli kahden napin takana. -->
+      <button id="alkuLiity" type="button" class="alku-opetus" data-ta="valikko.liitySelite">
+        <svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></svg>
+        <span data-t="valikko.liity">Liity peliin</span>
+      </button>
       <button id="alkuOpetus" type="button" class="alku-opetus" data-ta="opetus.aloitaSelite">
         <svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 3 8l9 4 9-4-9-4Z"/><path d="M7 11v4c0 1.7 2.2 3 5 3s5-1.3 5-3v-4"/></svg>
         <span data-t="opetus.aloita">Opettele pelaamaan</span>
@@ -616,7 +628,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261019g"></script>
+<script src="kielet.js?v=20261020a"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
 <script src="hahmot.js?v=20261009a"></script>
@@ -632,7 +644,7 @@
 <script src="basso-saannot.js?v=20261006b"></script>
 <script src="basso.js?v=20261020a"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="basso-verkko.js?v=20261010a"></script>
+<script src="basso-verkko.js?v=20261020a"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
      `aloitaPeli`a ja (Bassossa) `basso`a, joten se on ladattava niiden
      jalkeen - ja sen on oltava @party/@basso-merkintojen ULKOPUOLELLA,

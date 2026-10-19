@@ -562,6 +562,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
   };
   bvEl('alkuMoninpeli').onclick = function () { bvOsa('moninpeli'); };
+  /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026): sama `bvAvaaKoodi`
+     kuin «Omilla laitteilla» › «Liity peliin», ei omaa reittiä. */
+  bvEl('alkuLiity').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuoAvaa').onclick = bvAvaaLuo;
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuo').onclick = bvLuo;
