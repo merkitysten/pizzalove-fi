@@ -175,6 +175,10 @@ function bassoNaytaKierros() {
   nollaaValinta();
   naytaRuutu('peliRuutu');
   bassoVuoro();
+  /* Pakka sekoitetaan nakyvasti joka kierroksen alussa: Bassossa jokainen
+   * kierros on tuore jako, toisin kuin Partyssa jossa pakka kuluu koko
+   * pelin ajan. Yhteinen toteutus peli.js:ssa. */
+  sekoitaPakkaNaytolla();
 }
 
 /* peli.js:n näkymä lukee `tila`a. Säännöt pitävät omaa tilaansa, ja tämä

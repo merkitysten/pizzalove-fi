@@ -111,6 +111,7 @@ function verkkoIsantaLomake() {
   /* Liittymislomakkeelle kirjoitettu nimi kulkee mukana. */
   if (!verkkoEl('verkkoLuoNimi').value) verkkoEl('verkkoLuoNimi').value = verkkoEl('verkkoNimi').value;
   verkkoEl('verkkoLuoVirhe').hidden = true;
+  verkkoPiirraVarit('verkkoLuoVarit');
   verkkoPeite('luo');
 }
 
@@ -126,7 +127,7 @@ async function verkkoIsantaLuo(e) {
   try {
     await isannointiLuo(h, h.asetukset);
     luotu = true;
-    const j = await api('liity', { koodi: h.koodi, nimi: verkkoEl('verkkoLuoNimi').value });
+    const j = await api('liity', { koodi: h.koodi, nimi: verkkoEl('verkkoLuoNimi').value, vari: verkkoOmaVari() });
     verkkoIsantaTallenna();
     verkkoIsantaAloita();
     verkkoOtaPelaaja(h.koodi, j);

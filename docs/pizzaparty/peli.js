@@ -94,6 +94,8 @@ const ALOITUSAIKA = 5000;
 /* Ettei apina karkaa nollaan hyvin nopealla pelaajalla. */
 const AIKALATTIA = 800;
 
+/* Noston lennon kesto. Sama luku on peli.css:n --lento-oletuksessa. */
+const LENTO_MS = 420;
 const KADEN_KOKO = 5;
 
 /* ============================================================
@@ -337,6 +339,10 @@ function aloitaPeli(taso, apinanTapa) {
   naytaRuutu('peliRuutu');
   piirraKaikki();
   piirraPisteet();
+  /* Pakka sekoitetaan nakyvasti: peli alkaa lepotilassa, jossa kortit ovat
+   * selkapuoli ylospain - sekoitus on siis se ensimmainen asia joka
+   * ruudulla tapahtuu, aivan kuten poydassa. */
+  sekoitaPakkaNaytolla();
 }
 
 /* Kortin kaanto: kutistus reunalle, kuvan vaihto piilossa, aukeaminen.
@@ -1230,6 +1236,9 @@ function tarkistaLasku() {
     tila.uudet.push(uusi);
   }
 
+  /* ⚠️ Lento ENNEN piirraPisteet()a: pizzakortin sijainti luetaan ruudulta,
+   * ja piirto voi vaihtaa sen seuraavaan pizzaan. */
+  lennataPizzaVoittajalle(tila.moninpeli && tila.vuorossa !== null ? tila.vuorossa : 0);
   piirraPisteet();
   valahda('oma', '<span class="valahdys-merkki">✓</span><span>+' + poydanPisteet() + '</span>');
   siirryHetkenPaasta();
@@ -1444,11 +1453,22 @@ function piirraKasi() {
    * Ajastin on tilassa, jotta pysaytaKaikkiAjastimet saa sen kiinni. */
   const uudet = [].slice.call(alue.querySelectorAll('.tayte-kortti.uusi'));
   if (uudet.length && !tila.uusiAjastin) {
+    /* ⚠️ Kortti LAHTEE PAKAN KOHDALTA eika vain ilmesty kateen. Tama on
+     * sama perustelu kuin kaannolla (Markon havainto 9.9.2026, "muuten
+     * pelaaja ei huomaa etta pakasta tuli lisaa") - mutta nyt pakka on
+     * ruudulla, joten liikkeella on nakyva lahtopiste.
+     * Kaanto odottaa kunnes lento on perilla: paluuarvo on sen kesto. */
+    const lento = lennataKortitPakasta(uudet);
     tila.uusiAjastin = setTimeout(function () {
       tila.uusiAjastin = null;
       const kesto = parseFloat(getComputedStyle(document.documentElement)
         .getPropertyValue('--kaanto')) || 340;
       uudet.forEach(function (el, i) {
+        /* Lento on ohi: luokka pois, jottei sen transitio hidasta kaantoa. */
+        el.classList.remove('lentaa');
+        el.style.removeProperty('--lento-x');
+        el.style.removeProperty('--lento-y');
+        el.style.removeProperty('--lento-viive');
         el.style.animationDelay = (i * 45) + 'ms';
         el.classList.add('kaantyy');
       });
@@ -1456,7 +1476,7 @@ function piirraKasi() {
         tila.uudet = [];
         piirraKasi();
       }, kesto / 2 + 45 * Math.max(0, uudet.length - 1));
-    }, 240);
+    }, lento + 120);
   }
 }
 
@@ -1684,39 +1704,135 @@ function piirraPisteet() {
    * mutta kirjoitus elementtiin jota ei ole heittaisi ja TAPPAISI kaiken
    * taman jalkeisen (sama vika joka tyhjensi play-nakyman Norsussa). */
   piirraPelaajat();
-  /* Taytepakka palkkina: yksi siru per jaljella oleva kortti. Rivi
-   * lyhenee jaon mukana, eika lukua tarvita. Piirretaan vain kun maara
-   * muuttuu — muuten tama ajaisi 48 elementtia joka piirrolla. */
-  /* ⚠️ Taytepakka on PINO eika palkki (Markon tarkennus 9.9.2026):
-   * vierekkaiset viivat eivat lue korttipinona. Nyt kortit ovat
-   * paallekkain vinottain, jolloin PINON PAKSUUS kertoo maaran ja
-   * pino vie murto-osan siita tilasta jonka rivi vei. */
+  /* TAYTEPAKKA = OIKEA KORTTIPINO PIZZAKORTIN VIERESSA (Marko 19.10.2026).
+   * Sailytetty 9.9.2026:n perustelu: pinon PAKSUUS kertoo maaran, numeroa
+   * ei ole. Muuttunut on mittakaava - kortit ovat nyt kortin kokoisia
+   * eivatka 20 x 30 px:n siruja.
+   *
+   * ⚠️ SIJAINNIT OVAT OSUUKSIA KORTIN LEVEYDESTA, EIVAT PIKSELEITA.
+   * calc(var(--pakka-lev) * k) seuraa korttien kokoa itsestaan; pikseli
+   * olisi tapahtuma ja kaventuisi suhteessa isolla naytolla - juuri se
+   * vika jonka takia vanha pakka naytti pienelta.
+   *
+   * ⚠️ Vain PAALLIMMAISELLA on kuva. Muut ovat kortin valkoisia reunoja,
+   * eli 48 korttia ei ole 48 kuvakerrosta. Se on myos se mita poydalla
+   * nakyy.
+   *
+   * ⚠️ Pino levittyy ALAS VASEMMALLE (negatiiviset siirrot), jolloin
+   * paallimmainen kortti on tasan laatikon kohdalla ja CSS saa korkeuden
+   * aspect-ratiosta. Ilman sita korkeus pitaisi laskea tassa, eli
+   * korttisuhde olisi kahdessa paikassa. */
   const palkki = document.getElementById('taytepalkki');
   const n = tila.taytteet.length;
   if (palkki && palkki.dataset.maara !== String(n)) {
     palkki.dataset.maara = String(n);
     palkki.innerHTML = '';
-    const pino = document.createElement('div');
-    pino.className = 'pino';
-    /* Askel per kortti: taysi pakka (48) saa noin 19 px paksuutta, ja
-     * viimeiset kortit erottuvat yha koska askel ei riipu maarasta. */
-    const askel = 0.42;
-    const nousu = 0.34;                       /* pystysiirto per kortti */
-    for (let i = 0; i < n; i++) {
-      const s = document.createElement('span');
-      s.className = 'siru';
-      /* ⚠️ bottom eika negatiivinen top: nain kortit kasvavat pinon
-       * SISALLA ylospain eivatka sen ulkopuolelle. Aiemmin ylin kortti
-       * oli 6,7 px laatikon ylapuolella ja leikkautui (Markon havainto
-       * 9.9.2026). */
-      s.style.left = (i * askel).toFixed(2) + 'px';
-      s.style.bottom = (i * askel * nousu).toFixed(2) + 'px';
-      pino.appendChild(s);
+    if (n > 0) {
+      const pino = document.createElement('div');
+      pino.className = 'pakka-pino';
+      const ASKEL = 0.0040;                 /* osuus kortin leveydesta / kortti */
+      const NOUSU = 0.34;                   /* pystysiirto suhteessa askeleeseen */
+      for (let i = 0; i < n; i++) {
+        const k = document.createElement('span');
+        k.className = 'pakka-kortti';
+        const syvyys = n - 1 - i;           /* 0 = paallimmainen */
+        k.style.left = 'calc(var(--pakka-lev) * ' + (-syvyys * ASKEL).toFixed(5) + ')';
+        k.style.bottom = 'calc(var(--pakka-lev) * ' + (-syvyys * ASKEL * NOUSU).toFixed(5) + ')';
+        pino.appendChild(k);
+      }
+      const paalla = pino.lastChild;
+      paalla.className = 'pakka-kortti paalla';
+      paalla.innerHTML = '<img src="kuvat/tausta-tayte.webp?v=20260910a" alt="">';
+      palkki.appendChild(pino);
     }
-    pino.style.width = (20 + (n - 1) * askel).toFixed(1) + 'px';
-    pino.style.height = (30 + (n - 1) * askel * nousu).toFixed(1) + 'px';
-    palkki.appendChild(pino);
   }
+}
+
+/* ================= KORTTIANIMAATIOT (Marko 19.10.2026) =================
+ * "Siina voisi jopa aluksi olla sekoitusanimaatio molemmille korteille ja
+ *  aina myos animaatio, kun kortteja otetaan lisaa pelaajan kateen tai
+ *  kun pelaaja saa sen pizzakortin itselleen."
+ *
+ * Kolme liiketta, ja ne vastaavat kolmeen eri kysymykseen:
+ *   sekoitus  mista kortit tulevat        (pelin alussa, molemmat pelimuodot)
+ *   lento     mista TAMA kortti tuli      (nosto: pakasta kateen)
+ *   voitto    minne pizza meni            (vain Party - Bassossa pizzaa ei voiteta)
+ *
+ * ⚠️ Jokainen kunnioittaa prefers-reduced-motion:ia. Peli toimii ilman
+ * niita taysin samoin: ne eivat kanna yhtaan tietoa jota ei ole muualla. */
+
+function korttiLiikeSallittu() {
+  try { return !matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  catch (e) { return true; }
+}
+
+/* Sekoitus: paallimmaiset kortit heilahtavat vuorotellen ja palaavat.
+ * ⚠️ Vain 12 paallimmaista. Alemmat ovat kokonaan niiden alla (askel on
+ * .0040 kortin leveydesta), joten 48 animoitua kerrosta maksaisi ilman
+ * etta mitaan nakyisi. */
+function sekoitaPakkaNaytolla() {
+  const pino = document.querySelector('.pakka-pino');
+  if (!pino || !korttiLiikeSallittu()) return;
+  const kortit = pino.querySelectorAll('.pakka-kortti');
+  if (!kortit.length) return;
+  const alku = Math.max(0, kortit.length - 12);
+  for (let i = alku; i < kortit.length; i++) {
+    kortit[i].style.setProperty('--sekoitus-viive', ((kortit.length - 1 - i) * 38) + 'ms');
+  }
+  pino.classList.remove('sekoittuu');
+  void pino.offsetWidth;                 /* pakota animaation uudelleenkaynnistys */
+  pino.classList.add('sekoittuu');
+  if (tila.sekoitusAjastin) clearTimeout(tila.sekoitusAjastin);
+  tila.sekoitusAjastin = setTimeout(function () {
+    tila.sekoitusAjastin = null;
+    pino.classList.remove('sekoittuu');
+  }, 1300);
+}
+
+/* Lento pakasta kateen. Siirretaan OIKEAA korttia (ei kloonia): kortti on
+ * jo oikeassa paikassaan, se vain aloittaa pakan kohdalta ja liukuu
+ * paikalleen. Klooni tarvittaisiin vain jos lahde ja kohde olisivat eri
+ * elementteja - tassa ne ovat sama kortti. */
+function lennataKortitPakasta(uudet) {
+  const pakka = document.querySelector('.pakka-kortti.paalla');
+  if (!pakka || !uudet.length || !korttiLiikeSallittu()) return 0;
+  const p = pakka.getBoundingClientRect();
+  const PORRAS = 70;
+  uudet.forEach(function (el, i) {
+    const r = el.getBoundingClientRect();
+    if (!r.width) return;
+    el.style.setProperty('--lento-x', Math.round(p.left - r.left) + 'px');
+    el.style.setProperty('--lento-y', Math.round(p.top - r.top) + 'px');
+    el.style.setProperty('--lento-viive', (i * PORRAS) + 'ms');
+    el.classList.add('lentaa');
+  });
+  return LENTO_MS + PORRAS * Math.max(0, uudet.length - 1);
+}
+
+/* Voitettu pizza lentaa voittajan laatikkoon. Klooni, koska oikean
+ * pizzakortin liikuttaminen siirtaisi pizza-aluetta kesken kierroksen. */
+function lennataPizzaVoittajalle(laatikkoIndeksi) {
+  if (!korttiLiikeSallittu()) return;
+  const kortti = document.getElementById('pizzaKortti');
+  const rivi = document.getElementById('pelaajarivi');
+  if (!kortti || !rivi) return;
+  const kohde = rivi.children[laatikkoIndeksi] || rivi.children[0];
+  if (!kohde) return;
+  const a = kortti.getBoundingClientRect(), b = kohde.getBoundingClientRect();
+  if (!a.width || !b.width) return;
+  const klooni = document.createElement('div');
+  klooni.className = 'lentava-kortti';
+  klooni.style.left = a.left + 'px';
+  klooni.style.top = a.top + 'px';
+  klooni.style.width = a.width + 'px';
+  klooni.style.height = a.height + 'px';
+  klooni.innerHTML = kortti.innerHTML.replace(/<span[^>]*>[\s\S]*?<\/span>/g, '');
+  klooni.style.setProperty('--voitto-x',
+    Math.round(b.left + b.width / 2 - a.left - a.width / 2) + 'px');
+  klooni.style.setProperty('--voitto-y',
+    Math.round(b.top + b.height / 2 - a.top - a.height / 2) + 'px');
+  document.body.appendChild(klooni);
+  setTimeout(function () { if (klooni.parentNode) klooni.parentNode.removeChild(klooni); }, 800);
 }
 
 /* Välähdys on kuva ja numeroita, ei lausetta. Apinan voitosta näytetään sen

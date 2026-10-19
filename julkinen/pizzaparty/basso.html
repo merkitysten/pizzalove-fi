@@ -53,8 +53,8 @@
      näkyi hetken tyhjä pohja ja tyhjä ympyrä pallilla (mitattu 9.10.2026). -->
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
-<link rel="stylesheet" href="peli.css?v=20261015d">
-<link rel="stylesheet" href="yhteinen.css?v=20261018a">
+<link rel="stylesheet" href="peli.css?v=20261019f">
+<link rel="stylesheet" href="yhteinen.css?v=20261015s">
 <link rel="stylesheet" href="pelivalinta.css?v=20261015d">
 <link rel="stylesheet" href="basso.css?v=20261009f">
 </head>
@@ -76,11 +76,12 @@
          digiversiossa (apinavaaka/). Avaa valikon ja pysäyttää
          pelin kun tauko on sallittu — erillistä taukonappia ei enää ole. -->
     <button id="valikkoAuki" class="valikko-apina" data-ta="palkki.valikko" aria-label="Valikko"><img src="kuvat/basso-nappi.webp?v=20261009a" alt=""><span class="valikko-merkki" aria-hidden="true"><i></i><i></i><i></i></span></button>
-    <!-- ⚠️ Pizzalaskuri poistettu: pizzat eivat lopu kesken, joten luku ei
-         kerro mitaan (Marko 9.9.2026). Taytepakka on palkki eika numero:
-         kortin selkapuolia tiiviissa rivissa, ja rivi lyhenee sita mukaa
-         kun kortteja jaetaan. Se on sama tieto ilman lukua. -->
-    <div class="jaljella" id="taytepalkki" data-ta="palkki.taytteita" aria-label="Täytekortteja jäljellä"></div>
+    <!-- Taytepakka EI OLE ENAA ylapalkissa (Marko 19.10.2026: "nythan ne
+         apinakortit on siella ruudun ylalaidassa hyvin pienena ja
+         epaselvana" + "mahtuisiko ne apinakortit olemaan selka ylospain
+         siina pizzakortin vierella, silloin ehka nakisi paremmin etta
+         molempia kortteja on"). Se on nyt pizzakortin vieressa, ks.
+         .pizza-alue alempana. -->
     <!-- Vain yhteispelissä (pelaaja.js täyttää): erän eteneminen ja omat
          pisteet ruudun yläreunaan (Marko 12.9.2026). Yksinpelissä tässä on
          täytepakka, ja pisteet ovat alarivin laatikoissa. -->
@@ -95,6 +96,20 @@
 
   <div class="pelialue">
     <div class="pizza-alue">
+      <!-- TAYTEPAKKA PIZZAKORTIN VIERESSA (Marko 19.10.2026).
+           Mitattu ennen: pakka oli ylapalkissa 20 x 30 px:n sirupinona eli
+           40 x 37 px kokonaisuudessaan - 3,5 % pizzakortin pinta-alasta
+           tyopoydalla ja 6,9 % puhelimessa, 72 px pizzakortin ylapuolella
+           eli kokonaan eri alueella ruutua. Ja se oli pelin AINOA
+           korttikuva joka ei skaalaudu: kaikki muu johdetaan
+           --kortti-lev:sta, tama oli kovakoodattu 20 x 30 px, joten isolla
+           naytolla pakka kutistui suhteessa kaikkeen muuhun.
+           Nyt se on oikean kokoinen korttipino pizzakortin vasemmalla
+           puolella: kaksi pakkaa vierekkain, kuten poydalla.
+           Pinon PAKSUUS kertoo yha maaran (sailytetty 9.9.2026:n
+           perustelu), mutta sen varaama tila on VAKIO - muuten pizzakortti
+           liikkuisi sivusuunnassa joka kerta kun kortti jaetaan. -->
+      <div class="pakka-alue" id="taytepalkki" data-ta="palkki.taytteita" aria-label="Täytekortteja jäljellä"></div>
       <div class="pizza-kortti" id="pizzaKortti" role="button" tabindex="0" aria-disabled="true">
         <!-- ⚠️ EI ARVOMERKKIA PIZZAN PAALLE (Marko 11.9.2026): "Kortin
              numero nakyy kortissa itsessaan, niin sita ei tarvitse
@@ -398,7 +413,7 @@
          liian pieni ja «ruma». Kauppa aukeaa uuteen välilehteen, peli jää odottamaan. -->
     <div class="valikko-ala">
       <button id="taukoValikkoon" class="valikko-nappi reuna" data-t="valikko.alkuun">Alkuvalikkoon</button>
-      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" data-kauppa="korttipeli" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
     </div>
   </div>
 </div>
@@ -490,7 +505,7 @@
            Kauppa omana nappinaan hiusviivan alla (Marko: «Kauppaan on nyt tosi pieni ja
            taustaan hukkuva teksti. Kyllä silläkin pitää olla reunukset.»). -->
       <hr class="valikko-viiva alku-viiva">
-      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" data-kauppa="korttipeli" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
+      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
     </div>
     <div class="verkko-osa" data-osa="moninpeli" hidden>
       <!-- Liity ensin: neljän pelaajan pelissä yksi luo ja kolme liittyy (Marko 9.10.2026). -->
@@ -534,7 +549,7 @@
       <p class="verkko-virhe bv-virhe" hidden></p>
       <button id="bvAulaPois" type="button" class="toinen-nappi"></button>
     </div>
-    <a class="alku-logo-linkki" href="https://merkitysten.fi/" data-koti target="_blank" rel="noopener"><img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten"></a>
+    <img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten">
   </div>
 </div>
 <p id="bvViesti" class="bv-viesti" hidden role="status"></p>
@@ -551,20 +566,20 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261018c"></script>
+<script src="kielet.js?v=20261015b"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
 <script src="pelivalinta.js?v=20261015d"></script>
 <script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
-<script src="kierros.js?v=20260914b"></script>
+<script src="kierros.js?v=20261019a"></script>
 <!-- ⚠️ peli.js ladataan SELLAISENAAN, ja basso.js korvaa sen vuoroon liittyvät
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
-<script src="peli.js?v=20261009e"></script>
+<script src="peli.js?v=20261019c"></script>
 <script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261009d"></script>
+<script src="basso.js?v=20261019a"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="basso-verkko.js?v=20261010a"></script>
 </body>

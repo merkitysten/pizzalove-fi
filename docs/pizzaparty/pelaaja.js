@@ -108,11 +108,57 @@ function verkkoPeite(osa) {
   verkkoEl('verkkoOdota').hidden = osa !== 'odota';
 }
 
+/* ---------- oma hahmo (vari) ----------
+ * Marko 19.10.2026: "Pizza Partyssa pitaisi pystya valitsemaan oma tausta ja
+ * hahmo, kuten pizza bassossakin". Mitattu ennen: verkkopelin pelaajalla oli
+ * vain nimimerkki, eika huone.php:n pelaajarivilla ollut varia lainkaan.
+ *
+ * Valinta muistetaan laitteelle samaan paikkaan kuin muissakin peleissa
+ * (hahmoAsetukset.variNrot[0]), joten hahmo seuraa pelista toiseen - se on
+ * sama lupaus jonka asetusten selite jo antaa ("sama hahmo on mukana
+ * kaikissa peleissa").
+ *
+ * Varattuja vareja EI haeta etukateen: Partyn liittymislomake kysyy koodin
+ * ja nimen yhdella kertaa, joten huonetta ei ole viela avattu kun varia
+ * valitaan. Palvelin torjuu varatun varin (variVarattu) samoin kuin nimen. */
+function verkkoOmaVari() {
+  const n = hahmoAsetukset.variNrot[0];
+  return hahmoVari(n) ? n : HAHMO_APINAVARIT[0];
+}
+
+function verkkoValitseVari(n) {
+  const omat = hahmoAsetukset.variNrot.filter(function (x) { return x !== n; });
+  hahmoAsetukset.variNrot = [n].concat(omat);
+  hahmoTaydenna();
+  hahmoTallenna();
+}
+
+function verkkoPiirraVarit(id) {
+  const sailio = document.getElementById(id);
+  if (!sailio) return;
+  const valittu = verkkoOmaVari();
+  sailio.textContent = '';
+  TAYTTEET.forEach(function (x) {
+    const nappi = document.createElement('button');
+    nappi.type = 'button';
+    nappi.className = 'hahmo-valinta' + (x.arvo === valittu ? ' valittu' : '');
+    nappi.setAttribute('aria-label', t('basso.vari', { n: x.arvo }));
+    nappi.innerHTML = hahmoKuva(x.vari);
+    nappi.onclick = function () {
+      verkkoValitseVari(x.arvo);
+      verkkoPiirraVarit('verkkoLiityVarit');
+      verkkoPiirraVarit('verkkoLuoVarit');
+    };
+    sailio.appendChild(nappi);
+  });
+}
+
 function verkkoLiityNakyma(virhe) {
   verkkoLopetaPaikallisesti();
   const el = verkkoEl('verkkoVirhe');
   el.textContent = virhe || '';
   el.hidden = !virhe;
+  verkkoPiirraVarit('verkkoLiityVarit');
   verkkoPeite('liity');
 }
 
@@ -127,7 +173,11 @@ function verkkoOdotaNakyma(tilanne) {
    * ilman isäntää peli jäisi kaikilta jumiin, joten hänellä on Lopeta peli. */
   const poistu = verkkoEl('verkkoPoistu');
   poistu.hidden = !!verkkopeli.isanta;
-  poistu.textContent = t(verkkopeli.koodi ? 'verkko.poistu' : 'valikko.alkuun');
+  /* Nappi on nurkan rasti (.as-kulma), joten teksti menee aria-labeliin ja
+   * vihjeeseen. textContent peittaisi rastin. */
+  const poistuTeksti = t(verkkopeli.koodi ? 'verkko.poistu' : 'valikko.alkuun');
+  poistu.setAttribute('aria-label', poistuTeksti);
+  poistu.title = poistuTeksti;
   const taulu = verkkoEl('verkkoTaulu');
   taulu.textContent = '';
   taulu.hidden = true;
@@ -153,6 +203,17 @@ function verkkoPistetaulu(pelaajat) {
   kierrosJarjestys(pelaajat, KIELI).forEach(function (p) {
     const li = document.createElement('li');
     if (p.id === verkkopeli.id) { li.className = 'oma'; oma = li; }
+    /* Vari ennen sijaa: se on sama tunniste jonka pelaaja valitsi
+     * liittyessaan.
+     * Merkki piirretaan AINA, myos ilman varia (lapinakyvana). Rivi on
+     * nelisarakkeinen grid, joten ehdollinen elementti siirtaisi sijan,
+     * nimen ja pisteet yhden sarakkeen vasemmalle juuri niilla riveilla
+     * joilla varia ei ole - eika mikaan kaataisi, rivi vain menisi vinoon. */
+    const merkki = document.createElement('span');
+    merkki.className = 'verkko-taulu-vari';
+    const variHex = hahmoVari(p.vari);
+    if (variHex) merkki.style.background = variHex;
+    li.appendChild(merkki);
     [['verkko-taulu-sija', p.sija + '.'], ['verkko-taulu-nimi', p.nimi],
      ['verkko-taulu-pisteet', String(p.pisteet)]].forEach(function (osa) {
       const el = document.createElement('span');
@@ -526,7 +587,7 @@ async function verkkoLiity(e) {
   verkkoEl('verkkoVirhe').hidden = true;
   const koodi = verkkoEl('verkkoKoodi').value.trim();
   try {
-    verkkoOtaPelaaja(koodi, await api('liity', { koodi: koodi, nimi: verkkoEl('verkkoNimi').value }));
+    verkkoOtaPelaaja(koodi, await api('liity', { koodi: koodi, nimi: verkkoEl('verkkoNimi').value, vari: verkkoOmaVari() }));
   } catch (err) {
     const el = verkkoEl('verkkoVirhe');
     el.textContent = virheTeksti(err);

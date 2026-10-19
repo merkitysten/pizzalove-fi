@@ -214,6 +214,10 @@ function kierrosJarjestys(pelaajat, kieli) {
   let edellinen = null, sija = 0;
   return jarjestys.map(function (p, i) {
     if (p.pisteet !== edellinen) { sija = i + 1; edellinen = p.pisteet; }
-    return { id: p.id, nimi: p.nimi, pisteet: p.pisteet, sija: sija };
+    /* Vari mukaan: tama funktio on PROJEKTIO, ei jarjestys - se rakentaa
+     * uudet oliot, joten kentta joka ei ole tassa listassa katoaa hiljaa.
+     * Mitattu 19.10.2026: varipallo jai piirtamatta vaikka palvelin palautti
+     * varin ja piirtokoodi oli oikein, koska vari tippui tassa. */
+    return { id: p.id, nimi: p.nimi, pisteet: p.pisteet, vari: (p.vari || null), sija: sija };
   });
 }
