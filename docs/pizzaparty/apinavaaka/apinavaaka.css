@@ -224,12 +224,51 @@
 /* ---- Nälkäiset apinat ---- */
 .av__boksi{display:none}
 .av--apinat .av__boksi{display:flex;align-items:center;gap:8px}
-.av__boksi svg{width:68px;height:68px;filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
-.av__boksi-pohja{fill:#F3D9A4;stroke:#C98F3A;stroke-width:3}
-.av__boksi path{stroke:#fff;stroke-width:1.5;transition:fill .3s}
-.av__boksi path:not(.tay){stroke:#E5C68C}
-.av__boksi path.uusi{animation:av-pala .6s cubic-bezier(.3,1.8,.5,1);transform-origin:0 0}
-@keyframes av-pala{from{transform:scale(1.5)}}
+/* ⚠️ BOKSI ON OIKEA PIZZALAATIKKO. Mitat on luettu kuvasta (760 x 760,
+ * keskipiste keskella, kastikerenkaan ulkosade 258 px = 34 %), ja pala on
+ * tasan kymmenesosa ympyrasta (karki 35,9 astetta). Siksi palat ladotaan
+ * 36 asteen valein ilman rakoa.
+ * Pala asetetaan KARKI KESKIPISTEESSA: korkeus 34 % laatikosta, leveys
+ * sama osuus kortin omasta suhteesta (353/546), ja kiertokeskio on palan
+ * alareunan keskella eli tasan laatikon keskipisteessa. */
+/* ⚠️ NIMI ON .av__palajuhla EIKA .av__juhla, JA SE ON MITATTU VIRHE.
+ * Valitsin `.av__juhla` oli jo olemassa (ylempana): se on «PIZZAA!»
+ * -huudon tyyli, `position:absolute … transform:translate(-50%,-50%)
+ * scale(.3); opacity:0`. Sama valitsin kahdesti samalla tarkkuudella
+ * tarkoittaa etta uudempi saanto voittaa VAIN ne ominaisuudet jotka se
+ * itse asettaa - vanhan `transform` ja `opacity` jaivat voimaan, ja
+ * peite oli 307 x 230 px ruudun ulkopuolella nakymattomana. Mikaan ei
+ * kaatunut eika konsoliin tullut mitaan; vika nakyi vain mittaamalla
+ * (peite 307 x 230 kun ruutu on 1024 x 768). Juuri tama ansa on
+ * CLAUDE.md:ssa. */
+/* --- ansaitun palan juhla: iso keskella, sitten boksiin --- */
+.av__palajuhla{position:fixed;inset:0;z-index:60;display:flex;align-items:center;
+  justify-content:center;gap:2vmin;pointer-events:none;
+  background:rgba(26,20,12,.55);animation:av-palajuhla-pohja .28s ease-out both}
+@keyframes av-palajuhla-pohja{from{background:rgba(26,20,12,0)}}
+/* ⚠️ Korkeus vmin-yksikkona: sama saanto pystyssa ja vaakatasossa, eika
+ * mikaan kiinnea pikselimaara. Kaksi palaa (sydanpizza) mahtuu rinnan. */
+.av__palajuhla-kuva{height:46vmin;width:auto;display:block;
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.45));
+  animation:av-palajuhla-sisaan .42s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes av-palajuhla-sisaan{from{transform:scale(.25) rotate(-12deg);opacity:0}}
+
+.av__boksi{position:relative;width:68px;height:68px;flex:0 0 auto;
+  filter:drop-shadow(0 2px 3px rgba(60,30,0,.2))}
+.av__boksi-pohja{position:absolute;inset:0;width:100%;height:100%;display:block}
+.av__boksi-pala{position:absolute;left:50%;bottom:50%;
+  height:34%;width:calc(34% * 353 / 546);
+  margin-left:calc(-17% * 353 / 546);
+  transform-origin:50% 100%;display:block}
+.av__boksi-pala.uusi{animation:av-pala .6s cubic-bezier(.3,1.8,.5,1)}
+/* ⚠️ KIERTO ON TOISTETTAVA AVAINRUUDUISSA. `transform` on yksi
+ * ominaisuus: animaatio korvaa rivityylin kierron kokonaan sen ajaksi,
+ * joten ilman `rotate(var(--kulma))`a pala hyppaisi nollakulmaan ja
+ * palaisi vasta lopussa. Kulma tulee rivityylista samalla kertaa. */
+@keyframes av-pala{
+  from{transform:rotate(var(--kulma,0deg)) scale(.2);opacity:0}
+  to{transform:rotate(var(--kulma,0deg)) scale(1);opacity:1}
+}}
 .av__boksi b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
 
 .av__kortit{display:none}

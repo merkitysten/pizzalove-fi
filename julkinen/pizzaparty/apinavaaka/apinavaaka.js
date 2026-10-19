@@ -451,7 +451,7 @@
     var pinoV = el('div', 'av__pino'), pinoO = el('div', 'av__pino');
     var lukuV = el('span', 'av__luku'), lukuO = el('span', 'av__luku');
     [pinoV, pinoO, lukuV, lukuO].forEach(function (x) { nayttamo.appendChild(x); });
-    var juhla = el('div', 'av__juhla');
+    var juhla = el('div', 'av__palajuhla');
     nayttamo.appendChild(juhla);
     var loppuEl = el('div', 'av__loppu');
     nayttamo.appendChild(loppuEl);
@@ -883,6 +883,55 @@
         };
       });
     }
+    /* ⚠️ ANSAITTU PALA NAYTETAAN ISONA KESKELLA RUUTUA (Marko 19.10.2026:
+     * «kun se pala ansaitaan, niin se pitaa nayttaa selkeasti pelaajalle
+     * isompana kuvana keskella ruutua ja sitten se pizzalaatikko ja palat
+     * menevat pienempana omalle paikalleen»).
+     *
+     * Ennen pala ilmestyi suoraan 68 px:n boksiin pienella pompulla. Se
+     * oli tieto muttei tapahtuma - ja juuri se on pelin palkinto.
+     *
+     * ⚠️ KOHDE MITATAAN RUUDULTA, EI LASKETA. Boksi on ylapalkissa, jonka
+     * paikka riippuu asennosta ja ruudun koosta; `getBoundingClientRect`
+     * kertoo sen oikein kaikissa. Palan lentorata lasketaan siita.
+     * ⚠️ `mittakaava` mukaan kuten paistamisessa: peli voi olla zoomattu,
+     * jolloin ruutupikselit ja elementin omat pikselit eroavat.
+     * ⚠️ Liikerajoitus ohittaa koko juhlan (vahennaLiike), kuten uunikin. */
+    function juhliPala(numerot, valmis) {
+      var lista = [].concat(numerot).filter(function (n) { return typeof n === 'number'; });
+      if (!lista.length || vahennaLiike || !document.body.animate) return valmis();
+      var peite = el('div', 'av__palajuhla');
+      var kuvat = lista.map(function (n) {
+        var k = el('img', 'av__palajuhla-kuva');
+        k.src = KANSIO + '../kuvat/pala/' + n + '.webp';
+        k.alt = '';
+        peite.appendChild(k);
+        return k;
+      });
+      document.body.appendChild(peite);
+      var kesto = 820, lento = 460;
+      setTimeout(function () {
+        var b = boksiEl.getBoundingClientRect();
+        var jaljella = kuvat.length;
+        kuvat.forEach(function (k, i) {
+          var a = k.getBoundingClientRect();
+          var dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+          var dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+          var skaala = Math.max(0.08, b.width / Math.max(1, a.width));
+          k.animate([{ transform: 'none', opacity: 1 },
+            { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + skaala.toFixed(3) + ')', opacity: 0.1 }],
+            { duration: lento, delay: i * 90, easing: 'cubic-bezier(.5,0,.7,1)', fill: 'forwards' })
+            .onfinish = function () {
+              jaljella--;
+              if (jaljella <= 0) {
+                if (peite.parentNode) peite.parentNode.removeChild(peite);
+                valmis();
+              }
+            };
+        });
+      }, kesto);
+    }
+
     // näytön pikseleiden ja elementin omien CSS-pikseleiden suhde (peli voi olla pienennetty zoomilla)
     function mittakaava(x) { var r = x.getBoundingClientRect(); return (x.offsetWidth && r.width) ? r.width / x.offsetWidth : 1; }
     function kuljeta(tops, korttiEl, valmis) {
@@ -1115,20 +1164,26 @@
       // pizza liukuu hihnaa pitkin uuniin, ja vasta sitten pala menee boksiin
       if (korttiEl && !vahennaLiike && korttiEl.animate) return paista(korttiEl, function () { valmista(n); }, [n]);
       tila.paikka[n] = 'varasto';                       // käytetty täyte takaisin varastoon
-      if (tila.boksi.indexOf(n) < 0) { tila.boksi.push(n); tila.uusiPala = n; }   // sama pala vain kerran
+      var uusi = tila.boksi.indexOf(n) < 0;
+      if (uusi) { tila.boksi.push(n); tila.uusiPala = n; }   // sama pala vain kerran
       var i = tila.laudalla.indexOf(n);
       if (tila.pakka.length) { tila.laudalla[i] = tila.pakka.shift(); tila.uusiKortti = tila.laudalla[i]; } else tila.laudalla.splice(i, 1);
       tila.vuoronPizzat++;
       // sydänpizza (täytteet yhteensä 10): yksi vapaavalintainen lisäpala
-      if (tila.muoto === 'opas') return opasPizza();
-      if (n === 10 && tila.boksi.length < 10) { tila.valitsee = true; return piirra(); }
-      jatkaPizzat();
+      var jatka = function () {
+        if (tila.muoto === 'opas') return opasPizza();
+        if (n === 10 && tila.boksi.length < 10) { tila.valitsee = true; return piirra(); }
+        jatkaPizzat();
+      };
+      juhliPala(uusi ? n : null, jatka);
     }
     function valitseLisapala(k) {
       if (!tila.valitsee || tila.boksi.indexOf(k) >= 0) return;
       tila.boksi.push(k); tila.uusiPala = k; tila.valitsee = false;
-      if (tila.muoto === 'pulmat') return jatkaPulma();
-      jatkaPizzat();
+      juhliPala(k, function () {
+        if (tila.muoto === 'pulmat') return jatkaPulma();
+        jatkaPizzat();
+      });
     }
     function jatkaPizzat() {
       if (tila.boksi.length === 10) { piirra(); return setTimeout(function () { lopeta(); }, 700); }
@@ -1304,15 +1359,35 @@
           p += '<i class="' + (oi < tila.oVaihe ? 'tehty' : oi === tila.oVaihe ? 'nyt' : '') + '"></i>';
       }
       if (tuot) {
-        // boksi pizzana: 10 siivua, täytetty siivu täytteen värinen
-        var sv = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><circle r="47" class="av__boksi-pohja"/>';
+        /* ⚠️ BOKSI ON OIKEA PIZZALAATIKKO JA OIKEAT PALAT (Marko 19.10.2026:
+         * «tähän laatikkoon paloja sitten kerätään» + painotiedoston palat).
+         * Ennen tässä oli 68 px:n SVG-ympyrä jonka lohkot varittyivat -
+         * sama tieto, mutta ei mitaan yhteytta siihen mita poydalla
+         * tehdaan. Nyt pohja on `boksi.webp` (pizzalaatikko tyhjalla
+         * pizzapohjalla) ja palat `kuvat/pala/1-10.webp`, samat jotka
+         * painetaan.
+         *
+         * 📐 GEOMETRIA ON MITATTU KUVASTA EIKA ARVATTU: laatikko on
+         * 760 x 760, keskipiste (380, 380) ja tomaattikastikkeen
+         * ulkosade 258 px = 34 % laatikon leveydesta. Marko: «palat
+         * laitetaan ympyraan, joka leikkaantuu juuri tuon
+         * tomaattikastikkeen kohdalta.»
+         *
+         * 📐 JA PALA ON TASAN KYMMENESOSA: pala on 353 x 546 px, joten
+         * karjen puolikulma on atan(176.5 / 546) = 17,9 astetta eli koko
+         * karki 35,9 astetta. Kymmenen palaa = 359 astetta. Ne siis
+         * ladotaan 36 asteen valein ilman rakoa tai limitysta - se ei ole
+         * sattuma vaan painotiedoston oma mitta. */
+        var sv = '<img class="av__boksi-pohja" src="' + KANSIO + 'boksi.webp" alt="">';
         for (var j = 0; j < 10; j++) {
-          var a0 = (j * 36 - 90) * Math.PI / 180, a1 = ((j + 1) * 36 - 90) * Math.PI / 180, n0 = j + 1;
-          var tay = tila.boksi.indexOf(n0) >= 0;
-          sv += '<path class="' + (tay ? 'tay' : '') + (tila.uusiPala === n0 || (tila.uusiPala && tila.uusiPala.indexOf && tila.uusiPala.indexOf(n0) >= 0) ? ' uusi' : '') + '" d="M0 0L' + (44 * Math.cos(a0)).toFixed(2) + ' ' + (44 * Math.sin(a0)).toFixed(2) +
-            'A44 44 0 0 1 ' + (44 * Math.cos(a1)).toFixed(2) + ' ' + (44 * Math.sin(a1)).toFixed(2) + 'Z" style="fill:' + (tay ? VARIT[j] : 'transparent') + '"/>';
+          var n0 = j + 1;
+          if (tila.boksi.indexOf(n0) < 0) continue;
+          var tuore = (tila.uusiPala === n0 ||
+            (tila.uusiPala && tila.uusiPala.indexOf && tila.uusiPala.indexOf(n0) >= 0));
+          sv += '<img class="av__boksi-pala' + (tuore ? ' uusi' : '') + '" src="' +
+            KANSIO + '../kuvat/pala/' + n0 + '.webp" alt="" style="--kulma:' + (j * 36) +
+            'deg;transform:rotate(' + (j * 36) + 'deg)">';
         }
-        sv += '</svg>';
         tila.uusiPala = null;
         boksiEl.innerHTML = sv;
         boksiEl.setAttribute('aria-label', t.boksi + ': ' + tila.boksi.length + '/10');
