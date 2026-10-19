@@ -48,6 +48,13 @@
   var KIELI_NIVEL = [1580, 1740], KIELI_KULMA = { '<': 15, '=': -5, '>': -24 };
   var MAKSIMIKULMA = 9;
 
+  /* ⚠️ PALAKUVILLA ON OLTAVA VERSIOLEIMA, KOSKA NE EIVAT TULE HTML:STA.
+   * `?v=` nostetaan sivupohjassa vain `<script>`- ja `<link>`-riveille;
+   * JS:n rakentama `src` jaa ilman, ja silloin kerran ladattu kuva jaa
+   * selaimen valimuistiin PYSYVASTI. Varikorjaus 19.10.2026 ei olisi
+   * nakynyt yhdellekaan pelaajalle joka on kayttanyt peli aiemmin. */
+  var PALA_V = '?v=20261019b';
+
   var VARIT = ['#090A0D', '#E62448', '#FFDF00', '#1072B9', '#EF7925',
                '#824292', '#16A74F', '#7F3B1E', '#E473AA', '#6AC0B2'];
 
@@ -912,7 +919,7 @@
         if (tila.boksi.indexOf(n0) < 0) continue;
         var tuore = tuoreet && (tuoreet === n0 || (tuoreet.indexOf && tuoreet.indexOf(n0) >= 0));
         sv += '<img class="av__boksi-pala' + (tuore ? ' uusi' : '') + '" src="' +
-          KANSIO + '../kuvat/pala/' + n0 + '.webp" alt="" style="--kulma:' + (j * 36) +
+          KANSIO + '../kuvat/pala/' + n0 + '.webp' + PALA_V + '" alt="" style="--kulma:' + (j * 36) +
           'deg;transform:rotate(' + (j * 36) + 'deg)">';
       }
       return sv;
@@ -936,7 +943,7 @@
         var rivi = el('div', 'av__boksinaky-puuttuu');
         puuttuu.forEach(function (n) {
           var k = el('img');
-          k.src = KANSIO + '../kuvat/pala/' + n + '.webp';
+          k.src = KANSIO + '../kuvat/pala/' + n + '.webp' + PALA_V;
           k.alt = t.taytteet[n - 1] + ' ' + n;
           rivi.appendChild(k);
         });
@@ -965,36 +972,59 @@
     function juhliPala(numerot, valmis) {
       var lista = [].concat(numerot).filter(function (n) { return typeof n === 'number'; });
       if (!lista.length || vahennaLiike || !document.body.animate) return valmis();
-      var peite = el('div', 'av__palajuhla');
-      var kuvat = lista.map(function (n) {
-        var k = el('img', 'av__palajuhla-kuva');
-        k.src = KANSIO + '../kuvat/pala/' + n + '.webp';
-        k.alt = '';
-        peite.appendChild(k);
-        return k;
+      /* ⚠️ PALA LENTAA ISOON BOKSIIN, EI NURKKAAN (Marko 19.10.2026: «Kun palan
+       * saa, niin siinakin pitaisi tulla tama lahikuva, jolloin se pala menee
+       * boksiin.»). Ennen pala naytettiin isona keskella ja se kutistui 68 px:n
+       * nurkkanappiin - pelaaja naki palkinnon muttei sita MIHIN se meni.
+       *
+       * ⚠️ YKSI ELEMENTTI, EI KAHTA. Pala on alusta asti se sama
+       * `.av__boksi-pala` joka jaa boksiin; se vain aloittaa isona ruudun
+       * keskella. Erillinen keskikuva + erillinen boksin pala olisi sama asia
+       * kahdesti, ja niiden valissa nakyisi hyppy. */
+      var naky = el('div', 'av__boksinaky av__boksinaky--juhla');
+      var iso = el('div', 'av__boksi av__boksi--iso');
+      iso.innerHTML = boksinSisus(lista);
+      naky.appendChild(iso);
+      document.body.appendChild(naky);
+      /* `uusi`-luokan oma CSS-animaatio pois: tama polku animoi saman palan
+         itse, ja kaksi animaatiota samasta `transform`ista kilpailisi. */
+      var lentavat = [].slice.call(iso.querySelectorAll('.av__boksi-pala.uusi'));
+      lentavat.forEach(function (k) { k.classList.remove('uusi'); });
+      if (!lentavat.length) { if (naky.parentNode) naky.parentNode.removeChild(naky); return valmis(); }
+
+      /* ⚠️ MITAT RUUDULTA, EI LASKETTUNA. Boksin koko on `min(74vmin,420px)`,
+       * ja palan kiertokeskipiste on sen KESKELLA (`transform-origin:50% 100%`
+       * + `bottom:50%`). Keskityksen siirtyma lasketaan siita pisteesta. */
+      var b = iso.getBoundingClientRect();
+      var ox = b.left + b.width / 2, oy = b.top + b.height / 2;
+      var vmin = Math.min(window.innerWidth, window.innerHeight);
+      var skaala = Math.max(1, (0.46 * vmin) / Math.max(1, 0.34 * b.height));
+      var dx = window.innerWidth / 2 - ox;
+      var dy = (window.innerHeight / 2 + 0.21 * vmin) - oy;
+      var alkuMuoto = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' +
+        skaala.toFixed(3) + ') rotate(0deg)';
+
+      var naytto = 760, lento = 620, jaa = 760, jaljella = lentavat.length, ohi = false;
+      function sulje() {
+        if (ohi) return;
+        ohi = true;
+        if (naky.parentNode) naky.parentNode.removeChild(naky);
+        valmis();
+      }
+      naky.addEventListener('click', sulje);           // napautus ohittaa juhlan
+      lentavat.forEach(function (k, i) {
+        var kulma = k.style.transform || 'rotate(0deg)';
+        var viive = i * 220;
+        k.animate([
+          { transform: alkuMuoto, offset: 0 },
+          { transform: alkuMuoto, offset: naytto / (naytto + lento) },
+          { transform: kulma, offset: 1 }
+        ], { duration: naytto + lento, delay: viive, fill: 'both',
+             easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () {
+          jaljella--;
+          if (jaljella <= 0) setTimeout(sulje, jaa);
+        };
       });
-      document.body.appendChild(peite);
-      var kesto = 820, lento = 460;
-      setTimeout(function () {
-        var b = boksiEl.getBoundingClientRect();
-        var jaljella = kuvat.length;
-        kuvat.forEach(function (k, i) {
-          var a = k.getBoundingClientRect();
-          var dx = (b.left + b.width / 2) - (a.left + a.width / 2);
-          var dy = (b.top + b.height / 2) - (a.top + a.height / 2);
-          var skaala = Math.max(0.08, b.width / Math.max(1, a.width));
-          k.animate([{ transform: 'none', opacity: 1 },
-            { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + skaala.toFixed(3) + ')', opacity: 0.1 }],
-            { duration: lento, delay: i * 90, easing: 'cubic-bezier(.5,0,.7,1)', fill: 'forwards' })
-            .onfinish = function () {
-              jaljella--;
-              if (jaljella <= 0) {
-                if (peite.parentNode) peite.parentNode.removeChild(peite);
-                valmis();
-              }
-            };
-        });
-      }, kesto);
     }
 
     // näytön pikseleiden ja elementin omien CSS-pikseleiden suhde (peli voi olla pienennetty zoomilla)
@@ -1477,7 +1507,7 @@
           v.type = 'button';
           v.setAttribute('aria-label', t.taytteet[q - 1] + ' ' + q);
           var kuva = el('img');
-          kuva.src = KANSIO + '../kuvat/pala/' + q + '.webp';
+          kuva.src = KANSIO + '../kuvat/pala/' + q + '.webp' + PALA_V;
           kuva.alt = '';
           v.appendChild(kuva);
           v.addEventListener('click', function () { valitseLisapala(q); });
