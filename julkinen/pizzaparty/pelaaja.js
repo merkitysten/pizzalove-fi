@@ -529,7 +529,14 @@ function verkkoAjastaKysely(ms) {
  * odotusnäkymään, jotta erän numero näkyy myös tulosten aikana. */
 function verkkoPalkki(s) {
   const k = s.kierros ? s.kierros.n : (s.tulos ? s.tulos.n : 0);
-  verkkopeli.kierrosTeksti = k ? t('isanta.kierrosNro', { n: k, kaikki: s.asetukset.kierroksia }) : '';
+  /* ⚠️ HARJOITUSKIERROS SANOTAAN ÄÄNEEN (Marko 20.10.2026). «Kierros 2 / 10»
+   * harjoituksen aikana olisi suoraan väärin: pelin kierroksia ei ole vielä
+   * pelattu yhtään. ⚠️ Vanha palvelin ei välitä lippua, jolloin tämä on
+   * epätosi ja teksti on entisellään - peli toimii silti, merkki vain
+   * ilmestyy vasta kun palvelin on viety. */
+  const harjoituskierros = !!(s.kierros && s.kierros.harjoitus);
+  verkkopeli.kierrosTeksti = harjoituskierros ? t('harjoitus.aloita')
+    : (k ? t('isanta.kierrosNro', { n: k, kaikki: s.asetukset.kierroksia }) : '');
   verkkoEl('verkkoPalkkiKierros').textContent = verkkopeli.kierrosTeksti;
   verkkoEl('verkkoPalkkiPisteet').textContent = s.oma ? String(s.oma.pisteet) : '';
   verkkoEl('verkkoPalkki').hidden = false;

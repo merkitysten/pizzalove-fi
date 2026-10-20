@@ -165,6 +165,13 @@ function verkkoIsantaToiminto() {
   if (vaihe === 'kierros') {
     return { teksti: isannointiViimeinen(h) ? 'isanta.lopputulokseen' : 'isanta.seuraava', tee: null };
   }
+  /* ⚠️ HARJOITUS ENNEN «viimeinen kierros» -EHTOA (Marko 20.10.2026).
+   * Harjoitellessa ei koskaan siirrytä lopputuloksiin: pelihän ei ole vielä
+   * alkanut. Jos tämä olisi alempana, kolmas harjoituskierros olisi vienyt
+   * ryhmän suoraan loppuruutuun kymmenen kierroksen asetuksella. */
+  if (vaihe === 'tulos' && h.harjoitus) {
+    return { teksti: 'harjoitus.aloitaPeli', tee: verkkoIsantaAloitaPeli };
+  }
   if (vaihe === 'tulos' && isannointiViimeinen(h)) return { teksti: 'isanta.lopputulokseen', tee: isannointiPaataPeli };
   if (vaihe === 'tulos') return { teksti: 'isanta.seuraava', tee: isannointiAloitaKierros };
   if (vaihe === 'loppu') return { teksti: 'isanta.uudelleen', tee: isannointiUudelleen };
@@ -216,6 +223,15 @@ function verkkoIsantaPaivita() {
   /* ⚠️ Ei `hidden` vaan `.varattu`: palkin paikka lasketaan täydestä
    * korkeudesta (verkkoIsantaNapitNakyviin), jotta pääpainike ei siirry
    * kierroksen alkaessa ja päättyessä. */
+  /* Harjoitusnappi: aulassa «Harjoituskierros», harjoituksen tulosten
+     jälkeen «Harjoitellaan vielä». Muissa vaiheissa piilossa. */
+  const harjNappi = verkkoEl('verkkoIsantaHarjoitus');
+  if (harjNappi) {
+    const harjVaihe = aulassa || (s.vaihe === 'tulos' && h.harjoitus);
+    harjNappi.hidden = !harjVaihe;
+    if (harjVaihe) harjNappi.textContent = t(aulassa ? 'harjoitus.aloita' : 'harjoitus.viela');
+    harjNappi.disabled = h.kesken;
+  }
   const lopetaKierros = verkkoEl('verkkoIsantaLopetaKierros');
   const eiKierrosta = s.vaihe !== 'kierros';
   lopetaKierros.classList.toggle('varattu', eiKierrosta);
@@ -259,6 +275,16 @@ function verkkoIsantaKatosi(e) {
   verkkoIsantaUnohda();
   verkkoAjastaKysely(0);
   return true;
+}
+
+/* Harjoituksesta oikeaan peliin: `uudelleen` nollaa vaiheen, kierroksen,
+ * tulokset ja JOKAISEN pisteet (huone.php) - eli harjoittelussa kertynyt ei
+ * jää voimaan. ⚠️ Sama olemassa oleva tie jolla uusi peli muutenkin alkaa,
+ * ei uutta erikoistapausta. Kierroslaskuri alkaa samalla alusta, joten
+ * harjoituskierrokset eivät syö pelin kierroksia. */
+async function verkkoIsantaAloitaPeli(h) {
+  h.harjoitus = false;
+  await isannointiUudelleen(h);
 }
 
 async function verkkoIsantaJatka() {
@@ -410,6 +436,10 @@ function verkkoIsantaKytke() {
     });
   });
   verkkoEl('verkkoIsantaJatka').addEventListener('click', verkkoIsantaJatka);
+  verkkoEl('verkkoIsantaHarjoitus').addEventListener('click', function () {
+    verkkoIsanta.harjoitus = true;
+    isannointiAloitaKierros(verkkoIsanta);
+  });
   isannointiVarmistaEnsin(verkkoEl('verkkoIsantaLopeta'), verkkoIsantaLopeta);
   /* Kierroksen lopetus päättää sen kaikilta, myös niiltä jotka vielä
    * miettivät — sama kahden napautuksen varmistus kuin pelin lopetuksessa. */
@@ -430,7 +460,7 @@ function verkkoIsantaVahti() {
   ['verkkoIsantaQr', 'verkkoLuo', 'verkkoLuoNimi', 'verkkoLuoKierroksia', 'verkkoLuoAikaMiinus',
    'verkkoLuoAika', 'verkkoLuoAikaPlus', 'verkkoLuoOdota', 'verkkoLuoTapa', 'verkkoLuoLuvat',
    'verkkoLuoNappi', 'verkkoLuoVirhe', 'verkkoLuoTakaisin', 'verkkoIsanta', 'verkkoIsantaKoodi',
-   'verkkoIsantaOsoite', 'verkkoIsantaPelaajat', 'verkkoIsantaJatka', 'verkkoIsantaVirhe', 'verkkoIsantaLopetaKierros', 'verkkoIsantaNapit',
+   'verkkoIsantaOsoite', 'verkkoIsantaPelaajat', 'verkkoIsantaJatka', 'verkkoIsantaVirhe', 'verkkoIsantaLopetaKierros', 'verkkoIsantaHarjoitus', 'verkkoIsantaNapit',
    'verkkoIsantaLopeta'].forEach(function (id) { if (!verkkoEl(id)) puuttuu.push('#' + id); });
   ['isannointiUusi', 'isannointiLuo', 'isannointiJatka', 'isannointiAloitaKierros', 'isannointiPitaaPaattaa',
    'isannointiPaataKierros', 'isannointiPaataPeli', 'isannointiUudelleen', 'isannointiPoista',

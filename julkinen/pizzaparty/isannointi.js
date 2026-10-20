@@ -185,8 +185,14 @@ async function isannointiAloitaKierros(h) {
     v.virhe = 'eiJakoa';
     throw v;
   }
+  /* ⚠️ `harjoitus` LÄHETETÄÄN VAIKKA PALVELIN EI SITÄ VIELÄ TUNTISI. Vanha
+   * `huone.php` rakentaa kierroksen valkolistatuista kentistä ja pudottaa
+   * tämän hiljaa - silloin harjoituskierros toimii isännälle mutta muut
+   * eivät näe merkkiä. Uusi palvelin välittää sen, ja merkki ilmestyy
+   * itsestään. Mikään ei siis odota vientiä. */
   const j = await api('aloitaKierros', Object.assign(isannointiTunnus(h), {
     n: n, pizza: jako.pizza, kortit: jako.kortit, esimerkki: jako.esimerkki,
+    harjoitus: !!h.harjoitus,
   }));
   h.tila = j.tila;
   h.kierros = j.tila.kierros;

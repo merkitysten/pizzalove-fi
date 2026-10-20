@@ -57,7 +57,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261020a">
-<link rel="stylesheet" href="yhteinen.css?v=20261020c">
+<link rel="stylesheet" href="yhteinen.css?v=20261020d">
 <link rel="stylesheet" href="pelivalinta.css?v=20261019a">
 </head>
 <body>
@@ -554,6 +554,13 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
     <div class="verkko-isanta-lopetukset">
       <!-- Paikka varataan myös kun painike ei ole käytössä (.varattu): muuten
            palkki kasvaisi ja pääpainike nousisi kierroksen alkaessa. -->
+      <!-- HARJOITUSKIERROS (Marko 20.10.2026). Sama nappi kahdessa hetkessä:
+           aulassa «Harjoituskierros», harjoituksen tulosten jälkeen
+           «Harjoitellaan vielä». Oma nappi eikä pääpainikkeen tilalle:
+           pääpainike on «Aloita peli», ja se on se jota odotetaan.
+           ⚠️ Partyn verkkopelissä tämä on ISÄNNÄN PALKISSA eikä tulosruudussa
+           (toisin kuin Bassossa): Party ei käytä tulosruutua verkossa. -->
+      <button id="verkkoIsantaHarjoitus" type="button" class="toinen-nappi" hidden></button>
       <button id="verkkoIsantaLopetaKierros" type="button" class="toinen-nappi varattu" data-t="isanta.lopetaKierros"></button>
       <button id="verkkoIsantaLopeta" type="button" class="toinen-nappi" data-t="isanta.lopetaPeli"></button>
     </div>
@@ -698,10 +705,10 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <script src="kierros.js?v=20261019a"></script>
 <script src="yhteys.js?v=20261020a"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="isannointi.js?v=20260920a"></script>
+<script src="isannointi.js?v=20261020a"></script>
 <script src="peli.js?v=20261019c"></script>
-<script src="pelaaja.js?v=20261020c"></script>
-<script src="pelaavaisanta.js?v=20261019a"></script>
+<script src="pelaaja.js?v=20261020d"></script>
+<script src="pelaavaisanta.js?v=20261020a"></script>
 <script src="valikko.js?v=20261020b"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
      `aloitaPeli`a ja (Bassossa) `basso`a, joten se on ladattava niiden
