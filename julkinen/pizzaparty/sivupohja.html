@@ -75,7 +75,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261019g">
-<link rel="stylesheet" href="yhteinen.css?v=20261020b">
+<link rel="stylesheet" href="yhteinen.css?v=20261020c">
 <link rel="stylesheet" href="pelivalinta.css?v=20261019a">
 <!--@basso-->
 <link rel="stylesheet" href="basso.css?v=20261020a">
@@ -546,6 +546,11 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
       <img class="verkko-apina" src="kuvat/apina.webp?v=20260910a" alt="">
       <input id="verkkoKoodi" class="verkko-kentta" inputmode="numeric" pattern="[0-9]*" maxlength="4"
              autocomplete="off" data-tp="verkko.koodi" data-ta="verkko.koodi">
+      <!-- ⚠️ PIILOSSA KUNNES `qrluku.js` TOTEAA LUVUN MAHDOLLISEKSI. Nappi joka
+           ei voi toimia on huonompi kuin ei nappia: kamera vaatii suojatun
+           yhteyden ja `getUserMedia`n, eikä esim. vanha selain täytä kumpaakaan.
+           Luku tapahtuu laitteella (vendor/jsqr) — ks. qrluku.js. -->
+      <button id="verkkoQr" type="button" class="qr-nappi" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></svg><span data-t="qr.skannaa"></span></button>
       <input id="verkkoNimi" class="verkko-kentta" maxlength="16" autocomplete="off"
              data-tp="verkko.nimi" data-ta="verkko.nimi">
       <!-- OMA HAHMO MYOS PIZZA PARTYSSA (Marko 19.10.2026: "Pizza Partyssa
@@ -856,6 +861,11 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
     <div class="verkko-osa" data-osa="koodi" hidden>
       <input id="bvKoodi" class="verkko-kentta" inputmode="numeric" pattern="[0-9]*" maxlength="4"
              autocomplete="off" data-tp="verkko.koodi" data-ta="verkko.koodi">
+      <!-- ⚠️ PIILOSSA KUNNES `qrluku.js` TOTEAA LUVUN MAHDOLLISEKSI. Nappi joka
+           ei voi toimia on huonompi kuin ei nappia: kamera vaatii suojatun
+           yhteyden ja `getUserMedia`n, eikä esim. vanha selain täytä kumpaakaan.
+           Luku tapahtuu laitteella (vendor/jsqr) — ks. qrluku.js. -->
+      <button id="bvQr" type="button" class="qr-nappi" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></svg><span data-t="qr.skannaa"></span></button>
       <button id="bvKoodiJatka" type="button" class="iso-nappi" data-t="bverkko.jatka"></button>
       <p class="verkko-virhe bv-virhe" hidden></p>
       <button type="button" class="toinen-nappi bv-takaisin" data-t="as.takaisin"></button>
@@ -914,9 +924,10 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <!--@/-->
 </div>
 
-<script src="kielet.js?v=20261020a"></script>
+<script src="kielet.js?v=20261020b"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
+<script src="qrluku.js?v=20261020a"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
 <script src="pelivalinta.js?v=20261015d"></script>
@@ -937,11 +948,11 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <!--@party-->
 <script src="isannointi.js?v=20260920a"></script>
 <script src="peli.js?v=20261019c"></script>
-<script src="pelaaja.js?v=20261020a"></script>
+<script src="pelaaja.js?v=20261020b"></script>
 <script src="pelaavaisanta.js?v=20261019a"></script>
 <script src="valikko.js?v=20261020a"></script>
 <!--@basso-->
-<script src="basso-verkko.js?v=20261020a"></script>
+<script src="basso-verkko.js?v=20261020b"></script>
 <!--@/-->
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
      `aloitaPeli`a ja (Bassossa) `basso`a, joten se on ladattava niiden

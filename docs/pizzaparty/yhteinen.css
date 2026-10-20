@@ -928,3 +928,47 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 /* Liike ON tämän kuvan koko sisältö, joten vähennetyssä liikkeessä se jää pois
    kokonaan - paikallaan roikkuva laatikko olisi vain este ruudun yläreunassa. */
 @media (prefers-reduced-motion: reduce){ .on-aula .vieteri{display:none} }
+
+/* --- QR-SKANNERI (Marko 20.10.2026) ---------------------------------------
+ * «QR-koodin luku pitäisi olla mahdollista myös pizza loven pelaamisessa
+ * suoraan.» Rakenteen tekee `qrluku.js`; täällä on vain ulkoasu.
+ *
+ * ⚠️ `z-index` on peitteitä (`.peite`, z-index 5) korkeampi: skanneri avataan
+ * liittymisruudusta, joka ON peite. Matalampi jäisi sen alle - sama ansa kuin
+ * `#verkkoPeite`issä. */
+.qr-peite{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;padding:20px;
+  background:rgba(26,20,12,.92);animation:qr-sisaan .25s ease-out both}
+@keyframes qr-sisaan{from{opacity:0}}
+/* Ikkuna on neliö: QR on neliö, ja pystykuva jättäisi puolet kameran alasta
+   käyttämättä. `object-fit:cover` rajaa videon siihen vääristämättä. */
+.qr-ikkuna{position:relative;width:min(78vmin, 420px);aspect-ratio:1;
+  border-radius:18px;overflow:hidden;background:#000}
+.qr-video{width:100%;height:100%;object-fit:cover;display:block}
+/* Kulmamerkit kertovat mihin koodi osoitetaan. Ei täyttä kehystä: se peittäisi
+   kuvan reunat juuri siitä mistä koodia etsitään. */
+.qr-kehys{position:absolute;inset:12%;border-radius:10px;pointer-events:none;
+  background:
+    linear-gradient(var(--orange, #EE7203) 0 0) 0 0/22% 3px no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 0 0/3px 22% no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 100% 0/22% 3px no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 100% 0/3px 22% no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 0 100%/22% 3px no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 0 100%/3px 22% no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 100% 100%/22% 3px no-repeat,
+    linear-gradient(var(--orange, #EE7203) 0 0) 100% 100%/3px 22% no-repeat}
+.qr-ohje{margin:0;max-width:420px;text-align:center;color:#fff;
+  font-size:clamp(15px, 4vw, 18px);line-height:1.4}
+.qr-ohje--virhe{color:#FFD4C2}
+.qr-peite .qr-sulje{width:min(100%, 420px);margin:0}
+
+/* Nappi koodikentän vieressä. `hidden` kunnes `qrluku.js` toteaa luvun
+   mahdolliseksi - nappi joka ei voi toimia on huonompi kuin ei nappia. */
+.qr-nappi{display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;font:inherit;font-size:16px;cursor:pointer;
+  background:#fff;color:var(--ink);border:2px solid var(--raja);
+  border-radius:12px;padding:11px}
+.qr-nappi:hover{border-color:var(--orange)}
+.qr-nappi[hidden]{display:none}
+.qr-nappi svg{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:var(--orange);
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}

@@ -658,6 +658,19 @@ function verkkoAlusta() {
   tila.verkko = { kierros: null };
   pysaytaKaikkiAjastimet();
   verkkoEl('verkkoLiity').addEventListener('submit', verkkoLiity);
+  /* QR-luku koodikentän tilalle (Marko 20.10.2026). Nappi näkyy vain jos
+     kamera on käytettävissä - ks. qrluku.js. Luettu koodi täyttää kentän ja
+     kohdistus siirtyy nimeen, koska lomake kysyy vielä nimen ja värin. */
+  var qrNappi = verkkoEl('verkkoQr');
+  if (qrNappi && typeof qrLukuMahdollista === 'function' && qrLukuMahdollista()) {
+    qrNappi.hidden = false;
+    qrNappi.addEventListener('click', function () {
+      qrAvaaSkanneri(function (koodi) {
+        verkkoEl('verkkoKoodi').value = koodi;
+        verkkoEl('verkkoNimi').focus();
+      });
+    });
+  }
   verkkoEl('verkkoUusi').addEventListener('click', function () { verkkoLiityNakyma(''); });
   verkkoEl('verkkoPoistu').addEventListener('click', verkkoVarmistaPoistu);
   verkkoEl('verkkoVarmistaJatka').addEventListener('click', function () { verkkoPeite('odota'); });

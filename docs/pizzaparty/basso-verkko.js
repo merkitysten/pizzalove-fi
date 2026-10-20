@@ -567,6 +567,19 @@ document.addEventListener('DOMContentLoaded', function () {
   bvEl('alkuLiity').onclick = function () { bvAvaaKoodi(''); };
   bvEl('bvLuoAvaa').onclick = bvAvaaLuo;
   bvEl('bvLiityAvaa').onclick = function () { bvAvaaKoodi(''); };
+  /* ⚠️ BASSOSSA SKANNAUS VIE SUORAAN ETEENPÄIN: tämä ruutu kysyy VAIN koodin,
+     joten luettu koodi on koko vastaus. Partyssa sama lomake kysyy vielä nimen
+     ja värin, joten siellä koodi vain täytetään kenttään. */
+  var bvQrNappi = bvEl('bvQr');
+  if (bvQrNappi && typeof qrLukuMahdollista === 'function' && qrLukuMahdollista()) {
+    bvQrNappi.hidden = false;
+    bvQrNappi.onclick = function () {
+      qrAvaaSkanneri(function (koodi) {
+        bvEl('bvKoodi').value = koodi;
+        bvEl('bvKoodiJatka').click();
+      });
+    };
+  }
   bvEl('bvLuo').onclick = bvLuo;
   bvNimiKentta('bvLuoNimi', bvLuo);
   bvEl('bvLiity').onclick = bvLiity;
