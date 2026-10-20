@@ -10,6 +10,8 @@ kahteen kertaan, ja ne olivat vain 49–57 % samanlaisia.
 Ajo:  python3 sivut.py           rakentaa molemmat sivut
       python3 sivut.py --tarkista  paluuarvo 1 jos sivu ei vastaa pohjaa
                                    (joku muokkasi valmista sivua ohi pohjan)
+                                   TAI jos sama tiedosto on eri ?v=-leimalla
+                                   eri sivuilla
 
 ⚠️ ÄLÄ MUOKKAA party.html:ää EIKÄ basso.html:ää KÄSIN — muuta sivupohja.html
 ja aja tämä. Pohjan merkinnät ovat omilla riveillään:
@@ -20,7 +22,7 @@ ja aja tämä. Pohjan merkinnät ovat omilla riveillään:
 
 Kaikki merkintöjen ulkopuolella on molemmilla sivuilla.
 """
-import os, sys
+import os, re, sys
 
 JUURI = os.path.dirname(os.path.abspath(__file__))
 POHJA = os.path.join(JUURI, 'sivupohja.html')
@@ -54,6 +56,45 @@ def rakenna(peli, rivit):
     return ''.join(ulos)
 
 
+# Kaikki sivut joilla on ?v=-leimoja. `sivupohja.html` on mukana, koska
+# party.html ja basso.html syntyvat siita: jos pohjassa on vaara leima, se
+# monistuu molemmille.
+LEIMASIVUT = ['sivupohja.html', 'index.html', 'isanta.html', 'apinavaaka.html',
+              'party.html', 'basso.html']
+LEIMA = re.compile(r'(?:src|href)="([\w./-]+\.(?:js|css))\?v=([\w.-]+)"')
+
+
+def leimatarkistus():
+    """Sama tiedosto eri ?v=-leimalla eri sivuilla = toinen sivu saa vanhan kopion.
+
+    ⚠️ TAMA EI OLE TYYLIASIA VAAN MITATTU VIKA (20.10.2026). Loydettiin
+    seitseman hajaleimaa, ja jokainen niista oli aidosti vanhentunut: esim.
+    `peli.css` oli muuttunut 8 kertaa ja `valikko.js` 7 kertaa sen jalkeen kun
+    `isanta.html`:n leima asetettiin. Kuka tahansa joka oli avannut isantaruudun
+    sai siella syyskuista JS:aa ja CSS:aa — mukaan lukien valikkosilmukan,
+    joka oli jo korjattu muualla.
+
+    Oire on hiljaisuus: mikaan ei kaadu, tiedostot ovat tallella, ja sivu vain
+    kayttaytyy kuten viime kuussa. Siksi tama on tarkistus eika muistisaanto.
+    """
+    leimat = {}
+    for sivu in LEIMASIVUT:
+        polku = os.path.join(JUURI, sivu)
+        if not os.path.exists(polku):
+            continue
+        teksti = open(polku, encoding='utf-8').read()
+        for tiedosto, leima in LEIMA.findall(teksti):
+            leimat.setdefault(tiedosto, {}).setdefault(leima, []).append(sivu)
+    hajat = {f: v for f, v in leimat.items() if len(v) > 1}
+    for tiedosto in sorted(hajat):
+        osat = ' · '.join('%s (%s)' % (leima, ', '.join(sivut))
+                          for leima, sivut in sorted(hajat[tiedosto].items()))
+        print('✗ %s on eri leimalla eri sivuilla: %s' % (tiedosto, osat))
+    if not hajat:
+        print('✓ jokainen tiedosto yhdella leimalla (%d tiedostoa)' % len(leimat))
+    return len(hajat)
+
+
 def main():
     rivit = open(POHJA, encoding='utf-8').readlines()
     tarkista = '--tarkista' in sys.argv
@@ -73,6 +114,7 @@ def main():
             print('kirjoitettu %s' % nimi)
         else:
             print('ennallaan %s' % nimi)
+    virheita += leimatarkistus()
     sys.exit(1 if virheita else 0)
 
 

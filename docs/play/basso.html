@@ -55,7 +55,7 @@
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261020b">
-<link rel="stylesheet" href="yhteinen.css?v=20261020h">
+<link rel="stylesheet" href="yhteinen.css?v=20261020j">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <link rel="stylesheet" href="basso.css?v=20261020c">
 </head>
@@ -536,21 +536,35 @@
              joten kupla on staattinen eikä tarvitse yhtään riviä koodia.
              Alarivi on pizzalove.fi:n oma kuvaus (sisalto/*.json), jotta
              sivusto ja peli sanovat saman asian samoilla sanoilla. -->
-        <!-- ⚠️ KUPLA ON SIVUSTON OMA KÄSIN PIIRRETTY PILVI, EI CSS-LAATIKKO
-             (Marko 20.10.2026: «Ei tässä ole nyt se miettivä apina ja sille
-             kuuluva ajatuskupla käytössä. Luulen että ne on nuo kaksi
-             tiedostoa, joista se nettisivun ajatteleva apina on tehty.»).
-             Kuva peilataan (`scaleX(-1)`), koska sen pallot osoittavat
-             vasemmalle ja Basso on oikealla; teksti on kuvan PÄÄLLÄ eikä
-             sisällä, joten se ei peilaudu mukana. -->
+        <!-- ⚠️ NÄMÄ OVAT SIVUSTON OMAT TIEDOSTOT, EIVÄT LÄHIMMÄT SAMANNÄKÖISET
+             (Marko 20.10.2026: «Ei tuo ajatuskupla ja basso nyt yhtään voi olla
+             noin. Se on ensinäkin väärä ajatuskupla.»). Ensimmäinen versio otti
+             kuplaksi `vieteri-kupla.webp`:n (361 × 420, pizzalaatikon kupla) ja
+             Bassoksi 516 × 286 rajauksen, jossa roikkui irrallinen häntä.
+             Oikeat ovat varainhankinnan kansiossa ja nyt täällä:
+             `ajatuskupla.webp` 900 × 582 ja `basso-pohtii.webp` 560 × 601.
+
+             ⚠️ BASSO VASEMMALLE, KUPLA OIKEALLE — JA SEN RATKAISEE PISARAJONO,
+             EI KATSEEN SUUNTA. Tämä on varainhankintasivun mittaus, joka maksoi
+             siellä jo yhden Markon korjauksen («Apina ja ajatuskupla on väärin
+             päin», TYOLOKI.md 2.9.2026): `ajatuskupla.webp`:ssä on kolme
+             pikkukuplaa pilven YLÄVASEMMALLA, pienin kauimpana. Ajatusjono
+             kulkee ajattelijasta pilveen, joten pienin pää osoittaa
+             ajattelijaa. Toisin päin jono osoittaa apinasta POISPÄIN.
+             ⛔ Älä siis peilaa kuplaa (`scaleX(-1)`) saadaksesi Basson oikealle:
+             juuri se tehtiin tässä ensin, ja se kääntää mittauksen nurin.
+
+             ⚠️ MIETTIVÄ Basso eikä syövä: kupla on AJATUSkupla, ja syövä
+             hahmo ei ajattele. Basson alareuna ON leikkaus jo tiedostossa,
+             ja se asettuu pelivalitsimen yläreunaan (yhteinen.css). -->
+        <img class="alku-basso" src="kuvat/basso-pohtii.webp?v=20261020i" width="560" height="601" alt="" aria-hidden="true">
+        <!-- ⚠️ TEKSTI TULEE GENERAATTORISTA EIKÄ JS:STÄ: sivu tietää pelinsä,
+             joten kupla on staattinen eikä tarvitse yhtään riviä koodia.
+             Teksti on kuvan PÄÄLLÄ eikä sisällä, jotta sen voi kääntää. -->
         <div class="alku-kupla">
-          <img class="alku-kupla-pilvi" src="kuvat/vieteri-kupla.webp?v=20261019a" alt="" aria-hidden="true">
+          <img class="alku-kupla-pilvi" src="kuvat/ajatuskupla.webp?v=20261020i" width="900" height="582" alt="" aria-hidden="true">
           <b data-t="kupla.basso"></b><span data-t="kupla.bassoAla"></span>
         </div>
-        <!-- ⚠️ MIETTIVÄ Basso eikä syövä: kupla on AJATUSkupla, ja syövä
-             hahmo ei ajattele. Sama kuva kuin pizzalove.fi:llä, rajattuna
-             ruokalapun alareunaan. -->
-        <img class="alku-basso" src="kuvat/basso-miettii.webp?v=20261020h" width="516" height="286" alt="" aria-hidden="true">
       </div>
       <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). Laji on ylhäällä
            valkoisessa palkissa; tässä ovat vain valitun lajin pelit. -->

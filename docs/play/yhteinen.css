@@ -338,68 +338,106 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--orange, #EE7203)}
 @media (min-width:521px){.alku-lajipalkki .pelivalinta-kytkin-nappi{font-size:14.5px;padding:12px 10px}}
 
-/* Maskotit pelivalinnan yläpuolella KURKKAAMASSA RUUDUN SIVUISTA vinossa (Marko
- * 9.10.2026: «Basso kurkkaa usein eri materiaaleissamme ruudun sivusta, eli niiden ei
- * tarvitse mahtua kokonaan ruutuun — — se hieman vinosta katsominen on usein hauskempi
- * tapa kuvata basso»). Pizzalaatikko vasemmalta viirin alta, Basso — pizzaa syövä,
- * virallinen maskottikuva — isompana oikealta (Marko 9.10.2026: paikat vaihdettiin).
- * --sivu = sarakkeen etäisyys ruudun reunasta (sarake enintään 360 px, reunat 16 px):
- * negatiivinen marginaali vie kuvan ruudun reunan yli, ja .aloitusruutu leikkaa sen
- * (overflow-x:hidden). Kuvat ovat pelivalinnan ALLA (z-index), joten ne kurkkaavat
- * sen takaa eivätkä peitä tekstiä. */
-.alku-maskotit{--sivu:max(16px, calc(50vw - 180px));position:relative;z-index:0;flex:1 1 auto;
-  min-height:120px;width:100%;margin-bottom:-26px;pointer-events:none}
+/* Maskotit pelivalinnan yläpuolella: miettivä Basso ja ajatuskupla parina.
+ * Sommittelu ja sen perustelut alempana, «BASSO JA AJATUSKUPLA».
+ * ⚠️ Täällä oli `--sivu`, jolla vanha asettelu työnsi maskotit sarakkeen yli
+ * ruudun reunaan. Pari on nyt virrassa eikä kukaan lue sitä — muuttuja, jota
+ * ei lueta, näyttää sopimukselta jota ei ole. (Konfetin `--sivu` on eri
+ * muuttuja, JS asettaa sen jokaiselle hiutaleelle erikseen.) */
+.alku-maskotit{position:relative;z-index:0;flex:1 1 auto;
+  width:100%;pointer-events:none}
 .alku-paa > :not(.alku-maskotit){position:relative;z-index:1}
-/* Valkoinen tarrareuna kuten lautapelilaatikon kyljessä: erottaa hahmon kuosista. */
+/* Valkoinen tarrareuna kuten lautapelilaatikon kyljessä: erottaa hahmon kuosista.
+ * ⚠️ ALAREUNASSA EI OLE REUNAA. Basson alareuna on leikkaus joka asettuu
+ * pelivalitsimen yläreunaan; valkoinen viiva siinä piirtäisi raon juuri siihen
+ * kohtaan jossa kuvan pitää kohdata nappi. */
 .alku-basso{filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
-  drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
-/* Koko alueen korkeudesta (%), ei kiinteä. Siirto ruudun reunan yli translateX:llä, koska
- * sen prosentti on kuvan OMASTA leveydestä: Basso 24 % ja laatikko 22 % reunan takana. */
-/* Marko 10.10.2026: «basso isompana ja enemmän piiloon ruudun sivuun. Pizzalaatikko ehkä
- * vähän enemmän näkymään.» Basso saa nousta alueen yli (115 %) palkin alle asti. */
-/* ⚠️ ISOMMIKSI 14.10.2026 (Marko: «Apina ja rakastunut pizzalaatikko ovat
-   säälittävän pieniä»). Lajipalkki vei kuosista tyhjän kaistaleen, joten
-   maskoteille jäi tilaa kasvaa ilman että napit laskevat. */
-/* ⚠️ MITAT MUUTTUIVAT KUVAN MUKANA (20.10.2026): miettivä Basso on
-   516 × 286 eli LEVEÄ ja matala, kun syövä oli 438 × 520. Korkeuteen sidottu
-   mitoitus olisi tehnyt siitä ruudun levyisen. Siksi LEVEYS ratkaisee, ja
-   kallistus on pienempi: rajattu kuva päättyy suoraan reunaan, ja jyrkkä
-   kulma näyttäisi siltä että hahmo kaatuu. */
-.alku-basso{position:absolute;bottom:6%;right:calc(-1 * var(--sivu) - 14px);
-  width:min(64%, 245px);height:auto;
-  transform:rotate(-4deg);transform-origin:100% 100%}
-
-/* --- BASSON AJATUSKUPLA (Marko 20.10.2026) --------------------------------
- * «Eli Basso kertoisi pelimuodon eron kuplassa.»
+  drop-shadow(0 -2.5px 0 #fff)}
+/* ⚠️ Tässä oli kolme kommenttia vanhoista mitoista (translateX reunan yli,
+   «basso isompana ja enemmän piiloon» 10.10., «saälittävän pieniä» 14.10.).
+   Ne kuvasivat sääntöjä jotka eivät ole enää olemassa — rakastunut
+   pizzalaatikko poistui ja sommittelu vaihtui pariksi. Kommentti ilman
+   sääntöä on väärää tietoa, ei historiaa. */
+/* --- BASSO JA AJATUSKUPLA (Marko 20.10.2026) ------------------------------
+ * «Ei tuo ajatuskupla ja basso nyt yhtään voi olla noin. Se on ensinäkin
+ *  väärä ajatuskupla.»
  *
- * ⚠️ TÄSSÄ OLI `.alku-laatikko` (rakastunut pizzalaatikko), ja se väistyi:
- * kupla tarvitsee saman vasemman tilan, ja kaksi maskottia + kupla ei mahdu
- * 375 px:n leveyteen ilman että jokin niistä leikkautuu. Kuva jää repoon
- * siirtymää varten (zoomaus napin painalluksesta), jota ei ole rakennettu.
+ * 📐 MITATTU ENNEN KORJAUSTA, 390 × 844 (party.html):
+ *   kupla  `vieteri-kupla.webp` 361 × 420, PEILATTUNA, x −1…170 (ruudun yli)
+ *   Basso  `basso-miettii.webp` 516 × 286 -rajaus, irrallinen häntä
+ *   kupla peitti Bassoa 81 px korkeudelta
+ *   Basson alareuna 376, pelivalitsin alkaa 359 → 17 px Bassoa valitsimen ALLE
  *
- * Kupla on tekstiä eikä koristetta, joten se EI ole `aria-hidden`issa toisin
- * kuin maskotit — ruudunlukija lukee sen. Siksi `.alku-maskotit`in
- * `aria-hidden` on poistettu ja siirretty Basson kuvaan.
+ * Kolme asiaa yhdessä, ja kaikki kolme on otettu varainhankintasivun
+ * MITTAUKSESTA eikä keksitty tässä uudelleen (`../varainhankinta/index.html`
+ * `.basso-nosto`, ja TYOLOKI.md 2.9.2026):
  *
- * Ympyrät ovat ajatuskuplan merkki (vrt. varainhankintasivun Basso-kupla):
- * ne kulkevat kuplan oikeasta alakulmasta kohti Basson päätä. */
-/* ⚠️ PILVI ON KUVA, EI `border-radius`. Sivustolla on käsin piirretty
-   ajatuskupla, ja pyöristetty suorakaide sen tilalla olisi eri käsiala
-   samalla ruudulla. Kuva on 361 × 420, josta pilven runko on ylin 69 % ja
-   pallot alin osa — teksti sijoitetaan siksi rungon sisään prosentteina. */
-.alku-kupla{position:absolute;top:-10%;left:calc(-1 * var(--sivu) + 2px);z-index:1;
-  width:min(168px, 46%);aspect-ratio:361 / 420;
-  transform:rotate(-2deg)}
-/* Peilaus: pallot osoittavat kuvassa vasemmalle, Basso on oikealla. */
+ * 1. OIKEAT TIEDOSTOT. `ajatuskupla.webp` 900 × 582 ja `basso-pohtii.webp`
+ *    560 × 601. Ne ovat kaksi erillistä kuvaa juuri siksi, että teksti voi
+ *    vaihtua ja Bassoa voi rajata alhaalta.
+ *
+ * 2. BASSO VASEMMALLE, KUPLA OIKEALLE — JA SEN RATKAISEE PISARAJONO, EI
+ *    KATSEEN SUUNTA. Kuvassa on kolme pikkukuplaa pilven YLÄVASEMMALLA,
+ *    pienin kauimpana; jono kulkee ajattelijasta pilveen. Sivustolla tämä
+ *    oli ensin toisin päin, perusteltuna katseen suunnalla, ja Marko
+ *    korjasi sen: «Apina ja ajatuskupla on väärin päin.» Täällä sama
+ *    virhe tehtiin uudelleen ja vielä peittona: kupla PEILATTIIN
+ *    (`scaleX(-1)`) jotta pallot osoittaisivat oikealle.
+ *    ⛔ Älä peilaa kuplaa. Peilaus ei käännä mittausta vaan piilottaa sen.
+ *
+ * 3. LEIKATTU ALAREUNA KOHTAA ALLA OLEVAN ELEMENTIN. Basson alareuna on
+ *    leikkaus jo tiedostossa; se kuuluu pelivalitsimen yläreunaan, ei sen
+ *    alle. ⚠️ JA SIKSI BASSOA EI KALLISTETA: sivustolla mitattiin että
+ *    `rotate(-4deg)` nostaa leikatun reunan toisen pään irti ja jättää
+ *    väliin kiilan — hahmo «leijuu» vaikka laatikko olisi mitattuna kiinni.
+ *    Täällä kallistus teki lisäksi juuri sen 17 px:n uppoaman.
+ *    (Vaaka-asento on eri asia: siellä Basso kurkkaa ruudun sivusta eikä
+ *    nojaa mihinkään, ja kallistus on paikallaan — ks. media query.)
+ *
+ * Pari on tässä virrassa (flex-rivi) eikä absoluuttisesti sijoitettu:
+ * absoluuttinen pari ei voi kohdata alla olevaa elementtiä muuten kuin
+ * arvatulla pikselimäärällä, ja kaksi arvausta on jo tehty. */
+/* 📐 `margin-bottom` ON MITATTU, EI ARVATTU. `.alku-paa` on flex-sarake
+ * jonka `gap` on 10 px, eli nollamarginaalilla Basson leikatun alareunan ja
+ * pelivalitsimen väliin jäi mitattuna 10 px kuosia — hahmo leijui. Sivustolla
+ * sama kohta on «4 px päällekkäin 390 px:llä», joten 10 + 4 = 14. */
+.alku-maskotit{display:flex;align-items:flex-end;justify-content:center;
+  min-height:0;margin-bottom:-14px}
+/* Leveydet sivuston suhteista: apina 41 %, kupla 58 %, ja kupla limittäin
+ * −6 % jotta pisarajono alkaa Basson pään päältä eikä sen vierestä. */
+/* ⚠️ KUVAN LAATIKKO EI OLE HAHMON ALAREUNA, JA TÄMÄ ON MITATTU CANVASILTA.
+ * Marko 20.10.2026: «Muista asettaa basso siten, että se rajautuu nätisti
+ * siihen valintakytkimeen.» Asetin ensin kuvan LAATIKON kytkimen reunaan
+ * (4 px limitystä), ja väliin jäi silti näkyvä rako.
+ *
+ * 📐 Syy luettiin `basso-pohtii.webp`:stä pikseleittäin (560 × 601):
+ *   rivi 513  hahmon suora leikkausviiva, leveys 560 px
+ *   rivi 560  enää 108 px — vain vasen turkkitupsu ja oikea käsivarsi
+ *   rivi 590  58 px · rivi 595  31 px · rivi 600  10 px
+ * Eli kuvan alin 87 px (14,5 % korkeudesta) on kapeneva häntä, ei hahmon
+ * reuna. Sivustolla päädyttiin samaan lukuun kokeilemalla («limitys on nyt
+ * ~14 % kuvan korkeudesta», `.basso-reuna`); tässä se on luettu kuvasta.
+ *
+ * Siirto on `translateY` PROSENTTEINA, koska translaten prosentti lasketaan
+ * elementin OMASTA korkeudesta — `margin-bottom`in prosentti laskettaisiin
+ * säiliön LEVEYDESTÄ, eli se rikkoutuisi heti kun suhteet muuttuvat.
+ * Siirto ei vie tilaa, joten `.alku-maskotit`in −14 px jää voimaan ja
+ * leikkausviiva osuu tasan sinne missä laatikon alareuna oli: 4 px kytkimen
+ * sisään. Kapeneva häntä jää kytkimen taakse (z-index 0 vs. 1). */
+.alku-basso{width:41%;max-width:168px;height:auto;display:block;
+  margin:0 0 0 2%;transform:translateY(14.5%)}
+.alku-kupla{position:relative;flex:1 1 auto;max-width:58%;
+  margin:0 0 9% -6%;aspect-ratio:900 / 582;transform:none}
 .alku-kupla-pilvi{position:absolute;inset:0;width:100%;height:100%;
-  transform:scaleX(-1);pointer-events:none}
-/* Teksti pilven rungon sisään. 📐 Rungon reunat mitattu kuvasta:
-   vasen 4 %, oikea 3 %, ylä 1 %, runko päättyy 69 %:n kohdalla. */
+  transform:none;pointer-events:none}
+/* 📐 Tekstin sisäreunat mitattu kuvasta varainhankintasivulla:
+ * vasen 21 %, oikea 15 %, ylä 18 %, ala 13 %. Reunat ovat pyöreiä, joten
+ * teksti pidetään selvästi sisäpuolella. */
 .alku-kupla b, .alku-kupla span{position:relative;display:block;text-align:center}
-.alku-kupla{display:flex;flex-direction:column;justify-content:center;gap:2px;
-  padding:4% 13% 33%}
-.alku-kupla b{font-size:clamp(13px, 3.9vw, 16px);line-height:1.15;color:var(--ink, #1A1A1A)}
-.alku-kupla span{font-size:clamp(12px, 3.5vw, 14px);line-height:1.2;font-weight:700;
+.alku-kupla{display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:18% 15% 13% 21%}
+.alku-kupla b{font-size:clamp(11px, 3.1vw, 17px);line-height:1.15;color:var(--ink, #1A1A1A)}
+.alku-kupla span{font-size:clamp(10.5px, 2.8vw, 15px);line-height:1.2;font-weight:700;
   color:var(--orange, #EE7203)}
 
 /* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
@@ -554,19 +592,72 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    * Leveydet: Basso ≈ 0,84 × korkeus (basso-syo.webp 438×520), laatikko = korkeus.
    * Basso oikealla, laatikko vasemmalla viirin alla (paikat vaihdettu 9.10.2026). */
   .aloitusruutu > .alku-paa{flex:none;margin-block:auto;gap:8px}
-  .alku-maskotit{flex:none;min-height:0;height:0;margin:0}
-  .alku-basso{margin:0}
-  /* Marko 10.10.2026 vaakanäytöstä: «Rakastunut pizzalaatikko on liian reunassa. Laske sitä
-   * alemmas ja suurenna hieman. Basso on liian vinossa ja liian lähellä nappeja.»
-   * Laatikko keskitetään sarakkeen vasemmalle puolelle jäävään tilaan (enintään 12 vh reunan
-   * yli, jos tilaa ei ole); Basso suoremmaksi (−7°) ja vähintään 70 px reunan taakse. */
-  .alku-basso{position:fixed;height:72vh;height:72dvh;bottom:-8vh;
-    right:min(-70px, calc(50vw - 200px - 60vh));left:auto;top:auto;transform:rotate(-7deg);transform-origin:50% 100%}
-  /* Kupla samaan vasempaan tilaan johon laatikko ennen keskitettiin. Matala
-     ruutu: `.alku-maskotit` on 0 px korkea, joten kuplan on oltava `fixed`
-     kuten Basson — absoluuttisena se jäisi nollan sisään. */
-  .alku-kupla{position:fixed;top:auto;bottom:18vh;max-width:min(200px, calc(50vw - 196px));
-    left:max(8px, calc((50vw - 190px - 200px) / 2));transform:rotate(-2deg)}
+  /* ⚠️ BASSO JA KUPLA PYSYVÄT PARINA MYÖS VAAKATASOSSA, SAMALLA PUOLELLA.
+   * 📐 Mitattu 844 × 390 ennen korjausta: Basso oli kiinnitetty oikeaan
+   * reunaan (x 712…913) ja kupla vasempaan (x −40…275), eli pisarajono
+   * osoitti koko valikon yli POISPÄIN ajattelijasta — sama virhe kuin
+   * pystyasennossa, vain leveämpänä. Lisäksi kuplan yläreuna oli y −100 eli
+   * otsikkorivi ruudun ulkopuolella, kupla peitti pelivalitsinta 33 × 47 px,
+   * ja Basso oli venytetty (201 × 299, kun 560 : 601 vaatii 279 × 299),
+   * koska `height` asetettiin mutta `width` jäi pystyasennon prosenttiin.
+   *
+   * Korjaus: sama flex-pari kuin pystyssä, kiinnitettynä sarakkeen
+   * VASEMMALLE puolelle jäävään tyhjään tilaan. Siellä se mahtuu
+   * kokonaan (844 px:llä tilaa 242 px) ja järjestys säilyy.
+   * Basso ei täällä nojaa mihinkään, joten pieni kallistus on paikallaan —
+   * se on Markon «kurkkaa ruudun sivusta vinossa». */
+  .alku-maskotit{position:fixed;left:8px;bottom:7vh;z-index:0;
+    width:min(252px, calc(50vw - 188px));height:auto;min-height:0;margin:0;
+    display:flex;align-items:flex-end;justify-content:flex-start;
+    transform:rotate(-3deg);transform-origin:0 100%}
+  /* Vaakatasossa Basso ei nojaa mihinkään, joten kapeneva häntä saa näkyä:
+   * se on osa piirrosta. Siirto kuuluu vain sinne missä leikkausviivan on
+   * kohdattava jokin reuna. */
+  .alku-basso{position:static;width:41%;max-width:none;height:auto;margin:0;transform:none}
+  .alku-kupla{position:relative;flex:1 1 auto;max-width:58%;
+    margin:0 0 9% -6%;left:auto;right:auto;top:auto;bottom:auto;transform:none}
+  /* 📐 Kapeassa parissa teksti on se joka ei saa hävitä (sama päätös kuin
+   * varainhankintasivulla 320 px:llä): kiinteät pienet koot, ei vw-skaalausta,
+   * koska vw on täällä ruudun leveys eikä kuplan. */
+  .alku-kupla b{font-size:11px;line-height:1.1}
+  .alku-kupla span{font-size:10px;line-height:1.15}
+}
+/* ⚠️ KAPEASSA VAAKARUUDUSSA KUPLALLE EI OLE TILAA, JA SE ON MITATTU.
+ * 📐 667 × 375 (iPhone SE vaakatasossa): sarakkeen vasemmalle puolelle
+ * jää 143 px, jolloin kupla on 84 px leveä ja sen sisäala 54 px — sana
+ * «Nopeatempoinen» vie 11 px:n koossa n. 98 px. Mitattu vuoto: vasemmalta
+ * 2 px, oikealta 9 px. Fontin pienentäminen ei auta: 9 px:ssäkin sana vaatii
+ * 63 px eli enemmän kuin sisäala, ja sitä pienempi ei ole luettava.
+ *
+ * 📐 Raja on laskettu mittauksesta eikä valittu. Mittasin pisimmän
+ * KATKEAMATTOMAN sanan canvasilla neljällä kielellä ja molemmilla
+ * pelimuodoilla, vaaka-asennon 11 px:n koossa:
+ *   fi «Nopeatempoinen» 100 px  · fi «jännittävä.» 92 px
+ *   de 75 px · en 68 px · sv 69 px
+ * Pisin on 100 px. Kuplan sisäala on 64 % sen leveydestä (padding 21 % + 15 %),
+ * joten kupla tarvitsee 157 px, pari 58 %:n suhteella 270 px, ja koska pari on
+ * `50vw - 188px`, ruudun on oltava vähintään 915 px leveä.
+ *
+ * ⚠️ ENSIMMÄINEN RAJA (716 px) OLI LIIAN MATALA, ja syy oli mittarissa eikä
+ * laskussa: tarkistin luki tekstielementin `getBoundingClientRect`iä, joka on
+ * block-elementillä SISÄLTÖLAATIKKO — yli valuva sana ei näy siinä lainkaan,
+ * joten 844 × 390 näytti puhtaalta vaikka sana valui 13 px yli. Ylivuoto
+ * luetaan `scrollWidth`istä.
+ *
+ * Sen alla kupla piilotetaan ja Basso jää — ei toisin päin: Basso yksin
+ * kurkkaamassa on tämän valikon alkuperäinen vaaka-asu (Marko 9.10.2026),
+ * ja koristeen menettäminen on pienempi menetys kuin kuplasta yli valuva
+ * teksti. Pelimuotojen ero jää tällä ruudulla pelivalitsimen varaan. */
+@media (orientation:landscape) and (max-height:540px) and (max-width:914px){
+  .alku-kupla{display:none}
+  /* Ilman kuplaa Basso saa koko tilan ja palaa kurkkimaan ruudun reunasta.
+   * 📐 Leveys on laskettu niin ettei Basso osu sarakkeeseen: kontti alkaa
+   * −18 px:stä, sarake on enintään 360 px keskellä eli alkaa kohdasta
+   * `50vw - 180px`, ja väliin jätetään 8 px. Mitattu 568 × 320 ennen rajaa:
+   * `50vw - 150px` vei Basson 12 px sarakkeen päälle ja se peitti nappeja
+   * 68 px:n matkalta. */
+  .alku-maskotit{left:-18px;width:min(150px, calc(50vw - 172px))}
+  .alku-basso{width:100%}
   .alku-logo{width:72px}
   .alku-ruutu{min-height:48px;padding:4px 14px;gap:12px}
   .alku-ruutu svg{width:46px}
@@ -600,8 +691,15 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
      katosi valkoiselle. 📐 Mitattu ruudulta ennen korjausta: otsikko oli
      käytännössä lukukelvoton. Sarjakuvakupla on valkoinen kummassakin
      tilassa — se on kuplan tunnus, ei teema. */
-  .alku-kupla{background:#fff;border-color:#1A1A1A}
-  .alku-kupla::before,.alku-kupla::after{background:#fff;border-color:#1A1A1A}
+  /* ⚠️ TÄSSÄ OLI MYÖS `background:#fff` JA `border-color`, ja ne piirsivät
+     tummassa tilassa VALKOISEN SUORAKAITEEN käsin piirretyn pilven taakse
+     (mitattu 390 × 844 tummassa tilassa: laatikko näkyi pilven ympärillä ja
+     peitti Basson käsivarren). Säännöt ovat ajalta jolloin kupla oli
+     CSS-laatikko; nyt se on kuva, jonka läpinäkyvät kulmat paljastavat
+     jokaisen taustavärin. Samasta syystä poistettiin `::before/::after`,
+     jotka olivat vanhan laatikon pallot — pilvessä on omansa.
+     TEKSTIN värit jäävät: pilvi on valkoinen kummassakin teemassa, joten
+     `--ink` (tummassa vaalea) ja `--orange` katoaisivat siihen. */
   .alku-kupla b{color:#1A1A1A}
   .alku-kupla span{color:#C2580C}
   /* Valkoinen pohja + tumman tilan vaalea teksti = näkymätön (mitattu 9.10.2026,

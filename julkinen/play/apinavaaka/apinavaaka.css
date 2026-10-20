@@ -206,7 +206,7 @@
 .av__ikkuna li{margin:3px 0}
 .av__ikkuna p{margin:0 0 8px}
 .av__tavat{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0 0 10px;clear:both}
-.av__tavat dt{width:24px;height:24px;border-radius:50%;background:var(--orange, #EE7203);color:#fff;font-weight:800;text-align:center;line-height:24px;font-size:13px}
+.av__tavat dt{width:24px;height:24px;border-radius:50%;background:var(--orange, #EE7203);color:#1A1A1A;font-weight:800;text-align:center;line-height:24px;font-size:13px}
 .av__tavat dd{margin:0;align-self:center}
 
 
