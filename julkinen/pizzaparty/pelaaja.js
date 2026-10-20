@@ -620,6 +620,16 @@ async function verkkoLiity(e) {
     verkkoOtaPelaaja(koodi, await api('liity', { koodi: koodi, nimi: verkkoEl('verkkoNimi').value, vari: verkkoOmaVari() }));
   } catch (err) {
     const el = verkkoEl('verkkoVirhe');
+    /* ⚠️ KOODI VOI OLLA TOISEN PELIN (Marko 20.10.2026). Huoneet ovat eri
+       varastoissa, joten Basson koodi ei löydy täältä - mutta pelaaja ei voi
+       sitä tietää, ja hän näki «Peliä ei löydy». Kysytään toiselta peliltä
+       ennen kuin väitetään ettei peliä ole. Ks. pelivalinta.js. */
+    if (err && err.virhe === 'eiHuonetta' && typeof pelivalintaKokeileToista === 'function') {
+      const siirtyy = await pelivalintaKokeileToista(koodi, function (viesti) {
+        el.textContent = viesti; el.hidden = false;
+      });
+      if (siirtyy) return;                       // nappi jää pois päältä: sivu vaihtuu
+    }
     el.textContent = virheTeksti(err);
     el.hidden = false;
   } finally {

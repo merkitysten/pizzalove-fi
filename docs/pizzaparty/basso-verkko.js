@@ -265,7 +265,18 @@ async function bvKoodiJatka() {
   const koodi = (bvEl('bvKoodi').value || '').replace(/\D/g, '');
   if (koodi.length !== 4) return bvNaytaVirhe({ virhe: 'eiHuonetta' });
   try {
-    const j = await bvApi('katso', { koodi: koodi });
+    const j = await bvApi('katso', { koodi: koodi }).catch(async function (e) {
+      /* ⚠️ KOODI VOI OLLA PARTYN (Marko 20.10.2026) - ks. pelivalinta.js.
+         Kysytään toiselta peliltä ennen kuin väitetään ettei peliä ole. */
+      if (e && e.virhe === 'eiHuonetta' && typeof pelivalintaKokeileToista === 'function') {
+        const siirtyy = await pelivalintaKokeileToista(koodi, function (viesti) {
+          const osa = document.querySelector('#bassoValikko .verkko-osa:not([hidden]) .bv-virhe');
+          if (osa) { osa.textContent = viesti; osa.hidden = false; }
+        });
+        if (siirtyy) throw { virhe: 'siirtyy' };   // ei virheilmoitusta: sivu vaihtuu
+      }
+      throw e;
+    });
     if (j.vaihe !== 'aula') return bvNaytaVirhe({ virhe: 'alkanut' });
     if (!j.tilaa) return bvNaytaVirhe({ virhe: 'taynna' });
     bv.koodi = koodi;
@@ -280,7 +291,12 @@ async function bvKoodiJatka() {
     };
     piirra();
     bvOsa('liity');
-  } catch (e) { bvNaytaVirhe(e); }
+  } catch (e) {
+    /* `siirtyy` ei ole virhe vaan päätös: koodi löytyi toisesta pelistä ja
+       sivu vaihtuu. Virheilmoitus vilahtaisi turhaan juuri ennen vaihtoa. */
+    if (e && e.virhe === 'siirtyy') return;
+    bvNaytaVirhe(e);
+  }
 }
 
 async function bvLiity() {

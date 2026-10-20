@@ -321,3 +321,66 @@ document.addEventListener('DOMContentLoaded', function () {
   pelivalintaPiirra();
   kielivalintaPiirra();
 });
+
+/* --- KOODI VOI OLLA TOISEN PELIN (Marko 20.10.2026) -------------------------
+ * «Pääseehän liity peliin -napista sekä partyyn että bassoon?»
+ *
+ * 📐 Mitattu: EI PÄÄSSYT. Huoneet ovat kahdessa eri varastossa
+ * (`pp-huone-<koodi>.json` ja `pb-huone-<koodi>.json`), ja «Liity peliin»
+ * kysyy vain sen pelin palvelimelta jonka sivulla ollaan. Basson koodi
+ * Partyn kenttään antoi siis «Peliä ei löydy» vaikka peli oli olemassa.
+ * QR toimi silti, koska se kantaa oikean sivun osoitteen - vain näppäilty
+ * koodi oli pelikohtainen.
+ *
+ * Nyt: kun koodia ei löydy omasta pelistä, kysytään toiselta. Jos se löytyy
+ * sieltä, pelaaja siirretään sinne koodi mukanaan.
+ *
+ * ⚠️ OSOITE JOHDETAAN SIVUN OMASTA VAKIOSTA, ei kirjoiteta kolmatta kopiota.
+ * Partyn sivulla on `HUONE_OSOITE` (yhteys.js), Basson sivulla `BV_OSOITE`
+ * (basso-verkko.js); kansio on sama, vain tiedosto eri. Uusi kopio palvelimen
+ * osoitteesta olisi neljäs paikka jota pitää muistaa muuttaa.
+ *
+ * ⚠️ TUNNISTUS ON ERI KUMMASSAKIN, koska palvelimet ovat erilaiset:
+ *   Basso  `katso`  - avaimeton kurkistus, onnistuu jos huone on
+ *   Party  `tila`   - ilman avainta 403 `eiOikeutta` JOS HUONE ON,
+ *                     ja 404 `eiHuonetta` jos ei. Siksi 403 = löytyi.
+ * Party ei tunne `katso`a, eikä sitä lisätty: palvelinmuutos vaatisi Markon
+ * «vie»-luvan, ja 403/404 kertoo saman ilman sitä. */
+function pelivalintaHuoneOsoite(peli) {
+  var oma = (typeof HUONE_OSOITE !== 'undefined') ? HUONE_OSOITE
+          : (typeof BV_OSOITE !== 'undefined') ? BV_OSOITE : null;
+  if (!oma) return null;
+  return oma.replace(/[^/]*$/, '') + (peli === 'basso' ? 'basso-huone.php' : 'huone.php');
+}
+
+function pelivalintaOnkoKoodi(peli, koodi) {
+  var osoite = pelivalintaHuoneOsoite(peli);
+  if (!osoite || !/^[0-9]{4}$/.test(koodi || '')) return Promise.resolve(false);
+  var runko = (peli === 'basso') ? { toiminto: 'katso', koodi: koodi }
+                                 : { toiminto: 'tila', koodi: koodi };
+  return fetch(osoite, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(runko)
+  }).then(function (v) {
+    return (peli === 'basso') ? v.ok : v.status === 403;
+  }).catch(function () { return false; });   // verkkovirhe ei ole «ei ole»
+}
+
+/* Toisen pelin liittymisosoite koodilla. Molemmat sivut osaavat jo lukea
+   koodin osoitteesta (Party `?liity&koodi=`, Basso `?liity=`). */
+function pelivalintaLiittymisOsoite(peli, koodi) {
+  return (peli === 'basso') ? 'basso.html?liity=' + koodi : './?liity&koodi=' + koodi;
+}
+
+/* Kysyy toiselta peliltä ja siirtää sinne jos koodi löytyy. Palauttaa
+   lupauksen: tosi = siirrytään (kutsujan ei pidä näyttää virhettä). */
+function pelivalintaKokeileToista(koodi, kerro) {
+  var toinen = (peliNyt() === 'basso') ? 'party' : 'basso';
+  return pelivalintaOnkoKoodi(toinen, koodi).then(function (on) {
+    if (!on) return false;
+    var nimi = PELIT.filter(function (p) { return p.avain === toinen; })[0].nimi;
+    if (typeof kerro === 'function') kerro(t('verkko.toinenPeli', { peli: nimi }));
+    /* Pieni viive, jotta viesti ehditään lukea ennen sivunvaihtoa. */
+    setTimeout(function () { location.assign(pelivalintaLiittymisOsoite(toinen, koodi)); }, 1200);
+    return true;
+  });
+}

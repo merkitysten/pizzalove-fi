@@ -39,13 +39,32 @@ function qrLataaKirjasto() {
   return qrLukuLataus;
 }
 
-/* QR sisältää liittymislinkin (`pelaa.html?koodi=1234`), mutta myös paljas
-   nelinumeroinen koodi kelpaa. ⚠️ EI `new URL()`: se heittää jos teksti ei
-   ole osoite, ja silloin paljas koodi hylättäisiin. */
-function qrPoimiKoodi(teksti) {
+/* Mitä koodissa luki? Palauttaa { koodi, peli } tai null.
+ *
+ * 🔴 KAHDELLA PELILLÄ ON ERI LINKKI, ja se oli lähellä mennä ohi.
+ * 📐 Mitattu linkkien rakentajista:
+ *     Party  …/pelaa.html?koodi=1234   (isannointi.js)
+ *     Basso  …/basso.html?liity=1234   (basso-verkko.js)
+ * Ensimmäinen versio osasi vain `koodi=`, joten BASSON QR:ÄÄ EI OLISI LUETTU
+ * LAINKAAN - skanneri olisi jäänyt tuijottamaan sitä ikuisesti. Marko
+ * 20.10.2026: «liity peliin pitäisi olla globaali keino liittyä. Samoin kuin
+ * puhelimen oman kameran käyttö.»
+ *
+ * ⚠️ EMME SIIRRY SKANNATTUUN OSOITTEESEEN. Koodi voi olla kenen tahansa
+ * tekemä, ja osoitteeseen siirtyminen veisi pelaajan minne tahansa. Siksi
+ * luetaan vain KOODI ja se kumman pelin linkki oli, ja siirrytään MEIDÄN
+ * omalle sivullemme (pelivalinta.js).
+ *
+ * ⚠️ EI `new URL()`: se heittää jos teksti ei ole osoite, ja silloin paljas
+ * nelinumeroinen koodi hylättäisiin. */
+function qrPoimi(teksti) {
   if (typeof teksti !== 'string') return null;
-  var m = /[?&]koodi=(\d{4})\b/.exec(teksti) || /^\s*(\d{4})\s*$/.exec(teksti);
-  return m ? m[1] : null;
+  var m = /[?&]koodi=(\d{4})\b/.exec(teksti);
+  if (m) return { koodi: m[1], peli: 'party' };
+  m = /[?&]liity=(\d{4})\b/.exec(teksti);
+  if (m) return { koodi: m[1], peli: 'basso' };
+  m = /^\s*(\d{4})\s*$/.exec(teksti);
+  return m ? { koodi: m[1], peli: null } : null;
 }
 
 /* Avaa skannerin. `valmis(koodi)` kutsutaan kun koodi on luettu; jos pelaaja
@@ -93,8 +112,21 @@ function qrAvaaSkanneri(valmis) {
       var kuva = piirto.getImageData(0, 0, kangas.width, kangas.height);
       var osuma = window.jsQR ? jsQR(kuva.data, kuva.width, kuva.height,
         { inversionAttempts: 'dontInvert' }) : null;
-      var koodi = osuma && qrPoimiKoodi(osuma.data);
-      if (koodi) { sulje(); valmis(koodi); return; }
+      var luettu = osuma && qrPoimi(osuma.data);
+      if (luettu) {
+        sulje();
+        /* ⚠️ TOISEN PELIN KOODI HOIDETAAN TÄÄLLÄ, EI KUTSUJASSA. Muuten sama
+           päätös olisi molemmissa peleissä erikseen - ja «globaali keino
+           liittyä» tarkoittaa juuri sitä ettei pelaajan tarvitse tietää
+           kummasta pelistä on kyse. */
+        if (luettu.peli && typeof peliNyt === 'function' && luettu.peli !== peliNyt() &&
+            typeof pelivalintaLiittymisOsoite === 'function') {
+          location.assign(pelivalintaLiittymisOsoite(luettu.peli, luettu.koodi));
+          return;
+        }
+        valmis(luettu.koodi);
+        return;
+      }
     }
     kehys = requestAnimationFrame(silmukka);
   }
