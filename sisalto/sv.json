@@ -269,6 +269,58 @@
       "Fyllningspåse: 55 fyllningar, en tiosidig tärning och en Basso-tatuering"
     ],
     "peli_otsikko": "Spelet som följer med påsen: {nimi}",
-    "nappi": "Ladda ner spelplanen"
+    "nappi": "Ladda ner spelplanen",
+    "tarjoukset_otsikko": "Mässerbjudanden",
+    "tarjoukset_ingressi": "Gäller i vår monter på SPIEL Essen.",
+    "tarjoukset": [
+      [
+        "17 €",
+        "Kortspelet",
+        "eller 2 st 30 €",
+        "korttipeli"
+      ],
+      [
+        "30 €",
+        "Brädspelet",
+        "",
+        "lautapeli"
+      ],
+      [
+        "45 €",
+        "Båda spelen",
+        "47 € separat",
+        "molemmat"
+      ],
+      [
+        "10 €",
+        "Fyllningspåse",
+        "55 fyllningar + tärning",
+        ""
+      ]
+    ],
+    "kaupanpaalle": "Handla för över 35 € och fyllningspåsen bjuder vi på.",
+    "kaupanpaalle_lisa": "Begränsad upplaga 450 st — när de är slut är de slut.",
+    "tuotteet_otsikko": "Det här har vi med oss",
+    "avaa": "Läs mer",
+    "tuotteet": [
+      [
+        "Pizza Love-kortspelet",
+        "Tre spelsätt, 2–6 spelare",
+        "korttipeli.html",
+        "tuote-pakkaus.webp"
+      ],
+      [
+        "Pizza Love-brädspelet",
+        "Tre spelsätt, 2–4 spelare",
+        "lautapeli.html",
+        "lautapeli-kansi.webp"
+      ],
+      [
+        "Fyllningspåse",
+        "55 fyllningar, tärning och Basso-tatuering",
+        "#peli",
+        "nappulat-noppa.webp"
+      ]
+    ]
   }
 }

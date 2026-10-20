@@ -275,6 +275,58 @@
       "Belagbeutel: 55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo"
     ],
     "peli_otsikko": "Das Spiel zum Beutel: {nimi}",
-    "nappi": "Spielplan herunterladen"
+    "nappi": "Spielplan herunterladen",
+    "tarjoukset_otsikko": "Messeangebote",
+    "tarjoukset_ingressi": "Gültig an unserem Stand auf der SPIEL in Essen.",
+    "tarjoukset": [
+      [
+        "17 €",
+        "Kartenspiel",
+        "oder 2 für 30 €",
+        "korttipeli"
+      ],
+      [
+        "30 €",
+        "Brettspiel",
+        "",
+        "lautapeli"
+      ],
+      [
+        "45 €",
+        "Beide Spiele",
+        "einzeln 47 €",
+        "molemmat"
+      ],
+      [
+        "10 €",
+        "Belagbeutel",
+        "55 Beläge + Würfel",
+        ""
+      ]
+    ],
+    "kaupanpaalle": "Ab 35 € Einkauf gibt es den Belagbeutel gratis dazu.",
+    "kaupanpaalle_lisa": "Limitiert auf 450 Stück — weg ist weg.",
+    "tuotteet_otsikko": "Das bringen wir mit",
+    "avaa": "Mehr erfahren",
+    "tuotteet": [
+      [
+        "Pizza-Love-Kartenspiel",
+        "Drei Spielarten, 2–6 Personen",
+        "korttipeli.html",
+        "tuote-pakkaus.webp"
+      ],
+      [
+        "Pizza-Love-Brettspiel",
+        "Drei Spielarten, 2–4 Personen",
+        "lautapeli.html",
+        "lautapeli-kansi.webp"
+      ],
+      [
+        "Belagbeutel",
+        "55 Beläge, Würfel und Basso-Tattoo",
+        "#peli",
+        "nappulat-noppa.webp"
+      ]
+    ]
   }
 }

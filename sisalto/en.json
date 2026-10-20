@@ -275,6 +275,58 @@
       "Topping bag: 55 toppings, a ten-sided die and a Basso tattoo"
     ],
     "peli_otsikko": "The game that comes with the bag: {nimi}",
-    "nappi": "Download the board"
+    "nappi": "Download the board",
+    "tarjoukset_otsikko": "Fair offers",
+    "tarjoukset_ingressi": "Valid at our stand at SPIEL Essen.",
+    "tarjoukset": [
+      [
+        "€17",
+        "Card game",
+        "or 2 for €30",
+        "korttipeli"
+      ],
+      [
+        "€30",
+        "Board game",
+        "",
+        "lautapeli"
+      ],
+      [
+        "€45",
+        "Both games",
+        "€47 separately",
+        "molemmat"
+      ],
+      [
+        "€10",
+        "Topping bag",
+        "55 toppings + die",
+        ""
+      ]
+    ],
+    "kaupanpaalle": "Spend over €35 and the topping bag is on us.",
+    "kaupanpaalle_lisa": "Limited run of 450 — when they are gone, they are gone.",
+    "tuotteet_otsikko": "What we bring",
+    "avaa": "Read more",
+    "tuotteet": [
+      [
+        "Pizza Love card game",
+        "Three modes, 2–6 players",
+        "korttipeli.html",
+        "tuote-pakkaus.webp"
+      ],
+      [
+        "Pizza Love board game",
+        "Three modes, 2–4 players",
+        "lautapeli.html",
+        "lautapeli-kansi.webp"
+      ],
+      [
+        "Topping bag",
+        "55 toppings, a die and a Basso tattoo",
+        "#peli",
+        "nappulat-noppa.webp"
+      ]
+    ]
   }
 }

@@ -276,6 +276,58 @@
       "Täytepussi: 55 täytettä, kymmensivuinen noppa ja Basso-tatuointi"
     ],
     "peli_otsikko": "Pussin mukana tuleva peli: {nimi}",
-    "nappi": "Lataa pelialusta"
+    "nappi": "Lataa pelialusta",
+    "tarjoukset_otsikko": "Messutarjoukset",
+    "tarjoukset_ingressi": "Voimassa osastollamme SPIEL Essenissä.",
+    "tarjoukset": [
+      [
+        "17 €",
+        "Korttipeli",
+        "tai 2 kpl 30 €",
+        "korttipeli"
+      ],
+      [
+        "30 €",
+        "Lautapeli",
+        "",
+        "lautapeli"
+      ],
+      [
+        "45 €",
+        "Molemmat pelit",
+        "erikseen 47 €",
+        "molemmat"
+      ],
+      [
+        "10 €",
+        "Täytepussi",
+        "55 täytettä + noppa",
+        ""
+      ]
+    ],
+    "kaupanpaalle": "Yli 35 €:n ostoksesta täytepussi kaupan päälle.",
+    "kaupanpaalle_lisa": "Rajattu erä 450 kpl — kun ne on myyty, ne on myyty.",
+    "tuotteet_otsikko": "Mitä tuomme mukanamme",
+    "avaa": "Lue lisää",
+    "tuotteet": [
+      [
+        "Pizza Love -korttipeli",
+        "Kolme pelimuotoa, 2–6 pelaajaa",
+        "korttipeli.html",
+        "tuote-pakkaus.webp"
+      ],
+      [
+        "Pizza Love -lautapeli",
+        "Kolme pelimuotoa, 2–4 pelaajaa",
+        "lautapeli.html",
+        "lautapeli-kansi.webp"
+      ],
+      [
+        "Täytepussi",
+        "55 täytettä, noppa ja Basso-tatuointi",
+        "#peli",
+        "nappulat-noppa.webp"
+      ]
+    ]
   }
 }

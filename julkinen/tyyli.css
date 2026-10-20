@@ -341,3 +341,39 @@ ol.vaiheet h3{margin:6px 0 6px}
 .apinakortti__huom{font-size:14.5px;color:var(--soft)}
 .apinakortti__tarkennus{background:var(--warm);border-left:3px solid var(--orange);border-radius:8px;
   padding:8px 12px;font-size:14.5px;margin-top:8px!important}
+
+/* ─── Essen 2026: messutarjoukset ─────────────────────────────────────────
+   Marko 20.10.2026: «ne messutarjoukset isolla ja mieluiten linkit, että
+   pääsee suoraan ostamaan».
+   ⚠️ Hinta on kortin ISOIN asia, ei alaviite: messuvieras lukee hinnan
+   ensin ja nimen toisena. Siksi hinta on oma elementtinsä eikä osa tekstiä. */
+.tarjoukset{display:grid;gap:14px;margin:18px 0 28px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.tarjous{display:flex;flex-direction:column;gap:6px;padding:20px;
+  border:2px solid var(--oranssi,#F47920);border-radius:16px;background:#fff;
+  text-decoration:none;color:inherit}
+.tarjous--nosto{background:var(--oranssi,#F47920);color:#fff;border-color:transparent}
+.tarjous__hinta{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.tarjous__nimi{font-weight:700;font-size:17px}
+.tarjous__lisa{font-size:14px;opacity:.78}
+.tarjous__linkki{margin-top:auto;padding-top:10px;font-weight:700;font-size:15px}
+.tarjous__linkki::after{content:" →"}
+.tarjous--nosto .tarjous__lisa{opacity:.9}
+
+/* Kaupan paalle -lupaus: oma rivinsa, ei korttien sekaan */
+.kaupanpaalle{display:flex;gap:16px;align-items:center;padding:18px 20px;
+  border-radius:16px;background:#1A1A1A;color:#fff;margin:0 0 28px}
+.kaupanpaalle img{width:84px;height:auto;flex:none}
+.kaupanpaalle strong{display:block;font-size:19px;margin-bottom:3px}
+.kaupanpaalle span{font-size:15px;opacity:.85}
+
+/* Saannot: vaiheet numeroituna, ei yhtena potkona */
+.vaiheet{display:grid;gap:12px;margin:16px 0 26px;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.vaihe{position:relative;padding:18px 18px 18px 54px;border-radius:14px;
+  background:#FBF7F0;border:1px solid #e7ded0}
+.vaihe__nro{position:absolute;left:16px;top:16px;width:26px;height:26px;
+  border-radius:50%;background:var(--oranssi,#F47920);color:#fff;
+  font-weight:800;font-size:15px;display:grid;place-items:center}
+.vaihe h4{margin:0 0 4px;font-size:16px}
+.vaihe p{margin:0;font-size:15px}

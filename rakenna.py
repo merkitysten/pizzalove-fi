@@ -567,47 +567,93 @@ def apinakortit(t, kaikki):
 
 
 def essen2026(t, kaikki):
-    """Messusivu, jonka sisalla peli on yksi luku.
+    """Messusivu: tarjoukset ja tuotteet edella, peli ja saannot perassa.
 
-    Marko 20.10.2026: «kun peliä ei ole kukaan koskaan oikeasti testannut,
-    niin vähän tuntuu hömelöltä "lanseerata" uusi peli — — Sehän kehitettiin
-    vain sen takia, että on jotain myytävää 10 € hintaluokassa.»
+    Marko 20.10.2026: «Essen sivu on nyt tunkkainen eikä yhtään innostava.
+    Siellä pitäisi olla meidän hauskaa grafiikkaa ja raikkautta. Sääntöihin
+    joku järkevä rakenne eikä tuollalailla kaikki samassa pötkössä.»
 
-    Siksi sivu EI johdata pelin nimella. Iso otsikko lukisi lanseeraukseksi ja
-    asettaisi odotuksen jota kevyt peli ei taytä; messusivun otsikon alla sama
-    peli on bonus pussin mukana. Pussi perustelee itsensä 55 täytteellä ja
-    nopalla — pelin tehtava on olla syy kayttaa niita, ei syy ostaa.
+    Sivu EI johdata pelin nimella: iso otsikko lukisi lanseeraukseksi ja
+    asettaisi odotuksen jota testaamaton kevyt peli ei taytä. Messuvieras
+    etsii hintaa ja tuotetta; peli on pussin mukana tuleva bonus.
 
-    ⚠️ Pelaajan sanat ovat täyte, tiski ja lohko. Tekstit: sisalto/*.json,
-    avain `toppingten` (avain jäi vanhaksi, sivu vaihtui).
+    ⚠️ Hinta on kortin isoin asia, ei alaviite — siksi `.tarjous__hinta` on
+    oma elementtinsa eika osa lausetta.
     """
     a = t['toppingten']
 
     def tt(avain):
         return a[avain].replace('{nimi}', PELIN_NIMI)
 
-    luettelo = lambda avain, tagi: '<%s class="luettelo">%s</%s>' % (
-        tagi, ''.join('<li>%s</li>' % e(r) for r in a[avain]), tagi)
-    muunnelmat = ''.join('<article class="laatikko"><h3>%s</h3><p>%s</p></article>'
+    tarjoukset = []
+    for hinta, nimi, lisa, tuote in a['tarjoukset']:
+        linkki = kauppa(t, tuote, 'essen') if tuote else ''
+        tagi = 'a href="%s"' % e(linkki) if linkki else 'div'
+        tarjoukset.append(
+            '<%s class="tarjous%s">'
+            '<span class="tarjous__hinta">%s</span>'
+            '<span class="tarjous__nimi">%s</span>'
+            '<span class="tarjous__lisa">%s</span>%s</%s>'
+            % (tagi, ' tarjous--nosto' if not linkki else '', e(hinta), e(nimi),
+               e(lisa), '<span class="tarjous__linkki">%s</span>'
+               % e(t['ui']['kauppaan']) if linkki else '',
+               'a' if linkki else 'div'))
+
+    tuotteet = ''.join(
+        '<a class="peli-kortti" href="%s">'
+        '<div class="peli-kortti__kuva"><img src="../kuvat/%s" alt="" loading="lazy"></div>'
+        '<div class="peli-kortti__teksti"><p class="peli-kortti__nimi">%s</p>'
+        '<p class="peli-kortti__tiedot">%s</p>'
+        '<span class="peli-kortti__linkki">%s</span></div></a>'
+        % (e(linkki), e(kuva), e(nimi), e(tiedot), e(a['avaa']))
+        for nimi, tiedot, linkki, kuva in a['tuotteet'])
+
+    vaiheet = ''.join(
+        '<article class="vaihe"><span class="vaihe__nro">%d</span>'
+        '<p>%s</p></article>' % (i + 1, e(rivi))
+        for i, rivi in enumerate(a['vuoro']))
+
+    laatikko = lambda otsikko, teksti: (
+        '<article class="vaihe"><h4>%s</h4><p>%s</p></article>'
+        % (e(a[otsikko]), e(a[teksti])))
+    saannot = (laatikko('tavoite_otsikko', 'tavoite')
+               + laatikko('valmistelu_otsikko', 'valmistelu')
+               + laatikko('ohi_otsikko', 'ohi')
+               + laatikko('aloitus_otsikko', 'aloitus')
+               + laatikko('voitto_otsikko', 'voitto')
+               + laatikko('vinkki_otsikko', 'vinkki'))
+    muunnelmat = ''.join('<article class="vaihe"><h4>%s</h4><p>%s</p></article>'
                          % (e(nimi), e(teksti)) for nimi, teksti in a['muunnelmat'])
     nimet = {'tt_vari': a['lataa_vari'], 'tt_viiva': a['lataa_viiva']}
+
     runko = '''
-<h1>%s</h1>
-<p class="ingressi">%s</p>
+<section class="sankari">
+  <div>
+    <p class="merkki">%s</p>
+    <h1>%s</h1>
+    <p class="ingressi">%s</p>
+  </div>
+  <img class="sankari__basso" src="../kuvat/basso-syo.webp" width="438" height="520" alt="">
+</section>
 
 <h2>%s</h2>
-%s
+<p>%s</p>
+<div class="tarjoukset">%s</div>
+<div class="kaupanpaalle">
+  <img src="../kuvat/nappulapinot.webp" alt="" loading="lazy">
+  <div><strong>%s</strong><span>%s</span></div>
+</div>
 
-<hr style="margin:34px 0;border:0;border-top:1px solid #e7ded0">
-
-<p class="merkki">%s</p>
 <h2>%s</h2>
+<div class="pelit">%s</div>
+
+<h2 id="peli">%s</h2>
 <p class="ingressi">%s</p>
 <p class="pieni">%s</p>
 
 <section class="laatikko">
   <h3>%s</h3>
-  %s
+  <ul class="luettelo">%s</ul>
 </section>
 
 <h3>%s</h3>
@@ -615,41 +661,25 @@ def essen2026(t, kaikki):
 %s
 
 <h3>%s</h3>
-<h4>%s</h4>
+<div class="vaiheet">%s</div>
 <p>%s</p>
-<h4>%s</h4>
-<p>%s</p>
-<h4>%s</h4>
-%s
-<p>%s</p>
-<p>%s</p>
-<h4>%s</h4>
-<p>%s</p>
-<h4>%s</h4>
-<p>%s</p>
-<h4>%s</h4>
-<p>%s</p>
+<p class="pieni">%s</p>
 
-<section class="laatikko">
-  <h4>%s</h4>
-  <p>%s</p>
-</section>
+<div class="vaiheet">%s</div>
 
 <h3>%s</h3>
-<div class="kortit kortit--2">%s</div>
-''' % (e(a['sivu_h1']), e(a['sivu_ingressi']),
-       e(a['mukana_otsikko']), luettelo('mukana', 'ul'),
-       e(a['merkki']), e(tt('peli_otsikko')), e(tt('ingressi')), e(a['tiedot']),
-       e(a['sisalto_otsikko']), luettelo('sisalto', 'ul'),
-       e(a['lataa_otsikko']), e(a['lataa']), lataukset(['tt_vari', 'tt_viiva'], nimet, PDF),
-       e(a['saannot_otsikko']),
-       e(a['tavoite_otsikko']), e(a['tavoite']),
-       e(a['valmistelu_otsikko']), e(a['valmistelu']),
-       e(a['vuoro_otsikko']), luettelo('vuoro', 'ol'), e(a['vuoro_huom']), e(a['vuoro_raja']),
-       e(a['ohi_otsikko']), e(a['ohi']),
-       e(a['aloitus_otsikko']), e(a['aloitus']),
-       e(a['voitto_otsikko']), e(a['voitto']),
-       e(a['vinkki_otsikko']), e(a['vinkki']),
+<div class="vaiheet">%s</div>
+''' % (e(a['merkki']), e(a['sivu_h1']), e(a['sivu_ingressi']),
+       e(a['tarjoukset_otsikko']), e(a['tarjoukset_ingressi']), ''.join(tarjoukset),
+       e(a['kaupanpaalle']), e(a['kaupanpaalle_lisa']),
+       e(a['tuotteet_otsikko']), tuotteet,
+       e(tt('peli_otsikko')), e(tt('ingressi')), e(a['tiedot']),
+       e(a['sisalto_otsikko']),
+       ''.join('<li>%s</li>' % e(r) for r in a['sisalto']),
+       e(a['lataa_otsikko']), e(a['lataa']),
+       lataukset(['tt_vari', 'tt_viiva'], nimet, PDF),
+       e(a['vuoro_otsikko']), vaiheet, e(a['vuoro_huom']), e(a['vuoro_raja']),
+       saannot,
        e(a['muunnelmat_otsikko']), muunnelmat)
     return kehys(t, kaikki, 'essen', tt('title'), tt('kuvaus'), runko)
 
