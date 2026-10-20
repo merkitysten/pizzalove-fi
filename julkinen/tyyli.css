@@ -174,10 +174,15 @@ ul.lista li,ol.lista li{margin:4px 0}
    seisoo sen alareunalla. Kerrokset ja koordinaatit tulevat pelistä
    (`play/apinavaaka/apinavaaka.js` → `apinavaakaKuvat`), rakentaja on `sivu.js`:ssä.
    Ilman skriptiä näkyy sama apina kuvana (`kuvat/apinavaaka.webp`). */
-.pelaa-banneri--vaaka{grid-template-columns:minmax(0,320px) 1fr;gap:26px;align-items:end;
-  margin-top:96px;padding:0 26px 24px}
-.pelaa-banneri--vaaka > div{padding-top:24px}
-.vaaka-apina{position:relative;margin:-76px 0 -24px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* 📐 Apina seisoo laatikon YLÄREUNALLA omassa vapaassa tilassaan (Marko 20.10.2026:
+   «lamppu rajautuu tausta-alueen kanssa rumasti — — apina rehellisesti alueen
+   yläpuolella»). Laatikko on vain tekstin ympärillä; apinan rajattu alareuna
+   peittää laatikon reunaviivan 2 px, jotta se näyttää seisovan sillä. */
+.pelaa-banneri--vaaka{display:block;margin-top:32px;padding:0;background:none;border:0}
+.pelaa-banneri--vaaka > div:last-child{background:var(--warm);border:1px solid var(--line);
+  border-radius:var(--radius);padding:20px 24px 22px}
+.vaaka-apina{position:relative;z-index:1;width:min(320px,88%);margin:0 0 -2px 22px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent}
 .vaaka-apina > img{display:block;width:100%;height:auto}
 .vaaka-apina.elava{overflow:hidden;
   filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff)}
@@ -205,9 +210,8 @@ ul.lista li,ol.lista li{margin:4px 0}
   .vaaka-apina.syttyy .va-lamppu,.vaaka-apina.syttyy .va-saihkeet{animation:none;opacity:1}
 }
 @media (max-width:560px){
-  .pelaa-banneri--vaaka{grid-template-columns:1fr;gap:0;margin-top:84px;padding:0 18px 20px}
-  .pelaa-banneri--vaaka > div{padding-top:16px}
-  .vaaka-apina{width:min(320px,92%);margin:-70px auto 0}
+  .pelaa-banneri--vaaka > div:last-child{padding:16px 18px 20px}
+  .vaaka-apina{margin:0 auto -2px}
 }
 .pelaa-banneri strong{display:block;font-size:20px;line-height:1.25}
 .pelaa-banneri span:not(.nappi){display:block;font-size:15px;color:var(--soft);margin-top:4px}
