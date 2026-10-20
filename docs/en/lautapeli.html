@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../favicon-180.png">
 <link rel="preload" href="../fontit/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fontit/poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../tyyli.css?v=84c8a658">
+<link rel="stylesheet" href="../tyyli.css?v=1e7095db">
 <link rel="canonical" href="https://pizzalove.fi/en/lautapeli.html">
 <link rel="alternate" hreflang="fi" href="https://pizzalove.fi/fi/lautapeli.html"><link rel="alternate" hreflang="sv" href="https://pizzalove.fi/sv/lautapeli.html"><link rel="alternate" hreflang="en" href="https://pizzalove.fi/en/lautapeli.html"><link rel="alternate" hreflang="de" href="https://pizzalove.fi/de/lautapeli.html"><link rel="alternate" hreflang="x-default" href="https://pizzalove.fi/">
 <meta property="og:title" content="Pizza Love® board game – rules and videos">
@@ -93,14 +93,17 @@
   <div class="muoto__sisus" style="padding-top:14px"><p>Everyone gets two secret pizzas that the others can’t see – so no one knows which pizzas you’re going to make. The first to fill their box with 10 different slices wins.</p></div>
 </details>
 
-<div class="pelaa-banneri pelaa-banneri--vaaka" style="margin-top:28px">
-  <img src="../kuvat/apinavaaka.webp" width="720" height="489" alt="">
+<div class="pelaa-banneri pelaa-banneri--vaaka">
+  <div class="vaaka-apina" aria-hidden="true"><img src="../kuvat/apinavaaka.webp" width="720" height="489" alt=""></div>
   <div>
-    <strong>Practise online</strong>
-    <span>In Monkey Scales you get to know the board game’s scales, feed hungry monkeys and help Basso solve puzzles.</span>
-    <a class="nappi" href="../play/apinavaaka.html?kieli=en">Play online</a>
+    <strong>Monkey Scales</strong>
+    <span>Get to know the board game’s scales online: feed hungry monkeys and help Basso solve puzzles.</span>
+    <a class="nappi" data-syty href="../play/apinavaaka.html?kieli=en">Play online</a>
   </div>
 </div>
+
+<!-- Apinan kerrosten geometria yhdestä lähteestä (pelin apinavaaka.js); molemmat defer, joten tämä ajetaan ennen sivu.js:ää. -->
+<script src="../play/apinavaaka/apinavaaka.js" defer></script>
 
 <h2 id="lataa">Rules as PDF</h2>
 <p>Full rules for every game mode in Finnish, Swedish and English.</p>
@@ -130,6 +133,6 @@
     <p class="alaosa__pieni">Pizza Love® and Merkitysten® are registered trademarks of Merkitysten Oy. © Merkitysten Oy</p>
   </div>
 </footer>
-<script src="../sivu.js?v=c64296f3" defer></script>
+<script src="../sivu.js?v=7f6f486e" defer></script>
 </body>
 </html>

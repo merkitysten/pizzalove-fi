@@ -476,14 +476,17 @@ def lautapeli(t, kaikki):
 <p>%s</p>
 %s
 
-<div class="pelaa-banneri pelaa-banneri--vaaka" style="margin-top:28px">
-  <img src="../kuvat/apinavaaka.webp" width="%s" height="%s" alt="">
+<div class="pelaa-banneri pelaa-banneri--vaaka">
+  <div class="vaaka-apina" aria-hidden="true"><img src="../kuvat/apinavaaka.webp" width="%s" height="%s" alt=""></div>
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <a class="nappi" href="../play/apinavaaka.html?kieli=%s">%s</a>
+    <a class="nappi" data-syty href="../play/apinavaaka.html?kieli=%s">%s</a>
   </div>
 </div>
+
+<!-- Apinan kerrosten geometria yhdestä lähteestä (pelin apinavaaka.js); molemmat defer, joten tämä ajetaan ennen sivu.js:ää. -->
+<script src="../play/apinavaaka/apinavaaka.js" defer></script>
 
 <h2 id="lataa">%s</h2>
 <p>%s</p>

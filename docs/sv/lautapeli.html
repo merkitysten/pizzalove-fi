@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="../favicon-180.png">
 <link rel="preload" href="../fontit/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fontit/poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../tyyli.css?v=84c8a658">
+<link rel="stylesheet" href="../tyyli.css?v=1e7095db">
 <link rel="canonical" href="https://pizzalove.fi/sv/lautapeli.html">
 <link rel="alternate" hreflang="fi" href="https://pizzalove.fi/fi/lautapeli.html"><link rel="alternate" hreflang="sv" href="https://pizzalove.fi/sv/lautapeli.html"><link rel="alternate" hreflang="en" href="https://pizzalove.fi/en/lautapeli.html"><link rel="alternate" hreflang="de" href="https://pizzalove.fi/de/lautapeli.html"><link rel="alternate" hreflang="x-default" href="https://pizzalove.fi/">
 <meta property="og:title" content="Pizza Love® brädspel – regler och videor">
@@ -93,14 +93,17 @@
   <div class="muoto__sisus" style="padding-top:14px"><p>Alla får två hemliga pizzor som de andra inte ser – ingen vet vilka pizzor du tänker tillaga. Den som först fyller sin box med 10 olika bitar vinner.</p></div>
 </details>
 
-<div class="pelaa-banneri pelaa-banneri--vaaka" style="margin-top:28px">
-  <img src="../kuvat/apinavaaka.webp" width="720" height="489" alt="">
+<div class="pelaa-banneri pelaa-banneri--vaaka">
+  <div class="vaaka-apina" aria-hidden="true"><img src="../kuvat/apinavaaka.webp" width="720" height="489" alt=""></div>
   <div>
-    <strong>Öva online</strong>
-    <span>I Apvågen lär du känna brädspelets våg, matar hungriga apor och hjälper Basso med kluriga uppgifter.</span>
-    <a class="nappi" href="../play/apinavaaka.html?kieli=sv">Spela online</a>
+    <strong>Apvågen</strong>
+    <span>Lär känna brädspelets våg online: mata hungriga apor och hjälp Basso med kluriga uppgifter.</span>
+    <a class="nappi" data-syty href="../play/apinavaaka.html?kieli=sv">Spela online</a>
   </div>
 </div>
+
+<!-- Apinan kerrosten geometria yhdestä lähteestä (pelin apinavaaka.js); molemmat defer, joten tämä ajetaan ennen sivu.js:ää. -->
+<script src="../play/apinavaaka/apinavaaka.js" defer></script>
 
 <h2 id="lataa">Reglerna som PDF</h2>
 <p>Fullständiga regler för alla spellägen på finska, svenska och engelska.</p>
@@ -130,6 +133,6 @@
     <p class="alaosa__pieni">Pizza Love® och Merkitysten® är registrerade varumärken som ägs av Merkitysten Oy. © Merkitysten Oy</p>
   </div>
 </footer>
-<script src="../sivu.js?v=c64296f3" defer></script>
+<script src="../sivu.js?v=7f6f486e" defer></script>
 </body>
 </html>
