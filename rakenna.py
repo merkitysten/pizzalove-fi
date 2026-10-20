@@ -51,6 +51,7 @@ KAUPPA_KIELI = {
 }
 KAUPPA_KIELI['de'] = KAUPPA_KIELI['en']
 MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp
+VAAKA_W, VAAKA_H = 720, 489  # julkinen/kuvat/apinavaaka.webp (koottu Apinavaa'an valikkoapinan kerroksista, Marko 20.10.2026)
 
 
 def kauppa(t, tuote, paikka=None):
@@ -65,7 +66,7 @@ def kauppa(t, tuote, paikka=None):
 
 def kauppa_banneri(t, kuva, kuva_l, kuva_k, otsikko, teksti, napit, alalinkki=''):
     """Kauppaan ohjaava laatikko: kuva, otsikko, yksi lause, napit (18.10.2026)."""
-    nappi_html = ''.join('<a class="nappi%s" href="%s">%s →</a>' % ('' if i == 0 else ' nappi--toinen', e(h), e(x))
+    nappi_html = ''.join('<a class="nappi%s" href="%s">%s</a>' % ('' if i == 0 else ' nappi--toinen', e(h), e(x))
                          for i, (h, x) in enumerate(napit))
     return '''
 <section class="kauppa-banneri">
@@ -289,7 +290,7 @@ def varainhankinta_osio(s, avain='varainhankinta'):
     return '''<section class="laatikko varain" style="margin-top:20px">
   <h2 style="margin-top:0">%s</h2>
   <p>%s</p>
-  <div class="napit"><a class="nappi" href="%s">%s →</a></div>
+  <div class="napit"><a class="nappi" href="%s">%s</a></div>
 </section>''' % (e(v['otsikko']), e(v['teksti']), v['url'], e(v['nappi']))
 
 
@@ -330,7 +331,7 @@ def etusivu(t, kaikki):
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <span class="nappi">%s →</span>
+    <span class="nappi">%s</span>
   </div>
 </a>
 
@@ -413,7 +414,7 @@ def korttipeli(t, kaikki):
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <a class="nappi" href="../play/?kieli=%s">%s →</a>
+    <a class="nappi" href="../play/?kieli=%s">%s</a>
   </div>
 </div>
 
@@ -475,12 +476,12 @@ def lautapeli(t, kaikki):
 <p>%s</p>
 %s
 
-<div class="pelaa-banneri" style="margin-top:28px">
-  <img src="../kuvat/basso-miettii.webp" width="%s" height="%s" alt="">
+<div class="pelaa-banneri pelaa-banneri--vaaka" style="margin-top:28px">
+  <img src="../kuvat/apinavaaka.webp" width="%s" height="%s" alt="">
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <a class="nappi" href="../play/apinavaaka.html?kieli=%s">%s →</a>
+    <a class="nappi" href="../play/apinavaaka.html?kieli=%s">%s</a>
   </div>
 </div>
 
@@ -494,7 +495,7 @@ def lautapeli(t, kaikki):
        e(s['valmistelut_otsikko']), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
-       MIETTII_W, MIETTII_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
+       VAAKA_W, VAAKA_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
        ristiinmyynti(t, 'korttipeli', 'lautapelisivu'))

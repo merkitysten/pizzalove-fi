@@ -168,6 +168,10 @@ ul.lista li,ol.lista li{margin:4px 0}
   margin-top:20px;padding:18px;border-radius:var(--radius);background:var(--bar);color:var(--barInk);
   text-decoration:none}
 .pelaa-banneri img{width:84px}
+/* Lautapelin banneri: Apinavaaka-apina (leveä kuva), ei pientä Bassoa (Marko 20.10.2026). */
+.pelaa-banneri--vaaka{grid-template-columns:220px 1fr}
+.pelaa-banneri--vaaka img{width:220px}
+@media (max-width:560px){.pelaa-banneri--vaaka{grid-template-columns:1fr}.pelaa-banneri--vaaka img{width:min(260px,80%)}}
 .pelaa-banneri strong{display:block;font-size:20px;line-height:1.25}
 .pelaa-banneri span{display:block;font-size:14.5px;opacity:.8;margin-top:4px}
 .pelaa-banneri .nappi{margin-top:10px;opacity:1;display:inline-flex;font-size:16px}
@@ -188,10 +192,10 @@ ul.lista li,ol.lista li{margin:4px 0}
 /* ---------- Pelisivu ---------- */
 .pelin-tiedot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
 .pelin-tiedot li{background:var(--tint);color:var(--ink);font-weight:600;font-size:14px;
-  padding:5px 12px;border-radius:999px}
+  padding:5px 12px;border-radius:8px}
 .hyppylinkit{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
 .hyppylinkit a{font-size:14px;font-weight:600;text-decoration:none;color:var(--ink);
-  background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:8px}
 .hyppylinkit a:hover{border-color:var(--orange)}
 
 .laatikko{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -238,7 +242,7 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 .videot--vaaka .video{aspect-ratio:16/9}
 .video img{width:100%;height:100%;object-fit:cover;opacity:.9}
 .video::after{content:"";position:absolute;left:50%;top:50%;width:58px;height:58px;
-  transform:translate(-50%,-50%);border-radius:50%;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%231A1A1A'/%3E%3C/svg%3E") center/26px no-repeat;
+  transform:translate(-50%,-50%);border-radius:50%;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%23FFFFFF'/%3E%3C/svg%3E") center/26px no-repeat;
   box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .video.on::after{display:none}
