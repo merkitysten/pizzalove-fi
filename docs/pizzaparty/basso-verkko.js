@@ -557,9 +557,14 @@ document.addEventListener('DOMContentLoaded', function () {
     };
   });
   bvEl('alkuPelaa').onclick = function () {
-    bvOsa(null);
-    /* Samalla laitteella usea ihminen: vaihtoruutu odotti valikon alla. */
-    if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
+    /* ⚠️ Sama ensikerran tarjous kuin Partyssa (opetus.js). Basson opastus on
+       eri kuin Partyn, joten lippukin on pelikohtainen. */
+    const jatka = function () {
+      bvOsa(null);
+      /* Samalla laitteella usea ihminen: vaihtoruutu odotti valikon alla. */
+      if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
+    };
+    if (typeof opetusTarjoa === 'function') opetusTarjoa(jatka); else jatka();
   };
   bvEl('alkuMoninpeli').onclick = function () { bvOsa('moninpeli'); };
   /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026): sama `bvAvaaKoodi`

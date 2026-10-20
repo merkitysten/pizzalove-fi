@@ -498,13 +498,82 @@ function opetusLopeta(loppuunAsti) {
   if (!loppuunAsti && typeof valikkoNayta === 'function') valikkoNayta();
 }
 
+/* --- ENSIKERRAN OPASTUS (Marko 20.10.2026) ---------------------------------
+ * «Nyt se ensikerran opastus, niin saadaan se rivi pois valikosta.»
+ *
+ * Opastus ei ole enää valikon rivi vaan se tarjoutuu itse kun pelaaja
+ * aloittaa pelin ensimmäistä kertaa TÄLLÄ LAITTEELLA. Sen jälkeen se asuu
+ * asetuksissa (⚙), jotta sen voi katsoa uudelleen.
+ *
+ * ⚠️ TARJOTAAN TASAN KERRAN, EI «ensimmäisillä kerroilla». Toistuva tarjous
+ * on nalkutusta sille joka jo osaa, ja hän on juuri se joka painaa «Ohita».
+ * Siksi myös OHITUS merkitsee opastetuksi - pelaaja vastasi kysymykseen,
+ * eikä samaa kysymystä kysytä uudelleen. Uudelleen katsominen on silti
+ * yhden napin päässä asetuksissa.
+ *
+ * ⚠️ PELIKOHTAINEN: Partyn ja Basson opastukset ovat eri (`opetusOnBasso`),
+ * joten Partyn oppinut saa Basson tarjouksen silti. Yhteinen lippu olisi
+ * vaientanut toisen pelin opastuksen kokonaan.
+ *
+ * ⚠️ YKSITYINEN SELAUS: `localStorage` voi heittää. Silloin opastus
+ * tarjotaan joka kerta - se on parempi kuin kaatunut aloitusnappi. */
+var OPETUS_AVAIN = 'pizzalove-opastettu';
+
+function opetusPelinNimi() { return opetusOnBasso() ? 'basso' : 'party'; }
+
+function opetusLiput() {
+  try { return JSON.parse(localStorage.getItem(OPETUS_AVAIN) || '{}') || {}; }
+  catch (e) { return {}; }
+}
+
+function opetusOnOpastettu() { return !!opetusLiput()[opetusPelinNimi()]; }
+
+function opetusMerkitse() {
+  const l = opetusLiput();
+  l[opetusPelinNimi()] = true;
+  try { localStorage.setItem(OPETUS_AVAIN, JSON.stringify(l)); } catch (e) { /* yksityinen selaus */ }
+}
+
+/* Tarjoaa opastusta ja kutsuu `jatka`n jos pelaaja ohittaa sen tai on jo
+   opastettu. Jos hän valitsee opastuksen, `jatka`a EI kutsuta: opastus
+   käynnistää pelin itse (`opetusAloita`). */
+function opetusTarjoa(jatka) {
+  if (opetusOnOpastettu()) return jatka();
+  const peite = document.createElement('div');
+  peite.className = 'opetus-tarjous';
+  peite.innerHTML =
+    '<div class="opetus-tarjous-kortti">' +
+      '<h2></h2><p></p>' +
+      '<button type="button" class="iso-nappi opetus-tarjous-nayta"></button>' +
+      '<button type="button" class="opetus-tarjous-ohita"></button>' +
+    '</div>';
+  peite.querySelector('h2').textContent = t('opetus.ensiOtsikko');
+  peite.querySelector('p').textContent = t('opetus.ensiTeksti');
+  peite.querySelector('.opetus-tarjous-nayta').textContent = t('opetus.ensiNayta');
+  peite.querySelector('.opetus-tarjous-ohita').textContent = t('opetus.ensiOhita');
+  document.body.appendChild(peite);
+
+  function pois() { if (peite.parentNode) peite.parentNode.removeChild(peite); }
+  peite.querySelector('.opetus-tarjous-nayta').addEventListener('click', function () {
+    opetusMerkitse(); pois(); opetusAloita();
+  });
+  peite.querySelector('.opetus-tarjous-ohita').addEventListener('click', function () {
+    opetusMerkitse(); pois(); jatka();
+  });
+}
+
 function opetusKytke() {
   const jatka = opetusEl('opetusJatka');
   if (jatka) jatka.addEventListener('click', opetusSeuraava);
   const lopeta = opetusEl('opetusLopeta');
   if (lopeta) lopeta.addEventListener('click', function () { opetusLopeta(false); });
-  const nappi = opetusEl('alkuOpetus');
-  if (nappi) nappi.addEventListener('click', opetusAloita);
+  /* Opastus ei ole enää alkuvalikossa vaan asetuksissa (ks. yllä). */
+  const nappi = opetusEl('asOpetus');
+  if (nappi) nappi.addEventListener('click', function () {
+    const peite = opetusEl('asetusPeite');
+    if (peite) peite.hidden = true;
+    opetusAloita();
+  });
   window.addEventListener('resize', function () {
     if (opetus.paalla) opetusVahti();
   });
@@ -515,7 +584,7 @@ function opetusKytke() {
  * kaataa peliä, mutta sen on näyttävä. */
 function opetusVahtiRakenne() {
   const puuttuu = [];
-  ['opetus', 'opetusValo', 'opetusZoom', 'opetusTeksti', 'opetusJatka', 'opetusLopeta', 'opetusAskeleet', 'alkuOpetus']
+  ['opetus', 'opetusValo', 'opetusZoom', 'opetusTeksti', 'opetusJatka', 'opetusLopeta', 'opetusAskeleet', 'asOpetus']
     .forEach(function (id) { if (!opetusEl(id)) puuttuu.push('#' + id); });
   ['t', 'pizzapakka', 'taytepakka', 'sekoita', 'piirraKaikki', 'aloitaPeli']
     .forEach(function (f) { if (typeof window[f] !== 'function') puuttuu.push(f + '()'); });

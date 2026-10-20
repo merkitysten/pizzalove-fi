@@ -52,7 +52,14 @@ function valikkoNayta() {
  * osoitteen (sivustonOsoite), koska Bassokin tarvitsee sen. */
 
 function valikkoKytke() {
-  valikkoEl('alkuPelaa').addEventListener('click', function () { valikkoEl('valikkoPeite').hidden = true; });
+  /* ⚠️ ENSIMMÄISELLÄ KERRALLA TARJOTAAN OPASTUSTA (Marko 20.10.2026). Opastus
+     ei ole enää valikon rivi; se tarjoutuu tässä ja asuu sen jälkeen
+     asetuksissa. `opetusTarjoa` kutsuu takaisinkutsun vain jos pelaaja ohittaa
+     tai on jo opastettu - opastuksen valinnut käynnistää pelin sen kautta. */
+  valikkoEl('alkuPelaa').addEventListener('click', function () {
+    const jatka = function () { valikkoEl('valikkoPeite').hidden = true; };
+    if (typeof opetusTarjoa === 'function') opetusTarjoa(jatka); else jatka();
+  });
   valikkoEl('alkuMoninpeli').addEventListener('click', function () { valikkoSivu('moninpeli'); });
   /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026). Sama osoite kuin
      «Omilla laitteilla» › «Liity peliin», jotta reittejä ei ole kahta. */

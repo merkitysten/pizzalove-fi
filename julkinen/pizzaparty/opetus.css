@@ -130,3 +130,28 @@
 .alku-opetus .pieni-ikoni{width:22px;height:22px;flex:0 0 auto;
   fill:none;stroke:var(--orange);stroke-width:2;
   stroke-linecap:round;stroke-linejoin:round}
+
+/* --- ENSIKERRAN TARJOUS (Marko 20.10.2026) --------------------------------
+ * «Nyt se ensikerran opastus, niin saadaan se rivi pois valikosta.»
+ * Kortti tulee kun peli aloitetaan ensimmäistä kertaa tällä laitteella.
+ * Rakenteen tekee opetus.js (`opetusTarjoa`).
+ *
+ * ⚠️ `z-index` alkuvalikon peitteen (5) yläpuolelle: tarjous avataan
+ * valikosta, ja matalampi jäisi sen alle. */
+.opetus-tarjous{position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+  padding:20px;background:rgba(26,20,12,.6);animation:opetus-tarjous-sisaan .22s ease-out both}
+@keyframes opetus-tarjous-sisaan{from{opacity:0}}
+.opetus-tarjous-kortti{background:var(--ground);border-radius:18px;padding:22px 20px 16px;
+  width:min(100%, 340px);display:grid;gap:10px;justify-items:stretch;text-align:center;
+  box-shadow:0 10px 30px rgba(60,34,12,.3);
+  animation:opetus-tarjous-kortti .3s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes opetus-tarjous-kortti{from{transform:scale(.88);opacity:0}}
+.opetus-tarjous-kortti h2{margin:0;font-size:20px;color:var(--ink)}
+.opetus-tarjous-kortti p{margin:0 0 4px;font-size:16px;line-height:1.4;color:var(--ink)}
+/* ⚠️ OHITUS ON LINKKI, EI NAPPI, ja se on tarkoituksellista: kaksi
+   samannäköistä nappia tekisi valinnasta yhtä painavan, ja opastus on se
+   jota ensikertalaiselle tarjotaan. Ohitus on silti täysikokoinen
+   kosketusalue (padding), ei pelkkä pieni teksti. */
+.opetus-tarjous-ohita{border:0;background:none;padding:12px;font:inherit;font-size:15px;
+  color:var(--himmea, #6b5a4a);text-decoration:underline;cursor:pointer}
+.opetus-tarjous-ohita:hover{color:var(--ink)}
