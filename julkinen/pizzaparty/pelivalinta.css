@@ -64,3 +64,7 @@
 
 /* Asetussivulla lajirivin alle jää ilmaa ennen pelien valintalistaa. */
 #pelivalintaLista .pelivalinta-ryhma{margin:0 0 10px}
+
+/* Etuoven (index.html) pelivalinta pystysuunnassa keskelle: sivulla ei ole
+   muuta sisältöä, ja ylälaitaan jätettynä alle jäisi pelkkää kuosia. */
+.pelivalinta--etuovi{margin-block:auto}

@@ -1,7 +1,7 @@
 {
-  "name": "Pizza Party",
-  "short_name": "Pizza Party",
-  "description": "Pizza Love -korttipelin Pizza Party selaimessa.",
+  "name": "Pizza Love",
+  "short_name": "Pizza Love",
+  "description": "Pizza Love -pelit selaimessa: Pizza Party, Pizza Basso ja Apinavaaka.",
   "lang": "fi",
   "start_url": "./",
   "scope": "./",

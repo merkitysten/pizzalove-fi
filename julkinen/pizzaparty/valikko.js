@@ -18,7 +18,10 @@
  * ole; sieltä käytetään vain valikkoAlkuun().
  */
 
-const VALIKKO_OSOITE = './';
+/* ⚠️ `party.html` EIKÄ `./` (20.10.2026): `./` on nyt ETUOVI (pelin valinta).
+ * «Alkuvalikkoon» Partyn sisältä tarkoittaa Partyn omaa aloitusruutua, ei
+ * pelin valintaa - muuten pelistä poistuminen veisi väärään paikkaan. */
+const VALIKKO_OSOITE = 'party.html';
 
 function valikkoAlkuun() { location.assign(VALIKKO_OSOITE); }
 

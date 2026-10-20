@@ -7,11 +7,9 @@
 <head>
 <meta charset="utf-8">
 <!--@party-->
-<!-- Viimeksi valittu peli avautuu (pelivalinta.js, Marko 9.10.2026: «käyttäjä
-     voisi vaihtaa peliä lennosta»). Vain paljaassa osoitteessa tai pelkällä
-     ?kieli=-parametrilla: ?liity (verkkopeli) jää aina tälle sivulle. -->
-<script>try{var q=new URLSearchParams(location.search),k=[];q.forEach(function(v,n){k.push(n)});
-if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-peli')==='basso')location.replace('basso.html'+location.search)}catch(e){}</script>
+<!-- ⚠️ MUISTAVA OHJAUS ON SIIRTYNYT ETUOVELLE (`index.html`, 20.10.2026).
+     Tässä se oli niin kauan kuin Pizza Party OLI index.html; nyt pelisivu on
+     peli eikä etuovi, eikä se saa ohjata pelaajaa pois. -->
 <!--@/-->
 <!-- ⚠️ maximum-scale=1 + user-scalable=no ON TASSA TOINEN VYO, EI AINOA.
      Kaksoisnapautuksen zoomin torjuu ensisijaisesti peli.css:n
@@ -76,7 +74,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261020a">
 <link rel="stylesheet" href="yhteinen.css?v=20261020d">
-<link rel="stylesheet" href="pelivalinta.css?v=20261019a">
+<link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <!--@basso-->
 <link rel="stylesheet" href="basso.css?v=20261020c">
 <!--@/-->
@@ -956,7 +954,7 @@ if(k.every(function(n){return n==='kieli'})&&localStorage.getItem('pizzapeli-pel
 <script src="qrluku.js?v=20261020b"></script>
 <script src="hahmot.js?v=20261009a"></script>
 <script src="tulos.js?v=20261009b"></script>
-<script src="pelivalinta.js?v=20261020a"></script>
+<script src="pelivalinta.js?v=20261020c"></script>
 <script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
 <script src="kierros.js?v=20261019a"></script>

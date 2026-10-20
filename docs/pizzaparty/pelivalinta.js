@@ -12,7 +12,7 @@
  * laskutoimitukset (pizzapeli-asetukset) ja hahmo (hahmot.js) kulkevat mukana.
  *
  * Sivu kertoo pelinsä <html data-peli="…">-attribuutissa. Viimeksi valittu
- * peli muistetaan, ja index.html:n alussa oleva rivi avaa sen (`./`).
+ * peli muistetaan, ja etuoven (`index.html`) alussa oleva rivi avaa sen.
  *
  * Merkintä: .pelivalinta (valikossa, painikerivi) ja #pelivalintaLista
  * (asetusten «Peli»-sivulla, valintalista); valikkorivin arvo #arvoPeli.
@@ -40,7 +40,7 @@ const LAJIT = [
   { avain: 'lauta',  ta: 'peli.lauta' },
 ];
 const PELIT = [
-  { avain: 'party',      sivu: './',              nimi: 'Pizza Party',  laji: 'kortti' },
+  { avain: 'party',      sivu: 'party.html',      nimi: 'Pizza Party',  laji: 'kortti' },
   { avain: 'basso',      sivu: 'basso.html',      nimi: 'Pizza Basso',  laji: 'kortti' },
   { avain: 'apinavaaka', sivu: 'apinavaaka.html', nimi: 'Apinavaaka',   laji: 'lauta'  },
 ];
@@ -82,7 +82,13 @@ function lajinPeli(laji) {
  * yhteisissä asetuksissa ja seuraa mukana itsestään. */
 function peliVaihda(avain) {
   const peli = PELIT.filter(function (p) { return p.avain === avain; })[0];
-  if (!peli || avain === peliNyt()) return;
+  /* ⚠️ ETUOVELLA EI OLE NYKYISTÄ PELIÄ, ja `peliNyt()` palauttaa silloin
+     oletuksen 'party'. 📐 Mitattu ilman tätä: etuoven «Pizza Party» EI TEHNYT
+     MITÄÄN - valinta luettiin «olet jo siellä» -tapaukseksi. «Pizza Basso»
+     toimi, koska se eroaa oletuksesta; vika olisi siis osunut vain toiseen
+     peliin ja näyttänyt satunnaiselta. */
+  const nykyinen = document.documentElement.dataset.peli || null;
+  if (!peli || avain === nykyinen) return;
   peliMuista(avain);
   const kieli = new URLSearchParams(location.search).get('kieli');
   location.assign(peli.sivu + (kieli ? '?kieli=' + encodeURIComponent(kieli) : ''));
@@ -92,14 +98,15 @@ function peliVaihda(avain) {
  * kansiossa, ja sivut ovat kielikansioissa: ../fi/, ../sv/ … Varainhankinta-
  * sivustolla paluu vie sen etusivulle. (Siirretty valikko.js:stä, jotta
  * Bassokin osaa sen.) */
-/* PÄÄVALIKKO = korttipelin aloitusruutu (`index.html`), jossa valitaan peli,
- * kieli ja pelitapa. Marko 14.10.2026: «Miten pääsen takaisin siihen
- * päävalikkoon?» — lautapelistä ei ollut ulospääsyä muuta kuin selaimen
- * takaisin-napilla.
+/* PÄÄVALIKKO = ETUOVI (`index.html`), jossa valitaan laji ja peli.
+ * ⚠️ Tässä luki 20.10.2026 asti «korttipelin aloitusruutu», ja se piti
+ * paikkansa kun Pizza Party OLI index.html. Nyt etuovi on oma sivunsa.
+ * Marko 14.10.2026: «Miten pääsen takaisin siihen päävalikkoon?» —
+ * lautapelistä ei ollut ulospääsyä muuta kuin selaimen takaisin-napilla.
  *
- * ⚠️ TÄMÄ VIE SAMAAN PAIKKAAN KUIN KYTKIMEN «Korttipeli», eikä sitä väitetä
- * muuksi: korttipeli avautuu aloitusruutuunsa. Ero on nimessä, ja nimi on
- * tässä koko asia — kytkin lupaa pelin vaihdon, tämä lupaa ulospääsyn. */
+ * ⚠️ Etuovi MUISTAA viimeksi pelatun ja ohjaa sinne, joten tämä ei jää
+ * valintaruutuun kiertämään: palaaja menee suoraan peliinsä, ensikertalainen
+ * valitsee. Juuri se oli ehto sille ettei etuovi lisää napautusta. */
 function paavalikkoon() {
   const kieli = new URLSearchParams(location.search).get('kieli');
   const haku = kieli ? '?kieli=' + encodeURIComponent(kieli) : '';
@@ -188,7 +195,9 @@ function lajikytkin(laji) {
 }
 
 function pelivalintaPiirra() {
-  const nyt = peliNyt();
+  /* Etuovella mikään peli ei ole «nykyinen», joten mitään ei myöskään
+     korosteta valituksi. Pelisivulla korostus on paikkamerkki: tässä olet. */
+  const nyt = document.documentElement.dataset.peli ? peliNyt() : null;
   const laji = lajiNyt();
   const lajinPelit = PELIT.filter(function (p) { return p.laji === laji; });
 
@@ -229,7 +238,10 @@ function pelivalintaPiirra() {
       });
     }
   }
-  const nimi = PELIT.filter(function (p) { return p.avain === nyt; })[0].nimi;
+  /* ⚠️ Etuovella (tai jos muistissa on tuntematon arvo) nykyistä peliä ei
+     ole. Ennen tämä olisi heittänyt `undefined.nimi`. */
+  const nykyinen = PELIT.filter(function (p) { return p.avain === nyt; })[0];
+  const nimi = nykyinen ? nykyinen.nimi : '';
   const arvo = document.getElementById('arvoPeli');
   if (arvo) arvo.textContent = nimi;
   /* Aloitusruudun alasivuilla palkissa näkyy pelin nimi viirin tilalla. */
@@ -316,7 +328,12 @@ document.addEventListener('keydown', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  peliMuista(peliNyt());
+  /* ⚠️ MUISTIIN KIRJOITETAAN VAIN PELISIVULLA. Etuovella ei ole peliä, ja
+     `peliNyt()` palauttaa silloin oletuksen 'party'. 📐 Mitattu ilman tätä
+     ehtoa: tyhjennetyn muistin jälkeen pelkkä etuoven lataus jätti arvoksi
+     'party' - jolloin ensikertalainen olisi ohjattu seuraavalla kerralla
+     Pizza Partyyn VALITSEMATTA, eli koko etuoven idea olisi kadonnut. */
+  if (document.documentElement.dataset.peli) peliMuista(peliNyt());
   viiriPiirra();
   pelivalintaPiirra();
   kielivalintaPiirra();
@@ -368,7 +385,7 @@ function pelivalintaOnkoKoodi(peli, koodi) {
 /* Toisen pelin liittymisosoite koodilla. Molemmat sivut osaavat jo lukea
    koodin osoitteesta (Party `?liity&koodi=`, Basso `?liity=`). */
 function pelivalintaLiittymisOsoite(peli, koodi) {
-  return (peli === 'basso') ? 'basso.html?liity=' + koodi : './?liity&koodi=' + koodi;
+  return (peli === 'basso') ? 'basso.html?liity=' + koodi : 'party.html?liity&koodi=' + koodi;
 }
 
 /* Kysyy toiselta peliltä ja siirtää sinne jos koodi löytyy. Palauttaa
