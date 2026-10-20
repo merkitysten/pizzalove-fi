@@ -275,7 +275,7 @@
       "Pizza Love -lautapeli",
       "Pussi: 55 täytettä, kymmensivuinen noppa ja Basso-tatuointi"
     ],
-    "peli_otsikko": "Täytepussin peli: {nimi}",
+    "peli_otsikko": "Pussin peli: {nimi}",
     "nappi": "Lataa pelialusta",
     "tarjoukset_otsikko": "Messutarjoukset",
     "tarjoukset_ingressi": "Hinnat ovat voimassa osastollamme.",
