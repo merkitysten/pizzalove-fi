@@ -571,11 +571,28 @@ function piirraTulos() {
 
   bassoPiirraKisa(varit);
 
+  /* ⚠️ HARJOITUSKIERROKSEN JÄLKEEN VALINTA, EI ▶ (Marko 20.10.2026).
+   * Perustaja päättää jatketaanko harjoittelua vai aloitetaanko peli; muut
+   * näkevät vain tiedon. ⚠️ `hidden` asetetaan AINA kummallekin haaralle:
+   * jäänyt lohko jäisi näkyviin oikean pelin tulosruutuun. */
+  const harjoitus = document.getElementById('bassoHarjoitus');
+  const onHarjoitus = !!(basso && basso.harjoitus) && !tila.keskeytetty;
+  const perustajaNyt = !bassoVerkossa || bassoVerkossa.perustaja;
+  if (harjoitus) {
+    harjoitus.hidden = !onHarjoitus;
+    const teksti = document.getElementById('bassoHarjoitusTeksti');
+    if (teksti) teksti.textContent = t(perustajaNyt ? 'harjoitus.ohi' : 'harjoitus.odota');
+    document.getElementById('bassoHarjoitusLisaa').hidden = !perustajaNyt;
+    document.getElementById('bassoHarjoitusAloita').hidden = !perustajaNyt;
+  }
+
   const jatko = document.getElementById('uudelleen');
   /* Verkossa seuraavan kierroksen jakaa perustaja; muut odottavat ⏳. */
   const odota = document.getElementById('bassoOdota');
   const odottaa = !!bassoVerkossa && !bassoVerkossa.perustaja && basso.voittaja === null;
-  if (jatko) jatko.hidden = odottaa;
+  /* Harjoituksessa eteneminen tapahtuu omilla napeilla, joten ▶ piilotetaan:
+     kaksi eri tapaa jatkaa olisi kaksi eri sääntöä samassa ruudussa. */
+  if (jatko) jatko.hidden = odottaa || onHarjoitus;
   if (odota) odota.hidden = !odottaa;
   if (jatko) {
     jatko.setAttribute('aria-label', t(basso.voittaja === null && !tila.keskeytetty

@@ -254,3 +254,23 @@
 @media (min-height: 501px) and (max-height: 700px){
   .basso-kisa{--kisa-hahmo:28px}
 }
+
+/* --- HARJOITUSKIERROKSEN VALINTA (Marko 20.10.2026) -----------------------
+ * «Jokaisen kierroksen jälkeen tulisi kaksi nappia, että aloita peli tai
+ * harjoittele vielä.» Lohko on tulosruudun laatikoiden alla, ei niiden
+ * sisällä: se koskee OTTELUA eikä kierrosta josta laatikot kertovat.
+ * ⚠️ Leveys samasta kaavasta kuin laatikot (`min(100% - 16px, 620px)`),
+ * jotta reunat ovat linjassa - ei omaa lukuaan. */
+.basso-harjoitus{width:min(100% - 16px, 620px);display:grid;gap:10px;justify-items:stretch;
+  padding:4px 2px 0}
+.basso-harjoitus[hidden]{display:none}
+.basso-harjoitus p{margin:0;text-align:center;font-size:clamp(15px, 4vw, 18px);
+  font-weight:700;color:var(--ink)}
+/* Harjoittelu jatkuu toissijaisena ja peli alkaa ensisijaisena: ryhmä on
+   harjoitellut jo kerran, ja eteneminen on se mitä seuraavaksi odotetaan. */
+.basso-harjoitus-napit{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+.basso-harjoitus-napit button{margin:0;width:100%}
+.basso-harjoitus-napit button[hidden]{display:none}
+@media (max-width: 360px){
+  .basso-harjoitus-napit{grid-template-columns:1fr}
+}

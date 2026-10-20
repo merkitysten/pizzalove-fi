@@ -345,6 +345,13 @@ function bvNaytaAula(tilaP) {
   const aloita = bvEl('bvAloita');
   aloita.hidden = !perustaja;
   aloita.disabled = tilaP.pelaajat.length < 2;
+  /* Harjoituskierros samoin ehdoin kuin aloitus: vain perustaja, ja vasta
+     kun pelaajia on tarpeeksi. */
+  const harjoitus = bvEl('bvHarjoitus');
+  if (harjoitus) {
+    harjoitus.hidden = !perustaja;
+    harjoitus.disabled = aloita.disabled;
+  }
   bvEl('bvAulaOdota').textContent = t(perustaja ? 'bverkko.odotaPelaajia' : 'verkko.odota');
   bvEl('bvAulaPois').textContent = t(perustaja ? 'isanta.lopetaPeli' : 'verkko.poistu');
   bvOsa('aula');
@@ -352,17 +359,30 @@ function bvNaytaAula(tilaP) {
 
 /* Perustaja jakaa: uusi ottelu (aulasta tai päättyneen jälkeen) tai seuraava
  * kierros. Jako on perustajan laitteen, ja muut saavat sen palvelimelta. */
-async function bvJaa() {
+/* `valinnat`:
+ *   harjoitus   tosi = harjoituskierros (ei kerrytä mitään pysyvää)
+ *   uusiOttelu  tosi = aloita ottelu puhtaalta pöydältä (pisteet nollaan)
+ *
+ * ⚠️ HARJOITUS SÄILYY ELLEI SITÄ NIMENOMAAN MUUTETA. `bvJaa()` ilman
+ * valintoja on «seuraava kierros», ja jos se nollaisi lipun, harjoittelu
+ * muuttuisi kesken kaiken oikeaksi peliksi kenenkään huomaamatta.
+ *
+ * ⚠️ JA «Aloita peli» ON `uusiOttelu`, EI pelkkä lipun poisto: harjoituksessa
+ * kertyneet pisteet jäisivät muuten voimaan. Puhdas ottelu on olemassa oleva
+ * ja koeteltu tie (sama jolla uusi peli alkaa), ei uusi erikoistapaus. */
+async function bvJaa(valinnat) {
+  const v = valinnat || {};
   if (!bv.tila || bv.oma !== 0 || bv.kiire) return;
   bv.kiire = true;
   try {
     const t0 = bv.tila;
     let ottelu = basso;
-    if (t0.vaihe === 'aula' || !ottelu || ottelu.voittaja !== null || !t0.peli) {
+    if (v.uusiOttelu || t0.vaihe === 'aula' || !ottelu || ottelu.voittaja !== null || !t0.peli) {
       ottelu = bassoOttelu(t0.pelaajat.map(function () { return 'ihminen'; }),
         t0.asetukset.tavoite, t0.asetukset.sallitut);
     }
     bassoUusiKierros(ottelu);
+    ottelu.harjoitus = ('harjoitus' in v) ? !!v.harjoitus : !!ottelu.harjoitus;
     ottelu.viime = { tapa: 'jako' };
     const j = await bvApi('aloita', { koodi: bv.koodi, avain: bv.avain, peli: bassoSarjallista(ottelu) });
     bv.kiire = false;
@@ -582,6 +602,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     if (typeof opetusTarjoa === 'function') opetusTarjoa(jatka); else jatka();
   };
+  const hLisaa = bvEl('bassoHarjoitusLisaa');
+  if (hLisaa) hLisaa.onclick = function () { bvJaa({ harjoitus: true }); };
+  const hAloita = bvEl('bassoHarjoitusAloita');
+  if (hAloita) hAloita.onclick = function () { bvJaa({ harjoitus: false, uusiOttelu: true }); };
   bvEl('alkuMoninpeli').onclick = function () { bvOsa('moninpeli'); };
   /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026): sama `bvAvaaKoodi`
      kuin «Omilla laitteilla» › «Liity peliin», ei omaa reittiä. */
@@ -607,7 +631,9 @@ document.addEventListener('DOMContentLoaded', function () {
   bvNimiKentta('bvLiityNimi', bvLiity);
   bvEl('bvKoodiJatka').onclick = bvKoodiJatka;
   bvEl('bvKoodi').addEventListener('keydown', function (e) { if (e.key === 'Enter') bvKoodiJatka(); });
-  bvEl('bvAloita').onclick = bvJaa;
+  bvEl('bvAloita').onclick = function () { bvJaa({ harjoitus: false, uusiOttelu: true }); };
+  const harj = bvEl('bvHarjoitus');
+  if (harj) harj.onclick = function () { bvJaa({ harjoitus: true, uusiOttelu: true }); };
   bvEl('bvAulaPois').onclick = bvPois;
   bvEl('asVerkkoLopeta').onclick = function () {
     bvEl('asetusPeite').hidden = true;

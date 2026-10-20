@@ -249,6 +249,13 @@ function bassoSarjallista(ottelu) {
     vuorossa: k && k.voittaja === null ? k.vuorossa : null,
     kierrosOhi: !k || k.voittaja !== null,
     tavoite: ottelu.tavoite,
+    /* ⚠️ HARJOITUSKIERROS KULKEE PELITILAN MUKANA (Marko 20.10.2026: «pelin
+       luoja voisi ensin peluuttaa koko porukalle 1-3 harjoituskierrosta»).
+       Sarjallistaja VALKOLISTAA kentät, joten ilman tätä riviä lippu jäisi
+       perustajan laitteelle eivätkä muut tietäisi harjoittelevansa. Palvelin
+       välittää Basson pelitilan sellaisenaan, joten palvelinmuutosta EI
+       tarvita - toisin kuin Partyssa. */
+    harjoitus: !!ottelu.harjoitus,
     kierroksia: ottelu.kierroksia,
     aloittaja: ottelu.aloittaja,
     voittaja: ottelu.voittaja,
@@ -279,6 +286,7 @@ function bassoPalauta(s, sallitut) {
     }),
     tavoite: s.tavoite, sallitut: sallitut, kierroksia: s.kierroksia,
     aloittaja: s.aloittaja, kierros: null, voittaja: s.voittaja, viime: s.viime || null,
+    harjoitus: !!s.harjoitus,
   };
   const k = s.kierros;
   if (k) {

@@ -57,7 +57,7 @@
 <link rel="stylesheet" href="opetus.css?v=20261020a">
 <link rel="stylesheet" href="yhteinen.css?v=20261020c">
 <link rel="stylesheet" href="pelivalinta.css?v=20261019a">
-<link rel="stylesheet" href="basso.css?v=20261020a">
+<link rel="stylesheet" href="basso.css?v=20261020b">
 </head>
 <body>
 
@@ -158,6 +158,18 @@
   <div class="tulos-pisteet" id="tulosPisteet"></div>
   <!-- Juoksukilpailu kohti pisterajaa (Marko 6.10.2026). basso.js piirtää. -->
   <div id="bassoKisa" class="basso-kisa tulos-laatikko"></div>
+  <!-- ⚠️ HARJOITUKSEN JÄLKEEN KAKSI NAPPIA, EI ▶ (Marko 20.10.2026: «Jokaisen
+       kierroksen jälkeen tulisi kaksi nappia, että aloita peli tai harjoittele
+       vielä»). Perustaja päättää; muille näkyy vain tieto. Oma lohkonsa eikä
+       ▶-napin tilalle: ▶ on nurkan pyöreä merkki, eikä kahta nimettyä valintaa
+       voi esittää yhdellä. -->
+  <div id="bassoHarjoitus" class="basso-harjoitus" hidden>
+    <p id="bassoHarjoitusTeksti"></p>
+    <div class="basso-harjoitus-napit">
+      <button id="bassoHarjoitusLisaa" type="button" class="toinen-nappi" data-t="harjoitus.viela"></button>
+      <button id="bassoHarjoitusAloita" type="button" class="iso-nappi" data-t="harjoitus.aloitaPeli"></button>
+    </div>
+  </div>
 
   <!-- 🔵 Marko 7.10.2026: «Asetukset ensinnäkin yläkulmaan ja tuon play-napin
        alta apina pois. Se on jäänne ajalta, kun pelissä ei ollut vielä apinan
@@ -610,6 +622,11 @@
       <div id="bvAulaQr" class="verkko-isanta-qr" data-ta="isanta.qrAria"></div>
       <div id="bvAulaPelaajat" class="bv-pelaajat"></div>
       <button id="bvAloita" type="button" class="iso-nappi" data-t="isanta.aloita"></button>
+      <!-- HARJOITUSKIERROS (Marko 20.10.2026: «Ryhmäpeleissä pelin luoja voisi
+           ensin peluuttaa koko porukalle 1-3 harjoituskierrosta, jolloin
+           pelaajat oppivat miten peliä pelataan.») Vain perustajalla; piilotus
+           samassa kohdassa kuin «Aloita» (bvNaytaAula). -->
+      <button id="bvHarjoitus" type="button" class="toinen-nappi" data-t="harjoitus.aloita"></button>
       <p id="bvAulaOdota" class="verkko-tilanne" data-t="bverkko.odotaPelaajia"></p>
       <p class="verkko-virhe bv-virhe" hidden></p>
       <button id="bvAulaPois" type="button" class="toinen-nappi"></button>
@@ -631,7 +648,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261020d"></script>
+<script src="kielet.js?v=20261020e"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
 <script src="qrluku.js?v=20261020b"></script>
@@ -645,10 +662,10 @@
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
 <script src="peli.js?v=20261019c"></script>
-<script src="basso-saannot.js?v=20261006b"></script>
-<script src="basso.js?v=20261020a"></script>
+<script src="basso-saannot.js?v=20261020a"></script>
+<script src="basso.js?v=20261020b"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="basso-verkko.js?v=20261020d"></script>
+<script src="basso-verkko.js?v=20261020e"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
      `aloitaPeli`a ja (Bassossa) `basso`a, joten se on ladattava niiden
      jalkeen - ja sen on oltava @party/@basso-merkintojen ULKOPUOLELLA,
