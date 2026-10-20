@@ -640,7 +640,7 @@ def essen2026(t, kaikki):
 <p>%s</p>
 <div class="tarjoukset">%s</div>
 <div class="kaupanpaalle">
-  <img src="../kuvat/nappulapinot.webp" alt="" loading="lazy">
+  <img src="../kuvat/pikkunappulat-rasiassa.webp" alt="" loading="lazy">
   <div><strong>%s</strong><span>%s</span></div>
 </div>
 
