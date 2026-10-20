@@ -597,6 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
        eri kuin Partyn, joten lippukin on pelikohtainen. */
     const jatka = function () {
       bvOsa(null);
+      if (typeof siirtymaValahda === 'function') siirtymaValahda();
       /* Samalla laitteella usea ihminen: vaihtoruutu odotti valikon alla. */
       if (basso && basso.kierros && !bassoVerkossa) bassoVuoro();
     };

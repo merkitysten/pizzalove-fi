@@ -124,7 +124,9 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .valikko-laatikko{position:relative}
 .valikko-laatikko::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.35}
-@media (prefers-color-scheme:dark){.valikko-laatikko::before{display:none}}
+@media (prefers-color-scheme:dark){.valikko-laatikko::before{display:none}
+  /* Sama kuin ::before:lla: kuosi on vaalean pohjan kuvio. */
+  .peite > .aloitusruutu{background-image:none}}
 .valikko-laatikko > *{position:relative}
 .valikko-laatikko .as-valinta{border-color:var(--orange, #EE7203)}
 .valikko-laatikko .as-valinta.ensisijainen{background:var(--orange, #EE7203);color:#fff}
@@ -158,6 +160,20 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   border-radius:0;box-shadow:none;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;
   display:flex;flex-direction:column;align-items:center;gap:14px;
   padding:calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 14px)}
+/* ⚠️ KUOSI KOKO VIERITYSALUEELLE, EI VAIN NÄKYVÄÄN LAATIKKOON
+ * (Marko 20.10.2026 puhelimesta: «Taustakuosi ei mene alas saakka.»).
+ * 📐 Syy: kuosi on `.valikko-laatikko::before{position:absolute;inset:0}`, ja
+ * aloitusruutu on ITSE vierityssäiliö (`overflow-y:auto`). Absoluuttinen lapsi
+ * mitoittuu säiliön NÄKYVÄÄN laatikkoon, ei sen vieritettävään sisältöön —
+ * joten kuosi loppui ruudun alareunaan ja vieritys paljasti paljaan pohjan.
+ * Elementin OMA tausta kattaa koko vieritysalueen, joten kuosi siirtyy sinne.
+ * Läpikuultavuus (.35) tehdään vaalealla verholla, koska elementin taustalla
+ * ei ole omaa opasiteettia. */
+.peite > .aloitusruutu::before{display:none}
+.peite > .aloitusruutu{background-color:var(--ground, #FAF6EE);
+  background-image:linear-gradient(rgba(250,246,238,.65), rgba(250,246,238,.65)),
+    url('kuvat/kuosi.svg?v=20261006a');
+  background-repeat:repeat, repeat;background-size:auto, 286px 285px}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
 /* KAKSI OSAA: YLHÄÄLLÄ TUNNELMA, ALHAALLA NAPIT (Marko 9.10.2026: «yläosa on pelin
  * tunnelmaan virittävää grafiikkaa ja sitten on selkeästi ne napit. Nyt yläosassa on
@@ -296,7 +312,11 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * asettaa saman ominaisuuden samalla tarkkuudella, ja aloitusruudulla on
  * MOLEMMAT luokat. Yhdistelmavalitsin voittaa riippumatta siita kumpi lohko on
  * tiedostossa ensin — yhden luokan saanto olisi jaanyt jarjestyksen varaan. */
-.aloitusruutu.valikko-laatikko .pelivalinta-ryhma{background:rgba(60,34,12,.07)}
+/* ⚠️ UMPINAINEN, EI `rgba`. 📐 Mitattu: läpikuultava ura päästi Basson
+ * näkymään rivin läpi ja «Pizza Basso» muuttui vaikealukuiseksi. Arvo on
+ * sama sävy valkoisen päällä (rgba(60,34,12,.07) ≈ #F1EFEC), mutta pinta
+ * peittää. */
+.aloitusruutu.valikko-laatikko .pelivalinta-ryhma{background:#F1EFEC}
 /* Kytkimen ura on läpikuultava; kuosin päällä se tarvitsee umpinaisen pohjan. */
 .aloitusruutu .pelivalinta-kytkin{background:#fff;border:1px solid rgba(60,34,12,.22)}
 .aloitusruutu .pelivalinta-liuku{background:var(--warm,#FFF3E9)}
@@ -340,8 +360,14 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 /* ⚠️ ISOMMIKSI 14.10.2026 (Marko: «Apina ja rakastunut pizzalaatikko ovat
    säälittävän pieniä»). Lajipalkki vei kuosista tyhjän kaistaleen, joten
    maskoteille jäi tilaa kasvaa ilman että napit laskevat. */
-.alku-basso{position:absolute;bottom:0;right:calc(-1 * var(--sivu));height:min(140%, 520px);width:auto;
-  transform:translateX(30%) rotate(-14deg);transform-origin:50% 100%}
+/* ⚠️ MITAT MUUTTUIVAT KUVAN MUKANA (20.10.2026): miettivä Basso on
+   516 × 286 eli LEVEÄ ja matala, kun syövä oli 438 × 520. Korkeuteen sidottu
+   mitoitus olisi tehnyt siitä ruudun levyisen. Siksi LEVEYS ratkaisee, ja
+   kallistus on pienempi: rajattu kuva päättyy suoraan reunaan, ja jyrkkä
+   kulma näyttäisi siltä että hahmo kaatuu. */
+.alku-basso{position:absolute;bottom:6%;right:calc(-1 * var(--sivu) - 14px);
+  width:min(64%, 245px);height:auto;
+  transform:rotate(-4deg);transform-origin:100% 100%}
 
 /* --- BASSON AJATUSKUPLA (Marko 20.10.2026) --------------------------------
  * «Eli Basso kertoisi pelimuodon eron kuplassa.»
@@ -357,18 +383,24 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  *
  * Ympyrät ovat ajatuskuplan merkki (vrt. varainhankintasivun Basso-kupla):
  * ne kulkevat kuplan oikeasta alakulmasta kohti Basson päätä. */
-.alku-kupla{position:absolute;top:0;left:calc(-1 * var(--sivu) + 8px);z-index:1;
-  max-width:min(186px, 52%);box-sizing:border-box;
-  padding:10px 13px;border-radius:18px;background:#fff;border:2px solid var(--ink, #1A1A1A);
-  display:flex;flex-direction:column;gap:2px;text-align:left;
+/* ⚠️ PILVI ON KUVA, EI `border-radius`. Sivustolla on käsin piirretty
+   ajatuskupla, ja pyöristetty suorakaide sen tilalla olisi eri käsiala
+   samalla ruudulla. Kuva on 361 × 420, josta pilven runko on ylin 69 % ja
+   pallot alin osa — teksti sijoitetaan siksi rungon sisään prosentteina. */
+.alku-kupla{position:absolute;top:-10%;left:calc(-1 * var(--sivu) + 2px);z-index:1;
+  width:min(168px, 46%);aspect-ratio:361 / 420;
   transform:rotate(-2deg)}
-.alku-kupla b{font-size:15px;line-height:1.2;color:var(--ink, #1A1A1A)}
-.alku-kupla span{font-size:13.5px;line-height:1.25;font-weight:700;color:var(--orange, #EE7203)}
-/* Kaksi ympyrää kuplasta Bassoon päin. `::before` on isompi ja lähempänä. */
-.alku-kupla::before,.alku-kupla::after{content:"";position:absolute;
-  background:#fff;border:2px solid var(--ink, #1A1A1A);border-radius:50%}
-.alku-kupla::before{width:15px;height:15px;right:14px;bottom:-11px}
-.alku-kupla::after{width:9px;height:9px;right:-2px;bottom:-22px}
+/* Peilaus: pallot osoittavat kuvassa vasemmalle, Basso on oikealla. */
+.alku-kupla-pilvi{position:absolute;inset:0;width:100%;height:100%;
+  transform:scaleX(-1);pointer-events:none}
+/* Teksti pilven rungon sisään. 📐 Rungon reunat mitattu kuvasta:
+   vasen 4 %, oikea 3 %, ylä 1 %, runko päättyy 69 %:n kohdalla. */
+.alku-kupla b, .alku-kupla span{position:relative;display:block;text-align:center}
+.alku-kupla{display:flex;flex-direction:column;justify-content:center;gap:2px;
+  padding:4% 13% 33%}
+.alku-kupla b{font-size:clamp(13px, 3.9vw, 16px);line-height:1.15;color:var(--ink, #1A1A1A)}
+.alku-kupla span{font-size:clamp(12px, 3.5vw, 14px);line-height:1.2;font-weight:700;
+  color:var(--orange, #EE7203)}
 
 /* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
    siinä lautapelin päävalikossa ylhäällä tyhjässä tilassa»). Keskellä ja iso:
@@ -551,7 +583,7 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
      valittu nousee `--surface`iin. Yhdistelmävalitsin samasta syystä kuin
      vaaleassa: `.valikko-laatikko .pelivalinta-ryhma` on tässä lohkossa
      ALEMPANA ja voittaisi muuten. */
-  .aloitusruutu.valikko-laatikko .pelivalinta-ryhma{background:rgba(0,0,0,.28)}
+  .aloitusruutu.valikko-laatikko .pelivalinta-ryhma{background:#100D0B}
   /* ⚠️ VAALEA PINTA VAATII TUMMAN TEKSTIN, ja tämä oli oma regressioni samana
      päivänä: kun valitun täytöksi vaihtui `--surface`, teksti jäi `--ink`iin,
      joka on tummassa tilassa VAALEA. 📐 Mitattu ruudulta: kontrasti 1,12 : 1,
@@ -1043,3 +1075,57 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .qr-nappi svg{width:20px;height:20px;flex:0 0 auto;fill:none;stroke:var(--orange);
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
+
+/* --- SIIRTYMÄ JA LATAUSKUVAKE (Marko 20.10.2026) --------------------------
+ * «Se voisi toki toimia siirtymänä esim. zoomautumalla — — kun pelaaja on
+ * painanut jotain nappia. Myös sellainen latauskuvake olisi hauska, jossa nuo
+ * sydämet kiertävät laatikkoa.»
+ *
+ * Rakenne on JS:ssä (`siirtyma.js`), koska peite on sama kaikilla sivuilla.
+ *
+ * ⚠️ SYDÄMET OVAT OMA KUVANSA, EIVÄT `halaus.webp`:n omat. 📐 Mitattu:
+ * `halaus.webp`:ssä sydämet on piirretty kuvaan kiinni (yksi yhtenäinen
+ * saareke myös alfarajalla 250), joten niitä ei voi kiertää erikseen — ja
+ * ympyrärajaus laatikon ympäri leikkaisi laatikon kulmat, koska laatikko ja
+ * sydämet menevät säteittäin päällekkäin (sydämet r ≥ 140, laatikon kulmat
+ * yli sen). Kiertävät sydämet tulevat siksi Markon omasta sydänkaaresta
+ * (`sydämet_sydänkaari_pieni_UUSI_isompi.png`), joka rajattiin NELIÖKSI
+ * kaaren keskipisteen ympärille: vain silloin `rotate` kiertää sen omaa
+ * kaartaan pitkin eikä heilauta sitä ympyrän ulkopuolelle. Kaaren
+ * keskipiste ja säde sovitettiin sydänten painopisteistä (jäännös ±7 px).
+ *
+ * ⚠️ `pointer-events` on `none` heti kun peite häviää: peite joka jää
+ * nielemään napautuksia on lukko, ei siirtymä. */
+.siirtyma{position:fixed;inset:0;z-index:60;display:grid;place-items:center;
+  pointer-events:none;opacity:0;visibility:hidden;
+  /* 📐 Peite oli ensin lapinakyva (.96/.92) ja alla oleva valikko kilpaili
+     sydanten kanssa — ruudulla oli kaksi asiaa yhta aikaa. Umpinainen pohja
+     tekee siirtymasta hetken eika harson. */
+  background:radial-gradient(circle at 50% 50%, #fff 0 46%, var(--ground, #FAF6EE) 100%)}
+.siirtyma--nakyy{opacity:1;visibility:visible;pointer-events:auto;
+  animation:siirtyma-pohja .18s ease-out both}
+.siirtyma--pois{opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .22s ease-in, visibility 0s linear .22s}
+@keyframes siirtyma-pohja{from{opacity:0}}
+
+/* Kehys antaa molemmille kuville saman keskipisteen: sydämet kiertävät
+   laatikkoa, eivät sen vierestä. */
+.siirtyma-kehys{position:relative;width:min(62vw, 62vh, 300px);aspect-ratio:1;
+  display:grid;place-items:center}
+.siirtyma-kaari,.siirtyma-boksi{position:absolute;display:block;max-width:none}
+/* Kaari on laatikkoa isompi: sydämet kulkevat sen ympäri. */
+.siirtyma-kaari{width:100%;height:100%;
+  animation:siirtyma-kierto 2.6s linear infinite}
+/* Laatikko mahtuu kaaren sisälle: 300 px:n kehyksessä kaaren sydämet ovat
+   säteellä ~122 px, joten laatikon halkaisija 58 % jättää väliin ilmaa. */
+.siirtyma-boksi{width:54%;height:54%;
+  animation:siirtyma-zoom .42s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes siirtyma-kierto{to{transform:rotate(360deg)}}
+@keyframes siirtyma-zoom{from{transform:scale(.45);opacity:0}}
+/* ⚠️ Liikkeen vähennys on asetus eikä makuasia: kierto pysähtyy, laatikko
+   tulee ilman zoomia. Peite ja sen tehtävä (valkoisen välähdyksen kattaminen)
+   säilyvät. */
+@media (prefers-reduced-motion:reduce){
+  .siirtyma-kaari{animation:none}
+  .siirtyma-boksi{animation:siirtyma-zoom .01s both}
+}

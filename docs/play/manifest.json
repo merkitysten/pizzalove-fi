@@ -3,7 +3,7 @@
   "short_name": "Pizza Love",
   "description": "Pizza Love -pelit selaimessa: Pizza Party, Pizza Basso ja Apinavaaka.",
   "lang": "fi",
-  "start_url": "./",
+  "start_url": "party.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FAF6EE",

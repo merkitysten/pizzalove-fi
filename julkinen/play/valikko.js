@@ -22,6 +22,15 @@
  * «Alkuvalikkoon» Partyn sisältä tarkoittaa Partyn omaa aloitusruutua, ei
  * pelin valintaa - muuten pelistä poistuminen veisi väärään paikkaan. */
 const VALIKKO_OSOITE = 'party.html';
+
+/* Sivunvaihto siirtymän kanssa (siirtyma.js, Marko 20.10.2026): peite jää
+ * päälle kunnes uusi sivu korvaa sen, eli lataus ei välähdä valkoisena.
+ * ⚠️ `typeof`-vartiointi: navigointi ei saa jäädä tekemättä jos siirtymää ei
+ * jostain syystä ole ladattu. */
+function valikkoSiirry(osoite) {
+  if (typeof siirtymaNayta === 'function') siirtymaNayta();
+  location.assign(osoite);
+}
 /* 🔴 JOKAINEN NÄISTÄ OSOITTI ENNEN `./`:ään, JA SE JÄI LOOPPIIN (Marko
  * 20.10.2026: «Luo pelin jälkeen tulee valinta, jossa pitää valita peli —
  * — itseasiassa se jää looppiin jumiin eikä ikinä päästä oikeasti luomaan
@@ -71,18 +80,24 @@ function valikkoKytke() {
      asetuksissa. `opetusTarjoa` kutsuu takaisinkutsun vain jos pelaaja ohittaa
      tai on jo opastettu - opastuksen valinnut käynnistää pelin sen kautta. */
   valikkoEl('alkuPelaa').addEventListener('click', function () {
-    const jatka = function () { valikkoEl('valikkoPeite').hidden = true; };
+    /* Välähdys peittää valikon ja pelin välisen vaihdon (siirtyma.js). Se on
+       TARJOUKSEN JÄLKEEN eikä ennen: ensikertalaiselle avautuu opastuskortti,
+       eikä sen eteen kuulu peitettä. */
+    const jatka = function () {
+      valikkoEl('valikkoPeite').hidden = true;
+      if (typeof siirtymaValahda === 'function') siirtymaValahda();
+    };
     if (typeof opetusTarjoa === 'function') opetusTarjoa(jatka); else jatka();
   });
   valikkoEl('alkuMoninpeli').addEventListener('click', function () { valikkoSivu('moninpeli'); });
   /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026). Sama osoite kuin
      «Omilla laitteilla» › «Liity peliin», jotta reittejä ei ole kahta. */
-  valikkoEl('alkuLiity').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&uusi'); });
+  valikkoEl('alkuLiity').addEventListener('click', function () { valikkoSiirry(VALIKKO_OSOITE + '?liity&uusi'); });
   valikkoEl('valikkoTakaisin').addEventListener('click', function () { valikkoSivu('paa'); });
   valikkoEl('valikkoPalaa').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity'); });
-  valikkoEl('valikkoLuo').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&luo'); });
-  valikkoEl('valikkoLiity').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&uusi'); });
-  valikkoEl('valikkoIsoNaytto').addEventListener('click', function () { location.assign('isanta.html'); });
+  valikkoEl('valikkoLuo').addEventListener('click', function () { valikkoSiirry(VALIKKO_OSOITE + '?liity&luo'); });
+  valikkoEl('valikkoLiity').addEventListener('click', function () { valikkoSiirry(VALIKKO_OSOITE + '?liity&uusi'); });
+  valikkoEl('valikkoIsoNaytto').addEventListener('click', function () { valikkoSiirry('isanta.html'); });
   /* ⚠️ Esc valikon päällä ei saa päätyä peli.js:lle: se keskeyttäisi
    * lepotilassa odottavan pelin ja avaisi tulosruudun valikon alle.
    * Kaappausvaihe ajetaan ennen peli.js:n kuuntelijaa. */

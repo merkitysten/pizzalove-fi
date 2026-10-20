@@ -90,6 +90,10 @@ function peliVaihda(avain) {
   const nykyinen = document.documentElement.dataset.peli || null;
   if (!peli || avain === nykyinen) return;
   peliMuista(avain);
+  /* Siirtymä peittää sivunvaihdon valkoisen välähdyksen (siirtyma.js,
+     Marko 20.10.2026). `typeof`-vartiointi: etuovi ja apinavaaka lataavat
+     tämän tiedoston, ja peli saa toimia ilman siirtymää. */
+  if (typeof siirtymaNayta === 'function') siirtymaNayta();
   const kieli = new URLSearchParams(location.search).get('kieli');
   location.assign(peli.sivu + (kieli ? '?kieli=' + encodeURIComponent(kieli) : ''));
 }
