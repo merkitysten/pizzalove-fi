@@ -11,7 +11,7 @@ Ei riippuvuuksia: pelkkä Python 3.
 
 ⚠️ ÄLÄ MUOKKAA docs/-KANSION HTML-TIEDOSTOJA KÄSIN. Ne kirjoitetaan
 uudelleen joka ajossa. Muuta tekstiä sisalto/*.json:ssa ja ulkoasua
-julkinen/tyyli.css:ssä. Poikkeus: docs/pizzaparty/ (peli) ja docs/pdf/
+julkinen/tyyli.css:ssä. Poikkeus: docs/play/ (pelit) ja docs/pdf/
 eivät ole rakentajan tuotosta, vaan ne kopioidaan julkinen/-kansiosta.
 """
 import json, os, shutil, html
@@ -141,7 +141,7 @@ def ylaosa(t, sivu, kaikki):
     nav = [('index.html', ui['nav_etusivu'], 'etusivu'),
            ('korttipeli.html', ui['nav_korttipeli'], 'korttipeli'),
            ('lautapeli.html', ui['nav_lautapeli'], 'lautapeli'),
-           ('../pizzaparty/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
+           ('../play/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
     # Varainhankinta on vain suomeksi, joten välilehti näkyy vain kielillä joilla avain on.
     if ui.get('nav_varainhankinta') and t['etusivu'].get('varainhankinta'):
         nav.append((t['etusivu']['varainhankinta']['url'], ui['nav_varainhankinta'], 'varainhankinta'))
@@ -325,7 +325,7 @@ def etusivu(t, kaikki):
   </a>
 </div>
 
-<a class="pelaa-banneri" href="../pizzaparty/?kieli=%s">
+<a class="pelaa-banneri" href="../play/?kieli=%s">
   <img src="../kuvat/basso-syo.webp" width="438" height="520" alt="">
   <div>
     <strong>%s</strong>
@@ -413,7 +413,7 @@ def korttipeli(t, kaikki):
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <a class="nappi" href="../pizzaparty/?kieli=%s">%s →</a>
+    <a class="nappi" href="../play/?kieli=%s">%s →</a>
   </div>
 </div>
 
@@ -480,7 +480,7 @@ def lautapeli(t, kaikki):
   <div>
     <strong>%s</strong>
     <span>%s</span>
-    <a class="nappi" href="../pizzaparty/apinavaaka.html?kieli=%s">%s →</a>
+    <a class="nappi" href="../play/apinavaaka.html?kieli=%s">%s →</a>
   </div>
 </div>
 

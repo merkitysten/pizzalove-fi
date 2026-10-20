@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Pizza Party</title>
-<!-- ⚠️ OHJAUS, EI SIVU. Pelaajan näkymä on SAMA pelinäkymä kuin yksinpelissä
-     (index.html?liity): erillinen käyttöliittymä olisi toinen paikka jokaiselle
-     korjaukselle. Tämä osoite on olemassa koska isännän näyttö kertoo sen ja se
-     on helpompi kirjoittaa puhelimeen. Haun parametrit (?koodi=1234) kulkevat
-     mukana. -->
-<meta http-equiv="refresh" content="0; url=./?liity">
-<script>location.replace('party.html?liity' + (location.search ? '&' + location.search.slice(1) : ''));</script>
+<!-- ⚠️ OHJAUS VANHASTA OSOITTEESTA — ÄLÄ POISTA (Marko 20.10.2026).
+     Pelit siirtyivät `/pizzaparty/`:stä `/play/`:hin, koska kansio oli nimetty
+     YHDEN pelin mukaan vaikka siellä asuu kolme. Nämä ohjaukset ovat pysyviä:
+     · kotivalikkoon asennetut kuvakkeet avaavat yhä vanhaa polkua
+       (manifestin `start_url` on './', joka ratkeaa asennuspolkuun)
+     · jaetut linkit ja QR-koodit, jotka on luotu ennen siirtoa
+     · mahdollinen painettu osoite
+     ⚠️ Hakuparametrit SÄILYVÄT (?kieli=, ?liity&koodi=): ilman niitä
+     QR-koodista tullut menettäisi liittymiskoodinsa ja päätyisi etuovelle. -->
+<title>Pizza Love</title>
+<script>location.replace('../play/pelaa.html' + location.search + location.hash);</script>
 </head>
-<body><p><a href="party.html?liity">Pizza Party</a></p></body>
+<body><p><a href="../play/pelaa.html">Pizza Love</a></p></body>
 </html>

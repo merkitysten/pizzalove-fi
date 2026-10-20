@@ -2,56 +2,18 @@
 <html lang="fi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- ⚠️ TÄTÄ SIVUA EI TEE `sivut.py`. `party.html` ja `basso.html` syntyvät
-     `sivupohja.html`:stä; tämä on ETUOVI, ei pelisivu, eikä sillä ole mitään
-     pelin merkinnöistä. Marko 20.10.2026: «pitäisikö olla oma landingpage,
-     josta sitten valitaan korttipeli vs. lautapeli ja edelleen näiden sisällä
-     ne eri pelimuodot».
-
-     📐 MIKSI: ennen Pizza Party OLI `index.html`, eli etuovi ja peli olivat
-     sama sivu. Siitä seurasi kolme asiaa, jotka kaikki mitattiin:
-       · «Liity peliin» oli pelikohtainen (huoneet ovat eri varastoissa)
-       · Apinavaakaan mentiin Pizza Partyn sivun SISÄLTÄ
-       · etuovelle tullut latasi 524 kt eli koko korttipelin - valitsin
-         tarvitsee 167 kt, joten 357 kt meni hukkaan sille joka oli menossa
-         muualle
-
-     ⚠️ EIKÄ TÄMÄ LISÄÄ NAPAUTUSTA VAKIOKÄYTTÄJÄLLE: alla oleva rivi ohjaa
-     viimeksi pelattuun peliin. Ensikertalainen valitsee, palaaja menee
-     suoraan sisään. Juuri se oli ehto koko muutokselle. -->
-<script>try{var q=new URLSearchParams(location.search),k=[];q.forEach(function(v,n){k.push(n)});
-var p={party:'party.html',basso:'basso.html',apinavaaka:'apinavaaka.html'}[localStorage.getItem('pizzapeli-peli')];
-if(p&&k.every(function(n){return n==='kieli'}))location.replace(p+location.search)}catch(e){}</script>
-<link rel="apple-touch-icon" href="kuvat/ikoni-180.png?v=20260910a">
-<meta name="apple-mobile-web-app-title" content="Pizza Love">
-<link rel="manifest" href="manifest.json?v=20260910a">
-<meta name="theme-color" content="#FAF6EE">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ⚠️ OHJAUS VANHASTA OSOITTEESTA — ÄLÄ POISTA (Marko 20.10.2026).
+     Pelit siirtyivät `/pizzaparty/`:stä `/play/`:hin, koska kansio oli nimetty
+     YHDEN pelin mukaan vaikka siellä asuu kolme. Nämä ohjaukset ovat pysyviä:
+     · kotivalikkoon asennetut kuvakkeet avaavat yhä vanhaa polkua
+       (manifestin `start_url` on './', joka ratkeaa asennuspolkuun)
+     · jaetut linkit ja QR-koodit, jotka on luotu ennen siirtoa
+     · mahdollinen painettu osoite
+     ⚠️ Hakuparametrit SÄILYVÄT (?kieli=, ?liity&koodi=): ilman niitä
+     QR-koodista tullut menettäisi liittymiskoodinsa ja päätyisi etuovelle. -->
 <title>Pizza Love</title>
-<meta name="description" content="Pizza Love -pelit selaimessa: korttipelit Pizza Party ja Pizza Basso sekä lautapeli Apinavaaka.">
-<link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="yhteinen.css?v=20261020d">
-<link rel="stylesheet" href="pelivalinta.css?v=20261020a">
+<script>location.replace('../play/' + location.search + location.hash);</script>
 </head>
-<body>
-<!-- Sama rakenne kuin pelien aloitusruudulla (yhteinen.css: .peite >
-     .aloitusruutu), jotta etuovi näyttää samalta talolta. Sisältönä vain
-     valinta: lajikytkin palkissa ja pelit sen alla. Molemmat piirtää
-     `pelivalinta.js` - yksi lähde pelilistalle (PELIT). -->
-<div class="peite">
-  <div class="tauko-laatikko verkko-laatikko valikko-laatikko aloitusruutu">
-    <div class="alku-yla">
-      <div class="alku-palkki"><b class="alku-pelinimi"></b><div class="alku-kielet"></div></div>
-      <div class="alku-lajipalkki"><div class="pelivalinta" data-vain="laji"></div></div>
-      <a class="alku-viiri" href="../" data-sivustolle data-ta="valikko.sivustolle"></a>
-    </div>
-    <div class="verkko-osa alku-paa">
-      <div class="pelivalinta pelivalinta--etuovi" data-vain="pelit"></div>
-    </div>
-    <img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten">
-  </div>
-</div>
-<script src="kielet.js?v=20261020e"></script>
-<script src="pelivalinta.js?v=20261020c"></script>
-</body>
+<body><p><a href="../play/">Pizza Love</a></p></body>
 </html>
