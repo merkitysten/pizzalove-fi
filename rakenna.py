@@ -120,7 +120,15 @@ PDF = {
 
 def lue(kieli):
     with open(os.path.join(SISALTO, kieli + '.json'), encoding='utf-8') as f:
-        return json.load(f)
+        t = json.load(f)
+    # Apinakorttien selitykset omassa tiedostossaan (Marko 20.10.2026). Lähde: painettu
+    # pitkä ohje (FI/SV/EN), DE käännetty. Puuttuva kieli → suomi.
+    polku = os.path.join(SISALTO, 'apinakortit-%s.json' % kieli)
+    if not os.path.exists(polku):
+        polku = os.path.join(SISALTO, 'apinakortit-fi.json')
+    with open(polku, encoding='utf-8') as f:
+        t['apinakortit'] = json.load(f)
+    return t
 
 
 def e(s):
@@ -146,7 +154,8 @@ def ylaosa(t, sivu, kaikki):
     # Varainhankinta on vain suomeksi, joten välilehti näkyy vain kielillä joilla avain on.
     if ui.get('nav_varainhankinta') and t['etusivu'].get('varainhankinta'):
         nav.append((t['etusivu']['varainhankinta']['url'], ui['nav_varainhankinta'], 'varainhankinta'))
-    navi = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if k == sivu else '', e(n))
+    osio = 'lautapeli' if sivu == 'apinakortit' else sivu
+    navi = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if k == osio else '', e(n))
                    for h, n, k in nav)
     # Kielivalinta: yksi nappi (maapallo + nykyinen kieli), joka avaa listan.
     # Uusi kieli = uusi rivi KIELET-listaan ja sisalto/xx.json. (Marko 6.10.2026)
@@ -172,7 +181,8 @@ def ylaosa(t, sivu, kaikki):
 
 
 def sivutiedosto(sivu):
-    return {'etusivu': '', 'korttipeli': 'korttipeli.html', 'lautapeli': 'lautapeli.html'}[sivu]
+    return {'etusivu': '', 'korttipeli': 'korttipeli.html', 'lautapeli': 'lautapeli.html',
+            'apinakortit': 'apinakortit.html'}[sivu]
 
 
 def alaosa(t):
@@ -442,10 +452,14 @@ def lautapeli(t, kaikki):
     lang = t['lang']
     tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
     hyppy = ''.join('<a href="#%s">%s</a>' % (k, e(v)) for k, v in s['hyppy'].items())
+    hyppy += '<a href="apinakortit.html">%s</a>' % e(t['apinakortit']['linkki'])
     kok = videoruudukko([video(v, s['videot'][v], None, t) for v in LAUTA_VIDEOT_KOKOAMINEN], t, 'vaaka')
     vuoro = videoruudukko([video(LAUTA_VIDEO_VUORO[0], s['videot'][LAUTA_VIDEO_VUORO[0]], LAUTA_VIDEO_VUORO[1], t)], t, 'vaaka')
     valm = ''.join('<li>%s</li>' % e(x) for x in s['valmistelut'])
     vaiheet = ''.join('<li><h3>%s</h3>%s</li>' % (e(v['otsikko']), v['html']) for v in s['vaiheet'])
+    # Apinakortin nostaminen on viimeinen vaihe: sen perään suora linkki korttien selityksiin.
+    vaiheet = (vaiheet[:-len('</li>')] + '<p style="margin-top:10px"><a class="nappi nappi--toinen" '
+               'href="apinakortit.html">%s</a></p></li>' % e(t['apinakortit']['linkki']))
     muodot = ''.join('''<details class="muoto">
   <summary><span class="muoto__nimi">%s</span><span class="muoto__kuvaus">%s</span></summary>
   <div class="muoto__sisus" style="padding-top:14px">%s</div>
@@ -503,6 +517,39 @@ def lautapeli(t, kaikki):
        lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
        ristiinmyynti(t, 'korttipeli', 'lautapelisivu'))
     return kehys(t, kaikki, 'lautapeli', s['title'], s['kuvaus'], runko)
+
+
+def apinakortit(t, kaikki):
+    """Apinakorttien selitykset 01–33 (Marko 20.10.2026: «josta pelaaja voisi ne nopeasti katsoa»).
+    Numeroruudukko vie suoraan korttiin (#k01…#k33). Kentät: nimi, ohje, huom (painetun
+    ohjeen HUOM!), tarkennus (Markon hyväksymä selvennys monitulkintaiseen korttiin),
+    virhe (huomautus painetun ohjeen virheestä, esim. EN-kortin 30 numerointi).
+    Tekstit: sisalto/apinakortit-xx.json."""
+    a = t['apinakortit']
+    numerot = ''.join('<a href="#k%02d">%02d</a>' % (k['n'], k['n']) for k in a['kortit'])
+    kortit = []
+    for k in a['kortit']:
+        lisa = ''
+        if k.get('huom'):
+            lisa += '<p class="apinakortti__huom"><b>%s</b> %s</p>' % (e(a['huom']), e(k['huom']))
+        if k.get('tarkennus'):
+            lisa += '<p class="apinakortti__tarkennus"><b>%s:</b> %s</p>' % (e(a['tarkennus']), k['tarkennus'])
+        if k.get('virhe'):
+            lisa += '<p class="apinakortti__huom">%s</p>' % e(k['virhe'])
+        kortit.append('<article class="apinakortti" id="k%02d">\n  <span class="apinakortti__nro">%02d</span>\n'
+                      '  <div><h3>%s</h3><p>%s</p>%s</div>\n</article>'
+                      % (k['n'], k['n'], e(k['nimi']), e(k['ohje']), lisa))
+    runko = '''
+<p class="murupolku"><a href="lautapeli.html">← %s</a></p>
+<h1>%s</h1>
+<p class="ingressi">%s</p>
+<p class="pieni">%s</p>
+<nav class="korttinumerot" aria-label="%s">%s</nav>
+<div class="apinakortit">%s</div>
+<p class="murupolku" style="margin-top:28px"><a href="lautapeli.html">← %s</a></p>
+''' % (e(a['takaisin']), e(a['h1']), e(a['ingressi']), e(a['kaytto']), e(a['hae']), numerot,
+       '\n'.join(kortit), e(a['takaisin']))
+    return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)
 
 
 def juurisivu(kaikki):
@@ -613,7 +660,8 @@ def main():
     for k in KIELET:
         t = kaikki[k]
         os.makedirs(os.path.join(ULOS, k), exist_ok=True)
-        for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli)):
+        for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli),
+                        ('apinakortit.html', apinakortit)):
             with open(os.path.join(ULOS, k, nimi), 'w', encoding='utf-8') as out:
                 out.write(f(t, kaikki))
     os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)

@@ -321,3 +321,23 @@ ol.vaiheet h3{margin:6px 0 6px}
 .ohita{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--orange);color:#fff;
   padding:8px 14px;border-radius:8px;font-weight:700}
 .ohita:focus{left:8px}
+
+/* ---------- Apinakortit 01–33 (apinakortit.html, Marko 20.10.2026) ----------
+ * Numeroruudukko vie suoraan korttiin. Valittu kortti (#k07) korostuu oranssilla reunalla. */
+.murupolku{margin:0 0 10px;font-size:14px;font-weight:600}
+.murupolku a{text-decoration:none;color:var(--deep)}
+.korttinumerot{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px;margin:18px 0 22px}
+.korttinumerot a{display:block;text-align:center;padding:9px 0;border-radius:8px;background:var(--surface);
+  border:1px solid var(--line);font-weight:700;text-decoration:none;color:var(--ink);font-variant-numeric:tabular-nums}
+.korttinumerot a:hover{border-color:var(--orange)}
+.apinakortit{display:grid;gap:10px}
+.apinakortti{display:grid;grid-template-columns:52px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;scroll-margin-top:140px}
+.apinakortti:target{border-color:var(--orange);box-shadow:0 0 0 3px var(--tint)}
+.apinakortti__nro{width:52px;height:52px;border-radius:12px;background:var(--orange);color:#fff;font-weight:800;
+  font-size:20px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.apinakortti h3{margin:2px 0 4px;font-size:16.5px}
+.apinakortti p{margin:0 0 6px}
+.apinakortti__huom{font-size:14.5px;color:var(--soft)}
+.apinakortti__tarkennus{background:var(--warm);border-left:3px solid var(--orange);border-radius:8px;
+  padding:8px 12px;font-size:14.5px;margin-top:8px!important}
