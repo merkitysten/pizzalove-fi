@@ -22,6 +22,17 @@
  * «Alkuvalikkoon» Partyn sisältä tarkoittaa Partyn omaa aloitusruutua, ei
  * pelin valintaa - muuten pelistä poistuminen veisi väärään paikkaan. */
 const VALIKKO_OSOITE = 'party.html';
+/* 🔴 JOKAINEN NÄISTÄ OSOITTI ENNEN `./`:ään, JA SE JÄI LOOPPIIN (Marko
+ * 20.10.2026: «Luo pelin jälkeen tulee valinta, jossa pitää valita peli —
+ * — itseasiassa se jää looppiin jumiin eikä ikinä päästä oikeasti luomaan
+ * peliä»). Kun `./` muuttui etuoveksi, «Luo peli» vei osoitteeseen
+ * `./?liity&luo` eli ETUOVELLE - ja koska parametreja oli, muistava ohjaus
+ * ei lauennut vaan näytti pelin valinnan. Valinta vei `party.html`:ään
+ * ILMAN `?liity&luo`a, siis aloitusruutuun, josta «Luo peli» aloitti
+ * kierroksen alusta.
+ * ⚠️ Ja juuri siksi nämä käyttävät nyt `VALIKKO_OSOITE`-vakiota eivätkä
+ * omia merkkijonojaan: neljä kopiota samasta osoitteesta tarkoitti että
+ * yhden muuttaminen jätti kolme muuta osoittamaan vanhaan paikkaan. */
 
 function valikkoAlkuun() { location.assign(VALIKKO_OSOITE); }
 
@@ -66,11 +77,11 @@ function valikkoKytke() {
   valikkoEl('alkuMoninpeli').addEventListener('click', function () { valikkoSivu('moninpeli'); });
   /* Oikotie suoraan koodinsyöttöön (Marko 20.10.2026). Sama osoite kuin
      «Omilla laitteilla» › «Liity peliin», jotta reittejä ei ole kahta. */
-  valikkoEl('alkuLiity').addEventListener('click', function () { location.assign('./?liity&uusi'); });
+  valikkoEl('alkuLiity').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&uusi'); });
   valikkoEl('valikkoTakaisin').addEventListener('click', function () { valikkoSivu('paa'); });
-  valikkoEl('valikkoPalaa').addEventListener('click', function () { location.assign('./?liity'); });
-  valikkoEl('valikkoLuo').addEventListener('click', function () { location.assign('./?liity&luo'); });
-  valikkoEl('valikkoLiity').addEventListener('click', function () { location.assign('./?liity&uusi'); });
+  valikkoEl('valikkoPalaa').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity'); });
+  valikkoEl('valikkoLuo').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&luo'); });
+  valikkoEl('valikkoLiity').addEventListener('click', function () { location.assign(VALIKKO_OSOITE + '?liity&uusi'); });
   valikkoEl('valikkoIsoNaytto').addEventListener('click', function () { location.assign('isanta.html'); });
   /* ⚠️ Esc valikon päällä ei saa päätyä peli.js:lle: se keskeyttäisi
    * lepotilassa odottavan pelin ja avaisi tulosruudun valikon alle.
