@@ -216,8 +216,8 @@
     "ristiin_saannot": "Card game rules"
   },
   "toppingten": {
-    "title": "{nimi} — Essen Edition 2026 | Pizza Love®",
-    "kuvaus": "55 toppings, a ten-sided die and a Basso tattoo. Download the board for free and play. Limited run of 450.",
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love at SPIEL Essen 2026: the card game, the board game and a topping bag made for the fair, with a game of its own.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · limited run of 450",
     "ingressi": "A bag of toppings, a ten-sided die and a Basso tattoo. The board and the rules are free: download, print and play.",
@@ -265,6 +265,16 @@
     ],
     "essen_otsikko": "The Essen run",
     "essen": "This run was made for the fair. The toppings are the same ten colours as the Pizza Love card game, smaller and with a game of their own. When the run is gone, it is gone.",
-    "valmistelu_otsikko": "Setup"
+    "valmistelu_otsikko": "Setup",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "We are at SPIEL Essen. We bring the Pizza Love card game and board game, and a bag of toppings made for the fair that comes with a game of its own.",
+    "mukana_otsikko": "What we bring",
+    "mukana": [
+      "Pizza Love card game",
+      "Pizza Love board game",
+      "Topping bag: 55 toppings, a ten-sided die and a Basso tattoo"
+    ],
+    "peli_otsikko": "The game that comes with the bag: {nimi}",
+    "nappi": "Download the board"
   }
 }

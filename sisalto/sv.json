@@ -210,8 +210,8 @@
     "ristiin_saannot": "Kortspelets regler"
   },
   "toppingten": {
-    "title": "{nimi} — Essen Edition 2026 | Pizza Love®",
-    "kuvaus": "55 fyllningar, en tiosidig tärning och en Basso-tatuering. Ladda ner spelplanen gratis och spela. Begränsad upplaga på 450.",
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love på SPIEL Essen 2026: kortspelet, brädspelet och en fyllningspåse gjord för mässan, med ett eget spel.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · begränsad upplaga 450 st",
     "ingressi": "En påse fyllningar, en tiosidig tärning och en Basso-tatuering. Spelplanen och reglerna är gratis: ladda ner, skriv ut och spela.",
@@ -259,6 +259,16 @@
     ],
     "essen_otsikko": "Essen-upplagan",
     "essen": "Den här upplagan gjordes för mässan. Fyllningarna har samma tio färger som Pizza Love-kortspelet, fast mindre och med ett eget spel. När upplagan är slut är den slut.",
-    "valmistelu_otsikko": "Förberedelser"
+    "valmistelu_otsikko": "Förberedelser",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Vi är på SPIEL Essen. Med oss har vi Pizza Love-kortspelet och brädspelet samt en fyllningspåse gjord för mässan, som kommer med ett eget spel.",
+    "mukana_otsikko": "Det här har vi med oss",
+    "mukana": [
+      "Pizza Love-kortspelet",
+      "Pizza Love-brädspelet",
+      "Fyllningspåse: 55 fyllningar, en tiosidig tärning och en Basso-tatuering"
+    ],
+    "peli_otsikko": "Spelet som följer med påsen: {nimi}",
+    "nappi": "Ladda ner spelplanen"
   }
 }

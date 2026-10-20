@@ -163,7 +163,7 @@ def ylaosa(t, sivu, kaikki):
     nav = [('index.html', ui['nav_etusivu'], 'etusivu'),
            ('korttipeli.html', ui['nav_korttipeli'], 'korttipeli'),
            ('lautapeli.html', ui['nav_lautapeli'], 'lautapeli'),
-           ('topping-ten.html', PELIN_NIMI, 'toppingten'),
+           ('essen-2026.html', 'Essen 2026', 'essen'),
            ('../play/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
     # Varainhankinta on vain suomeksi, joten välilehti näkyy vain kielillä joilla avain on.
     if ui.get('nav_varainhankinta') and t['etusivu'].get('varainhankinta'):
@@ -196,7 +196,7 @@ def ylaosa(t, sivu, kaikki):
 
 def sivutiedosto(sivu):
     return {'etusivu': '', 'korttipeli': 'korttipeli.html', 'lautapeli': 'lautapeli.html',
-            'apinakortit': 'apinakortit.html', 'toppingten': 'topping-ten.html'}[sivu]
+            'apinakortit': 'apinakortit.html', 'essen': 'essen-2026.html'}[sivu]
 
 
 def alaosa(t):
@@ -566,19 +566,20 @@ def apinakortit(t, kaikki):
     return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)
 
 
-def toppingten(t, kaikki):
-    """Essenin täytepussin oma sivu.
+def essen2026(t, kaikki):
+    """Messusivu, jonka sisalla peli on yksi luku.
 
-    Marko 20.10.2026: «Pelillä pitää olla oma sivunsa ja paikkansa, koska
-    koitan saada niitä nappulapusseja ihmisille kaupaksi.»
+    Marko 20.10.2026: «kun peliä ei ole kukaan koskaan oikeasti testannut,
+    niin vähän tuntuu hömelöltä "lanseerata" uusi peli — — Sehän kehitettiin
+    vain sen takia, että on jotain myytävää 10 € hintaluokassa.»
 
-    Alusta ja säännöt ovat sivulla ilmaisina ja heti näkyvissä: juuri niiden
-    näkeminen myy pussin. Jos lataukset siirretään sivun pohjalle, sivu lakkaa
-    tekemästä työtään.
+    Siksi sivu EI johdata pelin nimella. Iso otsikko lukisi lanseeraukseksi ja
+    asettaisi odotuksen jota kevyt peli ei taytä; messusivun otsikon alla sama
+    peli on bonus pussin mukana. Pussi perustelee itsensä 55 täytteellä ja
+    nopalla — pelin tehtava on olla syy kayttaa niita, ei syy ostaa.
 
-    ⚠️ Pelaajan sanat ovat täyte, tiski ja lohko — eivät nappula, varanto ja
-    torni (Marko: «varanto on nyt meidän omaa kieltämme eikä asiakkaalle
-    kuuluvaa»). Tekstit: sisalto/*.json, avain toppingten.
+    ⚠️ Pelaajan sanat ovat täyte, tiski ja lohko. Tekstit: sisalto/*.json,
+    avain `toppingten` (avain jäi vanhaksi, sivu vaihtui).
     """
     a = t['toppingten']
 
@@ -591,49 +592,54 @@ def toppingten(t, kaikki):
                          % (e(nimi), e(teksti)) for nimi, teksti in a['muunnelmat'])
     nimet = {'tt_vari': a['lataa_vari'], 'tt_viiva': a['lataa_viiva']}
     runko = '''
-<p class="merkki">%s</p>
 <h1>%s</h1>
+<p class="ingressi">%s</p>
+
+<h2>%s</h2>
+%s
+
+<hr style="margin:34px 0;border:0;border-top:1px solid #e7ded0">
+
+<p class="merkki">%s</p>
+<h2>%s</h2>
 <p class="ingressi">%s</p>
 <p class="pieni">%s</p>
 
 <section class="laatikko">
-  <h2>%s</h2>
+  <h3>%s</h3>
   %s
 </section>
 
-<h2>%s</h2>
+<h3>%s</h3>
 <p>%s</p>
 %s
 
-<h2>%s</h2>
 <h3>%s</h3>
+<h4>%s</h4>
 <p>%s</p>
-<h3>%s</h3>
+<h4>%s</h4>
 <p>%s</p>
-<h3>%s</h3>
+<h4>%s</h4>
 %s
 <p>%s</p>
 <p>%s</p>
-<h3>%s</h3>
+<h4>%s</h4>
 <p>%s</p>
-<h3>%s</h3>
+<h4>%s</h4>
 <p>%s</p>
-<h3>%s</h3>
+<h4>%s</h4>
 <p>%s</p>
 
 <section class="laatikko">
-  <h3>%s</h3>
+  <h4>%s</h4>
   <p>%s</p>
 </section>
 
-<h2>%s</h2>
+<h3>%s</h3>
 <div class="kortit kortit--2">%s</div>
-
-<section class="laatikko varain" style="margin-top:28px">
-  <h2>%s</h2>
-  <p>%s</p>
-</section>
-''' % (e(a['merkki']), e(tt('h1')), e(tt('ingressi')), e(a['tiedot']),
+''' % (e(a['sivu_h1']), e(a['sivu_ingressi']),
+       e(a['mukana_otsikko']), luettelo('mukana', 'ul'),
+       e(a['merkki']), e(tt('peli_otsikko')), e(tt('ingressi')), e(a['tiedot']),
        e(a['sisalto_otsikko']), luettelo('sisalto', 'ul'),
        e(a['lataa_otsikko']), e(a['lataa']), lataukset(['tt_vari', 'tt_viiva'], nimet, PDF),
        e(a['saannot_otsikko']),
@@ -644,9 +650,8 @@ def toppingten(t, kaikki):
        e(a['aloitus_otsikko']), e(a['aloitus']),
        e(a['voitto_otsikko']), e(a['voitto']),
        e(a['vinkki_otsikko']), e(a['vinkki']),
-       e(a['muunnelmat_otsikko']), muunnelmat,
-       e(a['essen_otsikko']), e(tt('essen')))
-    return kehys(t, kaikki, 'toppingten', tt('title'), tt('kuvaus'), runko)
+       e(a['muunnelmat_otsikko']), muunnelmat)
+    return kehys(t, kaikki, 'essen', tt('title'), tt('kuvaus'), runko)
 
 
 def juurisivu(kaikki):
@@ -759,7 +764,7 @@ def main():
         os.makedirs(os.path.join(ULOS, k), exist_ok=True)
         for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli),
                         ('apinakortit.html', apinakortit),
-                        ('topping-ten.html', toppingten)):
+                        ('essen-2026.html', essen2026)):
             with open(os.path.join(ULOS, k, nimi), 'w', encoding='utf-8') as out:
                 out.write(f(t, kaikki))
     os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)

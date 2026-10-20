@@ -216,8 +216,8 @@
     "ristiin_saannot": "Regeln des Kartenspiels"
   },
   "toppingten": {
-    "title": "{nimi} — Essen Edition 2026 | Pizza Love®",
-    "kuvaus": "55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo. Spielplan gratis herunterladen und spielen. Limitiert auf 450 Stück.",
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love auf der SPIEL in Essen 2026: Kartenspiel, Brettspiel und ein Belagbeutel für die Messe mit eigenem Spiel.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · limitiert auf 450 Stück",
     "ingressi": "Ein Beutel Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo. Spielplan und Regeln gibt es gratis: herunterladen, ausdrucken, spielen.",
@@ -265,6 +265,16 @@
     ],
     "essen_otsikko": "Die Essener Auflage",
     "essen": "Diese Auflage ist für die Messe gemacht. Die Beläge haben dieselben zehn Farben wie das Pizza-Love-Kartenspiel, nur kleiner und mit einem eigenen Spiel. Ist die Auflage weg, ist sie weg.",
-    "valmistelu_otsikko": "Vorbereitung"
+    "valmistelu_otsikko": "Vorbereitung",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Wir sind auf der SPIEL in Essen. Dabei sind das Pizza-Love-Kartenspiel und das Brettspiel sowie ein Belagbeutel für die Messe, zu dem ein eigenes Spiel gehört.",
+    "mukana_otsikko": "Das bringen wir mit",
+    "mukana": [
+      "Pizza-Love-Kartenspiel",
+      "Pizza-Love-Brettspiel",
+      "Belagbeutel: 55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo"
+    ],
+    "peli_otsikko": "Das Spiel zum Beutel: {nimi}",
+    "nappi": "Spielplan herunterladen"
   }
 }

@@ -171,12 +171,53 @@ av.setAttribute('data-kieli', k);
 
      Lokero on `.alku-maskotit`; kuva on siinä absoluuttisesti, joten sen
      koko ei vaikuta lokeron korkeuteen — havainnoijasta ei tule silmukkaa.
-     94 % jättää lampun ja palkin väliin ilmaa: 308 × 644 -ruudulla 14 px → 24 px. */
-  var lokero = paikka.parentNode, ILMA = 0.94;
+
+     ⚠️ YLIMÄÄRÄ MENEE ALAS NAPPIEN TAAKSE, EI YLÖS PALKIN ALLE — JA TÄMÄ ON
+     KORJAUS EDELLISEEN YRITYKSEEN (Marko 20.10.2026 julkaistusta versiosta:
+     «Se skaalaus meni nyt jotenkin huonosti siellä lautapelin puolella.
+     Kaikki pieneni. Lisäksi Basso on irti kotivalikossa siitä "Apinavaaka
+     tutuksi" -palkista.»).
+     📐 Mitattu: ensimmäinen yritys kutisti kuvan mahtumaan lokeroon, jolloin
+     308 × 644 -ruudulla kuvaksi tuli 212 px eli vain 77 % napin leveydestä
+     (ennen 282 px eli napin levyinen), ja alareuna jäi 2 px napin
+     yläpuolelle — siitä «irti». Kutistaminen oli väärä keino.
+     Oikea keino on se jota korttipelin Basso jo käyttää: hahmo on täydessä
+     koossa ja sen alaosa jää nappien TAAKSE (`.alku-maskotit` on z-index 0,
+     napit 1). Siksi leveys on taas se vanha `min(102%, 380px)` ja ylimäärä
+     siirretään `bottom`illa alas. Yläreuna ei silti saa nousta lokeron yli,
+     ja lokero alkaa jo valmiiksi 14 px lajipalkin alapuolelta.
+     📐 Lopputulos mitattuna: 308 × 644 kuva 281 px (napin levyinen, kiinni
+     siinä), yläreuna 14 px palkin alla, 41 px hahmosta napin takana (20 %).
+     375 × 812, 462 × 966 ja 1440 × 900 pysyvät pikselilleen ennallaan.
+
+     📐 MAX_PEITTO ON LUETTU KUVASTA EIKÄ VALITTU SILMÄMÄÄRÄISESTI. Se on
+     se osuus jonka napit saavat peittää, ja raja on apinan vadeissa: ne ovat
+     vaa'an kupit, eikä puolikas vati enää ole vaaka. PSD-koordinaateista
+     (`apinavaakaKuvat.OSAT`, sama lähde kuin kerroksilla) vadit ovat kuvan
+     korkeudella 65,2–88,6 % ja 65,8–87,2 %, eli alin vadin reuna on 88,6 %.
+     Yli 11,4 %:n peitto leikkaa vadin — siksi 0,11.
+     📐 Mitattu 0,24:llä ennen tätä: napin yläreuna osui apinan leuan alle ja
+     vadit jäivät puoliksi piiloon. Koko oli oikea mutta kuva väärä.
+     Vasta jos tämäkään ei riitä, leveys pienenee — se on viimeinen keino
+     eikä ensimmäinen. */
+  var lokero = paikka.parentNode, MAX_PEITTO = 0.11;
   function sovitaVaaka() {
     var kork = lokero.clientHeight, lev = lokero.clientWidth;
     if (!kork || !lev) return;                       // asettelua ei ole vielä tehty
-    paikka.style.width = Math.round(Math.min(lev * 1.02, 380, kork * ILMA * (g.W / KH))) + 'px';
+    var suhde = g.W / KH;
+    /* ⚠️ LOKERO ULOTTUU ITSE NAPPIEN SISÄÄN, JA SE ON OSA PEITTOA. Sillä on
+       `margin-bottom:-14px` ja sarakkeen `gap` on 10 px, joten sen alareuna
+       on 4 px ensimmäisen napin päällä. 📐 Mitattu: ilman tätä peitoksi tuli
+       13,2 % vaikka raja on 11,4 %, eli vati leikkaantui silti. Luku luetaan
+       laudalta eikä kirjoiteta tähän, jotta se seuraa jos marginaali muuttuu. */
+    var napit = lokero.nextElementSibling;
+    var limitys = napit ? Math.max(0, lokero.getBoundingClientRect().bottom
+                                    - napit.getBoundingClientRect().top) : 0;
+    var leveys = Math.min(lev * 1.02, 380, ((kork - limitys) / (1 - MAX_PEITTO)) * suhde);
+    var korkeus = leveys / suhde;
+    paikka.style.width = Math.round(leveys) + 'px';
+    // 4 % kuten ennenkin, mutta ei niin paljon että yläreuna nousisi lokeron yli
+    paikka.style.bottom = Math.round(Math.min(0.04 * kork, kork - korkeus)) + 'px';
   }
   /* ⚠️ MITTA OTETAAN VASTA KUN VALIKKO ON RAKENNETTU, EI TÄSSÄ. Lokero on
      `flex:1 1 auto`, joten sen korkeus on se mitä napeilta jää yli — ja napit

@@ -217,8 +217,8 @@
     "ristiin_saannot": "Korttipelin säännöt"
   },
   "toppingten": {
-    "title": "{nimi} — Essen Edition 2026 | Pizza Love®",
-    "kuvaus": "55 täytettä, kymmensivuinen noppa ja Basso-tatuointi. Lataa pelialusta ilmaiseksi ja pelaa. Rajattu erä 450 kpl.",
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love SPIEL Essenissä 2026: korttipeli, lautapeli ja messuille tehty täytepussi, jonka mukana tulee peli.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · rajattu erä 450 kpl",
     "ingressi": "Pussillinen täytteitä, kymmensivuinen noppa ja Basso otsaan. Pelialusta ja säännöt ovat ilmaisia: lataa, tulosta ja pelaa.",
@@ -266,6 +266,16 @@
     ],
     "essen_otsikko": "Essenin erä",
     "essen": "Tämä erä tehtiin messuille. Täytteet ovat samat kymmenen väriä kuin Pizza Love -korttipelissä, pienempinä ja omana pelinään. Kun erä on myyty, se on myyty.",
-    "valmistelu_otsikko": "Valmistelu"
+    "valmistelu_otsikko": "Valmistelu",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Olemme SPIEL Essenissä. Mukana ovat Pizza Love -korttipeli ja -lautapeli sekä messuja varten tehty täytepussi, jonka mukana tulee peli.",
+    "mukana_otsikko": "Mitä tuomme mukanamme",
+    "mukana": [
+      "Pizza Love -korttipeli",
+      "Pizza Love -lautapeli",
+      "Täytepussi: 55 täytettä, kymmensivuinen noppa ja Basso-tatuointi"
+    ],
+    "peli_otsikko": "Pussin mukana tuleva peli: {nimi}",
+    "nappi": "Lataa pelialusta"
   }
 }
