@@ -217,10 +217,10 @@
   },
   "toppingten": {
     "title": "Essen 2026 | Pizza Love®",
-    "kuvaus": "Pizza Love auf der SPIEL in Essen 2026: Kartenspiel, Brettspiel und ein Belagbeutel für die Messe mit eigenem Spiel.",
+    "kuvaus": "Pizza Love auf der SPIEL in Essen 2026: Kartenspiel, Brettspiel und ein Beutel für die Messe mit eigenem Spiel.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · limitiert auf 450 Stück",
-    "ingressi": "Ein Beutel Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo. Spielplan und Regeln gibt es gratis: herunterladen, ausdrucken, spielen.",
+    "ingressi": "Spielplan ausdrucken, Beläge auf den Tisch schütten und losspielen. Die Regeln stehen auf dieser Seite.",
     "tiedot": "2–4 Personen · ab 7 Jahren · etwa 15 Minuten",
     "sisalto_otsikko": "Im Beutel sind",
     "sisalto": [
@@ -229,83 +229,91 @@
       "Ein Basso-Tattoo"
     ],
     "lataa_otsikko": "Spielplan herunterladen",
-    "lataa": "Ein A4-Blatt: vier Pizzen und die Theke, von der die Beläge kommen. Die Farbversion sieht besser aus, die Strichversion spart Tinte.",
+    "lataa": "Der Spielplan ist ein A4-Blatt. Die Strichversion ist dasselbe Spiel, braucht aber weniger Tinte.",
     "lataa_vari": "Spielplan, farbig",
     "lataa_viiva": "Spielplan, Strichversion",
     "saannot_otsikko": "Regeln",
-    "valmistelu": "Jede Person nimmt sich eine Pizza. Die Beläge kommen auf ihre nummerierten Plätze auf der Theke.",
+    "valmistelu": "Jede Person nimmt sich eine Pizza. Die Beläge kommen auf ihre eigenen Plätze auf der Theke.",
     "tavoite_otsikko": "Ziel",
-    "tavoite": "Füll als Erste oder Erster alle zehn Stücke deiner Pizza.",
+    "tavoite": "Füll die zehn Stücke deiner Pizza als Erste oder Erster, dann gewinnst du.",
     "vuoro_otsikko": "Dein Zug",
     "vuoro": [
       "Würfle.",
       "Nimm von der Theke Beläge, die zusammen genau deinen Wurf ergeben.",
       "Leg sie auf die leeren Stücke deiner Pizza, einen Belag pro Stück."
     ],
-    "vuoro_huom": "Eine 10 bringt dir einen Zehner oder 1 + 2 + 3 + 4. Ein Zehner füllt ein Stück, vier kleine füllen vier.",
-    "vuoro_raja": "Du kannst nicht mehr Beläge nehmen, als du leere Stücke hast.",
+    "vuoro_huom": "Würfelst du eine 10, nimmst du einen Zehner oder 1 + 2 + 3 + 4. Ein Zehner füllt ein Stück, vier kleine füllen vier.",
+    "vuoro_raja": "Mehr als du leere Stücke hast, kannst du nicht nehmen.",
     "ohi_otsikko": "Wenn du nicht nehmen kannst oder willst",
     "ohi": "Du setzt aus. Dreimal hintereinander ausgesetzt und du bist raus.",
     "aloitus_otsikko": "Wer die Runde beginnt",
-    "aloitus": "Wer die wenigsten Beläge auf der Pizza hat. Bei Gleichstand beginnt, wessen Beläge am wenigsten wert sind.",
+    "aloitus": "Die Runde beginnt, wer die wenigsten Beläge hat. Bei Gleichstand, wessen Beläge am wenigsten wert sind.",
     "voitto_otsikko": "Sieg",
     "voitto": "Wer zuerst eine volle Pizza hat, gewinnt.",
     "vinkki_otsikko": "Tipp",
-    "vinkki": "Kleine Beläge sind knapp: eine 1, zwei 2er. Genau sie machen eine genaue Summe möglich. Sind sie von der Theke weg, verfallen viele Würfe.",
+    "vinkki": "Kleine Beläge gibt es wenige: eine 1, zwei 2er. Mit ihnen geht die Summe genau auf. Sind sie weg, verfallen viele Würfe.",
     "muunnelmat_otsikko": "Varianten",
     "muunnelmat": [
       [
         "Zurücklegen",
-        "Wenn du deinen Wurf nicht legen kannst, darfst du einen deiner Beläge auf die Theke zurücklegen und es noch einmal versuchen."
+        "Bekommst du deinen Wurf nicht zusammen, leg einen Belag auf die Theke zurück und versuch es noch einmal."
       ],
       [
         "Genau 30",
-        "Die Stücke begrenzen nicht mehr, der Wert entscheidet. Du gewinnst, wenn deine Beläge genau 30 wert sind. Überschreiten ist nicht erlaubt: nimm die größte Kombination, die passt."
+        "Die Stücke begrenzen nicht mehr, der Wert entscheidet. Du gewinnst, wenn deine Beläge genau 30 wert sind. Überschreiten ist nicht erlaubt, nimm also das Größte, das passt."
       ]
     ],
     "essen_otsikko": "Die Essener Auflage",
-    "essen": "Diese Auflage ist für die Messe gemacht. Die Beläge haben dieselben zehn Farben wie das Pizza-Love-Kartenspiel, nur kleiner und mit einem eigenen Spiel. Ist die Auflage weg, ist sie weg.",
+    "essen": "Diese Auflage haben wir für die Messe gemacht. Die Beläge haben dieselben zehn Farben wie im Kartenspiel, nur kleiner.",
     "valmistelu_otsikko": "Vorbereitung",
     "sivu_h1": "Essen 2026",
-    "sivu_ingressi": "Wir sind auf der SPIEL in Essen. Dabei sind das Pizza-Love-Kartenspiel und das Brettspiel sowie ein Belagbeutel für die Messe, zu dem ein eigenes Spiel gehört.",
+    "sivu_ingressi": "Du findest uns auf der SPIEL in Essen. Dabei sind das Kartenspiel, das Brettspiel und ein Beutel Beläge, für den wir ein eigenes Spiel gemacht haben.",
     "mukana_otsikko": "Das bringen wir mit",
     "mukana": [
       "Pizza-Love-Kartenspiel",
       "Pizza-Love-Brettspiel",
-      "Belagbeutel: 55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo"
+      "Beutel: 55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo"
     ],
-    "peli_otsikko": "Das Spiel zum Beutel: {nimi}",
+    "peli_otsikko": "Das Spiel im Beutel: {nimi}",
     "nappi": "Spielplan herunterladen",
     "tarjoukset_otsikko": "Messeangebote",
-    "tarjoukset_ingressi": "Gültig an unserem Stand auf der SPIEL in Essen.",
+    "tarjoukset_ingressi": "Die Preise gelten an unserem Stand.",
     "tarjoukset": [
       [
         "17 €",
         "Kartenspiel",
-        "oder 2 für 30 €",
-        "korttipeli"
+        "oder zwei für 30 €",
+        "korttipeli",
+        "kansi-family.webp",
+        "Du sparst 4 €"
       ],
       [
         "30 €",
         "Brettspiel",
         "",
-        "lautapeli"
+        "lautapeli",
+        "lautapeli-kansi.webp",
+        ""
       ],
       [
         "45 €",
-        "Beide Spiele",
+        "Beide",
         "einzeln 47 €",
-        "molemmat"
+        "molemmat",
+        "tuote-pakkaus.webp",
+        "Du sparst 2 €"
       ],
       [
         "10 €",
-        "Belagbeutel",
-        "55 Beläge + Würfel",
+        "Ein kompakter Beutel voll Pizza Love!",
+        "55 Beläge, Würfel und Tattoo",
+        "",
+        "pikkunappulat-noppa.webp",
         ""
       ]
     ],
-    "kaupanpaalle": "Ab 35 € Einkauf gibt es den Belagbeutel gratis dazu.",
-    "kaupanpaalle_lisa": "Limitiert auf 450 Stück — weg ist weg.",
+    "kaupanpaalle": "Kauf für über 35 € ein, dann kommt der Beutel mit.",
+    "kaupanpaalle_lisa": "Es gibt 450 Beutel.",
     "tuotteet_otsikko": "Das bringen wir mit",
     "avaa": "Mehr erfahren",
     "tuotteet": [
@@ -313,7 +321,7 @@
         "Pizza-Love-Kartenspiel",
         "Drei Spielarten, 2–6 Personen",
         "korttipeli.html",
-        "tuote-pakkaus.webp"
+        "kansi-family.webp"
       ],
       [
         "Pizza-Love-Brettspiel",
@@ -322,11 +330,28 @@
         "lautapeli-kansi.webp"
       ],
       [
-        "Belagbeutel",
+        "Ein kompakter Beutel voll Pizza Love",
         "55 Beläge, Würfel und Basso-Tattoo",
         "#peli",
         "pikkunappulat-noppa.webp"
       ]
-    ]
+    ],
+    "editiot_otsikko": "Drei Cover, dieselben Karten",
+    "editiot_teksti": "Das Kartenspiel gibt es mit drei Covern. Die Decks sind innen gleich, nimm also das, das dir gefällt.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "Auf der Messe gibt es das Tattoo nur in diesem Beutel."
   }
 }

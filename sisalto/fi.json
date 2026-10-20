@@ -218,10 +218,10 @@
   },
   "toppingten": {
     "title": "Essen 2026 | Pizza Love®",
-    "kuvaus": "Pizza Love SPIEL Essenissä 2026: korttipeli, lautapeli ja messuille tehty täytepussi, jonka mukana tulee peli.",
+    "kuvaus": "Pizza Love SPIEL Essenissä 2026: korttipeli, lautapeli ja messuille tehty pussi, jonka mukana tulee peli.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · rajattu erä 450 kpl",
-    "ingressi": "Pussillinen täytteitä, kymmensivuinen noppa ja Basso otsaan. Pelialusta ja säännöt ovat ilmaisia: lataa, tulosta ja pelaa.",
+    "ingressi": "Tulosta pelialusta, kaada täytteet pöydälle ja pelaa. Säännöt ovat tällä sivulla.",
     "tiedot": "2–4 pelaajaa · 7 vuodesta · noin 15 minuuttia",
     "sisalto_otsikko": "Pussissa on",
     "sisalto": [
@@ -230,83 +230,91 @@
       "Basso-tatuointi"
     ],
     "lataa_otsikko": "Lataa pelialusta",
-    "lataa": "Yksi A4-arkki: neljä pizzaa ja tiski, josta täytteet otetaan. Värillinen on kaunis, viivaversio säästää mustetta.",
+    "lataa": "Alusta on yksi A4-arkki. Viivaversio on sama peli, mutta kuluttaa vähemmän mustetta.",
     "lataa_vari": "Pelialusta, värillinen",
     "lataa_viiva": "Pelialusta, viivaversio",
     "saannot_otsikko": "Säännöt",
-    "valmistelu": "Jokainen ottaa yhden pizzan. Täytteet asetetaan tiskille omille numeroiduille paikoilleen.",
+    "valmistelu": "Jokainen ottaa yhden pizzan. Täytteet menevät tiskille omille paikoilleen.",
     "tavoite_otsikko": "Tavoite",
-    "tavoite": "Täytä pizzasi kaikki kymmenen lohkoa ensimmäisenä.",
+    "tavoite": "Täytä pizzasi kymmenen lohkoa ensimmäisenä, niin voitat.",
     "vuoro_otsikko": "Vuoro",
     "vuoro": [
       "Heitä noppaa.",
       "Ota tiskistä täytteitä, joiden yhteisarvo on tasan nopan luku.",
       "Aseta ne pizzasi tyhjille lohkoille, yksi täyte lohkoa kohti."
     ],
-    "vuoro_huom": "Heitolla 10 voit ottaa yhden kympin tai vaikka 1 + 2 + 3 + 4. Yhdellä kympillä täytät yhden lohkon, neljällä pienellä neljä.",
-    "vuoro_raja": "Et voi ottaa enempää täytteitä kuin sinulla on tyhjiä lohkoja.",
+    "vuoro_huom": "Heitolla 10 otat yhden kympin tai vaikka 1 + 2 + 3 + 4. Kymppi täyttää yhden lohkon, neljä pientä täyttää neljä.",
+    "vuoro_raja": "Enempää kuin tyhjiä lohkoja et voi ottaa.",
     "ohi_otsikko": "Jos et voi tai et halua ottaa",
     "ohi": "Vuoro menee ohi. Kolme ohivuoroa peräkkäin ja putoat pelistä.",
     "aloitus_otsikko": "Kuka aloittaa kierroksen",
-    "aloitus": "Se, jolla on vähiten täytteitä pizzallaan. Jos useammalla on yhtä vähän, aloittaa se, jonka täytteiden yhteisarvo on pienin.",
+    "aloitus": "Kierroksen aloittaa se, jolla on vähiten täytteitä. Tasatilanteessa se, jonka täytteet ovat arvoltaan pienimmät.",
     "voitto_otsikko": "Voitto",
     "voitto": "Ensimmäinen, jonka pizza on täynnä, voittaa.",
     "vinkki_otsikko": "Vinkki",
-    "vinkki": "Pieniä täytteitä on vähän: ykkösiä yksi, kakkosia kaksi. Juuri niillä saa tarkan summan kokoon. Kun ne loppuvat tiskistä, moni heitto jää ottamatta.",
+    "vinkki": "Pieniä täytteitä on vähän: ykkösiä yksi, kakkosia kaksi. Niillä saat summan tasan. Kun ne on viety, moni heitto menee ohi.",
     "muunnelmat_otsikko": "Muunnelmat",
     "muunnelmat": [
       [
         "Palautus",
-        "Jos et saa heittoasi kokoon, saat palauttaa yhden täytteesi tiskiin ja yrittää uudelleen."
+        "Jos et saa heittoasi kokoon, palauta yksi täytteesi tiskiin ja yritä uudestaan."
       ],
       [
         "Tasan 30",
-        "Lohkot eivät rajoita, vaan ratkaiseva on arvo. Voitat, kun täytteidesi yhteisarvo on tasan 30. Yli ei saa ottaa: ota suurin yhdistelmä joka mahtuu."
+        "Lohkot eivät rajoita, vaan arvo ratkaisee. Voitat kun täytteesi ovat yhteensä tasan 30. Yli ei saa ottaa, joten ota suurin joka mahtuu."
       ]
     ],
     "essen_otsikko": "Essenin erä",
-    "essen": "Tämä erä tehtiin messuille. Täytteet ovat samat kymmenen väriä kuin Pizza Love -korttipelissä, pienempinä ja omana pelinään. Kun erä on myyty, se on myyty.",
+    "essen": "Teimme tämän erän messuille. Täytteet ovat samat kymmenen väriä kuin korttipelissä, vain pienempinä.",
     "valmistelu_otsikko": "Valmistelu",
     "sivu_h1": "Essen 2026",
-    "sivu_ingressi": "Olemme SPIEL Essenissä. Mukana ovat Pizza Love -korttipeli ja -lautapeli sekä messuja varten tehty täytepussi, jonka mukana tulee peli.",
+    "sivu_ingressi": "Löydät meidät SPIEL Essenistä. Mukana on korttipeli, lautapeli ja pussillinen täytteitä, jolle teimme oman pelin.",
     "mukana_otsikko": "Mitä tuomme mukanamme",
     "mukana": [
       "Pizza Love -korttipeli",
       "Pizza Love -lautapeli",
-      "Täytepussi: 55 täytettä, kymmensivuinen noppa ja Basso-tatuointi"
+      "Pussi: 55 täytettä, kymmensivuinen noppa ja Basso-tatuointi"
     ],
-    "peli_otsikko": "Pussin mukana tuleva peli: {nimi}",
+    "peli_otsikko": "Täytepussin peli: {nimi}",
     "nappi": "Lataa pelialusta",
     "tarjoukset_otsikko": "Messutarjoukset",
-    "tarjoukset_ingressi": "Voimassa osastollamme SPIEL Essenissä.",
+    "tarjoukset_ingressi": "Hinnat ovat voimassa osastollamme.",
     "tarjoukset": [
       [
         "17 €",
         "Korttipeli",
-        "tai 2 kpl 30 €",
-        "korttipeli"
+        "tai kaksi 30 €:lla",
+        "korttipeli",
+        "kansi-family.webp",
+        "Säästät 4 €"
       ],
       [
         "30 €",
         "Lautapeli",
         "",
-        "lautapeli"
+        "lautapeli",
+        "lautapeli-kansi.webp",
+        ""
       ],
       [
         "45 €",
-        "Molemmat pelit",
+        "Molemmat",
         "erikseen 47 €",
-        "molemmat"
+        "molemmat",
+        "tuote-pakkaus.webp",
+        "Säästät 2 €"
       ],
       [
         "10 €",
-        "Täytepussi",
-        "55 täytettä + noppa",
+        "Kompakti pussi täynnä Pizza Lovea!",
+        "55 täytettä, noppa ja tatuointi",
+        "",
+        "pikkunappulat-noppa.webp",
         ""
       ]
     ],
-    "kaupanpaalle": "Yli 35 €:n ostoksesta täytepussi kaupan päälle.",
-    "kaupanpaalle_lisa": "Rajattu erä 450 kpl — kun ne on myyty, ne on myyty.",
+    "kaupanpaalle": "Osta yli 35 €:lla, niin pussi tulee mukaan.",
+    "kaupanpaalle_lisa": "Pusseja on 450.",
     "tuotteet_otsikko": "Mitä tuomme mukanamme",
     "avaa": "Lue lisää",
     "tuotteet": [
@@ -314,7 +322,7 @@
         "Pizza Love -korttipeli",
         "Kolme pelimuotoa, 2–6 pelaajaa",
         "korttipeli.html",
-        "tuote-pakkaus.webp"
+        "kansi-family.webp"
       ],
       [
         "Pizza Love -lautapeli",
@@ -323,11 +331,28 @@
         "lautapeli-kansi.webp"
       ],
       [
-        "Täytepussi",
+        "Kompakti pussi täynnä Pizza Lovea",
         "55 täytettä, noppa ja Basso-tatuointi",
         "#peli",
         "pikkunappulat-noppa.webp"
       ]
-    ]
+    ],
+    "editiot_otsikko": "Kolme kantta, samat kortit",
+    "editiot_teksti": "Korttipelistä on kolme eri kantta. Pakat ovat sisältä samanlaiset, joten valitse se joka miellyttää.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "Tatuoinnin saa messuilla vain tästä pussista."
   }
 }

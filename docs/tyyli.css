@@ -349,6 +349,11 @@ ol.vaiheet h3{margin:6px 0 6px}
    ensin ja nimen toisena. Siksi hinta on oma elementtinsä eikä osa tekstiä. */
 .tarjoukset{display:grid;gap:14px;margin:18px 0 28px;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.tarjous__kuva{width:100%;height:auto;align-self:stretch;display:block;
+  border-radius:10px;background:#fff;margin:-4px 0 8px}
+.tarjous__saasto{align-self:flex-start;font-size:13px;font-weight:700;
+  padding:3px 9px;border-radius:999px;background:#1A1A1A;color:#fff}
+.tarjous--nosto .tarjous__saasto{background:#fff;color:#1A1A1A}
 .tarjous{display:flex;flex-direction:column;gap:6px;padding:20px;
   border:2px solid var(--oranssi,#F47920);border-radius:16px;background:#fff;
   text-decoration:none;color:inherit}
@@ -357,23 +362,41 @@ ol.vaiheet h3{margin:6px 0 6px}
 .tarjous__nimi{font-weight:700;font-size:17px}
 .tarjous__lisa{font-size:14px;opacity:.78}
 .tarjous__linkki{margin-top:auto;padding-top:10px;font-weight:700;font-size:15px}
-.tarjous__linkki::after{content:" →"}
 .tarjous--nosto .tarjous__lisa{opacity:.9}
 
 /* Kaupan paalle -lupaus: oma rivinsa, ei korttien sekaan */
-.kaupanpaalle{display:flex;gap:16px;align-items:center;padding:18px 20px;
+.kaupanpaalle{display:flex;gap:18px;align-items:center;padding:16px 22px;
   border-radius:16px;background:#1A1A1A;color:#fff;margin:0 0 28px}
-.kaupanpaalle img{width:84px;height:auto;flex:none}
+.kaupanpaalle img{width:104px;height:auto;flex:none;align-self:flex-end;
+  margin-bottom:-16px}
 .kaupanpaalle strong{display:block;font-size:19px;margin-bottom:3px}
-.kaupanpaalle span{font-size:15px;opacity:.85}
+.kaupanpaalle span{display:block;font-size:15px;opacity:.85}
+.kaupanpaalle span + span{margin-top:4px;opacity:1;font-weight:600;
+  color:var(--oranssi,#F47920)}
 
-/* Saannot: vaiheet numeroituna, ei yhtena potkona */
+/* Saannot: vaiheet numeroituna, ei yhtena potkona.
+   ⚠️ KORTIT OVAT VALKOISIA EIVATKA BEESSEJA. Marko 20.10.2026: «Ei voi olla
+   beessejä laatikoita beessillä taustalla.» Sivun pohja on kermanvalkoinen,
+   joten #FBF7F0:n kortti katosi siihen — kortin on erotuttava taustasta,
+   muuten rakenne on olemassa vain koodissa. */
 .vaiheet{display:grid;gap:12px;margin:16px 0 26px;
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-.vaihe{position:relative;padding:18px 18px 18px 54px;border-radius:14px;
-  background:#FBF7F0;border:1px solid #e7ded0}
-.vaihe__nro{position:absolute;left:16px;top:16px;width:26px;height:26px;
+.vaihe{position:relative;padding:18px;border-radius:14px;background:#fff;
+  border:1px solid #E6DCCB;box-shadow:0 1px 0 rgba(26,26,26,.04)}
+.vaihe--nro{padding-left:58px}
+.vaihe__nro{position:absolute;left:16px;top:16px;width:30px;height:30px;
   border-radius:50%;background:var(--oranssi,#F47920);color:#fff;
-  font-weight:800;font-size:15px;display:grid;place-items:center}
-.vaihe h4{margin:0 0 4px;font-size:16px}
+  font-weight:800;font-size:16px;display:grid;place-items:center}
+.vaihe h4{margin:0 0 5px;font-size:15px;color:var(--oranssi,#F47920);
+  text-transform:uppercase;letter-spacing:.04em}
 .vaihe p{margin:0;font-size:15px}
+
+/* Alustan lataukset: kuva kertoo mita ladataan */
+.alusta-lataus{display:grid;gap:18px;align-items:center;margin:16px 0 26px;
+  grid-template-columns:minmax(150px,230px) 1fr}
+.alusta-lataus img{width:100%;height:auto;display:block;border-radius:12px;
+  border:1px solid #E6DCCB}
+@media (max-width:560px){.alusta-lataus{grid-template-columns:1fr}}
+.pelit--kolme{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.peli-kortti--kuvaton{margin:0}
+.peli-kortti--kuvaton .peli-kortti__teksti{padding-bottom:16px}

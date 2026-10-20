@@ -217,10 +217,10 @@
   },
   "toppingten": {
     "title": "Essen 2026 | Pizza Love®",
-    "kuvaus": "Pizza Love at SPIEL Essen 2026: the card game, the board game and a topping bag made for the fair, with a game of its own.",
+    "kuvaus": "Pizza Love at SPIEL Essen 2026: the card game, the board game and a bag made for the fair, with a game of its own.",
     "h1": "{nimi}",
     "merkki": "Essen Edition · limited run of 450",
-    "ingressi": "A bag of toppings, a ten-sided die and a Basso tattoo. The board and the rules are free: download, print and play.",
+    "ingressi": "Print the board, tip the toppings onto the table and play. The rules are on this page.",
     "tiedot": "2–4 players · ages 7+ · about 15 minutes",
     "sisalto_otsikko": "In the bag",
     "sisalto": [
@@ -229,83 +229,91 @@
       "A Basso tattoo"
     ],
     "lataa_otsikko": "Download the board",
-    "lataa": "One A4 sheet: four pizzas and the counter the toppings come from. The colour version looks better, the line version saves ink.",
+    "lataa": "The board is one A4 sheet. The line version is the same game but uses less ink.",
     "lataa_vari": "Board, colour",
     "lataa_viiva": "Board, line version",
     "saannot_otsikko": "Rules",
-    "valmistelu": "Each player takes one pizza. The toppings go on their numbered places on the counter.",
+    "valmistelu": "Each player takes one pizza. The toppings go on their own places on the counter.",
     "tavoite_otsikko": "Goal",
-    "tavoite": "Be the first to fill all ten slices of your pizza.",
+    "tavoite": "Fill the ten slices of your pizza first and you win.",
     "vuoro_otsikko": "Your turn",
     "vuoro": [
       "Roll the die.",
       "Take toppings from the counter worth exactly the number you rolled.",
       "Place them on the empty slices of your pizza, one topping per slice."
     ],
-    "vuoro_huom": "A roll of 10 gets you one 10, or 1 + 2 + 3 + 4. One ten fills one slice; four small ones fill four.",
-    "vuoro_raja": "You cannot take more toppings than you have empty slices.",
+    "vuoro_huom": "Roll a 10 and you take one ten, or 1 + 2 + 3 + 4. A ten fills one slice, four small ones fill four.",
+    "vuoro_raja": "You cannot take more than you have empty slices.",
     "ohi_otsikko": "If you cannot or will not take",
     "ohi": "You pass. Three passes in a row and you are out.",
     "aloitus_otsikko": "Who starts the round",
-    "aloitus": "Whoever has the fewest toppings on their pizza. If several are tied, the one whose toppings are worth least.",
+    "aloitus": "The round starts with whoever has the fewest toppings. If that is tied, the one whose toppings are worth least.",
     "voitto_otsikko": "Winning",
-    "voitto": "The first player with a full pizza wins.",
+    "voitto": "First full pizza wins.",
     "vinkki_otsikko": "A tip",
-    "vinkki": "Small toppings are scarce: one 1, two 2s. They are what makes an exact sum possible. Once they are gone from the counter, many rolls go to waste.",
+    "vinkki": "There are few small toppings: one 1, two 2s. They are what make a sum come out exactly. Once they are taken, a lot of rolls go to waste.",
     "muunnelmat_otsikko": "Variants",
     "muunnelmat": [
       [
         "Put one back",
-        "If you cannot make your roll, put one of your toppings back on the counter and try again."
+        "If you cannot make your roll, put one topping back on the counter and try again."
       ],
       [
         "Exactly 30",
-        "Slices no longer limit you; value decides. You win when your toppings are worth exactly 30. You may not go over: take the largest combination that fits."
+        "Slices no longer limit you, value does. You win when your toppings are worth exactly 30. You may not go over, so take the largest that fits."
       ]
     ],
     "essen_otsikko": "The Essen run",
-    "essen": "This run was made for the fair. The toppings are the same ten colours as the Pizza Love card game, smaller and with a game of their own. When the run is gone, it is gone.",
+    "essen": "We made this run for the fair. The toppings are the same ten colours as in the card game, only smaller.",
     "valmistelu_otsikko": "Setup",
     "sivu_h1": "Essen 2026",
-    "sivu_ingressi": "We are at SPIEL Essen. We bring the Pizza Love card game and board game, and a bag of toppings made for the fair that comes with a game of its own.",
+    "sivu_ingressi": "Find us at SPIEL Essen. We bring the card game, the board game and a bag of toppings we made a game for.",
     "mukana_otsikko": "What we bring",
     "mukana": [
       "Pizza Love card game",
       "Pizza Love board game",
-      "Topping bag: 55 toppings, a ten-sided die and a Basso tattoo"
+      "Bag: 55 toppings, a ten-sided die and a Basso tattoo"
     ],
-    "peli_otsikko": "The game that comes with the bag: {nimi}",
+    "peli_otsikko": "The game in the bag: {nimi}",
     "nappi": "Download the board",
     "tarjoukset_otsikko": "Fair offers",
-    "tarjoukset_ingressi": "Valid at our stand at SPIEL Essen.",
+    "tarjoukset_ingressi": "Prices valid at our stand.",
     "tarjoukset": [
       [
         "€17",
         "Card game",
-        "or 2 for €30",
-        "korttipeli"
+        "or two for €30",
+        "korttipeli",
+        "kansi-family.webp",
+        "Save €4"
       ],
       [
         "€30",
         "Board game",
         "",
-        "lautapeli"
+        "lautapeli",
+        "lautapeli-kansi.webp",
+        ""
       ],
       [
         "€45",
-        "Both games",
+        "Both",
         "€47 separately",
-        "molemmat"
+        "molemmat",
+        "tuote-pakkaus.webp",
+        "Save €2"
       ],
       [
         "€10",
-        "Topping bag",
-        "55 toppings + die",
+        "A compact bag full of Pizza Love!",
+        "55 toppings, a die and a tattoo",
+        "",
+        "pikkunappulat-noppa.webp",
         ""
       ]
     ],
-    "kaupanpaalle": "Spend over €35 and the topping bag is on us.",
-    "kaupanpaalle_lisa": "Limited run of 450 — when they are gone, they are gone.",
+    "kaupanpaalle": "Spend over €35 and the bag comes with you.",
+    "kaupanpaalle_lisa": "There are 450 bags.",
     "tuotteet_otsikko": "What we bring",
     "avaa": "Read more",
     "tuotteet": [
@@ -313,7 +321,7 @@
         "Pizza Love card game",
         "Three modes, 2–6 players",
         "korttipeli.html",
-        "tuote-pakkaus.webp"
+        "kansi-family.webp"
       ],
       [
         "Pizza Love board game",
@@ -322,11 +330,28 @@
         "lautapeli-kansi.webp"
       ],
       [
-        "Topping bag",
+        "A compact bag full of Pizza Love",
         "55 toppings, a die and a Basso tattoo",
         "#peli",
         "pikkunappulat-noppa.webp"
       ]
-    ]
+    ],
+    "editiot_otsikko": "Three covers, same cards",
+    "editiot_teksti": "The card game comes in three covers. The decks inside are identical, so pick the one you like.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "At the fair, the tattoo comes only with this bag."
   }
 }

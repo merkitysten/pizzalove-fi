@@ -586,17 +586,21 @@ def essen2026(t, kaikki):
         return a[avain].replace('{nimi}', PELIN_NIMI)
 
     tarjoukset = []
-    for hinta, nimi, lisa, tuote in a['tarjoukset']:
+    for hinta, nimi, lisa, tuote, kuva, saasto in a['tarjoukset']:
         linkki = kauppa(t, tuote, 'essen') if tuote else ''
-        tagi = 'a href="%s"' % e(linkki) if linkki else 'div'
+        tagi = ('a href="%s"' % e(linkki)) if linkki else 'div'
         tarjoukset.append(
             '<%s class="tarjous%s">'
+            '<img class="tarjous__kuva" src="../kuvat/%s" alt="" loading="lazy">'
             '<span class="tarjous__hinta">%s</span>'
             '<span class="tarjous__nimi">%s</span>'
-            '<span class="tarjous__lisa">%s</span>%s</%s>'
-            % (tagi, ' tarjous--nosto' if not linkki else '', e(hinta), e(nimi),
-               e(lisa), '<span class="tarjous__linkki">%s</span>'
-               % e(t['ui']['kauppaan']) if linkki else '',
+            '%s%s%s</%s>'
+            % (tagi, '' if linkki else ' tarjous--nosto', e(kuva), e(hinta),
+               e(nimi),
+               '<span class="tarjous__lisa">%s</span>' % e(lisa) if lisa else '',
+               '<span class="tarjous__saasto">%s</span>' % e(saasto) if saasto else '',
+               '<span class="tarjous__linkki">%s</span>' % e(t['ui']['kauppaan'])
+               if linkki else '',
                'a' if linkki else 'div'))
 
     tuotteet = ''.join(
@@ -608,8 +612,16 @@ def essen2026(t, kaikki):
         % (e(linkki), e(kuva), e(nimi), e(tiedot), e(a['avaa']))
         for nimi, tiedot, linkki, kuva in a['tuotteet'])
 
+    editiot = ''.join(
+        '<figure class="peli-kortti peli-kortti--kuvaton">'
+        '<div class="peli-kortti__kuva"><img src="../kuvat/%s" alt="" '
+        'loading="lazy"></div>'
+        '<figcaption class="peli-kortti__teksti">'
+        '<p class="peli-kortti__nimi">%s</p></figcaption></figure>'
+        % (e(kuva), e(nimi)) for nimi, kuva in a['editiot'])
+
     vaiheet = ''.join(
-        '<article class="vaihe"><span class="vaihe__nro">%d</span>'
+        '<article class="vaihe vaihe--nro"><span class="vaihe__nro">%d</span>'
         '<p>%s</p></article>' % (i + 1, e(rivi))
         for i, rivi in enumerate(a['vuoro']))
 
@@ -640,12 +652,16 @@ def essen2026(t, kaikki):
 <p>%s</p>
 <div class="tarjoukset">%s</div>
 <div class="kaupanpaalle">
-  <img src="../kuvat/pikkunappulat-rasiassa.webp" alt="" loading="lazy">
-  <div><strong>%s</strong><span>%s</span></div>
+  <img src="../kuvat/basso-nojaa.webp" alt="" loading="lazy">
+  <div><strong>%s</strong><span>%s</span><span>%s</span></div>
 </div>
 
 <h2>%s</h2>
 <div class="pelit">%s</div>
+
+<h2>%s</h2>
+<p>%s</p>
+<div class="pelit pelit--kolme">%s</div>
 
 <h2 id="peli">%s</h2>
 <p class="ingressi">%s</p>
@@ -657,8 +673,10 @@ def essen2026(t, kaikki):
 </section>
 
 <h3>%s</h3>
-<p>%s</p>
-%s
+<div class="alusta-lataus">
+  <img src="../kuvat/topping-ten-alusta.webp" alt="" loading="lazy">
+  <div><p>%s</p>%s</div>
+</div>
 
 <h3>%s</h3>
 <div class="vaiheet">%s</div>
@@ -671,8 +689,9 @@ def essen2026(t, kaikki):
 <div class="vaiheet">%s</div>
 ''' % (e(a['merkki']), e(a['sivu_h1']), e(a['sivu_ingressi']),
        e(a['tarjoukset_otsikko']), e(a['tarjoukset_ingressi']), ''.join(tarjoukset),
-       e(a['kaupanpaalle']), e(a['kaupanpaalle_lisa']),
+       e(a['kaupanpaalle']), e(a['kaupanpaalle_lisa']), e(a['tatuointi']),
        e(a['tuotteet_otsikko']), tuotteet,
+       e(a['editiot_otsikko']), e(a['editiot_teksti']), editiot,
        e(tt('peli_otsikko')), e(tt('ingressi')), e(a['tiedot']),
        e(a['sisalto_otsikko']),
        ''.join('<li>%s</li>' % e(r) for r in a['sisalto']),
