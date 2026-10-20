@@ -55,7 +55,7 @@
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
 <link rel="stylesheet" href="opetus.css?v=20261020b">
-<link rel="stylesheet" href="yhteinen.css?v=20261020j">
+<link rel="stylesheet" href="yhteinen.css?v=20261020k">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <link rel="stylesheet" href="basso.css?v=20261020c">
 </head>
@@ -557,13 +557,32 @@
              ⚠️ MIETTIVÄ Basso eikä syövä: kupla on AJATUSkupla, ja syövä
              hahmo ei ajattele. Basson alareuna ON leikkaus jo tiedostossa,
              ja se asettuu pelivalitsimen yläreunaan (yhteinen.css). -->
-        <img class="alku-basso" src="kuvat/basso-pohtii.webp?v=20261020i" width="560" height="601" alt="" aria-hidden="true">
+        <!-- ⚠️ SILMÄT KATSOVAT VALITTUA PELIÄ, JA SE ON CSS-KERROS EIKÄ
+             MUOKATTU KUVA (Marko 20.10.2026: «Onko mahdollista, että basson
+             silmät katsoisi siihen mikä on valittu?»).
+             Markon alkuperäinen `basso-pohtii.webp` jää koskemattomaksi:
+             kaksi `i`-elementtiä peittävät silmän sisuksen valkoisella ja
+             piirtävät pupillin uuteen kohtaan. Maskottikuvan uudelleenmaalaus
+             tiedostoon olisi brändipäätös, tämän saa poistettua kahdella
+             rivillä. Mitat ja suunnat: yhteinen.css.
+             ⚠️ `alt`/`aria-hidden` siirtyi kääreeseen: koko ryhmä on koriste. -->
+        <div class="alku-basso alku-basso--oikealle" aria-hidden="true">
+          <img src="kuvat/basso-pohtii.webp?v=20261020i" width="560" height="601" alt="">
+          <i class="alku-silma alku-silma--v"></i><i class="alku-silma alku-silma--o"></i>
+        </div>
         <!-- ⚠️ TEKSTI TULEE GENERAATTORISTA EIKÄ JS:STÄ: sivu tietää pelinsä,
              joten kupla on staattinen eikä tarvitse yhtään riviä koodia.
              Teksti on kuvan PÄÄLLÄ eikä sisällä, jotta sen voi kääntää. -->
+        <!-- ⚠️ TEKSTILLÄ ON OMA KÄÄREENSÄ, JA SE ON PAKKO. Pehmusteen
+             prosentit lasketaan SÄILIÖN leveydestä, ja `.alku-kupla`n säiliö
+             on `.alku-maskotit` — ei kupla itse. Suoraan kuplalle kirjoitetut
+             prosentit luettiin siis 358 px:stä eikä 207 px:stä. Kääreen
+             säiliö ON kupla, joten sen prosentit osuvat. -->
         <div class="alku-kupla">
           <img class="alku-kupla-pilvi" src="kuvat/ajatuskupla.webp?v=20261020i" width="900" height="582" alt="" aria-hidden="true">
-          <b data-t="kupla.basso"></b><span data-t="kupla.bassoAla"></span>
+          <span class="alku-kupla-teksti">
+            <b data-t="kupla.basso"></b><span data-t="kupla.bassoAla"></span>
+          </span>
         </div>
       </div>
       <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). Laji on ylhäällä
@@ -695,7 +714,7 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261020g"></script>
+<script src="kielet.js?v=20261020h"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
 <script src="qrluku.js?v=20261020b"></script>

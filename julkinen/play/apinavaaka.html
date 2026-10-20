@@ -29,7 +29,7 @@
      overflow:hidden}` katkaisee komponenttisivun vierityksen. Kumous on
      alla omassa <style>-lohkossa, joka ladataan tämän jälkeen. -->
 <link rel="stylesheet" href="peli.css?v=20261019h">
-<link rel="stylesheet" href="yhteinen.css?v=20261020j">
+<link rel="stylesheet" href="yhteinen.css?v=20261020k">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261020b">
 <style>
@@ -48,6 +48,18 @@
      📐 Mitattu: vakiokorkeudella kuva leikkautui ensimmäisen napin alle 23 px. */
   .lauta-muoto{justify-content:center;text-align:center;padding:13px 12px;min-height:0}
   .lauta-muoto b{text-align:center;font-size:17px}
+  /* ⚠️ MASKOTTILOKERO EI SAA LUHISTUA. Se on `flex:1 1 auto; min-height:0`,
+     eli ahtaalla ruudulla napit vievät siltä kaiken.
+     📐 Mitattu ilman alarajaa: 320 × 480 -ruudulla lokeron korkeus oli 19 px
+     ja 812 × 375 (puhelin poikittain) 8 px. Vanha CSS-mitta piirsi apinan
+     silti täyteen leveyteen, jolloin se vuoti palkin alle ja nappien päälle;
+     uusi korkeuteen sidottu mitta taas kutisti apinan 24 × 18 pikseliin eli
+     näkymättömiin. Kumpikin on rikki, ja syy on sama luhistuva lokero.
+     132 px riittää apinalle (166 × 124 px) ja antaa sivun vierittää. Markon
+     laitteella (308 × 644) lokero on 169 px, joten tämä ei kosketa sitä.
+     ⚠️ Vain tällä sivulla: `.alku-maskotit` on jaettu korttipelin etuoven
+     kanssa, jossa parina on Basso ja ajatuskupla eivätkä nämä mitat päde. */
+  .alku-maskotit{min-height:132px}
 </style>
 </head>
 <body>
@@ -80,7 +92,7 @@
      komponentti käynnistyisi piilossa ja mittaisi näyttämönsä nollaan. -->
 <div id="lautaPeli" hidden><div id="av" data-koko></div></div>
 
-<script src="kielet.js?v=20261020g"></script>
+<script src="kielet.js?v=20261020h"></script>
 <script src="siirtyma.js?v=20261020h"></script>
 <script src="pelivalinta.js?v=20261020h"></script>
 <script src="apinavaaka/noppa3d.js?v=20261015b"></script>
@@ -133,6 +145,54 @@ av.setAttribute('data-kieli', k);
      korkeutta se maksoi 17 px, jonka otin leveydestä. */
   var YLA = 20, KH = g.H - YLA;
   paikka.style.aspectRatio = g.W + ' / ' + KH;
+
+  /* 📐 KUVAN KOKO TULEE KÄYTETTÄVISSÄ OLEVASTA KORKEUDESTA EIKÄ PELKÄSTÄ
+     LEVEYDESTÄ (Marko 20.10.2026 puhelimestaan: «basso on vähän irti tuosta
+     ylimmästä palkista — — nämä elementit saisi olla vähän alempana, koska
+     nyt lamppu on melkein kokonaan kiinni tuolla yläpalkissa»).
+
+     📐 Mitattu Markon laitteen mitoilla (308 × 644 CSS-pikseliä, DPR 3,
+     lovi 29 px): `yhteinen.css`:n `width:min(102%, 380px)` antoi kuvalle
+     211 px:n korkeuden 169 px:n lokeroon. Kuva vuoti 48 px lokeronsa yli ja
+     34 px valkoisen lajipalkin ALLE — juuri siksi lamppu oli palkissa
+     kiinni. Leveysmitta oli aikoinaan mitattu 375 × 715 -ruudulla, jossa
+     korkeus ei vielä sitonut; lyhyellä ruudulla se sitoo.
+
+     ⚠️ MITTA ON TÄÄLLÄ EIKÄ CSS:SSÄ, KOSKA KUVASUHDE ON TÄÄLLÄ. CSS:ään
+     kirjoitettuna suhde olisi toinen kopio samasta luvusta, ja kopio
+     ajautuisi erilleen heti kun rajaus (`YLA`) muuttuu.
+
+     ⚠️ JA PELKKÄ CSS EI OSAA TÄTÄ: kokeilin `height:94%; width:auto;
+     max-width:min(102%, 380px)` ja mittasin, että kun `max-width` sitoo,
+     selain EI laske korkeutta uudelleen kuvasuhteesta — 462 × 966 -ruudulla
+     laatikosta tuli 367 × 390 px eikä 367 × 275 px, eli väärän muotoinen.
+     `container-type:size` taas nollaa lokeron korkeuden (se on `flex:1 1
+     auto; min-height:0`), ja kuva katosi kokonaan. Mitattu molemmat.
+
+     Lokero on `.alku-maskotit`; kuva on siinä absoluuttisesti, joten sen
+     koko ei vaikuta lokeron korkeuteen — havainnoijasta ei tule silmukkaa.
+     94 % jättää lampun ja palkin väliin ilmaa: 308 × 644 -ruudulla 14 px → 24 px. */
+  var lokero = paikka.parentNode, ILMA = 0.94;
+  function sovitaVaaka() {
+    var kork = lokero.clientHeight, lev = lokero.clientWidth;
+    if (!kork || !lev) return;                       // asettelua ei ole vielä tehty
+    paikka.style.width = Math.round(Math.min(lev * 1.02, 380, kork * ILMA * (g.W / KH))) + 'px';
+  }
+  /* ⚠️ MITTA OTETAAN VASTA KUN VALIKKO ON RAKENNETTU, EI TÄSSÄ. Lokero on
+     `flex:1 1 auto`, joten sen korkeus on se mitä napeilta jää yli — ja napit
+     syntyvät vasta alempana tässä tiedostossa. 📐 Mitattu: tässä kohtaa
+     kutsuttuna lokero oli vielä napiton ja korkea, ja kuvaksi tuli 282 px
+     oikean 212 px:n sijaan, eli tasan vanha vika. Siksi `alkuVaakaSovita`
+     kutsutaan nappilistan rakentamisen jälkeen.
+     ⚠️ EIKÄ PELKÄN `ResizeObserver`IN VARASSA: se on kehysluupin varassa,
+     eikä sen ensimmäinenkään kutsu tule läpi kaikissa ympäristöissä
+     (mitattu: selainpaneelissa nolla kutsua). Havainnoija on myöhemmille
+     muutoksille, ei ensimmäiselle mitalle. */
+  window.alkuVaakaSovita = sovitaVaaka;
+  if (window.ResizeObserver) new ResizeObserver(sovitaVaaka).observe(lokero);
+  window.addEventListener('resize', sovitaVaaka);
+  window.addEventListener('orientationchange', sovitaVaaka);
+
   var kangas = document.createElement('div');
   kangas.className = 'alku-vaaka-kangas';
   kangas.style.top = '-' + (YLA / KH * 100).toFixed(4) + '%';
@@ -240,6 +300,9 @@ MUODOT.forEach(function (m, i) {
   b.onclick = function () { aloitaMuoto(m[1]); };
   lista.appendChild(b);
 });
+/* Napit vievät lopullisen tilansa vasta nyt, joten apinan mitta otetaan tästä
+   (ks. `sovitaVaaka` yllä). */
+if (window.alkuVaakaSovita) window.alkuVaakaSovita();
 
 var KAUPPA = { fi: 'Kauppaan', sv: 'Till butiken', en: 'To the shop', de: 'Zum Shop' };
 document.getElementById('lautaKauppa').textContent = KAUPPA[k] || KAUPPA.en;

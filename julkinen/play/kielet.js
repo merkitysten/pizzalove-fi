@@ -235,14 +235,23 @@ const KIELET = {
      * huomasi sen: «näyttää siltä, että pelaa olisi yksinpeli ja moninpeli olisi
      * moninpeli». Aloitusruudun neliöt nimetään siksi LAITTEEN mukaan. */
     /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
-       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
-       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
-       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
-       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
-       kuvausta: lähde on sivuston sisältö. */
-    'kupla.party':          'Nopeatempoinen peli',
+       Markon oma sanamuoto mekaniikasta, alarivi pizzalove.fi:n virallinen
+       kuvaus (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja
+       peli sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö.
+
+       ⚠️ YLÄRIVI ON YKSI SANA, JA SE ON MITTA EIKÄ MAKUASIA. Ylärivi luki
+       ensin «Nopeatempoinen peli», ja Marko 20.10.2026: «Nopeatempoinen peli
+       menee rumasti kahdelle riville. Tarvitseeko sitä "peli" sanaa edes
+       sanoa?» 📐 Mitattu 390 × 844: kuplan sisäala on 132 px, ja
+       «Nopeatempoinen peli» tarvitsee kahdelle riville. Ruotsi oli jo
+       valmiiksi ilman sanaa («Snabbt tempo» · «Turordning»), joten muut
+       kielet seuraavat sitä. Jos lisäät sanan takaisin, mittaa ensin: ylärivi
+       EI saa katketa, koska yhdyssanan katkaisu kesken on juuri se rumuus
+       josta Marko huomautti. */
+    'kupla.party':          'Nopeatempoinen',
     'kupla.partyAla':       'Helpoin aloitus.',
-    'kupla.basso':          'Vuoropohjainen peli',
+    'kupla.basso':          'Vuoropohjainen',
     'kupla.bassoAla':       'Rauhallinen ja jännittävä.',
     'valikko.tallaLaitteella':'Tällä laitteella',
     'valikko.omillaLaitteilla':'Omilla laitteilla',
@@ -501,11 +510,20 @@ const KIELET = {
     'verkko.varmistaAlkuun':  'Vill du verkligen gå till startmenyn?',
     'verkko.jatkaPelia':      'Fortsätt spela',
     /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
-       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
-       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
-       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
-       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
-       kuvausta: lähde on sivuston sisältö. */
+       Markon oma sanamuoto mekaniikasta, alarivi pizzalove.fi:n virallinen
+       kuvaus (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja
+       peli sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö.
+
+       ⚠️ YLÄRIVI ON YKSI SANA, JA SE ON MITTA EIKÄ MAKUASIA. Ylärivi luki
+       ensin «Nopeatempoinen peli», ja Marko 20.10.2026: «Nopeatempoinen peli
+       menee rumasti kahdelle riville. Tarvitseeko sitä "peli" sanaa edes
+       sanoa?» 📐 Mitattu 390 × 844: kuplan sisäala on 132 px, ja
+       «Nopeatempoinen peli» tarvitsee kahdelle riville. Ruotsi oli jo
+       valmiiksi ilman sanaa («Snabbt tempo» · «Turordning»), joten muut
+       kielet seuraavat sitä. Jos lisäät sanan takaisin, mittaa ensin: ylärivi
+       EI saa katketa, koska yhdyssanan katkaisu kesken on juuri se rumuus
+       josta Marko huomautti. */
     'kupla.party':          'Snabbt tempo',
     'kupla.partyAla':       'Lättast att börja med.',
     'kupla.basso':          'Turordning',
@@ -765,14 +783,23 @@ const KIELET = {
     'verkko.varmistaAlkuun':  'Really go back to the start menu?',
     'verkko.jatkaPelia':      'Keep playing',
     /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
-       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
-       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
-       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
-       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
-       kuvausta: lähde on sivuston sisältö. */
-    'kupla.party':          'Fast-paced game',
+       Markon oma sanamuoto mekaniikasta, alarivi pizzalove.fi:n virallinen
+       kuvaus (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja
+       peli sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö.
+
+       ⚠️ YLÄRIVI ON YKSI SANA, JA SE ON MITTA EIKÄ MAKUASIA. Ylärivi luki
+       ensin «Nopeatempoinen peli», ja Marko 20.10.2026: «Nopeatempoinen peli
+       menee rumasti kahdelle riville. Tarvitseeko sitä "peli" sanaa edes
+       sanoa?» 📐 Mitattu 390 × 844: kuplan sisäala on 132 px, ja
+       «Nopeatempoinen peli» tarvitsee kahdelle riville. Ruotsi oli jo
+       valmiiksi ilman sanaa («Snabbt tempo» · «Turordning»), joten muut
+       kielet seuraavat sitä. Jos lisäät sanan takaisin, mittaa ensin: ylärivi
+       EI saa katketa, koska yhdyssanan katkaisu kesken on juuri se rumuus
+       josta Marko huomautti. */
+    'kupla.party':          'Fast-paced',
     'kupla.partyAla':       'Easiest to start with.',
-    'kupla.basso':          'Turn-based game',
+    'kupla.basso':          'Turn-based',
     'kupla.bassoAla':       'Calm and exciting.',
     'valikko.tallaLaitteella':'On this device',
     'valikko.omillaLaitteilla':'On your own devices',
@@ -1029,14 +1056,23 @@ const KIELET = {
     'verkko.varmistaAlkuun':  'Wirklich zum Startmenü?',
     'verkko.jatkaPelia':      'Weiterspielen',
     /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
-       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
-       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
-       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
-       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
-       kuvausta: lähde on sivuston sisältö. */
-    'kupla.party':          'Schnelles Spiel',
+       Markon oma sanamuoto mekaniikasta, alarivi pizzalove.fi:n virallinen
+       kuvaus (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja
+       peli sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö.
+
+       ⚠️ YLÄRIVI ON YKSI SANA, JA SE ON MITTA EIKÄ MAKUASIA. Ylärivi luki
+       ensin «Nopeatempoinen peli», ja Marko 20.10.2026: «Nopeatempoinen peli
+       menee rumasti kahdelle riville. Tarvitseeko sitä "peli" sanaa edes
+       sanoa?» 📐 Mitattu 390 × 844: kuplan sisäala on 132 px, ja
+       «Nopeatempoinen peli» tarvitsee kahdelle riville. Ruotsi oli jo
+       valmiiksi ilman sanaa («Snabbt tempo» · «Turordning»), joten muut
+       kielet seuraavat sitä. Jos lisäät sanan takaisin, mittaa ensin: ylärivi
+       EI saa katketa, koska yhdyssanan katkaisu kesken on juuri se rumuus
+       josta Marko huomautti. */
+    'kupla.party':          'Schnelles Tempo',
     'kupla.partyAla':       'Am leichtesten zum Einstieg.',
-    'kupla.basso':          'Zugbasiertes Spiel',
+    'kupla.basso':          'Zugbasiert',
     'kupla.bassoAla':       'Ruhig und spannend.',
     'valikko.tallaLaitteella':'Auf diesem Gerät',
     'valikko.omillaLaitteilla':'Auf eigenen Geräten',

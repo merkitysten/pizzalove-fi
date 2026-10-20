@@ -174,6 +174,24 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   background-image:linear-gradient(rgba(250,246,238,.65), rgba(250,246,238,.65)),
     url('kuvat/kuosi.svg?v=20261006a');
   background-repeat:repeat, repeat;background-size:auto, 286px 285px}
+/* ⚠️ JA SAMA KUOSI PEITTEELLE, KOSKA ALOITUSRUUTU EI AINA TÄYTÄ RUUTUA.
+ * Marko sanoi saman asian toistamiseen 20.10.2026 («Taustakuosi ei ulotu alas
+ * saakka») — edellinen korjaus vei kuosin vieritysalueelle, mutta ei tänne.
+ * 📐 Mitattu Markon kuvakaappauksesta (924 × 2000, DPR 3) riveittäin: alimmat
+ * 101 kuvapistettä eli **34 CSS-pikseliä** ovat tasaista #FAF6EE:tä, joissa ei
+ * ole yhtään kuosin viivaa; kuosi loppuu riville 1879.
+ * 📐 Syy mitattu selaimesta: `.aloitusruutu` on `height:100dvh`, mutta `.peite`
+ * on `position:fixed; inset:0`. Kun dvh ratkeaa ruutua matalammaksi — osoite-
+ * palkki piiloutuu, standalone-tila, kuvakaappaus kesken palkin liu'un — väliin
+ * jää peitteen paljas pohja. Peite on AINA tasan ruudun kokoinen, joten kuosi
+ * kuuluu sinne: silloin paljasta kaistaletta ei voi syntyä millään dvh:n
+ * arvolla. Aloitusruudun oma kuosi jää, koska se taas kattaa vieritysalueen
+ * ruutua pidemmällä sisällöllä. Kuviot ovat samasta kuvasta ja samassa
+ * koossa, joten ne osuvat kohdakkain eivätkä näy kahtena. */
+.peite:has(> .aloitusruutu){background-color:var(--ground, #FAF6EE);
+  background-image:linear-gradient(rgba(250,246,238,.65), rgba(250,246,238,.65)),
+    url('kuvat/kuosi.svg?v=20261006a');
+  background-repeat:repeat, repeat;background-size:auto, 286px 285px}
 .aloitusruutu > .verkko-osa{max-width:360px;margin-block:auto}
 /* KAKSI OSAA: YLHÄÄLLÄ TUNNELMA, ALHAALLA NAPIT (Marko 9.10.2026: «yläosa on pelin
  * tunnelmaan virittävää grafiikkaa ja sitten on selkeästi ne napit. Nyt yläosassa on
@@ -351,13 +369,56 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * ⚠️ ALAREUNASSA EI OLE REUNAA. Basson alareuna on leikkaus joka asettuu
  * pelivalitsimen yläreunaan; valkoinen viiva siinä piirtäisi raon juuri siihen
  * kohtaan jossa kuvan pitää kohdata nappi. */
-.alku-basso{filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
+/* ⚠️ REUNA ON KUVALLA, EI KÄÄREELLÄ. `.alku-basso` on nyt kääre, jonka
+ * sisällä ovat myös silmäkerroksen palat; kääreen `filter` piirtäisi
+ * valkoisen renkaan myös pupillien ympärille. */
+.alku-basso > img{display:block;width:100%;height:auto;
+  filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff)
   drop-shadow(0 -2.5px 0 #fff)}
 /* ⚠️ Tässä oli kolme kommenttia vanhoista mitoista (translateX reunan yli,
    «basso isompana ja enemmän piiloon» 10.10., «saälittävän pieniä» 14.10.).
    Ne kuvasivat sääntöjä jotka eivät ole enää olemassa — rakastunut
    pizzalaatikko poistui ja sommittelu vaihtui pariksi. Kommentti ilman
    sääntöä on väärää tietoa, ei historiaa. */
+/* --- SILMÄT KATSOVAT VALITTUA PELIÄ (Marko 20.10.2026) -------------------
+ * «Onko mahdollista, että basson silmät katsoisi siihen mikä on valittu?»
+ *
+ * ⚠️ ALKUPERÄINEN KUVA EI MUUTU. Pupillin siirto vaatisi muuten
+ * maskottikuvan uudelleenmaalauksen, ja se on brändipäätös eikä
+ * asettelukysymys. Tässä silmän sisus peitetään valkoisella ympyrällä ja
+ * pupilli piirretään uuteen kohtaan — kaksi `i`-elementtiä, ei yhtään
+ * JS-riviä, ja poistettavissa poistamalla nämä säännöt.
+ *
+ * 📐 MITAT LUETTU KUVASTA CANVASILLA (basso-pohtii.webp 560 × 601):
+ *   vasen valkuainen  keskipiste 227,8 / 207,4  sisäsäde 36,4
+ *   oikea valkuainen  keskipiste 336,8 / 206,8  sisäsäde 38,7
+ * Peite on säde − 1,2 px: se peittää koko sisuksen muttei kosketa mustaa
+ * rengasta.
+ * ⚠️ TÄMÄ ON MITATTAVA EIKÄ ARVATTAVA: ensimmäinen kokeilu peitti
+ * ympyrällä säde − 7 px, ja oikeaan silmään jäi musta sirppi. Pupilli on
+ * piirroksessa KIINNI renkaassa — mitattu: pupillin etäisyys keskipisteestä
+ * on 100 % valkuaisen säteestä molemmissa silmissä — joten peitteen on
+ * ulotuttava renkaaseen asti.
+ *
+ * 📐 KATSEEN SUUNTA ON LASKETTU NAPPIEN PAIKASTA, ei valittu
+ * silmämääräisesti. Mitattu 390 × 844: silmien keskikohta on sivulla
+ * (106, 282) ja pelivalitsimen nappien keskipisteet (110, 382) ja (280, 382):
+ *   Pizza Party → suoraan alas          (dx +4,   dy +100)
+ *   Pizza Basso → alaviistoon oikealle  (dx +174, dy +100)
+ * Kumpi on voimassa, ratkeaa sivun luokasta (`sivut.py` tietää pelinsä),
+ * joten tähän ei tarvita ajonaikaista koodia. */
+.alku-silma{position:absolute;display:block;background:#fff;border-radius:50%;
+  pointer-events:none}
+.alku-silma--v{width:12.57%;aspect-ratio:1;left:34.39%;top:28.65%}
+.alku-silma--o{width:13.39%;aspect-ratio:1;left:53.45%;top:28.17%}
+/* Pupilli on peitteen lapsi, joten sen paikka on prosentteina SIITÄ —
+ * silloin samat kaksi riviä kelpaavat molemmille silmille, vaikka ne ovat
+ * eri kokoiset. Halkaisija 41,3 % peitteestä = sama suhde kuin piirroksessa. */
+.alku-silma::after{content:'';position:absolute;width:41.3%;aspect-ratio:1;
+  background:#161616;border-radius:50%}
+.alku-basso--alas .alku-silma::after{left:30.5%;top:56.8%}
+.alku-basso--oikealle .alku-silma::after{left:53.2%;top:43%}
+
 /* --- BASSO JA AJATUSKUPLA (Marko 20.10.2026) ------------------------------
  * «Ei tuo ajatuskupla ja basso nyt yhtään voi olla noin. Se on ensinäkin
  *  väärä ajatuskupla.»
@@ -424,20 +485,69 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
  * Siirto ei vie tilaa, joten `.alku-maskotit`in −14 px jää voimaan ja
  * leikkausviiva osuu tasan sinne missä laatikon alareuna oli: 4 px kytkimen
  * sisään. Kapeneva häntä jää kytkimen taakse (z-index 0 vs. 1). */
-.alku-basso{width:41%;max-width:168px;height:auto;display:block;
-  margin:0 0 0 2%;transform:translateY(14.5%)}
-.alku-kupla{position:relative;flex:1 1 auto;max-width:58%;
+.alku-basso{position:relative;width:41%;max-width:168px;height:auto;display:block;
+  margin:0 0 0 2%;transform:translateY(14.5%);line-height:0}
+/* `line-height:0`: kuvan ja tekstikääreen välissä oleva rivinvaihto on
+ * anonyymi tekstisolmu, jonka rivikorkeus kasvattaisi kuplaa ja rikkoisi
+ * `aspect-ratio`n. */
+.alku-kupla{position:relative;flex:1 1 auto;max-width:58%;line-height:0;
   margin:0 0 9% -6%;aspect-ratio:900 / 582;transform:none}
 .alku-kupla-pilvi{position:absolute;inset:0;width:100%;height:100%;
   transform:none;pointer-events:none}
-/* 📐 Tekstin sisäreunat mitattu kuvasta varainhankintasivulla:
- * vasen 21 %, oikea 15 %, ylä 18 %, ala 13 %. Reunat ovat pyöreiä, joten
- * teksti pidetään selvästi sisäpuolella. */
-.alku-kupla b, .alku-kupla span{position:relative;display:block;text-align:center}
-.alku-kupla{display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:18% 15% 13% 21%}
-.alku-kupla b{font-size:clamp(11px, 3.1vw, 17px);line-height:1.15;color:var(--ink, #1A1A1A)}
-.alku-kupla span{font-size:clamp(10.5px, 2.8vw, 15px);line-height:1.2;font-weight:700;
+/* 📐 TEKSTIN SISÄREUNAT MITATTU TÄSTÄ KUVASTA, EI KOPIOITU SIVUSTOLTA.
+ * Tässä oli `18% 15% 13% 21%`, joka on varainhankintasivun luku sen omalle
+ * asettelulle. Marko 20.10.2026: «katso, että se keskitetään siihen
+ * ajatuskuplaan hyvin» — ja mittaus näytti että teksti oli sivussa.
+ *
+ * Laskin canvasilla suurimman laatikon joka mahtuu pilven sisään KAIKILLA
+ * riveillä joita se peittää (leikkaus eikä yhdiste — pilven reuna
+ * aaltoilee, joten yhdiste lupaisi tilaa jota ei ole):
+ * Pilven runko ei ole kuvan keskellä: pisarajono vie vasemman reunan, ja
+ * rungon keskikohta on 59 % leveydestä ja 56 % korkeudesta. Vanha
+ * `18% 15% 13% 21%` oli siis 6,3 % liian vasemmalla.
+ *
+ * ⚠️ MITTA OTETAAN TEKSTIN OMALLA KORKEUDELLA, EI KOKO PILVEN KORKEUDELLA.
+ * Ensin laskin laatikon joka mahtuu KAIKILLE pilven riveille (y 108–516):
+ * se antoi vain 63,5 % käyttöleveyttä, koska se joutui mahtumaan myös
+ * pilven kapeimpaan kohtaan ylä- ja alareunassa — jonne teksti ei yllä.
+ * Teksti vie noin 44 % pilven korkeudesta, ja sen kaistalla (rungon
+ * keskikohdan ympärillä, y 199–454) laatikko on
+ *   ylä 34,2 %  oikea 6,6 %  ala 21,8 %  vasen 21,6 %  → käyttöleveys 71,9 %
+ * eli 8 % enemmän kuin varovainen koko korkeuden mitta.
+ *
+ * ⚠️ PYSTYPROSENTIT ON MUUNNETTAVA, ja tämä oli toinen oma virheeni:
+ * CSS laskee `padding`in prosentit AINA säiliön LEVEYDESTÄ, myös ylä- ja
+ * alapehmusteen. Kirjoitin kuvasta mitatut 34,2 % / 21,8 % sellaisenaan, ja
+ * ne luettiin leveydestä: 207,6 px:n kuplassa se on 71 + 45 px pehmustetta
+ * 167 px:n korkeuteen, jolloin teksti painui alas. Kuvasuhde on kiinteä
+ * (900/582 = 1,546), joten korkeuden prosentti jaetaan sillä:
+ *   ylä  34,2 / 1,546 = 22,1 %      ala  21,8 / 1,546 = 14,1 %
+ * Vaakapehmusteet ovat jo leveydestä eivätkä muutu.
+ *
+ * ⚠️ `align-items:stretch`, EI `center`, ja se on oma virheeni tältä
+ * päivältä. `center` kutistaa lapset omaan sisältoleveyteensä, jolloin yksi
+ * pitkä sana tekee `b`:stä LEVEMMÄN kuin sisältolaatikko ja teksti valuu
+ * pehmusteen yli — eikä `scrollWidth` näe sitä, koska `b` itse ei ylivuoda.
+ * Mitattu 390 × 844: `b` oli 140,7 px kun tilaa oli 131,8, ja
+ * «Nopeatempoinen» ylitti pilven reunan 17,7 px. `stretch` sitoo lapsen
+ * sisältolaatikkoon, jolloin ylivuoto sekä näkyy että mitataan. */
+.alku-kupla b, .alku-kupla-teksti > span{display:block;text-align:center}
+/* ⚠️ PEHMUSTE ON KÄÄREELLÄ EIKÄ KUPLALLA, ja tämä oli kolmas virheeni
+ * samassa kohdassa. Prosenttipehmuste lasketaan SÄILIÖN leveydestä, ja
+ * kuplan säiliö on `.alku-maskotit` (358 px), ei kupla (207,6 px). Mitattu:
+ * vasen pehmuste oli 77,3 px kun sen piti olla 44,8, ja sisältoleveydeksi
+ * jäi 107 px lasketun 149 px:n sijaan. Kääreen säiliö ON kupla
+ * (`position:relative` + `inset:0`), joten sen prosentit osuvat. */
+.alku-kupla-teksti{position:absolute;inset:0;box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:stretch;
+  justify-content:center;gap:2px;padding:22.1% 6.6% 14.1% 21.6%}
+/* Isompi kuin ennen, 3,1vw → 4vw (Marko: «Ajatusteksti voisi olla hiukan
+ * isommalla fontilla»). 📐 Ylärajan ratkaisee mittaus eikä maku: kupla on
+ * leveämmilläänkin n. 208 px (sarake on enintään 360 px), josta käyttöleveys
+ * 71,9 % = 149 px, ja pisin katkeamaton sana «Nopeatempoinen» vie 140,7 px
+ * 15,6 pikselin koossa. 16 px on siis se mikä vielä mahtuu. */
+.alku-kupla-teksti b{font-size:clamp(12px, 4vw, 16px);line-height:1.15;color:var(--ink, #1A1A1A)}
+.alku-kupla-teksti > span{font-size:clamp(11px, 3.4vw, 14.5px);line-height:1.2;font-weight:700;
   color:var(--orange, #EE7203)}
 
 /* LAUTAPELIN OMA KUVA (Marko 14.10.2026: «se apinavaaka-kuva olisi hyvä olla
@@ -613,14 +723,18 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
   /* Vaakatasossa Basso ei nojaa mihinkään, joten kapeneva häntä saa näkyä:
    * se on osa piirrosta. Siirto kuuluu vain sinne missä leikkausviivan on
    * kohdattava jokin reuna. */
-  .alku-basso{position:static;width:41%;max-width:none;height:auto;margin:0;transform:none}
+  /* ⚠️ `position:relative` SÄILYY: silmäkerros on absoluuttinen ja
+   * tarvitsee Basson sijoituskontekstikseen. Mitattu 1024 × 500, kun tässä
+   * luki `static`: peitteet sijoittuivat `.alku-maskotit`iin (joka on
+   * `fixed`) ja valuivat kasvojen ohi. */
+  .alku-basso{position:relative;width:41%;max-width:none;height:auto;margin:0;transform:none}
   .alku-kupla{position:relative;flex:1 1 auto;max-width:58%;
     margin:0 0 9% -6%;left:auto;right:auto;top:auto;bottom:auto;transform:none}
   /* 📐 Kapeassa parissa teksti on se joka ei saa hävitä (sama päätös kuin
    * varainhankintasivulla 320 px:llä): kiinteät pienet koot, ei vw-skaalausta,
    * koska vw on täällä ruudun leveys eikä kuplan. */
-  .alku-kupla b{font-size:11px;line-height:1.1}
-  .alku-kupla span{font-size:10px;line-height:1.15}
+  .alku-kupla-teksti b{font-size:11px;line-height:1.1}
+  .alku-kupla-teksti > span{font-size:10px;line-height:1.15}
 }
 /* ⚠️ KAPEASSA VAAKARUUDUSSA KUPLALLE EI OLE TILAA, JA SE ON MITATTU.
  * 📐 667 × 375 (iPhone SE vaakatasossa): sarakkeen vasemmalle puolelle
@@ -700,8 +814,8 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
      jotka olivat vanhan laatikon pallot — pilvessä on omansa.
      TEKSTIN värit jäävät: pilvi on valkoinen kummassakin teemassa, joten
      `--ink` (tummassa vaalea) ja `--orange` katoaisivat siihen. */
-  .alku-kupla b{color:#1A1A1A}
-  .alku-kupla span{color:#C2580C}
+  .alku-kupla-teksti b{color:#1A1A1A}
+  .alku-kupla-teksti > span{color:#C2580C}
   /* Valkoinen pohja + tumman tilan vaalea teksti = näkymätön (mitattu 9.10.2026,
    * koski myös pelin valikon reunanappeja). */
   .valikko-nappi.reuna, .valikko-laatikko .toinen-nappi,
