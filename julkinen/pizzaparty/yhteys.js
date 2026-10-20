@@ -16,7 +16,15 @@
  * (GitHub Pages, ei PHP:tä). Moninpelin palvelin pysyy Domainhotellissa, ja
  * huone.php sallii kutsut pizzalove.fi:stä (CORS). Jos palvelin siirtyy,
  * vaihda vain tämä rivi. */
-const HUONE_OSOITE = 'https://varainhankinta.merkitysten.fi/pizzaparty/huone.php';
+/* ⚠️ SAMA LOCALHOST-HAARA KUIN BASSOLLA (`BV_OSOITE`, basso-verkko.js).
+ * Tässä luki 20.10.2026 asti pelkkä tuotanto-osoite, ja ero kostautui
+ * mitattavasti: Partyn sivu puhui AINA tuotannolle myös kehityksessä, joten
+ * koko Party-puolen verkkopeliä ei voinut ajaa paikallisesti - eikä siis
+ * myöskään koetella (ristiinhaku jäi testaamatta suuntaan Party → Basso).
+ * Kaksi samaa asiaa tekevää vakiota, joista toinen osasi enemmän. */
+const HUONE_OSOITE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+  ? 'huone.php'
+  : 'https://varainhankinta.merkitysten.fi/pizzaparty/huone.php';
 /* ⚠️ YKSI OHI MENNYT KYSELY EI OLE KATKENNUT YHTEYS (Marko 12.9.2026:
  * *"Välillä tulee yhteys palvelimeen katkesi -herja, mutta se ei estä
  * pelaamista. Hämmentää toki."*). Kysely uusitaan sekunnin välein ja
