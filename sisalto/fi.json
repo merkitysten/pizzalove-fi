@@ -215,5 +215,57 @@
     "ristiin_otsikko": "Seuraavaksi: Pizza Love® -korttipeli",
     "ristiin_teksti": "Samat pizzat ja täytteet korttipelinä: tee pizza täytekorteistasi ja sano lasku ääneen. Kolme peliä samalla pakalla.",
     "ristiin_saannot": "Korttipelin säännöt"
+  },
+  "toppingten": {
+    "title": "{nimi} — Essen 2026 | Pizza Love®",
+    "kuvaus": "55 täytettä, kymmensivuinen noppa ja Basso-tatuointi. Lataa pelialusta ilmaiseksi ja pelaa. Rajattu erä 450 kpl.",
+    "h1": "{nimi}",
+    "merkki": "Essen 2026 · rajattu erä 450 kpl",
+    "ingressi": "Pussillinen täytteitä, kymmensivuinen noppa ja Basso otsaan. Pelialusta ja säännöt ovat ilmaisia: lataa, tulosta ja pelaa.",
+    "tiedot": "2–4 pelaajaa · 7 vuodesta · noin 15 minuuttia",
+    "sisalto_otsikko": "Pussissa on",
+    "sisalto": [
+      "55 täytettä kymmenessä värissä, arvot 1–10",
+      "Kymmensivuinen noppa",
+      "Basso-tatuointi"
+    ],
+    "lataa_otsikko": "Lataa pelialusta",
+    "lataa": "Yksi A4-arkki: neljä pizzaa ja tiski, josta täytteet otetaan. Värillinen on kaunis, viivaversio säästää mustetta.",
+    "lataa_vari": "Pelialusta, värillinen",
+    "lataa_viiva": "Pelialusta, viivaversio",
+    "saannot_otsikko": "Säännöt",
+    "valmistelu": "Jokainen ottaa yhden pizzan. Täytteet asetetaan tiskille omille numeroiduille paikoilleen.",
+    "tavoite_otsikko": "Tavoite",
+    "tavoite": "Täytä pizzasi kaikki kymmenen lohkoa ensimmäisenä.",
+    "vuoro_otsikko": "Vuoro",
+    "vuoro": [
+      "Heitä noppaa.",
+      "Ota tiskistä täytteitä, joiden yhteisarvo on tasan nopan luku.",
+      "Aseta ne pizzasi tyhjille lohkoille, yksi täyte lohkoa kohti."
+    ],
+    "vuoro_huom": "Heitolla 10 voit ottaa yhden kympin tai vaikka 1 + 2 + 3 + 4. Yhdellä kympillä täytät yhden lohkon, neljällä pienellä neljä.",
+    "vuoro_raja": "Et voi ottaa enempää täytteitä kuin sinulla on tyhjiä lohkoja.",
+    "ohi_otsikko": "Jos et voi tai et halua ottaa",
+    "ohi": "Vuoro menee ohi. Kolme ohivuoroa peräkkäin ja putoat pelistä.",
+    "aloitus_otsikko": "Kuka aloittaa kierroksen",
+    "aloitus": "Se, jolla on vähiten täytteitä pizzallaan. Jos useammalla on yhtä vähän, aloittaa se, jonka täytteiden yhteisarvo on pienin.",
+    "voitto_otsikko": "Voitto",
+    "voitto": "Ensimmäinen, jonka pizza on täynnä, voittaa.",
+    "vinkki_otsikko": "Vinkki",
+    "vinkki": "Pieniä täytteitä on vähän: ykkösiä yksi, kakkosia kaksi. Juuri niillä saa tarkan summan kokoon. Kun ne loppuvat tiskistä, moni heitto jää ottamatta.",
+    "muunnelmat_otsikko": "Muunnelmat",
+    "muunnelmat": [
+      [
+        "Palautus",
+        "Jos et saa heittoasi kokoon, saat palauttaa yhden täytteesi tiskiin ja yrittää uudelleen."
+      ],
+      [
+        "Tasan 30",
+        "Lohkot eivät rajoita, vaan ratkaiseva on arvo. Voitat, kun täytteidesi yhteisarvo on tasan 30. Yli ei saa ottaa: ota suurin yhdistelmä joka mahtuu."
+      ]
+    ],
+    "essen_otsikko": "Essenin erä",
+    "essen": "Tämä erä tehtiin messuille. Täytteet ovat samat kymmenen väriä kuin Pizza Love -korttipelissä, pienempinä ja omana pelinään. Kun erä on myyty, se on myyty.",
+    "valmistelu_otsikko": "Valmistelu"
   }
 }

@@ -208,5 +208,57 @@
     "ristiin_otsikko": "Nästa: Pizza Love® kortspel",
     "ristiin_teksti": "Samma pizzor och fyllningar som kortspel: tillaga en pizza med dina fyllningskort och säg räkneoperationen högt. Tre spel med samma kortlek.",
     "ristiin_saannot": "Kortspelets regler"
+  },
+  "toppingten": {
+    "title": "{nimi} — Essen 2026 | Pizza Love®",
+    "kuvaus": "55 fyllningar, en tiosidig tärning och en Basso-tatuering. Ladda ner spelplanen gratis och spela. Begränsad upplaga på 450.",
+    "h1": "{nimi}",
+    "merkki": "Essen 2026 · begränsad upplaga 450 st",
+    "ingressi": "En påse fyllningar, en tiosidig tärning och en Basso-tatuering. Spelplanen och reglerna är gratis: ladda ner, skriv ut och spela.",
+    "tiedot": "2–4 spelare · från 7 år · cirka 15 minuter",
+    "sisalto_otsikko": "I påsen finns",
+    "sisalto": [
+      "55 fyllningar i tio färger, värden 1–10",
+      "En tiosidig tärning",
+      "En Basso-tatuering"
+    ],
+    "lataa_otsikko": "Ladda ner spelplanen",
+    "lataa": "Ett A4-ark: fyra pizzor och disken som fyllningarna tas från. Färgversionen är vackrare, linjeversionen sparar bläck.",
+    "lataa_vari": "Spelplan, färg",
+    "lataa_viiva": "Spelplan, linjeversion",
+    "saannot_otsikko": "Regler",
+    "valmistelu": "Varje spelare tar en pizza. Fyllningarna läggs på sina numrerade platser på disken.",
+    "tavoite_otsikko": "Mål",
+    "tavoite": "Var först med att fylla alla tio bitar på din pizza.",
+    "vuoro_otsikko": "Din tur",
+    "vuoro": [
+      "Kasta tärningen.",
+      "Ta fyllningar från disken som tillsammans är värda exakt det du slog.",
+      "Lägg dem på de tomma bitarna på din pizza, en fyllning per bit."
+    ],
+    "vuoro_huom": "Ett kast på 10 ger dig en tia, eller 1 + 2 + 3 + 4. En tia fyller en bit, fyra små fyller fyra.",
+    "vuoro_raja": "Du kan inte ta fler fyllningar än du har tomma bitar.",
+    "ohi_otsikko": "Om du inte kan eller inte vill ta",
+    "ohi": "Du passar. Tre pass i rad och du är ute.",
+    "aloitus_otsikko": "Vem börjar rundan",
+    "aloitus": "Den som har färst fyllningar på sin pizza. Vid lika börjar den vars fyllningar är värda minst.",
+    "voitto_otsikko": "Vinst",
+    "voitto": "Först med full pizza vinner.",
+    "vinkki_otsikko": "Tips",
+    "vinkki": "Små fyllningar är få: en etta, två tvåor. Det är de som gör exakta summor möjliga. När de är slut på disken går många kast förlorade.",
+    "muunnelmat_otsikko": "Varianter",
+    "muunnelmat": [
+      [
+        "Lägg tillbaka",
+        "Om du inte får ihop ditt kast får du lägga tillbaka en av dina fyllningar på disken och försöka igen."
+      ],
+      [
+        "Exakt 30",
+        "Bitarna begränsar inte längre, utan värdet avgör. Du vinner när dina fyllningar är värda exakt 30. Du får inte gå över: ta den största kombination som får plats."
+      ]
+    ],
+    "essen_otsikko": "Essen-upplagan",
+    "essen": "Den här upplagan gjordes för mässan. Fyllningarna har samma tio färger som Pizza Love-kortspelet, fast mindre och med ett eget spel. När upplagan är slut är den slut.",
+    "valmistelu_otsikko": "Förberedelser"
   }
 }

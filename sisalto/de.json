@@ -214,5 +214,57 @@
     "ristiin_otsikko": "Als Nächstes: das Pizza Love® Kartenspiel",
     "ristiin_teksti": "Dieselben Pizzas und Beläge als Kartenspiel: Bereite eine Pizza mit deinen Belagkarten zu und sage die Rechnung laut. Drei Spiele mit einem Kartenstapel.",
     "ristiin_saannot": "Regeln des Kartenspiels"
+  },
+  "toppingten": {
+    "title": "{nimi} — Essen 2026 | Pizza Love®",
+    "kuvaus": "55 Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo. Spielplan gratis herunterladen und spielen. Limitiert auf 450 Stück.",
+    "h1": "{nimi}",
+    "merkki": "Essen 2026 · limitiert auf 450 Stück",
+    "ingressi": "Ein Beutel Beläge, ein zehnseitiger Würfel und ein Basso-Tattoo. Spielplan und Regeln gibt es gratis: herunterladen, ausdrucken, spielen.",
+    "tiedot": "2–4 Personen · ab 7 Jahren · etwa 15 Minuten",
+    "sisalto_otsikko": "Im Beutel sind",
+    "sisalto": [
+      "55 Beläge in zehn Farben, Werte 1–10",
+      "Ein zehnseitiger Würfel",
+      "Ein Basso-Tattoo"
+    ],
+    "lataa_otsikko": "Spielplan herunterladen",
+    "lataa": "Ein A4-Blatt: vier Pizzen und die Theke, von der die Beläge kommen. Die Farbversion sieht besser aus, die Strichversion spart Tinte.",
+    "lataa_vari": "Spielplan, farbig",
+    "lataa_viiva": "Spielplan, Strichversion",
+    "saannot_otsikko": "Regeln",
+    "valmistelu": "Jede Person nimmt sich eine Pizza. Die Beläge kommen auf ihre nummerierten Plätze auf der Theke.",
+    "tavoite_otsikko": "Ziel",
+    "tavoite": "Füll als Erste oder Erster alle zehn Stücke deiner Pizza.",
+    "vuoro_otsikko": "Dein Zug",
+    "vuoro": [
+      "Würfle.",
+      "Nimm von der Theke Beläge, die zusammen genau deinen Wurf ergeben.",
+      "Leg sie auf die leeren Stücke deiner Pizza, einen Belag pro Stück."
+    ],
+    "vuoro_huom": "Eine 10 bringt dir einen Zehner oder 1 + 2 + 3 + 4. Ein Zehner füllt ein Stück, vier kleine füllen vier.",
+    "vuoro_raja": "Du kannst nicht mehr Beläge nehmen, als du leere Stücke hast.",
+    "ohi_otsikko": "Wenn du nicht nehmen kannst oder willst",
+    "ohi": "Du setzt aus. Dreimal hintereinander ausgesetzt und du bist raus.",
+    "aloitus_otsikko": "Wer die Runde beginnt",
+    "aloitus": "Wer die wenigsten Beläge auf der Pizza hat. Bei Gleichstand beginnt, wessen Beläge am wenigsten wert sind.",
+    "voitto_otsikko": "Sieg",
+    "voitto": "Wer zuerst eine volle Pizza hat, gewinnt.",
+    "vinkki_otsikko": "Tipp",
+    "vinkki": "Kleine Beläge sind knapp: eine 1, zwei 2er. Genau sie machen eine genaue Summe möglich. Sind sie von der Theke weg, verfallen viele Würfe.",
+    "muunnelmat_otsikko": "Varianten",
+    "muunnelmat": [
+      [
+        "Zurücklegen",
+        "Wenn du deinen Wurf nicht legen kannst, darfst du einen deiner Beläge auf die Theke zurücklegen und es noch einmal versuchen."
+      ],
+      [
+        "Genau 30",
+        "Die Stücke begrenzen nicht mehr, der Wert entscheidet. Du gewinnst, wenn deine Beläge genau 30 wert sind. Überschreiten ist nicht erlaubt: nimm die größte Kombination, die passt."
+      ]
+    ],
+    "essen_otsikko": "Die Essener Auflage",
+    "essen": "Diese Auflage ist für die Messe gemacht. Die Beläge haben dieselben zehn Farben wie das Pizza-Love-Kartenspiel, nur kleiner und mit einem eigenen Spiel. Ist die Auflage weg, ist sie weg.",
+    "valmistelu_otsikko": "Vorbereitung"
   }
 }

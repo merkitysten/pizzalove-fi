@@ -108,6 +108,15 @@ KORTTI_VIDEOT = {
 LAUTA_VIDEOT_KOKOAMINEN = ['HE9301owOKI', 'RbLfhUyXHKw', 'Ya73FhJfj54']
 LAUTA_VIDEO_VUORO = ('IN2LvbXo9eA', 'fi')
 
+# ⚠️ PELIN NIMI ON YKSI VAKIO, KOSKA SE ON VIELA AUKI. Marko 20.10.2026:
+# «Topping Ten on varmaan se paras tässä kohtaa. Jos keksitään parempi, niin
+# muutetaan.» Nimi ei kaanny, joten se EI ole kielitiedostoissa — niissa se
+# on paikanpitaja `{nimi}`, joka korvataan tasta. Vaihto on siis yksi rivi.
+# 📐 Ja riski on mitattu: «Topping Ten» -nimista pelia ei ole, mutta «Top
+# Ten» (Cocktail Games, Spiel des Jahres -ehdokas) on Essenissa tunnettu ja
+# kuulostaa aaneen lahes samalta. Verkkohaku ei ole tavaramerkkihaku.
+PELIN_NIMI = 'Topping Ten'
+
 PDF = {
     'korttipeli': ('pdf/pizza-love-korttipeli-saannot.pdf', 'korttipeli'),
     # Pikaohje on WordPressissä, koska sitä päivitetään siellä (merkitysten.fi/pizzalove/lautapeli).
@@ -115,6 +124,10 @@ PDF = {
     'peruspeli': ('pdf/pizza-love-lautapeli-peruspeli.pdf', 'peruspeli'),
     'apinat': ('pdf/pizza-love-lautapeli-nalkaiset-apinat.pdf', 'apinat'),
     'salatut': ('pdf/pizza-love-lautapeli-salatut-pizzat.pdf', 'salatut'),
+    # Alusta on generoitu `pizzaparty/nappula-alusta.py`:lla ja tulostettu
+    # A4:ksi paattomalla Chromella. ⛔ Ala muokkaa naita kasin: aja generaattori.
+    'tt_vari': ('pdf/topping-ten-alusta-vari.pdf', 'tt_vari'),
+    'tt_viiva': ('pdf/topping-ten-alusta-viiva.pdf', 'tt_viiva'),
 }
 
 
@@ -150,6 +163,7 @@ def ylaosa(t, sivu, kaikki):
     nav = [('index.html', ui['nav_etusivu'], 'etusivu'),
            ('korttipeli.html', ui['nav_korttipeli'], 'korttipeli'),
            ('lautapeli.html', ui['nav_lautapeli'], 'lautapeli'),
+           ('topping-ten.html', PELIN_NIMI, 'toppingten'),
            ('../play/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
     # Varainhankinta on vain suomeksi, joten välilehti näkyy vain kielillä joilla avain on.
     if ui.get('nav_varainhankinta') and t['etusivu'].get('varainhankinta'):
@@ -182,7 +196,7 @@ def ylaosa(t, sivu, kaikki):
 
 def sivutiedosto(sivu):
     return {'etusivu': '', 'korttipeli': 'korttipeli.html', 'lautapeli': 'lautapeli.html',
-            'apinakortit': 'apinakortit.html'}[sivu]
+            'apinakortit': 'apinakortit.html', 'toppingten': 'topping-ten.html'}[sivu]
 
 
 def alaosa(t):
@@ -552,6 +566,89 @@ def apinakortit(t, kaikki):
     return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)
 
 
+def toppingten(t, kaikki):
+    """Essenin täytepussin oma sivu.
+
+    Marko 20.10.2026: «Pelillä pitää olla oma sivunsa ja paikkansa, koska
+    koitan saada niitä nappulapusseja ihmisille kaupaksi.»
+
+    Alusta ja säännöt ovat sivulla ilmaisina ja heti näkyvissä: juuri niiden
+    näkeminen myy pussin. Jos lataukset siirretään sivun pohjalle, sivu lakkaa
+    tekemästä työtään.
+
+    ⚠️ Pelaajan sanat ovat täyte, tiski ja lohko — eivät nappula, varanto ja
+    torni (Marko: «varanto on nyt meidän omaa kieltämme eikä asiakkaalle
+    kuuluvaa»). Tekstit: sisalto/*.json, avain toppingten.
+    """
+    a = t['toppingten']
+
+    def tt(avain):
+        return a[avain].replace('{nimi}', PELIN_NIMI)
+
+    luettelo = lambda avain, tagi: '<%s class="luettelo">%s</%s>' % (
+        tagi, ''.join('<li>%s</li>' % e(r) for r in a[avain]), tagi)
+    muunnelmat = ''.join('<article class="laatikko"><h3>%s</h3><p>%s</p></article>'
+                         % (e(nimi), e(teksti)) for nimi, teksti in a['muunnelmat'])
+    nimet = {'tt_vari': a['lataa_vari'], 'tt_viiva': a['lataa_viiva']}
+    runko = '''
+<p class="merkki">%s</p>
+<h1>%s</h1>
+<p class="ingressi">%s</p>
+<p class="pieni">%s</p>
+
+<section class="laatikko">
+  <h2>%s</h2>
+  %s
+</section>
+
+<h2>%s</h2>
+<p>%s</p>
+%s
+
+<h2>%s</h2>
+<h3>%s</h3>
+<p>%s</p>
+<h3>%s</h3>
+<p>%s</p>
+<h3>%s</h3>
+%s
+<p>%s</p>
+<p>%s</p>
+<h3>%s</h3>
+<p>%s</p>
+<h3>%s</h3>
+<p>%s</p>
+<h3>%s</h3>
+<p>%s</p>
+
+<section class="laatikko">
+  <h3>%s</h3>
+  <p>%s</p>
+</section>
+
+<h2>%s</h2>
+<div class="kortit kortit--2">%s</div>
+
+<section class="laatikko varain" style="margin-top:28px">
+  <h2>%s</h2>
+  <p>%s</p>
+</section>
+''' % (e(a['merkki']), e(tt('h1')), e(tt('ingressi')), e(a['tiedot']),
+       e(a['sisalto_otsikko']), luettelo('sisalto', 'ul'),
+       e(a['lataa_otsikko']), e(a['lataa']), lataukset(['tt_vari', 'tt_viiva'], nimet, PDF),
+       e(a['saannot_otsikko']),
+       e(a['tavoite_otsikko']), e(a['tavoite']),
+       e(a['valmistelu_otsikko']), e(a['valmistelu']),
+       e(a['vuoro_otsikko']), luettelo('vuoro', 'ol'), e(a['vuoro_huom']), e(a['vuoro_raja']),
+       e(a['ohi_otsikko']), e(a['ohi']),
+       e(a['aloitus_otsikko']), e(a['aloitus']),
+       e(a['voitto_otsikko']), e(a['voitto']),
+       e(a['vinkki_otsikko']), e(a['vinkki']),
+       e(a['muunnelmat_otsikko']), muunnelmat,
+       e(a['essen_otsikko']), e(tt('essen')))
+    return kehys(t, kaikki, 'toppingten', tt('title'), tt('kuvaus'), runko)
+
+
 def juurisivu(kaikki):
     """pizzalove.fi/ — ohjaa selaimen kielen mukaan. QR-koodit osoittavat tänne."""
     linkit = ''.join('<li><a href="%s/" hreflang="%s" lang="%s">%s</a></li>' % (k, k, k, e(kaikki[k]['nimi']))
@@ -661,7 +758,8 @@ def main():
         t = kaikki[k]
         os.makedirs(os.path.join(ULOS, k), exist_ok=True)
         for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli),
-                        ('apinakortit.html', apinakortit)):
+                        ('apinakortit.html', apinakortit),
+                        ('topping-ten.html', toppingten)):
             with open(os.path.join(ULOS, k, nimi), 'w', encoding='utf-8') as out:
                 out.write(f(t, kaikki))
     os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)
