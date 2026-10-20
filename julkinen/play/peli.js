@@ -2145,8 +2145,11 @@ function kytke() {
       function (v) { return v.taso.avain === tila.taso.avain; },
       function (v) { tila.taso = v.taso; });
 
+    /* ⚠️ VIISI, EI NELJÄ (Marko 20.10.2026): «Samalla laitteella viisi voi
+       olla ahdas, mutta kannattaa se mahdollistaa.» Painettu peli sanoo 2–5.
+       Eri laitteilla rajaa ei ole käytännössä lainkaan (huone.php sallii 40). */
     rakennaLista(document.getElementById('pelaajat'),
-      [1, 2, 3, 4].map(function (n) {
+      [1, 2, 3, 4, 5].map(function (n) {
         return { maara: n,
           nimi: n < 2 ? t('pelaajat.yksin') : t('pelaajat.monta', { n: n }) };
       }),

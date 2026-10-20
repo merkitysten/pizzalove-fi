@@ -58,8 +58,19 @@
 
 /* Kortti ruudun alareunaan: siellä se on peukalon ulottuvilla eikä peitä
  * pizzaa, joka on ylempänä molemmissa asennoissa. */
+/* ⚠️ PAIKAN PÄÄTTÄÄ MITTAUS (opetus.js `opetusAsetaKortti`), EI TÄMÄ
+ * TIEDOSTO. Täällä olevat `bottom`/`top`-säännöt ovat se mitä nähtäisiin
+ * jos mittaus ei saa kohdetta (peli ei vielä piirretty) — JS kirjoittaa
+ * `top`in ja `bottom:auto`n inline ja voittaa ne. Mittauksen perustelu ja
+ * luvut ovat opetus.js:ssä; täällä ei ole toista totuutta samasta asiasta.
+ *
+ * `transition` on täällä eikä siellä, koska se on ulkoasua: kortti siirtyy
+ * kun zoom avautuu tai pelilauta vaihtaa muotoaan (mitattu 1440 x 900:
+ * valintavaiheessa 133–229, lausekevaiheessa 317–408), ja hyppäys
+ * keskellä lausetta näyttäisi virheeltä. */
 .opetus-kortti{
   position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  transition:top .25s cubic-bezier(.3,.8,.4,1);
   width:min(560px, calc(100% - 24px));margin-bottom:8px;
   pointer-events:auto;box-sizing:border-box;
   background:#fff;border:2px solid var(--raja);border-radius:16px;

@@ -18,7 +18,11 @@
  * kolmannen pelaajan väri olisi kadonnut. */
 
 const HAHMO_ASETUSAVAIN = 'pizzapeli-hahmot';
-const HAHMOJA_ENINTAAN = 4;
+/* ⚠️ VIISI, EI NELJÄ (Marko 20.10.2026). Painettu peli sanoo 2–5 pelaajaa,
+ * ja digiversiossa raja oli neljä. Tämä on JAETTU Partyn ja Basson kesken:
+ * sama hahmo kulkee pelien välillä, joten raja on nostettava täällä tai
+ * viides ihminen jäisi ilman nimeä ja väriä. */
+const HAHMOJA_ENINTAAN = 5;
 const HAHMO_NIMI_ENINTAAN = 16;      // sama raja kuin verkkopelin nimessä
 /* Apinat ja täydennys saavat erottuvat värit tässä järjestyksessä. Neljä
  * ensimmäistä ovat Partyn vanhat moninpelin värit. */
@@ -35,7 +39,9 @@ function hahmoVari(nro) {
   return x ? x.vari : null;
 }
 
-/* Neljä eri väriä ja neljä nimeä aina. Puuttuvat apinoiden järjestyksestä. */
+/* Viisi eri väriä ja viisi nimeä aina. Puuttuvat apinoiden järjestyksestä.
+ * ⚠️ Tässä luki 20.10.2026 asti neljä. 📐 `HAHMO_APINAVARIT` on 10 pitkä,
+ * joten viisi ERI väriä riittää täytteeksi. */
 function hahmoTaydenna() {
   const a = hahmoAsetukset;
   a.variNrot = a.variNrot.filter(function (n, i, l) { return hahmoVari(n) && l.indexOf(n) === i; })

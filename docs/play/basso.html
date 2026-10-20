@@ -54,8 +54,8 @@
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=20261019h">
-<link rel="stylesheet" href="opetus.css?v=20261020a">
-<link rel="stylesheet" href="yhteinen.css?v=20261020d">
+<link rel="stylesheet" href="opetus.css?v=20261020b">
+<link rel="stylesheet" href="yhteinen.css?v=20261020g">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <link rel="stylesheet" href="basso.css?v=20261020c">
 </head>
@@ -516,12 +516,30 @@
            pelistä tulee hauskan näköinen ja lapsiin vetoava.» — ja: «sen kuuluu olla se pizzaa
            syövä basso. Se on se virallinen maskottikuva.»). Kuvat pizzalove.fi:stä.
            Koriste: ei tekstiä, ei napautusta. -->
-      <div class="alku-maskotit" aria-hidden="true">
+      <div class="alku-maskotit">
         <!-- Pizzalaatikko viirin alla vasemmalla, Basso isompana oikeasta reunasta (Marko 9.10.2026:
              «vaihda basson ja rakastuneen pizzalaatikon paikkoja keskenään ja tee samalla bassosta
              isompi»). Bassoa ei peilata: vatsan merkit kääntyisivät. -->
-        <img class="alku-laatikko" src="kuvat/halaus.webp?v=20261009a" width="420" height="420" alt="">
-        <img class="alku-basso" src="kuvat/basso-syo.webp?v=20261006a" width="438" height="520" alt="">
+        <!-- ⚠️ BASSO KERTOO PELIMUODON ERON AJATUSKUPLASSA, JA RAKASTUNUT
+             PIZZALAATIKKO VÄISTYI SEN TIELTÄ (Marko 20.10.2026: «nythän se
+             alkuvalikko on täysin sama vaikka vaihtaa pizza partyn ja pizza
+             basson välillä. — — siihen voisi saada tämän kuvan ja ajatuskuplan
+             avulla tuotua eroa. Eli Basso kertoisi pelimuodon eron kuplassa.
+             Jos innostut ottamaan tästä kopin, niin siinä tapauksessa ehkä se
+             rakastunut pizzalaatikko joudutaan poistamaan alkuvalikosta.»).
+             📐 Mitattu ennen: Partyn ja Basson alkuvalikot olivat samat yhtä
+             2 px rengasta lukuun ottamatta — mikään muu ruudulla ei kertonut
+             kumpaa peliä ollaan aloittamassa.
+             ⚠️ Kuva `kuvat/halaus.webp` JÄÄ repoon: se on tarkoitettu
+             siirtymään (zoomaus napin painalluksesta), jota ei ole rakennettu.
+             ⚠️ TEKSTI TULEE GENERAATTORISTA EIKÄ JS:STÄ: sivu tietää pelinsä,
+             joten kupla on staattinen eikä tarvitse yhtään riviä koodia.
+             Alarivi on pizzalove.fi:n oma kuvaus (sisalto/*.json), jotta
+             sivusto ja peli sanovat saman asian samoilla sanoilla. -->
+        <div class="alku-kupla">
+          <b data-t="kupla.basso"></b><span data-t="kupla.bassoAla"></span>
+        </div>
+        <img class="alku-basso" src="kuvat/basso-syo.webp?v=20261006a" width="438" height="520" alt="" aria-hidden="true">
       </div>
       <!-- Pelin valinta (pelivalinta.js, Marko 9.10.2026). Laji on ylhäällä
            valkoisessa palkissa; tässä ovat vain valitun lajin pelit. -->
@@ -652,11 +670,11 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=20261020e"></script>
+<script src="kielet.js?v=20261020g"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
 <script src="qrluku.js?v=20261020b"></script>
-<script src="hahmot.js?v=20261009a"></script>
+<script src="hahmot.js?v=20261020g"></script>
 <script src="tulos.js?v=20261009b"></script>
 <script src="pelivalinta.js?v=20261020c"></script>
 <script src="ratkoja.js?v=20261009a"></script>
@@ -665,9 +683,9 @@
 <!-- ⚠️ peli.js ladataan SELLAISENAAN, ja basso.js korvaa sen vuoroon liittyvät
      funktiot (samanniminen funktio myöhemmässä skriptissä voittaa). Siksi
      järjestys on pakollinen: peli.js ENNEN basso.js:ää. -->
-<script src="peli.js?v=20261019c"></script>
+<script src="peli.js?v=20261020g"></script>
 <script src="basso-saannot.js?v=20261020a"></script>
-<script src="basso.js?v=20261020c"></script>
+<script src="basso.js?v=20261020g"></script>
 <script src="qr.js?v=20260916a"></script>
 <script src="basso-verkko.js?v=20261020f"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
@@ -676,6 +694,6 @@
      koska opetuskierrokset ovat molemmissa korttipelimuodoissa.
      Mitattu: ensimmainen sijoitus oli @party-lohkon sisalla, ja
      basso.html kaatui heti «opetus is not defined». -->
-<script src="opetus.js?v=20261020a"></script>
+<script src="opetus.js?v=20261020b"></script>
 </body>
 </html>

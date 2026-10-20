@@ -122,6 +122,158 @@ function opetusValoKohteeseen(valitsin) {
   valo.hidden = false;
 }
 
+/* ---------- OPETUSKORTIN PAIKKA: MITATTU, EI RUUDUN REUNA ----------
+ * Marko 20.10.2026 (kuvakaappaus tietokoneen ruudulta): «Tuossa tietokoneen
+ * ruudun kuvakaappauksessa on myös asemointiin liittyviä haasteita.»
+ *
+ * 📐 MITATTU 20.10.2026, opetuskortin ylä-/alareuna vs. pelialueen reuna:
+ *
+ *   1440 x 900  vaaka   pelialue alkaa 241, kortti 10–126   → 115 px tyhjää
+ *   1280 x 800  vaaka   pelialue alkaa 241, kortti 10–126   → 115 px tyhjää
+ *   1024 x 768  vaaka   pelialue alkaa 295, kortti 10–126   → 169 px tyhjää
+ *    768 x 1024 pysty   pisterivi päättyy 580, kortti 911–1016 → 331 px tyhjää
+ *    800 x 1280 pysty   pisterivi päättyy 604, kortti 1167–1272 → 563 px tyhjää
+ *    900 x 1440 pysty   pisterivi päättyy 604, kortti 1327–1432 → 723 px tyhjää
+ *
+ * Eli kortti ei peitä työpöydällä mitään — se on päinvastoin satoja
+ * pikselejä irti siitä mistä se puhuu. Puhelimessa sama CSS-sääntö osuu
+ * oikein, koska siellä peli TÄYTTÄÄ ruudun ja reuna on pelin vieressä.
+ * Isolla näytöllä peli on keskellä ja reunat ovat tyhjiä.
+ *
+ * ⚠️ KORJAUS ON ANKKURI, EI UUSI REUNA. Kortti kiinnitetään siihen mitä
+ * askel katsoo: zoomattuun klooniin jos zoom on päällä, muuten pelialueen
+ * ja pistelaatikoiden yhteiseen laatikkoon. Kiinteä pikselimäärä olisi
+ * kolmas arvaus kahden jo epäonnistuneen jälkeen (ks. opetus.css).
+ *
+ * ⚠️ SAMA MITTAUSSILMUKKA KUIN VALOLLA, ei uutta koneistoa: `opetusVahti`
+ * ajaa 250 ms välein ja seuraa jo nyt kohteen liikettä. Kortit liikkuvat
+ * (nosto, käännöt) ja ruutu voi kääntyä, joten yksi laskenta aloituksessa
+ * vanhenisi heti.
+ *
+ * ⚠️ PUHELIN EI SAA MUUTTUA. Mitattu 375 x 812: pisterivi päättyy 673,
+ * kortti mahtuisi vasta 685:een mutta ruudun alle jää tilaa 677 asti — eli
+ * ankkuri EI mahdu ja kiinnitys putoaa takaisin ruudun reunaan 677, joka on
+ * tasan nykyinen paikka. Pystyasennon `#pelaajarivi{margin-top:4px}`
+ * (opetus.css) on siis yhä se mikä ratkaisee puhelimen, ei tämä.
+ */
+const OPETUS_VALI = 12;    /* rako kohteen ja kortin välissä */
+const OPETUS_REUNA = 8;    /* vähimmäisrako ruudun reunaan */
+
+/* Mitä kortti väistää: pelilauta JA zoomattu klooni yhdessä, ei kumpikaan
+ * yksin.
+ *
+ * ⚠️ ZOOMIN AIKANA PELILAUTA ON YHÄ MUKANA, ja se on mitattu. Ensin
+ * tämä palautti zoom-askeleessa pelkän kloonin laatikon, koska pohja on
+ * tumma eikä lautaan saa koskea. Mitattu 375 x 812: klooni päättyy 583,
+ * joten kortti asettui 595:een ja PEITTI pistelaatikot (585–673) 78 px:n
+ * matkalta. Tumma pohja ei piilota pisteitä vaan himmentää ne — ja juuri
+ * pisteiden peittämisestä Marko huomautti 19.10. puhelimella. Kun lauta
+ * on mukana, puhelin ei mahdu kummallekaan puolelle ja kortti putoaa
+ * takaisin ruudun reunaan 677 eli vanhaan paikkaansa; työpöydällä
+ * klooni on lautaa suurempi, joten union ei muuta mitattuja paikkoja
+ * (1440 x 900 zoom 63, 1024 x 768 zoom 18, 768 x 1024 zoom 842). */
+function opetusFokus() {
+  let ylä = Infinity, ala = -Infinity;
+  function mukaan(b) {
+    if (!b || !b.width || !b.height) return;
+    if (b.top < ylä) ylä = b.top;
+    if (b.bottom > ala) ala = b.bottom;
+  }
+  ['.pelialue', '#pelaajarivi'].forEach(function (valitsin) {
+    const el = document.querySelector(valitsin);
+    if (el) mukaan(el.getBoundingClientRect());
+  });
+  const kerros = opetusEl('opetusZoom');
+  const klooni = kerros && !kerros.hidden ? kerros.firstChild : null;
+  if (klooni && klooni.getBoundingClientRect) mukaan(klooni.getBoundingClientRect());
+  return ylä < ala ? { ylä: ylä, ala: ala } : null;
+}
+
+/* ⚠️ KOLMAS TEKSTIRIVI EI MAHDU PUHELIMEEN — JA SE ON VANHA VIKA, EI
+ * ESITTELYN TUOMA. opetus.css lupaa että pystyasennon kortti kantaa kaksi
+ * riviä (127 px) ja että «lyhyys on osa tätä ratkaisua». Mitattu
+ * 20.10.2026 HEADin versiosta, 375 x 812, suomeksi:
+ *
+ *   opetus.helpoin   3 riviä 149 px  kortti 655–804, pisterivi 585–673 → peitto 18 px
+ *   opetus.pizzalle  3 riviä 149 px  kortti 655–804, pisterivi 585–673 → peitto 18 px
+ *
+ * Eli lupaus oli jo rikki kahdessa askeleessa neljällä kielellä, ja
+ * saksassa myös `opetus.valitse` ja `opetus.taytteetTiukka`. Tekstien
+ * lyhentäminen korjaisi nämä kuusi — ja jättäisi säännön jota rikotaan
+ * joka kerta kun joku kirjoittaa virkkeen tai kääntää sen saksaksi.
+ *
+ * Siksi mitta ratkaisee tekstikoon eikä teksti mittaa: jos kortti ei
+ * mahdu pelilaudan viereen, tekstikokoa pienennetään askel kerrallaan
+ * neljällä pisteellä. Peruskoko luetaan CSS:stä (pysty 17 px, vaaka 15 px),
+ * joten tämä ei koskaan SUURENNA mitään eikä tee mitään siellä missä
+ * tilaa on — työpöydällä teksti pysyy täysikokoisena.
+ *
+ * ⚠️ VALIMUISTI, KOSKA TÄMÄ AJETAAN 250 MS VÄLEIN. Viisi koekokoa
+ * pakottaisi viisi asettelulaskentaa joka tikillä; avain on teksti,
+ * ruudun koko ja käytettävissä oleva tila, eli juuri ne joiden
+ * muuttuessa sovitus on tehtavä uudelleen. */
+/* 📐 VIISI ASKELTA, EI NELJÄÄ: mitattu 375 x 812 neljällä kielellä ja
+ * molemmilla pelimuodoilla. Neljällä askeleella (pohja 13 px) jäi yksi
+ * tapaus jossa kortti peitti pisteriviä 2 px: saksan
+ * `opetus.taytteetTiukka` Bassossa. Viidennellä askeleella peittoja ei
+ * ole yhtään. Lyhentäisin mieluummin sen yhden virkkeen, mutta se olisi
+ * taas yksi lause korjattuna kuvion sijaan — ja seuraava käännös
+ * rikkoisi saman rajan uudelleen. */
+const OPETUS_PIENENNYS = 5;
+
+function opetusSovitaTeksti(kortti, tilaa) {
+  const el = opetusEl('opetusTeksti');
+  if (!el) return;
+  const avain = el.textContent + '|' + innerWidth + 'x' + innerHeight + '|' + Math.round(tilaa);
+  if (opetus.sovitus === avain) return;
+  opetus.sovitus = avain;
+  el.style.fontSize = '';
+  const perus = parseFloat(getComputedStyle(el).fontSize) || 17;
+  for (let koko = perus - 1; kortti.offsetHeight > tilaa && koko >= perus - OPETUS_PIENENNYS; koko--) {
+    el.style.fontSize = koko + 'px';
+  }
+  /* ⚠️ PIENENNYS PERUTAAN JOS SE EI AUTTANUT. Mitattu puhelimen
+   * vaaka-asennossa 812 x 375: pelilauta täyttää koko korkeuden, joten
+   * korttia ei mahdu sen viereen millään koolla — ja silti silmukka ajoi
+   * tekstin pohjaan 10 pikseliin. Kortti peitti laudan yhtä paljon kuin
+   * ennenkin (mitattu HEADista samalla ruudulla: pizza 25 px, operaattorit
+   * 94 px), mutta tekstiä ei enää lukenut kukaan. Lukukelvoton teksti
+   * ratkaisemattoman ongelman päällä on kaksi ongelmaa yhden sijaan. */
+  if (kortti.offsetHeight > tilaa) el.style.fontSize = '';
+}
+
+function opetusAsetaKortti() {
+  const kortti = document.querySelector('.opetus-kortti');
+  if (!kortti) return;
+  const f = opetusFokus();
+  /* Käytettävissä oleva tila mitataan ILMAN rakoa: rako on kauneutta,
+   * peittämättömyys on sääntö. */
+  if (f) opetusSovitaTeksti(kortti, Math.max(f.ylä - OPETUS_REUNA, innerHeight - OPETUS_REUNA - f.ala));
+  const korkeus = kortti.offsetHeight;
+  if (!korkeus) return;
+  /* Ilman mittaa CSS saa päättää: tyhjä inline-arvo palauttaa
+   * media query -säännön eikä jätä korttia vanhaan paikkaan. */
+  if (!f) { kortti.style.top = ''; kortti.style.bottom = ''; kortti.style.marginBottom = ''; return; }
+  const ylin = OPETUS_REUNA;
+  const alin = innerHeight - OPETUS_REUNA - korkeus;
+  const yllä = f.ylä - OPETUS_VALI - korkeus;   /* kohteen yläpuolelle */
+  const alla = f.ala + OPETUS_VALI;             /* kohteen alapuolelle */
+  const yllaMahtuu = yllä >= ylin, allaMahtuu = alla <= alin;
+  /* Vaaka-asennossa tyhjä tila on pelilaudan YLÄpuolella (palkki ei vie
+   * asettelun korkeutta, peli.css), pystyssa ALApuolella — molemmat
+   * mitattu yllä olevasta taulukosta. Siksi sama järjestys kuin
+   * opetus.css:n kahdessa media queryssä, nyt vain ankkuroituna. */
+  const vaaka = innerWidth >= innerHeight;
+  let y;
+  if (yllaMahtuu && allaMahtuu) y = vaaka ? yllä : alla;
+  else if (yllaMahtuu) y = yllä;
+  else if (allaMahtuu) y = alla;
+  else y = vaaka ? ylin : alin;               /* puhelin: reuna, kuten ennen */
+  kortti.style.top = Math.round(Math.min(Math.max(y, ylin), alin)) + 'px';
+  kortti.style.bottom = 'auto';
+  kortti.style.marginBottom = '0';
+}
+
 /* ---------- ZOOMAUS: KOHDE RUUDUN ETEEN JA KESKELLE ----------
  * Marko 19.10.2026: «se tavoitepizza saisi tulla aivan ruudun eteen ja
  * keskelle, jolloin huomio on vain siinä. Sitten pizza voisi olla
@@ -176,11 +328,22 @@ function opetusZoomaa(valitsin, korostaLuku) {
   const kerros = opetusEl('opetusZoom');
   const el = valitsin ? document.querySelector(valitsin) : null;
   if (!kerros || !el) return;
+  /* ⚠️ KOROSTETTAVA LUKU EI OLE AINA PIZZAN ARVO. Ennen tämä luki
+   * `tila.pizza.arvo` suoraan, eli zoom osasi korostaa vain pizzakortin
+   * numeron. Esittelyaskel näyttää myös täytekortin isona ja sanoo
+   * «kortin numero on sen arvo» — silloin korostettava luku on SEN kortin.
+   * Siksi `korostaLuku` saa olla funktio, samalla tavalla kuin `kohde` ja
+   * `arvot` jo ovat. Tämä ei ole uusi zoom vaan sama zoom, jolta on
+   * poistettu oletus siitä mitä se katsoo. */
+  const luku = typeof korostaLuku === 'function' ? korostaLuku()
+    : (korostaLuku ? (tila.pizza ? tila.pizza.arvo : '') : null);
   /* ⚠️ SAMA KOHDE PERAKKAIN: EI UUTTA LIIKETTA. Kaksi perakkaista
    * askelta jotka puhuvat samasta kortista ovat yksi hetki - zoomin
    * toistaminen nykaisisi kortin pois ja takaisin keskella lausetta.
-   * Vain teksti vaihtuu. */
-  const avain = valitsin + '|' + (korostaLuku ? '1' : '0');
+   * Vain teksti vaihtuu. ⚠️ Avaimessa on LUKU eikä pelkkä lippu: kaksi
+   * peräkkäistä askelta jotka korostavat samasta kortista eri numeron
+   * ovat kaksi eri hetkeä. */
+  const avain = valitsin + '|' + (luku === null ? '-' : String(luku));
   if (opetus.zoomKohde === avain && !kerros.hidden && kerros.firstChild) return;
   if (opetus.zoomAjastin) { clearTimeout(opetus.zoomAjastin); opetus.zoomAjastin = null; }
   kerros.classList.remove('opetus-zoom--pois');
@@ -206,12 +369,12 @@ function opetusZoomaa(valitsin, korostaLuku) {
   klooni.style.setProperty('--zoom-y', Math.round(r.top + r.height / 2 - keskiY) + 'px');
   klooni.style.setProperty('--zoom-k', (r.width / lev).toFixed(4));
 
-  if (korostaLuku) {
+  if (luku !== null && luku !== '') {
     klooni.classList.add('opetus-zoom-kortti--himmea');
-    const luku = document.createElement('b');
-    luku.className = 'opetus-zoom-luku';
-    luku.textContent = tila.pizza ? String(tila.pizza.arvo) : '';
-    klooni.appendChild(luku);
+    const merkki = document.createElement('b');
+    merkki.className = 'opetus-zoom-luku';
+    merkki.textContent = String(luku);
+    klooni.appendChild(merkki);
   }
   kerros.appendChild(klooni);
 }
@@ -236,6 +399,8 @@ function opetusPiirra() {
   opetusValoKohteeseen(a.zoom ? null : a.kohde);
   const luku = opetusEl('opetusAskeleet');
   if (luku) luku.textContent = (opetus.askel + 1) + ' / ' + opetus.lista.length;
+  /* Teksti vaihtui → kortin korkeus vaihtui → paikka on laskettava uudelleen. */
+  opetusAsetaKortti();
 }
 
 function opetusSeuraava() {
@@ -251,6 +416,9 @@ function opetusSeuraava() {
   if (a && a.ennen) a.ennen();
   opetusPiirra();
   if (a && a.zoom) opetusZoomaa(a.zoom, a.korostaLuku);
+  /* ⚠️ ZOOM LUODAAN PIIRRON JÄLKEEN, joten `opetusPiirra`n laskema paikka
+   * on vanha heti: se mitattiin ilman kloonia. Sama uudelleen tässä. */
+  opetusAsetaKortti();
 }
 
 /* ⚠️ VAHTI ON AJASTIN EIKÄ KOUKKU PELIN FUNKTIOIHIN. Koukku pitäisi
@@ -277,9 +445,96 @@ function opetusVahti() {
   const a = opetusAskel();
   if (!a) return;
   opetusValoKohteeseen(a.zoom ? null : a.kohde);
+  opetusAsetaKortti();
   if (a.valmis && a.valmis()) return opetusSeuraava();
   const seuraava = opetus.lista[opetus.askel + 1];
   if (a.valmis && seuraava && seuraava.valmis && seuraava.valmis()) opetusSeuraava();
+}
+
+/* ---------- ESITTELY: MITÄ KORTTEJA PELISSÄ ON ----------
+ * Marko 20.10.2026 (opastuskierros tietokoneen ruudulla):
+ * «Minusta tämän pitäisi alkaa ihan alusta, siten että se selittää mitä
+ *  kortteja pelissä on ja mikä niiden tarkoitus pelissä on. Vähän kuin
+ *  interaktiivinen ohjekirja.»
+ * Ja täydennys samana päivänä: «Muista hyödyntää digitaalisuuden
+ * mahdollisuuksia, että otat siihen ruudulle keskelle isona sen jonkin
+ * asian ja selitetään se selkeästi.»
+ *
+ * ⚠️ MITATTU LÄHTÖTILA 20.10.2026 (`opetusPartyAskeleet` 12 askelta,
+ * `opetusBassoAskeleet` 10) — ei yhtään askelta joka kertoisi MITKÄ
+ * kortit pelissä ovat:
+ *
+ *   Party  1 tervetuloa → 2 «käännä kortit» (TEKO jo toisena askeleena).
+ *          Pizzakorttia ei nimetä kertaakaan; 3. askel sanoo «vain numero
+ *          ratkaisee» kortista jota ei ole esitelty. Täytekortti jää
+ *          käsiteltynä pelkkänä «nämä ovat sinun korttisi».
+ *   Basso  1 tervetuloaBasso → 2 pizzaBasso («sen numero on tavoite»).
+ *          Kierroksen tavoite kerrottiin vasta 9. askeleena eli VASTA
+ *          PELAAMISEN JÄLKEEN; täytekortti jäi yhtä nimettömäksi kuin
+ *          Partyssa.
+ *
+ * ⚠️ ESITTELY KÄYTTÄÄ OLEMASSA OLEVAA ZOOMIA, EI UUTTA KUVITUSTA. Kortti
+ * nousee ruudun eteen ja keskelle, kortti himmenee ja numero korostuu —
+ * sama `zoom`/`korostaLuku` jota Markon aiempi ohje jo pyysi. Piirretty
+ * esimerkkikuva olisi kuva pelistä jota ei ole; zoom näyttää sen oikean
+ * kortin joka on juuri nyt pöydällä.
+ *
+ * ⚠️ KERTOVA ASKEL, SITTEN TEKO — esittely ei saa muuttaa opastusta
+ * katselluksi esitykseksi. Jokainen tekemisaskel on tallella, ja ne ovat
+ * yhä oikeaa peliä: valo osoittaa, pelaaja koskee (opetus.css:
+ * `pointer-events` auto vain kortissa).
+ *
+ * ⚠️ PITKÄ KERRONTAJAKSO EI SAA OSUA ELÄVÄLLE LAUDALLE, ja tämä on
+ * mitattu eikä arvattu. Opetuskerros ei nielaise napautuksia
+ * (opetus.css: `pointer-events:none`), joten lauta on pelattavissa myös
+ * kerrottavan askeleen aikana — se on tarkoitus, `opetus.kaanna` nojaa
+ * siihen. Mutta kun esittely toi Partyyn kolme peräkkäistä kerrontaa
+ * käännön JÄLKEEN, mitattu ajo näytti tämän: pelaaja ehti valita
+ * kortit, painaa pizzaa ja voittaa koko ensimmäisen pizzan askeleessa
+ * «Vuoro kulkee näin», ja sen jälkeen opetus käveli läpi kolme
+ * tekemisaskelta jotka olivat jo tapahtuneet. Mikään ei kaatunut eikä
+ * jumittunut — vahdin ohitussaanto purki tilanteen — mutta opetus pyysi
+ * tekemään sen minkä pelaaja oli juuri tehnyt.
+ *
+ * Korjaus on järjestys, ei uusi este: kerronta sijoitetaan sinne missä
+ * lauta EI ole pelattavissa. Partyssa se on ennen `opetus.kaanna`a
+ * (lepotilassa korttinapit ovat `disabled`, peli.js korttiNappi), ja
+ * molemmissa peleissä zoom-askeleen aikana (opetus.css:
+ * `.opetus-zoom{pointer-events:auto}` — tumma pohja nielee napautukset).
+ * Peite joka estäisi koskemisen muulloin tekisi opetuksesta katsottavan
+ * esityksen, eikä sitä Marko pyytänyt.
+ *
+ * ⚠️ ESITTELYTEKSTI PUHUU PELISTÄ, EI KÄSKE. Markon sanoin tyyli on
+ * «Pelissä pöydällä on pizzakortteja, joita pelaajat pyrkivät
+ * valmistamaan… kädestään löytyvillä täytekorteilla.» Käsky kuuluu
+ * tekemisaskeleeseen, jossa valo osoittaa mihin koskea.
+ */
+
+/* Täytekortin esittely on sama molemmissa pelimuodoissa: yksi oikea
+ * kortti kädestä isona, sen oma numero korostettuna.
+ * ⚠️ ARVO LUETAAN KORTISTA, EI ASKELEESTA: käsi on jaettu kiinteällä
+ * listalla, mutta jos jako epäonnistuu (`opetusJaaKierros` palauttaa
+ * false) peli jatkaa tavallisella jaolla — ja silloin kovakoodattu luku
+ * näyttäisi eri numeroa kuin kortti jonka päällä se on. */
+function opetusEkaTayte() {
+  return tila.kasi && tila.kasi.length ? tila.kasi[0] : null;
+}
+function opetusEkaTaytteenArvo() {
+  const k = opetusEkaTayte();
+  return k && typeof k.arvo === 'number' ? k.arvo : '';
+}
+/* Esittelyaskeleet jotka ovat sanasta sanaan samat molemmissa peleissä.
+ * Kaksi kopiota ajautuisi erilleen ensimmäisessä korjauksessa. */
+function opetusEsittelyKortit() {
+  return [
+    { avain: 'opetus.esittelyPeli' },
+    { avain: 'opetus.esittelyPizzakortti', zoom: '#pizzaKortti', korostaLuku: true },
+  ];
+}
+function opetusEsittelyTayte() {
+  return { avain: 'opetus.esittelyTayte', zoom: '#kasi .tayte-kortti',
+           korostaLuku: opetusEkaTaytteenArvo,
+           arvot: function () { return { arvo: opetusEkaTaytteenArvo() }; } };
 }
 
 /* ---------- askeleet: Pizza Party ---------- */
@@ -295,20 +550,31 @@ function opetusPartyAskeleet() {
    *
    * ⚠️ ZOOM VASTA KAANNON JALKEEN. Lepotilassa pizzakortti on
    * selkapuoli ylospain, joten sita ennen zoomattaisiin kortin selka.
+   * TÄMÄ MÄÄRÄÄ ESITTELYN PAIKAN: Partyssa korttien esittely ei voi
+   * olla ennen `opetus.kaanna`a, koska esiteltavät kortit ovat silloin
+   * nurin päin. Siksi «pöydällä on pizzakortteja, kädessäsi
+   * täytekortteja» sanotaan ENNEN kääntöä (sitä varten se ei tarvitse
+   * zoomia) ja kortit näytetään isona heti käännön jälkeen.
    *
    * ⚠️ TOINEN KIERROS EI OPETA TAYTESAANTOA (Marko 19.10.): korttien
    * lukumaara ei ole saanto missaan pelitavassa, eika Partyn helpossa
    * tavassa tayteita tarkisteta lainkaan. Bassolla on oma opetuksensa. */
+  const esittely = opetusEsittelyKortit();
   return [
     { avain: 'opetus.tervetuloa' },
+    esittely[0],                                  /* mitä kortteja pelissä on */
+    { avain: 'opetus.partyTavoite' },             /* mihin pelissä pyritään */
+    { avain: 'opetus.esittelyVuoro' },            /* miten vuoro kulkee */
     /* ⚠️ KAANTO ON KAKSI NAPAUTUSTA, EI YHTA: pizzan painallus
      * lepotilassa kaantaa vain pizzan (peli.js kaannaKortit). Valo
      * seuraa sita puolta joka on viela kaantamatta. */
     { avain: 'opetus.kaanna',
       kohde: function () { return tila.kaannetty.pizza ? '#kasi' : '#pizzaKortti'; },
       valmis: function () { return tila.vaihe !== 'lepo'; } },
+    esittely[1],                                  /* pizzakortti isona */
     { avain: 'opetus.numero', zoom: '#pizzaKortti', korostaLuku: true },
     { avain: 'opetus.helpoin', zoom: '#pizzaKortti', korostaLuku: true },
+    opetusEsittelyTayte(),                        /* täytekortti isona */
     { avain: 'opetus.kasi', kohde: '#kasi' },
     { avain: 'opetus.valitse', kohde: '#kasi',
       arvot: function () { return { arvo: tila.pizza ? tila.pizza.arvo : '' }; },
@@ -340,11 +606,26 @@ function opetusBassoAskeleet() {
    * summan ja vasta sitten kertoo toisen ehdon opettaa epaonnistumaan.
    * Partyssa jarjestys saa olla toisin pain, koska siella helppo tapa ei
    * tarkista taytteita lainkaan - ja opetuksen jaetut kadet kelpaavat
-   * molemmissa tavoissa (2 eri arvoa, 2 taytetta). */
+   * molemmissa tavoissa (2 eri arvoa, 2 taytetta).
+   *
+   * ⚠️ BASSOSSA EI OLE KÄÄNTÖASKELTA, ja se on mitattu eikä unohdettu:
+   * `tila.kaannetty` on aloituksessa {pizza:true, kasi:true} ja vaihe on
+   * `valinta`. Siksi esittely voi alkaa heti ensimmäisestä askeleesta,
+   * toisin kuin Partyssa jossa kortit ovat nurin päin.
+   *
+   * ⚠️ «KIERROKSEN VOITTAA SE JONKA KORTIT LOPPUVAT ENSIN» ON NYT
+   * ENNEN PELAAMISTA, EI SEN JÄLKEEN. Mitattu: se oli 9. askel kymmenestä
+   * eli pelaaja sai tietää mihin pyrkii vasta tehtyään vuoron. Se on
+   * kierroksen koko tarkoitus, ei loppuhuomautus. */
+  const esittely = opetusEsittelyKortit();
   return [
     { avain: 'opetus.tervetuloaBasso' },
-    { avain: 'opetus.pizzaBasso', zoom: '#pizzaKortti', korostaLuku: true },
+    esittely[0],                                  /* mitä kortteja pelissä on */
+    { avain: 'opetus.bassoTavoite' },             /* mihin kierroksessa pyritään */
+    { avain: 'opetus.esittelyVuoro' },            /* miten vuoro kulkee */
+    esittely[1],                                  /* pizzakortti isona */
     { avain: 'opetus.taytteetTiukka', zoom: '#pizzaKortti' },
+    opetusEsittelyTayte(),                        /* täytekortti isona */
     { avain: 'opetus.kasiBasso', kohde: '#kasi' },
     { avain: 'opetus.valitseBasso', kohde: '#kasi',
       arvot: function () {
@@ -364,7 +645,6 @@ function opetusBassoAskeleet() {
         return opetus.kadessaAlussa !== undefined && tila.kasi.length !== opetus.kadessaAlussa;
       } },
     { avain: 'opetus.bassoNosto' },
-    { avain: 'opetus.bassoTavoite' },
     { avain: 'opetus.valmis' },
   ];
 }
@@ -480,6 +760,7 @@ function opetusAloita() {
   opetusPiirra();
   const eka = opetusAskel();
   if (eka && eka.zoom) opetusZoomaa(eka.zoom, eka.korostaLuku);
+  opetusAsetaKortti();
   if (opetus.kello) clearInterval(opetus.kello);
   opetus.kello = setInterval(opetusVahti, 250);
 }
@@ -492,6 +773,13 @@ function opetusLopeta(loppuunAsti) {
   const valo = opetusEl('opetusValo');
   if (valo) valo.hidden = true;
   opetusZoomPois(true);
+  /* Inline-paikka pois: seuraava aloitus mittaa omansa, eikä CSS:n
+   * oletusta jätetä vanhan mittauksen alle. */
+  const kortti = document.querySelector('.opetus-kortti');
+  if (kortti) { kortti.style.top = ''; kortti.style.bottom = ''; kortti.style.marginBottom = ''; }
+  const teksti = opetusEl('opetusTeksti');
+  if (teksti) teksti.style.fontSize = '';
+  opetus.sovitus = null;
   document.body.classList.remove('opetus-paalla');
   /* Keskeytetty opetus palaa valikkoon; loppuun pelattu jää peliin, jotta
    * pelaaja voi jatkaa samasta kädestä. */

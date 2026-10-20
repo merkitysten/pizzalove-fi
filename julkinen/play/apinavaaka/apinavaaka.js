@@ -184,6 +184,39 @@
     { tapa: 'C', ohjattu: true,  noppa: 3, linjasto: [2],       kortit: [5, 9, 4, 8], pizza: 5 },
     { tapa: 'C', ohjattu: false, noppa: 2, linjasto: [1, 2, 6], kortit: [3, 9, 5, 10], ratkaisu: { oikea: [3], vasen: [1] } }   // 8 − 6 ja 4 − 2 tasapainottavat, mutta eivät tuo pizzaa
   ];
+
+  /* Esittelyn nopan luku. Sama kuin ensimmäisen siirtovaiheen noppa, jotta
+     esittelystä siirtoihin siirtyminen ei vaihda lukua kesken kaiken. Yksi
+     lähde: tahko kortilla, heiton tulos ja kuittausteksti lukevat tämän. */
+  var ESITTELY_NOPPA = 3;
+
+  /* ---------------------------------------------------------------- esittely: pelin osat
+   * ⚠️ MARKON HAVAINTO 20.10.2026: «jos pelaaja ensimmäisen kerran tutustuu
+   * lautapeliin tämän digiversion kautta, niin välttämättä hänelle ei ole
+   * selvää mikä on varasto ja mikä on linjasto jne.»
+   *
+   * 📐 Mitattu ennen muutosta: opastus alkoi suoraan kortilta «1 / 3
+   * Perussiirto». Yhtään vaihetta joka nimeäisi varaston, linjaston,
+   * pizzakortin, nopan, apinavaa'an tai apinakortin ei ollut.
+   *
+   * ⚠️ TÄMÄ EI OLE OPAS_VAIHEET-LISTAN JATKO. Siellä jokaisella rivillä on
+   * siirtotapa (A/B/C), ja sitä lukevat `sallitut()`, `oikeaTapa()` ja
+   * `opasVie()`. Esittelyssä ei siirretä mitään, joten se on oma listansa ja
+   * oma tilansa (`tila.osa`). Yhteistä on ruutu (`naytaRuutu`) ja korostus
+   * (`av__paikka--vihje`-sukuinen `av__osoita`) — kumpaakaan ei kirjoiteta
+   * toista kertaa.
+   *
+   * `osoita` on sen laudan osan nimi jota pyydetään koskemaan; `null`
+   * tarkoittaa korttia jolla ei ole laudalla vastinetta (vuoron kulku ja
+   * apinakortti). */
+  var OPAS_OSAT = [
+    { avain: 'pizzat',   osoita: 'kortit'   },
+    { avain: 'varasto',  osoita: 'varasto'  },
+    { avain: 'linjasto', osoita: 'linjasto' },
+    { avain: 'noppa',    osoita: 'noppa'    },
+    { avain: 'vaaka',    osoita: 'vaaka'    },
+    { avain: 'vuoro',    osoita: null       }
+  ];
   var OPAS = {
     fi: {
       aloita: 'Aloita', harjoitus: 'Harjoitus', apinoihin: 'Pelaa Nälkäisiä apinoita', uudelleen: 'Harjoittele uudelleen',
@@ -193,6 +226,17 @@
         C: ['Erotussiirto', '”Vähennetään täytteitä”', 'Tuo liikaa täytteitä ja vie erotus linjastolta pois.']
       },
       teeItse: { A: 'Tee itse perussiirto.', B: 'Tee itse summasiirto.', C: 'Tee itse erotussiirto.' },
+      osat: {
+        selva: 'Selvä', ok: 'Juuri se!', nopasta: 'Nopasta tuli {d}.',
+        pizzat: { nimi: 'Pizzakortit', kerro: 'Pelissä pöydällä on neljä pizzakorttia. Pelaajat valmistavat niitä linjaston täytteillä ja ansaitsevat kustakin palan omaan boksiinsa.', pyynto: 'Napauta pizzakorttia.' },
+        varasto: { nimi: 'Varasto', kerro: 'Varasto on täytteiden aloituspaikka. Samanväriset nappulat ovat yksi täyte, ja niiden määrä on täytteen luku.', pyynto: 'Napauta varastoa.' },
+        linjasto: { nimi: 'Linjasto', kerro: 'Linjastolle siirretään sopivat täytteet. Vain linjaston täytteillä voi valmistaa pizzoja.', pyynto: 'Napauta linjastoa.' },
+        noppa: { nimi: 'Noppa', kerro: 'Noppa yhdistää täytteet, värit ja luvut. Sen luku kertoo, paljonko linjaston täytteiden arvo kasvaa vuorolla.', pyynto: 'Heitä noppaa.' },
+        vaaka: { nimi: 'Apinavaaka', kerro: 'Apinavaaka punnitsee täytteet siirron aikana. Kun tornit ovat yhtä korkeat, siirto täsmää ja lamppu syttyy.', pyynto: 'Napauta apinavaakaa.' },
+        vuoro: { nimi: 'Vuoron kulku', kerro: 'Vuoro kulkee aina samassa järjestyksessä.',
+          askeleet: ['Heitä noppaa ja siirrä täytteitä varastosta linjastolle.', 'Valmista linjaston täytteillä pizzoja ja ansaitse paloja boksiisi.', 'Jos sait vähintään yhden pizzan, nosta apinakortti ja toimi sen mukaan.'],
+          huomio: 'Apinakortti kuuluu lautapeliin. Tässä digiversiossa sitä ei nosteta — kaksi ensimmäistä askelta harjoitellaan nyt.' }
+      },
       loppu: ['Hienoa!', 'Osaat nyt kaikki kolme siirtoa.'],
       nopasta: 'Nopasta tuli {d}. Apina pitää {d} punnusta.',
       A: { kysy: 'Mikä varaston täyte tuo tasapainon?', ok: 'Jes! Nyt tornit ovat yhtä korkeat. 3 = 3.', pizza: 'Nyt ananaspizzan voi valmistaa!' },
@@ -212,6 +256,17 @@
         C: ['Skillnadsflytt', '”Minska fyllningar”', 'Hämta för mycket fyllning och ta bort skillnaden från linjen.']
       },
       teeItse: { A: 'Gör själv en basflytt.', B: 'Gör själv en summaflytt.', C: 'Gör själv en skillnadsflytt.' },
+      osat: {
+        selva: 'Okej', ok: 'Precis den!', nopasta: 'Tärningen visar {d}.',
+        pizzat: { nimi: 'Pizzakort', kerro: 'I spelet ligger fyra pizzakort på bordet. Spelarna tillagar dem med fyllningarna på linjen och förtjänar en bit till sin egen box.', pyynto: 'Tryck på ett pizzakort.' },
+        varasto: { nimi: 'Lager', kerro: 'Lagret är fyllningarnas startplats. Brickor med samma färg är en fyllning, och deras antal är fyllningens tal.', pyynto: 'Tryck på lagret.' },
+        linjasto: { nimi: 'Linje', kerro: 'Passande fyllningar flyttas över till linjen. Bara fyllningarna på linjen kan användas till pizzor.', pyynto: 'Tryck på linjen.' },
+        noppa: { nimi: 'Tärning', kerro: 'Tärningen kombinerar fyllningar, färger och tal. Talet visar hur mycket linjens värde växer under turen.', pyynto: 'Kasta tärningen.' },
+        vaaka: { nimi: 'Apvåg', kerro: 'Apvågen väger fyllningarna under din flytt. När tornen är lika höga stämmer flytten och lampan tänds.', pyynto: 'Tryck på apvågen.' },
+        vuoro: { nimi: 'Spelturen', kerro: 'Spelturen går alltid i samma ordning.',
+          askeleet: ['Kasta tärningen och flytta fyllningar från lagret till linjen.', 'Tillaga pizzor med fyllningarna på linjen och förtjäna bitar till din box.', 'Om du tillagade minst en pizza, lyft ett apkort och gör som det säger.'],
+          huomio: 'Apkortet hör till brädspelet. I den här digitala versionen dras det inte — nu övar vi de två första stegen.' }
+      },
       loppu: ['Bra!', 'Nu kan du alla tre flyttar.'],
       nopasta: 'Tärningen visar {d}. Apan håller {d} vikter.',
       A: { kysy: 'Vilken fyllning i lagret ger balans?', ok: 'Ja! Nu är tornen lika höga. 3 = 3.', pizza: 'Nu kan ananaspizzan göras!' },
@@ -231,6 +286,17 @@
         C: ['Difference move', '“Removing toppings”', 'Bring too much topping and take the difference off the line.']
       },
       teeItse: { A: 'Make a basic move yourself.', B: 'Make a sum move yourself.', C: 'Make a difference move yourself.' },
+      osat: {
+        selva: 'Got it', ok: 'That’s the one!', nopasta: 'The dice shows {d}.',
+        pizzat: { nimi: 'Pizza cards', kerro: 'Four pizza cards lie on the table. Players make them with the toppings on the line and earn a slice for their own box.', pyynto: 'Tap a pizza card.' },
+        varasto: { nimi: 'Storage', kerro: 'The storage is the starting point of the toppings. Pieces of the same colour are one topping, and their number is its value.', pyynto: 'Tap the storage.' },
+        linjasto: { nimi: 'Line', kerro: 'The right toppings are moved onto the line. Only the toppings on the line can be used to make pizzas.', pyynto: 'Tap the line.' },
+        noppa: { nimi: 'Dice', kerro: 'The dice combines the toppings, colours and numbers. Its number tells how much the value on the line grows this turn.', pyynto: 'Roll the dice.' },
+        vaaka: { nimi: 'Monkey scales', kerro: 'The monkey scales weigh the toppings during your move. When the towers are equally high, the move fits and the lamp lights up.', pyynto: 'Tap the monkey scales.' },
+        vuoro: { nimi: 'The turn', kerro: 'A turn always goes in the same order.',
+          askeleet: ['Roll the dice and move toppings from the storage to the line.', 'Make pizzas with the toppings on the line and earn slices for your box.', 'If you made at least one pizza, draw a monkey card and follow it.'],
+          huomio: 'The monkey card belongs to the board game. It is not drawn in this digital version — the first two steps are what you practise now.' }
+      },
       loppu: ['Well done!', 'Now you know all three moves.'],
       nopasta: 'The dice shows {d}. The monkey holds {d} weights.',
       A: { kysy: 'Which topping in the storage brings balance?', ok: 'Yes! The towers are equally high. 3 = 3.', pizza: 'Now the pineapple pizza can be made!' },
@@ -250,6 +316,17 @@
         C: ['Differenzzug', '„Zutaten abziehen“', 'Bring zu viel Zutat und nimm den Unterschied von der Linie.']
       },
       teeItse: { A: 'Mach selbst einen Grundzug.', B: 'Mach selbst einen Summenzug.', C: 'Mach selbst einen Differenzzug.' },
+      osat: {
+        selva: 'Alles klar', ok: 'Genau die!', nopasta: 'Der Würfel zeigt {d}.',
+        pizzat: { nimi: 'Pizzakarten', kerro: 'Im Spiel liegen vier Pizzakarten auf dem Tisch. Die Spieler backen sie mit den Zutaten auf der Linie und verdienen je ein Stück für ihre eigene Box.', pyynto: 'Tippe auf eine Pizzakarte.' },
+        varasto: { nimi: 'Lager', kerro: 'Das Lager ist der Startplatz der Zutaten. Steine derselben Farbe sind eine Zutat, und ihre Anzahl ist ihre Zahl.', pyynto: 'Tippe auf das Lager.' },
+        linjasto: { nimi: 'Linie', kerro: 'Die passenden Zutaten kommen auf die Linie. Nur mit den Zutaten auf der Linie kann man Pizzen backen.', pyynto: 'Tippe auf die Linie.' },
+        noppa: { nimi: 'Würfel', kerro: 'Der Würfel verbindet Zutaten, Farben und Zahlen. Seine Zahl sagt, um wie viel der Wert der Linie im Zug wächst.', pyynto: 'Würfle.' },
+        vaaka: { nimi: 'Affenwaage', kerro: 'Die Affenwaage wiegt die Zutaten während deines Zuges. Sind die Türme gleich hoch, stimmt der Zug und die Lampe leuchtet.', pyynto: 'Tippe auf die Affenwaage.' },
+        vuoro: { nimi: 'Der Spielzug', kerro: 'Ein Zug läuft immer in derselben Reihenfolge.',
+          askeleet: ['Würfle und bring Zutaten vom Lager auf die Linie.', 'Back mit den Zutaten auf der Linie Pizzen und verdiene Stücke für deine Box.', 'Hast du mindestens eine Pizza gebacken, zieh eine Affenkarte und folge ihr.'],
+          huomio: 'Die Affenkarte gehört zum Brettspiel. In dieser digitalen Fassung wird sie nicht gezogen — geübt werden jetzt die ersten beiden Schritte.' }
+      },
       loppu: ['Super!', 'Jetzt kannst du alle drei Züge.'],
       nopasta: 'Der Würfel zeigt {d}. Der Affe hält {d} Gewichte.',
       A: { kysy: 'Welche Zutat im Lager bringt das Gleichgewicht?', ok: 'Ja! Die Türme sind gleich hoch. 3 = 3.', pizza: 'Jetzt kann die Ananaspizza gebacken werden!' },
@@ -384,7 +461,8 @@
     var kieli = (T[urlKieli] && urlKieli) || juuri.getAttribute('data-kieli') || (document.documentElement.lang || 'fi').slice(0, 2);
     var t = T[kieli] || T.en;
     var vahennaLiike = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var tila = { nro: 0, paikka: {}, lahde: {}, oikea: [], vasen: [] };
+    // `osa` on esittelyn vaihe (ks. OPAS_OSAT); −1 tarkoittaa ettei esittely ole käynnissä
+    var tila = { nro: 0, osa: -1, paikka: {}, lahde: {}, oikea: [], vasen: [] };
 
     juuri.innerHTML = '';
     juuri.classList.add('av');
@@ -591,7 +669,7 @@
 
     /* PELIMUODON VALINNAT: samat `.as-valinta`-napit kuin korttipelin
        asetuksissa, ja «vapaa peli» ei ole niiden joukossa (ks. alla). */
-    var MUODOT = [['harjoitus', function () { aloitaOpas(0); }],
+    var MUODOT = [['harjoitus', function () { aloitaEsittely(0); }],
                   ['apinat',    function () { aloitaApinat(); }],
                   ['pulmat',    function () { aloitaPulmat(); }]];
     MUODOT.forEach(function (m) {
@@ -780,7 +858,7 @@
       nollaa(); piirra();
     }
     function aloitaVapaa() {
-      opasRuutu.hidden = true; clearTimeout(vihjeAjastin);
+      opasRuutu.hidden = true; clearTimeout(vihjeAjastin); lopetaEsittely();
       tila.nro = TEHTAVAT.length; tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
       uusiKierros();
@@ -792,7 +870,7 @@
       return a;
     }
     function aloitaApinat() {
-      opasRuutu.hidden = true; clearTimeout(vihjeAjastin);
+      opasRuutu.hidden = true; clearTimeout(vihjeAjastin); lopetaEsittely();
       tila.muoto = 'apinat'; tila.nro = TEHTAVAT.length; tila.paikka = {};
       for (var i = 1; i <= 10; i++) tila.paikka[i] = 'varasto';
       tila.pakka = sekoita([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -825,7 +903,7 @@
     }
     function pulma() { return tasonPulmat(tila.pTaso)[tila.pNro]; }
     function aloitaPulmat(taso, hiljaa) {
-      clearTimeout(vihjeAjastin); clearTimeout(pulmaAjastin);
+      clearTimeout(vihjeAjastin); clearTimeout(pulmaAjastin); lopetaEsittely();
       tila.muoto = 'pulmat'; tila.pTaso = taso == null ? lueTaso() : Math.min(taso, lueAvattu());
       tila.boksi = []; tila.pelatut = []; tila.loppu = false; tila.valitsee = false;
       tila.pNro = valitsePulma();
@@ -1204,7 +1282,153 @@
     // ---- opastettu harjoitus
     var vihjeAjastin = null, PINO_MAX = 12, riviMuisti = { teksti: '', aika: 0 };   // korkein pino täysikokoisena; korkeammat pienennetään
     function vaihe() { return OPAS_VAIHEET[tila.oVaihe]; }
+
+    /* ---- esittely: pelin osat ennen ensimmäistä siirtoa ----
+     *
+     * Kuvio on sama kolme askelta kuin ohjatussa siirrossa (`ohjattu: true`):
+     * OSOITA – PYYDÄ – VAHVISTA. Tässä se vain osoittaa laudan osaa eikä tornia.
+     *
+     * 1. OSOITA: osa nostetaan isona ruudun keskelle samalle opasruudulle jolla
+     *    siirtotavat jo esitellään. Marko 20.10.2026: «otat siihen ruudulle
+     *    keskelle isona sen jonkin asian ja selitetään se selkeästi».
+     *    ⚠️ Kuvat tulevat pelin omista piirtäjistä (`pizzaKuva`, `torni`) ja
+     *    sen omista tiedostoista. Yhtään uutta piirtotapaa ei ole: jos torni
+     *    joskus muuttuu, se muuttuu myös esittelyssä.
+     * 2. PYYDÄ: ruutu sulkeutuu, osa hohtaa laudalla ja viestirivi pyytää
+     *    koskemaan sitä. Muu lauta himmenee kuten ohjatussa siirrossa.
+     * 3. VAHVISTA: kosketus kuittaa ja seuraava kortti tulee esiin.
+     *
+     * ⚠️ TEKSTIN SÄVY: esittely KERTOO pelistä («Pelissä pöydällä on…»), ja
+     * vasta `pyynto` käskee. Sama ero kuin lautapelin ohjevihossa.
+     */
+    function osa() { return tila.osa >= 0 && tila.osa < OPAS_OSAT.length ? OPAS_OSAT[tila.osa] : null; }
+    /* Esittelyn iso kuva. Jokainen palanen on jo olemassa jossain pelissä;
+       tässä se vain suurennetaan. Nopan tahkot ovat `noppa/<luku>.svg`, samat
+       jotka `noppa3d` pyörittää, ja apinakortti on painotiedoston oma
+       päälipuoli — se on se mitä pöydällä näkyy, koska kortti nostetaan pakasta. */
+    function osanKuva(avain) {
+      if (avain === 'pizzat') return '<span class="av__kortti av__esittelykortti">' + pizzaKuva([3]) + '</span>';
+      if (avain === 'varasto') return '<span class="av__esittelytorni">' + torni(4).outerHTML + '</span>';
+      /* ⚠️ KULHOLLE OMA KEHYS. Torni seisoo kulhossa `bottom:78%`:ssa eli sen
+         yläpuolella, ja opaskortti on `overflow:auto` — ilman kehystä torni
+         leikkautui kortin yläreunaan. Mitattu: näkyvissä oli pelkkä tornin
+         huippu. Kehys varaa tornille tilan, eikä mikään ylitä korttia. */
+      if (avain === 'linjasto') return '<span class="av__esittelylinjasto"><span class="av__kulho av__esittelykulho">' +
+        '<img class="av__kulho-takana" src="' + KANSIO + 'kulho/tausta.webp" alt="">' +
+        '<span class="av__hylly-torni">' + torni(3).outerHTML + '</span>' +
+        '<img class="av__kulho-edessa" src="' + KANSIO + 'kulho/3.webp" alt=""></span></span>';
+      if (avain === 'noppa') return '<img class="av__esittelykuva av__esittelykuva--noppa" src="' + KANSIO + 'noppa/' + ESITTELY_NOPPA + '.svg" alt="">';
+      if (avain === 'vaaka') return '<img class="av__esittelykuva" src="' + KANSIO + 'vaaka-kansi.webp" alt="">';
+      return '<img class="av__esittelykuva av__esittelykuva--kortti" src="' + KANSIO + 'apinakortti.webp' + PALA_V + '" alt="">';
+    }
+    function aloitaEsittely(nro) {
+      clearTimeout(vihjeAjastin); clearTimeout(osaAjastin);
+      tila.muoto = 'opas'; tila.osa = nro; tila.oVaihe = 0; tila.osaOk = false;
+      tila.boksi = []; tila.loppu = false; tila.valitsee = false;
+      loppuEl.classList.remove('on');
+      /* Esittelylauta on sama kuin ensimmäisen siirtovaiheen lauta, mutta
+         yksi täyte on valmiiksi linjastolla. Muuten linjasto olisi tyhjä juuri
+         silloin kun sitä esitellään, eikä esittely voisi näyttää mitä se on. */
+      tila.paikka = {};
+      for (var i = 1; i <= 10; i++) tila.paikka[i] = i === 3 ? 'linjasto' : 'varasto';
+      tila.laudalla = [3, 1, 5, 9]; tila.pakka = [];
+      tila.tehtava = { tapa: 'A', noppa: ESITTELY_NOPPA }; tila.havikki = false;
+      nollaa(); tila.vihje = null; tila.oVirheet = 0; tila.oVirheNyt = false;
+      var o = OPAS_OSAT[nro], s = ot.osat[o.avain];
+      var teksti = '<p>' + s.kerro + '</p>';
+      if (s.askeleet) teksti += '<ol class="av__vuoro">' + s.askeleet.map(function (x) { return '<li>' + x + '</li>'; }).join('') +
+        '</ol><p class="av__huomio">' + s.huomio + '</p>';
+      naytaRuutu(osanKuva(o.avain) + '<small>' + (nro + 1) + ' / ' + OPAS_OSAT.length + '</small><h2>' + s.nimi + '</h2>' + teksti,
+        ot.osat.selva, function () {
+          opasRuutu.hidden = true;
+          // osa jolla ei ole laudalla vastinetta (vuoron kulku) jatkaa suoraan
+          if (o.osoita) return piirra();
+          seuraavaOsa();
+        });
+      piirra();
+    }
+    function seuraavaOsa() {
+      if (tila.osa < OPAS_OSAT.length - 1) return aloitaEsittely(tila.osa + 1);
+      aloitaOpas(0);
+    }
+    /* Kuittaus: osa löytyi laudalta. Teksti jää hetkeksi näkyviin, jotta
+       kosketuksella on vastaus, ja sitten tulee seuraava kortti. */
+    var osaAjastin = null;
+    function osaTehty() {
+      if (tila.osaOk) return;
+      tila.osaOk = true; piirra();
+      osaAjastin = setTimeout(seuraavaOsa, 1100);
+    }
+    /* Nopan vuorolla kosketus HEITTÄÄ nopan. Pelkkä kuittaus olisi rikki:
+       pelin ainoa napautettava noppa ei saa olla se joka ei reagoi.
+       ⚠️ Tämä ei ole `heita()`: se asettaisi `tila.heitetty`n ja siirtäisi
+       laudan siirtovaiheeseen kesken esittelyn. Tässä pyöritetään pelkkää
+       noppaa, ja luku on sama 3 jolla ensimmäinen siirtovaihe alkaa. */
+    function esittelyHeitto() {
+      if (pyorii || tila.osaOk) return;
+      pyorii = true;
+      noppaEl.classList.remove('av__noppa--odottaa');
+      nostaNoppa();
+      noppa3d.heita(ESITTELY_NOPPA, function () {
+        pyorii = false; laskeNoppa(); osaTehty();
+      }, vahennaLiike);
+    }
+    /* Esittelyn aikana lauta on katseltavaa eikä pelattavaa: napautus joko
+       kuittaa osoitetun osan tai ei tee mitään. Kuuntelija on kaappausvaiheessa
+       `juuri`ssa, jotta hyllyjen ja korttien omat käsittelijät eivät ehdi
+       ensin — ne pyytäisivät heittämään noppaa (`napauta` → `tonaise`).
+
+       ⚠️ VAIN PELILAUTA, JA SE ON SALLITTUJEN LISTA EIKÄ KIELLETTYJEN.
+       Ensin tässä oli «kaikki paitsi yläpalkki», ja valikko on `juuri`n
+       lapsi: mitattu — kesken esittelyä valikosta valittu «Nälkäiset
+       apinat» ei tehnyt mitään, koska tämä nieli sen napautuksen. Kielletyt
+       on aina vajaa lista; sallitut on tasan ne kolme lohkoa joita
+       esittely osoittaa. */
+    juuri.addEventListener('click', function (e) {
+      var o = osa();
+      if (!o || !opasRuutu.hidden || !o.osoita) return;
+      if (!hyllyt.contains(e.target) && !nayttamo.contains(e.target) && !noppaRivi.contains(e.target)) return;
+      e.stopPropagation(); e.preventDefault();
+      if (tila.osaOk) return;
+      if (o.osoita === 'noppa') { if (noppaEl.contains(e.target)) esittelyHeitto(); return; }
+      if (osanKohde(o.osoita, e.target)) osaTehty();
+    }, true);
+    /* Mikä laudan osa on tämän kosketuksen alla?
+       ⚠️ PIZZAKORTIT OVAT LINJASTON SISÄLLÄ (`kohde.appendChild(tuotanto)`),
+       joten pelkkä `linjastoEl.contains` osuisi myös kortteihin. Siksi
+       linjasto on linjasto vain tuotannon ulkopuolella. */
+    function osanKohde(nimi, kohde) {
+      if (nimi === 'kortit') return tuotanto.contains(kohde);
+      if (nimi === 'varasto') return varastoEl.contains(kohde);
+      if (nimi === 'linjasto') return linjastoEl.contains(kohde) && !tuotanto.contains(kohde);
+      if (nimi === 'vaaka') return nayttamo.contains(kohde);
+      return false;
+    }
+    /* Esittely päättyy aina samalla tavalla, oli syy mikä tahansa: pelaaja
+       pääsi loppuun, vaihtoi pelimuotoa valikosta tai aloitti alusta. Yksi
+       paikka, jottei hohto jää palamaan toiseen pelimuotoon. */
+    function lopetaEsittely() {
+      clearTimeout(osaAjastin);
+      tila.osa = -1; tila.osaOk = false;
+      osoitaOsa();
+    }
+    /* Hohto ja himmennys laudalle. Osoitettu osa hohtaa, muut himmenevät —
+       sama kuvio kuin ohjatussa siirrossa, jossa oikea torni hohtaa ja muut
+       saavat `av__paikka--himmea`n. */
+    function osoitaOsa() {
+      var o = osa(), nimi = o && opasRuutu.hidden ? o.osoita : null;
+      var paikat = linjastoEl.querySelector('.av__paikat');
+      [[tuotanto, 'kortit'], [varastoEl, 'varasto'], [paikat, 'linjasto'],
+       [noppaEl, 'noppa'], [nayttamo, 'vaaka']].forEach(function (x) {
+        if (!x[0]) return;
+        x[0].classList.toggle('av__osoita', !tila.osaOk && nimi === x[1]);
+        x[0].classList.toggle('av__vaimea', !!nimi && nimi !== x[1]);
+      });
+      juuri.classList.toggle('av--esittely', !!o);
+    }
+
     function aloitaOpas(nro) {
+      lopetaEsittely();
       tila.muoto = 'opas'; tila.oVaihe = nro; tila.boksi = []; tila.loppu = false; tila.valitsee = false;
       loppuEl.classList.remove('on');
       var v = vaihe();
@@ -1304,7 +1528,7 @@
       naytaRuutu('<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt=""><h2>' + ot.loppu[0] + '</h2><p>' + ot.loppu[1] + '</p>',
         ot.apinoihin, function () { opasRuutu.hidden = true; aloitaApinat(); },
         [[vk.nimet.vapaa, function () { tila.muoto = 'harjoitus'; aloitaVapaa(); }],
-         [ot.uudelleen, function () { aloitaOpas(0); }]]);
+         [ot.uudelleen, function () { aloitaEsittely(0); }]]);
     }
 
     function valmistettavat() {
@@ -1494,13 +1718,18 @@
       var teht = tila.tehtava, noppa = teht.noppa, heitetty = tila.heitetty;
       var vasenSumma = noppa + summa(tila.vasen), oikeaSumma = summa(tila.oikea);
       var opas = tila.muoto === 'opas', pulmat = tila.muoto === 'pulmat';
-      var tasapaino = !tila.siirretty && tila.oikea.length > 0 && vasenSumma === oikeaSumma;
+      /* Esittelyssä lautaa katsellaan eikä siirretä: noppaa ei ole heitetty
+         eikä apinan kädessä ole mitään, joten tasapainoa ei voi syntyä. Ehto on
+         silti tässä kirjoitettu näkyviin, koska siirtotapaa lukevat `oikeaTapa`
+         ja `vaihe().ohjattu` kaatuisivat esittelyn aikana. */
+      var esittelyNyt = opas && !!osa();
+      var tasapaino = !esittelyNyt && !tila.siirretty && tila.oikea.length > 0 && vasenSumma === oikeaSumma;
       // lautapelin sääntö: jos nopan luvun kokoinen täyte tuodaan (perussiirto), muita siirtoja ei saa yhdistää
       var perusYhdistetty = tasapaino && tila.oikea.indexOf(noppa) >= 0 && (tila.oikea.length > 1 || tila.vasen.length > 0);
       var eiPizzaa = opas && tasapaino && oikeaTapa() && !vaihe().ohjattu && !pizzaSyntyy();
       var pEiPizza = pulmat && tasapaino && !pulmaSyntyy();
       tila.valmis = tasapaino && !perusYhdistetty && (pulmat ? !pEiPizza : (!opas || (oikeaTapa() && !eiPizzaa)));
-      if (opas && vaihe() && !vaihe().ohjattu) {
+      if (opas && !esittelyNyt && vaihe() && !vaihe().ohjattu) {
         var oVirhe = tasapaino && !tila.valmis;
         if (oVirhe && !tila.oVirheNyt) opasYritys();
         tila.oVirheNyt = oVirhe;
@@ -1526,9 +1755,13 @@
         p = '<b class="av__tasonro">' + pt.taso + ' ' + (tila.pTaso + 1) + '</b>';   // taso yläreunassa; edistyminen näkyy boksissa
       }
       if (opas) {
+        /* Esittelyllä on omat pisteensä, koska se on oma jaksonsa eikä
+           siirtoharjoitusten jatke: kaksitoista pistettä yhdessä rivissä olisi
+           puhelimen yläpalkissa pelkkä viiva. */
+        var lkm = esittelyNyt ? OPAS_OSAT.length : OPAS_VAIHEET.length, nyt = esittelyNyt ? tila.osa : tila.oVaihe;
         p = '';
-        for (var oi = 0; oi < OPAS_VAIHEET.length; oi++)
-          p += '<i class="' + (oi < tila.oVaihe ? 'tehty' : oi === tila.oVaihe ? 'nyt' : '') + '"></i>';
+        for (var oi = 0; oi < lkm; oi++)
+          p += '<i class="' + (oi < nyt ? 'tehty' : oi === nyt ? 'nyt' : '') + '"></i>';
       }
       if (tuot) {
         /* ⚠️ BOKSI ON OIKEA PIZZALAATIKKO JA OIKEAT PALAT (Marko 19.10.2026:
@@ -1685,8 +1918,14 @@
       rivi.innerHTML = '';
       vieSlot.innerHTML = '';
       rivi.className = 'av__rivi';
-      var ov = opas && vaihe(), oteksti = ov ? (ot[ov.tapa] || {}) : null;
-      if (pulmat) {
+      var ov = opas && !esittelyNyt && vaihe(), oteksti = ov ? (ot[ov.tapa] || {}) : null;
+      if (esittelyNyt) {
+        // kortin ollessa näkyvissä rivi on tyhjä: pyyntö kuuluu vasta kun lauta on esillä
+        var os = ot.osat[osa().avain];
+        if (!opasRuutu.hidden) rivi.textContent = '';
+        else if (tila.osaOk) { rivi.textContent = osa().avain === 'noppa' ? ot.osat.nopasta.replace('{d}', ESITTELY_NOPPA) : ot.osat.ok; rivi.classList.add('av__rivi--ok'); }
+        else rivi.textContent = os.pyynto || '';
+      } else if (pulmat) {
         // oletus: pelaaja osaa pelata, joten ruudulla ei ole ohjeita – vain palaute ja pyydetty vihje
         if (tila.valitsee) { rivi.textContent = t.lisapala; rivi.classList.add('av__rivi--ok'); }
         else if (tila.vaihe === 'odota') { rivi.textContent = tila.pVihjeKaytetty ? pt.vihjeellaEi : pt.hyva; rivi.classList.add('av__rivi--ok'); }
@@ -1826,6 +2065,9 @@
         kohde.appendChild(paikat);
         if (nimi === 'linjasto') kohde.appendChild(tuotanto);   // hihna ja uuni kuuluvat linjastoon
       });
+
+      // esittelyn hohto vasta tässä: `.av__paikat` syntyy uudelleen joka piirrossa
+      osoitaOsa();
     }
 
     function mitoita() {
@@ -1865,7 +2107,7 @@
     setTimeout(sovita, 300);
     if (vahennaLiike) juuri.classList.add('av--ei-liiketta');
     var alkuTila = juuri.getAttribute('data-tila');
-    if (alkuTila === 'apinat') aloitaApinat(); else if (alkuTila === 'pulmat') aloitaPulmat(); else aloitaOpas(0);
+    if (alkuTila === 'apinat') aloitaApinat(); else if (alkuTila === 'pulmat') aloitaPulmat(); else aloitaEsittely(0);
   }
 
   function kaynnista() {

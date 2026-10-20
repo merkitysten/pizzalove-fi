@@ -234,6 +234,16 @@ const KIELET = {
      * 🔵 9.10.2026 tämä varoitus rikottiin (neliön nimeksi tuli «Moninpeli»), ja Marko
      * huomasi sen: «näyttää siltä, että pelaa olisi yksinpeli ja moninpeli olisi
      * moninpeli». Aloitusruudun neliöt nimetään siksi LAITTEEN mukaan. */
+    /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
+       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
+       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
+       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
+       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö. */
+    'kupla.party':          'Nopeatempoinen peli',
+    'kupla.partyAla':       'Helpoin aloitus.',
+    'kupla.basso':          'Vuoropohjainen peli',
+    'kupla.bassoAla':       'Rauhallinen ja jännittävä.',
     'valikko.tallaLaitteella':'Tällä laitteella',
     'valikko.omillaLaitteilla':'Omilla laitteilla',
     'valikko.tallaSelite':    'Pelaa tällä laitteella, yksin tai yhdessä',
@@ -294,7 +304,11 @@ const KIELET = {
     'opetus.lopeta':             'Lopeta',
     'opetus.tervetuloa':         'Tehdään yksi pizza yhdessä.',
     'opetus.tervetuloaBasso':    'Pelataan yksi vuoro yhdessä.',
-    'opetus.pizzaBasso':         'Tämä on pöydän pizza. Sen numero on tavoite.',
+    'opetus.esittelyPeli':       'Pöydällä on pizzakortteja, kädessäsi täytekortteja.',
+    'opetus.esittelyPizzakortti': 'Tätä pöydän pizzaa pelaajat pyrkivät valmistamaan. Sen numero on tavoite.',
+    'opetus.esittelyTayte':      'Pizza valmistetaan täytekorteilla. Kortin numero on sen arvo.',
+    'opetus.esittelyVuoro':      'Vuoro kulkee näin: valitse kortit, laita laskumerkki, paina pizzaa.',
+    'opetus.partyTavoite':       'Kaikki tekevät samaa pizzaa, ja nopein saa sen.',
     'opetus.kaanna':             'Käännä kortit: paina pizzaa ja omia korttejasi.',
     'opetus.numero':             'Vain numero ratkaisee. Täytteet ovat kuva.',
     'opetus.helpoin':            'Tämä on helpoin tapa pelata Pizza Lovea: riittää keskittyä kortin numeroon.',
@@ -486,6 +500,16 @@ const KIELET = {
     'verkko.varmistaPoistu':  'Vill du verkligen lämna spelet?',
     'verkko.varmistaAlkuun':  'Vill du verkligen gå till startmenyn?',
     'verkko.jatkaPelia':      'Fortsätt spela',
+    /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
+       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
+       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
+       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
+       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö. */
+    'kupla.party':          'Snabbt tempo',
+    'kupla.partyAla':       'Lättast att börja med.',
+    'kupla.basso':          'Turordning',
+    'kupla.bassoAla':       'Lugnt och spännande.',
     'valikko.tallaLaitteella':'På den här enheten',
     'valikko.omillaLaitteilla':'På egna enheter',
     'valikko.tallaSelite':    'Spela på den här enheten, ensam eller tillsammans',
@@ -546,7 +570,11 @@ const KIELET = {
     'opetus.lopeta':             'Avsluta',
     'opetus.tervetuloa':         'Vi gör en pizza tillsammans.',
     'opetus.tervetuloaBasso':    'Vi spelar en tur tillsammans.',
-    'opetus.pizzaBasso':         'Det här är bordets pizza. Dess siffra är målet.',
+    'opetus.esittelyPeli':       'På bordet finns pizzakort, i din hand fyllningskort.',
+    'opetus.esittelyPizzakortti': 'Den här pizzan på bordet försöker spelarna tillaga. Dess siffra är målet.',
+    'opetus.esittelyTayte':      'Pizzan tillagas med fyllningskort. Kortets siffra är dess värde.',
+    'opetus.esittelyVuoro':      'Så går turen: välj kort, sätt räknetecken, tryck på pizzan.',
+    'opetus.partyTavoite':       'Alla gör samma pizza, och den snabbaste får den.',
     'opetus.kaanna':             'Vänd korten: tryck på pizzan och på dina egna kort.',
     'opetus.numero':             'Bara siffran avgör. Fyllningarna är bild.',
     'opetus.helpoin':            'Det här är det lättaste sättet att spela Pizza Love: det räcker att titta på kortets siffra.',
@@ -736,6 +764,16 @@ const KIELET = {
     'verkko.varmistaPoistu':  'Really leave the game?',
     'verkko.varmistaAlkuun':  'Really go back to the start menu?',
     'verkko.jatkaPelia':      'Keep playing',
+    /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
+       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
+       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
+       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
+       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö. */
+    'kupla.party':          'Fast-paced game',
+    'kupla.partyAla':       'Easiest to start with.',
+    'kupla.basso':          'Turn-based game',
+    'kupla.bassoAla':       'Calm and exciting.',
     'valikko.tallaLaitteella':'On this device',
     'valikko.omillaLaitteilla':'On your own devices',
     'valikko.tallaSelite':    'Play on this device, alone or together',
@@ -796,7 +834,11 @@ const KIELET = {
     'opetus.lopeta':             'Stop',
     'opetus.tervetuloa':         'Let us make one pizza together.',
     'opetus.tervetuloaBasso':    'Let us play one turn together.',
-    'opetus.pizzaBasso':         'This is the pizza on the table. Its number is the target.',
+    'opetus.esittelyPeli':       'On the table there are pizza cards, in your hand topping cards.',
+    'opetus.esittelyPizzakortti': 'This pizza on the table is what the players try to make. Its number is the target.',
+    'opetus.esittelyTayte':      'The pizza is made with topping cards. A card’s number is its value.',
+    'opetus.esittelyVuoro':      'A turn goes like this: pick cards, add a sign, press the pizza.',
+    'opetus.partyTavoite':       'Everyone makes the same pizza, and the fastest one gets it.',
     'opetus.kaanna':             'Turn the cards: press the pizza and your own cards.',
     'opetus.numero':             'Only the number counts. The toppings are a picture.',
     'opetus.helpoin':            'This is the easiest way to play Pizza Love: just focus on the number on the card.',
@@ -986,6 +1028,16 @@ const KIELET = {
     'verkko.varmistaPoistu':  'Spiel wirklich verlassen?',
     'verkko.varmistaAlkuun':  'Wirklich zum Startmenü?',
     'verkko.jatkaPelia':      'Weiterspielen',
+    /* ⚠️ BASSON AJATUSKUPLA ALKUVALIKOSSA (Marko 20.10.2026). Ylärivi on
+       Markon oma sanamuoto mekaniikasta («Nopeatempoinen peli» ·
+       «Vuoropohjainen peli»), alarivi pizzalove.fi:n virallinen kuvaus
+       (sisalto/*.json → korttipeli.muodot[].kuvaus), jotta sivusto ja peli
+       sanovat saman asian samoilla sanoilla. ⛔ Älä kirjoita tähän uutta
+       kuvausta: lähde on sivuston sisältö. */
+    'kupla.party':          'Schnelles Spiel',
+    'kupla.partyAla':       'Am leichtesten zum Einstieg.',
+    'kupla.basso':          'Zugbasiertes Spiel',
+    'kupla.bassoAla':       'Ruhig und spannend.',
     'valikko.tallaLaitteella':'Auf diesem Gerät',
     'valikko.omillaLaitteilla':'Auf eigenen Geräten',
     'valikko.tallaSelite':    'Auf diesem Gerät spielen, allein oder zusammen',
@@ -1046,7 +1098,11 @@ const KIELET = {
     'opetus.lopeta':             'Beenden',
     'opetus.tervetuloa':         'Machen wir zusammen eine Pizza.',
     'opetus.tervetuloaBasso':    'Spielen wir zusammen einen Zug.',
-    'opetus.pizzaBasso':         'Das ist die Pizza auf dem Tisch. Ihre Zahl ist das Ziel.',
+    'opetus.esittelyPeli':       'Auf dem Tisch liegen Pizzakarten, in deiner Hand Belagkarten.',
+    'opetus.esittelyPizzakortti': 'Diese Pizza auf dem Tisch wollen die Spieler zubereiten. Ihre Zahl ist das Ziel.',
+    'opetus.esittelyTayte':      'Die Pizza wird mit Belagkarten gemacht. Die Zahl der Karte ist ihr Wert.',
+    'opetus.esittelyVuoro':      'So läuft ein Zug: Karten wählen, Rechenzeichen setzen, Pizza drücken.',
+    'opetus.partyTavoite':       'Alle machen dieselbe Pizza, und wer zuerst fertig ist, bekommt sie.',
     'opetus.kaanna':             'Dreh die Karten um: die Pizza und deine eigenen Karten.',
     'opetus.numero':             'Nur die Zahl zählt. Die Beläge sind Bild.',
     'opetus.helpoin':            'Das ist die einfachste Art, Pizza Love zu spielen: achte nur auf die Zahl der Karte.',

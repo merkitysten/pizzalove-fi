@@ -636,3 +636,88 @@
 @keyframes av-valahdys{0%{opacity:.2;transform:scale(.96)}60%{opacity:1;transform:scale(1.03)}100%{transform:none}}
 .av__rivi--uusi{animation:av-valahdys .42s ease-out}
 @media (prefers-reduced-motion:reduce){.av__rivi--uusi{animation:none}}
+
+/* ---- esittely: pelin osat (Apinavaaka tutuksi, 20.10.2026) ----
+
+   Marko: «otat siihen ruudulle keskelle isona sen jonkin asian ja selitetään
+   se selkeästi.» Iso kuva menee SAMALLE opasruudulle (`.av__opaskortti`) jolla
+   siirtotavat jo esitellään — ei omaa peitettä, ei omaa korttia.
+
+   ⚠️ KORTTI SAA VIERITTYÄ. Vuoron kulku -kortilla on kuva, otsikko, kolme
+   numeroitua askelta ja huomautus, ja matalin mitattu tila (1024 x 768
+   vaakaan) jättää kortille 768 px. Ilman `max-height`ia nappi jäisi ruudun
+   alapuolelle — ja nappi on se jolla eteenpäin pääsee. */
+.av__opaskortti{max-height:calc(100vh - 32px);overflow:auto;overscroll-behavior:contain;padding-bottom:0}
+/* ⚠️ NAPPI PYSYY NÄKYVISSÄ VAIKKA KORTTI VIERISI. Mitattu 812 x 375:ssä
+   (puhelin poikittain): «Vuoron kulku» on 625 px korkea, kortille jää 343 px,
+   ja «Selvä» oli y = 525 eli ruudun alapuolella. Kortti kyllä vieri, mutta
+   nappi on se jolla eteenpäin pääsee — sitä ei saa joutua etsimään.
+   `sticky` tarttuu vierityslaatikon alareunaan; lyhyillä korteilla se ei
+   tee mitään, joten siirtotapojen kortit eivät muutu. */
+.av__opaskortti .av__opasnapit{position:sticky;bottom:0;background:var(--surface,#fff);padding:6px 0 18px;margin-top:10px}
+/* ⚠️ ETULIITE `.av__opaskortti` ON TARKKUUTTA VARTEN EIKÄ KOSMETIIKKAA.
+   `.av--apinat .av__kortti` (0,2,0) tekee kortista 60 px:n ympyrän ilman
+   taustaa, ja se on päällä myös opastuksessa (`tuot`-haara). Pelkkä
+   `.av__esittelykortti` (0,1,0) hävisi sille — mitattu: kortti piirtyi
+   52 px:n levyisenä vaikka sääntö sanoi 140. Sama koskee tornia ja kulhoa. */
+.av__opaskortti .av__esittelykuva{display:block;width:100%;max-width:250px;height:auto;margin:0 auto 6px}
+.av__opaskortti .av__esittelykuva--noppa{max-width:128px}
+/* Apinakortti on neliö ja pienempi kuin apina, jotta kortti näyttää kortilta. */
+.av__opaskortti .av__esittelykuva--kortti{max-width:140px;border-radius:12px;box-shadow:0 4px 12px rgba(60,30,0,.3)}
+/* Esittelyssä pizzakortti on kortti: pahvi takaisin, koska juuri se on se
+   asia jota nimetään. Pelilaudalla se on pelkkä pyöreä pizza. */
+.av__opaskortti .av__esittelykortti{width:140px;height:140px;border-radius:18px;margin:0 auto 6px;cursor:default;
+  background:var(--warm,#FFF3E9);box-shadow:inset 0 0 0 2px var(--line2,#D6C7AF),0 3px 8px rgba(60,30,0,.18)}
+.av__opaskortti .av__esittelykortti .av__kortti-pizza{width:112px;height:112px}
+.av__opaskortti .av__esittelykortti .av__sydan{right:-2px;bottom:-2px}
+/* Torni ja kulho piirretään pelin omilla säännöillä; tässä vain mittakaava. */
+.av__opaskortti .av__esittelytorni{display:block;margin:0 auto 6px;--pala:16px;--leveys:58px}
+.av__opaskortti .av__esittelytorni .av__torni{align-items:center}
+.av__opaskortti .av__esittelylinjasto{display:block;position:relative;height:160px;margin:0 auto 6px}
+.av__opaskortti .av__esittelykulho{position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:104px;max-width:104px;margin:0;--pala:14px;--leveys:50px}
+.av__opaskortti .av__esittelykulho .av__hylly-torni{background:none;border:0;padding:0;bottom:78%}
+.av__opaskortti .av__vuoro{text-align:left;margin:4px 0 8px;padding-left:22px;font-size:16px}
+.av__opaskortti .av__vuoro li{margin:0 0 5px}
+.av__opaskortti .av__huomio{font-size:14px;color:var(--soft,#6E6357)}
+
+/* Osoitettu osa hohtaa, muu lauta himmenee. Sama kuvio ja sama hohtoanimaatio
+   (`av-vihje`) kuin ohjatussa siirrossa, jossa oikea torni hohtaa ja muut
+   saavat `av__paikka--himmea`n — ei kolmatta korostustapaa.
+   ⚠️ `pointer-events` jätetään päälle: esittelyn napautus luetaan
+   `juuri`ssa kaappausvaiheessa, ja himmennetyn osan napautuksen pitää
+   tulla perille, jotta se voidaan vaimentaa. */
+.av--esittely .av__vaimea{opacity:.3;filter:grayscale(.55);transition:opacity .3s,filter .3s}
+.av--esittely .av__osoita{animation:av-osoita 1.3s ease-in-out infinite;border-radius:14px}
+@keyframes av-osoita{0%,100%{filter:brightness(1);box-shadow:0 0 0 0 rgba(238,114,3,0)}
+  50%{filter:brightness(1.08);box-shadow:0 0 0 5px rgba(238,114,3,.55)}}
+@media (prefers-reduced-motion:reduce){
+  .av--esittely .av__osoita{animation:none;box-shadow:0 0 0 4px rgba(238,114,3,.6)}}
+/* Esittelyssä lauta on katseltavaa: osoitin ei lupaa napautusta muualla. */
+.av--esittely .av__paikka--kulho,.av--esittely .av__kortti{cursor:default}
+.av--esittely .av__osoita .av__kortti,.av--esittely .av__noppa.av__osoita{cursor:pointer}
+/* Noppa on ympyrä, joten sen hohtokin on: nelikulmainen kehys näyttäisi vieraalta. */
+.av--esittely .av__noppa.av__osoita{border-radius:50%}
+
+/* Matala ruutu (puhelin poikittain): sama kortti tiiviimpänä, jotta
+   vieritystä tarvitaan mahdollisimman vähän. Rajana sama 520 px kuin
+   pelin muussakin pystysuuntaisessa tiivistyksessä. */
+@media (max-height:520px){
+  .av__opaskortti{padding:14px 18px 0;max-width:420px}
+  .av__opaskortti h2{font-size:21px}
+  .av__opaskortti p{font-size:14px;margin:0 0 4px}
+  .av__opaskortti .av__lainaus{font-size:15px;margin:0 0 6px}
+  .av__opaskortti .av__esittelykuva{max-width:128px;margin-bottom:2px}
+  .av__opaskortti .av__esittelykuva--noppa{max-width:76px}
+  .av__opaskortti .av__esittelykuva--kortti{max-width:80px}
+  .av__opaskortti .av__esittelykortti{width:80px;height:80px;border-radius:12px;margin-bottom:2px}
+  .av__opaskortti .av__esittelykortti .av__kortti-pizza{width:64px;height:64px}
+  .av__opaskortti .av__esittelytorni{--pala:9px;--leveys:34px;margin-bottom:2px}
+  .av__opaskortti .av__esittelylinjasto{height:92px;margin-bottom:2px}
+  .av__opaskortti .av__esittelykulho{width:62px;max-width:62px;--pala:9px;--leveys:30px}
+  .av__opaskortti .av__vuoro{font-size:14px;margin:2px 0 4px;padding-left:20px}
+  .av__opaskortti .av__vuoro li{margin:0 0 3px}
+  .av__opaskortti .av__huomio{font-size:12px}
+  .av__opaskortti .av__opasnapit{margin-top:6px;padding:4px 0 12px}
+  .av__opasnapit .av__vie{min-width:180px}
+}

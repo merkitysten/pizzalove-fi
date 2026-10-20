@@ -37,10 +37,15 @@ const BASSO_APINAN_NAYTTO = 1700;   // apinan laskun näkyvyys — se on opetusp
 const BASSO_PIZZAA_KESTO = 1700;
 
 /* Pelaajat ja pisteraja. 🔵 Marko 6.10.2026: 30 pistettä oletuksena;
- * ihmisiä samalla laitteella 1–4 ja apinoita 0–3, yhteensä 2–4.
+ * ihmisiä samalla laitteella 1–5 ja apinoita 0–4, yhteensä 2–5.
+ * ⚠️ TÄSSÄ LUKI 20.10.2026 ASTI 1–4 / 0–3 / 2–4, ja painettu peli sanoo
+ * 2–5 (laatikon kyljessä ja pizzalove.fi:n tiedoissa). Marko 20.10.2026:
+ * «Samalla laitteella viisi voi olla ahdas, mutta kannattaa se mahdollistaa.»
+ * 📐 Mitattu ettei pakka lopu: käsi on 7 korttia ja täytepakassa 58, joten
+ * viisi kättä vie 35 ja nostopakkaan jää 23.
  * ⚠️ Hahmo (väri ja nimi) EI ole täällä vaan hahmot.js:ssä (9.10.2026): se on
  * pelaajan eikä pelimuodon, joten sama hahmo kulkee Partyn ja Basson välillä. */
-const BASSO_PELAAJIA_ENINTAAN = 4;
+const BASSO_PELAAJIA_ENINTAAN = 5;
 const bassoAsetukset = { ihmisia: 1, apinoita: 1, tavoite: BASSO_TAVOITTEET[0] };
 let basso = null;                    // käynnissä oleva ottelu (basso-saannot.js)
 let bassoAsetusMuuttui = false;
@@ -63,13 +68,13 @@ function bassoLataaAsetukset() {
   try { a = JSON.parse(localStorage.getItem(BASSO_ASETUSAVAIN) || 'null'); } catch (e) { a = null; }
   if (!a) return;
   if (a.ihmisia >= 1 && a.ihmisia <= BASSO_PELAAJIA_ENINTAAN) bassoAsetukset.ihmisia = a.ihmisia | 0;
-  if (a.apinoita >= 0 && a.apinoita <= 3) bassoAsetukset.apinoita = a.apinoita | 0;
+  if (a.apinoita >= 0 && a.apinoita <= BASSO_PELAAJIA_ENINTAAN - 1) bassoAsetukset.apinoita = a.apinoita | 0;
   if (BASSO_TAVOITTEET.indexOf(a.tavoite) >= 0) bassoAsetukset.tavoite = a.tavoite;
   bassoTasapainota('ihmisia');
 }
 
-/* Pelaajia 2–4: kun toista määrää muutetaan, toinen joustaa. (Värit ovat
- * hahmot.js:ssä, jossa niitä on aina neljä eri.) */
+/* Pelaajia 2–5: kun toista määrää muutetaan, toinen joustaa. (Värit ovat
+ * hahmot.js:ssä, jossa niitä on aina viisi eri.) */
 function bassoTasapainota(muuttui) {
   const a = bassoAsetukset;
   if (muuttui === 'apinoita') {
