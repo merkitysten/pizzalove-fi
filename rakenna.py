@@ -632,11 +632,17 @@ def essen2026(t, kaikki):
     laatikko = lambda otsikko, teksti: (
         '<article class="vaihe"><h4>%s</h4><p>%s</p></article>'
         % (e(a[otsikko]), e(a[teksti])))
+    # Markon saantomuutos 21.10.2026: tayttaminen PAATTAA pelin, arvo VOITTAA
+    # sen. Siksi loppu, pisteet ja tasatilanne ovat kolme eri laatikkoa eivatka
+    # yksi «voitto» — ne ovat kolme eri hetkea, ja niiden niputtaminen oli juuri
+    # se mika teki vanhasta saannosta sekavan.
     saannot = (laatikko('tavoite_otsikko', 'tavoite')
                + laatikko('valmistelu_otsikko', 'valmistelu')
                + laatikko('ohi_otsikko', 'ohi')
                + laatikko('aloitus_otsikko', 'aloitus')
                + laatikko('voitto_otsikko', 'voitto')
+               + laatikko('pisteet_otsikko', 'pisteet')
+               + laatikko('tasapeli_otsikko', 'tasapeli')
                + laatikko('vinkki_otsikko', 'vinkki'))
     muunnelmat = ''.join('<article class="vaihe"><h4>%s</h4><p>%s</p></article>'
                          % (e(nimi), e(teksti)) for nimi, teksti in a['muunnelmat'])
