@@ -276,34 +276,42 @@
       [
         "17 €",
         "Kortspelet",
-        "eller två för 30 €",
+        "Normalt 19,90 €",
         "korttipeli",
         "kansi-family.webp",
-        "Du sparar 4 €"
+        "Du sparar 2,90 €"
+      ],
+      [
+        "30 €",
+        "Två kortspel",
+        "Normalt 39,80 €",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Du sparar 9,80 €"
       ],
       [
         "30 €",
         "Brädspelet",
-        "",
+        "Normalt 34,90 €",
         "lautapeli",
-        "lautapeli-kansi.webp",
-        ""
+        "lautapeli-laatikko.webp",
+        "Du sparar 4,90 €"
       ],
       [
         "45 €",
-        "Båda",
-        "47 € separat",
+        "Båda spelen",
+        "Normalt 49,90 €",
         "molemmat",
-        "tuote-pakkaus.webp",
-        "Du sparar 2 €"
+        "molemmat-pelit.webp",
+        "Du sparar 4,90 €"
       ],
       [
         "10 €",
-        "En kompakt påse full av Pizza Love!",
-        "55 fyllningar, tärning och tatuering",
+        "En påse full av Pizza Love",
+        "55 fyllningsmynt i tio färger, samma som i kortspelet. De staplas till torn. Med följer en Pizza Love-tärning med tio sidor och en Basso-tatuering. Spelplanen laddar du ner här på sidan.",
         "",
         "pikkunappulat-noppa.webp",
-        ""
+        "Bara på mässan"
       ]
     ],
     "kaupanpaalle": "Handla för över 35 €, så följer påsen med.",
@@ -321,7 +329,7 @@
         "Pizza Love-brädspelet",
         "Tre spelsätt, 2–4 spelare",
         "lautapeli.html",
-        "lautapeli-kansi.webp"
+        "lautapeli-laatikko.webp"
       ],
       [
         "En kompakt påse full av Pizza Love",

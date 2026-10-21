@@ -283,34 +283,42 @@
       [
         "17 €",
         "Korttipeli",
-        "tai kaksi 30 €:lla",
+        "Normaalisti 19,90 €",
         "korttipeli",
         "kansi-family.webp",
-        "Säästät 4 €"
+        "Säästät 2,90 €"
+      ],
+      [
+        "30 €",
+        "Kaksi korttipeliä",
+        "Normaalisti 39,80 €",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Säästät 9,80 €"
       ],
       [
         "30 €",
         "Lautapeli",
-        "",
+        "Normaalisti 34,90 €",
         "lautapeli",
-        "lautapeli-kansi.webp",
-        ""
+        "lautapeli-laatikko.webp",
+        "Säästät 4,90 €"
       ],
       [
         "45 €",
-        "Molemmat",
-        "erikseen 47 €",
+        "Molemmat pelit",
+        "Normaalisti 49,90 €",
         "molemmat",
-        "tuote-pakkaus.webp",
-        "Säästät 2 €"
+        "molemmat-pelit.webp",
+        "Säästät 4,90 €"
       ],
       [
         "10 €",
-        "Kompakti pussi täynnä Pizza Lovea!",
-        "55 täytettä, noppa ja tatuointi",
+        "Pussillinen Pizza Lovea",
+        "55 täytekolikkoa kymmenessä värissä, samoissa kuin korttipelissä. Ne pinoutuvat torneiksi. Mukana Pizza Love -noppa, jossa on kymmenen sivua, ja Basso-tatuointi. Pelin alustan lataat tältä sivulta.",
         "",
         "pikkunappulat-noppa.webp",
-        ""
+        "Vain messuilla"
       ]
     ],
     "kaupanpaalle": "Osta yli 35 €:lla, niin pussi tulee mukaan.",
@@ -328,7 +336,7 @@
         "Pizza Love -lautapeli",
         "Kolme pelimuotoa, 2–4 pelaajaa",
         "lautapeli.html",
-        "lautapeli-kansi.webp"
+        "lautapeli-laatikko.webp"
       ],
       [
         "Kompakti pussi täynnä Pizza Lovea",

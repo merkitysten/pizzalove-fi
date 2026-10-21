@@ -282,34 +282,42 @@
       [
         "€17",
         "Card game",
-        "or two for €30",
+        "Normally €19.90",
         "korttipeli",
         "kansi-family.webp",
-        "Save €4"
+        "Save €2.90"
+      ],
+      [
+        "€30",
+        "Two card games",
+        "Normally €39.80",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Save €9.80"
       ],
       [
         "€30",
         "Board game",
-        "",
+        "Normally €34.90",
         "lautapeli",
-        "lautapeli-kansi.webp",
-        ""
+        "lautapeli-laatikko.webp",
+        "Save €4.90"
       ],
       [
         "€45",
-        "Both",
-        "€47 separately",
+        "Both games",
+        "Normally €49.90",
         "molemmat",
-        "tuote-pakkaus.webp",
-        "Save €2"
+        "molemmat-pelit.webp",
+        "Save €4.90"
       ],
       [
         "€10",
-        "A compact bag full of Pizza Love!",
-        "55 toppings, a die and a tattoo",
+        "A bag full of Pizza Love",
+        "55 topping coins in ten colours, the same ten as in the card game. They stack into towers. The bag also holds a ten-sided Pizza Love die and a Basso tattoo. Download the board from this page.",
         "",
         "pikkunappulat-noppa.webp",
-        ""
+        "Only at the fair"
       ]
     ],
     "kaupanpaalle": "Spend over €35 and the bag comes with you.",
@@ -327,7 +335,7 @@
         "Pizza Love board game",
         "Three modes, 2–4 players",
         "lautapeli.html",
-        "lautapeli-kansi.webp"
+        "lautapeli-laatikko.webp"
       ],
       [
         "A compact bag full of Pizza Love",

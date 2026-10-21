@@ -84,7 +84,7 @@ def ristiinmyynti(t, tuote, paikka):
     ui = t['ui']
     oma = 'korttipeli' if tuote == 'lautapeli' else 'lautapeli'
     s = t[oma]
-    kuva = ('lautapeli-kansi.webp', 240, 284) if tuote == 'lautapeli' else ('tuote-pakkaus.webp', 900, 686)
+    kuva = ('lautapeli-laatikko.webp', 793, 900) if tuote == 'lautapeli' else ('tuote-pakkaus.webp', 900, 686)
     return kauppa_banneri(t, kuva[0], kuva[1], kuva[2], s['ristiin_otsikko'], s['ristiin_teksti'],
                           [(kauppa(t, tuote, paikka), ui['kauppa_' + tuote]),
                            (tuote + '.html', s['ristiin_saannot'])])
@@ -341,7 +341,7 @@ def etusivu(t, kaikki):
     </div>
   </a>
   <a class="peli-kortti" href="lautapeli.html">
-    <div class="peli-kortti__kuva"><img src="../kuvat/lautapeli-kansi.webp" width="240" height="284" alt=""></div>
+    <div class="peli-kortti__kuva"><img src="../kuvat/lautapeli-laatikko.webp" width="793" height="900" alt=""></div>
     <div class="peli-kortti__teksti">
       <p class="peli-kortti__nimi">%s</p>
       <p class="peli-kortti__tiedot">%s</p>
@@ -589,18 +589,22 @@ def essen2026(t, kaikki):
     for hinta, nimi, lisa, tuote, kuva, saasto in a['tarjoukset']:
         linkki = kauppa(t, tuote, 'essen') if tuote else ''
         tagi = ('a href="%s"' % e(linkki)) if linkki else 'div'
+        teksti = ('<span class="tarjous__hinta">%s</span>'
+                  '<span class="tarjous__nimi">%s</span>%s%s%s'
+                  % (e(hinta), e(nimi),
+                     '<span class="tarjous__lisa">%s</span>' % e(lisa) if lisa else '',
+                     '<span class="tarjous__saasto">%s</span>' % e(saasto) if saasto else '',
+                     '<span class="tarjous__linkki">%s</span>' % e(t['ui']['kauppaan'])
+                     if linkki else ''))
+        # Linkiton kortti on pussi: oma leveä rivinsä, kuva vierellä eikä päällä.
+        # Marko 20.10.2026: pussin kohdalla mehustetaan noppaa ja pinottavia
+        # täytekolikoita, ja se vaatii tilaa jota 2-palstainen ruutu ei anna.
         tarjoukset.append(
             '<%s class="tarjous%s">'
             '<img class="tarjous__kuva" src="../kuvat/%s" alt="" loading="lazy">'
-            '<span class="tarjous__hinta">%s</span>'
-            '<span class="tarjous__nimi">%s</span>'
-            '%s%s%s</%s>'
-            % (tagi, '' if linkki else ' tarjous--nosto', e(kuva), e(hinta),
-               e(nimi),
-               '<span class="tarjous__lisa">%s</span>' % e(lisa) if lisa else '',
-               '<span class="tarjous__saasto">%s</span>' % e(saasto) if saasto else '',
-               '<span class="tarjous__linkki">%s</span>' % e(t['ui']['kauppaan'])
-               if linkki else '',
+            '%s</%s>'
+            % (tagi, '' if linkki else ' tarjous--nosto', e(kuva),
+               teksti if linkki else '<div class="tarjous__teksti">%s</div>' % teksti,
                'a' if linkki else 'div'))
 
     tuotteet = ''.join(

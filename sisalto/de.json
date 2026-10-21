@@ -282,34 +282,42 @@
       [
         "17 €",
         "Kartenspiel",
-        "oder zwei für 30 €",
+        "Normal 19,90 €",
         "korttipeli",
         "kansi-family.webp",
-        "Du sparst 4 €"
+        "Du sparst 2,90 €"
+      ],
+      [
+        "30 €",
+        "Zwei Kartenspiele",
+        "Normal 39,80 €",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Du sparst 9,80 €"
       ],
       [
         "30 €",
         "Brettspiel",
-        "",
+        "Normal 34,90 €",
         "lautapeli",
-        "lautapeli-kansi.webp",
-        ""
+        "lautapeli-laatikko.webp",
+        "Du sparst 4,90 €"
       ],
       [
         "45 €",
-        "Beide",
-        "einzeln 47 €",
+        "Beide Spiele",
+        "Normal 49,90 €",
         "molemmat",
-        "tuote-pakkaus.webp",
-        "Du sparst 2 €"
+        "molemmat-pelit.webp",
+        "Du sparst 4,90 €"
       ],
       [
         "10 €",
-        "Ein kompakter Beutel voll Pizza Love!",
-        "55 Beläge, Würfel und Tattoo",
+        "Ein Beutel voll Pizza Love",
+        "55 Belagmünzen in zehn Farben, denselben wie im Kartenspiel. Sie lassen sich zu Türmen stapeln. Dazu ein zehnseitiger Pizza-Love-Würfel und ein Basso-Tattoo. Den Spielplan lädst du hier auf der Seite herunter.",
         "",
         "pikkunappulat-noppa.webp",
-        ""
+        "Nur auf der Messe"
       ]
     ],
     "kaupanpaalle": "Kauf für über 35 € ein, dann kommt der Beutel mit.",
@@ -327,7 +335,7 @@
         "Pizza-Love-Brettspiel",
         "Drei Spielarten, 2–4 Personen",
         "lautapeli.html",
-        "lautapeli-kansi.webp"
+        "lautapeli-laatikko.webp"
       ],
       [
         "Ein kompakter Beutel voll Pizza Love",

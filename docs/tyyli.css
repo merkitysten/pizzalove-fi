@@ -350,6 +350,7 @@ ol.vaiheet h3{margin:6px 0 6px}
 .tarjoukset{display:grid;gap:14px;margin:18px 0 28px;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .tarjous__kuva{width:100%;height:auto;align-self:stretch;display:block;
+  aspect-ratio:4/3;object-fit:contain;
   border-radius:10px;background:#fff;margin:-4px 0 8px}
 .tarjous__saasto{align-self:flex-start;font-size:13px;font-weight:700;
   padding:3px 9px;border-radius:999px;background:#1A1A1A;color:#fff}
@@ -357,7 +358,12 @@ ol.vaiheet h3{margin:6px 0 6px}
 .tarjous{display:flex;flex-direction:column;gap:6px;padding:20px;
   border:2px solid var(--oranssi,#F47920);border-radius:16px;background:#fff;
   text-decoration:none;color:inherit}
-.tarjous--nosto{background:var(--oranssi,#F47920);color:#fff;border-color:transparent}
+.tarjous--nosto{background:var(--oranssi,#F47920);color:#fff;border-color:transparent;
+  grid-column:1/-1;flex-direction:row;align-items:center;gap:22px}
+.tarjous--nosto .tarjous__kuva{width:46%;flex:none;margin:0;aspect-ratio:auto}
+.tarjous__teksti{display:flex;flex-direction:column;gap:6px}
+@media (max-width:520px){.tarjous--nosto{flex-direction:column;align-items:stretch;gap:10px}
+  .tarjous--nosto .tarjous__kuva{width:100%}}
 .tarjous__hinta{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
 .tarjous__nimi{font-weight:700;font-size:17px}
 .tarjous__lisa{font-size:14px;opacity:.78}
