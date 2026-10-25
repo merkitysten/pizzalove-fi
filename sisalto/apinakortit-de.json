@@ -9,39 +9,188 @@
   "hae": "Kartennummer",
   "huom": "HINWEIS!",
   "tarkennus": "Genauer",
+  "yleista": "Dein Zug endet, wenn du die Affenkarte ziehst. Bringt die Karte Beläge auf das Band, bleiben sie dort für den nächsten Spieler: Er würfelt zuerst und bewegt die Beläge wie gewohnt und bereitet erst danach Pizzas zu. Eine Karte, die man aufbewahren kann, gehört dem, der sie gezogen hat – nur du entscheidest, wann du sie spielst.",
   "kortit": [
-    {"n": 1, "nimi": "Wow, was für ein dünner, knuspriger Pizzaboden!", "ohje": "Würfle und spiele einen neuen Zug."},
-    {"n": 2, "nimi": "Der Blasebalg ist frei!", "ohje": "Bringe einen Belag aus dem Lager auf das Band und nimm, wenn du willst, einen Belag vom Band."},
-    {"n": 3, "nimi": "Mit den Belägen stimmt etwas nicht.", "ohje": "Zähle eins zur Würfelzahl dazu.", "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."},
-    {"n": 4, "nimi": "Mit den Belägen stimmt etwas nicht.", "ohje": "Ziehe eins von der Würfelzahl ab.", "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."},
-    {"n": 5, "nimi": "Das Band braucht mehr Beläge!", "ohje": "Würfle zweimal – lege beide Male Beläge auf das Band. Pizzas werden erst nach beiden Würfen zubereitet.", "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."},
-    {"n": 6, "nimi": "Boxkontrolle!", "ohje": "Die Spieler bekommen oder verlieren Stücke: Wer führt, verliert ein Stück. Wer in der Mitte liegt, bekommt ein Stück. Wer hinten liegt, bekommt zwei Stücke.", "huom": "Die Karte wirkt sofort auf alle Spieler. Die Spieler dürfen die Stücke wählen."},
-    {"n": 7, "nimi": "Probier mal, wie lecker!", "ohje": "Gib ein Stück aus deiner Box einem anderen Spieler.", "huom": "Das Stück muss für den anderen Spieler neu sein."},
-    {"n": 8, "nimi": "Den Blasebalg zu pumpen macht müde.", "ohje": "Setze eine Würfelrunde aus."},
-    {"n": 9, "nimi": "Die Boxen werden gemischt!", "ohje": "Die Boxen wechseln im Uhrzeigersinn den Besitzer."},
-    {"n": 10, "nimi": "Die Boxen werden gemischt!", "ohje": "Die Boxen wechseln gegen den Uhrzeigersinn den Besitzer."},
-    {"n": 11, "nimi": "Abwechslung tut gut.", "ohje": "Die Spielrichtung ändert sich.", "huom": "Zu zweit bekommst du sofort einen neuen Zug."},
-    {"n": 12, "nimi": "Boxen tauschen!", "ohje": "Tausche deine Box mit einem Spieler deiner Wahl."},
-    {"n": 13, "nimi": "Essenspause! Die Affen essen ihre Stücke.", "ohje": "Alle Spieler verlieren so viele Stücke, wie auf der Karte angegeben ist.", "huom": "Hat ein Spieler nur ein Stück, wird es nicht weggenommen."},
-    {"n": 14, "nimi": "Niemand hat die Saugmaschine gewartet, und sie klemmt.", "ohje": "Alle Beläge auf dem Band kommen ins Lager."},
-    {"n": 15, "nimi": "Pizzaparty!", "ohje": "Alle Beläge kommen auf das Band.", "huom": "Du darfst deinen Zug fortsetzen und Pizzas zubereiten. Danach ziehst du eine neue Affenkarte."},
-    {"n": 16, "nimi": "Der Blasebalg spinnt.", "ohje": "Die kleinsten Beläge kommen ins Lager. Nimm, beginnend mit dem kleinsten, so viele Beläge vom Band, wie Spieler mitspielen."},
-    {"n": 17, "nimi": "Der Blasebalg streikt.", "ohje": "Die größten Beläge kommen ins Lager. Nimm, beginnend mit dem größten, so viele Beläge vom Band, wie Spieler mitspielen."},
-    {"n": 18, "nimi": "Zeit zum Pumpen!", "ohje": "Der Wert des Bandes steigt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager."},
-    {"n": 19, "nimi": "Schon wieder Zeit zum Pumpen!", "ohje": "Der Wert des Bandes sinkt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager."},
-    {"n": 20, "nimi": "Du hustest und drückst dabei auf den Blasebalg.", "ohje": "Alle ungeraden Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 21, "nimi": "Du niest und trittst auf den Blasebalg.", "ohje": "Alle geraden Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 22, "nimi": "Du lachst laut los und rollst über den Blasebalg.", "ohje": "Alle durch drei teilbaren Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 23, "nimi": "Dir entwischt ein kleiner Pups – und der Druck der Saugmaschine ändert sich.", "ohje": "Alle durch fünf teilbaren Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 24, "nimi": "Du magst besonders kleine Beläge.", "ohje": "Die kleinen Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 25, "nimi": "Ach, wie du große Beläge liebst.", "ohje": "Die großen Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 26, "nimi": "Du kannst einfach nicht aufhören zu pumpen!", "ohje": "Alle Beläge tauschen den Platz zwischen Band und Lager."},
-    {"n": 27, "nimi": "Du hast Willenskraft!", "ohje": "Du kannst die Wirkung einer Affenkarte aufheben.", "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."},
-    {"n": 28, "nimi": "Die Pizzakartons sind dir dankbar.", "ohje": "Du bekommst ein Extrastück deiner Wahl!"},
-    {"n": 29, "nimi": "Du bist ganz verrückt nach Pizza!", "ohje": "Die Beläge auf dem Band wechseln gemäß den Symbolen auf der Karte.", "huom": "Mit den Belägen passiert nichts, wenn beide auf dem Band liegen."},
-    {"n": 30, "nimi": "Für dich ist Pizza das Wichtigste.", "ohje": "Bereite eine Pizza entweder vor oder nach dem Würfeln zu.", "huom": "Die Karte kann aufbewahrt und später gespielt werden."},
-    {"n": 31, "nimi": "Futterneid!", "ohje": "Die Spieler dürfen sich ein Stück vom vorherigen Spieler aussuchen.", "huom": "Wer am Zug war, beginnt. Das Stück muss neu sein. Gibt es kein neues Stück, geht der Spieler leer aus. Er muss aber trotzdem eines seiner Stücke an den nächsten Spieler abgeben."},
-    {"n": 32, "nimi": "Bei den Pizzakartons bist du eine Legende!", "ohje": "Du bekommst zwei Extrastücke!"},
-    {"n": 33, "nimi": "Oh! Den Pizzabäcker packt der Hunger.", "ohje": "Du verlierst alle deine Stücke."}
+    {
+      "n": 1,
+      "nimi": "Wow, was für ein dünner, knuspriger Pizzaboden!",
+      "ohje": "Würfle und spiele einen neuen Zug."
+    },
+    {
+      "n": 2,
+      "nimi": "Der Blasebalg ist frei!",
+      "ohje": "Bringe einen Belag aus dem Lager auf das Band und nimm, wenn du willst, einen Belag vom Band."
+    },
+    {
+      "n": 3,
+      "nimi": "Mit den Belägen stimmt etwas nicht.",
+      "ohje": "Zähle eins zur Würfelzahl dazu.",
+      "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."
+    },
+    {
+      "n": 4,
+      "nimi": "Mit den Belägen stimmt etwas nicht.",
+      "ohje": "Ziehe eins von der Würfelzahl ab.",
+      "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."
+    },
+    {
+      "n": 5,
+      "nimi": "Das Band braucht mehr Beläge!",
+      "ohje": "Würfle zweimal – lege beide Male Beläge auf das Band. Pizzas werden erst nach beiden Würfen zubereitet.",
+      "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."
+    },
+    {
+      "n": 6,
+      "nimi": "Boxkontrolle!",
+      "ohje": "Die Spieler bekommen oder verlieren Stücke: Wer führt, verliert ein Stück. Wer in der Mitte liegt, bekommt ein Stück. Wer hinten liegt, bekommt zwei Stücke.",
+      "huom": "Die Karte wirkt sofort auf alle Spieler. Die Spieler dürfen die Stücke wählen."
+    },
+    {
+      "n": 7,
+      "nimi": "Probier mal, wie lecker!",
+      "ohje": "Gib ein Stück aus deiner Box einem anderen Spieler.",
+      "huom": "Das Stück muss für den anderen Spieler neu sein.",
+      "tarkennus": "Gib ein Stück, das der andere Spieler noch nicht hat."
+    },
+    {
+      "n": 8,
+      "nimi": "Den Blasebalg zu pumpen macht müde.",
+      "ohje": "Setze eine Würfelrunde aus."
+    },
+    {
+      "n": 9,
+      "nimi": "Die Boxen werden gemischt!",
+      "ohje": "Die Boxen wechseln im Uhrzeigersinn den Besitzer."
+    },
+    {
+      "n": 10,
+      "nimi": "Die Boxen werden gemischt!",
+      "ohje": "Die Boxen wechseln gegen den Uhrzeigersinn den Besitzer."
+    },
+    {
+      "n": 11,
+      "nimi": "Abwechslung tut gut.",
+      "ohje": "Die Spielrichtung ändert sich.",
+      "huom": "Zu zweit bekommst du sofort einen neuen Zug."
+    },
+    {
+      "n": 12,
+      "nimi": "Boxen tauschen!",
+      "ohje": "Tausche deine Box mit einem Spieler deiner Wahl."
+    },
+    {
+      "n": 13,
+      "nimi": "Essenspause! Die Affen essen ihre Stücke.",
+      "ohje": "Alle Spieler verlieren so viele Stücke, wie auf der Karte angegeben ist.",
+      "huom": "Hat ein Spieler nur ein Stück, wird es nicht weggenommen."
+    },
+    {
+      "n": 14,
+      "nimi": "Niemand hat die Saugmaschine gewartet, und sie klemmt.",
+      "ohje": "Alle Beläge auf dem Band kommen ins Lager."
+    },
+    {
+      "n": 15,
+      "nimi": "Pizzaparty!",
+      "ohje": "Alle Beläge kommen auf das Band.",
+      "huom": "Du darfst deinen Zug fortsetzen und Pizzas zubereiten. Danach ziehst du eine neue Affenkarte."
+    },
+    {
+      "n": 16,
+      "nimi": "Der Blasebalg spinnt.",
+      "ohje": "Die kleinsten Beläge kommen ins Lager. Nimm, beginnend mit dem kleinsten, so viele Beläge vom Band, wie Spieler mitspielen."
+    },
+    {
+      "n": 17,
+      "nimi": "Der Blasebalg streikt.",
+      "ohje": "Die größten Beläge kommen ins Lager. Nimm, beginnend mit dem größten, so viele Beläge vom Band, wie Spieler mitspielen."
+    },
+    {
+      "n": 18,
+      "nimi": "Zeit zum Pumpen!",
+      "ohje": "Der Wert des Bandes steigt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager.",
+      "tarkennus": "Bewege Beläge zwischen Band und Lager so, dass die Summe der Beläge auf dem Band um eins steigt. Beispiel: Auf dem Band liegen Ananas (3) und Tomate (2), also 5. Bringe eine Olive (1) auf das Band oder tausche die Ananas (3) gegen Blauschimmelkäse (4)."
+    },
+    {
+      "n": 19,
+      "nimi": "Schon wieder Zeit zum Pumpen!",
+      "ohje": "Der Wert des Bandes sinkt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager.",
+      "tarkennus": "Bewege Beläge zwischen Band und Lager so, dass die Summe der Beläge auf dem Band um eins sinkt. Beispiel: Auf dem Band liegen Ananas (3) und Tomate (2), also 5. Tausche die Tomate (2) gegen eine Olive (1) oder bringe beide ins Lager und hole stattdessen Blauschimmelkäse (4)."
+    },
+    {
+      "n": 20,
+      "nimi": "Du hustest und drückst dabei auf den Blasebalg.",
+      "ohje": "Alle ungeraden Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 21,
+      "nimi": "Du niest und trittst auf den Blasebalg.",
+      "ohje": "Alle geraden Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 22,
+      "nimi": "Du lachst laut los und rollst über den Blasebalg.",
+      "ohje": "Alle durch drei teilbaren Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 23,
+      "nimi": "Dir entwischt ein kleiner Pups – und der Druck der Saugmaschine ändert sich.",
+      "ohje": "Alle durch fünf teilbaren Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 24,
+      "nimi": "Du magst besonders kleine Beläge.",
+      "ohje": "Die kleinen Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 25,
+      "nimi": "Ach, wie du große Beläge liebst.",
+      "ohje": "Die großen Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 26,
+      "nimi": "Du kannst einfach nicht aufhören zu pumpen!",
+      "ohje": "Alle Beläge tauschen den Platz zwischen Band und Lager."
+    },
+    {
+      "n": 27,
+      "nimi": "Du hast Willenskraft!",
+      "ohje": "Du kannst die Wirkung einer Affenkarte aufheben.",
+      "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden."
+    },
+    {
+      "n": 28,
+      "nimi": "Die Pizzakartons sind dir dankbar.",
+      "ohje": "Du bekommst ein Extrastück deiner Wahl!"
+    },
+    {
+      "n": 29,
+      "nimi": "Du bist ganz verrückt nach Pizza!",
+      "ohje": "Die Beläge auf dem Band wechseln gemäß den Symbolen auf der Karte.",
+      "huom": "Mit den Belägen passiert nichts, wenn beide auf dem Band liegen."
+    },
+    {
+      "n": 30,
+      "nimi": "Für dich ist Pizza das Wichtigste.",
+      "ohje": "Bereite eine Pizza entweder vor oder nach dem Würfeln zu.",
+      "huom": "Die Karte kann aufbewahrt und später gespielt werden."
+    },
+    {
+      "n": 31,
+      "nimi": "Futterneid!",
+      "ohje": "Die Spieler dürfen sich ein Stück vom vorherigen Spieler aussuchen.",
+      "huom": "Wer am Zug war, beginnt. Das Stück muss neu sein. Gibt es kein neues Stück, geht der Spieler leer aus. Er muss aber trotzdem eines seiner Stücke an den nächsten Spieler abgeben.",
+      "tarkennus": "Jeder nimmt sich vom Spieler vor ihm ein Stück, das er noch nicht hat. Wer am Zug war, wählt zuerst, dann die anderen in Spielreihenfolge. Die Stücke kommen erst in die Boxen, wenn alle gewählt haben – du kannst also das Stück zurückbekommen, das du gerade abgegeben hast."
+    },
+    {
+      "n": 32,
+      "nimi": "Bei den Pizzakartons bist du eine Legende!",
+      "ohje": "Du bekommst zwei Extrastücke!"
+    },
+    {
+      "n": 33,
+      "nimi": "Oh! Den Pizzabäcker packt der Hunger.",
+      "ohje": "Du verlierst alle deine Stücke."
+    }
   ]
 }

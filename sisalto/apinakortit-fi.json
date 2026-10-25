@@ -9,39 +9,188 @@
   "hae": "Kortin numero",
   "huom": "HUOM!",
   "tarkennus": "Tarkennus",
+  "yleista": "Vuorosi päättyy apinakortin nostoon. Jos kortti tuo täytteitä linjastolle, ne jäävät seuraavalle pelaajalle: hän heittää ensin noppaa ja siirtää täytteitä tavalliseen tapaan ja valmistaa pizzoja vasta sitten. Säästettävä kortti on sen nostajan – vain sinä päätät, milloin pelaat sen.",
   "kortit": [
-    {"n": 1, "nimi": "Wau, miten ohut ja rapea pizzapohja!", "ohje": "Heitä noppaa ja pelaa uusi vuoro."},
-    {"n": 2, "nimi": "Palkeet ovat vapaana!", "ohje": "Tuo yksi täyte varastosta linjastolle ja vie halutessasi yksi täyte pois linjastolta."},
-    {"n": 3, "nimi": "Täytteissä on jotain hämärää.", "ohje": "Lisää nopan lukuun yksi.", "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."},
-    {"n": 4, "nimi": "Täytteissä on jotain hämärää.", "ohje": "Vähennä nopan luvusta yksi.", "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."},
-    {"n": 5, "nimi": "Linjastolle tarvitaan lisää täytteitä!", "ohje": "Heitä noppaa kaksi kertaa – lisää molemmilla kerroilla täytteitä linjastolle. Pizzoja valmistetaan vasta molempien heittojen jälkeen.", "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."},
-    {"n": 6, "nimi": "Boksitarkastus!", "ohje": "Pelaajat saavat tai menettävät paloja: Jos johdat, menetät yhden palan. Jos olet keskellä, saat yhden palan. Jos olet häviöllä, saat kaksi palaa.", "huom": "Kortti vaikuttaa heti kaikkiin pelaajiin. Pelaajat saavat valita palat."},
-    {"n": 7, "nimi": "Maista miten hyvää!", "ohje": "Anna boksistasi yksi pala toiselle pelaajalle.", "huom": "Palan tulee olla saajalleen uusi."},
-    {"n": 8, "nimi": "Palkeiden pumppaaminen väsyttää.", "ohje": "Pidä taukoa yksi heittokierros."},
-    {"n": 9, "nimi": "Boksit sekoittuvat!", "ohje": "Pelaajien boksit vaihtavat omistajaa myötäpäivään."},
-    {"n": 10, "nimi": "Boksit sekoittuvat!", "ohje": "Pelaajien boksit vaihtavat omistajaa vastapäivään."},
-    {"n": 11, "nimi": "Vaihtelu virkistää.", "ohje": "Pelin kiertosuunta vaihtuu.", "huom": "Kaksinpelissä saat heti uuden vuoron."},
-    {"n": 12, "nimi": "Boksit vaihtuvat!", "ohje": "Vaihda boksisi haluamasi pelaajan kanssa."},
-    {"n": 13, "nimi": "Ruokatauko! Apinat syövät palojaan.", "ohje": "Kaikkien pelaajien paloja vähennetään kortin osoittaman määrän mukaisesti.", "huom": "Jos pelaajalla on yksi pala, sitä ei poisteta."},
-    {"n": 14, "nimi": "Joku ei ole huoltanut imuria ja se jäi jumiin.", "ohje": "Kaikki linjaston täytteet siirtyvät varastoon."},
-    {"n": 15, "nimi": "Pizzaparty!", "ohje": "Kaikki täytteet siirtyvät linjastolle.", "huom": "Saat jatkaa vuoroasi valmistamalla pizzoja. Valmistamisen jälkeen nostat uuden apinakortin."},
-    {"n": 16, "nimi": "Palkeet temppuilevat.", "ohje": "Pienimmät täytteet siirtyvät varastoon. Poista linjaston täytteitä pienimmästä alkaen pelaajien lukumäärän verran."},
-    {"n": 17, "nimi": "Palkeet reistailevat.", "ohje": "Suurimmat täytteet siirtyvät varastoon. Poista linjaston täytteitä suurimmasta alkaen pelaajien lukumäärän verran."},
-    {"n": 18, "nimi": "On aika pumpata!", "ohje": "Linjaston arvo suurenee yhdellä. Siirrä haluamiasi täytteitä linjaston ja varaston välillä."},
-    {"n": 19, "nimi": "Taas on aika pumpata!", "ohje": "Linjaston arvo pienenee yhdellä. Siirrä haluamiasi täytteitä linjaston ja varaston välillä."},
-    {"n": 20, "nimi": "Yskäiset ja samalla painelet palkeita.", "ohje": "Kaikki parittomat täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 21, "nimi": "Aivastat ja tulet polkeneeksi palkeita.", "ohje": "Kaikki parilliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 22, "nimi": "Repeät nauramaan ja kierit palkeiden päällä.", "ohje": "Kaikki kolmella jaolliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 23, "nimi": "Sinulta pääsee ihan pieni paukku, joka samalla vaikuttaa myös imurin paineeseen.", "ohje": "Kaikki viidellä jaolliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 24, "nimi": "Sinua kiinnostaa erityisesti pienet täytteet.", "ohje": "Pienet täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 25, "nimi": "Ai että, miten rakastat suuria täytteitä.", "ohje": "Suuret täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 26, "nimi": "Et malta millään lopettaa pumppaamista!", "ohje": "Kaikki täytteet vaihtavat paikkaa linjaston ja varaston välillä."},
-    {"n": 27, "nimi": "Sinulla on tahdonvoimaa!", "ohje": "Pystyt perumaan apinakortin vaikutuksen.", "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."},
-    {"n": 28, "nimi": "Laatikot ovat kiitollisia sinulle.", "ohje": "Saat yhden vapaavalintaisen lisäpalan!"},
-    {"n": 29, "nimi": "Olet mennyt pizzasta sekaisin!", "ohje": "Linjaston täytteet vaihtuvat kortin kuvakkeiden mukaisesti.", "huom": "Täytteille ei tapahdu mitään, jos molemmat täytteet ovat linjastolla."},
-    {"n": 30, "nimi": "Mielestäsi pizza on pääasia.", "ohje": "Valmista pizzaa joko ennen tai jälkeen nopan heiton.", "huom": "Kortin voi säästää ja pelata myöhemmin."},
-    {"n": 31, "nimi": "Annoskateus!", "ohje": "Pelaajat saavat valita palan edelliseltä.", "huom": "Pelivuorossa ollut pelaaja aloittaa. Palan tulee olla uusi. Jos uutta palaa ei ole, pelaaja jää ilman. Pelaaja joutuu kuitenkin antamaan omistaan seuraavalle."},
-    {"n": 32, "nimi": "Laatikoiden keskuudessa olet legenda!", "ohje": "Saat kaksi lisäpalaa!"},
-    {"n": 33, "nimi": "Oho! Nälkä yllätti pizzanpaistajan.", "ohje": "Menetät kaikki omat palasi."}
+    {
+      "n": 1,
+      "nimi": "Wau, miten ohut ja rapea pizzapohja!",
+      "ohje": "Heitä noppaa ja pelaa uusi vuoro."
+    },
+    {
+      "n": 2,
+      "nimi": "Palkeet ovat vapaana!",
+      "ohje": "Tuo yksi täyte varastosta linjastolle ja vie halutessasi yksi täyte pois linjastolta."
+    },
+    {
+      "n": 3,
+      "nimi": "Täytteissä on jotain hämärää.",
+      "ohje": "Lisää nopan lukuun yksi.",
+      "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."
+    },
+    {
+      "n": 4,
+      "nimi": "Täytteissä on jotain hämärää.",
+      "ohje": "Vähennä nopan luvusta yksi.",
+      "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."
+    },
+    {
+      "n": 5,
+      "nimi": "Linjastolle tarvitaan lisää täytteitä!",
+      "ohje": "Heitä noppaa kaksi kertaa – lisää molemmilla kerroilla täytteitä linjastolle. Pizzoja valmistetaan vasta molempien heittojen jälkeen.",
+      "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."
+    },
+    {
+      "n": 6,
+      "nimi": "Boksitarkastus!",
+      "ohje": "Pelaajat saavat tai menettävät paloja: Jos johdat, menetät yhden palan. Jos olet keskellä, saat yhden palan. Jos olet häviöllä, saat kaksi palaa.",
+      "huom": "Kortti vaikuttaa heti kaikkiin pelaajiin. Pelaajat saavat valita palat."
+    },
+    {
+      "n": 7,
+      "nimi": "Maista miten hyvää!",
+      "ohje": "Anna boksistasi yksi pala toiselle pelaajalle.",
+      "huom": "Palan tulee olla saajalleen uusi.",
+      "tarkennus": "Anna pala, jota saajalla ei vielä ole."
+    },
+    {
+      "n": 8,
+      "nimi": "Palkeiden pumppaaminen väsyttää.",
+      "ohje": "Pidä taukoa yksi heittokierros."
+    },
+    {
+      "n": 9,
+      "nimi": "Boksit sekoittuvat!",
+      "ohje": "Pelaajien boksit vaihtavat omistajaa myötäpäivään."
+    },
+    {
+      "n": 10,
+      "nimi": "Boksit sekoittuvat!",
+      "ohje": "Pelaajien boksit vaihtavat omistajaa vastapäivään."
+    },
+    {
+      "n": 11,
+      "nimi": "Vaihtelu virkistää.",
+      "ohje": "Pelin kiertosuunta vaihtuu.",
+      "huom": "Kaksinpelissä saat heti uuden vuoron."
+    },
+    {
+      "n": 12,
+      "nimi": "Boksit vaihtuvat!",
+      "ohje": "Vaihda boksisi haluamasi pelaajan kanssa."
+    },
+    {
+      "n": 13,
+      "nimi": "Ruokatauko! Apinat syövät palojaan.",
+      "ohje": "Kaikkien pelaajien paloja vähennetään kortin osoittaman määrän mukaisesti.",
+      "huom": "Jos pelaajalla on yksi pala, sitä ei poisteta."
+    },
+    {
+      "n": 14,
+      "nimi": "Joku ei ole huoltanut imuria ja se jäi jumiin.",
+      "ohje": "Kaikki linjaston täytteet siirtyvät varastoon."
+    },
+    {
+      "n": 15,
+      "nimi": "Pizzaparty!",
+      "ohje": "Kaikki täytteet siirtyvät linjastolle.",
+      "huom": "Saat jatkaa vuoroasi valmistamalla pizzoja. Valmistamisen jälkeen nostat uuden apinakortin."
+    },
+    {
+      "n": 16,
+      "nimi": "Palkeet temppuilevat.",
+      "ohje": "Pienimmät täytteet siirtyvät varastoon. Poista linjaston täytteitä pienimmästä alkaen pelaajien lukumäärän verran."
+    },
+    {
+      "n": 17,
+      "nimi": "Palkeet reistailevat.",
+      "ohje": "Suurimmat täytteet siirtyvät varastoon. Poista linjaston täytteitä suurimmasta alkaen pelaajien lukumäärän verran."
+    },
+    {
+      "n": 18,
+      "nimi": "On aika pumpata!",
+      "ohje": "Linjaston arvo suurenee yhdellä. Siirrä haluamiasi täytteitä linjaston ja varaston välillä.",
+      "tarkennus": "Siirrä täytteitä linjaston ja varaston välillä niin, että linjaston täytteiden summa kasvaa yhdellä. Esimerkki: linjastolla on ananas (3) ja tomaatti (2) eli 5. Tuo oliivi (1) linjastolle tai vaihda ananas (3) homejuustoon (4)."
+    },
+    {
+      "n": 19,
+      "nimi": "Taas on aika pumpata!",
+      "ohje": "Linjaston arvo pienenee yhdellä. Siirrä haluamiasi täytteitä linjaston ja varaston välillä.",
+      "tarkennus": "Siirrä täytteitä linjaston ja varaston välillä niin, että linjaston täytteiden summa pienenee yhdellä. Esimerkki: linjastolla on ananas (3) ja tomaatti (2) eli 5. Vaihda tomaatti (2) oliiviin (1) tai vie molemmat varastoon ja tuo tilalle homejuusto (4)."
+    },
+    {
+      "n": 20,
+      "nimi": "Yskäiset ja samalla painelet palkeita.",
+      "ohje": "Kaikki parittomat täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 21,
+      "nimi": "Aivastat ja tulet polkeneeksi palkeita.",
+      "ohje": "Kaikki parilliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 22,
+      "nimi": "Repeät nauramaan ja kierit palkeiden päällä.",
+      "ohje": "Kaikki kolmella jaolliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 23,
+      "nimi": "Sinulta pääsee ihan pieni paukku, joka samalla vaikuttaa myös imurin paineeseen.",
+      "ohje": "Kaikki viidellä jaolliset täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 24,
+      "nimi": "Sinua kiinnostaa erityisesti pienet täytteet.",
+      "ohje": "Pienet täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 25,
+      "nimi": "Ai että, miten rakastat suuria täytteitä.",
+      "ohje": "Suuret täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 26,
+      "nimi": "Et malta millään lopettaa pumppaamista!",
+      "ohje": "Kaikki täytteet vaihtavat paikkaa linjaston ja varaston välillä."
+    },
+    {
+      "n": 27,
+      "nimi": "Sinulla on tahdonvoimaa!",
+      "ohje": "Pystyt perumaan apinakortin vaikutuksen.",
+      "huom": "Kortin voi säästää ja pelata kenen tahansa vuorolla."
+    },
+    {
+      "n": 28,
+      "nimi": "Laatikot ovat kiitollisia sinulle.",
+      "ohje": "Saat yhden vapaavalintaisen lisäpalan!"
+    },
+    {
+      "n": 29,
+      "nimi": "Olet mennyt pizzasta sekaisin!",
+      "ohje": "Linjaston täytteet vaihtuvat kortin kuvakkeiden mukaisesti.",
+      "huom": "Täytteille ei tapahdu mitään, jos molemmat täytteet ovat linjastolla."
+    },
+    {
+      "n": 30,
+      "nimi": "Mielestäsi pizza on pääasia.",
+      "ohje": "Valmista pizzaa joko ennen tai jälkeen nopan heiton.",
+      "huom": "Kortin voi säästää ja pelata myöhemmin."
+    },
+    {
+      "n": 31,
+      "nimi": "Annoskateus!",
+      "ohje": "Pelaajat saavat valita palan edelliseltä.",
+      "huom": "Pelivuorossa ollut pelaaja aloittaa. Palan tulee olla uusi. Jos uutta palaa ei ole, pelaaja jää ilman. Pelaaja joutuu kuitenkin antamaan omistaan seuraavalle.",
+      "tarkennus": "Jokainen ottaa edelliseltä pelaajalta palan, jota itsellä ei vielä ole. Vuorossa ollut pelaaja valitsee ensin, sitten muut pelijärjestyksessä. Palat laitetaan boksiin vasta, kun kaikki ovat valinneet – voit siis saada takaisin palan, jonka juuri annoit."
+    },
+    {
+      "n": 32,
+      "nimi": "Laatikoiden keskuudessa olet legenda!",
+      "ohje": "Saat kaksi lisäpalaa!"
+    },
+    {
+      "n": 33,
+      "nimi": "Oho! Nälkä yllätti pizzanpaistajan.",
+      "ohje": "Menetät kaikki omat palasi."
+    }
   ]
 }

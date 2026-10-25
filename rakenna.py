@@ -558,10 +558,15 @@ def apinakortit(t, kaikki):
 <h1>%s</h1>
 <p class="ingressi">%s</p>
 <p class="pieni">%s</p>
+%s
 <nav class="korttinumerot" aria-label="%s">%s</nav>
 <div class="apinakortit">%s</div>
 <p class="murupolku" style="margin-top:28px"><a href="lautapeli.html">← %s</a></p>
-''' % (e(a['takaisin']), e(a['h1']), e(a['ingressi']), e(a['kaytto']), e(a['hae']), numerot,
+''' % (e(a['takaisin']), e(a['h1']), e(a['ingressi']), e(a['kaytto']),
+       # Yleinen sääntö kaikille korteille (Marko 19.1.2026 pelaajalle): vuoro päättyy nostoon,
+       # säästettävä kortti on nostajan.
+       ('<p class="apinakortit__yleista">%s</p>' % e(a['yleista'])) if a.get('yleista') else '',
+       e(a['hae']), numerot,
        '\n'.join(kortit), e(a['takaisin']))
     return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)
 

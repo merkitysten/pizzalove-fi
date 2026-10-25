@@ -9,39 +9,189 @@
   "hae": "Card number",
   "huom": "NOTE!",
   "tarkennus": "Clarification",
+  "yleista": "Your turn ends when you draw the monkey card. If the card brings toppings to the line, they stay there for the next player: they first roll the dice and move toppings as usual, and only then make pizzas. A card that can be saved belongs to the player who drew it – only you decide when to play it.",
   "kortit": [
-    {"n": 1, "nimi": "Wow, what a thin and crispy pizza crust!", "ohje": "Roll the dice and play another turn."},
-    {"n": 2, "nimi": "The bellows are free!", "ohje": "Take one topping from the storage to the line and, if you want, remove one topping from the line."},
-    {"n": 3, "nimi": "There is something odd going on with the toppings.", "ohje": "Add one to the number on the dice.", "huom": "The card can be saved and played on anyone’s turn."},
-    {"n": 4, "nimi": "There is something odd going on with the toppings.", "ohje": "Subtract one from the number on the dice.", "huom": "The card can be saved and played on anyone’s turn."},
-    {"n": 5, "nimi": "The line needs more toppings!", "ohje": "Roll the dice twice – add toppings to the line both times. Pizzas are only made after both rolls.", "huom": "The card can be saved and played on anyone’s turn."},
-    {"n": 6, "nimi": "Box inspection!", "ohje": "Players get or lose slices: If you are in the lead, you lose one slice. If you are in the middle, you get one slice. If you are last, you get two slices.", "huom": "The card immediately affects all players. The players get to choose the slices."},
-    {"n": 7, "nimi": "Taste my pizza!", "ohje": "Give one slice from your box to another player.", "huom": "The slice must be new for the other player."},
-    {"n": 8, "nimi": "Pumping the bellows is tiring.", "ohje": "Rest for one round."},
-    {"n": 9, "nimi": "Shuffle the boxes!", "ohje": "Players’ boxes change owners clockwise."},
-    {"n": 10, "nimi": "Shuffle the boxes!", "ohje": "Players’ boxes change owners counterclockwise."},
-    {"n": 11, "nimi": "Variety is the spice of life.", "ohje": "The direction of play changes.", "huom": "In a two-player game, you get a new turn right away."},
-    {"n": 12, "nimi": "Swapping the boxes!", "ohje": "Swap your box with any player."},
-    {"n": 13, "nimi": "Lunch break! The monkeys eat their slices.", "ohje": "All players lose slices according to the number shown on the card.", "huom": "If a player has only one slice, it is not removed."},
-    {"n": 14, "nimi": "Someone forgot to maintain the suction system, and it got jammed.", "ohje": "All toppings on the line are moved to the storage."},
-    {"n": 15, "nimi": "Pizza party!", "ohje": "All toppings are moved to the line.", "huom": "You can continue your turn by making pizzas. Draw a new monkey card at the end."},
-    {"n": 16, "nimi": "The bellows are acting up.", "ohje": "The smallest toppings are moved to the storage. Starting with the smallest topping on the line, remove as many toppings as there are players in the game."},
-    {"n": 17, "nimi": "The bellows are playing tricks.", "ohje": "The largest toppings are moved to the storage. Starting with the largest topping on the line, remove as many toppings as there are players in the game."},
-    {"n": 18, "nimi": "Time to pump!", "ohje": "The value of the line increases by one. Move the toppings of your choice between the line and the storage."},
-    {"n": 19, "nimi": "Time to pump again!", "ohje": "The value of the line decreases by one. Move the toppings of your choice between the line and the storage."},
-    {"n": 20, "nimi": "You cough as you pump the bellows.", "ohje": "All odd toppings change place between the line and the storage."},
-    {"n": 21, "nimi": "You sneeze as you push the bellows.", "ohje": "All even toppings change place between the line and the storage."},
-    {"n": 22, "nimi": "You laugh out loud and roll on top of the bellows.", "ohje": "All toppings that are divisible by three change place between the line and the storage."},
-    {"n": 23, "nimi": "You let out a toot, affecting the suction system’s pressure.", "ohje": "All toppings that are divisible by five change place between the line and the storage."},
-    {"n": 24, "nimi": "You are particularly fond of small toppings.", "ohje": "Small toppings swap places between the line and the storage."},
-    {"n": 25, "nimi": "Oh, how you love large toppings.", "ohje": "Large toppings swap places between the line and the storage."},
-    {"n": 26, "nimi": "You cannot stop pumping!", "ohje": "All toppings swap places between the line and the storage."},
-    {"n": 27, "nimi": "You have willpower!", "ohje": "You can cancel the effect of a monkey card.", "huom": "The card can be saved and played on anyone’s turn."},
-    {"n": 28, "nimi": "The pizza boxes will thank you.", "ohje": "You get one free extra slice!"},
-    {"n": 29, "nimi": "You went crazy for pizza!", "ohje": "The toppings on the line are changed according to the icons on the card.", "huom": "Nothing happens to the toppings if both of them are on the line."},
-    {"n": 30, "nimi": "You have pizza on your mind.", "ohje": "Make a pizza either before or after rolling the dice.", "huom": "The card can be saved and played later.", "virhe": "In the printed English rules, this card is numbered 31 by mistake."},
-    {"n": 31, "nimi": "That looked tasty!", "ohje": "Players can choose a slice from the previous player.", "huom": "The player whose turn it was starts. The slice must be new. If there is no new slice, the player gets nothing. However, that player must still give one of their own slices to the next player."},
-    {"n": 32, "nimi": "You are a legend among the pizza boxes!", "ohje": "Get two extra slices!"},
-    {"n": 33, "nimi": "Oh! You suddenly feel hungry.", "ohje": "You lose all your slices."}
+    {
+      "n": 1,
+      "nimi": "Wow, what a thin and crispy pizza crust!",
+      "ohje": "Roll the dice and play another turn."
+    },
+    {
+      "n": 2,
+      "nimi": "The bellows are free!",
+      "ohje": "Take one topping from the storage to the line and, if you want, remove one topping from the line."
+    },
+    {
+      "n": 3,
+      "nimi": "There is something odd going on with the toppings.",
+      "ohje": "Add one to the number on the dice.",
+      "huom": "The card can be saved and played on anyone’s turn."
+    },
+    {
+      "n": 4,
+      "nimi": "There is something odd going on with the toppings.",
+      "ohje": "Subtract one from the number on the dice.",
+      "huom": "The card can be saved and played on anyone’s turn."
+    },
+    {
+      "n": 5,
+      "nimi": "The line needs more toppings!",
+      "ohje": "Roll the dice twice – add toppings to the line both times. Pizzas are only made after both rolls.",
+      "huom": "The card can be saved and played on anyone’s turn."
+    },
+    {
+      "n": 6,
+      "nimi": "Box inspection!",
+      "ohje": "Players get or lose slices: If you are in the lead, you lose one slice. If you are in the middle, you get one slice. If you are last, you get two slices.",
+      "huom": "The card immediately affects all players. The players get to choose the slices."
+    },
+    {
+      "n": 7,
+      "nimi": "Taste my pizza!",
+      "ohje": "Give one slice from your box to another player.",
+      "huom": "The slice must be new for the other player.",
+      "tarkennus": "Give a slice the other player does not have yet."
+    },
+    {
+      "n": 8,
+      "nimi": "Pumping the bellows is tiring.",
+      "ohje": "Rest for one round."
+    },
+    {
+      "n": 9,
+      "nimi": "Shuffle the boxes!",
+      "ohje": "Players’ boxes change owners clockwise."
+    },
+    {
+      "n": 10,
+      "nimi": "Shuffle the boxes!",
+      "ohje": "Players’ boxes change owners counterclockwise."
+    },
+    {
+      "n": 11,
+      "nimi": "Variety is the spice of life.",
+      "ohje": "The direction of play changes.",
+      "huom": "In a two-player game, you get a new turn right away."
+    },
+    {
+      "n": 12,
+      "nimi": "Swapping the boxes!",
+      "ohje": "Swap your box with any player."
+    },
+    {
+      "n": 13,
+      "nimi": "Lunch break! The monkeys eat their slices.",
+      "ohje": "All players lose slices according to the number shown on the card.",
+      "huom": "If a player has only one slice, it is not removed."
+    },
+    {
+      "n": 14,
+      "nimi": "Someone forgot to maintain the suction system, and it got jammed.",
+      "ohje": "All toppings on the line are moved to the storage."
+    },
+    {
+      "n": 15,
+      "nimi": "Pizza party!",
+      "ohje": "All toppings are moved to the line.",
+      "huom": "You can continue your turn by making pizzas. Draw a new monkey card at the end."
+    },
+    {
+      "n": 16,
+      "nimi": "The bellows are acting up.",
+      "ohje": "The smallest toppings are moved to the storage. Starting with the smallest topping on the line, remove as many toppings as there are players in the game."
+    },
+    {
+      "n": 17,
+      "nimi": "The bellows are playing tricks.",
+      "ohje": "The largest toppings are moved to the storage. Starting with the largest topping on the line, remove as many toppings as there are players in the game."
+    },
+    {
+      "n": 18,
+      "nimi": "Time to pump!",
+      "ohje": "The value of the line increases by one. Move the toppings of your choice between the line and the storage.",
+      "tarkennus": "Move toppings between the line and the storage so that the sum of the toppings on the line increases by one. Example: the line has pineapple (3) and tomato (2), so 5. Bring an olive (1) to the line, or swap the pineapple (3) for blue cheese (4)."
+    },
+    {
+      "n": 19,
+      "nimi": "Time to pump again!",
+      "ohje": "The value of the line decreases by one. Move the toppings of your choice between the line and the storage.",
+      "tarkennus": "Move toppings between the line and the storage so that the sum of the toppings on the line decreases by one. Example: the line has pineapple (3) and tomato (2), so 5. Swap the tomato (2) for an olive (1), or move both to the storage and bring blue cheese (4) instead."
+    },
+    {
+      "n": 20,
+      "nimi": "You cough as you pump the bellows.",
+      "ohje": "All odd toppings change place between the line and the storage."
+    },
+    {
+      "n": 21,
+      "nimi": "You sneeze as you push the bellows.",
+      "ohje": "All even toppings change place between the line and the storage."
+    },
+    {
+      "n": 22,
+      "nimi": "You laugh out loud and roll on top of the bellows.",
+      "ohje": "All toppings that are divisible by three change place between the line and the storage."
+    },
+    {
+      "n": 23,
+      "nimi": "You let out a toot, affecting the suction system’s pressure.",
+      "ohje": "All toppings that are divisible by five change place between the line and the storage."
+    },
+    {
+      "n": 24,
+      "nimi": "You are particularly fond of small toppings.",
+      "ohje": "Small toppings swap places between the line and the storage."
+    },
+    {
+      "n": 25,
+      "nimi": "Oh, how you love large toppings.",
+      "ohje": "Large toppings swap places between the line and the storage."
+    },
+    {
+      "n": 26,
+      "nimi": "You cannot stop pumping!",
+      "ohje": "All toppings swap places between the line and the storage."
+    },
+    {
+      "n": 27,
+      "nimi": "You have willpower!",
+      "ohje": "You can cancel the effect of a monkey card.",
+      "huom": "The card can be saved and played on anyone’s turn."
+    },
+    {
+      "n": 28,
+      "nimi": "The pizza boxes will thank you.",
+      "ohje": "You get one free extra slice!"
+    },
+    {
+      "n": 29,
+      "nimi": "You went crazy for pizza!",
+      "ohje": "The toppings on the line are changed according to the icons on the card.",
+      "huom": "Nothing happens to the toppings if both of them are on the line."
+    },
+    {
+      "n": 30,
+      "nimi": "You have pizza on your mind.",
+      "ohje": "Make a pizza either before or after rolling the dice.",
+      "huom": "The card can be saved and played later.",
+      "virhe": "In the printed English rules, this card is numbered 31 by mistake."
+    },
+    {
+      "n": 31,
+      "nimi": "That looked tasty!",
+      "ohje": "Players can choose a slice from the previous player.",
+      "huom": "The player whose turn it was starts. The slice must be new. If there is no new slice, the player gets nothing. However, that player must still give one of their own slices to the next player.",
+      "tarkennus": "Everyone takes a slice they do not have yet from the player before them. The player whose turn it was chooses first, then the others in turn order. The slices go into the boxes only after everyone has chosen – so you can get back the slice you just gave away."
+    },
+    {
+      "n": 32,
+      "nimi": "You are a legend among the pizza boxes!",
+      "ohje": "Get two extra slices!"
+    },
+    {
+      "n": 33,
+      "nimi": "Oh! You suddenly feel hungry.",
+      "ohje": "You lose all your slices."
+    }
   ]
 }
