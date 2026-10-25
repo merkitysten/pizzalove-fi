@@ -165,7 +165,7 @@
     "vaiheet": [
       {
         "otsikko": "Kasta tärningen och flytta brickorna",
-        "html": "<p>Den som senast åt pizza börjar genom att kasta tärningen. Tärningen avgör hur många brickor som flyttas mellan lagret och linjen. Brickor med samma färg flyttas alltid som ett torn. Om du inte kan göra en förflyttning, slutar din speltur.</p><p class=\"pieni\">Apvågen och vikterna hjälper barn att förstå förflyttningarna. <b>De behöver inte användas.</b></p>"
+        "html": "<p>Den som senast åt pizza börjar genom att kasta tärningen. Tärningen avgör hur många brickor som flyttas mellan lagret och linjen. Brickor med samma färg flyttas alltid som ett torn. Om du inte hittar någon förflyttning får de andra hjälpa till. Hittar någon en, görs den. Hittar ingen någon, slutar din speltur.</p><p class=\"pieni\">Apvågen och vikterna hjälper barn att förstå förflyttningarna. <b>De behöver inte användas.</b></p>"
       },
       {
         "otsikko": "Tillaga pizza",

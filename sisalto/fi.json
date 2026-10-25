@@ -172,7 +172,7 @@
     "vaiheet": [
       {
         "otsikko": "Nopan heitto ja nappuloiden siirto",
-        "html": "<p>Viimeksi pizzaa syönyt aloittaa heittämällä noppaa. Noppa kertoo, montako nappulaa siirretään varaston ja linjaston välillä. Samanväriset nappulat liikkuvat aina yhtenä tornina. Jos et voi tehdä siirtoa, vuorosi päättyy.</p><p class=\"pieni\">Apinavaaka ja punnukset auttavat lasta hahmottamaan siirtoja. <b>Niitä ei ole pakko käyttää.</b></p>"
+        "html": "<p>Viimeksi pizzaa syönyt aloittaa heittämällä noppaa. Noppa kertoo, montako nappulaa siirretään varaston ja linjaston välillä. Samanväriset nappulat liikkuvat aina yhtenä tornina. Jos et löydä siirtoa, muut saavat auttaa. Jos joku löytää siirron, se tehdään. Jos kukaan ei löydä, vuorosi päättyy.</p><p class=\"pieni\">Apinavaaka ja punnukset auttavat lasta hahmottamaan siirtoja. <b>Niitä ei ole pakko käyttää.</b></p>"
       },
       {
         "otsikko": "Pizzan valmistaminen",

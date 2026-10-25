@@ -171,7 +171,7 @@
     "vaiheet": [
       {
         "otsikko": "Rolling the dice and moving the pieces",
-        "html": "<p>The player who last ate pizza starts by rolling the dice. The dice determines how many pieces are moved between the storage and the line. Same-coloured pieces always move as one tower. If you cannot make a move, your turn ends.</p><p class=\"pieni\">The monkey scales and weights help children visualise the moves. <b>They do not need to be used.</b></p>"
+        "html": "<p>The player who last ate pizza starts by rolling the dice. The dice determines how many pieces are moved between the storage and the line. Same-coloured pieces always move as one tower. If you cannot find a move, the others may help. If someone finds one, it is made. If no one does, your turn ends.</p><p class=\"pieni\">The monkey scales and weights help children visualise the moves. <b>They do not need to be used.</b></p>"
       },
       {
         "otsikko": "Pizza making",

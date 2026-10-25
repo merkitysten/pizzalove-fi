@@ -171,7 +171,7 @@
     "vaiheet": [
       {
         "otsikko": "Würfeln und Spielsteine bewegen",
-        "html": "<p>Wer zuletzt Pizza gegessen hat, beginnt und würfelt. Der Würfel bestimmt, wie viele Spielsteine zwischen dem Lager und dem Band bewegt werden. Gleichfarbige Spielsteine bewegen sich immer als ein Turm. Kannst du keinen Zug machen, endet dein Zug.</p><p class=\"pieni\">Die Affenwaage und die Gewichte helfen Kindern, die Züge zu verstehen. <b>Sie müssen nicht verwendet werden.</b></p>"
+        "html": "<p>Wer zuletzt Pizza gegessen hat, beginnt und würfelt. Der Würfel bestimmt, wie viele Spielsteine zwischen dem Lager und dem Band bewegt werden. Gleichfarbige Spielsteine bewegen sich immer als ein Turm. Findest du keinen Zug, dürfen die anderen helfen. Findet jemand einen, wird er gemacht. Findet niemand einen, endet dein Zug.</p><p class=\"pieni\">Die Affenwaage und die Gewichte helfen Kindern, die Züge zu verstehen. <b>Sie müssen nicht verwendet werden.</b></p>"
       },
       {
         "otsikko": "Pizza zubereiten",
