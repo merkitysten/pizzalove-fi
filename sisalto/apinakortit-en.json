@@ -9,7 +9,7 @@
   "hae": "Card number",
   "huom": "NOTE!",
   "tarkennus": "Clarification",
-  "yleista": "Your turn ends when you draw the monkey card. If the card brings toppings to the line, they stay there for the next player: they first roll the dice and move toppings as usual, and only then make pizzas. A card that can be saved belongs to the player who drew it – only you decide when to play it.",
+  "yleista": "Your turn ends when you draw the monkey card. The next player rolls the dice and moves toppings before making pizzas. A card that can be saved belongs to the player who drew it.",
   "kortit": [
     {
       "n": 1,
@@ -26,28 +26,28 @@
       "nimi": "There is something odd going on with the toppings.",
       "ohje": "Add one to the number on the dice.",
       "huom": "The card can be saved and played on anyone’s turn.",
-      "tarkennus": "Play the card right after the dice is rolled, before any toppings are moved."
+      "tarkennus": "Play it right after the dice is rolled."
     },
     {
       "n": 4,
       "nimi": "There is something odd going on with the toppings.",
       "ohje": "Subtract one from the number on the dice.",
       "huom": "The card can be saved and played on anyone’s turn.",
-      "tarkennus": "Play the card right after the dice is rolled, before any toppings are moved. The number can become 0 if the dice shows 1. Then no toppings are moved."
+      "tarkennus": "Play it right after the dice is rolled. The number can become 0, and then no toppings are moved."
     },
     {
       "n": 5,
       "nimi": "The line needs more toppings!",
       "ohje": "Roll the dice twice – add toppings to the line both times. Pizzas are only made after both rolls.",
       "huom": "The card can be saved and played on anyone’s turn.",
-      "tarkennus": "The player whose turn it is when the card is played rolls the dice again and moves toppings a second time."
+      "tarkennus": "The player whose turn it is rolls the dice again."
     },
     {
       "n": 6,
       "nimi": "Box inspection!",
       "ohje": "Players get or lose slices: If you are in the lead, you lose one slice. If you are in the middle, you get one slice. If you are last, you get two slices.",
       "huom": "The card immediately affects all players. The players get to choose the slices.",
-      "tarkennus": "Positions are decided by the number of slices in each box. Players in the same position get the same. If everyone has the same number of slices, everyone gets one slice."
+      "tarkennus": "Most slices: you are in the lead. Fewest: you are last. If everyone has the same number, everyone gets one."
     },
     {
       "n": 7,
@@ -88,7 +88,7 @@
       "nimi": "Lunch break! The monkeys eat their slices.",
       "ohje": "All players lose slices according to the number shown on the card.",
       "huom": "If a player has only one slice, it is not removed.",
-      "tarkennus": "The picture on the card shows how many slices each player loses: 2–3 slices in the box → lose 1, 4–5 → lose 2, 6–7 → lose 3, 8–9 → lose 4. Everyone chooses which slices to give back."
+      "tarkennus": "2–3 slices: lose 1. 4–5 slices: lose 2. 6–7 slices: lose 3. 8–9 slices: lose 4."
     },
     {
       "n": 14,
@@ -100,80 +100,80 @@
       "nimi": "Pizza party!",
       "ohje": "All toppings are moved to the line.",
       "huom": "You can continue your turn by making pizzas. Draw a new monkey card at the end.",
-      "tarkennus": "If you make at least one pizza, draw a new monkey card at the end."
+      "tarkennus": "If you make pizzas, draw a new monkey card at the end."
     },
     {
       "n": 16,
       "nimi": "The bellows are acting up.",
       "ohje": "The smallest toppings are moved to the storage. Starting with the smallest topping on the line, remove as many toppings as there are players in the game.",
-      "tarkennus": "As many toppings (towers) are moved as there are players. In a three-player game, the three smallest toppings leave the line."
+      "tarkennus": "For example, in a three-player game the three smallest toppings go to the storage."
     },
     {
       "n": 17,
       "nimi": "The bellows are playing tricks.",
       "ohje": "The largest toppings are moved to the storage. Starting with the largest topping on the line, remove as many toppings as there are players in the game.",
-      "tarkennus": "As many toppings (towers) are moved as there are players. In a three-player game, the three largest toppings leave the line."
+      "tarkennus": "For example, in a three-player game the three largest toppings go to the storage."
     },
     {
       "n": 18,
       "nimi": "Time to pump!",
       "ohje": "The value of the line increases by one. Move the toppings of your choice between the line and the storage.",
-      "tarkennus": "Move toppings between the line and the storage so that the sum of the toppings on the line increases by one. Example: the line has pineapple (3) and tomato (2), so 5. Bring an olive (1) to the line, or swap the pineapple (3) for blue cheese (4)."
+      "tarkennus": "The sum of the toppings on the line increases by one. Example: pineapple (3) + tomato (2) = 5. Bring an olive (1) to the line and the sum is 6."
     },
     {
       "n": 19,
       "nimi": "Time to pump again!",
       "ohje": "The value of the line decreases by one. Move the toppings of your choice between the line and the storage.",
-      "tarkennus": "Move toppings between the line and the storage so that the sum of the toppings on the line decreases by one. Example: the line has pineapple (3) and tomato (2), so 5. Swap the tomato (2) for an olive (1), or move both to the storage and bring blue cheese (4) instead."
+      "tarkennus": "The sum of the toppings on the line decreases by one. Example: pineapple (3) + tomato (2) = 5. Swap the tomato for an olive (1) and the sum is 4."
     },
     {
       "n": 20,
       "nimi": "You cough as you pump the bellows.",
       "ohje": "All odd toppings change place between the line and the storage.",
-      "tarkennus": "The odd toppings are 1, 3, 5, 7 and 9. Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Odd: 1, 3, 5, 7 and 9."
     },
     {
       "n": 21,
       "nimi": "You sneeze as you push the bellows.",
       "ohje": "All even toppings change place between the line and the storage.",
-      "tarkennus": "The even toppings are 2, 4, 6, 8 and 10. Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Even: 2, 4, 6, 8 and 10."
     },
     {
       "n": 22,
       "nimi": "You laugh out loud and roll on top of the bellows.",
       "ohje": "All toppings that are divisible by three change place between the line and the storage.",
-      "tarkennus": "The toppings divisible by three are 3, 6 and 9. Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Divisible by three: 3, 6 and 9."
     },
     {
       "n": 23,
       "nimi": "You let out a toot, affecting the suction system’s pressure.",
       "ohje": "All toppings that are divisible by five change place between the line and the storage.",
-      "tarkennus": "The toppings divisible by five are 5 and 10. Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Divisible by five: 5 and 10."
     },
     {
       "n": 24,
       "nimi": "You are particularly fond of small toppings.",
       "ohje": "Small toppings swap places between the line and the storage.",
-      "tarkennus": "The small toppings are 1–5 (olive to shrimp). Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Small: 1–5."
     },
     {
       "n": 25,
       "nimi": "Oh, how you love large toppings.",
       "ohje": "Large toppings swap places between the line and the storage.",
-      "tarkennus": "The large toppings are 6–10 (aubergine to fish). Those on the line go to the storage and those in the storage come to the line."
+      "tarkennus": "Large: 6–10."
     },
     {
       "n": 26,
       "nimi": "You cannot stop pumping!",
       "ohje": "All toppings swap places between the line and the storage.",
-      "tarkennus": "The toppings on the line go to the storage and the toppings in the storage come to the line. If the line was empty before the card was drawn, all toppings come to the line and it is a pizza party: the player who drew the card continues their turn."
+      "tarkennus": "If the line was empty, it is a pizza party: continue your turn as with card 15."
     },
     {
       "n": 27,
       "nimi": "You have willpower!",
       "ohje": "You can cancel the effect of a monkey card.",
       "huom": "The card can be saved and played on anyone’s turn.",
-      "tarkennus": "Play the card as soon as someone has drawn a monkey card. That card’s effect is cancelled."
+      "tarkennus": "Play it as soon as someone draws a monkey card. That card’s effect is cancelled."
     },
     {
       "n": 28,
@@ -185,7 +185,7 @@
       "nimi": "You went crazy for pizza!",
       "ohje": "The toppings on the line are changed according to the icons on the card.",
       "huom": "Nothing happens to the toppings if both of them are on the line.",
-      "tarkennus": "The card shows five topping pairs: olive ↔ ham, tomato ↔ mushroom, pineapple ↔ rocket, blue cheese ↔ aubergine and shrimp ↔ fish. If one of a pair is on the line and the other in the storage, they swap places."
+      "tarkennus": "Pairs: olive–ham, tomato–mushroom, pineapple–rocket, blue cheese–aubergine, shrimp–fish. A pair swaps places if one is on the line and the other in the storage."
     },
     {
       "n": 30,
@@ -193,14 +193,14 @@
       "ohje": "Make a pizza either before or after rolling the dice.",
       "huom": "The card can be saved and played later.",
       "virhe": "In the printed English rules, this card is numbered 31 by mistake.",
-      "tarkennus": "Play the card on your own turn. You may make pizzas both before and after rolling the dice – that is, twice in the same turn."
+      "tarkennus": "You may make pizzas both before and after rolling the dice."
     },
     {
       "n": 31,
       "nimi": "That looked tasty!",
       "ohje": "Players can choose a slice from the previous player.",
       "huom": "The player whose turn it was starts. The slice must be new. If there is no new slice, the player gets nothing. However, that player must still give one of their own slices to the next player.",
-      "tarkennus": "Everyone takes a slice they do not have yet from the player before them. The player whose turn it was chooses first, then the others in turn order. The slices go into the boxes only after everyone has chosen – so you can get back the slice you just gave away."
+      "tarkennus": "Take a slice you do not have yet from the player before you. The slices go into the boxes only after everyone has chosen."
     },
     {
       "n": 32,

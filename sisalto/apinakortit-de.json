@@ -9,7 +9,7 @@
   "hae": "Kartennummer",
   "huom": "HINWEIS!",
   "tarkennus": "Genauer",
-  "yleista": "Dein Zug endet, wenn du die Affenkarte ziehst. Bringt die Karte Beläge auf das Band, bleiben sie dort für den nächsten Spieler: Er würfelt zuerst und bewegt die Beläge wie gewohnt und bereitet erst danach Pizzas zu. Eine Karte, die man aufbewahren kann, gehört dem, der sie gezogen hat – nur du entscheidest, wann du sie spielst.",
+  "yleista": "Dein Zug endet, wenn du die Affenkarte ziehst. Der nächste Spieler würfelt und bewegt Beläge, bevor er Pizzas zubereitet. Eine Karte zum Aufbewahren gehört dem, der sie gezogen hat.",
   "kortit": [
     {
       "n": 1,
@@ -26,35 +26,35 @@
       "nimi": "Mit den Belägen stimmt etwas nicht.",
       "ohje": "Zähle eins zur Würfelzahl dazu.",
       "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden.",
-      "tarkennus": "Spiele die Karte direkt nach dem Würfeln, bevor Beläge bewegt werden."
+      "tarkennus": "Spiele sie direkt nach dem Würfeln."
     },
     {
       "n": 4,
       "nimi": "Mit den Belägen stimmt etwas nicht.",
       "ohje": "Ziehe eins von der Würfelzahl ab.",
       "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden.",
-      "tarkennus": "Spiele die Karte direkt nach dem Würfeln, bevor Beläge bewegt werden. Die Zahl kann 0 werden, wenn der Würfel 1 zeigt. Dann werden keine Beläge bewegt."
+      "tarkennus": "Spiele sie direkt nach dem Würfeln. Die Zahl kann 0 werden, dann werden keine Beläge bewegt."
     },
     {
       "n": 5,
       "nimi": "Das Band braucht mehr Beläge!",
       "ohje": "Würfle zweimal – lege beide Male Beläge auf das Band. Pizzas werden erst nach beiden Würfen zubereitet.",
       "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden.",
-      "tarkennus": "Wer am Zug ist, wenn die Karte gespielt wird, würfelt noch einmal und bewegt ein zweites Mal Beläge."
+      "tarkennus": "Wer am Zug ist, würfelt noch einmal."
     },
     {
       "n": 6,
       "nimi": "Boxkontrolle!",
       "ohje": "Die Spieler bekommen oder verlieren Stücke: Wer führt, verliert ein Stück. Wer in der Mitte liegt, bekommt ein Stück. Wer hinten liegt, bekommt zwei Stücke.",
       "huom": "Die Karte wirkt sofort auf alle Spieler. Die Spieler dürfen die Stücke wählen.",
-      "tarkennus": "Die Platzierung ergibt sich aus der Zahl der Stücke in der Box. Wer gleich platziert ist, bekommt dasselbe. Haben alle gleich viele Stücke, bekommt jeder ein Stück."
+      "tarkennus": "Die meisten Stücke: Du führst. Die wenigsten: Du liegst hinten. Haben alle gleich viele, bekommt jeder eins."
     },
     {
       "n": 7,
       "nimi": "Probier mal, wie lecker!",
       "ohje": "Gib ein Stück aus deiner Box einem anderen Spieler.",
       "huom": "Das Stück muss für den anderen Spieler neu sein.",
-      "tarkennus": "Gib ein Stück, das der andere Spieler noch nicht hat."
+      "tarkennus": "Gib ein Stück, das der andere noch nicht hat."
     },
     {
       "n": 8,
@@ -88,7 +88,7 @@
       "nimi": "Essenspause! Die Affen essen ihre Stücke.",
       "ohje": "Alle Spieler verlieren so viele Stücke, wie auf der Karte angegeben ist.",
       "huom": "Hat ein Spieler nur ein Stück, wird es nicht weggenommen.",
-      "tarkennus": "Das Bild auf der Karte zeigt, wie viele Stücke jeder verliert: 2–3 Stücke in der Box → 1 weg, 4–5 → 2 weg, 6–7 → 3 weg, 8–9 → 4 weg. Jeder wählt selbst, welche Stücke er zurückgibt."
+      "tarkennus": "2–3 Stücke: 1 weg. 4–5 Stücke: 2 weg. 6–7 Stücke: 3 weg. 8–9 Stücke: 4 weg."
     },
     {
       "n": 14,
@@ -100,80 +100,80 @@
       "nimi": "Pizzaparty!",
       "ohje": "Alle Beläge kommen auf das Band.",
       "huom": "Du darfst deinen Zug fortsetzen und Pizzas zubereiten. Danach ziehst du eine neue Affenkarte.",
-      "tarkennus": "Wenn du mindestens eine Pizza zubereitest, ziehst du am Ende eine neue Affenkarte."
+      "tarkennus": "Wenn du Pizzas zubereitest, ziehst du am Ende eine neue Affenkarte."
     },
     {
       "n": 16,
       "nimi": "Der Blasebalg spinnt.",
       "ohje": "Die kleinsten Beläge kommen ins Lager. Nimm, beginnend mit dem kleinsten, so viele Beläge vom Band, wie Spieler mitspielen.",
-      "tarkennus": "Es werden so viele Beläge (Türme) bewegt, wie Spieler mitspielen. Zu dritt verlassen die drei kleinsten Beläge das Band."
+      "tarkennus": "Zum Beispiel zu dritt kommen die drei kleinsten Beläge ins Lager."
     },
     {
       "n": 17,
       "nimi": "Der Blasebalg streikt.",
       "ohje": "Die größten Beläge kommen ins Lager. Nimm, beginnend mit dem größten, so viele Beläge vom Band, wie Spieler mitspielen.",
-      "tarkennus": "Es werden so viele Beläge (Türme) bewegt, wie Spieler mitspielen. Zu dritt verlassen die drei größten Beläge das Band."
+      "tarkennus": "Zum Beispiel zu dritt kommen die drei größten Beläge ins Lager."
     },
     {
       "n": 18,
       "nimi": "Zeit zum Pumpen!",
       "ohje": "Der Wert des Bandes steigt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager.",
-      "tarkennus": "Bewege Beläge zwischen Band und Lager so, dass die Summe der Beläge auf dem Band um eins steigt. Beispiel: Auf dem Band liegen Ananas (3) und Tomate (2), also 5. Bringe eine Olive (1) auf das Band oder tausche die Ananas (3) gegen Blauschimmelkäse (4)."
+      "tarkennus": "Die Summe der Beläge auf dem Band steigt um eins. Beispiel: Ananas (3) + Tomate (2) = 5. Bringe eine Olive (1) auf das Band, dann ist die Summe 6."
     },
     {
       "n": 19,
       "nimi": "Schon wieder Zeit zum Pumpen!",
       "ohje": "Der Wert des Bandes sinkt um eins. Bewege Beläge deiner Wahl zwischen Band und Lager.",
-      "tarkennus": "Bewege Beläge zwischen Band und Lager so, dass die Summe der Beläge auf dem Band um eins sinkt. Beispiel: Auf dem Band liegen Ananas (3) und Tomate (2), also 5. Tausche die Tomate (2) gegen eine Olive (1) oder bringe beide ins Lager und hole stattdessen Blauschimmelkäse (4)."
+      "tarkennus": "Die Summe der Beläge auf dem Band sinkt um eins. Beispiel: Ananas (3) + Tomate (2) = 5. Tausche die Tomate gegen eine Olive (1), dann ist die Summe 4."
     },
     {
       "n": 20,
       "nimi": "Du hustest und drückst dabei auf den Blasebalg.",
       "ohje": "Alle ungeraden Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Ungerade Beläge sind 1, 3, 5, 7 und 9. Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Ungerade: 1, 3, 5, 7 und 9."
     },
     {
       "n": 21,
       "nimi": "Du niest und trittst auf den Blasebalg.",
       "ohje": "Alle geraden Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Gerade Beläge sind 2, 4, 6, 8 und 10. Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Gerade: 2, 4, 6, 8 und 10."
     },
     {
       "n": 22,
       "nimi": "Du lachst laut los und rollst über den Blasebalg.",
       "ohje": "Alle durch drei teilbaren Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Durch drei teilbar sind 3, 6 und 9. Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Durch drei teilbar: 3, 6 und 9."
     },
     {
       "n": 23,
       "nimi": "Dir entwischt ein kleiner Pups – und der Druck der Saugmaschine ändert sich.",
       "ohje": "Alle durch fünf teilbaren Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Durch fünf teilbar sind 5 und 10. Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Durch fünf teilbar: 5 und 10."
     },
     {
       "n": 24,
       "nimi": "Du magst besonders kleine Beläge.",
       "ohje": "Die kleinen Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Kleine Beläge sind 1–5 (von Olive bis Garnele). Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Klein: 1–5."
     },
     {
       "n": 25,
       "nimi": "Ach, wie du große Beläge liebst.",
       "ohje": "Die großen Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Große Beläge sind 6–10 (von Aubergine bis Fisch). Die auf dem Band kommen ins Lager, die im Lager kommen auf das Band."
+      "tarkennus": "Groß: 6–10."
     },
     {
       "n": 26,
       "nimi": "Du kannst einfach nicht aufhören zu pumpen!",
       "ohje": "Alle Beläge tauschen den Platz zwischen Band und Lager.",
-      "tarkennus": "Die Beläge auf dem Band kommen ins Lager, die Beläge im Lager kommen auf das Band. War das Band leer, bevor die Karte gezogen wurde, kommen alle Beläge auf das Band und es gibt eine Pizzaparty: Wer die Karte gezogen hat, darf seinen Zug fortsetzen."
+      "tarkennus": "War das Band leer, gibt es eine Pizzaparty: Setze deinen Zug fort wie bei Karte 15."
     },
     {
       "n": 27,
       "nimi": "Du hast Willenskraft!",
       "ohje": "Du kannst die Wirkung einer Affenkarte aufheben.",
       "huom": "Die Karte kann aufbewahrt und in jedem Zug gespielt werden.",
-      "tarkennus": "Spiele die Karte, sobald jemand eine Affenkarte gezogen hat. Die Wirkung dieser Karte wird aufgehoben."
+      "tarkennus": "Spiele sie, sobald jemand eine Affenkarte zieht. Die Wirkung dieser Karte wird aufgehoben."
     },
     {
       "n": 28,
@@ -185,21 +185,21 @@
       "nimi": "Du bist ganz verrückt nach Pizza!",
       "ohje": "Die Beläge auf dem Band wechseln gemäß den Symbolen auf der Karte.",
       "huom": "Mit den Belägen passiert nichts, wenn beide auf dem Band liegen.",
-      "tarkennus": "Die Karte zeigt fünf Belagpaare: Olive ↔ Schinken, Tomate ↔ Champignon, Ananas ↔ Rucola, Blauschimmelkäse ↔ Aubergine und Garnele ↔ Fisch. Liegt einer des Paares auf dem Band und der andere im Lager, tauschen sie den Platz."
+      "tarkennus": "Paare: Olive–Schinken, Tomate–Champignon, Ananas–Rucola, Blauschimmelkäse–Aubergine, Garnele–Fisch. Ein Paar tauscht den Platz, wenn einer auf dem Band und der andere im Lager liegt."
     },
     {
       "n": 30,
       "nimi": "Für dich ist Pizza das Wichtigste.",
       "ohje": "Bereite eine Pizza entweder vor oder nach dem Würfeln zu.",
       "huom": "Die Karte kann aufbewahrt und später gespielt werden.",
-      "tarkennus": "Spiele die Karte in deinem eigenen Zug. Du darfst sowohl vor als auch nach dem Würfeln Pizzas zubereiten – also zweimal im selben Zug."
+      "tarkennus": "Du darfst vor und nach dem Würfeln Pizzas zubereiten."
     },
     {
       "n": 31,
       "nimi": "Futterneid!",
       "ohje": "Die Spieler dürfen sich ein Stück vom vorherigen Spieler aussuchen.",
       "huom": "Wer am Zug war, beginnt. Das Stück muss neu sein. Gibt es kein neues Stück, geht der Spieler leer aus. Er muss aber trotzdem eines seiner Stücke an den nächsten Spieler abgeben.",
-      "tarkennus": "Jeder nimmt sich vom Spieler vor ihm ein Stück, das er noch nicht hat. Wer am Zug war, wählt zuerst, dann die anderen in Spielreihenfolge. Die Stücke kommen erst in die Boxen, wenn alle gewählt haben – du kannst also das Stück zurückbekommen, das du gerade abgegeben hast."
+      "tarkennus": "Nimm vom Spieler vor dir ein Stück, das du noch nicht hast. Die Stücke kommen erst in die Boxen, wenn alle gewählt haben."
     },
     {
       "n": 32,

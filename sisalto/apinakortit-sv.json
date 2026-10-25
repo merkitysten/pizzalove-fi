@@ -9,7 +9,7 @@
   "hae": "Kortets nummer",
   "huom": "OBS!",
   "tarkennus": "Förtydligande",
-  "yleista": "Din speltur slutar när du lyfter apakortet. Om kortet för fyllningar till linjen blir de kvar åt nästa spelare: hen kastar först tärningen och flyttar fyllningar som vanligt och tillagar pizzor först därefter. Ett kort som kan sparas tillhör den som lyfte det – bara du bestämmer när du spelar det.",
+  "yleista": "Din speltur slutar när du lyfter apakortet. Nästa spelare kastar tärningen och flyttar fyllningar innan hen tillagar pizzor. Ett kort som kan sparas tillhör den som lyfte det.",
   "kortit": [
     {
       "n": 1,
@@ -26,28 +26,28 @@
       "nimi": "Det är något skumt med fyllningarna.",
       "ohje": "Lägg till ett till talet på tärningen.",
       "huom": "Kortet kan sparas och spelas av vem som helst.",
-      "tarkennus": "Spela kortet direkt efter tärningskastet, innan fyllningarna flyttas."
+      "tarkennus": "Spela kortet direkt efter tärningskastet."
     },
     {
       "n": 4,
       "nimi": "Det är något skumt med fyllningarna.",
       "ohje": "Dra av ett från talet på tärningen.",
       "huom": "Kortet kan sparas och spelas av vem som helst.",
-      "tarkennus": "Spela kortet direkt efter tärningskastet, innan fyllningarna flyttas. Talet kan bli 0 om tärningen visar 1. Då flyttas inga fyllningar."
+      "tarkennus": "Spela kortet direkt efter tärningskastet. Talet kan bli 0, och då flyttas inga fyllningar."
     },
     {
       "n": 5,
       "nimi": "Linjen behöver fyllas på!",
       "ohje": "Kasta tärningen två gånger – fyll på linjen båda gångerna. Pizzor tillagas först efter båda kasten.",
       "huom": "Kortet kan sparas och spelas av vem som helst.",
-      "tarkennus": "Den spelare vars tur det är när kortet spelas kastar tärningen igen och flyttar fyllningar en gång till."
+      "tarkennus": "Den spelare vars tur det är kastar tärningen igen."
     },
     {
       "n": 6,
       "nimi": "Boxkontroll!",
       "ohje": "Spelarna får eller förlorar bitar: Om du leder förlorar du en bit. Om du är i mitten får du en bit. Om du håller på att förlora får du två bitar.",
       "huom": "Kortet påverkar omedelbart alla spelare. Spelarna får välja bitar.",
-      "tarkennus": "Placeringen avgörs av antalet bitar i boxen. Spelare med samma placering får samma. Om alla har lika många bitar får alla en bit."
+      "tarkennus": "Flest bitar: du leder. Minst: du håller på att förlora. Om alla har lika många får alla en bit."
     },
     {
       "n": 7,
@@ -88,7 +88,7 @@
       "nimi": "Matpaus! Aporna äter sina bitar.",
       "ohje": "Från alla spelares bitar dras det antal som visas på kortet av.",
       "huom": "Om en spelare endast har en bit tas den inte bort.",
-      "tarkennus": "Bilden på kortet visar hur många bitar var och en förlorar: 2–3 bitar i boxen → 1 bort, 4–5 → 2 bort, 6–7 → 3 bort, 8–9 → 4 bort. Var och en väljer själv vilka bitar som lämnas tillbaka."
+      "tarkennus": "2–3 bitar: du förlorar 1. 4–5 bitar: du förlorar 2. 6–7 bitar: du förlorar 3. 8–9 bitar: du förlorar 4."
     },
     {
       "n": 14,
@@ -100,80 +100,80 @@
       "nimi": "Pizzaparty!",
       "ohje": "Alla fyllningar flyttas till linjen.",
       "huom": "Du får fortsätta din speltur genom att tillaga pizzor. När du är klar lyfter du ett nytt apakort.",
-      "tarkennus": "Om du tillagar minst en pizza lyfter du till sist ett nytt apakort."
+      "tarkennus": "Om du tillagar pizzor lyfter du till sist ett nytt apakort."
     },
     {
       "n": 16,
       "nimi": "Bälgarna bråkar.",
       "ohje": "De minsta fyllningarna flyttas till lagret. Ta bort så många fyllningar från linjen som det finns spelare, börja från den minsta.",
-      "tarkennus": "Lika många fyllningar (torn) som det finns spelare flyttas. Med tre spelare flyttas de tre minsta fyllningarna från linjen."
+      "tarkennus": "Till exempel med tre spelare flyttas de tre minsta fyllningarna till lagret."
     },
     {
       "n": 17,
       "nimi": "Bälgarna krånglar.",
       "ohje": "De största fyllningarna flyttas till lagret. Ta bort så många fyllningar från linjen som det finns spelare, börja från den största.",
-      "tarkennus": "Lika många fyllningar (torn) som det finns spelare flyttas. Med tre spelare flyttas de tre största fyllningarna från linjen."
+      "tarkennus": "Till exempel med tre spelare flyttas de tre största fyllningarna till lagret."
     },
     {
       "n": 18,
       "nimi": "Dags att pumpa!",
       "ohje": "Linjens värde ökar med ett. Flytta önskade fyllningar mellan linjen och lagret.",
-      "tarkennus": "Flytta fyllningar mellan linjen och lagret så att summan av fyllningarna på linjen ökar med ett. Exempel: på linjen finns ananas (3) och tomat (2), alltså 5. Hämta oliv (1) till linjen eller byt ananas (3) mot mögelost (4)."
+      "tarkennus": "Summan av fyllningarna på linjen ökar med ett. Exempel: ananas (3) + tomat (2) = 5. Hämta oliv (1) till linjen, så blir summan 6."
     },
     {
       "n": 19,
       "nimi": "Dags att pumpa igen!",
       "ohje": "Linjens värde minskar med ett. Flytta önskade fyllningar mellan linjen och lagret.",
-      "tarkennus": "Flytta fyllningar mellan linjen och lagret så att summan av fyllningarna på linjen minskar med ett. Exempel: på linjen finns ananas (3) och tomat (2), alltså 5. Byt tomat (2) mot oliv (1) eller flytta båda till lagret och hämta mögelost (4) i stället."
+      "tarkennus": "Summan av fyllningarna på linjen minskar med ett. Exempel: ananas (3) + tomat (2) = 5. Byt tomat mot oliv (1), så blir summan 4."
     },
     {
       "n": 20,
       "nimi": "Du hostar och trycker samtidigt på bälgarna.",
       "ohje": "Alla fyllningar med udda tal byter plats mellan linjen och lagret.",
-      "tarkennus": "Udda fyllningar är 1, 3, 5, 7 och 9. De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Udda: 1, 3, 5, 7 och 9."
     },
     {
       "n": 21,
       "nimi": "Du nyser och trampar på bälgarna.",
       "ohje": "Alla fyllningar med jämna tal byter plats mellan linjen och lagret.",
-      "tarkennus": "Jämna fyllningar är 2, 4, 6, 8 och 10. De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Jämna: 2, 4, 6, 8 och 10."
     },
     {
       "n": 22,
       "nimi": "Du börjar skratta och rullar runt på bälgarna.",
       "ohje": "Alla fyllningar som kan delas med tre byter plats mellan linjen och lagret.",
-      "tarkennus": "Fyllningar som kan delas med tre är 3, 6 och 9. De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Delbara med tre: 3, 6 och 9."
     },
     {
       "n": 23,
       "nimi": "Du åstadkommer en riktigt liten smäll som samtidigt påverkar sugmaskinens tryck.",
       "ohje": "Alla fyllningar som kan delas med fem byter plats mellan linjen och lagret.",
-      "tarkennus": "Fyllningar som kan delas med fem är 5 och 10. De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Delbara med fem: 5 och 10."
     },
     {
       "n": 24,
       "nimi": "Du är särskilt intresserad av små fyllningar.",
       "ohje": "De små fyllningarna byter plats mellan linjen och lagret.",
-      "tarkennus": "Små fyllningar är 1–5 (från oliv till räka). De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Små: 1–5."
     },
     {
       "n": 25,
       "nimi": "Åh, så du älskar stora fyllningar.",
       "ohje": "De stora fyllningarna byter plats mellan linjen och lagret.",
-      "tarkennus": "Stora fyllningar är 6–10 (från aubergine till fisk). De som finns på linjen flyttas till lagret och de som finns i lagret flyttas till linjen."
+      "tarkennus": "Stora: 6–10."
     },
     {
       "n": 26,
       "nimi": "Du bara inte kan sluta pumpa!",
       "ohje": "Alla fyllningar byter plats mellan linjen och lagret.",
-      "tarkennus": "Fyllningarna på linjen flyttas till lagret och fyllningarna i lagret flyttas till linjen. Om linjen var tom innan kortet lyftes kommer alla fyllningar till linjen och det blir pizzaparty: den som lyfte kortet får fortsätta sin speltur."
+      "tarkennus": "Om linjen var tom blir det pizzaparty: fortsätt din speltur som på kort 15."
     },
     {
       "n": 27,
       "nimi": "Du har viljestyrka!",
       "ohje": "Du kan ta tillbaka effekten av ett apakort.",
       "huom": "Kortet kan sparas och spelas av vem som helst.",
-      "tarkennus": "Spela kortet direkt när någon har lyft ett apakort. Det kortets effekt tas tillbaka."
+      "tarkennus": "Spela kortet direkt när någon lyfter ett apakort. Det kortets effekt tas tillbaka."
     },
     {
       "n": 28,
@@ -185,21 +185,21 @@
       "nimi": "Du har blivit snurrig av pizza!",
       "ohje": "Linjens fyllningar ändras enligt ikonerna på kortet.",
       "huom": "Inget händer med fyllningarna om båda fyllningarna finns på linjen.",
-      "tarkennus": "Kortet visar fem fyllningspar: oliv ↔ skinka, tomat ↔ champinjon, ananas ↔ ruccola, mögelost ↔ aubergine och räka ↔ fisk. Om den ena i paret finns på linjen och den andra i lagret byter de plats."
+      "tarkennus": "Par: oliv–skinka, tomat–champinjon, ananas–ruccola, mögelost–aubergine, räka–fisk. Paret byter plats om den ena finns på linjen och den andra i lagret."
     },
     {
       "n": 30,
       "nimi": "Du tycker att pizza är det viktigaste.",
       "ohje": "Tillaga en pizza antingen före eller efter att du har kastat tärningen.",
       "huom": "Kortet kan sparas och spelas senare.",
-      "tarkennus": "Spela kortet på din egen tur. Du får tillaga pizzor både före och efter tärningskastet – alltså två gånger under samma tur."
+      "tarkennus": "Du får tillaga pizzor både före och efter tärningskastet."
     },
     {
       "n": 31,
       "nimi": "Portionsavundsjuka!",
       "ohje": "Spelarna får välja en bit från den föregående spelaren.",
       "huom": "Den spelare som har haft spelturen börjar. Biten måste vara ny. Om det inte finns någon ny bit blir spelaren utan. Spelaren måste ändå ge en av sina bitar till nästa spelare.",
-      "tarkennus": "Alla tar en bit som de inte redan har från spelaren före sig. Den som hade spelturen väljer först, sedan de andra i spelordning. Bitarna läggs i boxarna först när alla har valt – du kan alltså få tillbaka den bit du nyss gav bort."
+      "tarkennus": "Ta en bit som du inte redan har från spelaren före dig. Bitarna läggs i boxarna först när alla har valt."
     },
     {
       "n": 32,
