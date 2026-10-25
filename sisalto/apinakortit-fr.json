@@ -1,0 +1,215 @@
+{
+  "title": "Jeu de plateau Pizza Love® : cartes singe 01–33",
+  "kuvaus": "Les 33 cartes singe du jeu de plateau Pizza Love® et ce qu’il faut faire. Trouve ta carte grâce à son numéro.",
+  "h1": "Cartes singe",
+  "ingressi": "Si tu as préparé au moins une pizza pendant ton tour, pioche une carte singe à la fin de ton tour. Cherche le numéro de la carte et fais ce qu’elle dit.",
+  "kaytto": "Les cartes singe s’utilisent dans le jeu de base et dans Pizzas secrètes, pas dans Singes affamés. Pour rendre le jeu plus facile, laisse les cartes singe de côté.",
+  "takaisin": "Jeu de plateau",
+  "linkki": "Cartes singe 01–33",
+  "hae": "Numéro de carte",
+  "huom": "ATTENTION !",
+  "tarkennus": "Précision",
+  "yleista": "Ton tour se termine quand tu pioches la carte singe. Le joueur suivant lance le dé et déplace des ingrédients avant de préparer des pizzas. Une carte que l’on peut garder appartient au joueur qui l’a piochée.",
+  "kortit": [
+    {
+      "n": 1,
+      "nimi": "Waouh, quelle pâte à pizza fine et croustillante !",
+      "ohje": "Lance le dé et joue un autre tour."
+    },
+    {
+      "n": 2,
+      "nimi": "Le soufflet est libre !",
+      "ohje": "Déplace un ingrédient de la réserve vers la chaîne et, si tu veux, retire un ingrédient de la chaîne."
+    },
+    {
+      "n": 3,
+      "nimi": "Il se passe quelque chose de bizarre avec les ingrédients.",
+      "ohje": "Ajoute un au nombre du dé.",
+      "huom": "Tu peux garder la carte et la jouer pendant le tour de n’importe qui.",
+      "tarkennus": "Joue-la juste après le lancer du dé."
+    },
+    {
+      "n": 4,
+      "nimi": "Il se passe quelque chose de bizarre avec les ingrédients.",
+      "ohje": "Enlève un au nombre du dé.",
+      "huom": "Tu peux garder la carte et la jouer pendant le tour de n’importe qui.",
+      "tarkennus": "Joue-la juste après le lancer du dé. Le nombre peut devenir 0 : dans ce cas, aucun ingrédient n’est déplacé."
+    },
+    {
+      "n": 5,
+      "nimi": "La chaîne a besoin de plus d’ingrédients !",
+      "ohje": "Lance le dé deux fois et ajoute des ingrédients sur la chaîne les deux fois. Les pizzas se préparent seulement après les deux lancers.",
+      "huom": "Tu peux garder la carte et la jouer pendant le tour de n’importe qui.",
+      "tarkennus": "Le joueur dont c’est le tour relance le dé."
+    },
+    {
+      "n": 6,
+      "nimi": "Contrôle des boîtes !",
+      "ohje": "Les joueurs gagnent ou perdent des parts : si tu es en tête, tu perds une part. Si tu es au milieu, tu gagnes une part. Si tu es dernier, tu gagnes deux parts.",
+      "huom": "La carte s’applique tout de suite à tous les joueurs. Les joueurs choisissent les parts.",
+      "tarkennus": "Le plus de parts : tu es en tête. Le moins de parts : tu es dernier. Si tout le monde en a autant, chacun en gagne une."
+    },
+    {
+      "n": 7,
+      "nimi": "Goûte ma pizza !",
+      "ohje": "Donne une part de ta boîte à un autre joueur.",
+      "huom": "La part doit être nouvelle pour l’autre joueur.",
+      "tarkennus": "Donne une part que l’autre joueur n’a pas encore."
+    },
+    {
+      "n": 8,
+      "nimi": "Actionner le soufflet, c’est fatigant.",
+      "ohje": "Repose-toi pendant un tour.",
+      "tarkennus": "Tu passes ton prochain lancer."
+    },
+    {
+      "n": 9,
+      "nimi": "On mélange les boîtes !",
+      "ohje": "Les boîtes des joueurs changent de propriétaire dans le sens des aiguilles d’une montre."
+    },
+    {
+      "n": 10,
+      "nimi": "On mélange les boîtes !",
+      "ohje": "Les boîtes des joueurs changent de propriétaire dans le sens inverse des aiguilles d’une montre."
+    },
+    {
+      "n": 11,
+      "nimi": "Il faut varier les plaisirs.",
+      "ohje": "Le sens du jeu change.",
+      "huom": "À deux joueurs, tu rejoues tout de suite."
+    },
+    {
+      "n": 12,
+      "nimi": "Échange de boîtes !",
+      "ohje": "Échange ta boîte avec le joueur de ton choix."
+    },
+    {
+      "n": 13,
+      "nimi": "Pause déjeuner ! Les singes mangent leurs parts.",
+      "ohje": "Tous les joueurs perdent des parts selon le nombre indiqué sur la carte.",
+      "huom": "Si un joueur n’a qu’une part, on ne la lui retire pas.",
+      "tarkennus": "2–3 parts : 1 en moins. 4–5 parts : 2 en moins. 6–7 parts : 3 en moins. 8–9 parts : 4 en moins."
+    },
+    {
+      "n": 14,
+      "nimi": "Quelqu’un a oublié d’entretenir le système d’aspiration, et il s’est bloqué.",
+      "ohje": "Tous les ingrédients de la chaîne vont dans la réserve."
+    },
+    {
+      "n": 15,
+      "nimi": "Fête de la pizza !",
+      "ohje": "Tous les ingrédients vont sur la chaîne.",
+      "huom": "Tu peux continuer ton tour en préparant des pizzas. Pioche une nouvelle carte singe à la fin.",
+      "tarkennus": "Si tu prépares des pizzas, pioche une nouvelle carte singe à la fin."
+    },
+    {
+      "n": 16,
+      "nimi": "Le soufflet fait des siennes.",
+      "ohje": "Les plus petits ingrédients vont dans la réserve. En commençant par le plus petit ingrédient de la chaîne, retire autant d’ingrédients qu’il y a de joueurs.",
+      "tarkennus": "Par exemple, à trois joueurs, les trois plus petits ingrédients vont dans la réserve."
+    },
+    {
+      "n": 17,
+      "nimi": "Le soufflet joue des tours.",
+      "ohje": "Les plus gros ingrédients vont dans la réserve. En commençant par le plus gros ingrédient de la chaîne, retire autant d’ingrédients qu’il y a de joueurs.",
+      "tarkennus": "Par exemple, à trois joueurs, les trois plus gros ingrédients vont dans la réserve."
+    },
+    {
+      "n": 18,
+      "nimi": "C’est l’heure de pomper !",
+      "ohje": "La valeur de la chaîne augmente de un. Déplace les ingrédients de ton choix entre la chaîne et la réserve.",
+      "tarkennus": "La somme des ingrédients de la chaîne augmente de un. Exemple : ananas (3) + tomate (2) = 5. Ajoute une olive (1) sur la chaîne et la somme fait 6."
+    },
+    {
+      "n": 19,
+      "nimi": "Encore l’heure de pomper !",
+      "ohje": "La valeur de la chaîne diminue de un. Déplace les ingrédients de ton choix entre la chaîne et la réserve.",
+      "tarkennus": "La somme des ingrédients de la chaîne diminue de un. Exemple : ananas (3) + tomate (2) = 5. Remplace la tomate par une olive (1) et la somme fait 4."
+    },
+    {
+      "n": 20,
+      "nimi": "Tu tousses en actionnant le soufflet.",
+      "ohje": "Tous les ingrédients impairs changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Impairs : 1, 3, 5, 7 et 9."
+    },
+    {
+      "n": 21,
+      "nimi": "Tu éternues en appuyant sur le soufflet.",
+      "ohje": "Tous les ingrédients pairs changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Pairs : 2, 4, 6, 8 et 10."
+    },
+    {
+      "n": 22,
+      "nimi": "Tu éclates de rire et tu roules sur le soufflet.",
+      "ohje": "Tous les ingrédients divisibles par trois changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Divisibles par trois : 3, 6 et 9."
+    },
+    {
+      "n": 23,
+      "nimi": "Tu lâches un petit pet, et la pression du système d’aspiration change.",
+      "ohje": "Tous les ingrédients divisibles par cinq changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Divisibles par cinq : 5 et 10."
+    },
+    {
+      "n": 24,
+      "nimi": "Tu as un faible pour les petits ingrédients.",
+      "ohje": "Les petits ingrédients changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Petits : 1–5."
+    },
+    {
+      "n": 25,
+      "nimi": "Oh, comme tu aimes les gros ingrédients.",
+      "ohje": "Les gros ingrédients changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Gros : 6–10."
+    },
+    {
+      "n": 26,
+      "nimi": "Tu ne peux plus t’arrêter de pomper !",
+      "ohje": "Tous les ingrédients changent de place entre la chaîne et la réserve.",
+      "tarkennus": "Si la chaîne était vide, c’est la fête de la pizza : continue ton tour comme avec la carte 15."
+    },
+    {
+      "n": 27,
+      "nimi": "Tu as de la volonté !",
+      "ohje": "Tu peux annuler l’effet d’une carte singe.",
+      "huom": "Tu peux garder la carte et la jouer pendant le tour de n’importe qui.",
+      "tarkennus": "Joue-la dès que quelqu’un pioche une carte singe. L’effet de cette carte est annulé."
+    },
+    {
+      "n": 28,
+      "nimi": "Les boîtes à pizza te remercient.",
+      "ohje": "Tu reçois une part en plus, offerte !"
+    },
+    {
+      "n": 29,
+      "nimi": "Tu es fou de pizza !",
+      "ohje": "Les ingrédients de la chaîne changent selon les symboles de la carte.",
+      "huom": "Rien ne se passe si les deux ingrédients sont sur la chaîne.",
+      "tarkennus": "Paires : olive–jambon, tomate–champignon, ananas–roquette, fromage bleu–aubergine, crevette–poisson. Une paire change de place si l’un est sur la chaîne et l’autre dans la réserve."
+    },
+    {
+      "n": 30,
+      "nimi": "Tu as la pizza en tête.",
+      "ohje": "Prépare une pizza avant ou après le lancer du dé.",
+      "huom": "Tu peux garder la carte et la jouer plus tard.",
+      "tarkennus": "Tu peux préparer des pizzas avant et après le lancer du dé."
+    },
+    {
+      "n": 31,
+      "nimi": "Ça avait l’air bon !",
+      "ohje": "Les joueurs peuvent choisir une part chez le joueur précédent.",
+      "huom": "Le joueur dont c’était le tour commence. La part doit être nouvelle. S’il n’y a pas de nouvelle part, le joueur ne reçoit rien. Il doit quand même donner une de ses parts au joueur suivant.",
+      "tarkennus": "Prends au joueur avant toi une part que tu n’as pas encore. Les parts vont dans les boîtes seulement quand tout le monde a choisi."
+    },
+    {
+      "n": 32,
+      "nimi": "Tu es une légende chez les boîtes à pizza !",
+      "ohje": "Tu reçois deux parts en plus !"
+    },
+    {
+      "n": 33,
+      "nimi": "Oh ! Tu as soudain faim.",
+      "ohje": "Tu perds toutes tes parts."
+    }
+  ]
+}

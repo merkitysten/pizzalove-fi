@@ -1,0 +1,215 @@
+{
+  "title": "Pizza Love®-bordspel: apenkaarten 01–33",
+  "kuvaus": "Alle 33 apenkaarten van het Pizza Love®-bordspel en wat je moet doen. Zoek je kaart op nummer.",
+  "h1": "Apenkaarten",
+  "ingressi": "Heb je in je beurt minstens één pizza gemaakt, trek dan aan het eind van je beurt een apenkaart. Zoek het nummer van de kaart en doe wat erop staat.",
+  "kaytto": "Apenkaarten gebruik je in het basisspel en bij Geheime Pizza’s, niet bij Hongerige Apen. Laat de apenkaarten weg om het spel makkelijker te maken.",
+  "takaisin": "Bordspel",
+  "linkki": "Apenkaarten 01–33",
+  "hae": "Kaartnummer",
+  "huom": "LET OP!",
+  "tarkennus": "Toelichting",
+  "yleista": "Je beurt eindigt als je de apenkaart trekt. De volgende speler gooit met de dobbelsteen en verplaatst toppings voordat er pizza’s worden gemaakt. Een kaart die je mag bewaren, is van de speler die hem heeft getrokken.",
+  "kortit": [
+    {
+      "n": 1,
+      "nimi": "Wauw, wat een dunne en knapperige pizzabodem!",
+      "ohje": "Gooi met de dobbelsteen en speel nog een beurt."
+    },
+    {
+      "n": 2,
+      "nimi": "De blaasbalg is vrij!",
+      "ohje": "Breng één topping van de voorraad naar de lopende band en haal, als je wilt, één topping van de lopende band."
+    },
+    {
+      "n": 3,
+      "nimi": "Er is iets vreemds aan de hand met de toppings.",
+      "ohje": "Tel één op bij het getal op de dobbelsteen.",
+      "huom": "Je mag de kaart bewaren en in elke beurt spelen.",
+      "tarkennus": "Speel hem direct nadat er gegooid is."
+    },
+    {
+      "n": 4,
+      "nimi": "Er is iets vreemds aan de hand met de toppings.",
+      "ohje": "Trek één af van het getal op de dobbelsteen.",
+      "huom": "Je mag de kaart bewaren en in elke beurt spelen.",
+      "tarkennus": "Speel hem direct nadat er gegooid is. Het getal kan 0 worden, en dan worden er geen toppings verplaatst."
+    },
+    {
+      "n": 5,
+      "nimi": "De lopende band heeft meer toppings nodig!",
+      "ohje": "Gooi twee keer – leg beide keren toppings op de lopende band. Pizza’s worden pas na beide worpen gemaakt.",
+      "huom": "Je mag de kaart bewaren en in elke beurt spelen.",
+      "tarkennus": "De speler die aan de beurt is, gooit nog een keer."
+    },
+    {
+      "n": 6,
+      "nimi": "Dooscontrole!",
+      "ohje": "Spelers krijgen of verliezen stukken: Sta je voor, dan verlies je één stuk. Zit je in het midden, dan krijg je één stuk. Ben je laatste, dan krijg je twee stukken.",
+      "huom": "De kaart geldt meteen voor alle spelers. De spelers mogen de stukken kiezen.",
+      "tarkennus": "Meeste stukken: je staat voor. Minste: je bent laatste. Heeft iedereen er evenveel, dan krijgt iedereen er één."
+    },
+    {
+      "n": 7,
+      "nimi": "Proef mijn pizza!",
+      "ohje": "Geef één stuk uit je doos aan een andere speler.",
+      "huom": "Het stuk moet nieuw zijn voor de andere speler.",
+      "tarkennus": "Geef een stuk dat de andere speler nog niet heeft."
+    },
+    {
+      "n": 8,
+      "nimi": "Pompen met de blaasbalg is vermoeiend.",
+      "ohje": "Sla één ronde over.",
+      "tarkennus": "Je slaat je volgende worp over."
+    },
+    {
+      "n": 9,
+      "nimi": "Schud de dozen!",
+      "ohje": "De dozen van de spelers wisselen met de klok mee van eigenaar."
+    },
+    {
+      "n": 10,
+      "nimi": "Schud de dozen!",
+      "ohje": "De dozen van de spelers wisselen tegen de klok in van eigenaar."
+    },
+    {
+      "n": 11,
+      "nimi": "Afwisseling maakt het leven leuk.",
+      "ohje": "De speelrichting verandert.",
+      "huom": "Speel je met z’n tweeën, dan krijg je meteen een nieuwe beurt."
+    },
+    {
+      "n": 12,
+      "nimi": "Dozen ruilen!",
+      "ohje": "Ruil je doos met een speler naar keuze."
+    },
+    {
+      "n": 13,
+      "nimi": "Lunchpauze! De apen eten hun stukken op.",
+      "ohje": "Alle spelers verliezen stukken volgens het getal op de kaart.",
+      "huom": "Heeft een speler maar één stuk, dan wordt dat niet weggehaald.",
+      "tarkennus": "2–3 stukken: verlies 1. 4–5 stukken: verlies 2. 6–7 stukken: verlies 3. 8–9 stukken: verlies 4."
+    },
+    {
+      "n": 14,
+      "nimi": "Iemand vergat het zuigsysteem te onderhouden, en nu zit het vast.",
+      "ohje": "Alle toppings op de lopende band gaan naar de voorraad."
+    },
+    {
+      "n": 15,
+      "nimi": "Pizzafeest!",
+      "ohje": "Alle toppings gaan naar de lopende band.",
+      "huom": "Je kunt je beurt voortzetten door pizza’s te maken. Trek aan het eind een nieuwe apenkaart.",
+      "tarkennus": "Als je pizza’s maakt, trek je aan het eind een nieuwe apenkaart."
+    },
+    {
+      "n": 16,
+      "nimi": "De blaasbalg doet raar.",
+      "ohje": "De kleinste toppings gaan naar de voorraad. Haal, te beginnen met de kleinste topping op de lopende band, evenveel toppings weg als er spelers meedoen.",
+      "tarkennus": "Bijvoorbeeld: met drie spelers gaan de drie kleinste toppings naar de voorraad."
+    },
+    {
+      "n": 17,
+      "nimi": "De blaasbalg haalt streken uit.",
+      "ohje": "De grootste toppings gaan naar de voorraad. Haal, te beginnen met de grootste topping op de lopende band, evenveel toppings weg als er spelers meedoen.",
+      "tarkennus": "Bijvoorbeeld: met drie spelers gaan de drie grootste toppings naar de voorraad."
+    },
+    {
+      "n": 18,
+      "nimi": "Tijd om te pompen!",
+      "ohje": "De waarde van de lopende band gaat één omhoog. Verplaats toppings naar keuze tussen de lopende band en de voorraad.",
+      "tarkennus": "De som van de toppings op de lopende band gaat één omhoog. Voorbeeld: ananas (3) + tomaat (2) = 5. Breng een olijf (1) naar de lopende band en de som is 6."
+    },
+    {
+      "n": 19,
+      "nimi": "Weer tijd om te pompen!",
+      "ohje": "De waarde van de lopende band gaat één omlaag. Verplaats toppings naar keuze tussen de lopende band en de voorraad.",
+      "tarkennus": "De som van de toppings op de lopende band gaat één omlaag. Voorbeeld: ananas (3) + tomaat (2) = 5. Ruil de tomaat voor een olijf (1) en de som is 4."
+    },
+    {
+      "n": 20,
+      "nimi": "Je hoest terwijl je de blaasbalg pompt.",
+      "ohje": "Alle oneven toppings wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Oneven: 1, 3, 5, 7 en 9."
+    },
+    {
+      "n": 21,
+      "nimi": "Je niest terwijl je op de blaasbalg duwt.",
+      "ohje": "Alle even toppings wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Even: 2, 4, 6, 8 en 10."
+    },
+    {
+      "n": 22,
+      "nimi": "Je lacht hardop en rolt over de blaasbalg.",
+      "ohje": "Alle toppings die deelbaar zijn door drie wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Deelbaar door drie: 3, 6 en 9."
+    },
+    {
+      "n": 23,
+      "nimi": "Je laat een windje, en dat verandert de druk van het zuigsysteem.",
+      "ohje": "Alle toppings die deelbaar zijn door vijf wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Deelbaar door vijf: 5 en 10."
+    },
+    {
+      "n": 24,
+      "nimi": "Je bent dol op kleine toppings.",
+      "ohje": "Kleine toppings wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Klein: 1–5."
+    },
+    {
+      "n": 25,
+      "nimi": "Ach, wat hou je van grote toppings.",
+      "ohje": "Grote toppings wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Groot: 6–10."
+    },
+    {
+      "n": 26,
+      "nimi": "Je kunt niet stoppen met pompen!",
+      "ohje": "Alle toppings wisselen van plek tussen de lopende band en de voorraad.",
+      "tarkennus": "Was de lopende band leeg, dan is het pizzafeest: ga door met je beurt zoals bij kaart 15."
+    },
+    {
+      "n": 27,
+      "nimi": "Je hebt wilskracht!",
+      "ohje": "Je kunt het effect van een apenkaart tegenhouden.",
+      "huom": "Je mag de kaart bewaren en in elke beurt spelen.",
+      "tarkennus": "Speel hem zodra iemand een apenkaart trekt. Het effect van die kaart vervalt."
+    },
+    {
+      "n": 28,
+      "nimi": "De pizzadozen zullen je dankbaar zijn.",
+      "ohje": "Je krijgt één gratis extra stuk!"
+    },
+    {
+      "n": 29,
+      "nimi": "Je bent helemaal pizzagek geworden!",
+      "ohje": "De toppings op de lopende band wisselen volgens de plaatjes op de kaart.",
+      "huom": "Er gebeurt niets met de toppings als ze allebei op de lopende band liggen.",
+      "tarkennus": "Paren: olijf–ham, tomaat–champignon, ananas–rucola, blauwe kaas–aubergine, garnaal–vis. Een paar wisselt van plek als de ene op de lopende band ligt en de andere in de voorraad."
+    },
+    {
+      "n": 30,
+      "nimi": "Je denkt alleen nog aan pizza.",
+      "ohje": "Maak een pizza vóór of na het gooien met de dobbelsteen.",
+      "huom": "Je mag de kaart bewaren en later spelen.",
+      "tarkennus": "Je mag pizza’s maken zowel vóór als na het gooien."
+    },
+    {
+      "n": 31,
+      "nimi": "Dat zag er lekker uit!",
+      "ohje": "Spelers mogen een stuk kiezen van de vorige speler.",
+      "huom": "De speler die aan de beurt was, begint. Het stuk moet nieuw zijn. Is er geen nieuw stuk, dan krijgt de speler niets. Die speler moet wel nog steeds een eigen stuk aan de volgende speler geven.",
+      "tarkennus": "Pak van de speler vóór je een stuk dat je nog niet hebt. De stukken gaan pas in de dozen als iedereen heeft gekozen."
+    },
+    {
+      "n": 32,
+      "nimi": "Je bent een legende bij de pizzadozen!",
+      "ohje": "Je krijgt twee extra stukken!"
+    },
+    {
+      "n": 33,
+      "nimi": "O! Je krijgt ineens honger.",
+      "ohje": "Je verliest al je stukken."
+    }
+  ]
+}

@@ -1,0 +1,369 @@
+{
+  "lang": "nl",
+  "nimi": "Nederlands",
+  "lyhenne": "NL",
+  "ui": {
+    "nav_etusivu": "Home",
+    "nav_korttipeli": "Kaartspel",
+    "nav_lautapeli": "Bordspel",
+    "nav_pelaa": "Online spelen",
+    "kielivalinta": "Taal",
+    "kauppaan": "Winkel",
+    "katso_video": "Bekijk video",
+    "video_kieli": {
+      "fi": "in het Fins",
+      "en": "in het Engels"
+    },
+    "lataa": "Downloaden",
+    "alaosa_teksti": "Pizza Love® is een spel van Merkitysten Oy. De spellen zijn ontworpen in Finland en worden in Finland samengesteld en verpakt.",
+    "alaosa_yhteys": "Vragen? Schrijf ons:",
+    "alaosa_tavaramerkki": "Pizza Love® en Merkitysten® zijn geregistreerde handelsmerken van Merkitysten Oy.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Geld inzamelen",
+    "ohita": "Naar de inhoud",
+    "kauppa_korttipeli": "Kaartspel in de winkel",
+    "kauppa_lautapeli": "Bordspel in de winkel",
+    "kauppa_molemmat": "Beide spellen"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – regels, video’s en onlinespellen",
+    "kuvaus": "Regels en uitlegvideo’s voor het Pizza Love®-kaartspel en -bordspel, plus onlinespellen.",
+    "h1": "Welkom in de pizzafabriek!",
+    "ingressi": "Hier vind je de regels en uitlegvideo’s van de Pizza Love®-spellen. Kies je spel en binnen een paar minuten kun je spelen.",
+    "valitse": "Kies je spel",
+    "korttipeli_tiedot": "2–5 spelers · vanaf 6 jaar · 3 manieren om te spelen · 5–15 min.",
+    "lautapeli_tiedot": "2–4 spelers · vanaf 6 jaar · 3 manieren om te spelen · 10–20+ min.",
+    "avaa": "Regels en video’s",
+    "pelaa_otsikko": "Speel Pizza Love online",
+    "pelaa_teksti": "Pizza Party en Pizza Basso uit het kaartspel, Apenweegschaal en Hongerige Apen uit het bordspel. De kaartspellen kun je ook met vrienden spelen – iedereen op een eigen telefoon.",
+    "pelaa_nappi": "Nu spelen",
+    "kauppa_otsikko": "Zin in meer?",
+    "kauppa_teksti": "De Pizza Love®-spellen zijn te koop in de webwinkel van Merkitysten.",
+    "brandedition": {
+      "otsikko": "Voor clubs en bedrijven: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition is hetzelfde spel in de eigen doos en kleuren van je organisatie. Als cadeau, prijs of fanartikel. De minimale bestelling is 100 spellen.",
+      "nappi": "Vraag een offerte aan",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    },
+    "jalleenmyyjat": {
+      "otsikko": "Voor winkels en distributeurs",
+      "teksti": "Het Pizza Love®-kaartspel en -bordspel zijn beschikbaar voor winkels en distributie. De regels zijn in het Fins, Zweeds en Engels. Neem contact op voor groothandelsprijzen en voorwaarden: info@merkitysten.fi · +358 44 023 0688.",
+      "nappi": "Neem contact op",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20%E2%80%93%20retail%20and%20distribution"
+    }
+  },
+  "korttipeli": {
+    "title": "Pizza Love®-kaartspel – regels en video’s",
+    "kuvaus": "Regels en uitlegvideo’s voor het Pizza Love®-kaartspel: Pizza Party, Pizza Basso en Pizza Love.",
+    "h1": "Pizza Love®-kaartspel",
+    "ingressi": "Drie spellen met één stapel kaarten. Begin met Pizza Party – dat leer je het snelst.",
+    "tiedot": [
+      "2–5 spelers",
+      "vanaf 6 jaar",
+      "42 pizzakaarten",
+      "58 toppingkaarten",
+      "5–15 min."
+    ],
+    "hyppy": {
+      "perusteet": "Zo maak je een pizza",
+      "muodot": "Drie manieren om te spelen",
+      "lataa": "Regels als pdf"
+    },
+    "perusteet_otsikko": "Zo maak je een pizza",
+    "perusteet_ingressi": "Alle drie de spellen gebruiken dezelfde basisregel. Leer die eerst.",
+    "pizzakortit_otsikko": "Pizzakaarten",
+    "pizzakortit": "Op een pizzakaart staat een pizza met één tot vier verschillende toppings. De waarde van de pizza (1–10) staat in de hoeken. In het spel zitten 10 hartjespizza’s met de waarde 10.",
+    "taytekortit_otsikko": "Toppingkaarten",
+    "taytekortit": "Op een toppingkaart staat één topping. De waarde van de topping (1–10) staat in de hoeken. De 3 fantasietoppings (X) kunnen elke topping zijn.",
+    "perussaanto_otsikko": "Basisregel",
+    "perussaanto": "Pizzakaarten liggen altijd op tafel. Je maakt ze met toppingkaarten uit je hand.",
+    "arvo_otsikko": "Waarde van de pizza",
+    "arvo": "Maak een pizza met je eigen toppingkaarten en zeg hardop de som die de waarde van de pizza geeft. Alle sommen zijn toegestaan en je mag ze combineren, zolang de uitkomst gelijk is aan de waarde van de pizza. Bijvoorbeeld <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Voorbeeld: tomaat-ananaspizza",
+    "esimerkki_alt": "Een pizzakaart met de waarde 5, een tomaat (2) en een ananas (3)",
+    "esimerkki": "De pizza heeft twee toppings en de waarde 5. Tomaat 2 + ananas 3 = 5. Het kan ook anders: 4 + 1, 6 – 1 of zelfs 10 : 2.",
+    "tavat_otsikko": "Twee manieren om een pizza te maken",
+    "helpompi_otsikko": "Makkelijkere manier",
+    "helpompi": "Je kunt een pizza maken met elk aantal toppingkaarten, zelfs met maar één. Gebruik deze manier als je Pizza Party voor het eerst speelt of met een klein kind.",
+    "basso_tapa_otsikko": "De manier van aap Basso",
+    "basso_tapa": "Gebruik evenveel <b>verschillende toppings</b> als de pizza toppings heeft. Je mag meer kaarten gebruiken: de tomaat-ananaspizza (waarde 5) kun je maken met twee tomaten en één olijf, 2 + 2 + 1 = 5, want dat zijn twee verschillende soorten topping. Gebruik deze manier bij Pizza Basso, of als extra uitdaging bij Pizza Party.<br><span class=\"pieni\">In de gedrukte regels staat nog “evenveel toppingkaarten als de pizza toppings heeft”. De nieuwe manier geeft het spel meer mogelijkheden.</span>",
+    "huomio_bruno": "<b>Bruno of Basso?</b> De aap in het spel heet nu Basso. In oudere regels en video’s heet hij Bruno, en heet de tweede spelvorm Pizza Bruno. De regels zijn hetzelfde.",
+    "muodot_otsikko": "Drie manieren om te spelen",
+    "muodot_ingressi": "Open een spelvorm om de regels en video’s te zien.",
+    "videot_otsikko": "Video’s",
+    "videot": {
+      "party_en": "Pizza Party – zo speel je het",
+      "party_fi": "Pizza Party – zo speel je het",
+      "party_helpompi": "De makkelijkere manier van spelen",
+      "party_helpottaminen": "Het spel makkelijker maken",
+      "party_ei_valmistu": "Als niemand de pizza kan maken",
+      "party_basso_tapa": "De manier van aap Basso",
+      "basso_fi": "Pizza Basso – zo speel je het"
+    },
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Makkelijkst om mee te beginnen, snel en levendig · ca. 5 min.",
+        "html": "<h3>Doel</h3><p>De spelers maken om het snelst pizza’s. Winnaar is wie de meeste pizza’s maakt voordat de pizza- of toppingkaarten op zijn.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 5. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Alle spelers proberen meteen die pizza te maken met hun toppingkaarten.</p><h3>Zo speel je</h3><ul class=\"lista\"><li>Er wordt gespeeld zonder beurten: iedereen probeert tegelijk pizza’s te maken.</li><li>Wie de pizza het snelst maakt, pakt de kaart en legt die voor zich neer.</li><li>Gebruikte toppingkaarten gaan uit het spel. Trek nieuwe kaarten tot je er weer 5 in je hand hebt.</li><li>Draai meteen een nieuwe pizzakaart open. Ga door tot de pizza- of toppingkaarten op zijn en niemand nog een pizza kan maken.</li></ul><h3>Als een pizza niet gemaakt kan worden</h3><p>Als niemand de pizza op tafel kan of wil maken, draai je een nieuwe pizzakaart open bovenop de oude. Wie de volgende pizza maakt, krijgt alle pizza’s op tafel.</p><h3>Punten en winnen</h3><p>Gewone pizza = 1 punt, hartjespizza = 2 punten. De ronde wint wie de meeste punten heeft. Spreek af hoeveel rondes jullie spelen – bijvoorbeeld: wie als eerste 3 of 5 rondes wint, wint het hele spel.</p><h3>Pizza Party om de beurt</h3><p>Je kunt ook om de beurt spelen. Dan heeft iedereen tijd om na te denken tijdens de eigen beurt.</p><h3>Optionele regels</h3><p>Je kunt regels afspreken die de sommen beperken, bijvoorbeeld:</p><ul class=\"lista\"><li>alleen spelen met plus- en minsommen</li><li>bij elke pizza moet je een keer- of deelsom gebruiken.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Rustig en spannend · ca. 7 min.",
+        "html": "<p class=\"pieni\">In oudere regels: Pizza Bruno.</p><h3>Doel</h3><p>De spelers proberen al hun toppingkaarten kwijt te raken. Wie dat als eerste lukt, wint de ronde.</p><p><b>Let op:</b> Pizza’s maak je op de manier van aap Basso: gebruik evenveel verschillende toppings als de pizza toppings heeft. Je mag meer kaarten gebruiken, bijvoorbeeld twee olijven.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 7. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Wie het laatst pizza heeft gegeten, begint.</p><h3>Zo speel je</h3><p>De spelers proberen om de beurt de pizza op tafel te maken met hun toppingkaarten.</p><p><b>A) Als het lukt:</b> leg de gebruikte toppingkaarten uit het spel en draai een nieuwe pizzakaart van de stapel open bovenop de oude. De volgende speler is aan de beurt.</p><p><b>B) Als je de pizza niet kunt of wilt maken:</b> trek één toppingkaart. De volgende speler is aan de beurt.</p><p><b>C) Nog één kaart:</b> als je nog maar één toppingkaart hebt, doe je als een hongerige aap Basso en roep je: “PIZZAAA!”</p><h3>Als de toppingkaarten op zijn</h3><p>Schud de weggelegde toppingkaarten tot een nieuwe trekstapel en speel verder.</p><h3>Punten en winnen</h3><p>De ronde wint wie als eerste al zijn toppingkaarten kwijt is. Tel de waarden op van de kaarten die de anderen nog in hun hand hebben – dat totaal zijn de punten van de winnaar. Gewone toppings tellen hun waarde (1–10), een fantasietopping telt 20.</p><p>Wie als eerste 100 punten heeft, wint en krijgt de titel <b>Pizza Basso – de echte pizza-aap</b>.</p><h3>Korter spel</h3><p>Je kunt afspreken dat het spel stopt bij bijvoorbeeld 30 of 50 punten, of dat wie als eerste 3 of 5 rondes wint, het hele spel wint.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Meest tactisch en uitdagend, vanaf 8 jaar · ca. 15 min.",
+        "html": "<h3>Doel</h3><p>De spelers proberen al hun eigen pizza’s eerder te maken dan de anderen. Wie dat als eerste lukt, wint.</p><p><b>Let op:</b> Nu tellen de toppings: je kunt een pizza alleen maken met de juiste toppings.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud en geef iedere speler 8 pizzakaarten. De spelers leggen ze met de afbeelding naar beneden op een stapel voor zich en draaien de bovenste kaart open.</li><li>Leg één pizzakaart open in het midden van de tafel als ruilpizza. De rest van de pizzakaarten gaat uit het spel.</li><li>Schud de toppingkaarten en leg ze als trekstapel op tafel.</li></ol><h3>Voorraad</h3><p>Iedere speler heeft 4 voorraadplekken. Toppingkaarten in de voorraad liggen open. Je kunt ze voor je eigen pizza’s gebruiken net als kaarten in je hand, en andere spelers kunnen ze gebruiken om te ruilen.</p><h3>Begin van het spel</h3><p>Wie het laatst pizza heeft gegeten, begint en trekt 5 toppingkaarten.</p><h3>Zo speel je</h3><ol class=\"lista\"><li>Trek toppingkaarten tot je 5 kaarten in je hand hebt.</li><li>Probeer de bovenste pizza van je stapel te maken met kaarten uit je hand en je voorraad.</li><li>Je mag kaarten uit je voorraad met sommen ruilen tegen voorraadkaarten van een andere speler.</li><li>Eén keer per beurt mag je de bovenste pizza van je stapel ruilen met de ruilpizza in het midden. Die pizza mag je meteen maken.</li><li>Sluit je beurt af door één toppingkaart uit je hand open in je voorraad te leggen.</li></ol><h3>Een pizza maken</h3><p>Heb je de toppings die je nodig hebt in je hand en/of voorraad, maak dan de pizza. De pizzakaart en de gebruikte toppingkaarten gaan uit het spel. Draai de volgende pizzakaart van je stapel open – heb je de toppings ervoor, dan mag je hem meteen maken.</p><h3>Hartjespizza</h3><p>Als je een hartjespizza maakt, geef je je volgende pizzakaart (zonder te kijken) aan een andere speler. Die legt hem onderop zijn stapel.</p><h3>Voorraadkaarten ruilen</h3><p>Kom aan de toppings die je nodig hebt door kaarten uit je voorraad te ruilen tegen voorraadkaarten van een andere speler. Je ruilt met sommen: alles mag, zolang de uitkomst op de kaarten van beide spelers gelijk is. Je mag meerdere keren per beurt ruilen, maar elke ruil is altijd tussen twee voorraden. Een kaart die onder een andere kaart ligt, kun je niet ruilen. Leg de kaarten die je krijgt in willekeurige volgorde in je voorraad.</p><h3>De voorraad vullen</h3><p>Is je hand leeg voordat je een voorraadkaart hebt neergelegd, trek dan 5 nieuwe kaarten en ga door met je beurt. Je mag de voorraadplekken in elke volgorde vullen en kaarten op elkaar stapelen. De bovenste kaart moet je altijd gebruiken vóór de kaarten eronder. Voorraadkaarten mogen niet meer verplaatst worden als ze eenmaal liggen.</p><h3>Het spel winnen</h3><p>Het spel is afgelopen als een speler alle pizza’s van zijn stapel heeft gemaakt.</p>"
+      }
+    ],
+    "lataa_otsikko": "Regels als pdf",
+    "lataa_teksti": "Het gedrukte regelblad in het Fins, Zweeds en Engels.",
+    "lataa_tiedosto": "Regels kaartspel (FI · SV · EN)",
+    "pelaa_otsikko": "Pizza Party en Pizza Basso",
+    "pelaa_teksti": "Beide werken ook in je browser. Probeer ze uit voor je eerste spel, of speel met vrienden op jullie eigen telefoons.",
+    "ristiin_otsikko": "Volgende: het Pizza Love®-bordspel",
+    "ristiin_teksti": "Dezelfde pizzawereld op een speelbord: maak de lievelingspizza’s van de pizzadozen en verzamel als eerste 10 verschillende stukken. Drie manieren om te spelen, waaronder een coöperatief spel.",
+    "ristiin_saannot": "Regels bordspel"
+  },
+  "lautapeli": {
+    "title": "Pizza Love®-bordspel – regels en video’s",
+    "kuvaus": "Regels en uitlegvideo’s voor het Pizza Love®-bordspel: klaarzetten, een beurt spelen en drie manieren om te spelen.",
+    "h1": "Pizza Love®-bordspel",
+    "ingressi": "Maak de lievelingspizza’s van de pizzadozen en verzamel als eerste 10 verschillende stukken – dan win je!",
+    "tiedot": [
+      "2–4 spelers",
+      "vanaf 6 jaar",
+      "3 manieren om te spelen",
+      "10–20+ min."
+    ],
+    "hyppy": {
+      "kokoaminen": "Voor je eerste spel",
+      "peli": "Zo werkt het spel",
+      "muodot": "Drie manieren om te spelen",
+      "lataa": "Regels als pdf"
+    },
+    "kokoaminen_otsikko": "Voor je eerste spel",
+    "kokoaminen": "In de speldoos zitten een stickervel en vier dozen die je één keer in elkaar zet. Dat duurt even, en daarna is het spel altijd klaar om te spelen.",
+    "videot": {
+      "HE9301owOKI": "De dozen in elkaar zetten",
+      "RbLfhUyXHKw": "Stickers op de pionnen",
+      "Ya73FhJfj54": "Het spel klaarzetten",
+      "IN2LvbXo9eA": "Een beurt spelen en winnen"
+    },
+    "peli_otsikko": "Zo werkt het spel",
+    "voittaminen_otsikko": "Het spel winnen",
+    "voittaminen": "Je wint als je als eerste <b>10 verschillende</b> stukken in je doos hebt. Maak pizza’s op het bord om de bijpassende stukken voor je doos te krijgen. Een hartjespizza geeft je één extra stuk naar keuze.",
+    "valmistelut_otsikko": "Voorbereiding",
+    "valmistelut": [
+      "Stapel de kleurige toppingtorens in de voorraad.",
+      "Schud en leg 4 pizzakaarten op het bord. Leg de overige pizzakaarten als stapel op tafel.",
+      "Schud de apenkaarten en leg ze als stapel op tafel.",
+      "Geef iedere speler een lege doos."
+    ],
+    "vuoro_otsikko": "Een beurt spelen",
+    "vaiheet": [
+      {
+        "otsikko": "Dobbelen en pionnen verplaatsen",
+        "html": "<p>Wie het laatst pizza heeft gegeten, begint en gooit met de dobbelsteen. De dobbelsteen bepaalt hoeveel pionnen je verplaatst tussen de voorraad en de lopende band. Pionnen van dezelfde kleur bewegen altijd samen als één toren. Vind je geen zet, dan mogen de anderen helpen. Vindt iemand er een, dan wordt die gedaan. Vindt niemand er een, dan is je beurt voorbij.</p><p class=\"pieni\">De apenweegschaal en de gewichtjes helpen kinderen om de zetten voor zich te zien. <b>Je hoeft ze niet te gebruiken.</b></p>"
+      },
+      {
+        "otsikko": "Pizza’s maken",
+        "html": "<p>Liggen de toppings die een pizza nodig heeft op de lopende band, maak dan de pizza en verzamel de stukken in je doos. Je kunt meerdere pizza’s per beurt maken, maar elke topping mag per beurt maar voor één pizza worden gebruikt. Leg de gebruikte toppings terug in de voorraad en leg een nieuwe pizzakaart van de stapel op het bord.</p>"
+      },
+      {
+        "otsikko": "Een apenkaart trekken",
+        "html": "<p>Heb je minstens één pizza gemaakt, trek dan aan het eind van je beurt een apenkaart en doe wat erop staat. De beurt gaat met de klok mee.</p>"
+      }
+    ],
+    "muodot_otsikko": "Drie manieren om te spelen",
+    "muodot_ingressi": "Dobbelen, toppings verplaatsen en pizza’s maken werkt bij alle drie hetzelfde.",
+    "muodot": [
+      {
+        "nimi": "Pizza Love – basisspel",
+        "kuvaus": "Een race voor het hele gezin, vanaf 6 jaar · ca. 15–20 min.",
+        "html": "<p>Maak de lievelingspizza’s van de pizzadozen en verzamel als eerste 10 verschillende stukken in je doos. Ken je het basisspel, dan vind je in het regelboek extra regels die het sneller maken.</p>"
+      },
+      {
+        "nimi": "Hongerige Apen",
+        "kuvaus": "Coöperatief spel. Zelfs met een kind van 4 kun je het samen spelen en getallen en hoeveelheden ontdekken. · ca. 10 min.",
+        "html": "<p>De makkelijkste manier om te beginnen. Jullie spelen samen en vullen één gezamenlijke doos. Vul de doos met 10 verschillende stukken en jullie winnen allemaal. Maar let op: de hongerige apen eten hun stukken meteen op als er geen nieuwe bij komen!</p>"
+      },
+      {
+        "nimi": "Geheime Pizza’s",
+        "kuvaus": "Spannend en strategisch · 20+ min.",
+        "html": "<p>Iedereen krijgt twee geheime pizza’s die de anderen niet kunnen zien – dus niemand weet welke pizza’s jij gaat maken. Wie als eerste zijn doos vult met 10 verschillende stukken, wint.</p>"
+      }
+    ],
+    "lataa_otsikko": "Regels als pdf",
+    "lataa_teksti": "Volledige regels voor elke spelvorm in het Fins, Zweeds en Engels.",
+    "lataukset": {
+      "pikaohje": "Korte uitleg (om te printen)",
+      "peruspeli": "Basisspel – volledige regels",
+      "apinat": "Hongerige Apen – volledige regels",
+      "salatut": "Geheime Pizza’s – volledige regels"
+    },
+    "pelaa_otsikko": "Apenweegschaal",
+    "pelaa_teksti": "Leer de weegschaal van het bordspel online kennen: geef hongerige apen te eten en help Basso met puzzels.",
+    "ristiin_otsikko": "Volgende: het Pizza Love®-kaartspel",
+    "ristiin_teksti": "Dezelfde pizza’s en toppings als kaartspel: maak een pizza met je toppingkaarten en zeg de som hardop. Drie spellen met één stapel kaarten.",
+    "ristiin_saannot": "Regels kaartspel"
+  },
+  "toppingten": {
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love op SPIEL Essen 2026: het kaartspel, het bordspel en een zakje gemaakt voor de beurs, met een eigen spel.",
+    "h1": "{nimi}",
+    "merkki": "Essen Edition · beperkte oplage van 450",
+    "ingressi": "Print het speelbord, kiep de toppings op tafel en speel. De regels staan op deze pagina.",
+    "tiedot": "2–4 spelers · vanaf 7 jaar · ongeveer 15 minuten",
+    "sisalto_otsikko": "In het zakje",
+    "sisalto": [
+      "55 toppings in tien kleuren, waarden 1–10",
+      "Een tienzijdige dobbelsteen",
+      "Een Basso-tattoo"
+    ],
+    "lataa_otsikko": "Download het speelbord",
+    "lataa": "Het speelbord is één A4-vel. De lijnversie is hetzelfde spel, maar gebruikt minder inkt.",
+    "lataa_vari": "Speelbord, kleur",
+    "lataa_viiva": "Speelbord, lijnversie",
+    "saannot_otsikko": "Regels",
+    "valmistelu": "Iedere speler neemt één pizza. De toppings komen op hun eigen plek op de toonbank.",
+    "tavoite_otsikko": "Doel",
+    "tavoite": "Bouw de meest waardevolle pizza. Het spel stopt als iemand zijn pizza vol heeft, maar de waarde bepaalt wie wint, niet de snelheid.",
+    "vuoro_otsikko": "Jouw beurt",
+    "vuoro": [
+      "Gooi met de dobbelsteen.",
+      "Pak toppings van de toonbank die samen precies je worp waard zijn.",
+      "Leg ze op de lege stukken van je pizza, één topping per stuk."
+    ],
+    "vuoro_huom": "Gooi je 10, dan pak je één tien, of 1 + 2 + 3 + 4. De waarde is hetzelfde, maar de tien vult één stuk en de vier kleine vullen er vier.",
+    "vuoro_raja": "Je kunt niet meer pakken dan je lege stukken hebt.",
+    "ohi_otsikko": "Als je niet kunt of wilt pakken",
+    "ohi": "Je past. Drie keer achter elkaar passen en je ligt eruit.",
+    "aloitus_otsikko": "Wie begint de ronde",
+    "aloitus": "De ronde begint bij wie de minste toppings heeft. Is dat gelijk, dan bij wie de toppings het minst waard zijn.",
+    "voitto_otsikko": "Einde van het spel",
+    "voitto": "Het spel stopt zodra iemand alle tien stukken heeft gevuld. Die speler heeft dan nog niet gewonnen.",
+    "pisteet_otsikko": "Punten tellen",
+    "pisteet": "Iedereen telt de waarde van de toppings op zijn pizza op. De meest waardevolle pizza wint.",
+    "tasapeli_otsikko": "Gelijkspel",
+    "tasapeli": "Zijn twee pizza’s evenveel waard, dan wint de pizza met minder toppings. Is dat ook gelijk, dan wordt de winst gedeeld.",
+    "vinkki_otsikko": "Tip",
+    "vinkki": "Kleine toppings zijn schaars: er is maar één 1 en twee keer een 2. Daarmee kom je precies op de som als geen enkele topping past, en een gemiste beurt levert helemaal niets op. Grote toppings besparen stukken, en je hebt er maar tien.",
+    "muunnelmat_otsikko": "Varianten",
+    "muunnelmat": [
+      [
+        "Eén terug",
+        "Kun je je worp niet maken, leg dan één topping terug op de toonbank en probeer het opnieuw."
+      ],
+      [
+        "Precies 30",
+        "Niet de stukken maar de waarde is nu de grens. Je wint als je toppings precies 30 waard zijn. Je mag er niet overheen, dus pak de grootste die past."
+      ]
+    ],
+    "essen_otsikko": "De Essen-oplage",
+    "essen": "We hebben deze oplage voor de beurs gemaakt. De toppings hebben dezelfde tien kleuren als in het kaartspel, alleen kleiner.",
+    "valmistelu_otsikko": "Voorbereiding",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Je vindt ons op SPIEL Essen. We nemen het kaartspel en het bordspel mee, en een zakje toppings waar we een spel voor hebben gemaakt.",
+    "mukana_otsikko": "Wat we meenemen",
+    "mukana": [
+      "Pizza Love-kaartspel",
+      "Pizza Love-bordspel",
+      "Zakje: 55 toppings, een tienzijdige dobbelsteen en een Basso-tattoo"
+    ],
+    "peli_otsikko": "Het spel in het zakje: {nimi}",
+    "nappi": "Download het speelbord",
+    "tarjoukset_otsikko": "Beursaanbiedingen",
+    "tarjoukset_ingressi": "Prijzen geldig op onze stand.",
+    "tarjoukset": [
+      [
+        "€17",
+        "Kaartspel",
+        "Normaal €19,90",
+        "korttipeli",
+        "kansi-family.webp",
+        "Bespaar €2,90"
+      ],
+      [
+        "€30",
+        "Twee kaartspellen",
+        "Normaal €39,80",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Bespaar €9,80"
+      ],
+      [
+        "€30",
+        "Bordspel",
+        "Normaal €34,90",
+        "lautapeli",
+        "lautapeli-laatikko.webp",
+        "Bespaar €4,90"
+      ],
+      [
+        "€45",
+        "Beide spellen",
+        "Normaal €49,90",
+        "molemmat",
+        "molemmat-pelit.webp",
+        "Bespaar €4,90"
+      ],
+      [
+        "€10",
+        "Een zakje vol Pizza Love",
+        "55 toppingmuntjes in tien kleuren, dezelfde tien als in het kaartspel. Je kunt ze tot torens stapelen. In het zakje zitten ook een tienzijdige Pizza Love-dobbelsteen en een Basso-tattoo. Download het speelbord op deze pagina.",
+        "",
+        "pikkunappulat-noppa.webp",
+        "Alleen op de beurs"
+      ]
+    ],
+    "kaupanpaalle": "Besteed meer dan €35 en het zakje gaat met je mee.",
+    "kaupanpaalle_lisa": "Er zijn 450 zakjes.",
+    "tuotteet_otsikko": "Wat we meenemen",
+    "avaa": "Lees meer",
+    "tuotteet": [
+      [
+        "Pizza Love-kaartspel",
+        "Drie spelvormen, 2–6 spelers",
+        "korttipeli.html",
+        "kansi-family.webp"
+      ],
+      [
+        "Pizza Love-bordspel",
+        "Drie spelvormen, 2–4 spelers",
+        "lautapeli.html",
+        "lautapeli-laatikko.webp"
+      ],
+      [
+        "Een compact zakje vol Pizza Love",
+        "55 toppings, een dobbelsteen en een Basso-tattoo",
+        "#peli",
+        "pikkunappulat-noppa.webp"
+      ]
+    ],
+    "editiot_otsikko": "Drie covers, dezelfde kaarten",
+    "editiot_teksti": "Het kaartspel is er met drie covers. De kaarten erin zijn precies hetzelfde, dus kies de cover die je mooi vindt.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "Op de beurs krijg je de tattoo alleen bij dit zakje."
+  }
+}

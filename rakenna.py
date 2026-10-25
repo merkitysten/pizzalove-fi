@@ -21,8 +21,8 @@ SISALTO = os.path.join(JUURI, 'sisalto')
 JULKINEN = os.path.join(JUURI, 'julkinen')
 ULOS = os.path.join(JUURI, 'docs')
 
-KIELET = ['fi', 'sv', 'en', 'de']      # järjestys kielivalikossa
-LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE'}
+KIELET = ['fi', 'sv', 'en', 'de', 'nl', 'fr', 'es']      # järjestys kielivalikossa (NL/FR/ES lisätty 25.10.2026)
+LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE', 'nl': 'nl_NL', 'fr': 'fr_FR', 'es': 'es_ES'}
 OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään näistä
 OSOITE = 'https://pizzalove.fi'
 SAHKOPOSTI = 'info@merkitysten.fi'
@@ -49,7 +49,9 @@ KAUPPA_KIELI = {
            'lautapeli': 'https://merkitysten.fi/en/tuote/pizza-love-board-game/',
            'molemmat': 'https://merkitysten.fi/en/tuote/pizza-love-both-games/'},
 }
-KAUPPA_KIELI['de'] = KAUPPA_KIELI['en']
+# DE/NL/FR/ES: ei omaa kauppaa → EN-tuotesivut.
+for _k in ('de', 'nl', 'fr', 'es'):
+    KAUPPA_KIELI[_k] = KAUPPA_KIELI['en']
 MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp
 VAAKA_W, VAAKA_H = 720, 489  # julkinen/kuvat/apinavaaka.webp (koottu Apinavaa'an valikkoapinan kerroksista, Marko 20.10.2026)
 

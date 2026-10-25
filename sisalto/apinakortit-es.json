@@ -1,0 +1,215 @@
+{
+  "title": "Juego de mesa Pizza Love®: cartas de mono 01–33",
+  "kuvaus": "Las 33 cartas de mono del juego de mesa Pizza Love® y qué hacer con cada una. Busca tu carta por su número.",
+  "h1": "Cartas de mono",
+  "ingressi": "Si has preparado al menos una pizza en tu turno, roba una carta de mono al final del turno. Busca el número de la carta y haz lo que dice.",
+  "kaytto": "Las cartas de mono se usan en el juego básico y en Pizzas Secretas, no en Monos Hambrientos. Para hacer el juego más fácil, deja fuera las cartas de mono.",
+  "takaisin": "Juego de mesa",
+  "linkki": "Cartas de mono 01–33",
+  "hae": "Número de carta",
+  "huom": "¡OJO!",
+  "tarkennus": "Aclaración",
+  "yleista": "Tu turno termina cuando robas la carta de mono. El siguiente jugador tira el dado y mueve ingredientes antes de preparar pizzas. Una carta que se puede guardar pertenece al jugador que la robó.",
+  "kortit": [
+    {
+      "n": 1,
+      "nimi": "¡Vaya, qué masa tan fina y crujiente!",
+      "ohje": "Tira el dado y juega otro turno."
+    },
+    {
+      "n": 2,
+      "nimi": "¡El fuelle está libre!",
+      "ohje": "Lleva un ingrediente del almacén a la línea y, si quieres, quita un ingrediente de la línea."
+    },
+    {
+      "n": 3,
+      "nimi": "Algo raro pasa con los ingredientes.",
+      "ohje": "Suma uno al número del dado.",
+      "huom": "La carta se puede guardar y jugar en el turno de cualquiera.",
+      "tarkennus": "Júgala justo después de tirar el dado."
+    },
+    {
+      "n": 4,
+      "nimi": "Algo raro pasa con los ingredientes.",
+      "ohje": "Resta uno al número del dado.",
+      "huom": "La carta se puede guardar y jugar en el turno de cualquiera.",
+      "tarkennus": "Júgala justo después de tirar el dado. El número puede quedar en 0, y entonces no se mueve ningún ingrediente."
+    },
+    {
+      "n": 5,
+      "nimi": "¡La línea necesita más ingredientes!",
+      "ohje": "Tira el dado dos veces y añade ingredientes a la línea las dos veces. Las pizzas solo se preparan después de las dos tiradas.",
+      "huom": "La carta se puede guardar y jugar en el turno de cualquiera.",
+      "tarkennus": "El jugador que tiene el turno vuelve a tirar el dado."
+    },
+    {
+      "n": 6,
+      "nimi": "¡Inspección de cajas!",
+      "ohje": "Los jugadores ganan o pierden porciones: si vas en cabeza, pierdes una porción. Si vas en medio, ganas una porción. Si vas el último, ganas dos porciones.",
+      "huom": "La carta afecta enseguida a todos los jugadores. Los jugadores eligen las porciones.",
+      "tarkennus": "Más porciones: vas en cabeza. Menos: vas el último. Si todos tienen el mismo número, todos ganan una."
+    },
+    {
+      "n": 7,
+      "nimi": "¡Prueba mi pizza!",
+      "ohje": "Da una porción de tu caja a otro jugador.",
+      "huom": "La porción debe ser nueva para el otro jugador.",
+      "tarkennus": "Da una porción que el otro jugador todavía no tenga."
+    },
+    {
+      "n": 8,
+      "nimi": "Darle al fuelle cansa.",
+      "ohje": "Descansa una ronda.",
+      "tarkennus": "Te saltas tu próxima tirada."
+    },
+    {
+      "n": 9,
+      "nimi": "¡A mezclar las cajas!",
+      "ohje": "Las cajas de los jugadores cambian de dueño en el sentido de las agujas del reloj."
+    },
+    {
+      "n": 10,
+      "nimi": "¡A mezclar las cajas!",
+      "ohje": "Las cajas de los jugadores cambian de dueño en sentido contrario a las agujas del reloj."
+    },
+    {
+      "n": 11,
+      "nimi": "En la variedad está el gusto.",
+      "ohje": "Cambia el sentido del juego.",
+      "huom": "En una partida de dos jugadores, juegas otro turno enseguida."
+    },
+    {
+      "n": 12,
+      "nimi": "¡Cambio de cajas!",
+      "ohje": "Cambia tu caja con el jugador que quieras."
+    },
+    {
+      "n": 13,
+      "nimi": "¡Hora de comer! Los monos se comen sus porciones.",
+      "ohje": "Todos los jugadores pierden porciones según el número que indica la carta.",
+      "huom": "Si un jugador solo tiene una porción, no se le quita.",
+      "tarkennus": "2–3 porciones: pierdes 1. 4–5 porciones: pierdes 2. 6–7 porciones: pierdes 3. 8–9 porciones: pierdes 4."
+    },
+    {
+      "n": 14,
+      "nimi": "Alguien olvidó el mantenimiento del sistema de aspiración y se ha atascado.",
+      "ohje": "Todos los ingredientes de la línea pasan al almacén."
+    },
+    {
+      "n": 15,
+      "nimi": "¡Fiesta de pizza!",
+      "ohje": "Todos los ingredientes pasan a la línea.",
+      "huom": "Puedes seguir tu turno preparando pizzas. Al final, roba una nueva carta de mono.",
+      "tarkennus": "Si preparas pizzas, roba una nueva carta de mono al final."
+    },
+    {
+      "n": 16,
+      "nimi": "El fuelle hace de las suyas.",
+      "ohje": "Los ingredientes más pequeños pasan al almacén. Empezando por el ingrediente más pequeño de la línea, quita tantos ingredientes como jugadores haya en la partida.",
+      "tarkennus": "Por ejemplo, en una partida de tres jugadores, los tres ingredientes más pequeños van al almacén."
+    },
+    {
+      "n": 17,
+      "nimi": "El fuelle te gasta bromas.",
+      "ohje": "Los ingredientes más grandes pasan al almacén. Empezando por el ingrediente más grande de la línea, quita tantos ingredientes como jugadores haya en la partida.",
+      "tarkennus": "Por ejemplo, en una partida de tres jugadores, los tres ingredientes más grandes van al almacén."
+    },
+    {
+      "n": 18,
+      "nimi": "¡Hora de bombear!",
+      "ohje": "El valor de la línea sube uno. Mueve los ingredientes que quieras entre la línea y el almacén.",
+      "tarkennus": "La suma de los ingredientes de la línea sube uno. Ejemplo: piña (3) + tomate (2) = 5. Lleva una aceituna (1) a la línea y la suma es 6."
+    },
+    {
+      "n": 19,
+      "nimi": "¡Otra vez a bombear!",
+      "ohje": "El valor de la línea baja uno. Mueve los ingredientes que quieras entre la línea y el almacén.",
+      "tarkennus": "La suma de los ingredientes de la línea baja uno. Ejemplo: piña (3) + tomate (2) = 5. Cambia el tomate por una aceituna (1) y la suma es 4."
+    },
+    {
+      "n": 20,
+      "nimi": "Toses mientras bombeas con el fuelle.",
+      "ohje": "Todos los ingredientes impares cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Impares: 1, 3, 5, 7 y 9."
+    },
+    {
+      "n": 21,
+      "nimi": "Estornudas mientras empujas el fuelle.",
+      "ohje": "Todos los ingredientes pares cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Pares: 2, 4, 6, 8 y 10."
+    },
+    {
+      "n": 22,
+      "nimi": "Te ríes a carcajadas y ruedas sobre el fuelle.",
+      "ohje": "Todos los ingredientes divisibles entre tres cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Divisibles entre tres: 3, 6 y 9."
+    },
+    {
+      "n": 23,
+      "nimi": "Se te escapa un pedito y cambia la presión del sistema de aspiración.",
+      "ohje": "Todos los ingredientes divisibles entre cinco cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Divisibles entre cinco: 5 y 10."
+    },
+    {
+      "n": 24,
+      "nimi": "Tienes debilidad por los ingredientes pequeños.",
+      "ohje": "Los ingredientes pequeños cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Pequeños: 1–5."
+    },
+    {
+      "n": 25,
+      "nimi": "¡Ay, cómo te gustan los ingredientes grandes!",
+      "ohje": "Los ingredientes grandes cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Grandes: 6–10."
+    },
+    {
+      "n": 26,
+      "nimi": "¡No puedes parar de bombear!",
+      "ohje": "Todos los ingredientes cambian de sitio entre la línea y el almacén.",
+      "tarkennus": "Si la línea estaba vacía, es una fiesta de pizza: sigue tu turno como con la carta 15."
+    },
+    {
+      "n": 27,
+      "nimi": "¡Tienes fuerza de voluntad!",
+      "ohje": "Puedes anular el efecto de una carta de mono.",
+      "huom": "La carta se puede guardar y jugar en el turno de cualquiera.",
+      "tarkennus": "Júgala en cuanto alguien robe una carta de mono. El efecto de esa carta queda anulado."
+    },
+    {
+      "n": 28,
+      "nimi": "Las cajas de pizza te lo agradecerán.",
+      "ohje": "¡Ganas una porción extra a tu elección!"
+    },
+    {
+      "n": 29,
+      "nimi": "¡Te has vuelto loco por la pizza!",
+      "ohje": "Los ingredientes de la línea cambian según los iconos de la carta.",
+      "huom": "No pasa nada con los ingredientes si los dos están en la línea.",
+      "tarkennus": "Parejas: aceituna–jamón, tomate–champiñón, piña–rúcula, queso azul–berenjena, gamba–pescado. Una pareja cambia de sitio si uno está en la línea y el otro en el almacén."
+    },
+    {
+      "n": 30,
+      "nimi": "Solo piensas en pizza.",
+      "ohje": "Prepara una pizza antes o después de tirar el dado.",
+      "huom": "La carta se puede guardar y jugar más tarde.",
+      "tarkennus": "Puedes preparar pizzas antes y después de tirar el dado."
+    },
+    {
+      "n": 31,
+      "nimi": "¡Qué buena pinta tenía eso!",
+      "ohje": "Los jugadores pueden elegir una porción del jugador anterior.",
+      "huom": "Empieza el jugador que tenía el turno. La porción debe ser nueva. Si no hay ninguna porción nueva, ese jugador no recibe nada. Aun así, debe dar una de sus porciones al siguiente jugador.",
+      "tarkennus": "Coge del jugador anterior a ti una porción que todavía no tengas. Las porciones van a las cajas solo cuando todos han elegido."
+    },
+    {
+      "n": 32,
+      "nimi": "¡Eres una leyenda entre las cajas de pizza!",
+      "ohje": "¡Ganas dos porciones extra!"
+    },
+    {
+      "n": 33,
+      "nimi": "¡Oh! De repente te entra hambre.",
+      "ohje": "Pierdes todas tus porciones."
+    }
+  ]
+}

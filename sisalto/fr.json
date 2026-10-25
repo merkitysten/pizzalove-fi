@@ -1,0 +1,369 @@
+{
+  "lang": "fr",
+  "nimi": "Français",
+  "lyhenne": "FR",
+  "ui": {
+    "nav_etusivu": "Accueil",
+    "nav_korttipeli": "Jeu de cartes",
+    "nav_lautapeli": "Jeu de plateau",
+    "nav_pelaa": "Jouer en ligne",
+    "kielivalinta": "Langue",
+    "kauppaan": "Boutique",
+    "katso_video": "Voir la vidéo",
+    "video_kieli": {
+      "fi": "en finnois",
+      "en": "en anglais"
+    },
+    "lataa": "Télécharger",
+    "alaosa_teksti": "Pizza Love® est un jeu de Merkitysten Oy. Les jeux sont conçus en Finlande, puis assemblés et emballés en Finlande.",
+    "alaosa_yhteys": "Des questions ? Écris-nous :",
+    "alaosa_tavaramerkki": "Pizza Love® et Merkitysten® sont des marques déposées de Merkitysten Oy.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Collecte de fonds",
+    "ohita": "Aller au contenu",
+    "kauppa_korttipeli": "Jeu de cartes dans la boutique",
+    "kauppa_lautapeli": "Jeu de plateau dans la boutique",
+    "kauppa_molemmat": "Les deux jeux"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – règles, vidéos et jeux en ligne",
+    "kuvaus": "Règles et vidéos explicatives du jeu de cartes et du jeu de plateau Pizza Love®, et jeux en ligne.",
+    "h1": "Bienvenue à la fabrique de pizzas !",
+    "ingressi": "Tu trouveras ici les règles et les vidéos explicatives des jeux Pizza Love®. Choisis ton jeu : tu pourras jouer dans quelques minutes.",
+    "valitse": "Choisis ton jeu",
+    "korttipeli_tiedot": "2 à 5 joueurs · dès 6 ans · 3 façons de jouer · 5 à 15 min",
+    "lautapeli_tiedot": "2 à 4 joueurs · dès 6 ans · 3 façons de jouer · 10 à 20 min et plus",
+    "avaa": "Règles et vidéos",
+    "pelaa_otsikko": "Jouer à Pizza Love en ligne",
+    "pelaa_teksti": "Pizza Party et Pizza Basso du jeu de cartes, Balance des singes et Singes affamés du jeu de plateau. Tu peux aussi jouer aux jeux de cartes avec tes amis, chacun sur son téléphone.",
+    "pelaa_nappi": "Jouer maintenant",
+    "kauppa_otsikko": "Envie de plus ?",
+    "kauppa_teksti": "Les jeux Pizza Love® sont disponibles dans la boutique en ligne de Merkitysten.",
+    "brandedition": {
+      "otsikko": "Pour les clubs et les entreprises : Brand Edition",
+      "teksti": "Pizza Love® Brand Edition, c’est le même jeu dans une boîte aux couleurs de votre organisation. En cadeau, en récompense ou comme article pour les fans. La commande minimum est de 100 jeux.",
+      "nappi": "Demander un devis",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    },
+    "jalleenmyyjat": {
+      "otsikko": "Pour les boutiques et les distributeurs",
+      "teksti": "Le jeu de cartes et le jeu de plateau Pizza Love® sont disponibles pour la vente au détail et la distribution. Les règles sont en finnois, en suédois et en anglais. Contactez-nous pour les prix de gros et les conditions : info@merkitysten.fi · +358 44 023 0688.",
+      "nappi": "Nous contacter",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20%E2%80%93%20retail%20and%20distribution"
+    }
+  },
+  "korttipeli": {
+    "title": "Jeu de cartes Pizza Love® – règles et vidéos",
+    "kuvaus": "Règles et vidéos explicatives du jeu de cartes Pizza Love® : Pizza Party, Pizza Basso et Pizza Love.",
+    "h1": "Jeu de cartes Pizza Love®",
+    "ingressi": "Trois jeux avec un seul paquet. Commence par Pizza Party : c’est le plus rapide à apprendre.",
+    "tiedot": [
+      "2 à 5 joueurs",
+      "dès 6 ans",
+      "42 cartes pizza",
+      "58 cartes ingrédient",
+      "5 à 15 min"
+    ],
+    "hyppy": {
+      "perusteet": "Comment préparer une pizza",
+      "muodot": "Trois façons de jouer",
+      "lataa": "Règles en PDF"
+    },
+    "perusteet_otsikko": "Comment préparer une pizza",
+    "perusteet_ingressi": "Les trois jeux suivent la même règle de base. Apprends-la d’abord.",
+    "pizzakortit_otsikko": "Cartes pizza",
+    "pizzakortit": "Une carte pizza montre une pizza avec un à quatre ingrédients différents. La valeur de la pizza (1–10) est indiquée dans les coins. Le jeu contient 10 pizzas cœur de valeur 10.",
+    "taytekortit_otsikko": "Cartes ingrédient",
+    "taytekortit": "Une carte ingrédient montre un ingrédient. La valeur de l’ingrédient (1–10) est indiquée dans les coins. Les 3 ingrédients fantaisie (X) peuvent être n’importe quel ingrédient.",
+    "perussaanto_otsikko": "Règle de base",
+    "perussaanto": "Les cartes pizza sont toujours sur la table. Tu les prépares avec les cartes ingrédient de ta main.",
+    "arvo_otsikko": "Valeur de la pizza",
+    "arvo": "Prépare une pizza avec tes cartes ingrédient et dis à voix haute le calcul qui donne la valeur de la pizza. Tous les calculs sont permis et peuvent être combinés, tant que le résultat est égal à la valeur de la pizza. Par exemple <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Exemple : pizza tomate-ananas",
+    "esimerkki_alt": "Une carte pizza de valeur 5, une tomate (2) et un ananas (3)",
+    "esimerkki": "La pizza a deux ingrédients et sa valeur est 5. Tomate 2 + ananas 3 = 5. Il y a d’autres façons : 4 + 1, 6 – 1 ou même 10 : 2.",
+    "tavat_otsikko": "Deux façons de préparer une pizza",
+    "helpompi_otsikko": "La façon la plus facile",
+    "helpompi": "Tu peux préparer une pizza avec autant de cartes ingrédient que tu veux, même une seule. Utilise cette façon quand tu joues à Pizza Party pour la première fois ou avec un jeune enfant.",
+    "basso_tapa_otsikko": "La méthode du singe Basso",
+    "basso_tapa": "Utilise autant d’<b>ingrédients différents</b> que la pizza a d’ingrédients. Tu peux utiliser plus de cartes : la pizza tomate-ananas (valeur 5) peut se faire avec deux tomates et une olive, 2 + 2 + 1 = 5, car il y a deux sortes d’ingrédients. Utilise cette façon dans Pizza Basso, ou pour un défi en plus dans Pizza Party.<br><span class=\"pieni\">Les règles imprimées disent encore « autant de cartes ingrédient que la pizza a d’ingrédients ». La nouvelle façon donne plus de possibilités au jeu.</span>",
+    "huomio_bruno": "<b>Bruno ou Basso ?</b> Le singe du jeu s’appelle maintenant Basso. Dans les anciennes règles et vidéos, il s’appelle Bruno, et le deuxième mode de jeu s’appelle Pizza Bruno. Les règles sont les mêmes.",
+    "muodot_otsikko": "Trois façons de jouer",
+    "muodot_ingressi": "Ouvre un mode de jeu pour voir ses règles et ses vidéos.",
+    "videot_otsikko": "Vidéos",
+    "videot": {
+      "party_en": "Pizza Party – comment jouer",
+      "party_fi": "Pizza Party – comment jouer",
+      "party_helpompi": "La façon la plus facile de jouer",
+      "party_helpottaminen": "Rendre le jeu plus facile",
+      "party_ei_valmistu": "Quand personne ne peut préparer la pizza",
+      "party_basso_tapa": "La méthode du singe Basso",
+      "basso_fi": "Pizza Basso – comment jouer"
+    },
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Le plus facile pour commencer, rapide et animé · env. 5 min",
+        "html": "<h3>But du jeu</h3><p>Les joueurs font la course pour préparer des pizzas. Le gagnant est celui qui prépare le plus de pizzas avant qu’il n’y ait plus de cartes pizza ou de cartes ingrédient.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 5 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Tous les joueurs essaient aussitôt de préparer cette pizza avec leurs cartes ingrédient.</p><h3>Déroulement</h3><ul class=\"lista\"><li>On joue sans tours : tout le monde essaie de préparer des pizzas en même temps.</li><li>Le joueur le plus rapide à préparer la pizza prend la carte et la garde devant lui.</li><li>Les cartes ingrédient utilisées sont retirées du jeu. Pioche de nouvelles cartes jusqu’à avoir de nouveau 5 cartes en main.</li><li>Retourne tout de suite une nouvelle carte pizza. Continuez jusqu’à ce qu’il n’y ait plus de cartes pizza ou de cartes ingrédient et que personne ne puisse plus préparer de pizza.</li></ul><h3>Si une pizza ne peut pas être préparée</h3><p>Si personne ne peut ou ne veut préparer la pizza sur la table, retourne une nouvelle carte pizza par-dessus. Le joueur qui prépare la pizza suivante prend toutes les pizzas sur la table.</p><h3>Points et victoire</h3><p>Pizza normale = 1 point, pizza cœur = 2 points. Le joueur qui a le plus de points gagne la manche. Mettez-vous d’accord sur le nombre de manches : par exemple, le premier à gagner 3 ou 5 manches gagne la partie.</p><h3>Pizza Party au tour par tour</h3><p>Vous pouvez aussi jouer chacun à votre tour, pour que chaque joueur ait le temps de réfléchir pendant son tour.</p><h3>Règles optionnelles</h3><p>Vous pouvez choisir des règles qui limitent les calculs, par exemple :</p><ul class=\"lista\"><li>jouer seulement avec des additions et des soustractions</li><li>chaque pizza doit contenir une multiplication ou une division.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Calme et palpitant · env. 7 min",
+        "html": "<p class=\"pieni\">Dans les anciennes règles : Pizza Bruno.</p><h3>But du jeu</h3><p>Les joueurs essaient de se débarrasser de toutes leurs cartes ingrédient. Le premier qui y arrive gagne la manche.</p><p><b>Remarque :</b> les pizzas se préparent selon la méthode du singe Basso : utilise autant d’ingrédients différents que la pizza a d’ingrédients. Tu peux utiliser plus de cartes, par exemple deux olives.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 7 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Le dernier joueur à avoir mangé une pizza commence.</p><h3>Déroulement</h3><p>À tour de rôle, les joueurs essaient de préparer la pizza sur la table avec leurs cartes ingrédient.</p><p><b>A) Si tu réussis :</b> retire du jeu les cartes ingrédient utilisées et retourne une nouvelle carte pizza de la pile sur l’ancienne. C’est au tour du joueur suivant.</p><p><b>B) Si tu ne peux pas ou ne veux pas préparer la pizza :</b> pioche une carte ingrédient. C’est au tour du joueur suivant.</p><p><b>C) Plus qu’une carte :</b> quand il ne te reste qu’une carte ingrédient, fais comme le singe Basso affamé et crie : « PIZZAAA ! »</p><h3>Si les cartes ingrédient sont épuisées</h3><p>Mélange les cartes ingrédient défaussées pour former une nouvelle pioche et continuez.</p><h3>Points et victoire</h3><p>Le premier joueur à se débarrasser de toutes ses cartes ingrédient gagne la manche. On additionne les valeurs des cartes qui restent dans la main des autres joueurs : ce total donne les points du gagnant. Un ingrédient normal compte sa valeur (1–10), un ingrédient fantaisie compte 20.</p><p>Le premier à atteindre 100 points gagne et reçoit le titre de <b>Pizza Basso – le vrai singe de la pizza</b>.</p><h3>Partie plus courte</h3><p>Vous pouvez décider que la partie s’arrête, par exemple, à 30 ou 50 points, ou que le premier à gagner 3 ou 5 manches gagne la partie.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Le plus tactique et le plus exigeant, dès 8 ans · env. 15 min",
+        "html": "<h3>But du jeu</h3><p>Les joueurs essaient de préparer toutes leurs pizzas avant les autres. Le premier qui y arrive gagne.</p><p><b>Remarque :</b> maintenant, les ingrédients comptent : une pizza ne peut être préparée qu’avec les bons ingrédients.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et distribues-en 8 à chaque joueur. Les joueurs les posent face cachée en pile devant eux et retournent la carte du dessus.</li><li>Pose une carte pizza face visible au milieu de la table : c’est la pizza d’échange. Retire du jeu les autres cartes pizza.</li><li>Mélange les cartes ingrédient et pose-les sur la table pour former la pioche.</li></ol><h3>Réserve</h3><p>Chaque joueur a 4 emplacements de réserve. Les cartes ingrédient de la réserve sont face visible. Tu peux les utiliser pour tes pizzas comme les cartes de ta main, et les autres joueurs peuvent les utiliser pour des échanges.</p><h3>Début de la partie</h3><p>Le dernier joueur à avoir mangé une pizza commence et pioche 5 cartes ingrédient.</p><h3>Déroulement</h3><ol class=\"lista\"><li>Pioche des cartes ingrédient jusqu’à avoir 5 cartes en main.</li><li>Essaie de préparer la pizza du dessus de ta pile avec les cartes de ta main et de ta réserve.</li><li>Tu peux échanger des cartes de ta réserve contre des cartes de la réserve d’un autre joueur, à l’aide de calculs.</li><li>Une fois par tour, tu peux échanger la pizza du dessus de ta pile contre la pizza d’échange du milieu. Tu peux la préparer tout de suite.</li><li>Termine ton tour en posant une carte ingrédient de ta main face visible dans ta réserve.</li></ol><h3>Préparer une pizza</h3><p>Quand tu as les ingrédients nécessaires dans ta main et/ou ta réserve, prépare la pizza. La carte pizza et les cartes ingrédient utilisées sont retirées du jeu. Retourne la carte pizza suivante de ta pile : si tu as les ingrédients, tu peux la préparer tout de suite.</p><h3>Pizza cœur</h3><p>Quand tu prépares une pizza cœur, donne ta carte pizza suivante (sans la regarder) à un autre joueur. Il la place sous sa pile.</p><h3>Échanger des cartes de réserve</h3><p>Obtiens les ingrédients qui te manquent en échangeant des cartes de ta réserve contre des cartes de la réserve d’un autre joueur. L’échange se fait avec des calculs : tout est permis, tant que le résultat est le même sur les cartes des deux joueurs. Tu peux faire plusieurs échanges par tour, mais chaque échange se fait toujours entre deux réserves. Une carte placée sous une autre carte ne peut pas être échangée. Place les cartes reçues dans ta réserve dans l’ordre que tu veux.</p><h3>Remplir la réserve</h3><p>Si ta main est vide avant que tu aies posé une carte dans ta réserve, pioche 5 nouvelles cartes et continue ton tour. Les emplacements de réserve peuvent être remplis dans n’importe quel ordre et les cartes peuvent être empilées. La carte du dessus doit toujours être utilisée avant celles du dessous. Une fois posées, les cartes de réserve ne peuvent plus être déplacées.</p><h3>Gagner la partie</h3><p>La partie se termine quand un joueur a préparé toutes les pizzas de sa pile.</p>"
+      }
+    ],
+    "lataa_otsikko": "Règles en PDF",
+    "lataa_teksti": "La feuille de règles imprimée, en finnois, en suédois et en anglais.",
+    "lataa_tiedosto": "Règles du jeu de cartes (FI · SV · EN)",
+    "pelaa_otsikko": "Pizza Party et Pizza Basso",
+    "pelaa_teksti": "Les deux se jouent aussi dans ton navigateur. Essaie-les avant ta première partie, ou joue avec tes amis, chacun sur son téléphone.",
+    "ristiin_otsikko": "Ensuite : le jeu de plateau Pizza Love®",
+    "ristiin_teksti": "Le même univers de pizzas sur un plateau : prépare les pizzas préférées des boîtes à pizza et sois le premier à réunir 10 parts différentes. Trois façons de jouer, dont un jeu coopératif.",
+    "ristiin_saannot": "Règles du jeu de plateau"
+  },
+  "lautapeli": {
+    "title": "Jeu de plateau Pizza Love® – règles et vidéos",
+    "kuvaus": "Règles et vidéos explicatives du jeu de plateau Pizza Love® : mise en place, déroulement d’un tour et trois façons de jouer.",
+    "h1": "Jeu de plateau Pizza Love®",
+    "ingressi": "Prépare les pizzas préférées des boîtes à pizza et sois le premier à réunir 10 parts différentes, et tu gagnes !",
+    "tiedot": [
+      "2 à 4 joueurs",
+      "dès 6 ans",
+      "3 façons de jouer",
+      "10 à 20 min et plus"
+    ],
+    "hyppy": {
+      "kokoaminen": "Avant ta première partie",
+      "peli": "Comment fonctionne le jeu",
+      "muodot": "Trois façons de jouer",
+      "lataa": "Règles en PDF"
+    },
+    "kokoaminen_otsikko": "Avant ta première partie",
+    "kokoaminen": "La boîte de jeu contient une planche d’autocollants et quatre boîtes à pizza à monter une seule fois. Cela prend un moment, et ensuite le jeu est toujours prêt.",
+    "videot": {
+      "HE9301owOKI": "Monter les boîtes à pizza",
+      "RbLfhUyXHKw": "Les autocollants sur les pions",
+      "Ya73FhJfj54": "Mettre le jeu en place",
+      "IN2LvbXo9eA": "Déroulement d’un tour et victoire"
+    },
+    "peli_otsikko": "Comment fonctionne le jeu",
+    "voittaminen_otsikko": "Gagner la partie",
+    "voittaminen": "Pour gagner, sois le premier à réunir <b>10 parts différentes</b> dans ta boîte. Prépare les pizzas du plateau pour gagner les parts correspondantes pour ta boîte. Une pizza cœur te donne une part en plus, au choix.",
+    "valmistelut_otsikko": "Mise en place",
+    "valmistelut": [
+      "Empile les tours d’ingrédients colorées dans la réserve.",
+      "Mélange les cartes pizza et pose-en 4 sur le plateau. Pose les autres cartes pizza en pioche sur la table.",
+      "Mélange les cartes singe et pose-les en pioche sur la table.",
+      "Donne une boîte vide à chaque joueur."
+    ],
+    "vuoro_otsikko": "Déroulement d’un tour",
+    "vaiheet": [
+      {
+        "otsikko": "Lancer le dé et déplacer les pions",
+        "html": "<p>Le dernier joueur à avoir mangé une pizza commence en lançant le dé. Le dé indique combien de pions on déplace entre la réserve et la chaîne. Les pions de même couleur se déplacent toujours ensemble, comme une seule tour. Si tu ne trouves pas de déplacement, les autres peuvent t’aider. Si quelqu’un en trouve un, on le fait. Si personne n’en trouve, ton tour se termine.</p><p class=\"pieni\">La balance des singes et les poids aident les enfants à visualiser les déplacements. <b>Tu n’es pas obligé de les utiliser.</b></p>"
+      },
+      {
+        "otsikko": "Préparer une pizza",
+        "html": "<p>Quand les ingrédients d’une pizza sont sur la chaîne, prépare la pizza et mets les parts dans ta boîte. Tu peux préparer plusieurs pizzas par tour, mais chaque ingrédient ne peut servir qu’à une seule pizza par tour. Remets les ingrédients utilisés dans la réserve et pioche une nouvelle carte pizza pour le plateau.</p>"
+      },
+      {
+        "otsikko": "Piocher une carte singe",
+        "html": "<p>Si tu as préparé au moins une pizza, pioche une carte singe à la fin de ton tour et fais ce qu’elle dit. On joue dans le sens des aiguilles d’une montre.</p>"
+      }
+    ],
+    "muodot_otsikko": "Trois façons de jouer",
+    "muodot_ingressi": "Lancer le dé, déplacer les ingrédients et préparer les pizzas : tout se fait de la même façon dans les trois.",
+    "muodot": [
+      {
+        "nimi": "Pizza Love – jeu de base",
+        "kuvaus": "Une course pour toute la famille, dès 6 ans · env. 15 à 20 min",
+        "html": "<p>Prépare les pizzas préférées des boîtes à pizza et sois le premier à réunir 10 parts différentes dans ta boîte. Quand tu connais le jeu de base, le livret de règles propose des règles en plus pour accélérer la partie.</p>"
+      },
+      {
+        "nimi": "Singes affamés",
+        "kuvaus": "Jeu coopératif. Même avec un enfant de 4 ans, vous pouvez y jouer ensemble et découvrir les nombres et les quantités. · env. 10 min",
+        "html": "<p>La façon la plus facile de commencer. Vous jouez ensemble et remplissez une boîte commune. Remplissez-la avec 10 parts différentes et vous gagnez tous. Mais attention : les singes affamés mangent leurs parts tout de suite si aucune nouvelle part n’arrive !</p>"
+      },
+      {
+        "nimi": "Pizzas secrètes",
+        "kuvaus": "Palpitant et stratégique · 20 min et plus",
+        "html": "<p>Chaque joueur reçoit deux pizzas secrètes que les autres ne voient pas : personne ne sait quelles pizzas tu vas préparer. Le premier à remplir sa boîte avec 10 parts différentes gagne.</p>"
+      }
+    ],
+    "lataa_otsikko": "Règles en PDF",
+    "lataa_teksti": "Les règles complètes de chaque mode de jeu, en finnois, en suédois et en anglais.",
+    "lataukset": {
+      "pikaohje": "Aide-mémoire (à imprimer)",
+      "peruspeli": "Jeu de base – règles complètes",
+      "apinat": "Singes affamés – règles complètes",
+      "salatut": "Pizzas secrètes – règles complètes"
+    },
+    "pelaa_otsikko": "Balance des singes",
+    "pelaa_teksti": "Découvre en ligne la balance du jeu de plateau : nourris des singes affamés et aide Basso à résoudre des énigmes.",
+    "ristiin_otsikko": "Ensuite : le jeu de cartes Pizza Love®",
+    "ristiin_teksti": "Les mêmes pizzas et les mêmes ingrédients en jeu de cartes : prépare une pizza avec tes cartes ingrédient et dis le calcul à voix haute. Trois jeux avec un seul paquet.",
+    "ristiin_saannot": "Règles du jeu de cartes"
+  },
+  "toppingten": {
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love au SPIEL Essen 2026 : le jeu de cartes, le jeu de plateau et un sachet créé pour le salon, avec son propre jeu.",
+    "h1": "{nimi}",
+    "merkki": "Essen Edition · série limitée à 450 exemplaires",
+    "ingressi": "Imprime le plateau, verse les ingrédients sur la table et joue. Les règles sont sur cette page.",
+    "tiedot": "2 à 4 joueurs · dès 7 ans · environ 15 minutes",
+    "sisalto_otsikko": "Dans le sachet",
+    "sisalto": [
+      "55 ingrédients en dix couleurs, valeurs 1–10",
+      "Un dé à dix faces",
+      "Un tatouage Basso"
+    ],
+    "lataa_otsikko": "Télécharger le plateau",
+    "lataa": "Le plateau tient sur une feuille A4. La version au trait est le même jeu, mais elle utilise moins d’encre.",
+    "lataa_vari": "Plateau, couleur",
+    "lataa_viiva": "Plateau, version au trait",
+    "saannot_otsikko": "Règles",
+    "valmistelu": "Chaque joueur prend une pizza. Les ingrédients vont à leur place sur le comptoir.",
+    "tavoite_otsikko": "But du jeu",
+    "tavoite": "Garnis la pizza qui a le plus de valeur. La partie se termine quand quelqu’un a rempli sa pizza, mais c’est la valeur qui décide du gagnant, pas la vitesse.",
+    "vuoro_otsikko": "Ton tour",
+    "vuoro": [
+      "Lance le dé.",
+      "Prends sur le comptoir des ingrédients qui valent exactement le nombre obtenu.",
+      "Pose-les sur les parts vides de ta pizza, un ingrédient par part."
+    ],
+    "vuoro_huom": "Si tu fais 10, tu prends un dix, ou 1 + 2 + 3 + 4. La valeur est la même, mais le dix remplit une part et les quatre petits en remplissent quatre.",
+    "vuoro_raja": "Tu ne peux pas prendre plus d’ingrédients que tu n’as de parts vides.",
+    "ohi_otsikko": "Si tu ne peux pas ou ne veux pas prendre",
+    "ohi": "Tu passes. Si tu passes trois fois de suite, tu es éliminé.",
+    "aloitus_otsikko": "Qui commence la manche",
+    "aloitus": "Le joueur qui a le moins d’ingrédients commence la manche. En cas d’égalité, c’est celui dont les ingrédients valent le moins.",
+    "voitto_otsikko": "Fin de la partie",
+    "voitto": "La partie se termine dès que quelqu’un a rempli ses dix parts. Ce joueur n’a pas encore gagné.",
+    "pisteet_otsikko": "Points",
+    "pisteet": "Chacun additionne la valeur des ingrédients de sa pizza. La pizza qui a le plus de valeur gagne.",
+    "tasapeli_otsikko": "Égalité",
+    "tasapeli": "Si deux pizzas ont la même valeur, celle qui a le moins d’ingrédients gagne. Si c’est encore égal, la victoire est partagée.",
+    "vinkki_otsikko": "Un conseil",
+    "vinkki": "Les petits ingrédients sont rares : un seul 1 et deux 2. Ce sont eux qui te permettent d’obtenir la somme exacte quand aucun ingrédient ne convient seul, et un tour passé ne rapporte rien du tout. Les gros ingrédients économisent des parts, et tu n’en as que dix.",
+    "muunnelmat_otsikko": "Variantes",
+    "muunnelmat": [
+      [
+        "Remettre un ingrédient",
+        "Si tu n’arrives pas à faire le total de ton dé, remets un de tes ingrédients sur le comptoir et réessaie."
+      ],
+      [
+        "Exactement 30",
+        "Les parts ne te limitent plus, c’est la valeur qui compte. Tu gagnes quand tes ingrédients valent exactement 30. Tu ne peux pas dépasser, alors prends le plus gros qui convient."
+      ]
+    ],
+    "essen_otsikko": "La série d’Essen",
+    "essen": "Nous avons fait cette série pour le salon. Les ingrédients ont les mêmes dix couleurs que dans le jeu de cartes, en plus petit.",
+    "valmistelu_otsikko": "Mise en place",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Retrouve-nous au SPIEL Essen. Nous apportons le jeu de cartes, le jeu de plateau et un sachet d’ingrédients pour lequel nous avons créé un jeu.",
+    "mukana_otsikko": "Ce que nous apportons",
+    "mukana": [
+      "Jeu de cartes Pizza Love",
+      "Jeu de plateau Pizza Love",
+      "Sachet : 55 ingrédients, un dé à dix faces et un tatouage Basso"
+    ],
+    "peli_otsikko": "Le jeu du sachet : {nimi}",
+    "nappi": "Télécharger le plateau",
+    "tarjoukset_otsikko": "Offres du salon",
+    "tarjoukset_ingressi": "Prix valables sur notre stand.",
+    "tarjoukset": [
+      [
+        "17 €",
+        "Jeu de cartes",
+        "Au lieu de 19,90 €",
+        "korttipeli",
+        "kansi-family.webp",
+        "Tu économises 2,90 €"
+      ],
+      [
+        "30 €",
+        "Deux jeux de cartes",
+        "Au lieu de 39,80 €",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Tu économises 9,80 €"
+      ],
+      [
+        "30 €",
+        "Jeu de plateau",
+        "Au lieu de 34,90 €",
+        "lautapeli",
+        "lautapeli-laatikko.webp",
+        "Tu économises 4,90 €"
+      ],
+      [
+        "45 €",
+        "Les deux jeux",
+        "Au lieu de 49,90 €",
+        "molemmat",
+        "molemmat-pelit.webp",
+        "Tu économises 4,90 €"
+      ],
+      [
+        "10 €",
+        "Un sachet plein de Pizza Love",
+        "55 jetons ingrédients en dix couleurs, les mêmes que dans le jeu de cartes. Ils s’empilent en tours. Le sachet contient aussi un dé Pizza Love à dix faces et un tatouage Basso. Télécharge le plateau sur cette page.",
+        "",
+        "pikkunappulat-noppa.webp",
+        "Uniquement au salon"
+      ]
+    ],
+    "kaupanpaalle": "Pour plus de 35 € d’achats, le sachet t’est offert.",
+    "kaupanpaalle_lisa": "Il y a 450 sachets.",
+    "tuotteet_otsikko": "Ce que nous apportons",
+    "avaa": "En savoir plus",
+    "tuotteet": [
+      [
+        "Jeu de cartes Pizza Love",
+        "Trois modes de jeu, 2 à 6 joueurs",
+        "korttipeli.html",
+        "kansi-family.webp"
+      ],
+      [
+        "Jeu de plateau Pizza Love",
+        "Trois modes de jeu, 2 à 4 joueurs",
+        "lautapeli.html",
+        "lautapeli-laatikko.webp"
+      ],
+      [
+        "Un sachet compact plein de Pizza Love",
+        "55 ingrédients, un dé et un tatouage Basso",
+        "#peli",
+        "pikkunappulat-noppa.webp"
+      ]
+    ],
+    "editiot_otsikko": "Trois couvertures, les mêmes cartes",
+    "editiot_teksti": "Le jeu de cartes existe avec trois couvertures. Les paquets à l’intérieur sont identiques : choisis celle qui te plaît.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "Au salon, le tatouage est fourni uniquement avec ce sachet."
+  }
+}
