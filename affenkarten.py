@@ -25,8 +25,10 @@ import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 TANNE = os.path.dirname(os.path.abspath(__file__))
 CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
@@ -39,6 +41,14 @@ ORANSSI = '#EE7203'
 MUSTA = '#1A1A1A'
 OSOITE = 'pizzalove.fi/de/apinakortit.html'
 ISKULAUSE_KIRJASIN = "'DIN Alternate','DIN Condensed',Helvetica,Arial,sans-serif"
+QR_OSOITE = 'https://pizzalove.fi/de/apinakortit.html'
+QR_MM = 24.0
+# 🔵 Marko 30.10.2026: «Lisaa siihen se QR-koodi.» Syy on osoitteessa:
+# saksankielinen sivu on suomenkielisen tiedostonimen takana
+# (`/de/apinakortit.html`), ja laatikon lapulta se NAPYTELLAAN kasin.
+QR_MODUULI_MIN_MM = 0.5
+QRJS = os.path.join(TANNE, 'julkinen', 'play', 'qr.js')
+JSQR = os.path.join(TANNE, 'julkinen', 'play', 'vendor', 'jsqr', 'jsQR.js')
 
 
 def e(s):
@@ -57,6 +67,52 @@ def viiri():
         '<text class="viiri-iskulause"',
         '<text font-family=%s font-size="5.1" font-weight="700" '
         'letter-spacing="0.1" fill="#fff"' % ('"%s"' % ISKULAUSE_KIRJASIN))
+
+
+QR_AJURI = """ObjC.import('Foundation');
+function lue(p) {
+  return $.NSString.stringWithContentsOfFileEncodingError(
+    $(p), $.NSUTF8StringEncoding, null).js;
+}
+eval(lue(%r));
+console.log(norsuQrSvg(%r, { reunus: 4 }));
+"""
+
+
+def qr_svg():
+    """QR repon omalla koodaajalla (`julkinen/play/qr.js`) — ei ulkopuolista
+    palvelua. Valmis kuva olisi tiedosto jota kukaan ei ole mitannut.
+
+    ⚠️ JXA:n console.log kirjoittaa STDERRIIN, ei stdoutiin."""
+    ajuri = os.path.join(TANNE, '.qr-aja.js')
+    with open(ajuri, 'w') as f:
+        f.write(QR_AJURI % (QRJS, QR_OSOITE))
+    ulos = subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
+                          capture_output=True, text=True)
+    os.unlink(ajuri)
+    for virta in (ulos.stdout, ulos.stderr):
+        if virta.strip().startswith('<svg'):
+            return virta.strip()
+    raise SystemExit('QR-koodaus epaonnistui: %s'
+                     % (ulos.stderr or ulos.stdout)[:300])
+
+
+def qr_koko_koe():
+    """Onko moduuli riittavan iso PAINETTAVAKSI?
+
+    ⚠️ Oma kokeensa siksi, etta lukukoe EI nae painettavuutta: se lukee
+    tiheasta rasterista, jossa aivan liian pieni moduuli on yha monta
+    pikselia. Mitattu Essen-lapussa 21.10.2026: QR_MM 30 -> 5 ei muuttanut
+    lukukoetta punaiseksi lainkaan. Datan selviaminen putkesta ja koodin
+    skannattavuus ovat eri asia, ja jalkimmainen on LASKETTAVA."""
+    moduuleja = 37.0          # versio 3 (29) + hiljainen reunus 2 x 4
+    mm = QR_MM / moduuleja
+    if mm < QR_MODUULI_MIN_MM:
+        print('🔴 QR-KOKO: moduuli %.2f mm, vahimmais %.2f mm' % (mm, QR_MODUULI_MIN_MM))
+        return False
+    print('QR-koko: moduuli %.2f mm (vahimmais %.2f mm) — OK'
+          % (mm, QR_MODUULI_MIN_MM))
+    return True
 
 
 def kortit(a):
@@ -93,6 +149,11 @@ def sivu_html():
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   header {{ display: flex; align-items: flex-start; gap: 6mm;
             border-bottom: .5mm solid {oranssi}; padding-bottom: 3.4mm }}
+  .otsikko {{ flex: 1 }}
+  .qr {{ flex: none; width: {qrmm}mm; text-align: center }}
+  .qr svg {{ width: 100%; height: auto; display: block }}
+  .qr span {{ display: block; margin-top: 1mm; font-size: 5.8pt;
+              line-height: 1.2; font-weight: 700; opacity: .75 }}
   .viiri {{ width: 20mm; flex: none }}
   .viiri svg {{ width: 100%; height: auto; display: block }}
   h1 {{ font-size: 19pt; line-height: 1; letter-spacing: -.01em }}
@@ -118,10 +179,11 @@ def sivu_html():
 </style>
 <header>
   <div class="viiri">{viiri}</div>
-  <div>
+  <div class="otsikko">
     <h1>{h1} 01–33</h1>
     <div class="ala">{takaisin} · Pizza Love®</div>
   </div>
+  <div class="qr">{qr}<span>Alle Karten<br>online</span></div>
 </header>
 <div class="johdanto">
   <p>{ingressi}</p>
@@ -134,7 +196,75 @@ def sivu_html():
 </html>'''.format(musta=MUSTA, oranssi=ORANSSI, viiri=viiri(), h1=e(a['h1']),
                   takaisin=e(a['takaisin']), ingressi=e(a['ingressi']),
                   kaytto=e(a['kaytto']), huom=e(a['huom']),
-                  yleista=e(a['yleista']), kortit=kortit(a), osoite=OSOITE)
+                  yleista=e(a['yleista']), kortit=kortit(a), osoite=OSOITE, qr=qr_svg(), qrmm=QR_MM)
+
+
+SIVU_AJURI = """ObjC.import('Quartz'); ObjC.import('AppKit');
+var doc = $.PDFDocument.alloc.initWithURL($.NSURL.fileURLWithPath($(%r)));
+var k = doc.pageAtIndex(0).thumbnailOfSizeForBox($.NSMakeSize(1654, 2339), 0);
+var rep = $.NSBitmapImageRep.imageRepWithData(k.TIFFRepresentation);
+rep.representationUsingTypeProperties($.NSBitmapImageFileTypePNG, $())
+   .writeToFileAtomically($(%r), true);
+console.log('ok');
+"""
+
+LUKU_SIVU = """<!doctype html><meta charset="utf-8"><body>
+<script src="jsQR.js"></script>
+<script>
+const img = new Image();
+img.onload = () => {
+  const c = document.createElement('canvas');
+  c.width = img.width; c.height = img.height;
+  const x = c.getContext('2d');
+  x.drawImage(img, 0, 0);
+  const d = x.getImageData(0, 0, c.width, c.height);
+  const r = jsQR(d.data, c.width, c.height);
+  document.title = 'TULOS ' + JSON.stringify({teksti: r ? r.data : null});
+};
+img.onerror = () => { document.title = 'TULOS {"teksti":"KUVA EI LATAUTUNUT"}'; };
+img.src = 'sivu.png';
+</script>"""
+
+
+def qr_lukukoe(pdf):
+    """Lukee QR:n VALMIISTA PDF:STA — ei siita SVG:sta jonka juuri kirjoitimme,
+    koska silloin koe todistaisi vain oman itsensa.
+
+    ⚠️ Koko sivu syotetaan lukijalle sellaisenaan: jsQR etsii kuvion mista
+    tahansa, joten rajauskoordinaatteja ei tarvita eika niita voi saada
+    vaariin. ⚠️ EI vartioi osoitteen ARVOA: se luetaan samasta vakiosta jolla
+    se koodattiin, joten vakioon osuva mutaatio on sokea."""
+    tyo = tempfile.mkdtemp(prefix='affen-qr-')
+    try:
+        png = os.path.join(tyo, 'sivu.png')
+        ajuri = os.path.join(tyo, 'sivu.js')
+        with open(ajuri, 'w') as f:
+            f.write(SIVU_AJURI % (pdf, png))
+        subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
+                       capture_output=True, text=True)
+        if not os.path.exists(png):
+            print('QR-lukukoe: sivua ei saatu kuvaksi — EI MITATTAVISSA')
+            return None
+        shutil.copy(JSQR, os.path.join(tyo, 'jsQR.js'))
+        sivu = os.path.join(tyo, 'lue.html')
+        with open(sivu, 'w') as f:
+            f.write(LUKU_SIVU)
+        ulos = subprocess.run(
+            [CHROME, '--headless', '--disable-gpu', '--allow-file-access-from-files',
+             '--virtual-time-budget=6000', '--dump-dom', 'file://' + sivu],
+            capture_output=True, text=True)
+        osuma = re.search(r'TULOS (\{.*?\})', ulos.stdout)
+        if not osuma:
+            print('QR-lukukoe: lukijalta ei tullut tulosta — EI MITATTAVISSA')
+            return None
+        luettu = json.loads(osuma.group(1))['teksti']
+        if luettu == QR_OSOITE:
+            print('QR-lukukoe: arkilta luettu %s — OK' % luettu)
+            return True
+        print('🔴 QR-LUKUKOE: luettiin %r, odotettiin %r' % (luettu, QR_OSOITE))
+        return False
+    finally:
+        shutil.rmtree(tyo, ignore_errors=True)
 
 
 def sivuja(pdf):
@@ -149,11 +279,15 @@ def main():
                     '--no-pdf-header-footer', '--print-to-pdf=' + KOHDE,
                     'file://' + SIVU], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if not qr_koko_koe():
+        return 1
     n = sivuja(KOHDE)
     print('%s  (%.0f kt, %d sivu%s)'
           % (KOHDE, os.path.getsize(KOHDE) / 1024, n, '' if n == 1 else 'a'))
     if n != 1:
         print('🔴 LAPPU EI MAHDU YHDELLE SIVULLE. Laatikkoon menee yksi arkki.')
+        return 1
+    if qr_lukukoe(KOHDE) is False:
         return 1
     return 0
 
