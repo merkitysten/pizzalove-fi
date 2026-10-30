@@ -119,6 +119,15 @@ LAUTA_VIDEO_VUORO = ('IN2LvbXo9eA', 'fi')
 # kuulostaa aaneen lahes samalta. Verkkohaku ei ole tavaramerkkihaku.
 PELIN_NIMI = 'Topping Ten'
 
+# ⚠️ KORTTIPELIN SAANTO-PDF ON KIELIKOHTAINEN, MUU EI. Painettu arkki on
+# FI · SV · EN, joten saksankieliselle lukijalle se on lataus jota han ei osaa
+# lukea. `korttisaannot.py` tekee saksasta A4-arkin SIVUN OMASTA SISALLOSTA,
+# eika sita saa korvata painetusta arkista kaannetylla: painettu on vanhempi
+# (apina on siina Bruno, ja Basson tapa on eri saanto).
+KORTTIPELI_PDF = {
+    'de': ('pdf/pizza-love-kartenspiel-regeln-de.pdf', 'korttipeli'),
+}
+
 PDF = {
     'korttipeli': ('pdf/pizza-love-korttipeli-saannot.pdf', 'korttipeli'),
     # Pikaohje on WordPressissä, koska sitä päivitetään siellä (merkitysten.fi/pizzalove/lautapeli).
@@ -458,7 +467,8 @@ def korttipeli(t, kaikki):
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
-       lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']}, PDF),
+       lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']},
+                 dict(PDF, korttipeli=KORTTIPELI_PDF.get(lang, PDF['korttipeli']))),
        ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
