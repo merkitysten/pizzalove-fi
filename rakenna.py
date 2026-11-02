@@ -426,8 +426,8 @@ def korttipeli(t, kaikki):
   <h3>%s</h3>
   <div class="esimerkki" role="img" aria-label="%s">
     <img src="../kuvat/pizza-31.webp" width="351" height="532" alt=""><b>=</b>
-    <img src="../kuvat/tayte-2.webp" width="351" height="532" alt=""><b>+</b>
-    <img src="../kuvat/tayte-3.webp" width="351" height="532" alt="">
+    <img src="../kuvat/tayte-10.webp" width="351" height="532" alt=""><b>:</b>
+    <img src="../kuvat/tayte-2.webp" width="351" height="532" alt="">
   </div>
   <p>%s</p>
 </div>

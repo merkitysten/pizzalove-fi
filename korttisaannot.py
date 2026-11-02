@@ -248,8 +248,8 @@ def sivu_html(kieli, lahde):
     <h3>{esimerkki_otsikko}</h3>
     <div class="esimerkki" role="img" aria-label="{esimerkki_alt}">
       <img src="julkinen/kuvat/pizza-31.webp"><b>=</b>
-      <img src="julkinen/kuvat/tayte-2.webp"><b>+</b>
-      <img src="julkinen/kuvat/tayte-3.webp"></div>
+      <img src="julkinen/kuvat/tayte-10.webp"><b>:</b>
+      <img src="julkinen/kuvat/tayte-2.webp"></div>
     <p>{esimerkki}</p>
   </div>
   <h3>{tavat_otsikko}</h3>
