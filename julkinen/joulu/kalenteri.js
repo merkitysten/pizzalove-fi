@@ -116,6 +116,9 @@
     return tulos;
   }
 
+  /* Palkin suurin kallistuma asteina — sama kuin pelissä (MAKSIMIKULMA). */
+  var VAAKA_KULMA = 9;
+
   var SANA = ['tapaa', 'tapoja'];
   var SANA_LAUTA = ['siirtoa', 'siirtoja'];
 
@@ -476,8 +479,7 @@
       '    <p class="ohje">Siirrä täytteet niin, että nämä voi valmistaa ja ' +
       '       <b>vaaka tasaa</b>: sisään tuotujen summa = noppa + takaisin viety.</p>' +
       '  </div>' +
-      '  <div class="vaaka"><span class="noppa" title="Nopan silmäluku">' + p.noppa + '</span>' +
-      '    <span class="vaakarivi" data-vaaka></span></div>' +
+      '  <div class="vaaka" data-vaaka></div>' +
       '  <div class="otsake">Linjasto</div><div class="rivi" data-linja></div>' +
       '  <div class="otsake">Varasto</div><div class="rivi" data-varasto></div>' +
       '  <p class="palaute" data-palaute></p>' +
@@ -535,6 +537,56 @@
         '|' + (viedyt()[0] || 0);
     }
 
+    /* 🔵 Marko 3.11.2026: «Tämä on nyt aika sekava, kun tuossa puhutaan
+       jostain vaa'asta vaikka siinä ei ole ollenkaan mitään vaakaa
+       näkyvillä.» Rivi «0 = 0 · noppa 3 + takaisin 5 = 8 ei tasaa» kertoi
+       sanoin sen minkä lautapelissä NÄKEE: apinan vaaka kallistuu.
+
+       Nyt kupit ovat ruudulla ja palkki kallistuu. Puolet ovat samat kuin
+       pelissä (apinavaaka.js): VASEN = noppa + takaisin viedyt, OIKEA =
+       linjastolle tuodut, kulma = (oikea − vasen) × 2,2 enintään 9°, ja
+       keskellä sama vertailumerkki jonka apina näyttää kielellään.
+       Noppa on pelin oma tahkokuva `noppa/<luku>.svg`, ei piirretty luku. */
+    function piirraVaaka() {
+      var sis = tuodut(), ulos = viedyt();
+      var vasen = p.noppa + summa(ulos), oikea = summa(sis);
+      var kulma = Math.max(-VAAKA_KULMA,
+                  Math.min(VAAKA_KULMA, (oikea - vasen) * 2.2));
+      var merkki = vasen === oikea ? '=' : (vasen < oikea ? '<' : '>');
+
+      function kuppi(sisus, termit, luku, tyhja) {
+        return '<div class="vaaka__kuppi" style="transform:rotate(' +
+          (-kulma).toFixed(1) + 'deg)">' +
+          '<div class="vaaka__sisus">' + (sisus || '<span class="tyhja">' + tyhja + '</span>') + '</div>' +
+          '<div class="vaaka__termit">' + termit + '</div>' +
+          '<div class="vaaka__luku">' + luku + '</div></div>';
+      }
+
+      var noppaKuva = '<img class="vaaka__noppa" src="' + KUVAT +
+        'apinavaaka/noppa/' + p.noppa + '.svg" alt="Noppa ' + p.noppa + '">';
+      var vasenSisus = noppaKuva + ulos.map(function (a) {
+        return taytekuva(a, 'kortti kortti--pieni');
+      }).join('');
+      var oikeaSisus = sis.map(function (a) {
+        return taytekuva(a, 'kortti kortti--pieni');
+      }).join('');
+
+      vaakaEl.innerHTML =
+        '<div class="vaaka__tanko" style="transform:rotate(' + kulma.toFixed(1) + 'deg)">' +
+        kuppi(vasenSisus, 'noppa ' + p.noppa +
+              (ulos.length ? ' + takaisin ' + ulos.join(' + ') : ''), vasen) +
+        kuppi(oikeaSisus, sis.length ? sis.join(' + ') : '', oikea,
+              'tuo täytteitä') +
+        '</div>' +
+        '<div class="vaaka__pylvas"><span class="vaaka__merkki' +
+        (merkki === '=' ? ' vaaka__merkki--tasan' : '') + '">' + merkki +
+        '</span></div>';
+      vaakaEl.setAttribute('aria-label', 'Vaaka: noppa ' + p.noppa +
+        (ulos.length ? ' ja takaisin viedyt ' + ulos.join(', ') : '') +
+        ' yhteensä ' + vasen + ', linjastolle tuodut yhteensä ' + oikea + '. ' +
+        (vasen === oikea ? 'Vaaka tasaa.' : 'Vaaka ei tasaa.'));
+    }
+
     function piirraLaskuri() {
       laskuriEl.innerHTML = laskuriTeksti(loytoja(avain), p.ratkaisuja, SANA_LAUTA);
       loydotEl.innerHTML = loytoRivit(loytolista(avain), 'Löytämäsi siirrot');
@@ -559,22 +611,14 @@
           taytekuva(a, 'kortti') + '</button>';
       }
 
-      var sis = tuodut(), ulos = viedyt();
-      uudelleenEl.hidden = !(sis.length || ulos.length);
-      vaakaEl.innerHTML = sis.length || ulos.length
-        ? '<b>' + (sis.join(' + ') || '0') + ' = ' + summa(sis) + '</b> ' +
-          (ulos.length ? '· noppa ' + p.noppa + ' + takaisin ' + ulos.join(' + ') +
-                         ' = ' + (p.noppa + summa(ulos))
-                       : '· noppa ' + p.noppa) +
-          (tasaako() ? ' <span class="tulos--osuu">tasaa</span>'
-                     : ' <span class="tulos--ohi">ei tasaa</span>')
-        : '<span class="tyhja">Napauta täytteitä: varastosta linjastolle ja takaisin.</span>';
+      uudelleenEl.hidden = !(tuodut().length || viedyt().length);
+      piirraVaaka();
 
       if (kelpaa()) onnistui();
       else {
         ilmoitettu = null;
         juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
-        if (ulos.length > 1) {
+        if (viedyt().length > 1) {
           palauteEl.textContent = 'Vaakaan mahtuu vain yksi takaisin vietävä täyte.';
         } else if (!perussiirtoOk()) {
           palauteEl.textContent = 'Perussiirtoon ei voi yhdistää muita siirtoja: ' +
@@ -593,9 +637,11 @@
       juuri.querySelector('.pulma').classList.add('pulma--ratkaistu');
       if (ilmoitettu === tunnus) return;
       ilmoitettu = tunnus;
-      var teksti = summa(tuodut()) + ' = noppa ' + p.noppa +
-        (viedyt().length ? ' + takaisin ' + viedyt()[0] : '') +
-        '  (' + tuodut().join(' + ') + ')';
+      /* Lauseke sen muotoisena kuin vaaka sen näyttää: vasen puoli = oikea.
+         «3 = noppa 3 (1 + 2)» luki summan ensin ja kortit sulkeissa. */
+      var teksti = tuodut().join(' + ') + ' = ' + summa(tuodut()) +
+        ' · noppa ' + p.noppa +
+        (viedyt().length ? ' + takaisin ' + viedyt()[0] : '');
       var laji = lisaaLoyto(avain, tunnus, teksti);
       var n = loytoja(avain), kaikki = p.ratkaisuja;
       var porras = porrasTeksti(n, kaikki, SANA_LAUTA, '');
