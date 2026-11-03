@@ -243,9 +243,12 @@ ul.lista li,ol.lista li{margin:4px 0}
 
 .laatikko{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   box-shadow:var(--shadow);padding:18px 18px 8px;margin:14px 0}
-.huomio{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;
-  background:var(--warm);border:1px solid var(--line);border-radius:14px;padding:14px;margin:18px 0}
-.huomio img{width:56px}
+/* Basso-huomio (Marko 3.11.2026): rajattu pohtiva Basso kuten varainhankinnan sivulla.
+   Kuvan alareuna on LEIKKAUS, joten se asetetaan laatikon alareunaan (margin-bottom = -padding). */
+.huomio{display:grid;grid-template-columns:104px 1fr;gap:16px;align-items:center;
+  background:var(--warm);border:1px solid var(--line);border-radius:14px;padding:14px 16px 14px 14px;margin:18px 0}
+.huomio img{width:104px;height:auto;align-self:end;margin-bottom:-14px}
+@media (max-width:560px){.huomio{grid-template-columns:80px 1fr;gap:12px}.huomio img{width:80px}}
 .huomio p{margin:0;font-size:14.5px}
 
 /* Esimerkkikortit: pizza = täyte + täyte */

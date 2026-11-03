@@ -52,7 +52,7 @@ KAUPPA_KIELI = {
 # DE/NL/FR/ES: ei omaa kauppaa → EN-tuotesivut.
 for _k in ('de', 'nl', 'fr', 'es'):
     KAUPPA_KIELI[_k] = KAUPPA_KIELI['en']
-MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp
+MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp (huomio-laatikko käyttää 3.11.2026 alkaen basso-pohtii.webp 560×601)
 VAAKA_W, VAAKA_H = 720, 489  # julkinen/kuvat/apinavaaka.webp (koottu Apinavaa'an valikkoapinan kerroksista, Marko 20.10.2026)
 
 
@@ -438,7 +438,7 @@ def korttipeli(t, kaikki):
   <div class="laatikko" style="margin:0"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
 </div>
 
-<div class="huomio"><img src="../kuvat/basso-miettii.webp" width="520" height="503" alt=""><p>%s</p></div>
+<div class="huomio"><img src="../kuvat/basso-pohtii.webp" width="560" height="601" alt=""><p>%s</p></div>
 
 <h2 id="muodot">%s</h2>
 <p>%s</p>
