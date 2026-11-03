@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PIILOSSA: ei linkkia navigaatiosta, ei hakukoneisiin. Sama merkinta kuin
+     apinavaaka-testi/, pelimuodot-testi/ ja play/ -sivuilla. Marko 3.11.2026:
+     «Linkita kalenteri sivustolle, mutta piiloon siten, etta sen loytaa vain
+     oikealla osoitteella.»
+     ⚠️ `noindex` pitaa sivun pois Googlesta. Se EI tee osoitteesta salaista:
+     /joulu/ on arvattavissa, ja jaettu linkki leviaa eteenpain. -->
+<meta name="robots" content="noindex, nofollow">
 <title>Pizza Love® -joulukalenteri</title>
 <meta name="description" content="24 luukkua, 28 matikkapulmaa Pizza Love -kortti- ja lautapelistä. Avaa luukku pizzatehtaan seinästä.">
 <link rel="stylesheet" href="kalenteri.css">
@@ -30,6 +37,7 @@
 </dialog>
 
 <footer class="alaosa">
+  <a href="../fi/">pizzalove.fi</a>
   <a href="../fi/korttipeli.html">Korttipelin säännöt</a>
   <a href="../fi/lautapeli.html">Lautapelin säännöt</a>
   <a href="../play/">Pelaa selaimessa</a>
