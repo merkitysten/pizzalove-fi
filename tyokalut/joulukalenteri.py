@@ -41,6 +41,8 @@ lautapulman siirto tarkistetaan saannoista. Haku joka tarkistaa itsensa
 todistaisi vain oman itsensa.
 """
 
+import hashlib
+import io
 import json
 import os
 import random
@@ -120,6 +122,19 @@ def lautaratkaisu(p):
         if ok(S, t):
             return sorted(S), t
     return None, None
+
+
+def lautaratkaisuja(p):
+    """Montako LAILLISTA siirtoa tasaa vaa'an JA tekee pizzat.
+
+    ⚠️ `siirrot` torjuu jo perussiirron yhdistamisen (nopan luvun kokoinen
+    tayte tuodaan yksin), joten tama luku on sama jonka peli hyvaksyy.
+    📐 Mitattu 3.11.2026: kolmessa lautapulmassa (8, 10, 24) on siirto joka
+    tasaa ja tekee pizzat mutta jonka peli hylkaa — ilman tata rajausta luku
+    olisi liian suuri ja sivu lupaisi ratkaisuja joita ei ole."""
+    d, L, piz = p['d'], set(p['lin']), [set(x) for x in p['pizzat']]
+    return sum(1 for S, t in siirrot(d, sorted(L))
+               if all(q <= ((L - {t}) | S) for q in piz))
 
 
 def lautateksti(p, S, t):
@@ -261,18 +276,23 @@ def kokoa():
         rivit = []
         for p in pulmat:
             if p.get('laji') == 'kortti':
+                kp.taydenna_maarat(p)        # hidas: vain valituille
                 k, r = kortititeksti(p)
                 rivit.append(dict(laji='kortti', tapa=p['tapa'],
                                   pizza=p['pizza'], kasi=p['kasi'],
                                   arvo=p['arvo'], kysymys=k, ratkaisu=r,
                                   kortit=p['kortit'], lauseke=p['lauseke'],
-                                  ratkaisuja=p['ratkaisuja'], D=p['D']))
+                                  ratkaisuja=p['ratkaisuja'],
+                                  ratkaisujaHelppo=p['ratkaisujaHelppo'],
+                                  ratkaisujaBasso=p['ratkaisujaBasso'],
+                                  D=p['D']))
             else:
                 S, t = lautaratkaisu(p)
                 k, r = lautateksti(p, S, t)
                 rivit.append(dict(laji='lauta', noppa=p['d'], linjasto=p['lin'],
                                   pizzat=p['pizzat'], siirto=S, takaisin=t,
-                                  kysymys=k, ratkaisu=r, D=p['D']))
+                                  kysymys=k, ratkaisu=r,
+                                  ratkaisuja=lautaratkaisuja(p), D=p['D']))
         luukut.append(dict(paiva=paiva, pulmat=rivit))
     return luukut
 
@@ -322,6 +342,12 @@ def tarkista(luukut):
                                    % (tunnus, sum(S), d, t))
                 if set(S) & lin:
                     virheet.append('%s: siirretaan taytetta joka on jo linjastolla' % tunnus)
+                # ⚠️ PERUSSIIRTOON EI SAA YHDISTAA MUITA SIIRTOJA (lautapelin
+                # saanto, apinavaaka.js rivit 423 ja 830). Tama ehto puuttui
+                # 3.11.2026 asti seka tasta etta sivun tarkistuksesta, ja
+                # mitattuna se oli saavutettavissa kolmessa lautapulmassa.
+                if d in set(S) and (len(S) > 1 or t):
+                    virheet.append('%s: perussiirtoon on yhdistetty muita siirtoja' % tunnus)
                 if t and t not in lin:
                     virheet.append('%s: palautetaan tayte jota ei ole linjastolla' % tunnus)
                 uusi = (lin - {t}) | set(S)
@@ -330,6 +356,32 @@ def tarkista(luukut):
                         virheet.append('%s: pizza %s ei synny siirron jalkeen'
                                        % (tunnus, pizza))
     return virheet
+
+
+SIVU = os.path.join(os.path.dirname(TANNE), 'julkinen', 'joulu', 'index.html')
+
+
+def leimaa_sivu():
+    """Kirjoittaa `pulmat.js?v=` -leiman SISALLON TIIVISTEESTA.
+
+    ⚠️ 📐 MITATTU 3.11.2026: selain tarjoili vanhaa `pulmat.js`:aa uuden
+    `kalenteri.js`:n rinnalle, ja mutaatiokoe nayttti vihrealta vaikka
+    mutaatio oli tiedostossa. Sivuston muu tapa on kasin nostettava `?v=`
+    (ks. `julkinen/play/sivut.py` leimatarkistus), mutta tama tiedosto
+    syntyy koneellisesti — joten leima lasketaan sisallosta eika jateta
+    ihmisen muistin varaan. Kasin nostettava leima jonka sisalto syntyy
+    koneellisesti on juuri se pari joka ajautuu erilleen."""
+    tiiviste = hashlib.sha256(
+        io.open(SIVULLE, 'rb').read()).hexdigest()[:10]
+    teksti = io.open(SIVU, encoding='utf-8').read()
+    uusi, n = re.subn(r'src="pulmat\.js(?:\?v=[\w.-]+)?"',
+                      'src="pulmat.js?v=%s"' % tiiviste, teksti)
+    if n != 1:
+        raise SystemExit('index.html: pulmat.js -viittauksia %d, odotettiin 1' % n)
+    if uusi != teksti:
+        io.open(SIVU, 'w', encoding='utf-8').write(uusi)
+        return '%s  (pulmat.js?v=%s)' % (SIVU, tiiviste)
+    return 'leima ennallaan (pulmat.js?v=%s)' % tiiviste
 
 
 def main():
@@ -358,6 +410,7 @@ def main():
         f.write(';\n')
     print(KOHDE)
     print(SIVULLE)
+    print(leimaa_sivu())
     return 0
 
 

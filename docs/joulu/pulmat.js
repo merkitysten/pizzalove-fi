@@ -71,6 +71,8 @@ window.PULMAT = {
      ],
      "lauseke": "4 + 6",
      "ratkaisuja": 15,
+     "ratkaisujaHelppo": 16,
+     "ratkaisujaBasso": 5,
      "D": 3.0
     }
    ]
@@ -99,6 +101,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **9**. Linjastolla on Tomaatti (2), Katkarapu (5) ja Kala (10). Valmistettavana on pizza Oliivi (1) + Herkkusieni (8) = 9. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1) ja Herkkusieni (8). Vaaka tasaa: 9 = noppa 9.",
+     "ratkaisuja": 3,
      "D": 1.0
     }
    ]
@@ -129,6 +132,8 @@ window.PULMAT = {
      ],
      "lauseke": "4 + 5",
      "ratkaisuja": 14,
+     "ratkaisujaHelppo": 15,
+     "ratkaisujaBasso": 1,
      "D": 3.1
     }
    ]
@@ -151,6 +156,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **7**. Linjasto on tyhjä. Valmistettavana on pizza Rucola (7) = 7. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Rucola (7). Vaaka tasaa: 7 = noppa 7.",
+     "ratkaisuja": 1,
      "D": 2.0
     }
    ]
@@ -181,6 +187,8 @@ window.PULMAT = {
      ],
      "lauseke": "2 + 8",
      "ratkaisuja": 13,
+     "ratkaisujaHelppo": 14,
+     "ratkaisujaBasso": 2,
      "D": 3.2
     }
    ]
@@ -208,6 +216,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **3**. Linjastolla on Katkarapu (5) ja Herkkusieni (8). Valmistettavana on pizza Tomaatti (2) + Herkkusieni (8) = 10. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1) ja Tomaatti (2). Vaaka tasaa: 3 = noppa 3.",
+     "ratkaisuja": 2,
      "D": 3.0
     },
     {
@@ -233,6 +242,8 @@ window.PULMAT = {
      ],
      "lauseke": "2 + 3",
      "ratkaisuja": 10,
+     "ratkaisujaHelppo": 11,
+     "ratkaisujaBasso": 3,
      "D": 3.5
     }
    ]
@@ -265,6 +276,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + 2",
      "ratkaisuja": 12,
+     "ratkaisujaHelppo": 39,
+     "ratkaisujaBasso": 12,
      "D": 4.3
     }
    ]
@@ -292,6 +305,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **8**. Linjastolla on Ananas (3) ja Kinkku (9). Valmistettavana on pizza Oliivi (1) + Ananas (3) = 4. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1) ja Rucola (7). Vaaka tasaa: 8 = noppa 8.",
+     "ratkaisuja": 5,
      "D": 3.0
     }
    ]
@@ -324,6 +338,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + 7",
      "ratkaisuja": 9,
+     "ratkaisujaHelppo": 44,
+     "ratkaisujaBasso": 9,
      "D": 4.7
     }
    ]
@@ -351,6 +367,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **8**. Linjastolla on Kinkku (9). Valmistettavana on pizza Ananas (3) + Homejuusto (4) = 7. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1), Ananas (3) ja Homejuusto (4). Vaaka tasaa: 8 = noppa 8.",
+     "ratkaisuja": 3,
      "D": 3.5
     }
    ]
@@ -383,6 +400,8 @@ window.PULMAT = {
      ],
      "lauseke": "3 + 5",
      "ratkaisuja": 7,
+     "ratkaisujaHelppo": 49,
+     "ratkaisujaBasso": 7,
      "D": 5.0
     }
    ]
@@ -409,6 +428,7 @@ window.PULMAT = {
      "takaisin": 3,
      "kysymys": "Noppa näyttää **3**. Linjastolla on Tomaatti (2) ja Ananas (3). Valmistettavana on pizza Tomaatti (2) + Munakoiso (6) = 8. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Munakoiso (6). Palauta varastoon Ananas (3). Vaaka tasaa: 6 = noppa 3 + palautettu 3.",
+     "ratkaisuja": 1,
      "D": 4.5
     },
     {
@@ -435,6 +455,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + (2 + 6)",
      "ratkaisuja": 9,
+     "ratkaisujaHelppo": 10,
+     "ratkaisujaBasso": 2,
      "D": 5.2
     }
    ]
@@ -467,6 +489,8 @@ window.PULMAT = {
      ],
      "lauseke": "4 + 6",
      "ratkaisuja": 5,
+     "ratkaisujaHelppo": 46,
+     "ratkaisujaBasso": 5,
      "D": 5.4
     }
    ]
@@ -492,6 +516,7 @@ window.PULMAT = {
      "takaisin": 0,
      "kysymys": "Noppa näyttää **8**. Linjasto on tyhjä. Valmistettavana on pizza Oliivi (1) + Homejuusto (4) = 5. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1), Ananas (3) ja Homejuusto (4). Vaaka tasaa: 8 = noppa 8.",
+     "ratkaisuja": 1,
      "D": 5.0
     }
    ]
@@ -524,6 +549,8 @@ window.PULMAT = {
      ],
      "lauseke": "2 + (2 + 5)",
      "ratkaisuja": 5,
+     "ratkaisujaHelppo": 6,
+     "ratkaisujaBasso": 4,
      "D": 5.9
     }
    ]
@@ -552,6 +579,7 @@ window.PULMAT = {
      "takaisin": 5,
      "kysymys": "Noppa näyttää **2**. Linjastolla on Oliivi (1), Katkarapu (5) ja Herkkusieni (8). Valmistettavana on pizza Oliivi (1) + Ananas (3) = 4. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Ananas (3) ja Homejuusto (4). Palauta varastoon Katkarapu (5). Vaaka tasaa: 7 = noppa 2 + palautettu 5.",
+     "ratkaisuja": 2,
      "D": 7.5
     }
    ]
@@ -581,6 +609,8 @@ window.PULMAT = {
      ],
      "lauseke": "6 − 4",
      "ratkaisuja": 10,
+     "ratkaisujaHelppo": 11,
+     "ratkaisujaBasso": 0,
      "D": 6.5
     }
    ]
@@ -606,6 +636,7 @@ window.PULMAT = {
      "takaisin": 4,
      "kysymys": "Noppa näyttää **7**. Linjastolla on Homejuusto (4). Valmistettavana on pizza Kala (10) = 10. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1) ja Kala (10). Palauta varastoon Homejuusto (4). Vaaka tasaa: 11 = noppa 7 + palautettu 4.",
+     "ratkaisuja": 1,
      "D": 9.0
     },
     {
@@ -635,6 +666,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + (3 + 6)",
      "ratkaisuja": 18,
+     "ratkaisujaHelppo": 59,
+     "ratkaisujaBasso": 18,
      "D": 6.5
     }
    ]
@@ -667,6 +700,8 @@ window.PULMAT = {
      ],
      "lauseke": "2 × 3",
      "ratkaisuja": 6,
+     "ratkaisujaHelppo": 27,
+     "ratkaisujaBasso": 9,
      "D": 8.2
     }
    ]
@@ -701,6 +736,7 @@ window.PULMAT = {
      "takaisin": 7,
      "kysymys": "Noppa näyttää **7**. Linjastolla on Tomaatti (2), Katkarapu (5) ja Rucola (7). Valmistettavana ovat pizzat Oliivi (1) + Ananas (3) = 4 · Homejuusto (4) + Katkarapu (5) = 9. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1), Ananas (3), Homejuusto (4) ja Munakoiso (6). Palauta varastoon Rucola (7). Vaaka tasaa: 14 = noppa 7 + palautettu 7.",
+     "ratkaisuja": 1,
      "D": 11.2
     }
    ]
@@ -733,6 +769,8 @@ window.PULMAT = {
      ],
      "lauseke": "2 × 5",
      "ratkaisuja": 7,
+     "ratkaisujaHelppo": 40,
+     "ratkaisujaBasso": 7,
      "D": 10.0
     }
    ]
@@ -767,6 +805,7 @@ window.PULMAT = {
      "takaisin": 10,
      "kysymys": "Noppa näyttää **9**. Linjastolla on Oliivi (1), Herkkusieni (8) ja Kala (10). Valmistettavana ovat pizzat Tomaatti (2) + Homejuusto (4) = 6 · Oliivi (1) + Rucola (7) = 8. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Tomaatti (2), Homejuusto (4), Munakoiso (6) ja Rucola (7). Palauta varastoon Kala (10). Vaaka tasaa: 19 = noppa 9 + palautettu 10.",
+     "ratkaisuja": 1,
      "D": 12.6
     }
    ]
@@ -799,6 +838,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + (3 × 3)",
      "ratkaisuja": 2,
+     "ratkaisujaHelppo": 3,
+     "ratkaisujaBasso": 0,
      "D": 11.9
     }
    ]
@@ -833,6 +874,7 @@ window.PULMAT = {
      "takaisin": 10,
      "kysymys": "Noppa näyttää **9**. Linjastolla on Herkkusieni (8) ja Kala (10). Valmistettavana ovat pizzat Ananas (3) + Homejuusto (4) = 7 · Oliivi (1) + Herkkusieni (8) = 9. Mitkä täytteet siirrät varastosta linjastolle — ja lähteekö jokin takaisin varastoon?",
      "ratkaisu": "Siirrä linjastolle Oliivi (1), Ananas (3), Homejuusto (4), Katkarapu (5) ja Munakoiso (6). Palauta varastoon Kala (10). Vaaka tasaa: 19 = noppa 9 + palautettu 10.",
+     "ratkaisuja": 1,
      "D": 16.5
     },
     {
@@ -863,6 +905,8 @@ window.PULMAT = {
      ],
      "lauseke": "1 + ((1 + 2) × 3)",
      "ratkaisuja": 2,
+     "ratkaisujaHelppo": 15,
+     "ratkaisujaBasso": 8,
      "D": 15.4
     }
    ]

@@ -135,6 +135,35 @@ def ratkaisut(kasi, arvo, tasan_eri):
     return out
 
 
+def ratkaisuja_kaikki(kasi, arvo, tasan_eri):
+    """Montako eri KORTTIJOUKKOA tuottaa pizzan arvon — koko katta kayttaen.
+
+    ⚠️ ERI FUNKTIO KUIN `ratkaisut`, JA SYY ON MITATTU 3.11.2026. `ratkaisut`
+    katkaisee haun neljaan korttiin (nopeus: sita kutsutaan kymmeniatuhansia
+    kertoja hakuvaiheessa). Peli ei katkaise: `etsiRatkaisu` (ratkoja.js)
+    sanoo sen itse — «koko kasi on kaytettavissa: yhden tayteen pizzan voi
+    tehda viidella kortilla». Nelja kortin katto oli siis sama vika jonka
+    peli oli jo korjannut, ja luku oli alakanttiin: luukun 18 helppo tapa
+    36 vastaan **59**, luukun 24 Basson tapa 2 vastaan **8**.
+
+    Sivu nayttaa taman luvun nimittajana («loysit 3/59 tapaa»), joten
+    alakanttiin laskettu luku EI ole vain epatarkka — pelaaja voisi loytaa
+    enemman tapoja kuin niita muka on. Siksi tama lasketaan vain niille
+    28 pulmalle jotka kalenteriin paatyvat, ei hakuvaiheessa."""
+    n = 0
+    nahty = set()
+    for k in range(1, len(kasi) + 1):
+        for osa in combinations(sorted(kasi), k):
+            if osa in nahty:
+                continue
+            nahty.add(osa)
+            if tasan_eri and len(set(osa)) != tasan_eri:
+                continue
+            if F(arvo) in kaikki_arvot(osa):
+                n += 1
+    return n
+
+
 def plus_riittaa(osa, arvo):
     return sum(osa) == arvo
 
@@ -190,3 +219,20 @@ def arvo_pulma(rnd, tapa, kasikoko, pizzan_koko, vahintaan_kortteja=2):
                 arvo=sum(pizza), ratkaisuja=len(rat),
                 kortit=rat[0][0], lauseke=rat[0][1],
                 D=vaikeus(kasi, pizza, tapa, rat))
+
+
+def taydenna_maarat(p):
+    """Lisaa pulmaan ratkaisujen MAARAT molemmilla tavoilla.
+
+    🔵 Marko 3.11.2026: «siellahan on useampikin muu ratkaisumahdollisuus.
+    Minusta tahan pitaisi rohkaista.» Siksi sivu tarvitsee molemmat luvut:
+    nimittajan laskuriin, ja tiedon siita onko Basson tapaa ylipaataan
+    olemassa (📐 14 korttipulmaa 16:sta ratkeaa myos silla, kaksi ei).
+
+    ⚠️ Kutsutaan vain valituille pulmille — tama on hidas (ks.
+    `ratkaisuja_kaikki`)."""
+    arvo = p['arvo']
+    p['ratkaisujaHelppo'] = ratkaisuja_kaikki(p['kasi'], arvo, 0)
+    p['ratkaisujaBasso'] = (0 if len(p['pizza']) < 2
+                            else ratkaisuja_kaikki(p['kasi'], arvo, len(p['pizza'])))
+    return p

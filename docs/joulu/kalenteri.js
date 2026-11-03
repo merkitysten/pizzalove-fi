@@ -4,11 +4,18 @@
  * hyödyntäen jo tehtyjä pelimekaniikkoja. — — ei kerrota vaan näytetään kuvin
  * ja laitetaan joulukalenterin avaaja tekemään ne laskutoimitukset.»
  *
+ * 🔵 Marko 3.11.2026 (sama päivä): «Siellähän on useampikin muu
+ * ratkaisumahdollisuus. Minusta tähän pitäisi rohkaista.»
+ * 📐 Mitattu: korttipulmissa on 2–36 ratkaisua, yhteensä 269; lautapulmissa
+ * 1–5. Luukku ei siis sulkeudu ensimmäisestä oikeasta vastauksesta vaan
+ * laskee montako eri tapaa pelaaja on löytänyt — ja ne jäävät muistiin.
+ *
  * SIKSI TÄMÄ SIVU EI TOTEUTA PELIN SÄÄNTÖJÄ UUDELLEEN:
  *   kortit.js   oikeat kortit ja niiden kuvat (`pizzapakka`, 42 korttia)
  *   kierros.js  lausekkeen rakennus ja VASTAUKSEN TARKISTUS
  *               (`kierrosTokenit`, `kierrosTarkista`) — sama funktio jolla
  *               yhteispelin isäntä tarkistaa pelaajien vastaukset
+ *   ratkoja.js  pelin oma haku (`etsiRatkaisu`) — vain itsetestissä
  *   laskin.js   lausekkeen arvo murtolukuina (`laske`, `osuuko`)
  * Ne ladataan `../play/`-kansiosta sellaisinaan, ei kopioina.
  *
@@ -17,12 +24,23 @@
  * vaatii «tasan». Peli olisi hylännyt oman kalenterini ratkaisun. Sääntö on
  * nyt yksi, ja se asuu pelissä.
  *
+ * ⚠️ BASSON TAPA ON VALINTA, EI PULMAN OMINAISUUS (3.11.2026). Pelissä sääntö
+ * tulee kahdella tavalla eikä kolmannella: Pizza Bassossa se on AINA päällä,
+ * Pizza Partyssa pelaaja kääntää sen itse («Vaikeampi», peli.js
+ * `tila.apinanTapa` → `kierrosTarkista(..., vaikea)`). Helpossa tavassa
+ * täytteiden lukumäärää ei tarkisteta lainkaan. Kalenteri teki valinnan
+ * ensin pelaajan puolesta; nyt se on nappi, ja se tarjotaan vain kun sellainen
+ * ratkaisu on olemassa (📐 14 korttipulmaa 16:sta).
+ *
  * ⚠️ LAUTAPULMAN TARKISTUS ON TÄSSÄ TIEDOSTOSSA, KORTTIPULMAN EI. Vaa'an
- * sääntö (sisään = noppa + ulos) on apinavaaan sisällä 2 143 rivin
- * komponentissa eikä omana moduulinaan, joten sitä ei voi kutsua tänne.
- * Se on kirjoitettu tähän uudelleen — kolme riviä — ja juuri siksi
- * `?koe=1` ajaa jokaisen pulman tallennetun ratkaisun tämän sivun
- * tarkistuksen läpi: kaksi toteutusta ajautuu erilleen, ellei sitä mitata.
+ * sääntö on apinavaaan sisällä 2 143 rivin komponentissa eikä omana
+ * moduulinaan, joten sitä ei voi kutsua tänne. Se on kirjoitettu tähän
+ * uudelleen — ja juuri siksi `?koe=1` LASKEE lautapulmien ratkaisut tämän
+ * sivun tarkistuksella ja vertaa lukua generaattorin lukuun. Kaksi
+ * toteutusta ajautuu erilleen, ellei sitä mitata, ja niin kävi:
+ * 📐 «perussiirtoon ei saa yhdistää muita siirtoja» (apinavaaka.js 423, 830)
+ * puuttui tästä tiedostosta 3.11.2026 asti, ja mitattuna se oli
+ * saavutettavissa kolmessa lautapulmassa (8, 10, 24).
  *
  * ⚠️ LUUKKUJEN PAIKAT OVAT ENSIMMÄINEN VEDOS. Pyörä (oikea yläkulma) ja
  * varastopylpyrät (alalaita, pelin omat numerot 1–10) on jätetty vapaaksi.
@@ -47,7 +65,14 @@
   var SALLITUT = { kerto: true, jako: true, potenssi: false, log: false, sulut: true };
   var MERKIT = ['+', '−', '×', '÷'];
 
-  var tila = { data: null, auki: lueAuki(), ratkotut: lueRatkotut() };
+  var tila = {
+    data: null,
+    auki: lue(AVAIN, []),
+    ratkotut: lue(AVAIN + '-ratkotut', []),
+    /* { "<päivä>-<pulma>-<tapa>": { "4,6": ["4 + 6"] } } — löydetyt tavat
+       korttijoukon mukaan, ja jokaisen joukon eri lausekkeet. */
+    loydot: lue(AVAIN + '-loydot', {})
+  };
 
   function lue(avain, oletus) {
     try { return JSON.parse(localStorage.getItem(avain)) || oletus; }
@@ -56,14 +81,43 @@
   function kirjoita(avain, arvo) {
     try { localStorage.setItem(avain, JSON.stringify(arvo)); } catch (e) {}
   }
-  function lueAuki() { return lue(AVAIN, []); }
-  function lueRatkotut() { return lue(AVAIN + '-ratkotut', []); }
 
   function kaikkiAuki() { return /[?&]kaikki=1/.test(location.search); }
   function avautunut(paiva) {
     if (kaikkiAuki()) return true;
     var n = new Date();
     return n.getMonth() === 11 && n.getDate() >= paiva;
+  }
+
+  /* ---------- löydöt ----------
+   * ⚠️ TAPA ON OSA AVAINTA. Sama käsi antaa helpolla tavalla eri määrän
+   * ratkaisuja kuin Basson tavalla (luukku 18: 36 vastaan 18), joten yhteinen
+   * laskuri näyttäisi «18/18 löydetty» heti kun helppoja on tarpeeksi. */
+
+  function loytoAvain(pohja, tapa) { return pohja + '-' + tapa; }
+
+  function loydetyt(avain) { return tila.loydot[avain] || {}; }
+
+  function loytoja(avain) { return Object.keys(loydetyt(avain)).length; }
+
+  /* Palauttaa 'uusi' | 'uusi-lauseke' | 'tuttu'. */
+  function lisaaLoyto(avain, tunnus, teksti) {
+    var kaikki = tila.loydot[avain] || (tila.loydot[avain] = {});
+    var tulos;
+    if (!kaikki[tunnus]) { kaikki[tunnus] = [teksti]; tulos = 'uusi'; }
+    else if (kaikki[tunnus].indexOf(teksti) < 0) {
+      kaikki[tunnus].push(teksti); tulos = 'uusi-lauseke';
+    } else tulos = 'tuttu';
+    kirjoita(AVAIN + '-loydot', tila.loydot);
+    return tulos;
+  }
+
+  function loytolista(avain) {
+    var kaikki = loydetyt(avain), ulos = [];
+    Object.keys(kaikki).forEach(function (t) {
+      kaikki[t].forEach(function (s) { ulos.push(s); });
+    });
+    return ulos;
   }
 
   /* ---------- kortit kuvina (kortit.js) ---------- */
@@ -95,9 +149,41 @@
       '.webp" alt="' + t.nimi + ' ' + arvo + '"' + (lisa || '') + '>';
   }
 
+  /* Kehotteen tavoite on PIENI, vaikka tapoja on paljon. 📐 Luukussa 18 on
+     59 eri tapaa, ja «löysit 1/59» lannistaa siinä missä «löysit 1/3»
+     kannustaa — iso luku kuuluu samalle riville tietona, ei vaatimuksena.
+     Pulmissa joissa tapoja on vähemmän tavoite laskee niiden mukaan. */
+  var TAVOITE = 3;
+
+  /* `sana` = [partitiivi yksikkö, partitiivi monikko]: «3 eri tapaa» mutta
+     «erilaisia tapoja on 16». Yhdellä muodolla rivi oli «erilaisia tapaa». */
+  function laskuriTeksti(n, kaikki, sana) {
+    var maali = Math.min(TAVOITE, kaikki);
+    var muita = kaikki > maali
+      ? ' · erilaisia ' + sana[1] + ' on kaikkiaan ' + kaikki
+      : '';
+    if (!n) {
+      return (maali > 1 ? 'Löydätkö <b>' + maali + '</b> eri ' + sana[0] + '?'
+                        : 'Löydätkö ratkaisun?') + muita;
+    }
+    if (n >= maali) {
+      return '<b>' + n + '</b> eri ' + sana[0] + ' löydetty' +
+        (kaikki > n ? ' — jatka jos haluat!' : ' — kaikki! 🍕') + muita;
+    }
+    return '<b>' + n + '/' + maali + '</b> eri ' + sana[0] + ' löydetty' + muita;
+  }
+
+  /* Montako eri tapaa tällä kädellä on. ⚠️ YKSI LÄHDE: luku tulee
+     generaattorilta (`tyokalut/korttipulma.py`), jonka oma tarkistus laskee
+     sen pelin säännöillä. Jos tätä lukua laskisi myös sivu, kaksi
+     toteutusta ajautuisi erilleen. */
+  function tavoite(p, tapa) {
+    return tapa === 'basso' ? p.ratkaisujaBasso : p.ratkaisujaHelppo;
+  }
+
   /* ---------- korttipulma: pelin oma lausekekone ---------- */
 
-  function korttipulma(p, juuri, valmis) {
+  function korttipulma(p, juuri, valmis, pohja) {
     var kierros = {
       pizza: { arvo: p.arvo, tayteMaara: p.pizza.length, sydan: p.arvo === 10,
                kuva: (pizzakortti(p.pizza) || {}).kuva },
@@ -105,34 +191,65 @@
         return { arvo: a, fantasia: false, kuva: 'kuvat/tayte-' + a + '.webp' };
       })
     };
+    var tapa = p.tapa;
+    /* Basson tapa tarjotaan vain kun sellainen ratkaisu on olemassa, ja
+       helppo vain kun se on eri asia (yhden täytteen pizzalla ei ole). */
+    var tavat = [];
+    if (p.ratkaisujaHelppo > 0) tavat.push('helpompi');
+    if (p.ratkaisujaBasso > 0) tavat.push('basso');
     var v = { kortit: [], merkit: [], ryhmat: [] };
     var ryhmitys = null;              /* null | {} | {alku} — kuten peli.js */
+    var ilmoitettu = null;            /* viimeksi kuitattu korttijoukko */
 
     juuri.innerHTML =
       '<div class="pulma">' +
       '  <div class="kohde">' + pizzakuva(p.pizza) +
-      '    <p class="ohje">' + (p.tapa === 'basso'
-          ? 'Valmista tämä pizza. <b>Basson tapa:</b> käytä tasan yhtä montaa eri täytettä kuin pizzassa on täytteitä.'
-          : 'Valmista tämä pizza. Kortteja saa käyttää niin monta kuin haluat.') + '</p>' +
+      '    <p class="ohje" data-ohje></p>' +
       '  </div>' +
+      (tavat.length > 1
+        ? '  <div class="tapavalinta" data-tavat>' + tavat.map(function (x) {
+            return '<button type="button" class="tapanappi" data-tapa="' + x + '">' +
+              (x === 'basso' ? 'Basson tapa' : 'Vapaa tapa') + '</button>';
+          }).join('') + '</div>'
+        : '') +
       '  <div class="lauseke" data-lauseke></div>' +
       '  <div class="tyokalut"><button type="button" class="sulkunappi" data-sulut>( )</button>' +
-      '    <span class="tulos" data-tulos></span></div>' +
+      '    <span class="tulos" data-tulos></span>' +
+      '    <button type="button" class="nappi nappi--pieni" data-uudelleen hidden>Kokeile toista tapaa</button>' +
+      '  </div>' +
       '  <div class="otsake">Kätesi</div><div class="kasi" data-kasi></div>' +
       '  <p class="palaute" data-palaute></p>' +
+      '  <div class="laskuri" data-laskuri></div>' +
+      '  <div class="loydot" data-loydot></div>' +
       '</div>';
 
+    var ohjeEl = juuri.querySelector('[data-ohje]');
     var lausekeEl = juuri.querySelector('[data-lauseke]');
     var kasiEl = juuri.querySelector('[data-kasi]');
     var tulosEl = juuri.querySelector('[data-tulos]');
     var palauteEl = juuri.querySelector('[data-palaute]');
     var sulutEl = juuri.querySelector('[data-sulut]');
+    var uudelleenEl = juuri.querySelector('[data-uudelleen]');
+    var laskuriEl = juuri.querySelector('[data-laskuri]');
+    var loydotEl = juuri.querySelector('[data-loydot]');
+
+    function avain() { return loytoAvain(pohja, tapa); }
+
+    function tyhjenna() {
+      v = { kortit: [], merkit: [], ryhmat: [] };
+      ryhmitys = null;
+      ilmoitettu = null;
+      palauteEl.innerHTML = '';
+      juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
+      piirra();
+    }
 
     sulutEl.addEventListener('click', function () {
       if (v.kortit.length < 3) return;
       ryhmitys = ryhmitys ? null : {};
       piirra();
     });
+    uudelleenEl.addEventListener('click', tyhjenna);
 
     function lisaa(i) {
       if (v.kortit.some(function (k) { return k.i === i; })) return;
@@ -169,7 +286,32 @@
       return v.kortit.length > 0 && v.merkit.every(function (m) { return !!m; });
     }
 
+    function korttitunnus() {
+      return v.kortit.map(function (k) { return k.arvo; }).sort(function (a, b) {
+        return a - b;
+      }).join(',');
+    }
+
+    function piirraLaskuri() {
+      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain()), tavoite(p, tapa), ['tapaa', 'tapoja']);
+      var lista = loytolista(avain());
+      loydotEl.innerHTML = lista.length
+        ? lista.map(function (s) { return '<span class="loyto">' + s + '</span>'; }).join('')
+        : '';
+    }
+
     function piirra() {
+      ohjeEl.innerHTML = 'Valmista tämä pizza. ' + (tapa === 'basso'
+        ? '<b>Basson tapa:</b> eri täytteitä tasan yhtä monta kuin pizzassa (' +
+          p.pizza.length + '). Kortteja saa olla enemmän.'
+        : 'Kortteja saa käyttää niin monta kuin haluat.');
+      if (tavat.length > 1) {
+        juuri.querySelectorAll('[data-tapa]').forEach(function (b) {
+          b.classList.toggle('tapanappi--paalla', b.dataset.tapa === tapa);
+          b.setAttribute('aria-pressed', b.dataset.tapa === tapa ? 'true' : 'false');
+        });
+      }
+
       /* lauseke */
       var osat = [];
       if (!v.kortit.length) osat.push('<span class="tyhja">Napauta täytekortteja alta</span>');
@@ -210,31 +352,58 @@
       /* elävä tulos ja tarkistus — pelin omilla funktioilla */
       sulutEl.disabled = v.kortit.length < 3;
       sulutEl.classList.toggle('sulkunappi--paalla', !!ryhmitys);
+      uudelleenEl.hidden = !v.kortit.length;
       if (valmisLauseke()) {
         var arvot = v.kortit.map(function (k) { return k.arvo; });
         var t = laske(kierrosTokenit(arvot, v.merkit, v.ryhmat));
         tulosEl.textContent = t ? tulosTekstina(t) : '✕';
         tulosEl.className = 'tulos ' + (osuuko(t, p.arvo) ? 'tulos--osuu' : 'tulos--ohi');
-        var tarkistus = kierrosTarkista(kierros, v, SALLITUT, p.tapa === 'basso');
-        if (tarkistus.oikein) return onnistui();
-        palauteEl.textContent = (tarkistus.syy === 'taytteet')
-          ? 'Arvo osuu, mutta Basson tapa vaatii tasan ' + p.pizza.length +
-            ' eri täytettä — nyt niitä on ' + new Set(arvot).size + '.'
-          : '';
+        var tarkistus = kierrosTarkista(kierros, v, SALLITUT, tapa === 'basso');
+        if (tarkistus.oikein) onnistui();
+        else {
+          ilmoitettu = null;
+          juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
+          palauteEl.innerHTML = (tarkistus.syy === 'taytteet')
+            ? 'Arvo osuu, mutta Basson tapa vaatii tasan ' + p.pizza.length +
+              ' eri täytettä — nyt niitä on ' + new Set(arvot).size + '.'
+            : '';
+        }
       } else {
         tulosEl.textContent = '';
         tulosEl.className = 'tulos';
-        palauteEl.textContent = '';
+        ilmoitettu = null;
       }
+      piirraLaskuri();
     }
 
+    /* ⚠️ EI SULJE PULMAA. Ennen tätä oikea vastaus poisti kaikki napit
+       käytöstä, eli luukku päättyi ensimmäiseen ratkaisuun — juuri se mitä
+       Marko pyysi muuttamaan. Nyt lauseke jää ruudulle ja löytö kirjataan;
+       `ilmoitettu` estää saman löydön kuittaamisen joka piirrolla. */
     function onnistui() {
+      var tunnus = korttitunnus();
       juuri.querySelector('.pulma').classList.add('pulma--ratkaistu');
-      palauteEl.innerHTML = '<b>Oikein!</b> ' + kierrosLauseke(v) + ' = ' + p.arvo;
-      lausekeEl.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-      kasiEl.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-      sulutEl.disabled = true;
+      if (ilmoitettu === tunnus) return;
+      ilmoitettu = tunnus;
+      var teksti = kierrosLauseke(v).trim() + ' = ' + p.arvo;
+      var laji = lisaaLoyto(avain(), tunnus, teksti);
+      var n = loytoja(avain()), kaikki = tavoite(p, tapa);
+      palauteEl.innerHTML = laji === 'uusi'
+        ? '<b>Oikein!</b> ' + teksti +
+          (n >= kaikki ? ' Löysit kaikki tavat!' : ' Löydätkö vielä toisen tavan?')
+        : (laji === 'uusi-lauseke'
+            ? '<b>Oikein!</b> ' + teksti + ' Samat kortit, uusi lauseke.'
+            : '<b>Oikein!</b> ' + teksti + ' Tämän tavan löysit jo.');
       valmis();
+    }
+
+    if (tavat.length > 1) {
+      juuri.querySelector('[data-tavat]').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-tapa]');
+        if (!b || b.dataset.tapa === tapa) return;
+        tapa = b.dataset.tapa;
+        tyhjenna();
+      });
     }
 
     juuri.addEventListener('click', function (e) {
@@ -250,18 +419,20 @@
     piirra();
 
     /* Tarkistus paljaalle ratkaisulle — `?koe=1` kutsuu tätä. */
-    return function koeRatkaisu(kortit, merkit, ryhmat) {
+    return function koeRatkaisu(kortit, merkit, ryhmat, koeTapa) {
       return kierrosTarkista(kierros,
         { kortit: kortit, merkit: merkit, ryhmat: ryhmat || [] },
-        SALLITUT, p.tapa === 'basso');
+        SALLITUT, (koeTapa || tapa) === 'basso');
     };
   }
 
   /* ---------- lautapulma: vaaka, varasto ja linjasto ---------- */
 
-  function lautapulma(p, juuri, valmis) {
+  function lautapulma(p, juuri, valmis, pohja) {
     var alku = p.linjasto.slice();
     var linjalla = alku.slice();      /* pelaajan muokkaama tila */
+    var ilmoitettu = null;
+    var avain = loytoAvain(pohja, 'lauta');
 
     juuri.innerHTML =
       '<div class="pulma">' +
@@ -275,12 +446,26 @@
       '  <div class="otsake">Linjasto</div><div class="rivi" data-linja></div>' +
       '  <div class="otsake">Varasto</div><div class="rivi" data-varasto></div>' +
       '  <p class="palaute" data-palaute></p>' +
+      '  <div class="laskuri" data-laskuri></div>' +
+      '  <div class="loydot" data-loydot></div>' +
+      '  <button type="button" class="nappi nappi--pieni" data-uudelleen hidden>Kokeile toista tapaa</button>' +
       '</div>';
 
     var linjaEl = juuri.querySelector('[data-linja]');
     var varastoEl = juuri.querySelector('[data-varasto]');
     var vaakaEl = juuri.querySelector('[data-vaaka]');
     var palauteEl = juuri.querySelector('[data-palaute]');
+    var laskuriEl = juuri.querySelector('[data-laskuri]');
+    var loydotEl = juuri.querySelector('[data-loydot]');
+    var uudelleenEl = juuri.querySelector('[data-uudelleen]');
+
+    uudelleenEl.addEventListener('click', function () {
+      linjalla = alku.slice();
+      ilmoitettu = null;
+      palauteEl.innerHTML = '';
+      juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
+      piirra();
+    });
 
     function tuodut() {
       return linjalla.filter(function (a) { return alku.indexOf(a) < 0; });
@@ -290,17 +475,37 @@
     }
     function summa(l) { return l.reduce(function (a, b) { return a + b; }, 0); }
 
-    /* ⚠️ Vaa'an sääntö ja yhden paluun raja ovat samat kuin pulmadatan
-       `siirrot(d, L)`:ssä: sisään tuotujen summa = noppa + yksi takaisin
-       viety. Useamman palauttaminen ei ole pelissä mahdollista. */
+    /* Vaaka: sisään tuotujen summa = noppa + yksi takaisin viety. */
     function tasaako() {
       return viedyt().length <= 1 && tuodut().length > 0 &&
         summa(tuodut()) === p.noppa + summa(viedyt());
+    }
+    /* ⚠️ PERUSSIIRTOON EI SAA YHDISTÄÄ MUITA SIIRTOJA: jos nopan luvun
+       kokoinen täyte tuodaan, se tulee yksin eikä mitään palauteta
+       (apinavaaka.js 423 ja 830, sama ehto `siirrot`issa). Tämä puuttui
+       3.11.2026 asti, ja mitattuna sen ohi pääsi kolmessa pulmassa. */
+    function perussiirtoOk() {
+      var sis = tuodut();
+      return !(sis.indexOf(p.noppa) >= 0 && (sis.length > 1 || viedyt().length));
     }
     function pizzatSyntyvat() {
       return p.pizzat.every(function (pz) {
         return pz.every(function (a) { return linjalla.indexOf(a) >= 0; });
       });
+    }
+    function kelpaa() { return tasaako() && perussiirtoOk() && pizzatSyntyvat(); }
+
+    function siirtotunnus() {
+      return tuodut().slice().sort(function (a, b) { return a - b; }).join(',') +
+        '|' + (viedyt()[0] || 0);
+    }
+
+    function piirraLaskuri() {
+      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain), p.ratkaisuja, ['siirtoa', 'siirtoja']);
+      var lista = loytolista(avain);
+      loydotEl.innerHTML = lista.length
+        ? lista.map(function (s) { return '<span class="loyto">' + s + '</span>'; }).join('')
+        : '';
     }
 
     function piirra() {
@@ -323,6 +528,7 @@
       }
 
       var sis = tuodut(), ulos = viedyt();
+      uudelleenEl.hidden = !(sis.length || ulos.length);
       vaakaEl.innerHTML = sis.length || ulos.length
         ? '<b>' + (sis.join(' + ') || '0') + ' = ' + summa(sis) + '</b> ' +
           (ulos.length ? '· noppa ' + p.noppa + ' + takaisin ' + ulos.join(' + ') +
@@ -332,23 +538,38 @@
                      : ' <span class="tulos--ohi">ei tasaa</span>')
         : '<span class="tyhja">Napauta täytteitä: varastosta linjastolle ja takaisin.</span>';
 
-      if (ulos.length > 1) {
-        palauteEl.textContent = 'Vaakaan mahtuu vain yksi takaisin vietävä täyte.';
-      } else if (tasaako() && pizzatSyntyvat()) {
-        return onnistui();
-      } else if (tasaako() && !pizzatSyntyvat()) {
-        palauteEl.textContent = 'Vaaka tasaa, mutta kaikkia pizzoja ei vielä voi valmistaa.';
-      } else {
-        palauteEl.textContent = '';
+      if (kelpaa()) onnistui();
+      else {
+        ilmoitettu = null;
+        juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
+        if (ulos.length > 1) {
+          palauteEl.textContent = 'Vaakaan mahtuu vain yksi takaisin vietävä täyte.';
+        } else if (!perussiirtoOk()) {
+          palauteEl.textContent = 'Perussiirtoon ei voi yhdistää muita siirtoja: ' +
+            'nopan luvun kokoinen täyte tulee yksin.';
+        } else if (tasaako() && !pizzatSyntyvat()) {
+          palauteEl.textContent = 'Vaaka tasaa, mutta kaikkia pizzoja ei vielä voi valmistaa.';
+        } else {
+          palauteEl.textContent = '';
+        }
       }
+      piirraLaskuri();
     }
 
     function onnistui() {
+      var tunnus = siirtotunnus();
       juuri.querySelector('.pulma').classList.add('pulma--ratkaistu');
-      palauteEl.innerHTML = '<b>Oikein!</b> ' + (viedyt().length
-        ? summa(tuodut()) + ' = noppa ' + p.noppa + ' + takaisin ' + viedyt()[0]
-        : summa(tuodut()) + ' = noppa ' + p.noppa);
-      juuri.querySelectorAll('.tayte').forEach(function (b) { b.disabled = true; });
+      if (ilmoitettu === tunnus) return;
+      ilmoitettu = tunnus;
+      var teksti = summa(tuodut()) + ' = noppa ' + p.noppa +
+        (viedyt().length ? ' + takaisin ' + viedyt()[0] : '') +
+        '  (' + tuodut().join(' + ') + ')';
+      var laji = lisaaLoyto(avain, tunnus, teksti);
+      var n = loytoja(avain), kaikki = p.ratkaisuja;
+      palauteEl.innerHTML = '<b>Oikein!</b> ' + teksti +
+        (laji === 'tuttu' ? ' Tämän siirron löysit jo.'
+          : (n >= kaikki ? ' Löysit kaikki siirrot!'
+                         : ' Löydätkö vielä toisen siirron?'));
       valmis();
     }
 
@@ -364,8 +585,10 @@
 
     return function koeRatkaisu(siirto, takaisin) {
       linjalla = alku.filter(function (a) { return a !== takaisin; }).concat(siirto);
-      return { oikein: tasaako() && pizzatSyntyvat(),
-               syy: tasaako() ? (pizzatSyntyvat() ? null : 'pizzat') : 'vaaka' };
+      return { oikein: kelpaa(),
+               syy: !tasaako() ? 'vaaka'
+                    : (!perussiirtoOk() ? 'perussiirto'
+                                        : (pizzatSyntyvat() ? null : 'pizzat')) };
     };
   }
 
@@ -376,8 +599,8 @@
     if (tila.ratkotut.indexOf(avain) < 0) {
       tila.ratkotut.push(avain);
       kirjoita(AVAIN + '-ratkotut', tila.ratkotut);
-      paivitaTila();
     }
+    paivitaTila();
   }
 
   function avaa(luukku, nappi) {
@@ -389,17 +612,17 @@
       var lohko = document.createElement('div');
       lohko.className = 'lohko';
       lohko.innerHTML = '<div class="laji">' +
-        (p.laji === 'kortti' ? 'Korttipeli' : 'Lautapeli') +
-        (p.tapa === 'basso' ? ' · Basson tapa' : '') + '</div>';
+        (p.laji === 'kortti' ? 'Korttipeli' : 'Lautapeli') + '</div>';
       var pelialue = document.createElement('div');
       lohko.appendChild(pelialue);
       sisus.appendChild(lohko);
+      var pohja = luukku.paiva + '-' + i;
       var valmis = function () { merkitseRatkaistu(luukku.paiva, i); };
-      if (p.laji === 'kortti') korttipulma(p, pelialue, valmis);
-      else lautapulma(p, pelialue, valmis);
+      if (p.laji === 'kortti') korttipulma(p, pelialue, valmis, pohja);
+      else lautapulma(p, pelialue, valmis, pohja);
       var apu = document.createElement('button');
       apu.className = 'apunappi';
-      apu.textContent = 'Näytä ratkaisu';
+      apu.textContent = 'Jumissa? Näytä yksi ratkaisu';
       apu.addEventListener('click', function () {
         apu.outerHTML = '<p class="ratkaisu">' + p.ratkaisu + '</p>';
       });
@@ -414,6 +637,12 @@
     }
   }
 
+  function loytojaKaikkiaan() {
+    return Object.keys(tila.loydot).reduce(function (s, a) {
+      return s + Object.keys(tila.loydot[a]).length;
+    }, 0);
+  }
+
   function paivitaTila() {
     var tilarivi = document.getElementById('tila');
     var mitaan = tila.data.luukut.some(function (l) { return avautunut(l.paiva); });
@@ -425,7 +654,8 @@
     var pulmia = tila.data.luukut.reduce(function (s, l) { return s + l.pulmat.length; }, 0);
     tilarivi.textContent = (kaikkiAuki() ? 'Esikatselu — kaikki luukut auki. ' : '') +
       'Avattu ' + tila.auki.length + '/24 luukkua · ratkaistu ' +
-      tila.ratkotut.length + '/' + pulmia + ' pulmaa.';
+      tila.ratkotut.length + '/' + pulmia + ' pulmaa · ' +
+      loytojaKaikkiaan() + ' eri ratkaisua löydetty.';
   }
 
   function piirra() {
@@ -453,20 +683,36 @@
   }
 
   /* ---------- itsetesti: ?koe=1 ----------
-   * Ajaa JOKAISEN pulman tallennetun ratkaisun tämän sivun tarkistuksen läpi.
-   * Korttipulmissa tarkistaja on pelin oma `kierrosTarkista`, lautapulmissa
-   * tämän tiedoston oma — ja juuri siksi tämä on olemassa: generaattori
-   * (Python) ja sivu (JS) ovat kaksi toteutusta samasta säännöstä. */
+   * Kolme eri koetta, ja jokainen vastaa eri kysymykseen:
+   *
+   *   1  tallennettu ratkaisu kelpaa sivun tarkistukselle
+   *   2  LAUTAPULMAN RATKAISUJEN MÄÄRÄ: sivu laskee ne itse ja luku on
+   *      verrattava generaattorin lukuun. Tämä on ainoa koe joka näkee jos
+   *      vaa'an sääntö on sivulla löysempi tai tiukempi kuin pelissä —
+   *      yksittäinen oikea ratkaisu menee läpi kummallakin.
+   *   3  BASSON TAVAN OLEMASSAOLO: pelin oma haku (`etsiRatkaisu`) löytää
+   *      Basson tavan ratkaisun tasan niissä pulmissa joissa generaattori
+   *      sanoo niitä olevan. Tämä olisi nähnyt «vähintään / tasan» -eron.
+   *
+   * ⚠️ Jokainen koe kertoo MONTAKO TAPAUSTA se ajoi. Tyhjä sarja näyttää
+   * muuten täsmälleen samalta kuin läpäisty. */
   function koeAjo() {
-    var rivit = [], virheita = 0;
+    var rivit = [], virheita = 0, ajettu = { a: 0, b: 0, c: 0 };
     var piilo = document.createElement('div');
     piilo.style.display = 'none';
     document.body.appendChild(piilo);
+
+    function kirjaa(ok, teksti) {
+      if (!ok) virheita++;
+      rivit.push((ok ? 'OK   ' : '🔴 ') + teksti);
+    }
+
     tila.data.luukut.forEach(function (L) {
       L.pulmat.forEach(function (p, i) {
-        var koe;
+        var tunnus = L.paiva + '/' + (i + 1) + ' ' + p.laji;
+        var pohja = 'koe-' + L.paiva + '-' + i;
         if (p.laji === 'kortti') {
-          koe = korttipulma(p, piilo, function () {});
+          var koe = korttipulma(p, piilo, function () {}, pohja);
           /* ⚠️ JÄRJESTYS LUETAAN LAUSEKKEESTA, EI `kortit`-KENTÄSTÄ. Se on
              lajiteltu monijoukko: luukussa 17 kortit ovat [4, 6] mutta
              lauseke on «6 − 4». Ensimmäinen versio laski 4 − 6 = −2 ja
@@ -477,23 +723,62 @@
             kasi[j] = null;
             kortit.push({ i: j, arvo: arvo });
           });
-          var tulos = koe(kortit, merkitLausekkeesta(p.lauseke, kortit.length),
-                          ryhmatLausekkeesta(p.lauseke));
+          ajettu.a++;
+          kirjaa(koe(kortit, merkitLausekkeesta(p.lauseke, kortit.length),
+                     ryhmatLausekkeesta(p.lauseke), p.tapa).oikein,
+                 tunnus + ' tallennettu ratkaisu (' + p.tapa + ')');
+          /* 3: ONKO BASSON TAPAA. Pelin oma haku (`etsiRatkaisu`) joko löytää
+             tasan `pizza.length` eri arvoa käyttävän ratkaisun tai ei, ja
+             generaattorin luvun pitää sanoa sama. Tämä olisi nähnyt
+             «vähintään / tasan» -eron, ja se ratkaisee tarjotaanko Basson
+             tapaa lainkaan (📐 14 pulmaa 16:sta).
+
+             ⚠️ MÄÄRÄÄ TÄLLÄ EI VOI LASKEA: `etsiRatkaisu` saa käyttää
+             annetusta kädestä osajoukon, joten «löytyi» ei kerro mitä
+             kortteja. Generaattorin luku on eri kysymys (mitkä korttijoukot),
+             ja sen vartija on generaattorin oma tarkistus. */
+          var pelinKasi = p.kasi.map(function (a) {
+            return { arvo: a, fantasia: false };
+          });
+          var r = etsiRatkaisu(pelinKasi, p.arvo, SALLITUT, p.pizza.length, 200000);
+          ajettu.c++;
+          kirjaa(!!(r && r.kortit) === (p.ratkaisujaBasso > 0),
+                 tunnus + ' Basson tapa: haku ' + (r && r.kortit ? 'löysi' : 'ei löytänyt') +
+                 ', luku ' + p.ratkaisujaBasso);
         } else {
-          koe = lautapulma(p, piilo, function () {});
-          tulos = koe(p.siirto, p.takaisin);
+          var lkoe = lautapulma(p, piilo, function () {}, pohja);
+          ajettu.a++;
+          kirjaa(lkoe(p.siirto, p.takaisin).oikein, tunnus + ' tallennettu siirto');
+          /* 2: laske kaikki kelpaavat siirrot sivun omalla tarkistuksella. */
+          var vapaat = [];
+          for (var a = 1; a <= 10; a++) if (p.linjasto.indexOf(a) < 0) vapaat.push(a);
+          var paluut = [0].concat(p.linjasto);
+          var n = 0;
+          for (var maski = 1; maski < (1 << vapaat.length); maski++) {
+            var S = vapaat.filter(function (x, k) { return maski & (1 << k); });
+            for (var t = 0; t < paluut.length; t++) {
+              if (lkoe(S, paluut[t]).oikein) n++;
+            }
+          }
+          ajettu.b++;
+          kirjaa(n === p.ratkaisuja,
+                 tunnus + ' ratkaisujen määrä: sivu ' + n + ', generaattori ' + p.ratkaisuja);
         }
-        if (!tulos.oikein) { virheita++; }
-        rivit.push((tulos.oikein ? 'OK   ' : '🔴 ') + L.paiva + '/' + (i + 1) +
-                   ' ' + p.laji + (tulos.syy ? ' — ' + tulos.syy : ''));
       });
     });
     piilo.remove();
+    /* ⚠️ Löydöt eivät saa jäädä kokeesta muistiin: koe ratkoo joka pulman. */
+    Object.keys(tila.loydot).forEach(function (a) {
+      if (a.indexOf('koe-') === 0) delete tila.loydot[a];
+    });
+    kirjoita(AVAIN + '-loydot', tila.loydot);
+
     var ulos = document.createElement('pre');
     ulos.id = 'koetulos';
     ulos.textContent = (virheita ? '🔴 ' + virheita + ' VIRHETTÄ\n'
-                                 : 'Kaikki ' + rivit.length + ' ratkaisua kelpaavat sivun tarkistukselle\n')
-                       + rivit.join('\n');
+                                 : 'Kaikki ' + rivit.length + ' väitettä pitävät\n') +
+      'tallennetut ' + ajettu.a + ' · lautalaskennat ' + ajettu.b +
+      ' · Basso-haut ' + ajettu.c + '\n' + rivit.join('\n');
     document.body.appendChild(ulos);
   }
 

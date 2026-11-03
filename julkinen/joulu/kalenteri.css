@@ -130,3 +130,18 @@ h1 .r{font-size:.5em;vertical-align:super}
 #koetulos{position:fixed;inset:auto 8px 8px auto;max-height:60vh;overflow:auto;
   background:#fff;color:#111;font:12px/1.4 ui-monospace,monospace;padding:10px;
   border-radius:8px;z-index:99}
+
+/* ---------- tapa, laskuri ja löydöt (3.11.2026) ----------
+   🔵 Marko: «siellähän on useampikin muu ratkaisumahdollisuus. Minusta
+   tähän pitäisi rohkaista.» Laskuri ja löytölista ovat se rohkaisu:
+   luukku ei pääty ensimmäiseen oikeaan vastaukseen. */
+.tapavalinta{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.tapanappi{border:2px solid #ddd6cc;background:#fff;border-radius:9px;
+  font:700 13px/1 inherit;padding:8px 12px;cursor:pointer;color:#555}
+.tapanappi--paalla{border-color:var(--oranssi);background:#fff2e6;color:var(--musta)}
+.nappi--pieni{margin-top:0;padding:8px 12px;font-size:13px}
+.laskuri{margin-top:8px;font-size:13.5px;color:#555}
+.laskuri b{color:var(--oranssi);font-size:15px}
+.loydot{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.loyto{border:1px solid #cfe8d6;background:#eefaf1;border-radius:7px;
+  font:700 12.5px/1 ui-monospace,monospace;padding:5px 7px;color:#17923f}
