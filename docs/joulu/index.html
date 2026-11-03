@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pizza Love® -joulukalenteri</title>
+<meta name="description" content="24 luukkua, 28 matikkapulmaa Pizza Love -kortti- ja lautapelistä. Avaa luukku pizzatehtaan seinästä.">
+<link rel="stylesheet" href="kalenteri.css">
+</head>
+<body>
+<header class="ylaosa">
+  <h1>Pizza&nbsp;Love<span class="r">®</span> -joulukalenteri</h1>
+  <p class="ingressi">Pizzatehtaassa on 24 luukkua. Jokaisen takana on pulma
+     kortti- tai lautapelistä — ja neljän takana kaksi. Pulmat helpottuvat
+     joulua kohti… eivät tietenkään: ne vaikeutuvat.</p>
+  <p class="tila" id="tila"></p>
+</header>
+
+<div class="lautakehys">
+  <div class="lauta" id="lauta">
+    <img src="pelitehdas.webp" alt="Pizza Love -pelilauta: apinoiden pizzatehdas" width="2400" height="1140">
+    <!-- luukut lisätään tähän kalenteri.js:ssä -->
+  </div>
+</div>
+<p class="vihje" id="vihje">Vieritä lautaa sivusuunnassa nähdäksesi koko tehtaan.</p>
+
+<dialog id="arkki" class="arkki">
+  <form method="dialog" class="arkki__sulku"><button aria-label="Sulje">✕</button></form>
+  <div id="arkkiSisus"></div>
+</dialog>
+
+<footer class="alaosa">
+  <a href="../fi/korttipeli.html">Korttipelin säännöt</a>
+  <a href="../fi/lautapeli.html">Lautapelin säännöt</a>
+  <a href="../play/">Pelaa selaimessa</a>
+</footer>
+
+<script src="pulmat.js"></script>
+<script src="kalenteri.js"></script>
+</body>
+</html>

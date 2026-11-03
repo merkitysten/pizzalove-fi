@@ -13,6 +13,9 @@ Taustalla: `../Hankehakemukset/pizzalove_fi_TOIMEKSIANTO.md`.
 | `julkinen/kuvat/`, `julkinen/pdf/` | kuvat ja ladattavat ohjeet |
 | `julkinen/pizzaparty/` | **kopio** pelistä (`../pizzaparty/`). Älä muokkaa täällä. |
 | `rakenna.py` | tekee sivut. Videot, kauppalinkit ja PDF:t on lueteltu tiedoston alussa. |
+| `korttisaannot.py` | korttipelin säännöt A4-PDF:nä kielikohtaisesti (`julkinen/pdf/`) |
+| `tyokalut/joulukalenteri.py` | joulukalenterin 24 luukkua ja 28 pulmaa → `julkinen/joulu/pulmat.json` |
+| `julkinen/joulu/` | joulukalenterisivu (pelilauta taustana, luukut sen päällä) |
 | `docs/` | valmis sivusto, jonka GitHub Pages julkaisee. **Älä muokkaa käsin.** |
 
 ## Muutoksen tekeminen

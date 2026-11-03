@@ -1,0 +1,81 @@
+/* Pizza Love -joulukalenteri. Värit ovat pelin omat (#EE7203 brändioranssi). */
+:root{
+  --oranssi:#EE7203; --musta:#1A1A1A; --valkoinen:#fff;
+  --luukku:  clamp(34px, 3.4vw, 54px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:#14110f; color:#fff; min-height:100vh;
+  background-image:radial-gradient(circle at 20% -10%, #3a2a18 0%, #14110f 55%);
+}
+.ylaosa{max-width:900px;margin:0 auto;padding:28px 18px 14px;text-align:center}
+h1{font-size:clamp(24px,4.2vw,40px);line-height:1.1;letter-spacing:-.01em}
+h1 .r{font-size:.5em;vertical-align:super}
+.ingressi{margin-top:10px;opacity:.85;font-size:clamp(14px,1.6vw,17px);line-height:1.5}
+.tila{margin-top:10px;font-weight:700;color:var(--oranssi);min-height:1.4em}
+.tila a{color:#fff;text-decoration:underline}
+
+/* ⚠️ LAUTA ON LEVEÄ (2,1:1). Puhelimessa koko lauta ruudun levyisenä tekisi
+   luukusta 18 px:n täplän, eli liian pienen osuttavaksi. Siksi lauta vierii
+   sivusuunnassa ja sen korkeus on sidottu näkymään: luukku pysyy sormen
+   kokoisena. Leveällä ruudulla vieritystä ei synny. */
+.lautakehys{overflow-x:auto;overflow-y:hidden;padding:10px 0 4px;-webkit-overflow-scrolling:touch}
+.lauta{position:relative;margin:0 auto;width:min(1400px, 100vw - 24px);min-width:720px}
+.lauta img{display:block;width:100%;height:auto;border-radius:10px;
+  box-shadow:0 14px 40px rgba(0,0,0,.55)}
+
+.luukku{
+  position:absolute;transform:translate(-50%,-50%);
+  width:var(--luukku);height:var(--luukku);border-radius:50%;
+  border:3px solid #fff;background:var(--oranssi);color:#fff;
+  font:800 clamp(15px,1.5vw,22px)/1 inherit;cursor:pointer;
+  box-shadow:0 3px 0 rgba(0,0,0,.35), 0 0 0 3px rgba(0,0,0,.22);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.luukku:hover,.luukku:focus-visible{transform:translate(-50%,-50%) scale(1.12);outline:none}
+.luukku--tupla::after{content:'';position:absolute;inset:-7px;border-radius:50%;
+  border:2px dashed rgba(255,255,255,.75)}
+.luukku--auki{background:#fff;color:var(--oranssi);border-color:var(--oranssi)}
+.luukku--lukossa{background:#6b6b6b;border-color:#cfcfcf;cursor:not-allowed;opacity:.85}
+.luukku--lukossa:hover{transform:translate(-50%,-50%)}
+.vihje{text-align:center;font-size:13px;opacity:.6;margin:4px 0 24px}
+
+/* ⚠️ `margin:auto` ON PAKOLLINEN. Selaimen oma <dialog> keskittyy juuri
+   silla, ja `*{margin:0}` nollasi sen — arkki avautui vasempaan ylakulmaan. */
+.arkki{
+  border:0;border-radius:16px;padding:0;max-width:640px;width:calc(100vw - 28px);
+  margin:auto;max-height:88vh;overflow:auto;
+  background:#fff;color:var(--musta);box-shadow:0 30px 80px rgba(0,0,0,.6)
+}
+.arkki::backdrop{background:rgba(0,0,0,.65)}
+.arkki__sulku{position:absolute;top:8px;right:8px}
+.arkki__sulku button{border:0;background:transparent;font-size:20px;cursor:pointer;
+  color:#888;padding:6px 10px;line-height:1}
+.arkki__sisus{padding:22px 24px 24px}
+.paiva{display:inline-block;background:var(--oranssi);color:#fff;border-radius:999px;
+  padding:3px 14px;font-weight:800;font-size:14px}
+.laji{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--oranssi);margin:18px 0 6px}
+.kysymys{font-size:16px;line-height:1.5}
+.kysymys strong{background:#ffe9d4;padding:0 5px;border-radius:4px}
+.sirut{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.siru{display:inline-flex;align-items:center;gap:6px;border:1px solid #e3e3e3;
+  border-radius:8px;padding:3px 9px 3px 6px;font-size:13px;font-weight:600;background:#fafafa}
+.pallo{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.25);flex:none}
+.otsake{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  opacity:.55;margin-top:10px}
+.nappi{margin-top:14px;border:0;border-radius:10px;background:var(--musta);color:#fff;
+  font:700 15px/1 inherit;padding:11px 18px;cursor:pointer}
+.nappi:hover{background:#333}
+.ratkaisu{margin-top:12px;border-left:4px solid var(--oranssi);background:#fff7f0;
+  padding:12px 14px;border-radius:0 10px 10px 0;font-size:15px;line-height:1.5}
+.ratkaisu b{color:var(--oranssi)}
+.erotin{height:1px;background:#eee;margin:20px 0 4px}
+
+.alaosa{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;
+  padding:10px 18px 40px;font-size:14px}
+.alaosa a{color:#fff;opacity:.75;text-decoration:underline}
+.alaosa a:hover{opacity:1}
+@media (max-width:760px){ .lauta{min-width:860px} }
