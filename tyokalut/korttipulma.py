@@ -104,7 +104,7 @@ def siisti(lauseke):
     return lauseke
 
 
-def ratkaisut(kasi, arvo, vahintaan_eri):
+def ratkaisut(kasi, arvo, tasan_eri):
     """Kaikki kattaukset jotka tuottavat pizzan arvon.
 
     Palauttaa listan (kortit, lauseke) — yksi lauseke korttijoukkoa kohden,
@@ -116,7 +116,12 @@ def ratkaisut(kasi, arvo, vahintaan_eri):
             if osa in nahty:
                 continue
             nahty.add(osa)
-            if len(set(osa)) < vahintaan_eri:
+            # ⚠️ TASAN, EI VAHINTAAN. Pelin oma tarkistus
+            # (`kierrosTarkista`, kierros.js) vaatii etta ERI arvoja on tasan
+            # yhta monta kuin pizzassa taytteita — ei vahintaan. Loysempi
+            # saanto tuottaisi «ratkaisun» jonka peli itse hylkaa, ja
+            # kalenteri kayttaa juuri sita tarkistusta.
+            if tasan_eri and len(set(osa)) != tasan_eri:
                 continue
             L = kaikki_arvot(osa)
             if F(arvo) in L:
@@ -170,7 +175,7 @@ def arvo_pulma(rnd, tapa, kasikoko, pizzan_koko, vahintaan_kortteja=2):
         return None
     pizza = rnd.choice([p for p in PIZZAT if len(p) == pizzan_koko])
     kasi = jaa_kasi(rnd, kasikoko)
-    eri = len(pizza) if tapa == 'basso' else 1
+    eri = len(pizza) if tapa == 'basso' else 0      # 0 = ei rajoitusta
     rat = ratkaisut(kasi, sum(pizza), eri)
     # ⚠️ YKSI KORTTI RIITTAA -> PULMA HYLATAAN, EI RATKAISUA. Ensimmainen
     # versio suodatti vain RATKAISUT, ja silloin kasi jossa on pizzan arvoinen

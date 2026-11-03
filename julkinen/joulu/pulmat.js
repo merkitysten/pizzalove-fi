@@ -244,28 +244,28 @@ window.PULMAT = {
      "laji": "kortti",
      "tapa": "basso",
      "pizza": [
-      2,
-      7
+      1,
+      2
      ],
      "kasi": [
       1,
       1,
-      3,
-      7,
-      7,
-      7,
-      8
+      2,
+      4,
+      4,
+      5,
+      5
      ],
-     "arvo": 9,
-     "kysymys": "Pöydällä on pizza Tomaatti (2) + Rucola (7) — arvo **9**. Kädessäsi ovat Oliivi (1), Oliivi (1), Ananas (3), Rucola (7), Rucola (7), Rucola (7) ja Herkkusieni (8). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
-     "ratkaisu": "1 + 8 = 9  (kortit 1, 8)",
+     "arvo": 3,
+     "kysymys": "Pöydällä on pizza Oliivi (1) + Tomaatti (2) — arvo **3**. Kädessäsi ovat Oliivi (1), Oliivi (1), Tomaatti (2), Homejuusto (4), Homejuusto (4), Katkarapu (5) ja Katkarapu (5). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "1 + 2 = 3  (kortit 1, 2)",
      "kortit": [
       1,
-      8
+      2
      ],
-     "lauseke": "1 + 8",
-     "ratkaisuja": 15,
-     "D": 4.0
+     "lauseke": "1 + 2",
+     "ratkaisuja": 12,
+     "D": 4.3
     }
    ]
   },
@@ -304,27 +304,27 @@ window.PULMAT = {
      "tapa": "basso",
      "pizza": [
       2,
-      4
+      6
      ],
      "kasi": [
       1,
-      1,
-      4,
-      4,
-      5,
-      8,
-      8
+      2,
+      2,
+      2,
+      3,
+      6,
+      7
      ],
-     "arvo": 6,
-     "kysymys": "Pöydällä on pizza Tomaatti (2) + Homejuusto (4) — arvo **6**. Kädessäsi ovat Oliivi (1), Oliivi (1), Homejuusto (4), Homejuusto (4), Katkarapu (5), Herkkusieni (8) ja Herkkusieni (8). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
-     "ratkaisu": "1 + 5 = 6  (kortit 1, 5)",
+     "arvo": 8,
+     "kysymys": "Pöydällä on pizza Tomaatti (2) + Munakoiso (6) — arvo **8**. Kädessäsi ovat Oliivi (1), Tomaatti (2), Tomaatti (2), Tomaatti (2), Ananas (3), Munakoiso (6) ja Rucola (7). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "1 + 7 = 8  (kortit 1, 7)",
      "kortit": [
       1,
-      5
+      7
      ],
-     "lauseke": "1 + 5",
-     "ratkaisuja": 20,
-     "D": 4.0
+     "lauseke": "1 + 7",
+     "ratkaisuja": 9,
+     "D": 4.7
     }
    ]
   },
@@ -362,28 +362,28 @@ window.PULMAT = {
      "laji": "kortti",
      "tapa": "basso",
      "pizza": [
-      3,
-      6
+      1,
+      7
      ],
      "kasi": [
       1,
+      2,
+      2,
       3,
-      4,
-      4,
+      3,
       5,
-      5,
-      7
+      10
      ],
-     "arvo": 9,
-     "kysymys": "Pöydällä on pizza Ananas (3) + Munakoiso (6) — arvo **9**. Kädessäsi ovat Oliivi (1), Ananas (3), Homejuusto (4), Homejuusto (4), Katkarapu (5), Katkarapu (5) ja Rucola (7). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
-     "ratkaisu": "4 + 5 = 9  (kortit 4, 5)",
+     "arvo": 8,
+     "kysymys": "Pöydällä on pizza Oliivi (1) + Rucola (7) — arvo **8**. Kädessäsi ovat Oliivi (1), Tomaatti (2), Tomaatti (2), Ananas (3), Ananas (3), Katkarapu (5) ja Kala (10). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "3 + 5 = 8  (kortit 3, 5)",
      "kortit": [
-      4,
+      3,
       5
      ],
-     "lauseke": "4 + 5",
-     "ratkaisuja": 27,
-     "D": 4.0
+     "lauseke": "3 + 5",
+     "ratkaisuja": 7,
+     "D": 5.0
     }
    ]
   },
@@ -413,38 +413,6 @@ window.PULMAT = {
     },
     {
      "laji": "kortti",
-     "tapa": "basso",
-     "pizza": [
-      2,
-      4
-     ],
-     "kasi": [
-      1,
-      1,
-      2,
-      2,
-      4,
-      7,
-      10
-     ],
-     "arvo": 6,
-     "kysymys": "Pöydällä on pizza Tomaatti (2) + Homejuusto (4) — arvo **6**. Kädessäsi ovat Oliivi (1), Oliivi (1), Tomaatti (2), Tomaatti (2), Homejuusto (4), Rucola (7) ja Kala (10). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
-     "ratkaisu": "2 + 4 = 6  (kortit 2, 4)",
-     "kortit": [
-      2,
-      4
-     ],
-     "lauseke": "2 + 4",
-     "ratkaisuja": 33,
-     "D": 4.0
-    }
-   ]
-  },
-  {
-   "paiva": 13,
-   "pulmat": [
-    {
-     "laji": "kortti",
      "tapa": "helpompi",
      "pizza": [
       4,
@@ -468,6 +436,38 @@ window.PULMAT = {
      "lauseke": "1 + (2 + 6)",
      "ratkaisuja": 9,
      "D": 5.2
+    }
+   ]
+  },
+  {
+   "paiva": 13,
+   "pulmat": [
+    {
+     "laji": "kortti",
+     "tapa": "basso",
+     "pizza": [
+      2,
+      8
+     ],
+     "kasi": [
+      1,
+      1,
+      4,
+      5,
+      5,
+      6,
+      7
+     ],
+     "arvo": 10,
+     "kysymys": "Pöydällä on pizza Tomaatti (2) + Herkkusieni (8) — arvo **10**. Kädessäsi ovat Oliivi (1), Oliivi (1), Homejuusto (4), Katkarapu (5), Katkarapu (5), Munakoiso (6) ja Rucola (7). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "4 + 6 = 10  (kortit 4, 6)",
+     "kortit": [
+      4,
+      6
+     ],
+     "lauseke": "4 + 6",
+     "ratkaisuja": 5,
+     "D": 5.4
     }
    ]
   },
@@ -613,28 +613,28 @@ window.PULMAT = {
      "tapa": "basso",
      "pizza": [
       1,
-      2,
-      7
+      4,
+      5
      ],
      "kasi": [
       1,
+      1,
       2,
-      2,
+      3,
+      4,
       6,
-      7,
-      7,
       9
      ],
      "arvo": 10,
-     "kysymys": "Pöydällä on pizza Oliivi (1) + Tomaatti (2) + Rucola (7) — arvo **10**. Kädessäsi ovat Oliivi (1), Tomaatti (2), Tomaatti (2), Munakoiso (6), Rucola (7), Rucola (7) ja Kinkku (9). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (3). Kortteja saa olla enemmän.",
-     "ratkaisu": "1 + (2 + 7) = 10  (kortit 1, 2, 7)",
+     "kysymys": "Pöydällä on pizza Oliivi (1) + Homejuusto (4) + Katkarapu (5) — arvo **10**. Kädessäsi ovat Oliivi (1), Oliivi (1), Tomaatti (2), Ananas (3), Homejuusto (4), Munakoiso (6) ja Kinkku (9). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (3). Kortteja saa olla enemmän.",
+     "ratkaisu": "1 + (3 + 6) = 10  (kortit 1, 3, 6)",
      "kortit": [
       1,
-      2,
-      7
+      3,
+      6
      ],
-     "lauseke": "1 + (2 + 7)",
-     "ratkaisuja": 21,
+     "lauseke": "1 + (3 + 6)",
+     "ratkaisuja": 18,
      "D": 6.5
     }
    ]
@@ -650,24 +650,24 @@ window.PULMAT = {
       5
      ],
      "kasi": [
+      2,
+      2,
+      2,
+      2,
       3,
-      4,
-      4,
-      4,
-      5,
-      7,
-      9
+      6,
+      10
      ],
      "arvo": 6,
-     "kysymys": "Pöydällä on pizza Oliivi (1) + Katkarapu (5) — arvo **6**. Kädessäsi ovat Ananas (3), Homejuusto (4), Homejuusto (4), Homejuusto (4), Katkarapu (5), Rucola (7) ja Kinkku (9). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
-     "ratkaisu": "9 − 3 = 6  (kortit 3, 9)",
+     "kysymys": "Pöydällä on pizza Oliivi (1) + Katkarapu (5) — arvo **6**. Kädessäsi ovat Tomaatti (2), Tomaatti (2), Tomaatti (2), Tomaatti (2), Ananas (3), Munakoiso (6) ja Kala (10). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "2 × 3 = 6  (kortit 2, 3)",
      "kortit": [
-      3,
-      9
+      2,
+      3
      ],
-     "lauseke": "9 − 3",
-     "ratkaisuja": 25,
-     "D": 7.0
+     "lauseke": "2 × 3",
+     "ratkaisuja": 6,
+     "D": 8.2
     }
    ]
   },
@@ -713,29 +713,27 @@ window.PULMAT = {
      "tapa": "basso",
      "pizza": [
       1,
-      2,
-      6
-     ],
-     "kasi": [
-      1,
-      4,
-      5,
-      6,
-      8,
-      8,
       9
      ],
-     "arvo": 9,
-     "kysymys": "Pöydällä on pizza Oliivi (1) + Tomaatti (2) + Munakoiso (6) — arvo **9**. Kädessäsi ovat Oliivi (1), Homejuusto (4), Katkarapu (5), Munakoiso (6), Herkkusieni (8), Herkkusieni (8) ja Kinkku (9). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (3). Kortteja saa olla enemmän.",
-     "ratkaisu": "4 + (6 − 1) = 9  (kortit 1, 4, 6)",
-     "kortit": [
-      1,
-      4,
-      6
+     "kasi": [
+      2,
+      3,
+      5,
+      5,
+      5,
+      6,
+      9
      ],
-     "lauseke": "4 + (6 − 1)",
-     "ratkaisuja": 28,
-     "D": 9.5
+     "arvo": 10,
+     "kysymys": "Pöydällä on pizza Oliivi (1) + Kinkku (9) — arvo **10**. Kädessäsi ovat Tomaatti (2), Ananas (3), Katkarapu (5), Katkarapu (5), Katkarapu (5), Munakoiso (6) ja Kinkku (9). Millä korteilla valmistat pizzan? Basson tapa: käytä yhtä montaa <b>eri</b> täytettä kuin pizzassa on täytteitä (2). Kortteja saa olla enemmän.",
+     "ratkaisu": "2 × 5 = 10  (kortit 2, 5)",
+     "kortit": [
+      2,
+      5
+     ],
+     "lauseke": "2 × 5",
+     "ratkaisuja": 7,
+     "D": 10.0
     }
    ]
   },

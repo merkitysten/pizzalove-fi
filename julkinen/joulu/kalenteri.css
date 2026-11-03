@@ -79,3 +79,54 @@ h1 .r{font-size:.5em;vertical-align:super}
 .alaosa a{color:#fff;opacity:.75;text-decoration:underline}
 .alaosa a:hover{opacity:1}
 @media (max-width:760px){ .lauta{min-width:860px} }
+
+/* ---------- pulma: oikeat kortit, pelaaja laskee ---------- */
+.lohko{margin-top:4px}
+.pulma{margin-top:6px}
+.kohde{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  background:#faf7f2;border-radius:12px;padding:10px 12px}
+.ohje{flex:1;min-width:180px;font-size:13.5px;line-height:1.45;margin:0}
+.kortti{width:58px;height:auto;border-radius:5px;display:block;
+  box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.kortti--pizza{width:76px}
+.kortti--pieni{width:40px}
+
+.lauseke{display:flex;flex-wrap:wrap;align-items:center;gap:4px;
+  min-height:62px;margin:12px 0 0;padding:8px;border-radius:12px;
+  background:#f4f1ec;border:2px dashed #ddd6cc}
+.lauseke .tyhja,.rivi .tyhja,.vaakarivi .tyhja{font-size:13px;opacity:.55;padding:0 4px}
+.valittu,.kasikortti,.tayte{border:0;background:transparent;padding:0;cursor:pointer;
+  border-radius:6px;line-height:0}
+.valittu--osoitettu .kortti{outline:3px solid var(--oranssi);outline-offset:2px}
+.kasikortti--kaytossa{opacity:.25;cursor:default}
+.merkki{width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--musta);color:#fff;font:800 16px/1 inherit}
+.merkki--tyhja{background:#fff;color:#bbb;border:2px dashed #c9c2b8}
+.sulku{border:0;background:transparent;cursor:pointer;color:var(--oranssi);
+  font:800 26px/1 inherit;padding:0 1px}
+.tyokalut{display:flex;align-items:center;gap:12px;margin-top:8px}
+.sulkunappi{border:2px solid #ddd6cc;background:#fff;border-radius:9px;
+  font:700 14px/1 inherit;padding:8px 12px;cursor:pointer}
+.sulkunappi--paalla{border-color:var(--oranssi);background:#fff2e6}
+.sulkunappi:disabled{opacity:.4;cursor:default}
+.tulos{font:800 20px/1 inherit;min-width:2ch}
+.tulos--osuu{color:#17923f}
+.tulos--ohi{color:#c62828}
+.kasi,.rivi{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tayte--tuotu .kortti{outline:3px solid #17923f;outline-offset:2px}
+.tayte--viety .kortti{opacity:.45}
+.tayte:disabled,.valittu:disabled,.kasikortti:disabled{cursor:default}
+.vaaka{display:flex;align-items:center;gap:10px;margin-top:12px;
+  background:#f4f1ec;border-radius:12px;padding:10px 12px}
+.noppa{flex:none;width:38px;height:38px;border-radius:9px;background:var(--musta);
+  color:#fff;display:grid;place-items:center;font:800 19px/1 inherit}
+.vaakarivi{font-size:13.5px;line-height:1.4}
+.vaakarivi b{font-size:15px}
+.palaute{margin-top:10px;font-size:14px;line-height:1.45;min-height:1.2em}
+.palaute b{color:#17923f}
+.pulma--ratkaistu .lauseke,.pulma--ratkaistu .vaaka{border-color:#17923f;background:#eefaf1}
+.apunappi{margin-top:10px;border:0;background:transparent;color:#888;
+  font:600 13px/1 inherit;text-decoration:underline;cursor:pointer;padding:4px 0}
+#koetulos{position:fixed;inset:auto 8px 8px auto;max-height:60vh;overflow:auto;
+  background:#fff;color:#111;font:12px/1.4 ui-monospace,monospace;padding:10px;
+  border-radius:8px;z-index:99}

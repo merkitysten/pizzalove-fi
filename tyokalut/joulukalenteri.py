@@ -24,6 +24,17 @@ pulmalajien D on kaava. Ramppi on siis «mallin mukaan nouseva», ja se on eri
 asia kuin «lapsesta nouseva». Jos jarjestys tuntuu vaaralta pelatessa, luku
 on vaarassa — ei lapsi.
 
+⚠️ `kysymys`-KENTTA EI OLE SIVUN TEKSTI (3.11.2026). Marko: «ei kerrota vaan
+nayteta kuvin ja laitetaan joulukalenterin avaaja tekemaan ne laskutoimitukset».
+Sivu piirtaa pulman OIKEILLA KORTEILLA ja tarkistaa vastauksen pelin omalla
+`kierrosTarkista`lla; `kysymys` ja `ratkaisu` jaavat tiedostoon ihmisen
+luettavaksi (tarkastuslista, «Nayta ratkaisu» -nappi).
+
+⚠️ BASSON TAPA ON *TASAN* YHTA MONTA ERI TAYTETTA, EI VAHINTAAN. Saanto on
+pelissa (`kierrosTarkista`), ja generaattori oli siita loysempi — peli olisi
+hylannyt oman kalenterinsa ratkaisun. Loytyi vasta kun sivu alkoi kayttaa
+pelin omaa tarkistusta.
+
 ⚠️ JOKAINEN RATKAISU TODENNETAAN ERI KOODILLA KUIN MILLA SE LOYDETTIIN:
 korttipulman lauseke jasennetaan merkkijonosta ja lasketaan murtoluvuilla,
 lautapulman siirto tarkistetaan saannoista. Haku joka tarkistaa itsensa
@@ -293,9 +304,10 @@ def tarkista(luukut):
                         virheet.append('%s: kortti %d ei ole kadessa' % (tunnus, k))
                         break
                     kasi.remove(k)
-                eri = len(p['pizza']) if p['tapa'] == 'basso' else 1
-                if len(set(kaytetyt)) < eri:
-                    virheet.append('%s: Basson tapa vaatii %d eri tayteta' % (tunnus, eri))
+                if p['tapa'] == 'basso' and len(set(kaytetyt)) != len(p['pizza']):
+                    virheet.append('%s: Basson tapa vaatii TASAN %d eri tayteta '
+                                   '(kierrosTarkista), ratkaisussa %d'
+                                   % (tunnus, len(p['pizza']), len(set(kaytetyt))))
                 if p['arvo'] != sum(p['pizza']):
                     virheet.append('%s: pizzan arvo ei ole taytteiden summa' % tunnus)
                 if not 1 <= len(p['pizza']) <= 4 or sum(p['pizza']) > 10:
