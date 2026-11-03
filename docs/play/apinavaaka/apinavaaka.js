@@ -896,6 +896,11 @@
     var omaPulma = null;
     function asetaOmaPulma(q) {
       omaPulma = q ? pulmaksi(q) : null;
+      /* 🔵 Marko 3.11.2026: «Piilota se valikkonappi luukussa.» Valikosta voi
+         vaihtaa pelimuotoa, ja joulukalenterin luukussa se veisi pois siitä
+         pulmasta jota luukku lupaa. Nappi on siis piilossa vain annetussa
+         pulmassa; pelin omalla sivulla se on ennallaan. */
+      if (infoNappi) infoNappi.hidden = !!omaPulma;
       if (omaPulma) { clearTimeout(pulmaAjastin); aloitaPulmat(0, true); }
     }
     juuri.avPulma = asetaOmaPulma;
