@@ -311,8 +311,10 @@ def lataukset(avaimet, nimet, polut):
         if polku.startswith('http'):
             rivit.append('<li><a href="%s"><span>%s</span><small>PDF</small></a></li>' % (polku, e(nimet[a])))
         else:
+            # ?v=-leima: muuttunut PDF haetaan heti, ei selaimen välimuistista (Marko 3.11.2026:
+            # päivitetty sääntö-PDF ei näkynyt)
             rivit.append('<li><a href="../%s" download><span>%s</span><small>PDF %s</small></a></li>' % (
-                polku, e(nimet[a]), koko_mt(polku)))
+                leima(polku), e(nimet[a]), koko_mt(polku)))
     return '<ul class="lataukset">%s</ul>' % ''.join(rivit)
 
 

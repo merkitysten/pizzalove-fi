@@ -218,7 +218,9 @@ def sivu_html(kieli, lahde):
   .huomio {{ display: flex; gap: 2.4mm; align-items: center;
              border-left: .8mm solid {oranssi}; padding: 1.4mm 0 1.4mm 2.2mm }}
   .huomio img {{ width: 17mm; height: auto; flex: none; align-self: flex-end;
-                 margin-bottom: -1.4mm }}  /* rajattu Basso, leikkaus alareunaan (Marko 3.11.2026) */
+                 margin-bottom: calc(-1.4mm - 17mm * .1536) }}
+  /* rajattu Basso: vartalon leikkaus huomion alareunaan, kyynärpää (15,36 % leveydestä)
+     jää sen alapuolelle (Marko 3.11.2026) */
   footer {{ margin-top: 2.6mm; padding-top: 1.4mm;
             border-top: .3mm solid #d8d8d8; font-size: 6.6pt; opacity: .82;
             display: flex; justify-content: space-between; gap: 4mm }}
