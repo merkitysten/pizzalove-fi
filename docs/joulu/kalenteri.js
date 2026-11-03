@@ -6,9 +6,13 @@
  *
  * 🔵 Marko 3.11.2026 (sama päivä): «Siellähän on useampikin muu
  * ratkaisumahdollisuus. Minusta tähän pitäisi rohkaista.»
- * 📐 Mitattu: korttipulmissa on 2–36 ratkaisua, yhteensä 269; lautapulmissa
- * 1–5. Luukku ei siis sulkeudu ensimmäisestä oikeasta vastauksesta vaan
- * laskee montako eri tapaa pelaaja on löytänyt — ja ne jäävät muistiin.
+ * 📐 Mitattu: korttipulmissa on 3–59 eri tapaa (yhteensä 405 vapaalla
+ * tavalla, 92 Basson tavalla), lautapulmissa 1–5. ⚠️ Tässä luki ensin
+ * «2–36, yhteensä 269» — se oli laskettu kädellä joka katkaistiin neljään
+ * korttiin, vaikka peli antaa käyttää koko kättä. Luukku ei sulkeudu
+ * ensimmäisestä oikeasta vastauksesta vaan laskee montako eri tapaa
+ * pelaaja on löytänyt, tarjoaa portaittain uutta tavoitetta — ja pitää
+ * löydetyt lausekkeet näkyvillä.
  *
  * SIKSI TÄMÄ SIVU EI TOTEUTA PELIN SÄÄNTÖJÄ UUDELLEEN:
  *   kortit.js   oikeat kortit ja niiden kuvat (`pizzapakka`, 42 korttia)
@@ -112,6 +116,19 @@
     return tulos;
   }
 
+  var SANA = ['tapaa', 'tapoja'];
+  var SANA_LAUTA = ['siirtoa', 'siirtoja'];
+
+  /* 🔵 Marko: «Ne aikaisemmat eri tavat pitäisi olla jossain näkyvillä
+     siten, että ne muistaa esim. symbolikielen lausekkeina.» Lausekkeet
+     ovat siis listassa sellaisinaan — `4 + 6 = 10`, ei sanallisena
+     selityksenä — ja ne näkyvät koko ajan, myös seuraavaa rakennettaessa. */
+  function loytoRivit(lista, otsake) {
+    if (!lista.length) return '';
+    return '<div class="otsake">' + otsake + '</div>' +
+      lista.map(function (s) { return '<span class="loyto">' + s + '</span>'; }).join('');
+  }
+
   function loytolista(avain) {
     var kaikki = loydetyt(avain), ulos = [];
     Object.keys(kaikki).forEach(function (t) {
@@ -149,28 +166,47 @@
       '.webp" alt="' + t.nimi + ' ' + arvo + '"' + (lisa || '') + '>';
   }
 
-  /* Kehotteen tavoite on PIENI, vaikka tapoja on paljon. 📐 Luukussa 18 on
-     59 eri tapaa, ja «löysit 1/59» lannistaa siinä missä «löysit 1/3»
-     kannustaa — iso luku kuuluu samalle riville tietona, ei vaatimuksena.
-     Pulmissa joissa tapoja on vähemmän tavoite laskee niiden mukaan. */
-  var TAVOITE = 3;
+  /* 🔵 Marko 3.11.2026: «Se kolme tapaa on ihan hyvä alkumotivaatio, mutta
+     sen jälkeen peli voisi tarjota taas uusia.» Tavoite ei siis ole yksi
+     luku vaan PORTAIKKO: kolmen jälkeen kuusi, sitten kymmenen.
+
+     ⚠️ Askel on pieni myös silloin kun tapoja on paljon. 📐 Luukussa 18 on
+     59 eri tapaa, ja «1/59» lannistaa siinä missä «1/3» kannustaa — koko
+     luku kuuluu samalle riville tietona, ei vaatimuksena. Viimeinen askel
+     on aina `kaikki`, joten portaikko ei lupaa enempää kuin on olemassa. */
+  var PORTAAT = [3, 6, 10, 15, 20, 30, 40, 50];
+
+  /* Pienin porras joka on suurempi kuin jo löydetyt — enintään `kaikki`. */
+  function maali(n, kaikki) {
+    for (var i = 0; i < PORTAAT.length; i++) {
+      if (PORTAAT[i] > n && PORTAAT[i] < kaikki) return PORTAAT[i];
+    }
+    return kaikki;
+  }
 
   /* `sana` = [partitiivi yksikkö, partitiivi monikko]: «3 eri tapaa» mutta
      «erilaisia tapoja on 16». Yhdellä muodolla rivi oli «erilaisia tapaa». */
   function laskuriTeksti(n, kaikki, sana) {
-    var maali = Math.min(TAVOITE, kaikki);
-    var muita = kaikki > maali
+    var m = maali(n, kaikki);
+    var muita = kaikki > m
       ? ' · erilaisia ' + sana[1] + ' on kaikkiaan ' + kaikki
       : '';
     if (!n) {
-      return (maali > 1 ? 'Löydätkö <b>' + maali + '</b> eri ' + sana[0] + '?'
-                        : 'Löydätkö ratkaisun?') + muita;
+      return (m > 1 ? 'Löydätkö <b>' + m + '</b> eri ' + sana[0] + '?'
+                    : 'Löydätkö ratkaisun?') + muita;
     }
-    if (n >= maali) {
-      return '<b>' + n + '</b> eri ' + sana[0] + ' löydetty' +
-        (kaikki > n ? ' — jatka jos haluat!' : ' — kaikki! 🍕') + muita;
+    if (n >= kaikki) {
+      return '<b>' + n + '</b> eri ' + sana[0] + ' löydetty — kaikki! 🍕';
     }
-    return '<b>' + n + '/' + maali + '</b> eri ' + sana[0] + ' löydetty' + muita;
+    return '<b>' + n + '/' + m + '</b> eri ' + sana[0] + ' löydetty' + muita;
+  }
+
+  /* Juhlarivi kun porras täyttyy. Palauttaa tyhjän kun ei täyttynyt. */
+  function porrasTeksti(n, kaikki, sana, teko) {
+    if (n >= kaikki || PORTAAT.indexOf(n) < 0) return '';
+    return ' <b>Hienoa, löysit ' + n + ' eri ' + sana[0] +
+      (teko ? ' ' + teko : '') + '!</b> Löydätkö vielä ' +
+      (maali(n, kaikki) - n) + '?';
   }
 
   /* Montako eri tapaa tällä kädellä on. ⚠️ YKSI LÄHDE: luku tulee
@@ -293,11 +329,8 @@
     }
 
     function piirraLaskuri() {
-      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain()), tavoite(p, tapa), ['tapaa', 'tapoja']);
-      var lista = loytolista(avain());
-      loydotEl.innerHTML = lista.length
-        ? lista.map(function (s) { return '<span class="loyto">' + s + '</span>'; }).join('')
-        : '';
+      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain()), tavoite(p, tapa), SANA);
+      loydotEl.innerHTML = loytoRivit(loytolista(avain()), 'Löytämäsi tavat');
     }
 
     function piirra() {
@@ -388,12 +421,14 @@
       var teksti = kierrosLauseke(v).trim() + ' = ' + p.arvo;
       var laji = lisaaLoyto(avain(), tunnus, teksti);
       var n = loytoja(avain()), kaikki = tavoite(p, tapa);
+      var porras = porrasTeksti(n, kaikki, SANA, 'valmistaa pizza');
       palauteEl.innerHTML = laji === 'uusi'
-        ? '<b>Oikein!</b> ' + teksti +
-          (n >= kaikki ? ' Löysit kaikki tavat!' : ' Löydätkö vielä toisen tavan?')
+        ? '<b>Oikein!</b> ' + teksti + '.' +
+          (porras || (n >= kaikki ? ' Löysit kaikki tavat!'
+                                  : ' Löydätkö vielä toisen tavan?'))
         : (laji === 'uusi-lauseke'
-            ? '<b>Oikein!</b> ' + teksti + ' Samat kortit, uusi lauseke.'
-            : '<b>Oikein!</b> ' + teksti + ' Tämän tavan löysit jo.');
+            ? '<b>Oikein!</b> ' + teksti + '. Samat kortit, uusi lauseke.'
+            : '<b>Oikein!</b> ' + teksti + '. Tämän tavan löysit jo.');
       valmis();
     }
 
@@ -501,11 +536,8 @@
     }
 
     function piirraLaskuri() {
-      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain), p.ratkaisuja, ['siirtoa', 'siirtoja']);
-      var lista = loytolista(avain);
-      loydotEl.innerHTML = lista.length
-        ? lista.map(function (s) { return '<span class="loyto">' + s + '</span>'; }).join('')
-        : '';
+      laskuriEl.innerHTML = laskuriTeksti(loytoja(avain), p.ratkaisuja, SANA_LAUTA);
+      loydotEl.innerHTML = loytoRivit(loytolista(avain), 'Löytämäsi siirrot');
     }
 
     function piirra() {
@@ -566,10 +598,11 @@
         '  (' + tuodut().join(' + ') + ')';
       var laji = lisaaLoyto(avain, tunnus, teksti);
       var n = loytoja(avain), kaikki = p.ratkaisuja;
-      palauteEl.innerHTML = '<b>Oikein!</b> ' + teksti +
+      var porras = porrasTeksti(n, kaikki, SANA_LAUTA, '');
+      palauteEl.innerHTML = '<b>Oikein!</b> ' + teksti + '.' +
         (laji === 'tuttu' ? ' Tämän siirron löysit jo.'
-          : (n >= kaikki ? ' Löysit kaikki siirrot!'
-                         : ' Löydätkö vielä toisen siirron?'));
+          : (porras || (n >= kaikki ? ' Löysit kaikki siirrot!'
+                                    : ' Löydätkö vielä toisen siirron?')));
       valmis();
     }
 
@@ -618,15 +651,13 @@
       sisus.appendChild(lohko);
       var pohja = luukku.paiva + '-' + i;
       var valmis = function () { merkitseRatkaistu(luukku.paiva, i); };
+      /* ⚠️ EI «NÄYTÄ RATKAISU» -NAPPIA (Marko 3.11.2026). Kun tapoja on
+         kymmeniä, valmis vastaus ei auta jumista vaan ohittaa koko pulman —
+         ja se on ristiriidassa sen kanssa että luukku pyytää etsimään
+         useamman tavan. `p.ratkaisu` jää dataan ihmisen luettavaksi
+         (tarkastuslista, `sisalto/joulukalenteri-fi.json`). */
       if (p.laji === 'kortti') korttipulma(p, pelialue, valmis, pohja);
       else lautapulma(p, pelialue, valmis, pohja);
-      var apu = document.createElement('button');
-      apu.className = 'apunappi';
-      apu.textContent = 'Jumissa? Näytä yksi ratkaisu';
-      apu.addEventListener('click', function () {
-        apu.outerHTML = '<p class="ratkaisu">' + p.ratkaisu + '</p>';
-      });
-      lohko.appendChild(apu);
     });
     document.getElementById('arkki').showModal();
     if (tila.auki.indexOf(luukku.paiva) < 0) {
