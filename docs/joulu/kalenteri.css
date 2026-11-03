@@ -76,10 +76,6 @@ h1 .r{font-size:.5em;vertical-align:super}
 .alaosa a{color:#fff;opacity:.75;text-decoration:underline}
 .alaosa a:hover{opacity:1}
 @media (max-width:760px){ .lauta{min-width:860px} }
-@media (max-width:420px){
-  .vaaka__tanko{gap:18px}
-  .vaaka__sisus .kortti{width:26px}
-}
 
 /* ---------- pulma: oikeat kortit, pelaaja laskee ---------- */
 .lohko{margin-top:4px}
@@ -95,7 +91,7 @@ h1 .r{font-size:.5em;vertical-align:super}
 .lauseke{display:flex;flex-wrap:wrap;align-items:center;gap:4px;
   min-height:62px;margin:12px 0 0;padding:8px;border-radius:12px;
   background:#f4f1ec;border:2px dashed #ddd6cc}
-.lauseke .tyhja,.rivi .tyhja,.vaaka__sisus .tyhja{font-size:12px;opacity:.55;padding:0 4px}
+.lauseke .tyhja{font-size:12px;opacity:.55;padding:0 4px}
 .valittu,.kasikortti,.tayte{border:0;background:transparent;padding:0;cursor:pointer;
   border-radius:6px;line-height:0}
 .valittu--osoitettu .kortti{outline:3px solid var(--oranssi);outline-offset:2px}
@@ -113,45 +109,17 @@ h1 .r{font-size:.5em;vertical-align:super}
 .tulos{font:800 20px/1 inherit;min-width:2ch}
 .tulos--osuu{color:#17923f}
 .tulos--ohi{color:#c62828}
-.kasi,.rivi{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.tayte--tuotu .kortti{outline:3px solid #17923f;outline-offset:2px}
-.tayte--viety .kortti{opacity:.45}
-.tayte:disabled,.valittu:disabled,.kasikortti:disabled{cursor:default}
-/* ---------- vaaka (3.11.2026) ----------
-   🔵 Marko: «aika sekava, kun tuossa puhutaan jostain vaa'asta vaikka
-   siinä ei ole ollenkaan mitään vaakaa näkyvillä.» Nyt palkki kallistuu
-   ja kupit roikkuvat sen päistä, kuten lautapelin apinavaaassa. Kupit
-   kierretään vastakkaiseen suuntaan, jotta kortit pysyvät pystyssä. */
-.vaaka{position:relative;margin:14px 0 6px;padding:4px 16px 32px}
-.vaaka__tanko{position:relative;z-index:1;display:flex;justify-content:space-between;
-  gap:34px;border-top:7px solid var(--musta);border-radius:4px;
-  transform-origin:50% 0;transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
-.vaaka__kuppi{position:relative;flex:1 1 0;min-width:0;margin-top:14px;background:#f4f1ec;
-  border:2px solid #ddd6cc;border-top:0;border-radius:0 0 16px 16px;
-  padding:8px 8px 10px;text-align:center;
-  transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
-.vaaka__kuppi::before{content:'';position:absolute;top:-14px;width:2px;height:14px;
-  background:#c9c2b8}                                    /* naru palkkiin */
-.vaaka__tanko>.vaaka__kuppi:first-child::before{left:12%}
-.vaaka__tanko>.vaaka__kuppi:last-child::before{right:12%}
-.vaaka__sisus{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;
-  align-items:center;min-height:38px}
-.vaaka__sisus .kortti{width:30px}
-.vaaka__noppa{width:34px;height:auto}
-.vaaka__termit{margin-top:6px;font-size:11.5px;color:#777;line-height:1.3}
-.vaaka__luku{font:800 17px/1.1 inherit;margin-top:2px}
-.vaaka__pylvas{position:absolute;left:50%;top:4px;width:10px;height:112px;margin-left:-5px;
-  background:var(--musta);border-radius:0 0 4px 4px;z-index:0}
-.vaaka__pylvas::after{content:'';position:absolute;left:50%;bottom:-6px;width:56px;height:8px;
-  margin-left:-28px;background:var(--musta);border-radius:4px}
-.vaaka__merkki{position:absolute;left:50%;top:-16px;margin-left:-16px;width:32px;height:32px;
-  border-radius:50%;background:var(--musta);color:#fff;display:grid;place-items:center;
-  font:800 17px/1 inherit;z-index:2}
-.vaaka__merkki--tasan{background:#17923f}
+.kasi{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.valittu:disabled,.kasikortti:disabled{cursor:default}
+/* ---------- upotettu apinavaaka (3.11.2026) ----------
+   🔵 Marko: «Käytä sitä meidän tekemää oikeaa noppaa ja niitä täytetorneja,
+   eikä pelikortteja. — — Ja myös se apinavaaka käyttöön.» Peli tuo omat
+   tyylinsä (`apinavaaka.css`); tässä on vain sen paikka arkin sisällä. */
+.peli{margin:14px 0 6px}
+.peli .av{max-width:100%}
 .palaute{margin-top:10px;font-size:14px;line-height:1.45;min-height:1.2em}
 .palaute b{color:#17923f}
 .pulma--ratkaistu .lauseke{border-color:#17923f;background:#eefaf1}
-.pulma--ratkaistu .vaaka__kuppi{border-color:#17923f;background:#eefaf1}
 #koetulos{position:fixed;inset:auto 8px 8px auto;max-height:60vh;overflow:auto;
   background:#fff;color:#111;font:12px/1.4 ui-monospace,monospace;padding:10px;
   border-radius:8px;z-index:99}

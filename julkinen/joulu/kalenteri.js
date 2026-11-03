@@ -36,15 +36,17 @@
  * ensin pelaajan puolesta; nyt se on nappi, ja se tarjotaan vain kun sellainen
  * ratkaisu on olemassa (📐 14 korttipulmaa 16:sta).
  *
- * ⚠️ LAUTAPULMAN TARKISTUS ON TÄSSÄ TIEDOSTOSSA, KORTTIPULMAN EI. Vaa'an
- * sääntö on apinavaaan sisällä 2 143 rivin komponentissa eikä omana
- * moduulinaan, joten sitä ei voi kutsua tänne. Se on kirjoitettu tähän
- * uudelleen — ja juuri siksi `?koe=1` LASKEE lautapulmien ratkaisut tämän
- * sivun tarkistuksella ja vertaa lukua generaattorin lukuun. Kaksi
- * toteutusta ajautuu erilleen, ellei sitä mitata, ja niin kävi:
- * 📐 «perussiirtoon ei saa yhdistää muita siirtoja» (apinavaaka.js 423, 830)
- * puuttui tästä tiedostosta 3.11.2026 asti, ja mitattuna se oli
- * saavutettavissa kolmessa lautapulmassa (8, 10, 24).
+ * ⚠️ LAUTAPULMA ON PELI ITSE (3.11.2026). Luukku upottaa
+ * `julkinen/play/apinavaaka/`n ja antaa sille yhden pulman, joten vaa'an
+ * säännöt, 3D-noppa ja täytetornit tulevat pelistä eivätkä tästä
+ * tiedostosta. Ennen tätä sivu piirsi oman vaakansa ja tarkisti siirrot
+ * itse — ja se ajautui erilleen: 📐 «perussiirtoon ei saa yhdistää muita
+ * siirtoja» (apinavaaka.js 423, 830) puuttui tästä tiedostosta, ja
+ * mitattuna sen ohi pääsi kolmessa lautapulmassa (8, 10, 24).
+ *
+ * `lautaKelpaa` jäi tänne, mutta sen tehtävä on toinen: `?koe=1` laskee
+ * sillä montako kelvollista siirtoa pulmassa on ja vertaa lukua
+ * generaattorin lupaamaan. Se vartioi siis DATAA, ei käyttöliittymää.
  *
  * ⚠️ LUUKKUJEN PAIKAT OVAT ENSIMMÄINEN VEDOS. Pyörä (oikea yläkulma) ja
  * varastopylpyrät (alalaita, pelin omat numerot 1–10) on jätetty vapaaksi.
@@ -464,184 +466,90 @@
     };
   }
 
-  /* ---------- lautapulma: vaaka, varasto ja linjasto ---------- */
+  /* ---------- lautapulma: PELIN OMA APINAVAAKA ----------
+   * 🔵 Marko 3.11.2026: «Käytä sitä meidän tekemää oikeaa noppaa ja niitä
+   * täytetorneja, eikä pelikortteja.» — «Ja myös se apinavaaka käyttöön.»
+   *
+   * Luukku ei siis piirrä enää omaa vaakaansa, vaan tähän upotetaan
+   * `julkinen/play/apinavaaka/` sellaisenaan: sama apina, sama 3D-noppa
+   * (`noppa3d.js`), samat täytetornit ja samat säännöt. Kalenteri antaa sille
+   * yhden pulman (`avPulma({d, lin, pizzat})`) ja kuuntelee tapahtumaa
+   * `apinavaaka-siirto`; kaiken muun tekee peli.
+   *
+   * ⚠️ YKSI ILMENTYMÄ, JOTA SIIRRETÄÄN LUUKUSTA TOISEEN. `Apinavaaka`
+   * lisää ikkunaan resize-kuuntelijat eikä pura niitä, joten uusi ilmentymä
+   * joka luukun avauksella jättäisi kuolleita kuuntelijoita. Kalenterissa on
+   * korkeintaan yksi lautapulma per luukku, joten yksi riittää.
+   */
+
+  var av = { el: null, kuuntelija: null };
+
+  function apinavaakaElementti() {
+    if (av.el) return av.el;
+    av.el = document.createElement('div');
+    av.el.className = 'apinavaaka';
+    av.el.setAttribute('data-kieli', 'fi');
+    av.el.addEventListener('apinavaaka-siirto', function (e) {
+      if (av.kuuntelija) av.kuuntelija(e.detail);
+    });
+    return av.el;
+  }
+
+  /* Siirron kelpoisuus ILMAN komponenttia — vain `?koe=1`:tä varten.
+     ⚠️ Peli tarkistaa siirrot itse; tämä on olemassa jotta generaattorin
+     lupaama ratkaisujen MÄÄRÄ voidaan laskea ja verrata. Sääntö on sama
+     kuin `pulmadata.py`:n `siirrot`issa, perussiirto mukaan lukien. */
+  function lautaKelpaa(p, S, t) {
+    var summa = S.reduce(function (a, b) { return a + b; }, 0);
+    if (summa !== p.noppa + (t || 0)) return false;
+    if (S.indexOf(p.noppa) >= 0 && (S.length > 1 || t)) return false;
+    if (S.some(function (x) { return p.linjasto.indexOf(x) >= 0; })) return false;
+    if (t && p.linjasto.indexOf(t) < 0) return false;
+    var uusi = p.linjasto.filter(function (x) { return x !== t; }).concat(S);
+    return p.pizzat.every(function (pz) {
+      return pz.every(function (x) { return uusi.indexOf(x) >= 0; });
+    });
+  }
 
   function lautapulma(p, juuri, valmis, pohja) {
-    var alku = p.linjasto.slice();
-    var linjalla = alku.slice();      /* pelaajan muokkaama tila */
-    var ilmoitettu = null;
     var avain = loytoAvain(pohja, 'lauta');
 
     juuri.innerHTML =
       '<div class="pulma">' +
       '  <div class="kohde">' +
       p.pizzat.map(function (x) { return pizzakuva(x); }).join('') +
-      '    <p class="ohje">Siirrä täytteet niin, että nämä voi valmistaa ja ' +
-      '       <b>vaaka tasaa</b>: sisään tuotujen summa = noppa + takaisin viety.</p>' +
+      '    <p class="ohje">Valmista nämä pizzat. Heitä noppa, siirrä täytetornit ' +
+      '       varastosta linjastolle — ja saa apinan vaaka tasapainoon.</p>' +
       '  </div>' +
-      '  <div class="vaaka" data-vaaka></div>' +
-      '  <div class="otsake">Linjasto</div><div class="rivi" data-linja></div>' +
-      '  <div class="otsake">Varasto</div><div class="rivi" data-varasto></div>' +
+      '  <div class="peli" data-peli></div>' +
       '  <p class="palaute" data-palaute></p>' +
       '  <div class="laskuri" data-laskuri></div>' +
       '  <div class="loydot" data-loydot></div>' +
-      '  <button type="button" class="nappi nappi--pieni" data-uudelleen hidden>Kokeile toista tapaa</button>' +
       '</div>';
 
-    var linjaEl = juuri.querySelector('[data-linja]');
-    var varastoEl = juuri.querySelector('[data-varasto]');
-    var vaakaEl = juuri.querySelector('[data-vaaka]');
     var palauteEl = juuri.querySelector('[data-palaute]');
     var laskuriEl = juuri.querySelector('[data-laskuri]');
     var loydotEl = juuri.querySelector('[data-loydot]');
-    var uudelleenEl = juuri.querySelector('[data-uudelleen]');
 
-    uudelleenEl.addEventListener('click', function () {
-      linjalla = alku.slice();
-      ilmoitettu = null;
-      palauteEl.innerHTML = '';
-      juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
-      piirra();
-    });
-
-    function tuodut() {
-      return linjalla.filter(function (a) { return alku.indexOf(a) < 0; });
-    }
-    function viedyt() {
-      return alku.filter(function (a) { return linjalla.indexOf(a) < 0; });
-    }
-    function summa(l) { return l.reduce(function (a, b) { return a + b; }, 0); }
-
-    /* Vaaka: sisään tuotujen summa = noppa + yksi takaisin viety. */
-    function tasaako() {
-      return viedyt().length <= 1 && tuodut().length > 0 &&
-        summa(tuodut()) === p.noppa + summa(viedyt());
-    }
-    /* ⚠️ PERUSSIIRTOON EI SAA YHDISTÄÄ MUITA SIIRTOJA: jos nopan luvun
-       kokoinen täyte tuodaan, se tulee yksin eikä mitään palauteta
-       (apinavaaka.js 423 ja 830, sama ehto `siirrot`issa). Tämä puuttui
-       3.11.2026 asti, ja mitattuna sen ohi pääsi kolmessa pulmassa. */
-    function perussiirtoOk() {
-      var sis = tuodut();
-      return !(sis.indexOf(p.noppa) >= 0 && (sis.length > 1 || viedyt().length));
-    }
-    function pizzatSyntyvat() {
-      return p.pizzat.every(function (pz) {
-        return pz.every(function (a) { return linjalla.indexOf(a) >= 0; });
-      });
-    }
-    function kelpaa() { return tasaako() && perussiirtoOk() && pizzatSyntyvat(); }
-
-    function siirtotunnus() {
-      return tuodut().slice().sort(function (a, b) { return a - b; }).join(',') +
-        '|' + (viedyt()[0] || 0);
-    }
-
-    /* 🔵 Marko 3.11.2026: «Tämä on nyt aika sekava, kun tuossa puhutaan
-       jostain vaa'asta vaikka siinä ei ole ollenkaan mitään vaakaa
-       näkyvillä.» Rivi «0 = 0 · noppa 3 + takaisin 5 = 8 ei tasaa» kertoi
-       sanoin sen minkä lautapelissä NÄKEE: apinan vaaka kallistuu.
-
-       Nyt kupit ovat ruudulla ja palkki kallistuu. Puolet ovat samat kuin
-       pelissä (apinavaaka.js): VASEN = noppa + takaisin viedyt, OIKEA =
-       linjastolle tuodut, kulma = (oikea − vasen) × 2,2 enintään 9°, ja
-       keskellä sama vertailumerkki jonka apina näyttää kielellään.
-       Noppa on pelin oma tahkokuva `noppa/<luku>.svg`, ei piirretty luku. */
-    function piirraVaaka() {
-      var sis = tuodut(), ulos = viedyt();
-      var vasen = p.noppa + summa(ulos), oikea = summa(sis);
-      var kulma = Math.max(-VAAKA_KULMA,
-                  Math.min(VAAKA_KULMA, (oikea - vasen) * 2.2));
-      var merkki = vasen === oikea ? '=' : (vasen < oikea ? '<' : '>');
-
-      function kuppi(sisus, termit, luku, tyhja) {
-        return '<div class="vaaka__kuppi" style="transform:rotate(' +
-          (-kulma).toFixed(1) + 'deg)">' +
-          '<div class="vaaka__sisus">' + (sisus || '<span class="tyhja">' + tyhja + '</span>') + '</div>' +
-          '<div class="vaaka__termit">' + termit + '</div>' +
-          '<div class="vaaka__luku">' + luku + '</div></div>';
-      }
-
-      var noppaKuva = '<img class="vaaka__noppa" src="' + KUVAT +
-        'apinavaaka/noppa/' + p.noppa + '.svg" alt="Noppa ' + p.noppa + '">';
-      var vasenSisus = noppaKuva + ulos.map(function (a) {
-        return taytekuva(a, 'kortti kortti--pieni');
-      }).join('');
-      var oikeaSisus = sis.map(function (a) {
-        return taytekuva(a, 'kortti kortti--pieni');
-      }).join('');
-
-      vaakaEl.innerHTML =
-        '<div class="vaaka__tanko" style="transform:rotate(' + kulma.toFixed(1) + 'deg)">' +
-        kuppi(vasenSisus, 'noppa ' + p.noppa +
-              (ulos.length ? ' + takaisin ' + ulos.join(' + ') : ''), vasen) +
-        kuppi(oikeaSisus, sis.length ? sis.join(' + ') : '', oikea,
-              'tuo täytteitä') +
-        '</div>' +
-        '<div class="vaaka__pylvas"><span class="vaaka__merkki' +
-        (merkki === '=' ? ' vaaka__merkki--tasan' : '') + '">' + merkki +
-        '</span></div>';
-      vaakaEl.setAttribute('aria-label', 'Vaaka: noppa ' + p.noppa +
-        (ulos.length ? ' ja takaisin viedyt ' + ulos.join(', ') : '') +
-        ' yhteensä ' + vasen + ', linjastolle tuodut yhteensä ' + oikea + '. ' +
-        (vasen === oikea ? 'Vaaka tasaa.' : 'Vaaka ei tasaa.'));
-    }
+    juuri.querySelector('[data-peli]').appendChild(apinavaakaElementti());
+    if (typeof apinavaakaKaynnista === 'function') apinavaakaKaynnista();
+    if (av.el.avPulma) av.el.avPulma({ d: p.noppa, lin: p.linjasto, pizzat: p.pizzat });
+    /* Komponentti mitoittaa itsensä ikkunan mukaan; siirto uuteen luukkuun
+       ei laukaise sitä, joten nykäistään. */
+    setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 0);
 
     function piirraLaskuri() {
       laskuriEl.innerHTML = laskuriTeksti(loytoja(avain), p.ratkaisuja, SANA_LAUTA);
       loydotEl.innerHTML = loytoRivit(loytolista(avain), 'Löytämäsi siirrot');
     }
 
-    function piirra() {
-      linjaEl.innerHTML = linjalla.sort(function (a, b) { return a - b; })
-        .map(function (a) {
-          var uusi = alku.indexOf(a) < 0;
-          return '<button type="button" class="tayte' + (uusi ? ' tayte--tuotu' : '') +
-            '" data-pois="' + a + '" aria-label="Vie ' + nimiArvo(a) +
-            ' takaisin varastoon">' + taytekuva(a, 'kortti') + '</button>';
-        }).join('') || '<span class="tyhja">Linjasto on tyhjä</span>';
-
-      varastoEl.innerHTML = '';
-      for (var a = 1; a <= 10; a++) {
-        if (linjalla.indexOf(a) >= 0) continue;
-        var viety = alku.indexOf(a) >= 0;
-        varastoEl.innerHTML += '<button type="button" class="tayte' +
-          (viety ? ' tayte--viety' : '') + '" data-sisaan="' + a +
-          '" aria-label="Siirrä ' + nimiArvo(a) + ' linjastolle">' +
-          taytekuva(a, 'kortti') + '</button>';
-      }
-
-      uudelleenEl.hidden = !(tuodut().length || viedyt().length);
-      piirraVaaka();
-
-      if (kelpaa()) onnistui();
-      else {
-        ilmoitettu = null;
-        juuri.querySelector('.pulma').classList.remove('pulma--ratkaistu');
-        if (viedyt().length > 1) {
-          palauteEl.textContent = 'Vaakaan mahtuu vain yksi takaisin vietävä täyte.';
-        } else if (!perussiirtoOk()) {
-          palauteEl.textContent = 'Perussiirtoon ei voi yhdistää muita siirtoja: ' +
-            'nopan luvun kokoinen täyte tulee yksin.';
-        } else if (tasaako() && !pizzatSyntyvat()) {
-          palauteEl.textContent = 'Vaaka tasaa, mutta kaikkia pizzoja ei vielä voi valmistaa.';
-        } else {
-          palauteEl.textContent = '';
-        }
-      }
-      piirraLaskuri();
-    }
-
-    function onnistui() {
-      var tunnus = siirtotunnus();
-      juuri.querySelector('.pulma').classList.add('pulma--ratkaistu');
-      if (ilmoitettu === tunnus) return;
-      ilmoitettu = tunnus;
-      /* Lauseke sen muotoisena kuin vaaka sen näyttää: vasen puoli = oikea.
-         «3 = noppa 3 (1 + 2)» luki summan ensin ja kortit sulkeissa. */
-      var teksti = tuodut().join(' + ') + ' = ' + summa(tuodut()) +
-        ' · noppa ' + p.noppa +
-        (viedyt().length ? ' + takaisin ' + viedyt()[0] : '');
+    av.kuuntelija = function (siirto) {
+      var S = siirto.oikea.slice().sort(function (a, b) { return a - b; });
+      var t = siirto.vasen[0] || 0;
+      if (!lautaKelpaa(p, S, t)) return;        /* välisiirto, ei vielä ratkaisu */
+      var tunnus = S.join(',') + '|' + t;
+      var teksti = S.join(' + ') + ' = ' + S.reduce(function (a, b) { return a + b; }, 0) +
+        ' · noppa ' + p.noppa + (t ? ' + takaisin ' + t : '');
       var laji = lisaaLoyto(avain, tunnus, teksti);
       var n = loytoja(avain), kaikki = p.ratkaisuja;
       var porras = porrasTeksti(n, kaikki, SANA_LAUTA, '');
@@ -649,25 +557,16 @@
         (laji === 'tuttu' ? ' Tämän siirron löysit jo.'
           : (porras || (n >= kaikki ? ' Löysit kaikki siirrot!'
                                     : ' Löydätkö vielä toisen siirron?')));
+      piirraLaskuri();
       valmis();
-    }
+    };
 
-    juuri.addEventListener('click', function (e) {
-      var el = e.target.closest('[data-sisaan],[data-pois]');
-      if (!el || el.disabled) return;
-      var a = +(el.dataset.sisaan || el.dataset.pois);
-      if (el.dataset.sisaan !== undefined) linjalla.push(a);
-      else linjalla.splice(linjalla.indexOf(a), 1);
-      piirra();
-    });
-    piirra();
+    piirraLaskuri();
 
+    /* `?koe=1` kysyy kelpaako siirto — ilman komponenttia. */
     return function koeRatkaisu(siirto, takaisin) {
-      linjalla = alku.filter(function (a) { return a !== takaisin; }).concat(siirto);
-      return { oikein: kelpaa(),
-               syy: !tasaako() ? 'vaaka'
-                    : (!perussiirtoOk() ? 'perussiirto'
-                                        : (pizzatSyntyvat() ? null : 'pizzat')) };
+      var ok = lautaKelpaa(p, siirto.slice().sort(function (a, b) { return a - b; }), takaisin || 0);
+      return { oikein: ok, syy: ok ? null : 'ei kelpaa' };
     };
   }
 
@@ -823,10 +722,16 @@
                  tunnus + ' Basson tapa: haku ' + (r && r.kortit ? 'löysi' : 'ei löytänyt') +
                  ', luku ' + p.ratkaisujaBasso);
         } else {
-          var lkoe = lautapulma(p, piilo, function () {}, pohja);
+          /* ⚠️ LAUTAPULMAA EI MOUNTATA KOKEESEEN. Peli (apinavaaka) on yksi
+             ilmentymä jota siirretään luukusta toiseen; kahdentoista
+             mounttaus peräkkäin hiljaiseen div:iin ei mittaisi mitään ja
+             jättäisi pelin väärään paikkaan. Koe kysyy sen sijaan suoraan
+             sääntöfunktiolta — ja sen tehtävä onkin vartioida GENERAATTORIN
+             lukua, ei käyttöliittymää: säännöt ovat nyt pelin sisällä. */
           ajettu.a++;
-          kirjaa(lkoe(p.siirto, p.takaisin).oikein, tunnus + ' tallennettu siirto');
-          /* 2: laske kaikki kelpaavat siirrot sivun omalla tarkistuksella. */
+          kirjaa(lautaKelpaa(p, p.siirto.slice().sort(function (x, y) { return x - y; }),
+                             p.takaisin || 0),
+                 tunnus + ' tallennettu siirto');
           var vapaat = [];
           for (var a = 1; a <= 10; a++) if (p.linjasto.indexOf(a) < 0) vapaat.push(a);
           var paluut = [0].concat(p.linjasto);
@@ -834,12 +739,12 @@
           for (var maski = 1; maski < (1 << vapaat.length); maski++) {
             var S = vapaat.filter(function (x, k) { return maski & (1 << k); });
             for (var t = 0; t < paluut.length; t++) {
-              if (lkoe(S, paluut[t]).oikein) n++;
+              if (lautaKelpaa(p, S, paluut[t])) n++;
             }
           }
           ajettu.b++;
           kirjaa(n === p.ratkaisuja,
-                 tunnus + ' ratkaisujen määrä: sivu ' + n + ', generaattori ' + p.ratkaisuja);
+                 tunnus + ' ratkaisujen määrä: sääntö ' + n + ', generaattori ' + p.ratkaisuja);
         }
       });
     });

@@ -446,14 +446,13 @@
     [{ d: 9, lin: [3, 4, 6, 10], pizzat: [[1, 7]] }, { d: 10, lin: [5, 7], pizzat: [[1, 2, 5]] }, { d: 9, lin: [1, 3, 8], pizzat: [[2, 5]] }, { d: 7, lin: [1, 8], pizzat: [[1, 2, 3]] }, { d: 9, lin: [4, 5], pizzat: [[1, 3, 4]] }, { d: 9, lin: [4, 6], pizzat: [[1, 2, 6]] }, { d: 8, lin: [4, 5], pizzat: [[2, 7]] }, { d: 10, lin: [3, 5, 6, 7], pizzat: [[1, 2, 4]] }, { d: 6, lin: [7, 9], pizzat: [[1, 3, 5]] }, { d: 8, lin: [6, 8], pizzat: [[1, 2, 4]] }, { d: 8, lin: [6, 8, 10], pizzat: [[1, 2, 4]] }, { d: 6, lin: [7, 8, 9], pizzat: [[1, 3, 5]] }, { d: 10, lin: [3, 4, 8], pizzat: [[1, 2, 6]] }, { d: 7, lin: [3, 7, 9, 10], pizzat: [[1, 2, 6]] }, { d: 8, lin: [4, 9], pizzat: [[1, 2, 6]] }, { d: 9, lin: [6, 7], pizzat: [[1, 2, 3]] }, { d: 9, lin: [6, 7], pizzat: [[1, 2, 4]] }, { d: 9, lin: [4, 9], pizzat: [[1, 2, 5]] }, { d: 10, lin: [4, 8], pizzat: [[1, 2, 5]] }, { d: 5, lin: [6, 8], pizzat: [[2, 4]] }, { d: 5, lin: [7, 8], pizzat: [[3, 4]] }, { d: 5, lin: [3, 6, 7], pizzat: [[1, 8]] }, { d: 3, lin: [5, 10], pizzat: [[1, 8]] }, { d: 7, lin: [5, 8, 10], pizzat: [[1, 3, 6]] }, { d: 10, lin: [3, 4, 9], pizzat: [[1, 2, 6]] }, { d: 7, lin: [5, 8], pizzat: [[2, 3, 4]] }, { d: 7, lin: [2, 5, 7, 10], pizzat: [[1, 3, 6]] }, { d: 8, lin: [4, 8], pizzat: [[1, 3, 6]] }, { d: 8, lin: [3, 6], pizzat: [[1, 2, 4]] }, { d: 7, lin: [2, 7, 8, 9], pizzat: [[1, 4, 5]] }, { d: 7, lin: [3, 7], pizzat: [[1, 2, 5]] }, { d: 7, lin: [6, 10], pizzat: [[1, 2, 5]] }, { d: 5, lin: [2, 7, 8, 9], pizzat: [[1, 3, 6]] }, { d: 6, lin: [5, 8, 10], pizzat: [[1, 2, 7]] }, { d: 9, lin: [2, 5], pizzat: [[2, 7]] }, { d: 5, lin: [4, 6, 8, 10], pizzat: [[1, 8]] }, { d: 8, lin: [1, 2, 10], pizzat: [[1, 9]] }, { d: 6, lin: [7, 8, 10], pizzat: [[1, 4, 5]] }, { d: 10, lin: [1, 5, 7, 9], pizzat: [[2, 4]] }, { d: 10, lin: [3, 5, 7, 10], pizzat: [[1, 3, 4]] }, { d: 5, lin: [6, 10], pizzat: [[1, 2, 6]] }, { d: 9, lin: [2, 8], pizzat: [[1, 2, 7]] }, { d: 6, lin: [3, 7], pizzat: [[10]] }, { d: 8, lin: [1, 6, 7], pizzat: [[1, 4, 5]] }, { d: 7, lin: [2, 7], pizzat: [[4, 6]] }],
     [{ d: 10, lin: [1, 7, 9, 10], pizzat: [[1, 3, 5], [2, 6]] }, { d: 10, lin: [4, 6, 7, 10], pizzat: [[2, 4], [1, 3, 5]] }, { d: 7, lin: [5, 7, 9, 10], pizzat: [[1, 2, 5], [3, 6]] }, { d: 7, lin: [7], pizzat: [[1, 2, 3]] }, { d: 9, lin: [1, 8, 10], pizzat: [[2, 4], [1, 7]] }, { d: 9, lin: [5, 9, 10], pizzat: [[4], [6], [2]] }, { d: 8, lin: [5], pizzat: [[1, 6], [4]] }, { d: 9, lin: [3, 5], pizzat: [[1, 7], [2]] }, { d: 7, lin: [10], pizzat: [[1, 2], [9]] }, { d: 10, lin: [3, 6], pizzat: [[1, 2, 3], [9]] }, { d: 10, lin: [4, 7, 8], pizzat: [[1], [2, 3], [4, 5]] }, { d: 7, lin: [8, 10], pizzat: [[1, 2, 5], [6]] }, { d: 4, lin: [4, 9, 10], pizzat: [[3, 4], [7]] }, { d: 10, lin: [7], pizzat: [[6], [1, 8]] }, { d: 6, lin: [2, 10], pizzat: [[2, 4], [8]] }, { d: 9, lin: [10], pizzat: [[1, 7], [4, 5]] }, { d: 9, lin: [4, 9], pizzat: [[1, 5], [2, 7]] }, { d: 9, lin: [5, 8], pizzat: [[1, 3, 4], [2, 5]] }, { d: 10, lin: [4, 8, 9], pizzat: [[3], [1, 2, 5]] }, { d: 9, lin: [7, 8], pizzat: [[1, 2, 4], [6]] }, { d: 9, lin: [9], pizzat: [[2], [3, 4], [8]] }, { d: 8, lin: [4, 7, 8, 10], pizzat: [[3, 4], [1, 7]] }, { d: 8, lin: [3, 5, 6, 10], pizzat: [[1, 2, 5]] }, { d: 10, lin: [4, 9], pizzat: [[2, 3, 4], [1, 8]] }, { d: 8, lin: [10], pizzat: [[1, 4], [2, 5]] }, { d: 9, lin: [10], pizzat: [[1, 7], [3, 6]] }, { d: 10, lin: [9], pizzat: [[1, 2, 5], [4]] }, { d: 9, lin: [10], pizzat: [[4, 6], [3], [1]] }, { d: 7, lin: [4, 8, 9, 10], pizzat: [[2, 4], [1, 9], [5]] }, { d: 9, lin: [7], pizzat: [[1, 2, 3, 4]] }, { d: 10, lin: [3, 7, 8, 9], pizzat: [[6], [1, 3, 5]] }, { d: 10, lin: [8], pizzat: [[1, 6], [2, 5]] }, { d: 10, lin: [9], pizzat: [[2, 8], [1, 3]] }, { d: 9, lin: [1, 3, 6, 9], pizzat: [[1, 5], [2, 6]] }, { d: 7, lin: [2, 6, 7, 8], pizzat: [[2, 3, 5]] }, { d: 4, lin: [7, 8], pizzat: [[2], [1, 8]] }, { d: 4, lin: [6, 7, 8], pizzat: [[1, 6], [2, 8]] }, { d: 9, lin: [2, 6, 7, 9], pizzat: [[4, 6], [10]] }, { d: 7, lin: [2, 6, 8], pizzat: [[2, 3, 5]] }, { d: 10, lin: [4, 7, 10], pizzat: [[4, 6], [8], [2, 7]] }, { d: 5, lin: [4, 10], pizzat: [[1, 9]] }, { d: 9, lin: [6, 9], pizzat: [[4, 6], [10]] }, { d: 9, lin: [4, 7], pizzat: [[2, 4], [10]] }, { d: 7, lin: [7], pizzat: [[4, 6]] }, { d: 8, lin: [5, 7, 8], pizzat: [[6], [1, 3, 5]] }, { d: 9, lin: [7], pizzat: [[10], [3]] }, { d: 9, lin: [4, 6, 10], pizzat: [[3, 5], [2, 6]] }, { d: 7, lin: [9], pizzat: [[1, 2, 6]] }, { d: 9, lin: [8, 10], pizzat: [[3, 4], [1, 8]] }]
   ];
-  function luoPulmat(tasoNro) {
-    return PULMADATA[tasoNro].map(function (q) {
-      var kohde = [].concat.apply([], q.pizzat).sort(function (a, b) { return a - b; });
-      var rat = pulmaRatkaisut(q.d, q.lin, kohde);
-      return { d: q.d, lin: q.lin, pizzat: q.pizzat, kohde: kohde, rat: rat, kaikki: q.pizzat.length > 1,
-        helpoin: Math.min.apply(null, rat.map(siirronTapa)) };
-    });
+  function pulmaksi(q) {
+    var kohde = [].concat.apply([], q.pizzat).sort(function (a, b) { return a - b; });
+    var rat = pulmaRatkaisut(q.d, q.lin, kohde);
+    return { d: q.d, lin: q.lin, pizzat: q.pizzat, kohde: kohde, rat: rat, kaikki: q.pizzat.length > 1,
+      helpoin: Math.min.apply(null, rat.map(siirronTapa)) };
   }
+  function luoPulmat(tasoNro) { return PULMADATA[tasoNro].map(pulmaksi); }
 
   // ---------------------------------------------------------------- komponentti
   function Apinavaaka(juuri) {
@@ -881,6 +880,25 @@
     }
     // ---- Auta Bassoa: pulmat (pizza valmiiksi yhdellä siirrolla)
     var pt = PULMA[kieli] || PULMA.en, pulmaVarasto = {}, pulmaAjastin = null;
+
+    /* ---- YKSI ANNETTU PULMA (3.11.2026, pizzalove.fi:n joulukalenteri) ----
+       🔵 Marko: «Ja myös se apinavaaka käyttöön.» Kalenterin luukussa on
+       yksi tietty lautapulma, ei tasoa eikä pulmavarastoa. `data-pulma`
+       (tai `juuri.avPulma(q)`) antaa sen muodossa {d, lin, pizzat} — samassa
+       jossa `tyokalut/pulmadata.py` ne tuottaa ja jossa PULMADATA on.
+
+       ⚠️ OPT-IN: ilman attribuuttia `omaPulma` on null eikä yksikään haara
+       alla muutu. Peli itse ei siis tiedä tästä mitään.
+
+       Ratkaistusta siirrosta lähtee tapahtuma `apinavaaka-siirto`
+       ({oikea, vasen}), ja sama pulma alkaa alusta — kalenteri laskee eri
+       ratkaisut itse, eikä taso voi vaihtua kesken joulukalenterin. */
+    var omaPulma = null;
+    function asetaOmaPulma(q) {
+      omaPulma = q ? pulmaksi(q) : null;
+      if (omaPulma) { clearTimeout(pulmaAjastin); aloitaPulmat(0, true); }
+    }
+    juuri.avPulma = asetaOmaPulma;
     vihjeNappi.setAttribute('aria-label', pt.vihjeNappi);
     vihjeNappi.addEventListener('click', function () {
       if (tila.muoto !== 'pulmat' || !tila.heitetty || tila.siirretty) return;
@@ -898,6 +916,7 @@
     }
     function tallennaTaso(n) { try { localStorage.setItem('apinavaaka-pulmataso', String(n)); } catch (e) {} }
     function tasonPulmat(n) {
+      if (omaPulma) return [omaPulma];
       // helpoimmat (eniten ratkaisuja) ensin
       return pulmaVarasto[n] || (pulmaVarasto[n] = luoPulmat(n));
     }
@@ -909,7 +928,7 @@
       tila.pNro = valitsePulma();
       loppuEl.classList.remove('on');
       asetaPulma();
-      if (hiljaa) { opasRuutu.hidden = true; return heitaPulma(); }
+      if (hiljaa || omaPulma) { opasRuutu.hidden = true; return heitaPulma(); }
       // tason voi valita itse: kaikki tasot ovat auki
       var valinta = '<p class="av__tasot-otsikko">' + pt.valitse + '</p><div class="av__tasot">';
       var avattu = lueAvattu();
@@ -1212,6 +1231,7 @@
     }
     // seuraava pulma: mieluiten sellainen, josta saa puuttuvia paloja; vaikeus kasvaa boksin täyttyessä
     function valitsePulma() {
+      if (omaPulma) return 0;
       var pool = tasonPulmat(tila.pTaso), tavoite = Math.min(1, tila.boksi.length / 9), paras = -1, parasArvo = -1e9;
       if (tila.pelatut.length >= pool.length) tila.pelatut = [];
       pool.forEach(function (p, i) {
@@ -1234,6 +1254,7 @@
     }
     function seuraavaPulma() {
       if (tila.muoto !== 'pulmat') return;
+      if (omaPulma) { asetaPulma(); return heitaPulma(); }
       if (tila.boksi.length < 10) { tila.pNro = valitsePulma(); asetaPulma(); return heitaPulma(); }
       var seur = tila.pTaso + 1, laatikko = '<img class="av__laatikko" src="' + KANSIO + 'laatikko.webp" alt="">';
       if (seur < PULMADATA.length) {
@@ -1651,7 +1672,14 @@
       });
       tila.siirretty = true;
       if (tila.muoto === 'opas') return opasVie();
-      if (tila.muoto === 'pulmat') return pulmaVie();
+      if (tila.muoto === 'pulmat') {
+        if (omaPulma) {
+          juuri.dispatchEvent(new CustomEvent('apinavaaka-siirto', {
+            detail: { oikea: tila.oikea.slice(), vasen: tila.vasen.slice(), noppa: omaPulma.d }
+          }));
+        }
+        return pulmaVie();
+      }
       if (tila.muoto === 'apinat') {
         tila.vaihe = 'pizza';
         if (!valmistettavat().length) return vuoroLoppuu();
@@ -1751,8 +1779,8 @@
       juuri.classList.toggle('av--opas', opas);
       juuri.classList.toggle('av--pulmat', pulmat);
       if (pulmat) {
-        p = '';
-        p = '<b class="av__tasonro">' + pt.taso + ' ' + (tila.pTaso + 1) + '</b>';   // taso yläreunassa; edistyminen näkyy boksissa
+        // annetussa yhdessä pulmassa ei ole tasoa, joten otsikkokin jää pois
+        p = omaPulma ? '' : '<b class="av__tasonro">' + pt.taso + ' ' + (tila.pTaso + 1) + '</b>';   // taso yläreunassa; edistyminen näkyy boksissa
       }
       if (opas) {
         /* Esittelyllä on omat pisteensä, koska se on oma jaksonsa eikä
@@ -2107,7 +2135,11 @@
     setTimeout(sovita, 300);
     if (vahennaLiike) juuri.classList.add('av--ei-liiketta');
     var alkuTila = juuri.getAttribute('data-tila');
-    if (alkuTila === 'apinat') aloitaApinat(); else if (alkuTila === 'pulmat') aloitaPulmat(); else aloitaEsittely(0);
+    var annettu = juuri.getAttribute('data-pulma');
+    if (annettu) asetaOmaPulma(JSON.parse(annettu));
+    else if (alkuTila === 'apinat') aloitaApinat();
+    else if (alkuTila === 'pulmat') aloitaPulmat();
+    else aloitaEsittely(0);
   }
 
   function kaynnista() {
