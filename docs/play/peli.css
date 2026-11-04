@@ -1,3 +1,4 @@
+:root{color-scheme:only light}  /* vain vaalea teema (Marko 4.11.2026) */
 /* Pizza Love — Pizza Party selaimessa.
  * Värit varainhankintasivuston :root-lohkosta (mitattu 8.9.2026), jotta
  * peli ja sivusto ovat samaa ilmettä eivätkä ajaudu erilleen. */
@@ -148,7 +149,6 @@ button, .pizza-kortti{touch-action:manipulation}
  * valikossakin. */
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background:url('kuvat/kuosi.svg?v=20261006a') repeat;background-size:286px 285px;opacity:.14}
-@media (prefers-color-scheme:dark){body::before{display:none}}
 
 body{
   background:var(--ground); color:var(--ink);
@@ -1226,32 +1226,6 @@ h2{font-size:17px;margin:26px 0 6px}
   #peliRuutu.selitys .op.op-log{font-size:calc(var(--kortti-lev) * .22)}
 }
 
-@media (prefers-color-scheme:dark){
-  :root{--ground:#171310;--ink:#F7F1E7;--orange:#FF881F;--money:#82C99C;
-        --himmea:#7A7064;--raja:#332B24}
-  /* ⚠️ VALKOINEN TEKSTI --ink-TAUSTALLA KATOAA TUMMASSA TILASSA.
-   * `--ink` on vaalea pimealla (#F7F1E7), joten valkoinen teksti sen
-   * paalla on kontrastiltaan 1,12:1 — mitattu 10.9.2026, vaatimus on
-   * 3:1. Pizzan ARVO oli siis kaytannossa nakymaton, ja se on pelin
-   * tarkein luku.
-   *
-   * ⚠️ Vika oli vanha eika mistaan muutoksesta: se syntyi silla hetkella
-   * kun tumma tila lisattiin, koska `color:#fff` on kiintea eika token.
-   * Se ei kaadu, ei kirjaa konsoliin eika nay yhdessakaan tarkistimessa —
-   * loytyi vain katsomalla ruutua pimeassa.
-   *
-   * Teksti kaannetaan taustan variksi, ei toisin pain: `--ink` on
-   * tarkoituksella se vari joka vaihtuu teeman mukana. */
-  .arvomerkki{color:var(--ground)}
-  .esimerkki,.as-valinta,.pisteet,.op,.aukko{background:#221C17}
-  .as-valinta.valittu{background:#33241A}
-  .as-selite{background:#33241A}
-  .lasku-tulos{background:#332B24;color:var(--ink)}
-  .lupa span{background:#221C17}
-  .lupa input:checked + span{background:#33241A}
-  .ohje-lista .korostettu{background:#33241A}
-  .virhe{background:#3A1F1F;color:#F3C9C9}
-}
 
 /* ============================================================
  * YHTEISPELI OMALLA LAITTEELLA (pelaaja.js, ?liity)

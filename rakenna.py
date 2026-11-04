@@ -251,6 +251,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
 <title>%s</title>
 <meta name="description" content="%s">
 <meta name="theme-color" content="#F47920">
@@ -741,6 +742,7 @@ def juurisivu(kaikki):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
 <title>Pizza Love®</title>
 <meta name="description" content="Pizza Love® – rules, videos and online game · säännöt, videot ja verkkopeli">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
@@ -806,6 +808,7 @@ def varainhankinta_ohjaus(kaikki):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
 <meta name="robots" content="noindex">
 <meta http-equiv="refresh" content="0; url=%s">
 <link rel="canonical" href="%s">

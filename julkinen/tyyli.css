@@ -21,18 +21,9 @@
   --radius:18px;
   --palsta:720px;
   --viiri-w:104px;
-  color-scheme:light dark;
+  color-scheme:only light;
 }
 @media (min-width:1000px){:root{--viiri-w:124px}}
-@media (prefers-color-scheme:dark){
-  :root{
-    --ground:#171310; --surface:#221D18; --warm:#2C241C;
-    --ink:#F7F1E7; --soft:#B3A695; --line:#38302A; --line2:#4B4038;
-    --orange:#FF8446; --deep:#FF9A62; --tint:#3A2418;
-    --green:#82C99C; --greenTint:#1E2F24;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
-  }
-}
 
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -44,10 +35,9 @@ a{color:var(--deep)}
 [hidden]{display:none !important}
 
 /* Täytekuosi taustalla. Laatta on 572,4 × 569, joten koko sidotaan siihen.
-   Tummassa teemassa kuosi on pois päältä (sama päätös kuin varainhankinnassa). */
+   Sivusto on vain vaalea (color-scheme: only light, Marko 4.11.2026). */
 body::before{content:"";position:fixed;inset:0;z-index:-1;
   background:url("kuosi.svg") repeat;background-size:286px 285px;opacity:.45;pointer-events:none}
-@media (prefers-color-scheme:dark){body::before{display:none}}
 
 /* ---------- Yläosa: oranssi palkki (#F47920, Marko 6.10.2026), riippuva musta viiri, sivurivi ---------- */
 .ylaosa{position:sticky;top:0;z-index:50}

@@ -11,7 +11,7 @@
      oranssi palkki, sama viiri, sama valkoinen lajipalkki — mutta sisältö on
      lautapelin: iso apinavaaka-kuva ja kolme pelimuotoa. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#FAF6EE">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -28,8 +28,8 @@
      ⚠️ Yksi asia on kumottava: `peli.css`:n `html,body{height:100%;
      overflow:hidden}` katkaisee komponenttisivun vierityksen. Kumous on
      alla omassa <style>-lohkossa, joka ladataan tämän jälkeen. -->
-<link rel="stylesheet" href="peli.css?v=20261019h">
-<link rel="stylesheet" href="yhteinen.css?v=20261020k">
+<link rel="stylesheet" href="peli.css?v=20261104a">
+<link rel="stylesheet" href="yhteinen.css?v=20261104a">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
 <link rel="stylesheet" href="apinavaaka/apinavaaka.css?v=20261020b">
 <style>
@@ -38,7 +38,7 @@
   /* 📐 Mitattu: `peli.css` lukitsee sivun korkeuden (`height:100%;
      overflow:hidden`), koska korttipeli mahtuu aina ruudulle. Lautapeli
      vierittyy. Kumotaan tasan nämä kaksi. */
-  html,body{touch-action:manipulation;color-scheme:light;height:auto;overflow:visible}
+  html,body{touch-action:manipulation;color-scheme:only light;height:auto;overflow:visible}
   body{background:#FAF6EE;margin:0;font-family:Poppins,system-ui,sans-serif}
   #lautaPeli{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right))
        8px max(6px,env(safe-area-inset-left))}
