@@ -597,21 +597,22 @@ def sivu_html(kieli, lahde):
   .alalaatikko .osa {{ flex: 1 }}
   /* 🔵 Marko 6.11.2026: Basson ajatuskuplassa laskutoimitusten symbolit –
      kuva kertoo saman kuin pitka teksti, joten paperin teksti on lyhyt
-     (korttipeli.laskut.paperi). Kupla (paperi/kortit) on kaannetty pystysuunnassa, jotta
-     pikkupallot osoittavat Basson paahan. */
+     (korttipeli.laskut.paperi). Kupla oikein pain (paperi/kortit, reunan
+     irtoviiva poistettu), pikkupallot nousevat kohti Basson paata. */
   .huomio.alalaatikko {{ padding-left: 3mm }}
-  .ajattelee {{ flex: none; position: relative; width: 50mm; height: 24mm;
-                align-self: stretch }}
-  .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0; bottom: 0;
-      width: 15mm; margin: 0 0 calc(-2.6mm - 15mm * .1536) }}
-  .kupla {{ position: absolute; right: 0; top: 0; width: 39mm }}
-  .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block;
-                               }}
-  .merkit {{ position: absolute; left: 25%; right: 8%; top: 10%; bottom: 24%;
+  .ajattelee {{ flex: none; position: relative; width: 55mm; align-self: stretch;
+                min-height: 22mm }}
+  /* Basson vartalon suora leikkaus laatikon alareunaan, kyynarpaa
+     (15,36 % leveydesta) jaa sen alle (Marko 3.11. ja 6.11.2026) */
+  .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0;
+      bottom: calc(-1.4mm - 21mm * .1536); width: 21mm; margin: 0 }}
+  .kupla {{ position: absolute; right: 0; bottom: 0; width: 36mm }}
+  .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
+  .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
              display: grid; grid-template-columns: repeat(4, 1fr);
              align-items: center; justify-items: center;
-             font: 900 13pt/1 Viiri, sans-serif; color: {musta} }}
-  .merkit span:nth-child(n+5) {{ font: 700 10.5pt/1 Otsikko, sans-serif }}
+             font: 900 12pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 10pt/1 Otsikko, sans-serif }}
   .merkit sup {{ font-size: .6em }}
   .alalaatikko h3 {{ margin: 0 0 .6mm }}
   .alalaatikko p {{ font-size: 8.8pt; margin: 0 }}
