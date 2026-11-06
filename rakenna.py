@@ -446,6 +446,8 @@ def korttipeli(t, kaikki):
   <p>%s</p>
 </div>
 
+<div class="laatikko"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
+
 <h3>%s</h3>
 <div class="korttiparit">
   <div class="laatikko" style="margin:0"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
@@ -476,6 +478,7 @@ def korttipeli(t, kaikki):
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
        e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
+       e(s['laskut']['otsikko']), s['laskut']['html'],
        e(s['tavat_otsikko']), e(s['helpompi_otsikko']), e(s['helpompi']), e(s['basso_tapa_otsikko']), s['basso_tapa'],
        s['huomio_bruno'],
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),

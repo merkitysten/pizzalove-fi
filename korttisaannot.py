@@ -580,6 +580,15 @@ def sivu_html(kieli, lahde):
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
   .palstat p:has(+ ul.lista), .palstat p:has(+ ol.lista) {{ break-after: avoid }}
   .kotisaanto p {{ margin: 0 }}
+  /* 🔵 Marko 6.11.2026: «kaikki laskutoimitukset kayvat» on tarkeampi kuin
+     apinan nimi, joten se on oma laatikkonsa ensimmaisena Hyva tietaa
+     -laatikon vieressa (Pizzan arvo -kappale pysyy lyhyena). */
+  .alaboksit {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm;
+                margin-top: 3mm; break-inside: avoid }}
+  .alaboksit > .kehys {{ margin-top: 0 }}
+  .laskut {{ padding: 2.4mm 5mm 2mm }}
+  .laskut h3 {{ margin: 0 0 .6mm }}
+  .laskut p {{ font-size: 8.8pt; margin: 0 }}
   .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
@@ -685,8 +694,11 @@ def sivu_html(kieli, lahde):
 <div class="kaksi">{portaat}</div>
 </section>
 
-<div class="huomio tieto kehys"><img src="julkinen/kuvat/basso-pohtii.webp">
-  <div><h3>{hyva_tietaa}</h3><p>{tieto}</p></div></div>
+<div class="alaboksit">
+  <div class="laskut kehys"><h3>{laskut_otsikko}</h3><p>{laskut}</p></div>
+  <div class="huomio tieto kehys"><img src="julkinen/kuvat/basso-pohtii.webp">
+    <div><h3>{hyva_tietaa}</h3><p>{tieto}</p></div></div>
+</div>
 
 {muodot}
 
@@ -715,6 +727,7 @@ def sivu_html(kieli, lahde):
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
         hyva_tietaa=e(k['hyva_tietaa']), tieto=s['tieto'],
+        laskut_otsikko=e(s['laskut']['otsikko']), laskut=s['laskut']['html'],
         portaat_otsikko=e(s['portaat_otsikko']),
         portaat_ingressi=e(s['portaat_ingressi']),
         portaat=''.join(porras(x) for x in s['portaat']),
@@ -735,6 +748,7 @@ def otsikot(lahde):
               'lataa_otsikko', 'muodot_otsikko', 'tavat_otsikko',
               'helpompi_otsikko', 'basso_tapa_otsikko', 'esimerkki_otsikko')]
     nimet += [x['otsikko'] for x in s['portaat']]
+    nimet.append(s['laskut']['otsikko'])
     for m in s['muodot']:
         nimet.append(m['nimi'])
         nimet += re.findall(r'<h3>(.*?)</h3>', m['html'])
