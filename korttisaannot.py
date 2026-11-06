@@ -278,7 +278,10 @@ def kaavio(k):
                 '<text x="44" y="%.1f" text-anchor="middle" fill="#fff">%s</text>'
                 % (y, y + 4.1, sana))
 
-    v = [laatta(0, pa)]
+    # 🔵 Marko 6.11.2026: ilmaa pelaajan nimen ja korttien valiin –
+    # poytä siirtyy ILMA mm alaspain ja B:n nimi 2 * ILMA.
+    ILMA = 2.2
+    v = [laatta(0, pa), '<g transform="translate(0 %.1f)">' % ILMA]
     # pelaaja A: pino vasemmalla, varasto oikealla (6 ja 2), nimet alla
     v.append(pakka(2, 8, 'tausta-pizza', 'pizza-16'))
     v.append(kortti(22, 8, 'tayte-6', True))
@@ -297,11 +300,12 @@ def kaavio(k):
     v.append(kortti(3, 61.5, 'tayte-4', True))
     v += [kortti(18 + i * 15, 61.5) for i in range(3)]
     v.append(pakka(74, 61.5, 'tausta-pizza', 'pizza-34'))
-    v.append(laatta(82.2, pb))
-    return ('<figure class="kaavio"><svg viewBox="0 0 88 88" '
+    v.append('</g>')
+    v.append(laatta(82.2 + 2 * ILMA, pb))
+    return ('<figure class="kaavio"><svg viewBox="0 0 88 %.1f" '
             'font-family="Otsikko, sans-serif" font-weight="700" '
             'font-size="3.4" letter-spacing=".08" style="text-transform:uppercase">'
-            '%s</svg></figure>' % ''.join(v))
+            '%s</svg></figure>' % (88 + 2 * ILMA, ''.join(v)))
 
 
 def vaihtoesimerkki(k):
@@ -367,7 +371,10 @@ def muoto(m, k):
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
         runko = runko[:i] + kaavio(k) + runko[i:]
         # esimerkki vaihtoluvun loppuun eli ennen seuraavaa otsikkoa
-        j = runko.index('<h3>%s</h3>' % k['vaihto_luku'])
+        # 🔵 Marko 6.11.2026: kolmas palsta alkaa vaihtoluvulla
+        runko = runko.replace('<h3>%s</h3>' % k['vaihto_luku'],
+                              '<h3 class="palstan-alku">%s</h3>' % k['vaihto_luku'])
+        j = runko.index('<h3 class="palstan-alku">')
         j = runko.find('<h3>', j + 4)
         j = len(runko) if j < 0 else j
         runko = runko[:j] + vaihtoesimerkki(k) + runko[j:]
@@ -612,6 +619,7 @@ def sivu_html(kieli, lahde):
   .kaavio {{ break-inside: avoid; margin: 3mm 0 2mm }}
   .kaavio svg {{ width: 100%; height: auto; display: block }}
   .vaihtoesim {{ break-inside: avoid }}
+  h3.palstan-alku {{ break-before: column; margin-top: 0 }}
   .vaihtoesim .vaihto {{ justify-content: center; margin: 1.6mm 0 1.4mm }}
   .vaihtoesim .vaihto img {{ width: 11mm; border-color: {oranssi}; border-width: .4mm }}
 
