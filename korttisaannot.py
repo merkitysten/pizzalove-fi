@@ -615,9 +615,11 @@ def sivu_html(kieli, lahde):
       clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
   .kupla {{ position: absolute; left: 29mm; bottom: 3mm; width: 44mm }}
   .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
-  .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
+  /* symbolit kuplan sisapuolen keskelle: kuplan runko on kuvassa
+     x 18,9–98,9 %, y 11–99,7 % → keskipiste (58,9 %, 55,3 %) */
+  .merkit {{ position: absolute; left: 29%; right: 11.2%; top: 22%; bottom: 17%;
              display: grid; grid-template-columns: repeat(4, 1fr);
-             align-items: center; justify-items: center;
+             align-content: space-evenly; align-items: center; justify-items: center;
              font: 900 15pt/1 Viiri, sans-serif; color: {musta} }}
   .merkit span:nth-child(n+5) {{ font: 700 12pt/1 Otsikko, sans-serif }}
   .merkit sup {{ font-size: .6em }}
