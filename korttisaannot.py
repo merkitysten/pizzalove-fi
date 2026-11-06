@@ -19,7 +19,8 @@ saannon uudella kielella. Siksi teksti luetaan `sisalto/{kieli}.json`:sta —
 samasta tiedostosta josta `rakenna.py` tekee sivun. Kuvat ovat sivun omia
 (`julkinen/kuvat/`), eika niita piirreta uudelleen.
 
-⚠️ KAKSI SIVUA ON TAVOITE, EI VAATIMUS: yksi arkki kaksipuolisena. Saksaa on
+⚠️ KOLME SIVUA ON KATTO (6.11.2026, aiemmin kaksi). Alkuperainen tavoite oli
+kaksi sivua: yksi arkki kaksipuolisena. Saksaa on
 7 716 merkkia, joten raja on `SIVU_KATTO` ja koe kertoo heti jos teksti
 kasvaa yli. Kolmas sivu ei ole vika — se on paatos, ja se tehdaan aanen.
 
@@ -50,7 +51,7 @@ QRJS = os.path.join(TANNE, 'julkinen', 'play', 'qr.js')
 JSQR = os.path.join(TANNE, 'julkinen', 'play', 'vendor', 'jsqr', 'jsQR.js')
 QR_MM = 22.0
 QR_MODUULI_MIN_MM = 0.5
-SIVU_KATTO = 2
+SIVU_KATTO = 3   # 🔵 Marko 6.11.2026: «Jos ohjeet menevät kolmelle A4-sivulle, niin se ei haittaa, kunhan ohjeet ovat selkeät ja helposti luettavat.»
 
 # 🔵 Marko 30.10.2026: «Englanninkielinen ohje on tarkistettu natiivin
 # puhujan toimesta.» Siksi `en` on mukana: se on ainoa kieli jonka sanamuodosta
@@ -64,6 +65,8 @@ KIELET = {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
         'alaotsikko': 'Die Regeln aller drei Spielvarianten',
         'iskulause': 'JEDE PIZZA ZÄHLT',
+        'kaavio': ('Spieler A', 'Spieler B', 'Pizzastapel', 'Vorrat',
+                   'Nachziehstapel', 'Tauschpizza'),
         'qr_teksti': 'Regeln und<br>Videos online',
         'osoite': 'https://pizzalove.fi/de/korttipeli.html',
         'videot': 'Erklärvideos zu jeder Spielvariante findest du online.',
@@ -74,6 +77,8 @@ KIELET = {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
         'alaotsikko': 'The rules of all three game modes',
         'iskulause': 'EVERY PIZZA COUNTS',
+        'kaavio': ('Player A', 'Player B', 'Pizza pile', 'Storage',
+                   'Draw pile', 'Exchange pizza'),
         'qr_teksti': 'Rules and<br>videos online',
         'osoite': 'https://pizzalove.fi/en/korttipeli.html',
         'videot': 'Watch the how-to videos for every game mode online.',
@@ -86,6 +91,8 @@ KIELET = {
         'tiedosto': 'pizza-love-kartova-hra-pravidla-sk.pdf',
         'alaotsikko': 'Pravidlá všetkých troch spôsobov hry',
         'iskulause': 'KAŽDÁ PIZZA SA POČÍTA',
+        'kaavio': ('Hráč A', 'Hráč B', 'Kôpka pízz', 'Sklad',
+                   'Dobierací balíček', 'Výmenná pizza'),
         'qr_teksti': 'Pravidlá a<br>videá online',
         'osoite': 'https://pizzalove.fi/sk/korttipeli.html',
         'videot': 'Videonávody ku každému spôsobu hry nájdete online.',
@@ -170,17 +177,77 @@ def qr_koko_koe(svg):
     return True
 
 
-def muoto(m):
+def kaavio(sanat):
+    """Pizza Loven (#3) pelipoyta painetun arkin tapaan: kaksi pelaajaa
+    vastakkain, kummallakin pizzapino ja 4 varastopaikkaa, keskella
+    nostopakka ja vaihtopizza. 🔵 Marko 6.11.2026: «se kaaviokuva siitä
+    pizza loven pelipöydästä puuttuu.» Sanat ovat ARKIN omia (KIELET), koska
+    sivulla kaaviota ei ole. Mitat millimetreina (viewBox = mm)."""
+    pa, pb, pino, varasto, nosto, vaihto = (e(x) for x in sanat)
+    L, K = 11, 16.7                     # kortti 351 x 532 px
+
+    def kortti(x, y, kuva=None, katko=False):
+        if kuva:
+            return ('<image href="julkinen/kuvat/%s.webp" x="%.1f" y="%.1f" '
+                    'width="%.1f" height="%.1f"/>' % (kuva, x, y, L, K))
+        return ('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" rx="1.1" '
+                'fill="none" stroke="#1A1A1A" stroke-width=".3"%s/>'
+                % (x, y, L, K, ' stroke-dasharray="1.4 1"' if katko else ''))
+
+    def teksti(x, y, sana, ankkuri='middle', vari='#1A1A1A'):
+        return ('<text x="%.1f" y="%.1f" text-anchor="%s" fill="%s">%s</text>'
+                % (x, y, ankkuri, vari, sana))
+
+    def rivit(x, y, sana, ankkuri='start'):
+        osat = sana.split(' ', 1) if len(sana) > 12 else [sana]
+        return ''.join(teksti(x, y + i * 3.6, o, ankkuri)
+                       for i, o in enumerate(osat))
+
+    def laatta(y, sana):
+        return ('<rect x="27" y="%.1f" width="34" height="5.6" rx="1" fill="#1A1A1A"/>'
+                '<text x="44" y="%.1f" text-anchor="middle" fill="#fff">%s</text>'
+                % (y, y + 4.1, sana))
+
+    v = [laatta(0, pa)]
+    # pelaaja A: pino vasemmalla, varasto oikealla, nimet alla
+    v.append(kortti(3, 8, 'pizza-31'))
+    v += [kortti(22 + i * 15, 8, katko=True) for i in range(4)]
+    v.append(teksti(8.5, 29, pino))
+    v.append(teksti(55.5, 29, varasto))
+    # keskella nostopakka ja vaihtopizza
+    v.append(kortti(6, 34, 'tausta-tayte'))
+    v.append(rivit(19.5, 41, nosto))
+    v.append(kortti(48, 34, 'pizza-54'))
+    v.append(rivit(61.5, 41, vaihto))
+    # pelaaja B peilikuvana: varasto vasemmalla, pino oikealla, nimet ylla
+    v.append(teksti(32.5, 59, varasto))
+    v.append(teksti(79.5, 59, pino))
+    v += [kortti(3 + i * 15, 61.5, katko=True) for i in range(4)]
+    v.append(kortti(74, 61.5, 'pizza-31'))
+    v.append(laatta(81.5, pb))
+    return ('<figure class="kaavio"><svg viewBox="0 0 88 87.2" '
+            'font-family="Otsikko, sans-serif" font-weight="700" '
+            'font-size="3.4" letter-spacing=".08" style="text-transform:uppercase">'
+            '%s</svg></figure>' % ''.join(v))
+
+
+def muoto(m, k):
     """Pelimuodon otsikko painetun arkin tapaan: musta viiri, jossa
-    «#1 PIZZA» oranssina ja loppu valkoisena (PIZZAPARTY, PIZZABASSO)."""
+    «#1 PIZZA» oranssina ja loppu valkoisena (PIZZAPARTY, PIZZABASSO).
+    🔵 Marko 6.11.2026: viiri on KORKEINTAAN ensimmaisen palstan levyinen
+    (koko leveydelta venytetty oli liian levea); kuvaus viirin viereen."""
     sanat = m['nimi'].split(' ', 1)
     loppu = sanat[1] if len(sanat) > 1 else ''
-    return ('<section class="muoto kehys">'
+    runko = m['html']
+    if m['numero'] == '#3':
+        # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
+        i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
+        runko = runko[:i] + kaavio(k['kaavio']) + runko[i:]
+    return ('<section class="muoto kehys"><div class="muoto-yla">'
             '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
-            '<p class="kuvaus">%s</p>'
+            '<p class="kuvaus">%s</p></div>'
             '<div class="palstat">%s</div></section>'
-            % (e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']),
-               m['html']))
+            % (e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko))
 
 
 # ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
@@ -243,7 +310,7 @@ def sivu_html(kieli, lahde):
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
   body {{ font-family: Teksti, 'Helvetica Neue', Arial, sans-serif;
           color: {musta}; background: #fff;
-          font-size: 8.6pt; line-height: 1.3;
+          font-size: 9.4pt; line-height: 1.4;
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   b {{ font-weight: 700 }}
   .kehys {{ border: .35mm solid {musta}; -webkit-box-decoration-break: clone;
@@ -267,16 +334,21 @@ def sivu_html(kieli, lahde):
   .qr span {{ display: block; margin-top: .8mm; font: 700 7pt/1.15 Otsikko,
               sans-serif; text-transform: uppercase; letter-spacing: .02em }}
 
-  .perusteet {{ margin-top: 2.6mm; padding: 2.6mm 4mm 1.6mm }}
+  .perusteet {{ margin-top: 4mm; padding: 3.4mm 5mm 2.4mm }}
   h2 {{ font: 700 17pt/1 Otsikko, sans-serif; text-transform: uppercase;
         color: {oranssi}; margin-bottom: 2mm; break-after: avoid }}
   h3 {{ font: 700 10pt/1.1 Otsikko, sans-serif; text-transform: uppercase;
-        letter-spacing: .015em; margin: 1.9mm 0 .6mm; break-after: avoid }}
-  h3.osa {{ font-size: 13pt; color: {oranssi}; margin: 2.6mm 0 0 }}
-  .palkki {{ background: {musta}; color: #fff; margin: 1.6mm 0 1.2mm;
+        letter-spacing: .015em; margin: 4mm 0 1mm; break-after: avoid }}
+  h3.osa {{ font-size: 13pt; color: {oranssi}; margin: 5mm 0 0 }}
+  .palkki {{ background: {musta}; color: #fff; margin: 3mm 0 1.6mm;
              padding: 1.1mm 2.2mm .8mm }}
-  p {{ margin-bottom: 1.1mm }}
+  p {{ margin-bottom: 1.5mm }}
+  .palstat > h3:first-child, .palstat > p:first-child + h3 {{ margin-top: 0 }}
   .palstat {{ columns: 2; column-gap: 7mm }}
+  /* perusteet kahtena kiinteana palstana: vasen = korttien ja pizzan
+     perusteet, oikea = kaksi tapaa. CSS-palstat repivat esimerkin kahtia. */
+  .kaksi {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 7mm }}
+  .kaksi h3.osa {{ margin-top: 0 }}
   .palstat > *, .kortti {{ break-inside: avoid }}
   .palstat > .laatikko {{ break-inside: auto }}
   .laatikko > p, .esimerkki {{ break-inside: avoid }}
@@ -285,13 +357,13 @@ def sivu_html(kieli, lahde):
   .pieni {{ font-size: 7.4pt; opacity: .75 }}
   .kortti {{ display: flex; gap: 2.6mm; align-items: flex-start;
              margin-bottom: 1.8mm }}
-  .kortti img {{ width: 14mm; height: auto; flex: none; border-radius: 1mm }}
+  .kortti img {{ width: 19mm; height: auto; flex: none; border-radius: 1mm }}
   .kortti h3 {{ margin-top: 0 }}
   .laatikko {{ margin-bottom: 1.4mm }}
-  .esimerkki {{ display: flex; align-items: center; gap: 1.6mm;
-                margin: 1.2mm 0 }}
-  .esimerkki img {{ width: 13mm; height: auto; border-radius: 1mm }}
-  .esimerkki b {{ font: 900 14pt/1 Viiri, sans-serif; color: {oranssi} }}
+  .esimerkki {{ display: flex; align-items: center; gap: 2.4mm;
+                margin: 2mm 0 }}
+  .esimerkki img {{ width: 19mm; height: auto; border-radius: 1mm }}
+  .esimerkki b {{ font: 900 18pt/1 Viiri, sans-serif; color: {oranssi} }}
   .huomio {{ display: flex; gap: 2.4mm; align-items: center;
              border: .35mm solid {musta}; padding: 1.4mm 2.6mm 1.4mm 2.2mm }}
   .huomio img {{ width: 17mm; height: auto; flex: none; align-self: flex-end;
@@ -300,14 +372,20 @@ def sivu_html(kieli, lahde):
      jää sen alapuolelle (Marko 3.11.2026) */
   .huomio p {{ margin: 0 }}
 
-  .muoto {{ margin-top: 2.6mm; padding: 0 4mm 1mm }}
-  .banneri {{ background: {musta}; color: #fff; text-align: center;
-              margin: 0 -4mm; padding: 1.5mm 0 3.8mm;
+  .muoto {{ margin-top: 5mm; padding: 0 5mm 2.4mm }}
+  /* pelimuoto alkaa ja loppuu samalla sivulla, jos se mahtuu sivulle:
+     palstat eivat jatku siististi sivulta toiselle (mitattu 6.11.2026) */
+  .muoto {{ break-inside: avoid }}
+  .muoto-yla {{ display: flex; align-items: center; gap: 7mm; margin-bottom: 3mm;
+                break-after: avoid }}
+  .banneri {{ flex: 0 0 calc((100% - 7mm) / 2); background: {musta}; color: #fff;
+              text-align: center; padding: 1.8mm 0 4mm;
               font: 900 14pt/1 Viiri, sans-serif; letter-spacing: .01em;
               clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%) }}
   .banneri .oranssi {{ color: {oranssi} }}
-  .muoto .kuvaus {{ text-align: center; font-weight: 700; font-size: 8pt;
-                    margin: .8mm 0 1mm }}
+  .muoto .kuvaus {{ flex: 1; font-weight: 700; font-size: 9pt; margin: 0 }}
+  .kaavio {{ break-inside: avoid; margin: 3mm 0 2mm }}
+  .kaavio svg {{ width: 100%; height: auto; display: block }}
 
   footer {{ margin-top: 2.6mm; padding-top: 1.4mm;
             border-top: .35mm solid {musta}; font-size: 7pt;
@@ -327,7 +405,8 @@ def sivu_html(kieli, lahde):
 
 <section class="perusteet kehys">
 <h2>{perusteet_otsikko}</h2>
-<div class="palstat">
+<div class="kaksi">
+ <div>
   <p>{perusteet_ingressi}</p>
   <div class="kortti"><img src="julkinen/kuvat/tausta-pizza.webp">
     <div><h3>{pizzakortit_otsikko}</h3><p>{pizzakortit}</p></div></div>
@@ -336,13 +415,15 @@ def sivu_html(kieli, lahde):
   <div class="laatikko">
     <h3 class="palkki">{perussaanto_otsikko}</h3><p>{perussaanto}</p>
     <h3>{arvo_otsikko}</h3><p>{arvo}</p>
-    <h3>{esimerkki_otsikko}</h3>
+    <div class="esim"><h3>{esimerkki_otsikko}</h3>
     <div class="esimerkki" role="img" aria-label="{esimerkki_alt}">
       <img src="julkinen/kuvat/pizza-31.webp"><b>=</b>
       <img src="julkinen/kuvat/tayte-10.webp"><b>:</b>
       <img src="julkinen/kuvat/tayte-2.webp"></div>
-    <p>{esimerkki}</p>
+    <p>{esimerkki}</p></div>
   </div>
+ </div>
+ <div>
   <h3 class="osa">{tavat_otsikko}</h3>
   <div class="laatikko"><h3 class="palkki">{helpompi_otsikko}</h3>
     <p>{helpompi}</p></div>
@@ -350,6 +431,7 @@ def sivu_html(kieli, lahde):
     <p>{basso_tapa}</p></div>
   <div class="huomio"><img src="julkinen/kuvat/basso-pohtii.webp">
     <p>{huomio_bruno}</p></div>
+ </div>
 </div>
 </section>
 
@@ -379,7 +461,7 @@ def sivu_html(kieli, lahde):
         helpompi_otsikko=e(s['helpompi_otsikko']), helpompi=e(s['helpompi']),
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
-        muodot=''.join(muoto(m) for m in s['muodot']),
+        muodot=''.join(muoto(m, k) for m in s['muodot']),
         videot=e(k['videot']), nakyva=k['osoite'].replace('https://', ''),
         oikeudet=e(k['oikeudet']))
 

@@ -78,7 +78,7 @@
     "perussaanto_otsikko": "Règle de base",
     "perussaanto": "Les cartes pizza sont toujours sur la table. Tu les prépares avec les cartes ingrédient de ta main.",
     "arvo_otsikko": "Valeur de la pizza",
-    "arvo": "Prépare une pizza avec tes cartes ingrédient et dis à voix haute le calcul qui donne la valeur de la pizza. Tous les calculs sont permis et peuvent être combinés, tant que le résultat est égal à la valeur de la pizza. Par exemple <b>5 = 2 + 4 – 1</b>.",
+    "arvo": "Prépare une pizza avec tes cartes ingrédient et dis à voix haute le calcul qui donne la valeur de la pizza. Tous les calculs sont permis et peuvent être combinés, tant que le résultat est égal à la valeur de la pizza. Par exemple <b>5 = 10 : 2</b>.",
     "esimerkki_otsikko": "Exemple : pizza tomate-ananas",
     "esimerkki_alt": "Une carte pizza de valeur 5 et les cartes ingrédient 10 et 2 : 10 : 2 = 5",
     "esimerkki": "La pizza vaut 5. Tu peux la préparer avec n’importe quelles cartes ingrédient, tant que le calcul donne 5 : par exemple 4 + 1, 6 – 1, 2 + 3 ou 10 : 2.",

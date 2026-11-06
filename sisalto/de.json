@@ -78,7 +78,7 @@
     "perussaanto_otsikko": "Grundregel",
     "perussaanto": "Die Pizzakarten liegen immer auf dem Tisch. Sie werden mit Belagkarten aus der Hand zubereitet.",
     "arvo_otsikko": "Der Wert der Pizza",
-    "arvo": "Bereite die Pizza mit deinen eigenen Belagkarten zu und sage laut die Rechnung, die den Wert der Pizza ergibt. Alle Rechenarten sind erlaubt und dürfen kombiniert werden, solange das Ergebnis dem Wert der Pizza entspricht. Zum Beispiel <b>5 = 2 + 4 – 1</b>.",
+    "arvo": "Bereite die Pizza mit deinen eigenen Belagkarten zu und sage laut die Rechnung, die den Wert der Pizza ergibt. Alle Rechenarten sind erlaubt und dürfen kombiniert werden, solange das Ergebnis dem Wert der Pizza entspricht. Zum Beispiel <b>5 = 10 : 2</b>.",
     "esimerkki_otsikko": "Beispiel: Tomaten-Ananas-Pizza",
     "esimerkki_alt": "Eine Pizzakarte mit dem Wert 5 und die Belagkarten 10 und 2: 10 : 2 = 5",
     "esimerkki": "Die Pizza hat den Wert 5. Du kannst sie mit beliebigen Belagkarten zubereiten, solange die Rechnung 5 ergibt: zum Beispiel 4 + 1, 6 – 1, 2 + 3 oder 10 : 2.",

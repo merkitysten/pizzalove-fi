@@ -78,7 +78,7 @@
     "perussaanto_otsikko": "Basic rule",
     "perussaanto": "Pizza cards are always on the table. They are made with topping cards from your hand.",
     "arvo_otsikko": "Pizza value",
-    "arvo": "Make a pizza with your own topping cards and say aloud the calculation that matches the pizza’s value. All calculations are allowed and can be combined, as long as the result equals the pizza’s value. For example <b>5 = 2 + 4 – 1</b>.",
+    "arvo": "Make a pizza with your own topping cards and say aloud the calculation that matches the pizza’s value. All calculations are allowed and can be combined, as long as the result equals the pizza’s value. For example <b>5 = 10 : 2</b>.",
     "esimerkki_otsikko": "Example: tomato–pineapple pizza",
     "esimerkki_alt": "A pizza card with the value 5 and the topping cards 10 and 2: 10 : 2 = 5",
     "esimerkki": "The pizza’s value is 5. You can make it with any topping cards, as long as the calculation gives 5: for example 4 + 1, 6 – 1, 2 + 3 or 10 : 2.",

@@ -79,7 +79,7 @@
     "perussaanto_otsikko": "Perussääntö",
     "perussaanto": "Pizzakortit ovat aina pöydällä. Ne valmistetaan kädessä olevilla täytekorteilla.",
     "arvo_otsikko": "Pizzan arvo",
-    "arvo": "Valmista pizza omilla täytekorteillasi ja sano ääneen laskutoimitus, jolla saat pizzan arvon. Kaikki laskutoimitukset ovat sallittuja ja niitä saa yhdistää, kunhan tulos on pizzan arvo. Esimerkiksi <b>5 = 2 + 4 – 1</b>.",
+    "arvo": "Valmista pizza omilla täytekorteillasi ja sano ääneen laskutoimitus, jolla saat pizzan arvon. Kaikki laskutoimitukset ovat sallittuja ja niitä saa yhdistää, kunhan tulos on pizzan arvo. Esimerkiksi <b>5 = 10 : 2</b>.",
     "esimerkki_otsikko": "Esimerkki: tomaatti-ananaspizza",
     "esimerkki_alt": "Pizzakortti, jonka arvo on 5, sekä täytekortit 10 ja 2: 10 : 2 = 5",
     "esimerkki": "Pizzan arvo on 5. Sen voi tehdä millä tahansa täytekorteilla, kunhan laskun tulos on 5: esimerkiksi 4 + 1, 6 – 1, 2 + 3 tai 10 : 2.",
