@@ -72,7 +72,7 @@
     "perussaanto_otsikko": "Grundregel",
     "perussaanto": "Pizzakorten ligger alltid på bordet. De tillagas med fyllningskort från handen.",
     "arvo_otsikko": "Pizzans värde",
-    "arvo": "Tillaga pizzan med dina egna fyllningskort och säg högt den räkneoperation som ger pizzans värde. Alla räknesätt är tillåtna och kan kombineras, så länge resultatet är lika med pizzans värde. Till exempel <b>5 = 10 : 2</b>.",
+    "arvo": "Tillaga pizzan med dina egna fyllningskort och säg högt den räkneoperation som ger pizzans värde. Alla räknesätt är tillåtna och kan kombineras, så länge resultatet är lika med pizzans värde. Till exempel <b>5 = 10 : 2</b>. Förutom addition, subtraktion, multiplikation och division går det till exempel också bra med potenser, logaritmer och fakultet – var och en räknar på sin egen nivå.",
     "esimerkki_otsikko": "Exempel: tomat-ananas-pizza",
     "esimerkki_alt": "Ett pizzakort med värdet 5 och fyllningskorten 10 och 2: 10 : 2 = 5",
     "esimerkki": "Pizzans värde är 5. Den kan göras med vilka fyllningskort som helst, så länge uträkningen blir 5: till exempel 4 + 1, 6 – 1, 2 + 3 eller 10 : 2.",

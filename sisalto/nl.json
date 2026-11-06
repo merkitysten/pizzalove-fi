@@ -78,7 +78,7 @@
     "perussaanto_otsikko": "Basisregel",
     "perussaanto": "Pizzakaarten liggen altijd op tafel. Je maakt ze met toppingkaarten uit je hand.",
     "arvo_otsikko": "Waarde van de pizza",
-    "arvo": "Maak een pizza met je eigen toppingkaarten en zeg hardop de som die de waarde van de pizza geeft. Alle sommen zijn toegestaan en je mag ze combineren, zolang de uitkomst gelijk is aan de waarde van de pizza. Bijvoorbeeld <b>5 = 10 : 2</b>.",
+    "arvo": "Maak een pizza met je eigen toppingkaarten en zeg hardop de som die de waarde van de pizza geeft. Alle sommen zijn toegestaan en je mag ze combineren, zolang de uitkomst gelijk is aan de waarde van de pizza. Bijvoorbeeld <b>5 = 10 : 2</b>. Naast optellen, aftrekken, vermenigvuldigen en delen mag je bijvoorbeeld ook machten, logaritmen en faculteiten gebruiken – iedereen rekent op zijn eigen niveau.",
     "esimerkki_otsikko": "Voorbeeld: tomaat-ananaspizza",
     "esimerkki_alt": "Een pizzakaart met de waarde 5 en de toppingkaarten 10 en 2: 10 : 2 = 5",
     "esimerkki": "De pizza heeft de waarde 5. Je kunt hem maken met willekeurige toppingkaarten, zolang de som 5 oplevert: bijvoorbeeld 4 + 1, 6 – 1, 2 + 3 of 10 : 2.",

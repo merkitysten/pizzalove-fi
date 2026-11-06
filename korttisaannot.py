@@ -539,7 +539,7 @@ def sivu_html(kieli, lahde):
   .qr span {{ display: block; margin-top: .8mm; font: 700 7pt/1.15 Otsikko,
               sans-serif; text-transform: uppercase; letter-spacing: .02em }}
 
-  .perusteet {{ margin-top: 4mm; padding: 3.4mm 5mm 2.4mm }}
+  .perusteet {{ margin-top: 3mm; padding: 3.4mm 5mm 2.4mm }}
   h2 {{ font: 700 17pt/1 Otsikko, sans-serif; text-transform: uppercase;
         color: {oranssi}; margin-bottom: 2mm; break-after: avoid }}
   h3 {{ font: 700 10pt/1.1 Otsikko, sans-serif; text-transform: uppercase;
@@ -558,13 +558,13 @@ def sivu_html(kieli, lahde):
   .kaksi > div > .palkki:first-child {{ margin-top: 0 }}
   .johdanto {{ font-size: 9.8pt; margin-bottom: 3mm }}
   .rivi {{ display: flex; gap: 2mm; margin: 0 0 2mm }}
-  .rivi img {{ width: 14mm; height: auto; border: .15mm solid {viiva};
+  .rivi img {{ width: 13mm; height: auto; border: .15mm solid {viiva};
                border-radius: 8% / 5.3% }}
-  .portaat {{ margin-top: 4mm; padding: 3.4mm 5mm 3mm }}
+  .portaat {{ margin-top: 3mm; padding: 3.4mm 5mm 3mm }}
   .pelit {{ font: 700 9pt/1.2 Otsikko, sans-serif; text-transform: uppercase;
             letter-spacing: .02em; color: {oranssi}; margin-bottom: 1.6mm }}
   .lasku {{ gap: 1mm; margin: 2.4mm 0 0 }}
-  .lasku img {{ flex: 0 1 10.5mm; min-width: 0; width: 10.5mm }}
+  .lasku img {{ flex: 0 1 10mm; min-width: 0; width: 10mm }}
   .lasku b {{ font-size: 12pt }}
   .uusi-sivu {{ break-before: page; margin-top: 0 }}
   .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 2.4mm;
@@ -580,7 +580,7 @@ def sivu_html(kieli, lahde):
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
   .palstat p:has(+ ul.lista), .palstat p:has(+ ol.lista) {{ break-after: avoid }}
   .kotisaanto p {{ margin: 0 }}
-  .tieto {{ margin-top: 4mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
+  .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
   .palstat > *, .kortti {{ break-inside: avoid }}

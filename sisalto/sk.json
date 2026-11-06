@@ -78,7 +78,7 @@
     "perussaanto_otsikko": "Základné pravidlo",
     "perussaanto": "Karty pízz sú vždy na stole. Pripravujú sa kartami prísad, ktoré máte v ruke.",
     "arvo_otsikko": "Hodnota pizze",
-    "arvo": "Pripravte pizzu z vlastných kariet prísad a nahlas povedzte výpočet, ktorý dá hodnotu pizze. Všetky výpočty sú povolené a dajú sa kombinovať, ak sa výsledok rovná hodnote pizze. Napríklad <b>5 = 10 : 2</b>.",
+    "arvo": "Pripravte pizzu z vlastných kariet prísad a nahlas povedzte výpočet, ktorý dá hodnotu pizze. Všetky výpočty sú povolené a dajú sa kombinovať, ak sa výsledok rovná hodnote pizze. Napríklad <b>5 = 10 : 2</b>. Okrem sčítania, odčítania, násobenia a delenia môžete použiť napríklad aj mocniny, logaritmy či faktoriál – každý počíta na svojej úrovni.",
     "esimerkki_otsikko": "Príklad: pizza s paradajkou a ananásom",
     "esimerkki_alt": "Karta pizze s hodnotou 5 a karty prísad 10 a 2: 10 : 2 = 5",
     "esimerkki": "Hodnota pizze je 5. Môžete ju pripraviť z akýchkoľvek kariet prísad, ak výpočet dá 5: napríklad 4 + 1, 6 – 1, 2 + 3 alebo 10 : 2.",
