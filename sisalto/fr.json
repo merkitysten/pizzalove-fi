@@ -81,7 +81,8 @@
     "arvo": "Prépare une pizza avec tes cartes ingrédient et dis à voix haute le calcul qui donne la valeur de la pizza. Tous les calculs sont permis et peuvent être combinés, tant que le résultat est égal à la valeur de la pizza. Par exemple <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Tous les calculs comptent",
-      "html": "En plus de l’addition, de la soustraction, de la multiplication et de la division, tu peux aussi utiliser les puissances, les logarithmes ou la factorielle, par exemple <b>5 = 2² + 1</b> ou <b>5 = 3! – 1</b>. Chacun calcule à son niveau."
+      "html": "En plus de l’addition, de la soustraction, de la multiplication et de la division, tu peux aussi utiliser les puissances, les logarithmes ou la factorielle, par exemple <b>5 = 2² + 1</b> ou <b>5 = 3! – 1</b>. Chacun calcule à son niveau.",
+      "paperi": "<p>Chacun calcule à son niveau, par exemple :</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Astuces pratiques :</b> multiplie par un, ou divise un nombre par lui-même pour obtenir un (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Exemple : pizza tomate-ananas",
     "esimerkki_alt": "Une carte pizza de valeur 5 et les cartes ingrédient 10 et 2 : 10 : 2 = 5",
@@ -92,6 +93,38 @@
     "basso_tapa_otsikko": "La méthode du singe Basso",
     "basso_tapa": "Utilise autant d’<b>ingrédients différents</b> que la pizza a d’ingrédients. Tu peux utiliser plus de cartes : la pizza tomate-ananas (valeur 5) peut se faire avec deux tomates et une olive, 2 + 2 + 1 = 5, car il y a deux sortes d’ingrédients. Utilise cette façon dans Pizza Basso, ou pour un défi en plus dans Pizza Party.<br><span class=\"pieni\">Les règles imprimées disent encore « autant de cartes ingrédient que la pizza a d’ingrédients ». La nouvelle façon donne plus de possibilités au jeu.</span>",
     "huomio_bruno": "<b>Bruno ou Basso ?</b> Le singe du jeu s’appelle maintenant Basso. Dans les anciennes règles et vidéos, il s’appelle Bruno, et le deuxième mode de jeu s’appelle Pizza Bruno. Les règles sont les mêmes.",
+    "portaat_otsikko": "Trois façons de préparer une pizza",
+    "portaat_ingressi": "La valeur doit toujours correspondre. Les jeux diffèrent par les cartes ingrédient que tu peux utiliser. L’exemple est la pizza tomate-ananas (valeur 5).",
+    "portaat": [
+      {
+        "otsikko": "1. N’importe quels ingrédients",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Utilise n’importe quelles cartes ingrédient, autant que tu veux – <b>même une seule</b>. Seule la valeur compte.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 7 + 6 - 8"
+        ]
+      },
+      {
+        "otsikko": "2. La méthode du singe Basso",
+        "pelit": "#1 Pizza Party (défi en plus) · #2 Pizza Basso",
+        "html": "<p>Utilise autant d’ingrédients <b>différents</b> que la pizza en a. Ce ne sont pas forcément les ingrédients de la pizza. Tu peux utiliser plus de cartes, par exemple deux identiques.</p><p>Essaie aussi dans <b>#1 Pizza Party</b> : le jeu devient plus amusant, même s’il est un peu plus difficile.</p><p>La pizza tomate-ananas a deux ingrédients : une seule carte ne suffit donc pas.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. Les bons ingrédients",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Prépare la pizza avec <b>exactement ses propres ingrédients</b>.</p><p>La pizza tomate-ananas a besoin d’une tomate et d’un ananas.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
+    "tieto": "<b>Bruno ou Basso ?</b> Dans les règles imprimées en 2025 et dans les vidéos, le singe s’appelle Bruno (et le deuxième jeu Pizza Bruno). La méthode de Basso parle maintenant d’ingrédients et non plus de cartes ingrédient, ce qui donne beaucoup plus de possibilités au jeu.",
     "muodot_otsikko": "Trois façons de jouer",
     "muodot_ingressi": "Ouvre un mode de jeu pour voir ses règles et ses vidéos.",
     "videot_otsikko": "Vidéos",
@@ -110,14 +143,26 @@
         "numero": "#1",
         "nimi": "Pizza Party",
         "kuvaus": "Le plus facile pour commencer, rapide et animé · env. 5 min",
-        "html": "<h3>But du jeu</h3><p>Les joueurs font la course pour préparer des pizzas. Le gagnant est celui qui prépare le plus de pizzas avant qu’il n’y ait plus de cartes pizza ou de cartes ingrédient.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 5 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Tous les joueurs essaient aussitôt de préparer cette pizza avec leurs cartes ingrédient.</p><h3>Déroulement</h3><ul class=\"lista\"><li>On joue sans tours : tout le monde essaie de préparer des pizzas en même temps.</li><li>Pour préparer une pizza, tu plaques tes cartes ingrédient sur la pizza de la table et tu dis le calcul à voix haute. Le plus rapide prend la carte pizza et la garde devant lui.</li><li>Si plusieurs joueurs plaquent leurs cartes en même temps, la pizza revient à celui dont les cartes sont tout en dessous.</li><li>Les cartes ingrédient utilisées sont retirées du jeu. Pioche de nouvelles cartes jusqu’à avoir de nouveau 5 cartes en main.</li><li>Retourne tout de suite une nouvelle carte pizza. Continuez jusqu’à ce qu’il n’y ait plus de cartes pizza ou de cartes ingrédient et que personne ne puisse plus préparer de pizza.</li></ul><h3>Si une pizza ne peut pas être préparée</h3><p>Si personne ne peut ou ne veut préparer la pizza sur la table, retourne une nouvelle carte pizza par-dessus. Le joueur qui prépare la pizza suivante prend toutes les pizzas sur la table.</p><h3>Points et victoire</h3><p>Une pizza rapporte autant de points qu’elle a d’ingrédients. Une pizza cœur rapporte un point de plus. Par exemple, la pizza tomate-ananas = 2 points.</p><p>Le joueur qui a le plus de points gagne la manche. Mettez-vous d’accord sur le nombre de manches : par exemple, le premier à gagner 3 ou 5 manches gagne la partie.</p><h3>Pizza Party au tour par tour</h3><p>Vous pouvez aussi jouer chacun à votre tour, pour que chaque joueur ait le temps de réfléchir pendant son tour.</p><h3>Règles optionnelles</h3><p>Vous pouvez choisir des règles qui limitent les calculs, par exemple :</p><ul class=\"lista\"><li>jouer seulement avec des additions et des soustractions</li><li>chaque pizza doit contenir une multiplication ou une division.</li></ul>"
+        "html": "<h3>But du jeu</h3><p>Les joueurs font la course pour préparer des pizzas. Le gagnant est celui qui prépare le plus de pizzas avant qu’il n’y ait plus de cartes pizza ou de cartes ingrédient.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 5 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Tous les joueurs essaient aussitôt de préparer cette pizza avec leurs cartes ingrédient.</p><h3>Déroulement</h3><ul class=\"lista\"><li>On joue sans tours : tout le monde essaie de préparer des pizzas en même temps.</li><li>Pour préparer une pizza, tu plaques tes cartes ingrédient sur la pizza de la table et tu dis le calcul à voix haute. Le plus rapide prend la carte pizza et la garde devant lui.</li><li>Si plusieurs joueurs plaquent leurs cartes en même temps, la pizza revient à celui dont les cartes sont tout en dessous.</li><li>Les cartes ingrédient utilisées sont retirées du jeu. Pioche de nouvelles cartes jusqu’à avoir de nouveau 5 cartes en main.</li><li>Retourne tout de suite une nouvelle carte pizza. Continuez jusqu’à ce qu’il n’y ait plus de cartes pizza ou de cartes ingrédient et que personne ne puisse plus préparer de pizza.</li></ul><h3>Si une pizza ne peut pas être préparée</h3><p>Si personne ne peut ou ne veut préparer la pizza sur la table, retourne une nouvelle carte pizza par-dessus. Le joueur qui prépare la pizza suivante prend toutes les pizzas sur la table.</p><h3>Points et victoire</h3><p>Une pizza rapporte autant de points qu’elle a d’ingrédients. Une pizza cœur rapporte un point de plus. Par exemple, la pizza tomate-ananas = 2 points.</p><p>Le joueur qui a le plus de points gagne la manche. Mettez-vous d’accord sur le nombre de manches : par exemple, le premier à gagner 3 ou 5 manches gagne la partie.</p><h3>Pizza Party au tour par tour</h3><p>Vous pouvez aussi jouer chacun à votre tour, pour que chaque joueur ait le temps de réfléchir pendant son tour.</p><h3>Règles optionnelles</h3><p>Vous pouvez choisir des règles qui limitent les calculs, par exemple :</p><ul class=\"lista\"><li>jouer seulement avec des additions et des soustractions</li><li>chaque pizza doit contenir une multiplication ou une division.</li></ul>",
+        "kotisaanto": {
+          "otsikko": "Règles optionnelles",
+          "html": "<p><b>Points :</b> mettez-vous d’accord avant la partie si vous comptez autrement.</p><ul class=\"lista\"><li><b>Plus facile :</b> chaque pizza = 1 point, +1 pour une pizza cœur.</li><li><b>Plus difficile :</b> une pizza = sa valeur (1 à 10), +1 pour une pizza cœur.</li></ul>",
+          "siirra": "Règles optionnelles",
+          "siirra_alku": "<p><b>Calculs :</b> vous pouvez les limiter, par exemple :</p>"
+        }
       },
       {
         "avain": "basso",
         "numero": "#2",
         "nimi": "Pizza Basso",
         "kuvaus": "Calme et palpitant · env. 7 min",
-        "html": "<p class=\"pieni\">Dans les anciennes règles : Pizza Bruno.</p><h3>But du jeu</h3><p>Les joueurs essaient de vider leur main, c’est-à-dire de se débarrasser de toutes les cartes ingrédient qu’ils ont en main. Le premier qui y arrive gagne la manche.</p><p><b>Remarque :</b> les pizzas se préparent selon la méthode du singe Basso.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 7 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Le dernier joueur à avoir mangé une pizza commence.</p><h3>Déroulement</h3><p>À tour de rôle, les joueurs essaient de préparer la pizza sur la table avec leurs cartes ingrédient.</p><p><b>A) Si tu réussis :</b> retire du jeu les cartes ingrédient utilisées et retourne une nouvelle carte pizza de la pile sur l’ancienne. C’est au tour du joueur suivant.</p><p><b>B) Si tu ne peux pas ou ne veux pas préparer la pizza :</b> pioche une carte ingrédient. C’est au tour du joueur suivant.</p><p><b>C) Plus qu’une carte :</b> quand il ne te reste qu’une carte ingrédient, fais comme le singe Basso affamé et crie : « PIZZAAA ! »</p><h3>Si les cartes ingrédient sont épuisées</h3><p>Mélange les cartes ingrédient défaussées pour former une nouvelle pioche et continuez.</p><h3>Points et victoire</h3><p>Le premier joueur à se débarrasser de toutes ses cartes ingrédient gagne la manche. On additionne les valeurs des cartes qui restent dans la main des autres joueurs : ce total donne les points du gagnant. Un ingrédient normal compte sa valeur (1–10), un ingrédient fantaisie compte 20.</p><p>Le premier à atteindre 100 points gagne et reçoit le titre de <b>Pizza Basso – le vrai singe de la pizza</b>.</p><h3>Partie plus courte</h3><p>Vous pouvez décider que la partie s’arrête, par exemple, à 30 ou 50 points, ou que le premier à gagner 3 ou 5 manches gagne la partie.</p>"
+        "html": "<p class=\"pieni\">Dans les anciennes règles : Pizza Bruno.</p><h3>But du jeu</h3><p>Les joueurs essaient de vider leur main, c’est-à-dire de se débarrasser de toutes les cartes ingrédient qu’ils ont en main. Le premier qui y arrive gagne la manche.</p><p><b>Remarque :</b> les pizzas se préparent selon la méthode du singe Basso.</p><h3>Mise en place</h3><ol class=\"lista\"><li>Mélange les cartes pizza et pose-les en pile à portée de tous les joueurs.</li><li>Mélange les cartes ingrédient et distribues-en 7 à chaque joueur. Les autres forment la pioche. Les joueurs peuvent regarder leurs cartes.</li></ol><h3>Début de la partie</h3><p>Retourne la première carte pizza face visible à côté de la pile. Le dernier joueur à avoir mangé une pizza commence.</p><h3>Déroulement</h3><p>À tour de rôle, les joueurs essaient de préparer la pizza sur la table avec leurs cartes ingrédient.</p><p><b>A) Si tu réussis :</b> retire du jeu les cartes ingrédient utilisées et retourne une nouvelle carte pizza de la pile sur l’ancienne. C’est au tour du joueur suivant.</p><p><b>B) Si tu ne peux pas ou ne veux pas préparer la pizza :</b> pioche une carte ingrédient. C’est au tour du joueur suivant.</p><p><b>C) Plus qu’une carte :</b> quand il ne te reste qu’une carte ingrédient, fais comme le singe Basso affamé et crie : « PIZZAAA ! »</p><h3>Si les cartes ingrédient sont épuisées</h3><p>Mélange les cartes ingrédient défaussées pour former une nouvelle pioche et continuez.</p><h3>Points et victoire</h3><p>Le premier joueur à se débarrasser de toutes ses cartes ingrédient gagne la manche. On additionne les valeurs des cartes qui restent dans la main des autres joueurs : ce total donne les points du gagnant. Un ingrédient normal compte sa valeur (1–10), un ingrédient fantaisie compte 20.</p><p>Le premier à atteindre 100 points gagne et reçoit le titre de <b>Pizza Basso – le vrai singe de la pizza</b>.</p><h3>Partie plus courte</h3><p>Vous pouvez décider que la partie s’arrête, par exemple, à 30 ou 50 points, ou que le premier à gagner 3 ou 5 manches gagne la partie.</p>",
+        "kotisaanto": {
+          "otsikko": "Règles optionnelles",
+          "html": "<p><b>Tout le monde marque des points :</b> chacun garde les pizzas qu’il prépare et compte ses propres points à la fin de la manche : une pizza = sa valeur (1 à 10), +1 pour une pizza cœur. Idéal avec de jeunes enfants.</p>",
+          "siirra": "Partie plus courte",
+          "siirra_alku": "<p><b>Partie plus courte :</b> vous pouvez décider que la partie s’arrête, par exemple, à 30 ou 50 points, ou que le premier à gagner 3 ou 5 manches gagne la partie.</p>"
+        }
       },
       {
         "avain": "love",
@@ -128,8 +173,8 @@
       }
     ],
     "lataa_otsikko": "Règles en PDF",
-    "lataa_teksti": "La feuille de règles imprimée, en finnois, en suédois et en anglais.",
-    "lataa_tiedosto": "Règles du jeu de cartes (FI · SV · EN)",
+    "lataa_teksti": "Les trois modes de jeu en français – trois pages à imprimer.",
+    "lataa_tiedosto": "Règles du jeu de cartes (français)",
     "pelaa_otsikko": "Pizza Party et Pizza Basso",
     "pelaa_teksti": "Les deux se jouent aussi dans ton navigateur. Essaie-les avant ta première partie, ou joue avec tes amis, chacun sur son téléphone.",
     "ristiin_otsikko": "Ensuite : le jeu de plateau Pizza Love®",

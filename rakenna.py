@@ -119,13 +119,21 @@ LAUTA_VIDEO_VUORO = ('IN2LvbXo9eA', 'fi')
 # kuulostaa aaneen lahes samalta. Verkkohaku ei ole tavaramerkkihaku.
 PELIN_NIMI = 'Topping Ten'
 
-# ⚠️ KORTTIPELIN SAANTO-PDF ON KIELIKOHTAINEN, MUU EI. Painettu arkki on
-# FI · SV · EN, joten saksankieliselle lukijalle se on lataus jota han ei osaa
-# lukea. `korttisaannot.py` tekee saksasta A4-arkin SIVUN OMASTA SISALLOSTA,
-# eika sita saa korvata painetusta arkista kaannetylla: painettu on vanhempi
-# (apina on siina Bruno, ja Basson tapa on eri saanto).
+# ⚠️ KORTTIPELIN SAANTO-PDF ON KIELIKOHTAINEN, MUU EI. Marko 6.11.2026:
+# «juu kaikille oma pdf». `korttisaannot.py` tekee jokaiselle kielelle
+# A4-arkin SIVUN OMASTA SISALLOSTA. Painettu FI · SV · EN -arkki
+# (pdf/pizza-love-korttipeli-saannot.pdf) jaa repoon arkistoksi, mutta
+# mikaan sivu ei linkita siihen: se on vanhempi (apina on siina Bruno, ja
+# Basson tapa on eri saanto). Sita kaytetaan vain varalla, jos kielen oma
+# PDF puuttuu (varoitus tulostuu).
 KORTTIPELI_PDF = {
+    'fi': ('pdf/pizza-love-korttipeli-saannot-fi.pdf', 'korttipeli'),
+    'sv': ('pdf/pizza-love-kortspel-regler-sv.pdf', 'korttipeli'),
+    'en': ('pdf/pizza-love-card-game-rules-en.pdf', 'korttipeli'),
     'de': ('pdf/pizza-love-kartenspiel-regeln-de.pdf', 'korttipeli'),
+    'nl': ('pdf/pizza-love-kaartspel-regels-nl.pdf', 'korttipeli'),
+    'fr': ('pdf/pizza-love-jeu-de-cartes-regles-fr.pdf', 'korttipeli'),
+    'es': ('pdf/pizza-love-juego-de-cartas-reglas-es.pdf', 'korttipeli'),
     'sk': ('pdf/pizza-love-kartova-hra-pravidla-sk.pdf', 'korttipeli'),
 }
 

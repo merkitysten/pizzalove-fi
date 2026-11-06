@@ -65,13 +65,11 @@ SIVU_KATTO = 3   # 🔵 Marko 6.11.2026: «Jos ohjeet menevät kolmelle A4-sivul
 KIELET = {
     # 🔵 Marko 6.11.2026: «Voitko tehdä samanlaisen ohjeen myös suomeksi,
     # jolloin voin helpommin tarkistaa ohjeen rakenteen ja myös kielen.»
-    # ⚠️ TARKISTUSVERSIO, EI JULKAISTA: kansio paperi/luonnokset (ei
-    # julkinen/), eika sivu linkita siihen. Suomen julkinen lataus on yha
-    # painettu FI·SV·EN-arkki (pizza-love-korttipeli-saannot.pdf), jota
-    # tama EI saa korvata.
+    # 🔵 Marko 6.11.2026: «juu kaikille oma pdf» – suomikin julkaistaan.
+    # Painettu FI·SV·EN-arkki (pizza-love-korttipeli-saannot.pdf) jaa
+    # arkistoksi, mutta mikaan sivu ei enaa linkita siihen.
     'fi': {
-        'tiedosto': 'pizza-love-korttipeli-saannot-fi-luonnos.pdf',
-        'kansio': os.path.join('paperi', 'luonnokset'),
+        'tiedosto': 'pizza-love-korttipeli-saannot-fi.pdf',
         'alaotsikko': 'Kolme peliä samalla pakalla',
         'iskulause': 'JOKAINEN PIZZA LASKETAAN',
         'bruno_huomio': '*Vuoden 2025 ohjeissa Pizza Bruno.',
@@ -127,6 +125,89 @@ KIELET = {
         'videot': 'More information and videos at',
         'oikeudet': ('Pizza Love® and Merkitysten® are registered trademarks '
                      'of Merkitysten Oy. All rights reserved.'),
+    },
+    'sv': {
+        'tiedosto': 'pizza-love-kortspel-regler-sv.pdf',
+        'alaotsikko': 'Tre spel med samma kortlek',
+        'iskulause': 'VARJE PIZZA RÄKNAS',
+        'bruno_huomio': '*I reglerna från 2025: Pizza Bruno.',
+        'hyva_tietaa': 'Bra att veta',
+        'kaavio': ('Spelare A', 'Spelare B', 'Pizzahög', 'Lager',
+                   'Draghög', 'Bytespizza'),
+        'vaihto_luku': 'Att byta lagerkort',
+        'vaihto_otsikko': 'Exempel på ett byte',
+        'vaihto': ('Spelare B byter sin 4:a mot spelare A:s 6:a och 2:a, '
+                   'eftersom 4 = 6 – 2. Nu kan B tillaga sin pizza. Bytet '
+                   'hjälpte A också, men för B var det ändå värt det.'),
+        'qr_teksti': 'Regler och<br>videor online',
+        'osoite': 'https://pizzalove.fi/sv/korttipeli.html',
+        'videot': 'Mer information och videor på',
+        'oikeudet': ('Pizza Love® och Merkitysten® är registrerade varumärken '
+                     'som tillhör Merkitysten Oy. Alla rättigheter förbehållna.'),
+    },
+    'nl': {
+        # pidempi kieli: hieman tiiviimpi leipateksti, jotta arkki pysyy 3 sivussa
+        'tiivis': (8.6, 1.36),
+        'tiedosto': 'pizza-love-kaartspel-regels-nl.pdf',
+        'alaotsikko': 'Drie spellen met één stapel kaarten',
+        'iskulause': 'ELKE PIZZA TELT',
+        'bruno_huomio': '*In de regels van 2025: Pizza Bruno.',
+        'hyva_tietaa': 'Goed om te weten',
+        'kaavio': ('Speler A', 'Speler B', 'Pizzastapel', 'Voorraad',
+                   'Trekstapel', 'Ruilpizza'),
+        'vaihto_luku': 'Voorraadkaarten ruilen',
+        'vaihto_otsikko': 'Voorbeeld van een ruil',
+        'vaihto': ('Speler B ruilt zijn 4 tegen de 6 en de 2 van speler A, want '
+                   '4 = 6 – 2. Nu kan B zijn pizza maken. De ruil hielp A ook, '
+                   'maar voor B was hij toch de moeite waard.'),
+        'qr_teksti': 'Regels en<br>video’s online',
+        'osoite': 'https://pizzalove.fi/nl/korttipeli.html',
+        'videot': 'Meer informatie en video’s op',
+        'oikeudet': ('Pizza Love® en Merkitysten® zijn geregistreerde '
+                     'handelsmerken van Merkitysten Oy. Alle rechten voorbehouden.'),
+    },
+    'fr': {
+        # pidempi kieli: hieman tiiviimpi leipateksti, jotta arkki pysyy 3 sivussa
+        'tiivis': (8.6, 1.36),
+        'tiedosto': 'pizza-love-jeu-de-cartes-regles-fr.pdf',
+        'alaotsikko': 'Trois jeux avec un seul paquet',
+        'iskulause': 'CHAQUE PIZZA COMPTE',
+        'bruno_huomio': '*Dans les règles de 2025 : Pizza Bruno.',
+        'hyva_tietaa': 'Bon à savoir',
+        'kaavio': ('Joueur A', 'Joueur B', 'Pile de pizzas', 'Réserve',
+                   'Pioche', 'Pizza d’échange'),
+        'vaihto_luku': 'Échanger des cartes de réserve',
+        'vaihto_otsikko': 'Exemple d’échange',
+        'vaihto': ('Le joueur B échange son 4 contre le 6 et le 2 du joueur A, '
+                   'car 4 = 6 – 2. B peut maintenant préparer sa pizza. '
+                   'L’échange a aussi aidé A, mais il valait quand même le coup '
+                   'pour B.'),
+        'qr_teksti': 'Règles et<br>vidéos en ligne',
+        'osoite': 'https://pizzalove.fi/fr/korttipeli.html',
+        'videot': 'Plus d’informations et de vidéos sur',
+        'oikeudet': ('Pizza Love® et Merkitysten® sont des marques déposées de '
+                     'Merkitysten Oy. Tous droits réservés.'),
+    },
+    'es': {
+        # pidempi kieli: hieman tiiviimpi leipateksti, jotta arkki pysyy 3 sivussa
+        'tiivis': (8.6, 1.36),
+        'tiedosto': 'pizza-love-juego-de-cartas-reglas-es.pdf',
+        'alaotsikko': 'Tres juegos con una sola baraja',
+        'iskulause': 'CADA PIZZA CUENTA',
+        'bruno_huomio': '*En las reglas de 2025: Pizza Bruno.',
+        'hyva_tietaa': 'Bueno saber',
+        'kaavio': ('Jugador A', 'Jugador B', 'Montón de pizzas', 'Almacén',
+                   'Mazo de robo', 'Pizza de intercambio'),
+        'vaihto_luku': 'Intercambiar cartas del almacén',
+        'vaihto_otsikko': 'Ejemplo de intercambio',
+        'vaihto': ('El jugador B cambia su 4 por el 6 y el 2 del jugador A, '
+                   'porque 4 = 6 – 2. Ahora B puede preparar su pizza. El '
+                   'intercambio también ayudó a A, pero a B le compensó igualmente.'),
+        'qr_teksti': 'Reglas y<br>vídeos en línea',
+        'osoite': 'https://pizzalove.fi/es/korttipeli.html',
+        'videot': 'Más información y vídeos en',
+        'oikeudet': ('Pizza Love® y Merkitysten® son marcas registradas de '
+                     'Merkitysten Oy. Todos los derechos reservados.'),
     },
     # 🔵 Marko 6.11.2026: «Nyt tarvittaisiin slovakian kielinen versio
     # nettisivuista sekä ohjeesta.» Odottaa natiivitarkistusta.
@@ -281,6 +362,13 @@ def kaavio(k):
                 '<text x="44" y="%.1f" text-anchor="middle" fill="#fff">%s</text>'
                 % (y, y + 4.1, sana))
 
+    def mahtuu(cx, sana):
+        '''Pitka nimi (esim. PILE DE PIZZAS) siirretaan kuvan sisaan, ettei
+        se leikkaudu reunasta; lyhyt pysyy kortin keskella. Leveysarvio:
+        isot kirjaimet, Barlow Condensed 3.4 mm ~ 1.95 mm/merkki.'''
+        puoli = len(sana) * 1.95 / 2 + .4
+        return min(max(cx, puoli), 88 - puoli)
+
     def keski(x0, maara):
         """Varastopaikkojen (L + 4 mm valein) keskikohta nimea varten."""
         return x0 + (maara * L + (maara - 1) * 4) / 2
@@ -297,7 +385,7 @@ def kaavio(k):
     v.append(kortti(22, 8, 'tayte-6', True))
     v.append(kortti(37, 8, 'tayte-2', True))
     v += [kortti(52 + i * 15, 8) for i in range(2)]
-    v.append(teksti(2 + L / 2, 30, pino))
+    v.append(teksti(mahtuu(2 + L / 2, pino), 30, pino))
     v.append(teksti(keski(22, 4), 30, varasto))
     v.append('</g>')
     # keskella nostopakka ja vaihtopizza, nimet kortin keskikohdalla
@@ -310,7 +398,7 @@ def kaavio(k):
     # pelaaja B peilikuvana: varasto vasemmalla (4), pino oikealla, nimet ylla
     v.append('<g transform="translate(0 %.1f)">' % B)
     v.append(teksti(keski(3, 4), 59.5, varasto))
-    v.append(teksti(74 + L / 2, 59.5, pino))
+    v.append(teksti(mahtuu(74 + L / 2, pino), 59.5, pino))
     v.append(kortti(3, 61.5, 'tayte-4', True))
     v += [kortti(18 + i * 15, 61.5) for i in range(3)]
     v.append(pakka(74, 61.5, 'tausta-pizza', 'pizza-34'))
@@ -531,7 +619,7 @@ def sivu_html(kieli, lahde):
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
   body {{ font-family: Teksti, 'Helvetica Neue', Arial, sans-serif;
           color: {musta}; background: #fff;
-          font-size: 9pt; line-height: 1.4;
+          font-size: {perus}pt; line-height: {rivi};
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   b {{ font-weight: 700 }}
   .kehys {{ border: .35mm solid {musta}; -webkit-box-decoration-break: clone;
@@ -551,7 +639,7 @@ def sivu_html(kieli, lahde):
   /* 🔵 Marko 6.11.2026: teksti keskelle ja väljemmin. Pehmusteet on
      mitattu versaalien mukaan (400 dpi), ei rivilaatikon. */
   .tiedot li {{ background: {musta}; color: #fff; border-radius: 1.2mm;
-                padding: 1.3mm 3mm 1.1mm; font: 700 9pt/1 Otsikko, sans-serif;
+                padding: 1.3mm {laatta_sivu}mm 1.1mm; font: 700 {laatta_pt}pt/1 Otsikko, sans-serif;
                 text-transform: uppercase; letter-spacing: .02em }}
   .qr {{ flex: none; width: {qrmm}mm; text-align: center; padding-top: 3.2mm }}
   .qr span {{ display: block; margin-top: .8mm; font: 700 7pt/1.15 Otsikko,
@@ -636,7 +724,7 @@ def sivu_html(kieli, lahde):
   .alalaatikko h3 {{ margin: 0 0 .6mm }}
   .alalaatikko p {{ font-size: 8.6pt; margin: 0 }}
   .alalaatikko h3.bruno {{ margin-top: 1.8mm }}
-  .alalaatikko .tekstit p {{ font-size: 8.6pt }}
+  .alalaatikko .tekstit p {{ font-size: {ala_pt}pt }}
   .alalaatikko .osa p {{ line-height: 1.32 }}
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto);
                  justify-content: start; column-gap: 7mm; row-gap: .2mm;
@@ -680,7 +768,7 @@ def sivu_html(kieli, lahde):
      jää sen alapuolelle (Marko 3.11.2026) */
   .huomio p {{ margin: 0 }}
 
-  .muoto {{ margin-top: 5mm; padding: 0 5mm 2.4mm }}
+  .muoto {{ margin-top: {muoto_vali}mm; padding: 0 5mm 2.4mm }}
   /* pelimuoto alkaa ja loppuu samalla sivulla, jos se mahtuu sivulle:
      palstat eivat jatku siististi sivulta toiselle (mitattu 6.11.2026) */
   .muoto {{ break-inside: avoid }}
@@ -766,6 +854,9 @@ def sivu_html(kieli, lahde):
 </html>'''
     return runko.format(
         kieli=kieli, vali=PALSTAVALI,
+        perus=k.get('tiivis', (9, 1.4))[0], rivi=k.get('tiivis', (9, 1.4))[1],
+        ala_pt=8.2 if 'tiivis' in k else 8.6, muoto_vali=3.2 if 'tiivis' in k else 5,
+        laatta_pt=8.4 if 'tiivis' in k else 9, laatta_sivu=2.4 if 'tiivis' in k else 3,
         hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=VIIVA, musta=MUSTA, oranssi=ORANSSI, kirjasimet=KIRJASIMET,
         viiri=viiri(k['iskulause']), qr=qr,
         qrmm=QR_MM, qr_teksti=k['qr_teksti'], title=e(s['title']),

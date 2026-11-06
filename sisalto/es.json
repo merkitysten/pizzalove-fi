@@ -81,7 +81,8 @@
     "arvo": "Prepara una pizza con tus propias cartas de ingrediente y di en voz alta el cálculo que da el valor de la pizza. Se permiten todos los cálculos y se pueden combinar, siempre que el resultado sea el valor de la pizza. Por ejemplo, <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Valen todos los cálculos",
-      "html": "Además de sumar, restar, multiplicar y dividir, también puedes usar potencias, logaritmos o el factorial, por ejemplo <b>5 = 2² + 1</b> o <b>5 = 3! – 1</b>. Cada uno calcula a su nivel."
+      "html": "Además de sumar, restar, multiplicar y dividir, también puedes usar potencias, logaritmos o el factorial, por ejemplo <b>5 = 2² + 1</b> o <b>5 = 3! – 1</b>. Cada uno calcula a su nivel.",
+      "paperi": "<p>Cada uno calcula a su nivel, por ejemplo así:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Trucos útiles:</b> multiplica por uno, o divide un número entre sí mismo para obtener uno (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Ejemplo: pizza de tomate y piña",
     "esimerkki_alt": "Una carta de pizza con el valor 5 y las cartas de ingrediente 10 y 2: 10 : 2 = 5",
@@ -92,6 +93,38 @@
     "basso_tapa_otsikko": "La forma del mono Basso",
     "basso_tapa": "Usa tantos <b>ingredientes distintos</b> como ingredientes tenga la pizza. Puedes usar más cartas: la pizza de tomate y piña (valor 5) se puede preparar con dos tomates y una aceituna, 2 + 2 + 1 = 5, porque hay dos tipos de ingrediente distintos. Usa esta forma en Pizza Basso o como reto extra en Pizza Party.<br><span class=\"pieni\">Las reglas impresas todavía dicen «tantas cartas de ingrediente como ingredientes tenga la pizza». La nueva forma da más posibilidades al juego.</span>",
     "huomio_bruno": "<b>¿Bruno o Basso?</b> El mono del juego ahora se llama Basso. En las reglas y los vídeos antiguos se llama Bruno, y el segundo modo de juego se llama Pizza Bruno. Las reglas son las mismas.",
+    "portaat_otsikko": "Tres formas de preparar una pizza",
+    "portaat_ingressi": "El valor siempre tiene que coincidir. Los juegos se diferencian en qué cartas de ingrediente puedes usar. El ejemplo es la pizza de tomate y piña (valor 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Cualquier ingrediente",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Usa cualquier carta de ingrediente, tantas como quieras: <b>incluso una sola</b>. Solo cuenta el valor.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 7 + 6 - 8"
+        ]
+      },
+      {
+        "otsikko": "2. La forma del mono Basso",
+        "pelit": "#1 Pizza Party (reto extra) · #2 Pizza Basso",
+        "html": "<p>Usa tantos ingredientes <b>distintos</b> como tenga la pizza. No tienen que ser los ingredientes de la propia pizza. Puedes usar más cartas, por ejemplo dos iguales.</p><p>Pruébalo también en <b>#1 Pizza Party</b>: el juego se vuelve más divertido, aunque un poco más difícil.</p><p>La pizza de tomate y piña tiene dos ingredientes, así que una carta no basta.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. Los ingredientes correctos",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Prepara la pizza con <b>exactamente sus propios ingredientes</b>.</p><p>La pizza de tomate y piña necesita un tomate y una piña.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
+    "tieto": "<b>¿Bruno o Basso?</b> En las reglas impresas en 2025 y en los vídeos, el mono se llama Bruno (y el segundo juego, Pizza Bruno). La forma de Basso habla ahora de ingredientes en lugar de cartas de ingrediente, lo que da muchas más posibilidades al juego.",
     "muodot_otsikko": "Tres formas de jugar",
     "muodot_ingressi": "Abre un modo de juego para ver sus reglas y vídeos.",
     "videot_otsikko": "Vídeos",
@@ -110,14 +143,26 @@
         "numero": "#1",
         "nimi": "Pizza Party",
         "kuvaus": "El más fácil para empezar, rápido y animado · aprox. 5 min",
-        "html": "<h3>Objetivo</h3><p>Los jugadores compiten por preparar pizzas. Gana quien prepare más pizzas antes de que se acaben las cartas de pizza o de ingrediente.</p><h3>Preparación</h3><ol class=\"lista\"><li>Baraja las cartas de pizza y ponlas en un montón al alcance de todos los jugadores.</li><li>Baraja las cartas de ingrediente y reparte 5 a cada jugador. Las demás forman el mazo de robo. Los jugadores pueden mirar sus cartas.</li></ol><h3>Inicio de la partida</h3><p>Pon boca arriba la primera carta de pizza junto al montón. Todos los jugadores intentan enseguida preparar esa pizza con sus cartas de ingrediente.</p><h3>Cómo se juega</h3><ul class=\"lista\"><li>Se juega sin turnos: todos intentan preparar pizzas a la vez.</li><li>Para preparar una pizza, pon de golpe tus cartas de ingrediente sobre la pizza de la mesa y di el cálculo en voz alta. El más rápido se queda la carta de pizza y la guarda delante de sí.</li><li>Si varios lo hacen a la vez, la pizza es para aquel cuyas cartas quedan debajo de todo.</li><li>Las cartas de ingrediente usadas salen del juego. Roba cartas nuevas hasta volver a tener 5 en la mano.</li><li>Pon enseguida boca arriba una nueva carta de pizza. Seguid hasta que se acaben las cartas de pizza o de ingrediente y nadie pueda preparar más pizzas.</li></ul><h3>Si no se puede preparar una pizza</h3><p>Si nadie puede o quiere preparar la pizza de la mesa, pon una nueva carta de pizza boca arriba encima. Quien prepare la siguiente pizza se lleva todas las pizzas de la mesa.</p><h3>Puntos y victoria</h3><p>Una pizza da tantos puntos como ingredientes tiene. Una pizza corazón da un punto extra. Por ejemplo, la pizza de tomate y piña = 2 puntos.</p><p>Gana la ronda el jugador con más puntos. Acordad cuántas rondas vais a jugar: por ejemplo, gana la partida quien gane primero 3 o 5 rondas.</p><h3>Pizza Party por turnos</h3><p>También podéis jugar por turnos, para que cada jugador tenga tiempo de pensar en su turno.</p><h3>Reglas opcionales</h3><p>Podéis acordar reglas que limiten los cálculos, por ejemplo:</p><ul class=\"lista\"><li>jugar solo con sumas y restas</li><li>cada pizza debe incluir una multiplicación o una división.</li></ul>"
+        "html": "<h3>Objetivo</h3><p>Los jugadores compiten por preparar pizzas. Gana quien prepare más pizzas antes de que se acaben las cartas de pizza o de ingrediente.</p><h3>Preparación</h3><ol class=\"lista\"><li>Baraja las cartas de pizza y ponlas en un montón al alcance de todos los jugadores.</li><li>Baraja las cartas de ingrediente y reparte 5 a cada jugador. Las demás forman el mazo de robo. Los jugadores pueden mirar sus cartas.</li></ol><h3>Inicio de la partida</h3><p>Pon boca arriba la primera carta de pizza junto al montón. Todos los jugadores intentan enseguida preparar esa pizza con sus cartas de ingrediente.</p><h3>Cómo se juega</h3><ul class=\"lista\"><li>Se juega sin turnos: todos intentan preparar pizzas a la vez.</li><li>Para preparar una pizza, pon de golpe tus cartas de ingrediente sobre la pizza de la mesa y di el cálculo en voz alta. El más rápido se queda la carta de pizza y la guarda delante de sí.</li><li>Si varios lo hacen a la vez, la pizza es para aquel cuyas cartas quedan debajo de todo.</li><li>Las cartas de ingrediente usadas salen del juego. Roba cartas nuevas hasta volver a tener 5 en la mano.</li><li>Pon enseguida boca arriba una nueva carta de pizza. Seguid hasta que se acaben las cartas de pizza o de ingrediente y nadie pueda preparar más pizzas.</li></ul><h3>Si no se puede preparar una pizza</h3><p>Si nadie puede o quiere preparar la pizza de la mesa, pon una nueva carta de pizza boca arriba encima. Quien prepare la siguiente pizza se lleva todas las pizzas de la mesa.</p><h3>Puntos y victoria</h3><p>Una pizza da tantos puntos como ingredientes tiene. Una pizza corazón da un punto extra. Por ejemplo, la pizza de tomate y piña = 2 puntos.</p><p>Gana la ronda el jugador con más puntos. Acordad cuántas rondas vais a jugar: por ejemplo, gana la partida quien gane primero 3 o 5 rondas.</p><h3>Pizza Party por turnos</h3><p>También podéis jugar por turnos, para que cada jugador tenga tiempo de pensar en su turno.</p><h3>Reglas opcionales</h3><p>Podéis acordar reglas que limiten los cálculos, por ejemplo:</p><ul class=\"lista\"><li>jugar solo con sumas y restas</li><li>cada pizza debe incluir una multiplicación o una división.</li></ul>",
+        "kotisaanto": {
+          "otsikko": "Reglas opcionales",
+          "html": "<p><b>Puntos:</b> acordad antes de la partida si contáis de otra manera.</p><ul class=\"lista\"><li><b>Más fácil:</b> cada pizza = 1 punto, +1 por una pizza corazón.</li><li><b>Más difícil:</b> una pizza = su valor (1–10), +1 por una pizza corazón.</li></ul>",
+          "siirra": "Reglas opcionales",
+          "siirra_alku": "<p><b>Cálculos:</b> podéis limitarlos, por ejemplo:</p>"
+        }
       },
       {
         "avain": "basso",
         "numero": "#2",
         "nimi": "Pizza Basso",
         "kuvaus": "Tranquilo y emocionante · aprox. 7 min",
-        "html": "<p class=\"pieni\">En las reglas antiguas: Pizza Bruno.</p><h3>Objetivo</h3><p>Los jugadores intentan vaciar su mano, es decir, quedarse sin las cartas de ingrediente que tienen en la mano. El primero que lo consigue gana la ronda.</p><p><b>Nota:</b> Las pizzas se preparan a la manera del mono Basso.</p><h3>Preparación</h3><ol class=\"lista\"><li>Baraja las cartas de pizza y ponlas en un montón al alcance de todos los jugadores.</li><li>Baraja las cartas de ingrediente y reparte 7 a cada jugador. Las demás forman el mazo de robo. Los jugadores pueden mirar sus cartas.</li></ol><h3>Inicio de la partida</h3><p>Pon boca arriba la primera carta de pizza junto al montón. Empieza quien haya comido pizza por última vez.</p><h3>Cómo se juega</h3><p>Por turnos, los jugadores intentan preparar la pizza de la mesa con sus cartas de ingrediente.</p><p><b>A) Si lo consigues:</b> retira del juego las cartas de ingrediente usadas y pon una nueva carta de pizza del montón boca arriba encima de la anterior. El turno pasa al siguiente jugador.</p><p><b>B) Si no puedes o no quieres preparar la pizza:</b> roba una carta de ingrediente. El turno pasa al siguiente jugador.</p><p><b>C) Te queda una carta:</b> cuando solo te quede una carta de ingrediente, haz como un mono Basso hambriento y grita: «¡PIZZAAA!»</p><h3>Si se acaban las cartas de ingrediente</h3><p>Baraja las cartas de ingrediente retiradas para formar un nuevo mazo de robo y seguid jugando.</p><h3>Puntos y victoria</h3><p>Gana la ronda el primer jugador que se quede sin cartas de ingrediente. Sumad los valores de las cartas que quedan en la mano de los demás jugadores: ese total son los puntos del ganador. Los ingredientes normales cuentan lo que valen (1–10), un ingrediente fantasía cuenta 20.</p><p>El primero en llegar a 100 puntos gana y recibe el título de <b>Pizza Basso – el auténtico mono pizzero</b>.</p><h3>Partida más corta</h3><p>Podéis acordar que la partida termine, por ejemplo, a los 30 o 50 puntos, o que gane la partida quien gane primero 3 o 5 rondas.</p>"
+        "html": "<p class=\"pieni\">En las reglas antiguas: Pizza Bruno.</p><h3>Objetivo</h3><p>Los jugadores intentan vaciar su mano, es decir, quedarse sin las cartas de ingrediente que tienen en la mano. El primero que lo consigue gana la ronda.</p><p><b>Nota:</b> Las pizzas se preparan a la manera del mono Basso.</p><h3>Preparación</h3><ol class=\"lista\"><li>Baraja las cartas de pizza y ponlas en un montón al alcance de todos los jugadores.</li><li>Baraja las cartas de ingrediente y reparte 7 a cada jugador. Las demás forman el mazo de robo. Los jugadores pueden mirar sus cartas.</li></ol><h3>Inicio de la partida</h3><p>Pon boca arriba la primera carta de pizza junto al montón. Empieza quien haya comido pizza por última vez.</p><h3>Cómo se juega</h3><p>Por turnos, los jugadores intentan preparar la pizza de la mesa con sus cartas de ingrediente.</p><p><b>A) Si lo consigues:</b> retira del juego las cartas de ingrediente usadas y pon una nueva carta de pizza del montón boca arriba encima de la anterior. El turno pasa al siguiente jugador.</p><p><b>B) Si no puedes o no quieres preparar la pizza:</b> roba una carta de ingrediente. El turno pasa al siguiente jugador.</p><p><b>C) Te queda una carta:</b> cuando solo te quede una carta de ingrediente, haz como un mono Basso hambriento y grita: «¡PIZZAAA!»</p><h3>Si se acaban las cartas de ingrediente</h3><p>Baraja las cartas de ingrediente retiradas para formar un nuevo mazo de robo y seguid jugando.</p><h3>Puntos y victoria</h3><p>Gana la ronda el primer jugador que se quede sin cartas de ingrediente. Sumad los valores de las cartas que quedan en la mano de los demás jugadores: ese total son los puntos del ganador. Los ingredientes normales cuentan lo que valen (1–10), un ingrediente fantasía cuenta 20.</p><p>El primero en llegar a 100 puntos gana y recibe el título de <b>Pizza Basso – el auténtico mono pizzero</b>.</p><h3>Partida más corta</h3><p>Podéis acordar que la partida termine, por ejemplo, a los 30 o 50 puntos, o que gane la partida quien gane primero 3 o 5 rondas.</p>",
+        "kotisaanto": {
+          "otsikko": "Reglas opcionales",
+          "html": "<p><b>Todos puntúan:</b> cada uno se queda las pizzas que prepara y cuenta sus propios puntos al final de la ronda: una pizza = su valor (1–10), +1 por una pizza corazón. Funciona bien con niños pequeños.</p>",
+          "siirra": "Partida más corta",
+          "siirra_alku": "<p><b>Partida más corta:</b> podéis acordar que la partida termine, por ejemplo, a los 30 o 50 puntos, o que gane la partida quien gane primero 3 o 5 rondas.</p>"
+        }
       },
       {
         "avain": "love",
@@ -128,8 +173,8 @@
       }
     ],
     "lataa_otsikko": "Reglas en PDF",
-    "lataa_teksti": "La hoja de reglas impresa en finlandés, sueco e inglés.",
-    "lataa_tiedosto": "Reglas del juego de cartas (FI · SV · EN)",
+    "lataa_teksti": "Los tres modos de juego en español: tres páginas para imprimir.",
+    "lataa_tiedosto": "Reglas del juego de cartas (español)",
     "pelaa_otsikko": "Pizza Party y Pizza Basso",
     "pelaa_teksti": "Los dos funcionan también en el navegador. Pruébalos antes de tu primera partida o juega con amigos, cada uno en su móvil.",
     "ristiin_otsikko": "Siguiente: el juego de mesa Pizza Love®",

@@ -81,7 +81,8 @@
     "arvo": "Maak een pizza met je eigen toppingkaarten en zeg hardop de som die de waarde van de pizza geeft. Alle sommen zijn toegestaan en je mag ze combineren, zolang de uitkomst gelijk is aan de waarde van de pizza. Bijvoorbeeld <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Alle berekeningen tellen",
-      "html": "Naast optellen, aftrekken, vermenigvuldigen en delen mag je ook machten, logaritmen en faculteiten gebruiken, bijvoorbeeld <b>5 = 2² + 1</b> of <b>5 = 3! – 1</b>. Iedereen rekent op zijn eigen niveau."
+      "html": "Naast optellen, aftrekken, vermenigvuldigen en delen mag je ook machten, logaritmen en faculteiten gebruiken, bijvoorbeeld <b>5 = 2² + 1</b> of <b>5 = 3! – 1</b>. Iedereen rekent op zijn eigen niveau.",
+      "paperi": "<p>Iedereen rekent op zijn eigen niveau, bijvoorbeeld zo:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Handige trucs:</b> vermenigvuldig met één, of deel een getal door zichzelf, dan krijg je één (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Voorbeeld: tomaat-ananaspizza",
     "esimerkki_alt": "Een pizzakaart met de waarde 5 en de toppingkaarten 10 en 2: 10 : 2 = 5",
@@ -92,6 +93,38 @@
     "basso_tapa_otsikko": "De manier van aap Basso",
     "basso_tapa": "Gebruik evenveel <b>verschillende toppings</b> als de pizza toppings heeft. Je mag meer kaarten gebruiken: de tomaat-ananaspizza (waarde 5) kun je maken met twee tomaten en één olijf, 2 + 2 + 1 = 5, want dat zijn twee verschillende soorten topping. Gebruik deze manier bij Pizza Basso, of als extra uitdaging bij Pizza Party.<br><span class=\"pieni\">In de gedrukte regels staat nog “evenveel toppingkaarten als de pizza toppings heeft”. De nieuwe manier geeft het spel meer mogelijkheden.</span>",
     "huomio_bruno": "<b>Bruno of Basso?</b> De aap in het spel heet nu Basso. In oudere regels en video’s heet hij Bruno, en heet de tweede spelvorm Pizza Bruno. De regels zijn hetzelfde.",
+    "portaat_otsikko": "Drie manieren om een pizza te maken",
+    "portaat_ingressi": "De waarde moet altijd kloppen. De spellen verschillen in welke toppingkaarten je mag gebruiken. Het voorbeeld is de tomaat-ananaspizza (waarde 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Willekeurige toppings",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Gebruik willekeurige toppingkaarten, zoveel als je wilt – <b>ook maar één</b>. Alleen de waarde telt.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 7 + 6 - 8"
+        ]
+      },
+      {
+        "otsikko": "2. De manier van aap Basso",
+        "pelit": "#1 Pizza Party (extra uitdaging) · #2 Pizza Basso",
+        "html": "<p>Gebruik evenveel <b>verschillende</b> toppings als de pizza heeft. Het hoeven niet de toppings van de pizza zelf te zijn. Je mag meer kaarten gebruiken, bijvoorbeeld twee dezelfde.</p><p>Probeer het ook bij <b>#1 Pizza Party</b>: het spel wordt leuker, al is het wat moeilijker.</p><p>De tomaat-ananaspizza heeft twee toppings, dus één kaart is niet genoeg.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. De juiste toppings",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Maak de pizza met <b>precies zijn eigen toppings</b>.</p><p>De tomaat-ananaspizza heeft een tomaat en een ananas nodig.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
+    "tieto": "<b>Bruno of Basso?</b> In de regels die in 2025 zijn gedrukt en in de video’s heet de aap Bruno (en het tweede spel Pizza Bruno). De manier van Basso gaat nu over toppings in plaats van toppingkaarten, en dat geeft het spel veel meer mogelijkheden.",
     "muodot_otsikko": "Drie manieren om te spelen",
     "muodot_ingressi": "Open een spelvorm om de regels en video’s te zien.",
     "videot_otsikko": "Video’s",
@@ -110,14 +143,26 @@
         "numero": "#1",
         "nimi": "Pizza Party",
         "kuvaus": "Makkelijkst om mee te beginnen, snel en levendig · ca. 5 min.",
-        "html": "<h3>Doel</h3><p>De spelers maken om het snelst pizza’s. Winnaar is wie de meeste pizza’s maakt voordat de pizza- of toppingkaarten op zijn.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 5. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Alle spelers proberen meteen die pizza te maken met hun toppingkaarten.</p><h3>Zo speel je</h3><ul class=\"lista\"><li>Er wordt gespeeld zonder beurten: iedereen probeert tegelijk pizza’s te maken.</li><li>Je maakt een pizza door je toppingkaarten op de pizza op tafel te slaan en de som hardop te zeggen. Wie het snelst is, pakt de pizzakaart en legt die voor zich neer.</li><li>Slaan meerdere spelers tegelijk, dan krijgt degene van wie de kaarten onderop liggen de pizza.</li><li>Gebruikte toppingkaarten gaan uit het spel. Trek nieuwe kaarten tot je er weer 5 in je hand hebt.</li><li>Draai meteen een nieuwe pizzakaart open. Ga door tot de pizza- of toppingkaarten op zijn en niemand nog een pizza kan maken.</li></ul><h3>Als een pizza niet gemaakt kan worden</h3><p>Als niemand de pizza op tafel kan of wil maken, draai je een nieuwe pizzakaart open bovenop de oude. Wie de volgende pizza maakt, krijgt alle pizza’s op tafel.</p><h3>Punten en winnen</h3><p>Een pizza levert evenveel punten op als hij toppings heeft. Een hartjespizza levert een extra punt op. Bijvoorbeeld de tomaat-ananaspizza = 2 punten.</p><p>De ronde wint wie de meeste punten heeft. Spreek af hoeveel rondes jullie spelen – bijvoorbeeld: wie als eerste 3 of 5 rondes wint, wint het hele spel.</p><h3>Pizza Party om de beurt</h3><p>Je kunt ook om de beurt spelen. Dan heeft iedereen tijd om na te denken tijdens de eigen beurt.</p><h3>Optionele regels</h3><p>Je kunt regels afspreken die de sommen beperken, bijvoorbeeld:</p><ul class=\"lista\"><li>alleen spelen met plus- en minsommen</li><li>bij elke pizza moet je een keer- of deelsom gebruiken.</li></ul>"
+        "html": "<h3>Doel</h3><p>De spelers maken om het snelst pizza’s. Winnaar is wie de meeste pizza’s maakt voordat de pizza- of toppingkaarten op zijn.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 5. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Alle spelers proberen meteen die pizza te maken met hun toppingkaarten.</p><h3>Zo speel je</h3><ul class=\"lista\"><li>Er wordt gespeeld zonder beurten: iedereen probeert tegelijk pizza’s te maken.</li><li>Je maakt een pizza door je toppingkaarten op de pizza op tafel te slaan en de som hardop te zeggen. Wie het snelst is, pakt de pizzakaart en legt die voor zich neer.</li><li>Slaan meerdere spelers tegelijk, dan krijgt degene van wie de kaarten onderop liggen de pizza.</li><li>Gebruikte toppingkaarten gaan uit het spel. Trek nieuwe kaarten tot je er weer 5 in je hand hebt.</li><li>Draai meteen een nieuwe pizzakaart open. Ga door tot de pizza- of toppingkaarten op zijn en niemand nog een pizza kan maken.</li></ul><h3>Als een pizza niet gemaakt kan worden</h3><p>Als niemand de pizza op tafel kan of wil maken, draai je een nieuwe pizzakaart open bovenop de oude. Wie de volgende pizza maakt, krijgt alle pizza’s op tafel.</p><h3>Punten en winnen</h3><p>Een pizza levert evenveel punten op als hij toppings heeft. Een hartjespizza levert een extra punt op. Bijvoorbeeld de tomaat-ananaspizza = 2 punten.</p><p>De ronde wint wie de meeste punten heeft. Spreek af hoeveel rondes jullie spelen – bijvoorbeeld: wie als eerste 3 of 5 rondes wint, wint het hele spel.</p><h3>Pizza Party om de beurt</h3><p>Je kunt ook om de beurt spelen. Dan heeft iedereen tijd om na te denken tijdens de eigen beurt.</p><h3>Optionele regels</h3><p>Je kunt regels afspreken die de sommen beperken, bijvoorbeeld:</p><ul class=\"lista\"><li>alleen spelen met plus- en minsommen</li><li>bij elke pizza moet je een keer- of deelsom gebruiken.</li></ul>",
+        "kotisaanto": {
+          "otsikko": "Optionele regels",
+          "html": "<p><b>Punten:</b> spreek voor het spel af als jullie anders tellen.</p><ul class=\"lista\"><li><b>Makkelijker:</b> elke pizza = 1 punt, +1 voor een hartjespizza.</li><li><b>Moeilijker:</b> een pizza = zijn waarde (1–10), +1 voor een hartjespizza.</li></ul>",
+          "siirra": "Optionele regels",
+          "siirra_alku": "<p><b>Sommen:</b> jullie kunnen ze beperken, bijvoorbeeld:</p>"
+        }
       },
       {
         "avain": "basso",
         "numero": "#2",
         "nimi": "Pizza Basso",
         "kuvaus": "Rustig en spannend · ca. 7 min.",
-        "html": "<p class=\"pieni\">In oudere regels: Pizza Bruno.</p><h3>Doel</h3><p>De spelers proberen hun hand leeg te spelen: al hun toppingkaarten in de hand kwijt te raken. Wie dat als eerste lukt, wint de ronde.</p><p><b>Let op:</b> Pizza’s maak je op de manier van aap Basso.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 7. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Wie het laatst pizza heeft gegeten, begint.</p><h3>Zo speel je</h3><p>De spelers proberen om de beurt de pizza op tafel te maken met hun toppingkaarten.</p><p><b>A) Als het lukt:</b> leg de gebruikte toppingkaarten uit het spel en draai een nieuwe pizzakaart van de stapel open bovenop de oude. De volgende speler is aan de beurt.</p><p><b>B) Als je de pizza niet kunt of wilt maken:</b> trek één toppingkaart. De volgende speler is aan de beurt.</p><p><b>C) Nog één kaart:</b> als je nog maar één toppingkaart hebt, doe je als een hongerige aap Basso en roep je: “PIZZAAA!”</p><h3>Als de toppingkaarten op zijn</h3><p>Schud de weggelegde toppingkaarten tot een nieuwe trekstapel en speel verder.</p><h3>Punten en winnen</h3><p>De ronde wint wie als eerste al zijn toppingkaarten kwijt is. Tel de waarden op van de kaarten die de anderen nog in hun hand hebben – dat totaal zijn de punten van de winnaar. Gewone toppings tellen hun waarde (1–10), een fantasietopping telt 20.</p><p>Wie als eerste 100 punten heeft, wint en krijgt de titel <b>Pizza Basso – de echte pizza-aap</b>.</p><h3>Korter spel</h3><p>Je kunt afspreken dat het spel stopt bij bijvoorbeeld 30 of 50 punten, of dat wie als eerste 3 of 5 rondes wint, het hele spel wint.</p>"
+        "html": "<p class=\"pieni\">In oudere regels: Pizza Bruno.</p><h3>Doel</h3><p>De spelers proberen hun hand leeg te spelen: al hun toppingkaarten in de hand kwijt te raken. Wie dat als eerste lukt, wint de ronde.</p><p><b>Let op:</b> Pizza’s maak je op de manier van aap Basso.</p><h3>Voorbereiding</h3><ol class=\"lista\"><li>Schud de pizzakaarten en leg ze op een stapel binnen bereik van alle spelers.</li><li>Schud de toppingkaarten en geef iedere speler er 7. De rest vormt de trekstapel. De spelers mogen hun kaarten bekijken.</li></ol><h3>Begin van het spel</h3><p>Draai de eerste pizzakaart open naast de stapel. Wie het laatst pizza heeft gegeten, begint.</p><h3>Zo speel je</h3><p>De spelers proberen om de beurt de pizza op tafel te maken met hun toppingkaarten.</p><p><b>A) Als het lukt:</b> leg de gebruikte toppingkaarten uit het spel en draai een nieuwe pizzakaart van de stapel open bovenop de oude. De volgende speler is aan de beurt.</p><p><b>B) Als je de pizza niet kunt of wilt maken:</b> trek één toppingkaart. De volgende speler is aan de beurt.</p><p><b>C) Nog één kaart:</b> als je nog maar één toppingkaart hebt, doe je als een hongerige aap Basso en roep je: “PIZZAAA!”</p><h3>Als de toppingkaarten op zijn</h3><p>Schud de weggelegde toppingkaarten tot een nieuwe trekstapel en speel verder.</p><h3>Punten en winnen</h3><p>De ronde wint wie als eerste al zijn toppingkaarten kwijt is. Tel de waarden op van de kaarten die de anderen nog in hun hand hebben – dat totaal zijn de punten van de winnaar. Gewone toppings tellen hun waarde (1–10), een fantasietopping telt 20.</p><p>Wie als eerste 100 punten heeft, wint en krijgt de titel <b>Pizza Basso – de echte pizza-aap</b>.</p><h3>Korter spel</h3><p>Je kunt afspreken dat het spel stopt bij bijvoorbeeld 30 of 50 punten, of dat wie als eerste 3 of 5 rondes wint, het hele spel wint.</p>",
+        "kotisaanto": {
+          "otsikko": "Optionele regels",
+          "html": "<p><b>Iedereen krijgt punten:</b> iedereen houdt de pizza’s die hij maakt en telt aan het eind van de ronde zijn eigen punten: een pizza = zijn waarde (1–10), +1 voor een hartjespizza. Werkt goed met jonge kinderen.</p>",
+          "siirra": "Korter spel",
+          "siirra_alku": "<p><b>Korter spel:</b> je kunt afspreken dat het spel stopt bij bijvoorbeeld 30 of 50 punten, of dat wie als eerste 3 of 5 rondes wint, het hele spel wint.</p>"
+        }
       },
       {
         "avain": "love",
@@ -128,8 +173,8 @@
       }
     ],
     "lataa_otsikko": "Regels als pdf",
-    "lataa_teksti": "Het gedrukte regelblad in het Fins, Zweeds en Engels.",
-    "lataa_tiedosto": "Regels kaartspel (FI · SV · EN)",
+    "lataa_teksti": "Alle drie de spelvormen in het Nederlands – drie pagina’s om te printen.",
+    "lataa_tiedosto": "Regels kaartspel (Nederlands)",
     "pelaa_otsikko": "Pizza Party en Pizza Basso",
     "pelaa_teksti": "Beide werken ook in je browser. Probeer ze uit voor je eerste spel, of speel met vrienden op jullie eigen telefoons.",
     "ristiin_otsikko": "Volgende: het Pizza Love®-bordspel",
