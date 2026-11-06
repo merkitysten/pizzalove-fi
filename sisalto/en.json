@@ -88,6 +88,37 @@
     "basso_tapa_otsikko": "Basso the monkey’s way",
     "basso_tapa": "Use as many <b>different toppings</b> as the pizza has toppings. You may use more cards: the tomato–pineapple pizza (value 5) can be made with two tomatoes and one olive, 2 + 2 + 1 = 5, because there are two different kinds of topping. Use this in Pizza Basso, or for an extra challenge in Pizza Party.<br><span class=\"pieni\">The printed rules still say “as many topping cards as the pizza has toppings”. The new way gives the game more possibilities.</span>",
     "huomio_bruno": "<b>Bruno or Basso?</b> The monkey in the game is now called Basso. In older rules and videos his name is Bruno, and the second game mode is called Pizza Bruno. The rules are the same.",
+    "portaat_otsikko": "Three ways to make a pizza",
+    "portaat_ingressi": "The value always has to match. The game modes differ in which topping cards you may use. The example is the tomato–pineapple pizza (value 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Any toppings",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Use any topping cards, as many as you like – <b>even just one</b>. Only the value counts.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 10 : 2"
+        ]
+      },
+      {
+        "otsikko": "2. Basso the monkey’s way",
+        "pelit": "#2 Pizza Basso · extra challenge in #1",
+        "html": "<p>Use as many <b>different</b> toppings as the pizza has. They don’t have to be the pizza’s own toppings. You may use more cards, for example two of the same.</p><p>The tomato–pineapple pizza has two toppings, so one card is not enough.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. The right toppings",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Make the pizza with <b>exactly its own toppings</b>.</p><p>The tomato–pineapple pizza needs a tomato and a pineapple.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
     "muodot_otsikko": "Three ways to play",
     "muodot_ingressi": "Open a game mode to see its rules and videos.",
     "videot_otsikko": "Videos",

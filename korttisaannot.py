@@ -67,6 +67,7 @@ KIELET = {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
         'alaotsikko': 'Die Regeln aller drei Spielvarianten',
         'iskulause': 'JEDE PIZZA ZÄHLT',
+        'hyva_tietaa': 'Gut zu wissen',
         'kaavio': ('Spieler A', 'Spieler B', 'Pizzastapel', 'Vorrat',
                    'Nachziehstapel', 'Tauschpizza'),
         'vaihto': ('Tausch: die 4 von Spieler B gegen die 6 und die 2 von '
@@ -82,6 +83,7 @@ KIELET = {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
         'alaotsikko': 'The rules of all three game modes',
         'iskulause': 'EVERY PIZZA COUNTS',
+        'hyva_tietaa': 'Good to know',
         'kaavio': ('Player A', 'Player B', 'Pizza pile', 'Storage',
                    'Draw pile', 'Exchange pizza'),
         'vaihto': ('Exchange: player B’s 4 for player A’s 6 and 2, because '
@@ -98,6 +100,7 @@ KIELET = {
         'tiedosto': 'pizza-love-kartova-hra-pravidla-sk.pdf',
         'alaotsikko': 'Pravidlá všetkých troch spôsobov hry',
         'iskulause': 'KAŽDÁ PIZZA SA POČÍTA',
+        'hyva_tietaa': 'Dobré vedieť',
         'kaavio': ('Hráč A', 'Hráč B', 'Kôpka pízz', 'Sklad',
                    'Dobierací balíček', 'Výmenná pizza'),
         'vaihto': ('Výmena: štvorka hráča B za šestku a dvojku hráča A, '
@@ -279,11 +282,12 @@ def muoto(m, k):
         # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
         runko = runko[:i] + kaavio(k) + runko[i:]
-    return ('<section class="muoto kehys"><div class="muoto-yla">'
+    uusi = ' uusi-sivu' if m['numero'] == '#1' else ''
+    return ('<section class="muoto kehys%s"><div class="muoto-yla">'
             '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
             '<p class="kuvaus">%s</p></div>'
             '<div class="palstat">%s</div></section>'
-            % (e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko))
+            % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko))
 
 
 # ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
@@ -323,6 +327,41 @@ KIRJASIMET = '''
   @font-face {{ font-family: Teksti; font-weight: 700;
     src: url(paperi/fontit/source-sans-3-700-latin.woff2); unicode-range: {latin} }}
 '''.format(ext=LATIN_EXT, latin=LATIN, ddin=DDIN)
+
+
+def lasku(lauseke):
+    """«5 = 4 + 1» korteiksi: ensimmainen luku on pizza (tomaatti-ananas,
+    arvo 5), loput taytekortteja, merkit oransseina."""
+    osat = lauseke.split()
+    if osat[0] != '5':
+        raise SystemExit('Esimerkkipizza on arvoltaan 5: %r' % lauseke)
+    html = ['<img src="julkinen/kuvat/pizza-31.webp">']
+    for o in osat[1:]:
+        if o.isdigit():
+            html.append('<img src="paperi/kortit/tayte-%s.webp">' % o)
+        else:
+            html.append('<b>%s</b>' % {'-': '–'}.get(o, o))
+    return ('<div class="esimerkki lasku" role="img" aria-label="%s">%s</div>'
+            % (e(lauseke), ''.join(html)))
+
+
+def porras(x):
+    """🔵 Marko 6.11.2026: kolme selkeaa porrasta. 1) maaralla tai
+    taytteilla ei valia, kunhan arvo tasmaa (myos yksi kortti kay),
+    2) pizzan taytteiden maara ratkaisee eri taytteiden maaran, mutta
+    taytteiden ei tarvitse olla pizzan omia, 3) Pizza Love: juuri oikeat
+    taytteet. Teksti: sisalto/xx.json → korttipeli.portaat."""
+    return ('<div class="porras"><h3 class="palkki">%s</h3>'
+            '<p class="pelit">%s</p>%s%s</div>'
+            % (e(x['otsikko']), e(x['pelit']), x['html'],
+               ''.join(lasku(l) for l in x['esimerkit'])))
+
+
+def painettu_huomautus(s):
+    """«Painetuissa saannoissa lukee vielä…» on tietoa, ei saanto, joten se
+    siirtyy Basson tavasta hyva tietaa -laatikkoon (Marko 6.11.2026)."""
+    m = re.search(r'<span class="pieni">(.*?)</span>', s['basso_tapa'])
+    return m.group(1) if m else ''
 
 
 def sivu_html(kieli, lahde):
@@ -386,6 +425,21 @@ def sivu_html(kieli, lahde):
      perussaanto ja esimerkki · kaksi tapaa (CSS-palstat repisivat esimerkin). */
   .kaksi {{ display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: {vali}mm }}
   .kaksi h3.osa {{ margin-top: 0 }}
+  .kaksi > div > .palkki:first-child {{ margin-top: 0 }}
+  .johdanto {{ font-size: 9.8pt; margin-bottom: 3mm }}
+  .rivi {{ display: flex; gap: 2mm; margin: 0 0 2mm }}
+  .rivi img {{ width: 14mm; height: auto; border: .15mm solid {viiva};
+               border-radius: 8% / 5.3% }}
+  .portaat {{ margin-top: 4mm; padding: 3.4mm 5mm 3mm }}
+  .pelit {{ font: 700 9pt/1.2 Otsikko, sans-serif; text-transform: uppercase;
+            letter-spacing: .02em; color: {oranssi}; margin-bottom: 1.6mm }}
+  .lasku {{ gap: 1mm; margin: 2.4mm 0 0 }}
+  .lasku img {{ flex: 0 1 10.5mm; min-width: 0; width: 10.5mm }}
+  .lasku b {{ font-size: 12pt }}
+  .uusi-sivu {{ break-before: page; margin-top: 0 }}
+  .tieto {{ margin-top: 4mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
+  .tieto h3 {{ margin: 0 0 .6mm }}
+  .tieto p {{ font-size: 8.8pt }}
   .palstat > *, .kortti {{ break-inside: avoid }}
   .palstat > .laatikko {{ break-inside: auto }}
   .laatikko > p, .esimerkki {{ break-inside: avoid }}
@@ -450,37 +504,35 @@ def sivu_html(kieli, lahde):
 
 <section class="perusteet kehys">
 <h2>{perusteet_otsikko}</h2>
+<p class="johdanto">{perusteet_ingressi}</p>
 <div class="kaksi">
  <div>
-  <p>{perusteet_ingressi}</p>
-  <div class="kortti"><img src="julkinen/kuvat/tausta-pizza.webp">
-    <div><h3>{pizzakortit_otsikko}</h3><p>{pizzakortit}</p></div></div>
-  <div class="kortti"><img src="julkinen/kuvat/tausta-tayte.webp">
-    <div><h3>{taytekortit_otsikko}</h3><p>{taytekortit}</p></div></div>
-  <div class="huomio"><img src="julkinen/kuvat/basso-pohtii.webp">
-    <p>{huomio_bruno}</p></div>
+  <h3 class="palkki">{pizzakortit_otsikko}</h3>
+  <div class="rivi"><img src="julkinen/kuvat/tausta-pizza.webp"><img
+    src="julkinen/kuvat/pizza-31.webp"><img src="paperi/kortit/pizza-22.webp"></div>
+  <p>{pizzakortit}</p>
  </div>
  <div>
-  <div class="laatikko">
-    <h3 class="palkki" style="margin-top:0">{perussaanto_otsikko}</h3><p>{perussaanto}</p>
-    <h3>{arvo_otsikko}</h3><p>{arvo}</p>
-    <div class="esim"><h3>{esimerkki_otsikko}</h3>
-    <div class="esimerkki" role="img" aria-label="{esimerkki_alt}">
-      <img src="julkinen/kuvat/pizza-31.webp"><b>=</b>
-      <img src="julkinen/kuvat/tayte-10.webp"><b>:</b>
-      <img src="julkinen/kuvat/tayte-2.webp"></div>
-    <p>{esimerkki}</p></div>
-  </div>
+  <h3 class="palkki">{taytekortit_otsikko}</h3>
+  <div class="rivi"><img src="julkinen/kuvat/tausta-tayte.webp"><img
+    src="paperi/kortit/tayte-8.webp"><img src="julkinen/kuvat/tayte-x.webp"></div>
+  <p>{taytekortit}</p>
  </div>
  <div>
-  <h3 class="osa">{tavat_otsikko}</h3>
-  <div class="laatikko"><h3 class="palkki">{helpompi_otsikko}</h3>
-    <p>{helpompi}</p></div>
-  <div class="laatikko"><h3 class="palkki">{basso_tapa_otsikko}</h3>
-    <p>{basso_tapa}</p></div>
+  <h3 class="palkki">{perussaanto_otsikko}</h3><p>{perussaanto}</p>
+  <h3>{arvo_otsikko}</h3><p>{arvo}</p>
  </div>
 </div>
 </section>
+
+<section class="portaat kehys">
+<h2>{portaat_otsikko}</h2>
+<p class="johdanto">{portaat_ingressi}</p>
+<div class="kaksi">{portaat}</div>
+</section>
+
+<div class="huomio tieto kehys"><img src="julkinen/kuvat/basso-pohtii.webp">
+  <div><h3>{hyva_tietaa}</h3><p>{huomio_bruno} {painettu}</p></div></div>
 
 {muodot}
 
@@ -508,6 +560,10 @@ def sivu_html(kieli, lahde):
         helpompi_otsikko=e(s['helpompi_otsikko']), helpompi=e(s['helpompi']),
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
+        hyva_tietaa=e(k['hyva_tietaa']), painettu=painettu_huomautus(s),
+        portaat_otsikko=e(s['portaat_otsikko']),
+        portaat_ingressi=e(s['portaat_ingressi']),
+        portaat=''.join(porras(x) for x in s['portaat']),
         muodot=''.join(muoto(m, k) for m in s['muodot']),
         videot=e(k['videot']), nakyva=k['osoite'].replace('https://', ''),
         oikeudet=e(k['oikeudet']))
@@ -518,9 +574,13 @@ def otsikot(lahde):
     kirjoitetusta listasta, joka vanhenisi juuri siita luvusta jota varten
     koe on."""
     s = json.load(open(lahde, encoding='utf-8'))['korttipeli']
+    # Sivun «kaksi tapaa» + esimerkki korvautuvat arkilla kolmella portaalla
+    # (Marko 6.11.2026), joten ne eivat ole arkilla.
     nimet = [s[a] for a in s if a.endswith('_otsikko') and a not in
              ('videot_otsikko', 'pelaa_otsikko', 'ristiin_otsikko',
-              'lataa_otsikko', 'muodot_otsikko')]
+              'lataa_otsikko', 'muodot_otsikko', 'tavat_otsikko',
+              'helpompi_otsikko', 'basso_tapa_otsikko', 'esimerkki_otsikko')]
+    nimet += [x['otsikko'] for x in s['portaat']]
     for m in s['muodot']:
         nimet.append(m['nimi'])
         nimet += re.findall(r'<h3>(.*?)</h3>', m['html'])

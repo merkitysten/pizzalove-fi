@@ -88,6 +88,37 @@
     "basso_tapa_otsikko": "Spôsob opice Basso",
     "basso_tapa": "Použite toľko <b>rôznych prísad</b>, koľko prísad má pizza. Kariet môže byť viac: pizzu s paradajkou a ananásom (hodnota 5) pripravíte aj z dvoch paradajok a jednej olivy, 2 + 2 + 1 = 5, pretože sú to dva rôzne druhy prísad. Použite ho v hre Pizza Basso alebo ako výzvu navyše v Pizza Party.<br><span class=\"pieni\">V tlačených pravidlách je ešte „toľko kariet prísad, koľko prísad má pizza“. Nový spôsob dáva hre viac možností.</span>",
     "huomio_bruno": "<b>Bruno alebo Basso?</b> Opica v hre sa teraz volá Basso. V starších pravidlách a videách sa volá Bruno a druhý spôsob hry sa volá Pizza Bruno. Pravidlá sú rovnaké.",
+    "portaat_otsikko": "Tri spôsoby, ako pripraviť pizzu",
+    "portaat_ingressi": "Hodnota musí vždy sedieť. Spôsoby hry sa líšia v tom, aké karty prísad môžete použiť. Príkladom je pizza s paradajkou a ananásom (hodnota 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Ľubovoľné prísady",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Použite ľubovoľné karty prísad, koľko chcete – <b>aj len jednu</b>. Rozhoduje iba hodnota.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 10 : 2"
+        ]
+      },
+      {
+        "otsikko": "2. Spôsob opice Basso",
+        "pelit": "#2 Pizza Basso · výzva navyše v #1",
+        "html": "<p>Použite toľko <b>rôznych</b> prísad, koľko prísad má pizza. Nemusia to byť prísady z pizze. Kariet môže byť viac, napríklad dve rovnaké.</p><p>Pizza s paradajkou a ananásom má dve prísady, takže jedna karta nestačí.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. Správne prísady",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Pizzu pripravte <b>presne z jej vlastných prísad</b>.</p><p>Pizza s paradajkou a ananásom potrebuje paradajku a ananás.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
     "muodot_otsikko": "Tri spôsoby hry",
     "muodot_ingressi": "Otvorte spôsob hry a uvidíte jeho pravidlá a videá.",
     "videot_otsikko": "Videá",

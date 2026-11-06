@@ -89,6 +89,37 @@
     "basso_tapa_otsikko": "Basso-apinan tapa",
     "basso_tapa": "Käytä yhtä monta <b>eri täytettä</b> kuin pizzassa on täytteitä. Kortteja saa olla enemmänkin: tomaatti-ananaspizzan (arvo 5) voi tehdä vaikka kahdella tomaatilla ja yhdellä oliivilla, 2 + 2 + 1 = 5, koska täytteitä on kaksi eri lajia. Käytä tätä Pizza Bassossa tai kun haluat Pizza Partyyn lisähaastetta.<br><span class=\"pieni\">Painetuissa ohjeissa sääntö on vielä muodossa ”yhtä monta täytekorttia kuin täytteitä”. Uusi tapa antaa pelille enemmän mahdollisuuksia.</span>",
     "huomio_bruno": "<b>Bruno vai Basso?</b> Pelin apina on nykyään Basso. Vanhemmissa ohjeissa ja videoissa hänen nimensä on Bruno, ja toisen pelimuodon nimi on Pizza Bruno. Säännöt ovat samat.",
+    "portaat_otsikko": "Kolme tapaa valmistaa pizza",
+    "portaat_ingressi": "Arvon on aina täsmättävä. Pelimuodot eroavat siinä, mitä täytekortteja saa käyttää. Esimerkkinä tomaatti-ananaspizza (arvo 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Mitkä tahansa täytteet",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Käytä mitä tahansa täytekortteja, niin monta kuin haluat – <b>vaikka vain yhtä</b>. Vain arvolla on väliä.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 10 : 2"
+        ]
+      },
+      {
+        "otsikko": "2. Basso-apinan tapa",
+        "pelit": "#2 Pizza Basso · lisähaaste #1:een",
+        "html": "<p>Käytä yhtä monta <b>eri</b> täytettä kuin pizzassa on täytteitä. Niiden ei tarvitse olla pizzan omia täytteitä. Kortteja saa olla enemmän, esimerkiksi kaksi samaa.</p><p>Tomaatti-ananaspizzassa on kaksi täytettä, joten yksi kortti ei riitä.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. Oikeat täytteet",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Valmista pizza <b>juuri sen omilla täytteillä</b>.</p><p>Tomaatti-ananaspizzaan tarvitaan tomaatti ja ananas.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
     "muodot_otsikko": "Kolme tapaa pelata",
     "muodot_ingressi": "Avaa pelimuoto, niin näet säännöt ja videot.",
     "videot_otsikko": "Videot",

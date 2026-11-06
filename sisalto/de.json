@@ -88,6 +88,37 @@
     "basso_tapa_otsikko": "Die Art von Affe Basso",
     "basso_tapa": "Verwende so viele <b>verschiedene Beläge</b>, wie die Pizza Beläge hat. Es dürfen mehr Karten sein: Die Tomaten-Ananas-Pizza (Wert 5) geht zum Beispiel mit zwei Tomaten und einer Olive, 2 + 2 + 1 = 5, denn das sind zwei verschiedene Belagsorten. Nutze diese Art bei Pizza Basso oder als zusätzliche Herausforderung bei Pizza Party.<br><span class=\"pieni\">In den gedruckten Regeln steht noch „so viele Belagkarten, wie die Pizza Beläge hat“. Die neue Art bietet dem Spiel mehr Möglichkeiten.</span>",
     "huomio_bruno": "<b>Bruno oder Basso?</b> Der Affe im Spiel heißt jetzt Basso. In älteren Regeln und Videos heißt er Bruno, und die zweite Spielvariante heißt Pizza Bruno. Die Regeln sind dieselben.",
+    "portaat_otsikko": "Drei Arten, eine Pizza zuzubereiten",
+    "portaat_ingressi": "Der Wert muss immer stimmen. Die Spielvarianten unterscheiden sich darin, welche Belagkarten du verwenden darfst. Das Beispiel ist die Tomaten-Ananas-Pizza (Wert 5).",
+    "portaat": [
+      {
+        "otsikko": "1. Beliebige Beläge",
+        "pelit": "#1 Pizza Party",
+        "html": "<p>Verwende beliebige Belagkarten, so viele du willst – <b>auch nur eine</b>. Nur der Wert zählt.</p>",
+        "esimerkit": [
+          "5 = 5",
+          "5 = 4 + 1",
+          "5 = 10 : 2"
+        ]
+      },
+      {
+        "otsikko": "2. Die Art von Affe Basso",
+        "pelit": "#2 Pizza Basso · Zusatzherausforderung in #1",
+        "html": "<p>Verwende so viele <b>verschiedene</b> Beläge, wie die Pizza Beläge hat. Es müssen nicht die Beläge der Pizza sein. Es dürfen mehr Karten sein, zum Beispiel zwei gleiche.</p><p>Die Tomaten-Ananas-Pizza hat zwei Beläge, eine Karte reicht also nicht.</p>",
+        "esimerkit": [
+          "5 = 10 : 2",
+          "5 = 2 + 2 + 1"
+        ]
+      },
+      {
+        "otsikko": "3. Die richtigen Beläge",
+        "pelit": "#3 Pizza Love",
+        "html": "<p>Bereite die Pizza <b>genau mit ihren eigenen Belägen</b> zu.</p><p>Die Tomaten-Ananas-Pizza braucht eine Tomate und eine Ananas.</p>",
+        "esimerkit": [
+          "5 = 2 + 3"
+        ]
+      }
+    ],
     "muodot_otsikko": "Drei Spielvarianten",
     "muodot_ingressi": "Öffne eine Spielvariante, um ihre Regeln und Videos zu sehen.",
     "videot_otsikko": "Videos",
