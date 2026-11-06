@@ -103,8 +103,8 @@
       },
       {
         "otsikko": "2. Die Art von Affe Basso",
-        "pelit": "#2 Pizza Basso · Zusatzherausforderung in #1",
-        "html": "<p>Verwende so viele <b>verschiedene</b> Beläge, wie die Pizza Beläge hat. Es müssen nicht die Beläge der Pizza sein. Es dürfen mehr Karten sein, zum Beispiel zwei gleiche.</p><p>Die Tomaten-Ananas-Pizza hat zwei Beläge, eine Karte reicht also nicht.</p>",
+        "pelit": "#2 Pizza Basso · #1 Pizza Party",
+        "html": "<p>Verwende so viele <b>verschiedene</b> Beläge, wie die Pizza Beläge hat. Es müssen nicht die Beläge der Pizza sein. Es dürfen mehr Karten sein, zum Beispiel zwei gleiche.</p><p>Probier es auch in <b>#1 Pizza Party</b> aus: Das Spiel wird lustiger, wenn auch etwas schwieriger.</p><p>Die Tomaten-Ananas-Pizza hat zwei Beläge, eine Karte reicht also nicht.</p>",
         "esimerkit": [
           "5 = 10 : 2",
           "5 = 2 + 2 + 1"
