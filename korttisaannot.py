@@ -294,6 +294,17 @@ def kaavio(k):
             % (''.join(v), vaihtokuva, e(k['vaihto'])))
 
 
+def kotisaanto(x):
+    """🔵 Marko 6.11.2026: kodit ovat laskeneet pisteiksi korttien arvoja –
+    se on kotisaanto, ei virallinen saanto, joten se on oma laatikkonsa
+    pelimuodon alla (kuten «Bruno vai Basso?»). sisalto/xx.json →
+    korttipeli.muodot[i].kotisaanto."""
+    if not x:
+        return ''
+    return ('<div class="kotisaanto"><h3>%s</h3><p>%s</p></div>'
+            % (e(x['otsikko']), x['html']))
+
+
 def muoto(m, k):
     """Pelimuodon otsikko painetun arkin tapaan: musta viiri, jossa
     «#1 PIZZA» oranssina ja loppu valkoisena (PIZZAPARTY, PIZZABASSO).
@@ -310,8 +321,9 @@ def muoto(m, k):
     return ('<section class="muoto kehys%s"><div class="muoto-yla">'
             '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
             '<p class="kuvaus">%s</p></div>'
-            '<div class="palstat">%s</div></section>'
-            % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko))
+            '<div class="palstat">%s</div>%s</section>'
+            % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko,
+               kotisaanto(m.get('kotisaanto'))))
 
 
 # ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
@@ -468,6 +480,13 @@ def sivu_html(kieli, lahde):
   .lasku img {{ flex: 0 1 10.5mm; min-width: 0; width: 10.5mm }}
   .lasku b {{ font-size: 12pt }}
   .uusi-sivu {{ break-before: page; margin-top: 0 }}
+  .kotisaanto {{ display: flex; gap: 4mm; align-items: baseline;
+                 border: .35mm solid {musta}; padding: 2mm 4mm;
+                 margin: 2.4mm 0 1.4mm; break-inside: avoid }}
+  .kotisaanto h3 {{ margin: 0; white-space: nowrap }}
+  /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
+  .palstat p:has(+ ul.lista), .palstat p:has(+ ol.lista) {{ break-after: avoid }}
+  .kotisaanto p {{ margin: 0 }}
   .tieto {{ margin-top: 4mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
