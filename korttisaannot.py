@@ -610,10 +610,10 @@ def sivu_html(kieli, lahde):
                 min-height: 36mm }}
   .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0;
       bottom: calc(-2.6mm - 37mm * .1536); width: 37mm; margin: 0 }}
-  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 32.5mm;
+  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 34mm;
       bottom: calc(-2.6mm - 4.6mm); width: 34mm; margin: 0;
       clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
-  .kupla {{ position: absolute; left: 29mm; bottom: 5.6mm; width: 44mm }}
+  .kupla {{ position: absolute; left: 29mm; bottom: 3mm; width: 44mm }}
   .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
   .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
              display: grid; grid-template-columns: repeat(4, 1fr);
