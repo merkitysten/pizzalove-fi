@@ -492,6 +492,14 @@ def porras(x):
 # ja basso_tapa ennallaan).
 
 
+def tieto_jaettu(s):
+    """«<b>Bruno vai Basso?</b> teksti» → (otsikko, teksti). 🔵 Marko
+    6.11.2026: laskutoimitukset ja Bruno vai Basso samaan laatikkoon omiin
+    palstoihinsa, kumpikin omalla otsikollaan; «Hyva tietaa» pois."""
+    m = re.match(r'<b>([^<]*)</b>\s*(.*)$', s['tieto'], re.S)
+    return (m.group(1), m.group(2)) if m else ('', s['tieto'])
+
+
 def sivu_html(kieli, lahde):
     """🔵 Marko 6.11.2026: «Haluaisin vähän täsmentää sitä paperi pdf:ää,
     että se olisi enemmän Pizza Love brändin mukainen. Tässä alkuperäinen
@@ -583,12 +591,12 @@ def sivu_html(kieli, lahde):
   /* 🔵 Marko 6.11.2026: «kaikki laskutoimitukset kayvat» on tarkeampi kuin
      apinan nimi, joten se on oma laatikkonsa ensimmaisena Hyva tietaa
      -laatikon vieressa (Pizzan arvo -kappale pysyy lyhyena). */
-  .alaboksit {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm;
-                margin-top: 3mm; break-inside: avoid }}
-  .alaboksit > .kehys {{ margin-top: 0 }}
-  .laskut {{ padding: 2.4mm 5mm 2mm }}
-  .laskut h3 {{ margin: 0 0 .6mm }}
-  .laskut p {{ font-size: 8.8pt; margin: 0 }}
+  /* yksi alalaatikko: Basso-kuva (mietti laskutoimituksia, Marko) |
+     laskutoimitukset | Bruno vai Basso */
+  .huomio.alalaatikko {{ gap: {vali}mm; align-items: flex-start }}
+  .alalaatikko .osa {{ flex: 1 }}
+  .alalaatikko h3 {{ margin: 0 0 .6mm }}
+  .alalaatikko p {{ font-size: 8.8pt; margin: 0 }}
   .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
@@ -694,10 +702,10 @@ def sivu_html(kieli, lahde):
 <div class="kaksi">{portaat}</div>
 </section>
 
-<div class="alaboksit">
-  <div class="laskut kehys"><h3>{laskut_otsikko}</h3><p>{laskut}</p></div>
-  <div class="huomio tieto kehys"><img src="julkinen/kuvat/basso-pohtii.webp">
-    <div><h3>{hyva_tietaa}</h3><p>{tieto}</p></div></div>
+<div class="huomio tieto kehys alalaatikko">
+  <img src="julkinen/kuvat/basso-pohtii.webp">
+  <div class="osa"><h3>{laskut_otsikko}</h3><p>{laskut}</p></div>
+  <div class="osa"><h3>{tieto_otsikko}</h3><p>{tieto}</p></div>
 </div>
 
 {muodot}
@@ -726,7 +734,7 @@ def sivu_html(kieli, lahde):
         helpompi_otsikko=e(s['helpompi_otsikko']), helpompi=e(s['helpompi']),
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
-        hyva_tietaa=e(k['hyva_tietaa']), tieto=s['tieto'],
+        tieto_otsikko=tieto_jaettu(s)[0], tieto=tieto_jaettu(s)[1],
         laskut_otsikko=e(s['laskut']['otsikko']), laskut=s['laskut']['html'],
         portaat_otsikko=e(s['portaat_otsikko']),
         portaat_ingressi=e(s['portaat_ingressi']),
