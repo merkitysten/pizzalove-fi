@@ -366,8 +366,10 @@ def muoto(m, k):
         # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
         runko = runko[:i] + kaavio(k) + runko[i:]
+        # esimerkki vaihtoluvun loppuun eli ennen seuraavaa otsikkoa
         j = runko.index('<h3>%s</h3>' % k['vaihto_luku'])
-        j = runko.index('</p>', j) + 4
+        j = runko.find('<h3>', j + 4)
+        j = len(runko) if j < 0 else j
         runko = runko[:j] + vaihtoesimerkki(k) + runko[j:]
     # 🔵 Marko 6.11.2026: palstan alussa oleva «Vanhemmissa ohjeissa: Pizza
     # Bruno» rivitti otsikot eri tasoille. Arkilla se on pieni lisähuomio
