@@ -63,6 +63,29 @@ SIVU_KATTO = 3   # 🔵 Marko 6.11.2026: «Jos ohjeet menevät kolmelle A4-sivul
 # tekstit; paperilla on omat (mista kortit saa, kuka on kustantaja, QR:n
 # saate). Kieli joka puuttuu tasta, puuttuu myos arkilta.
 KIELET = {
+    # 🔵 Marko 6.11.2026: «Voitko tehdä samanlaisen ohjeen myös suomeksi,
+    # jolloin voin helpommin tarkistaa ohjeen rakenteen ja myös kielen.»
+    # ⚠️ TARKISTUSVERSIO, EI JULKAISTA: kansio paperi/luonnokset (ei
+    # julkinen/), eika sivu linkita siihen. Suomen julkinen lataus on yha
+    # painettu FI·SV·EN-arkki (pizza-love-korttipeli-saannot.pdf), jota
+    # tama EI saa korvata.
+    'fi': {
+        'tiedosto': 'pizza-love-korttipeli-saannot-fi-luonnos.pdf',
+        'kansio': os.path.join('paperi', 'luonnokset'),
+        'alaotsikko': 'Kaikkien kolmen pelimuodon säännöt',
+        'iskulause': 'JOKAINEN PIZZA LASKETAAN',
+        'hyva_tietaa': 'Hyvä tietää',
+        'kaavio': ('Pelaaja A', 'Pelaaja B', 'Pizzapino', 'Varasto',
+                   'Nostopakka', 'Vaihtopizza'),
+        'vaihto': ('Vaihto: pelaaja B:n nelonen pelaaja A:n kutoseen ja '
+                   'kakkoseen, koska 4 = 6 – 2. Sen jälkeen molemmat voivat '
+                   'valmistaa pizzansa.'),
+        'qr_teksti': 'Säännöt ja<br>videot netissä',
+        'osoite': 'https://pizzalove.fi/fi/korttipeli.html',
+        'videot': 'Jokaisen pelimuodon opetusvideot löydät netistä.',
+        'oikeudet': ('Merkitysten® on Merkitysten Oy:n rekisteröity '
+                     'tavaramerkki. Kaikki oikeudet pidätetään.'),
+    },
     'de': {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
         'alaotsikko': 'Die Regeln aller drei Spielvarianten',
@@ -117,7 +140,8 @@ KIELET = {
 def polut(kieli):
     k = KIELET[kieli]
     return (os.path.join(TANNE, 'sisalto', kieli + '.json'),
-            os.path.join(TANNE, 'julkinen', 'pdf', k['tiedosto']),
+            os.path.join(TANNE, k.get('kansio', os.path.join('julkinen', 'pdf')),
+                         k['tiedosto']),
             os.path.join(TANNE, '.korttisaannot-%s.html' % kieli))
 
 
@@ -723,6 +747,7 @@ def sivuja(pdf):
 
 def tee(kieli):
     lahde, kohde, sivu = polut(kieli)
+    os.makedirs(os.path.dirname(kohde), exist_ok=True)
     with open(sivu, 'w', encoding='utf-8') as f:
         f.write(sivu_html(kieli, lahde))
     # ⚠️ Sivu tarjoillaan REPON JUURESTA, koska kuvapolut (`julkinen/kuvat/`)
