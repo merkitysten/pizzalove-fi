@@ -1,0 +1,369 @@
+{
+  "lang": "sk",
+  "nimi": "Slovenčina",
+  "lyhenne": "SK",
+  "ui": {
+    "nav_etusivu": "Domov",
+    "nav_korttipeli": "Kartová hra",
+    "nav_lautapeli": "Stolová hra",
+    "nav_pelaa": "Hrať online",
+    "kielivalinta": "Jazyk",
+    "kauppaan": "Obchod",
+    "katso_video": "Pozrieť video",
+    "video_kieli": {
+      "fi": "po fínsky",
+      "en": "po anglicky"
+    },
+    "lataa": "Stiahnuť",
+    "alaosa_teksti": "Pizza Love® je hra spoločnosti Merkitysten Oy. Hry sú navrhnuté vo Fínsku a vo Fínsku aj skompletizované a zabalené.",
+    "alaosa_yhteys": "Máte otázky? Napíšte nám:",
+    "alaosa_tavaramerkki": "Pizza Love® a Merkitysten® sú registrované ochranné známky spoločnosti Merkitysten Oy.",
+    "alaosa_yritys": "Merkitysten Oy",
+    "alaosa_varainhankinta": "Získavanie financií",
+    "ohita": "Preskočiť na obsah",
+    "kauppa_korttipeli": "Kartová hra v obchode",
+    "kauppa_lautapeli": "Stolová hra v obchode",
+    "kauppa_molemmat": "Obe hry"
+  },
+  "etusivu": {
+    "title": "Pizza Love® – pravidlá, videá a online hry",
+    "kuvaus": "Pravidlá a videonávody ku kartovej a stolovej hre Pizza Love® a k tomu online hry.",
+    "h1": "Vitajte v továrni na pizzu!",
+    "ingressi": "Nájdete tu pravidlá a videonávody k hrám Pizza Love®. Vyberte si hru a o pár minút už hráte.",
+    "valitse": "Vyberte si hru",
+    "korttipeli_tiedot": "2–5 hráčov · od 6 rokov · 3 spôsoby hry · 5–15 min",
+    "lautapeli_tiedot": "2–4 hráči · od 6 rokov · 3 spôsoby hry · 10–20+ min",
+    "avaa": "Pravidlá a videá",
+    "pelaa_otsikko": "Hrajte Pizza Love online",
+    "pelaa_teksti": "Pizza Party a Pizza Basso z kartovej hry, Opičia váha a Hladné opice zo stolovej hry. Kartové hry môžete hrať aj s kamarátmi – každý na vlastnom telefóne.",
+    "pelaa_nappi": "Hrať teraz",
+    "kauppa_otsikko": "Chcete viac?",
+    "kauppa_teksti": "Hry Pizza Love® nájdete v internetovom obchode Merkitysten.",
+    "brandedition": {
+      "otsikko": "Pre kluby a firmy: Brand Edition",
+      "teksti": "Pizza Love® Brand Edition je tá istá hra vo vlastnej krabičke a farbách vašej organizácie. Ako darček, ocenenie alebo fanúšikovský predmet. Minimálna objednávka je 100 hier.",
+      "nappi": "Vyžiadať ponuku",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20Brand%20Edition"
+    },
+    "jalleenmyyjat": {
+      "otsikko": "Pre obchody a distribútorov",
+      "teksti": "Kartová a stolová hra Pizza Love® sú dostupné pre maloobchod a distribúciu. Pravidlá sú vo fínčine, švédčine a angličtine. Veľkoobchodné ceny a podmienky: info@merkitysten.fi · +358 44 023 0688.",
+      "nappi": "Kontaktujte nás",
+      "url": "mailto:info@merkitysten.fi?subject=Pizza%20Love%20%E2%80%93%20retail%20and%20distribution"
+    }
+  },
+  "korttipeli": {
+    "title": "Kartová hra Pizza Love® – pravidlá a videá",
+    "kuvaus": "Pravidlá a videonávody ku kartovej hre Pizza Love®: Pizza Party, Pizza Basso a Pizza Love.",
+    "h1": "Kartová hra Pizza Love®",
+    "ingressi": "Tri hry s jedným balíčkom. Začnite s Pizza Party – naučíte sa ju najrýchlejšie.",
+    "tiedot": [
+      "2–5 hráčov",
+      "od 6 rokov",
+      "42 kariet pízz",
+      "58 kariet prísad",
+      "5–15 min"
+    ],
+    "hyppy": {
+      "perusteet": "Ako sa pripravuje pizza",
+      "muodot": "Tri spôsoby hry",
+      "lataa": "Pravidlá v PDF"
+    },
+    "perusteet_otsikko": "Ako sa pripravuje pizza",
+    "perusteet_ingressi": "Všetky tri hry používajú to isté základné pravidlo. Naučte sa ho ako prvé.",
+    "pizzakortit_otsikko": "Karty pízz",
+    "pizzakortit": "Na karte pizze je pizza s jednou až štyrmi rôznymi prísadami. Hodnota pizze (1–10) je v rohoch karty. V hre je 10 srdcových pízz s hodnotou 10.",
+    "taytekortit_otsikko": "Karty prísad",
+    "taytekortit": "Na karte prísady je jedna prísada. Hodnota prísady (1–10) je v rohoch karty. 3 fantazijné prísady (X) môžu byť akoukoľvek prísadou.",
+    "perussaanto_otsikko": "Základné pravidlo",
+    "perussaanto": "Karty pízz sú vždy na stole. Pripravujú sa kartami prísad, ktoré máte v ruke.",
+    "arvo_otsikko": "Hodnota pizze",
+    "arvo": "Pripravte pizzu z vlastných kariet prísad a nahlas povedzte výpočet, ktorý dá hodnotu pizze. Všetky výpočty sú povolené a dajú sa kombinovať, ak sa výsledok rovná hodnote pizze. Napríklad <b>5 = 2 + 4 – 1</b>.",
+    "esimerkki_otsikko": "Príklad: pizza s paradajkou a ananásom",
+    "esimerkki_alt": "Karta pizze s hodnotou 5 a karty prísad 10 a 2: 10 : 2 = 5",
+    "esimerkki": "Hodnota pizze je 5. Môžete ju pripraviť z akýchkoľvek kariet prísad, ak výpočet dá 5: napríklad 4 + 1, 6 – 1, 2 + 3 alebo 10 : 2.",
+    "tavat_otsikko": "Dva spôsoby, ako pripraviť pizzu",
+    "helpompi_otsikko": "Jednoduchší spôsob",
+    "helpompi": "Pizzu môžete pripraviť z ľubovoľného počtu kariet prísad, aj z jednej. Použite ho, keď hráte Pizza Party prvýkrát alebo s malým dieťaťom.",
+    "basso_tapa_otsikko": "Spôsob opice Basso",
+    "basso_tapa": "Použite toľko <b>rôznych prísad</b>, koľko prísad má pizza. Kariet môže byť viac: pizzu s paradajkou a ananásom (hodnota 5) pripravíte aj z dvoch paradajok a jednej olivy, 2 + 2 + 1 = 5, pretože sú to dva rôzne druhy prísad. Použite ho v hre Pizza Basso alebo ako výzvu navyše v Pizza Party.<br><span class=\"pieni\">V tlačených pravidlách je ešte „toľko kariet prísad, koľko prísad má pizza“. Nový spôsob dáva hre viac možností.</span>",
+    "huomio_bruno": "<b>Bruno alebo Basso?</b> Opica v hre sa teraz volá Basso. V starších pravidlách a videách sa volá Bruno a druhý spôsob hry sa volá Pizza Bruno. Pravidlá sú rovnaké.",
+    "muodot_otsikko": "Tri spôsoby hry",
+    "muodot_ingressi": "Otvorte spôsob hry a uvidíte jeho pravidlá a videá.",
+    "videot_otsikko": "Videá",
+    "videot": {
+      "party_en": "Pizza Party – ako sa hrá",
+      "party_fi": "Pizza Party – ako sa hrá",
+      "party_helpompi": "Jednoduchší spôsob hry",
+      "party_helpottaminen": "Ako hru zjednodušiť",
+      "party_ei_valmistu": "Keď nikto nevie pripraviť pizzu",
+      "party_basso_tapa": "Spôsob opice Basso",
+      "basso_fi": "Pizza Basso – ako sa hrá"
+    },
+    "muodot": [
+      {
+        "avain": "party",
+        "numero": "#1",
+        "nimi": "Pizza Party",
+        "kuvaus": "Najľahší začiatok, rýchla a živá · asi 5 min",
+        "html": "<h3>Cieľ</h3><p>Hráči súťažia v príprave pízz. Vyhráva ten, kto pripraví najviac pízz, kým sa neminú karty pízz alebo prísad.</p><h3>Príprava hry</h3><ol class=\"lista\"><li>Zamiešajte karty pízz a položte ich na kôpku tak, aby na ňu všetci dosiahli.</li><li>Zamiešajte karty prísad a každému hráčovi rozdajte 5. Zvyšné tvoria dobierací balíček. Hráči si môžu pozrieť svoje karty.</li></ol><h3>Začiatok hry</h3><p>Otočte prvú kartu pizze lícom nahor vedľa kôpky. Všetci hráči sa hneď snažia pripraviť túto pizzu zo svojich kariet prísad.</p><h3>Priebeh hry</h3><ul class=\"lista\"><li>Hrá sa bez ťahov: všetci sa snažia pripravovať pizze naraz.</li><li>Najrýchlejší hráč, ktorý pizzu pripraví, si vezme kartu a odloží ju pred seba.</li><li>Použité karty prísad idú z hry von. Dobierajte nové, kým nemáte v ruke opäť 5 kariet.</li><li>Hneď otočte novú kartu pizze. Pokračujte, kým sa neminú karty pízz alebo prísad a nikto už nevie pripraviť pizzu.</li></ul><h3>Ak sa pizza nedá pripraviť</h3><p>Ak nikto nevie alebo nechce pripraviť pizzu na stole, otočte na ňu novú kartu pizze. Hráč, ktorý pripraví ďalšiu pizzu, si vezme všetky pizze na stole.</p><h3>Body a víťazstvo</h3><p>Obyčajná pizza = 1 bod, srdcová pizza = 2 body. Kolo vyhráva hráč s najviac bodmi. Dohodnite sa, koľko kôl hráte – napríklad celú hru vyhrá ten, kto prvý vyhrá 3 alebo 5 kôl.</p><h3>Pizza Party na ťahy</h3><p>Môžete hrať aj na ťahy, aby mal každý hráč počas svojho ťahu čas premýšľať.</p><h3>Voliteľné pravidlá</h3><p>Môžete sa dohodnúť na pravidlách, ktoré obmedzujú výpočty, napríklad:</p><ul class=\"lista\"><li>hrá sa len so sčítaním a odčítaním</li><li>v každej pizze musí byť násobenie alebo delenie.</li></ul>"
+      },
+      {
+        "avain": "basso",
+        "numero": "#2",
+        "nimi": "Pizza Basso",
+        "kuvaus": "Pokojná a napínavá · asi 7 min",
+        "html": "<p class=\"pieni\">V starších pravidlách: Pizza Bruno.</p><h3>Cieľ</h3><p>Hráči sa snažia zbaviť všetkých svojich kariet prísad. Kto to dokáže prvý, vyhráva kolo.</p><p><b>Pozor:</b> Pizze sa pripravujú spôsobom opice Basso: použite toľko rôznych prísad, koľko prísad má pizza. Kariet môže byť viac, napríklad dve olivy.</p><h3>Príprava hry</h3><ol class=\"lista\"><li>Zamiešajte karty pízz a položte ich na kôpku tak, aby na ňu všetci dosiahli.</li><li>Zamiešajte karty prísad a každému hráčovi rozdajte 7. Zvyšné tvoria dobierací balíček. Hráči si môžu pozrieť svoje karty.</li></ol><h3>Začiatok hry</h3><p>Otočte prvú kartu pizze lícom nahor vedľa kôpky. Začína hráč, ktorý naposledy jedol pizzu.</p><h3>Priebeh hry</h3><p>Hráči sa na ťahu striedajú a snažia sa pripraviť pizzu na stole zo svojich kariet prísad.</p><p><b>A) Ak sa vám to podarí:</b> použité karty prísad dajte z hry von a z kôpky otočte novú kartu pizze na tú starú. Ťah prechádza na ďalšieho hráča.</p><p><b>B) Ak pizzu neviete alebo nechcete pripraviť:</b> dobierte jednu kartu prísady. Ťah prechádza na ďalšieho hráča.</p><p><b>C) Posledná karta:</b> keď vám zostane jediná karta prísady, správajte sa ako hladná opica Basso a zakričte: „PIZZAAA!“</p><h3>Ak sa minú karty prísad</h3><p>Zamiešajte odložené karty prísad do nového dobieracieho balíčka a pokračujte.</p><h3>Body a víťazstvo</h3><p>Kolo vyhráva hráč, ktorý sa prvý zbaví všetkých kariet prísad. Spočítajte hodnoty kariet, ktoré zostali ostatným hráčom v ruke – súčet sú víťazove body. Obyčajné prísady sa rátajú podľa hodnoty (1–10), fantazijná prísada za 20.</p><p>Kto prvý dosiahne 100 bodov, vyhráva a získava titul <b>Pizza Basso – skutočná pizzová opica</b>.</p><h3>Kratšia hra</h3><p>Môžete sa dohodnúť, že hra skončí napríklad pri 30 alebo 50 bodoch, alebo že celú hru vyhrá ten, kto prvý vyhrá 3 alebo 5 kôl.</p>"
+      },
+      {
+        "avain": "love",
+        "numero": "#3",
+        "nimi": "Pizza Love",
+        "kuvaus": "Najtaktickejšia a najnáročnejšia, od 8 rokov · asi 15 min",
+        "html": "<h3>Cieľ</h3><p>Hráči sa snažia pripraviť všetky svoje pizze skôr ako ostatní. Kto to dokáže prvý, vyhráva.</p><p><b>Pozor:</b> Teraz rozhodujú prísady: pizzu môžete pripraviť len zo správnych prísad.</p><h3>Príprava hry</h3><ol class=\"lista\"><li>Zamiešajte karty pízz a každému hráčovi rozdajte 8. Hráči si ich položia pred seba na kôpku rubom nahor a vrchnú kartu otočia lícom nahor.</li><li>Do stredu stola položte jednu kartu pizze lícom nahor ako výmennú pizzu. Zvyšné karty pízz dajte z hry von.</li><li>Zamiešajte karty prísad a položte ich na stôl ako dobierací balíček.</li></ol><h3>Sklad</h3><p>Každý hráč má 4 miesta v sklade. Karty prísad v sklade ležia lícom nahor. Môžete ich používať na svoje pizze rovnako ako karty v ruke a ostatní hráči ich môžu použiť na výmeny.</p><h3>Začiatok hry</h3><p>Začína hráč, ktorý naposledy jedol pizzu, a dobierie si do ruky 5 kariet prísad.</p><h3>Priebeh hry</h3><ol class=\"lista\"><li>Dobierajte karty prísad, kým nemáte v ruke 5 kariet.</li><li>Skúste pripraviť vrchnú pizzu svojej kôpky z kariet v ruke a v sklade.</li><li>Karty vo svojom sklade môžete pomocou výpočtov vymeniť za karty v sklade iného hráča.</li><li>Raz za ťah môžete vymeniť vrchnú pizzu svojej kôpky za výmennú pizzu v strede. Túto pizzu môžete hneď pripraviť.</li><li>Ťah ukončite tak, že jednu kartu prísady z ruky položíte lícom nahor do svojho skladu.</li></ol><h3>Príprava pizze</h3><p>Keď máte potrebné prísady v ruke a/alebo v sklade, pripravte pizzu. Karta pizze a použité karty prísad idú z hry von. Otočte ďalšiu kartu pizze zo svojej kôpky – ak na ňu máte prísady, môžete ju pripraviť hneď.</p><h3>Srdcová pizza</h3><p>Keď pripravíte srdcovú pizzu, dajte svoju ďalšiu kartu pizze (bez pozerania) inému hráčovi. Ten si ju dá na spodok svojej kôpky.</p><h3>Výmena kariet v sklade</h3><p>Potrebné prísady získate výmenou kariet vo svojom sklade za karty v sklade iného hráča. Výmena sa robí výpočtami: povolené je všetko, ak je výsledok na kartách oboch hráčov rovnaký. Za ťah môžete urobiť viac výmen, ale každá výmena je vždy medzi dvoma skladmi. Kartu pod inou kartou vymeniť nemožno. Získané karty si do skladu uložte v ľubovoľnom poradí.</p><h3>Plnenie skladu</h3><p>Ak minete karty v ruke skôr, ako položíte kartu do skladu, dobierte si 5 nových kariet a pokračujte vo svojom ťahu. Miesta v sklade môžete plniť v ľubovoľnom poradí a karty môžete ukladať na seba. Vrchnú kartu treba vždy použiť skôr ako tie pod ňou. Karty v sklade sa po položení nedajú presúvať.</p><h3>Víťazstvo</h3><p>Hra končí, keď niektorý hráč pripraví všetky pizze zo svojej kôpky.</p>"
+      }
+    ],
+    "lataa_otsikko": "Pravidlá v PDF",
+    "lataa_teksti": "Všetky tri spôsoby hry po slovensky – dve strany na vytlačenie.",
+    "lataa_tiedosto": "Pravidlá kartovej hry (slovensky)",
+    "pelaa_otsikko": "Pizza Party a Pizza Basso",
+    "pelaa_teksti": "Obe fungujú aj v prehliadači. Vyskúšajte si ich pred prvou hrou alebo hrajte s kamarátmi na vlastných telefónoch.",
+    "ristiin_otsikko": "Ďalej: stolová hra Pizza Love®",
+    "ristiin_teksti": "Ten istý pizzový svet na hracom pláne: pripravte obľúbené pizze krabíc na pizzu a ako prvý nazbierajte 10 rôznych kúskov. Tri spôsoby hry vrátane kooperatívnej.",
+    "ristiin_saannot": "Pravidlá stolovej hry"
+  },
+  "lautapeli": {
+    "title": "Stolová hra Pizza Love® – pravidlá a videá",
+    "kuvaus": "Pravidlá a videonávody ku stolovej hre Pizza Love®: príprava, priebeh ťahu a tri spôsoby hry.",
+    "h1": "Stolová hra Pizza Love®",
+    "ingressi": "Pripravte obľúbené pizze krabíc na pizzu a ako prvý nazbierajte 10 rôznych kúskov – a vyhráte!",
+    "tiedot": [
+      "2–4 hráči",
+      "od 6 rokov",
+      "3 spôsoby hry",
+      "10–20+ min"
+    ],
+    "hyppy": {
+      "kokoaminen": "Pred prvou hrou",
+      "peli": "Ako hra funguje",
+      "muodot": "Tri spôsoby hry",
+      "lataa": "Pravidlá v PDF"
+    },
+    "kokoaminen_otsikko": "Pred prvou hrou",
+    "kokoaminen": "V krabici je hárok nálepiek a štyri krabičky, ktoré sa poskladajú raz. Zaberie to chvíľku a potom je hra vždy pripravená.",
+    "videot": {
+      "HE9301owOKI": "Skladanie krabičiek",
+      "RbLfhUyXHKw": "Nálepky na figúrky",
+      "Ya73FhJfj54": "Príprava hry",
+      "IN2LvbXo9eA": "Priebeh ťahu a víťazstvo"
+    },
+    "peli_otsikko": "Ako hra funguje",
+    "voittaminen_otsikko": "Víťazstvo",
+    "voittaminen": "Vyhráte, ak ako prvý nazbierate do svojej krabice <b>10 rôznych</b> kúskov. Pripravujte pizze na pláne a za ne získate zodpovedajúce kúsky do krabice. Srdcová pizza vám dá jeden kúsok navyše podľa vlastného výberu.",
+    "valmistelut_otsikko": "Príprava hry",
+    "valmistelut": [
+      "Farebné veže prísad naskladajte do skladu.",
+      "Zamiešajte karty pízz a 4 položte na plán. Zvyšné karty pízz položte ako balíček na stôl.",
+      "Zamiešajte opičie karty a položte ich ako balíček na stôl.",
+      "Každý hráč dostane prázdnu krabicu."
+    ],
+    "vuoro_otsikko": "Priebeh ťahu",
+    "vaiheet": [
+      {
+        "otsikko": "Hod kockou a posúvanie figúrok",
+        "html": "<p>Začína hráč, ktorý naposledy jedol pizzu, a hodí kockou. Kocka určuje, koľko figúrok sa presunie medzi skladom a linkou. Figúrky rovnakej farby sa vždy presúvajú ako jedna veža. Ak nenájdete ťah, ostatní vám môžu pomôcť. Ak ho niekto nájde, urobí sa. Ak nikto, váš ťah končí.</p><p class=\"pieni\">Opičia váha a závažia pomáhajú deťom predstaviť si ťahy. <b>Nemusia sa používať.</b></p>"
+      },
+      {
+        "otsikko": "Príprava pizze",
+        "html": "<p>Keď sú prísady potrebné pre pizzu na linke, pripravte pizzu a kúsky si dajte do krabice. Za ťah môžete pripraviť viac pízz, ale každú prísadu môžete v jednom ťahu použiť len na jednu pizzu. Použité prísady vráťte do skladu a z balíčka si na plán dobierte novú kartu pizze.</p>"
+      },
+      {
+        "otsikko": "Opičia karta",
+        "html": "<p>Ak ste pripravili aspoň jednu pizzu, na konci ťahu si vezmite opičiu kartu a riaďte sa ňou. Ťah pokračuje v smere hodinových ručičiek.</p>"
+      }
+    ],
+    "muodot_otsikko": "Tri spôsoby hry",
+    "muodot_ingressi": "Hod kockou, posúvanie prísad a príprava pízz fungujú vo všetkých troch rovnako.",
+    "muodot": [
+      {
+        "nimi": "Pizza Love – základná hra",
+        "kuvaus": "Preteky pre celú rodinu, od 6 rokov · asi 15–20 min",
+        "html": "<p>Pripravte obľúbené pizze krabíc na pizzu a ako prvý nazbierajte do svojej krabice 10 rôznych kúskov. Keď poznáte základnú hru, v pravidlách nájdete doplnkové pravidlá, ktoré ju zrýchlia.</p>"
+      },
+      {
+        "nimi": "Hladné opice",
+        "kuvaus": "Kooperatívna hra. Hrať ju môžete spolu aj so štvorročným dieťaťom a skúmať čísla a množstvá. · asi 10 min",
+        "html": "<p>Najľahší začiatok. Hráte spolu a plníte spoločnú krabicu. Ak ju naplníte 10 rôznymi kúskami, vyhrávate všetci. Ale pozor: hladné opice zjedia svoje kúsky hneď, ak neprichádzajú nové!</p>"
+      },
+      {
+        "nimi": "Tajné pizze",
+        "kuvaus": "Napínavá a strategická · 20+ min",
+        "html": "<p>Každý dostane dve tajné pizze, ktoré ostatní nevidia – nikto teda nevie, ktoré pizze idete pripraviť. Vyhráva ten, kto prvý naplní svoju krabicu 10 rôznymi kúskami.</p>"
+      }
+    ],
+    "lataa_otsikko": "Pravidlá v PDF",
+    "lataa_teksti": "Úplné pravidlá všetkých spôsobov hry vo fínčine, švédčine a angličtine.",
+    "lataukset": {
+      "pikaohje": "Stručný návod (na vytlačenie)",
+      "peruspeli": "Základná hra – úplné pravidlá",
+      "apinat": "Hladné opice – úplné pravidlá",
+      "salatut": "Tajné pizze – úplné pravidlá"
+    },
+    "pelaa_otsikko": "Opičia váha",
+    "pelaa_teksti": "Spoznajte váhu zo stolovej hry online: kŕmte hladné opice a pomôžte Bassovi riešiť hádanky.",
+    "ristiin_otsikko": "Ďalej: kartová hra Pizza Love®",
+    "ristiin_teksti": "Tie isté pizze a prísady ako kartová hra: pripravte pizzu z kariet prísad a výpočet povedzte nahlas. Tri hry s jedným balíčkom.",
+    "ristiin_saannot": "Pravidlá kartovej hry"
+  },
+  "toppingten": {
+    "title": "Essen 2026 | Pizza Love®",
+    "kuvaus": "Pizza Love na veľtrhu SPIEL Essen 2026: kartová hra, stolová hra a vrecúško vyrobené pre veľtrh s vlastnou hrou.",
+    "h1": "{nimi}",
+    "merkki": "Essen Edition · limitovaná séria 450 kusov",
+    "ingressi": "Vytlačte si hrací plán, vysypte prísady na stôl a hrajte. Pravidlá sú na tejto stránke.",
+    "tiedot": "2–4 hráči · od 7 rokov · asi 15 minút",
+    "sisalto_otsikko": "Vo vrecúšku",
+    "sisalto": [
+      "55 prísad v desiatich farbách, hodnoty 1–10",
+      "Desaťstenná kocka",
+      "Tetovačka s Bassom"
+    ],
+    "lataa_otsikko": "Stiahnite si hrací plán",
+    "lataa": "Hrací plán je jeden hárok A4. Čiarová verzia je tá istá hra, len spotrebuje menej atramentu.",
+    "lataa_vari": "Hrací plán, farebný",
+    "lataa_viiva": "Hrací plán, čiarová verzia",
+    "saannot_otsikko": "Pravidlá",
+    "valmistelu": "Každý hráč si vezme jednu pizzu. Prísady idú na svoje miesta na pulte.",
+    "tavoite_otsikko": "Cieľ",
+    "tavoite": "Pripravte najhodnotnejšiu pizzu. Hra končí, keď niekto zaplní svoju pizzu, ale víťaza určuje hodnota, nie rýchlosť.",
+    "vuoro_otsikko": "Váš ťah",
+    "vuoro": [
+      "Hoďte kockou.",
+      "Vezmite si z pultu prísady, ktorých hodnota je presne číslo, ktoré ste hodili.",
+      "Položte ich na prázdne kúsky svojej pizze, jednu prísadu na jeden kúsok."
+    ],
+    "vuoro_huom": "Ak hodíte 10, vezmete si jednu desiatku alebo 1 + 2 + 3 + 4. Hodnota je v oboch prípadoch rovnaká, ale desiatka zaplní jeden kúsok a štyri malé zaplnia štyri.",
+    "vuoro_raja": "Nemôžete si vziať viac, ako máte prázdnych kúskov.",
+    "ohi_otsikko": "Ak nemôžete alebo nechcete brať",
+    "ohi": "Ťah vynecháte. Po troch vynechaných ťahoch za sebou vypadávate.",
+    "aloitus_otsikko": "Kto začína kolo",
+    "aloitus": "Kolo začína ten, kto má najmenej prísad. Pri zhode ten, koho prísady majú najnižšiu hodnotu.",
+    "voitto_otsikko": "Koniec hry",
+    "voitto": "Hra končí vo chvíli, keď niekto zaplní všetkých desať kúskov. Tento hráč ešte nevyhral.",
+    "pisteet_otsikko": "Bodovanie",
+    "pisteet": "Každý spočíta hodnotu prísad na svojej pizze. Vyhráva najhodnotnejšia pizza.",
+    "tasapeli_otsikko": "Remíza",
+    "tasapeli": "Ak majú dve pizze rovnakú hodnotu, vyhráva tá s menej prísadami. Ak je aj to rovnaké, víťazstvo sa delí.",
+    "vinkki_otsikko": "Tip",
+    "vinkki": "Malých prísad je málo: jedna jednotka a dve dvojky. Práve vďaka nim trafíte súčet presne, keď nesedí žiadna samostatná prísada, a vynechaný ťah nemá žiadnu hodnotu. Veľké prísady šetria kúsky a tých máte len desať.",
+    "muunnelmat_otsikko": "Varianty",
+    "muunnelmat": [
+      [
+        "Jednu späť",
+        "Ak nedokážete využiť hod, vráťte jednu prísadu na pult a skúste to znova."
+      ],
+      [
+        "Presne 30",
+        "Neobmedzujú vás kúsky, ale hodnota. Vyhrávate, keď majú vaše prísady hodnotu presne 30. Nesmiete ju prekročiť, preto berte najväčšiu, ktorá sa zmestí."
+      ]
+    ],
+    "essen_otsikko": "Séria pre Essen",
+    "essen": "Túto sériu sme vyrobili pre veľtrh. Prísady majú tých istých desať farieb ako v kartovej hre, len sú menšie.",
+    "valmistelu_otsikko": "Príprava",
+    "sivu_h1": "Essen 2026",
+    "sivu_ingressi": "Nájdete nás na veľtrhu SPIEL Essen. Prinesieme kartovú hru, stolovú hru a vrecúško prísad, pre ktoré sme vymysleli hru.",
+    "mukana_otsikko": "Čo prinesieme",
+    "mukana": [
+      "Kartová hra Pizza Love",
+      "Stolová hra Pizza Love",
+      "Vrecúško: 55 prísad, desaťstenná kocka a tetovačka s Bassom"
+    ],
+    "peli_otsikko": "Hra vo vrecúšku: {nimi}",
+    "nappi": "Stiahnuť hrací plán",
+    "tarjoukset_otsikko": "Veľtržné ponuky",
+    "tarjoukset_ingressi": "Ceny platia v našom stánku.",
+    "tarjoukset": [
+      [
+        "17 €",
+        "Kartová hra",
+        "Bežne 19,90 €",
+        "korttipeli",
+        "kansi-family.webp",
+        "Ušetríte 2,90 €"
+      ],
+      [
+        "30 €",
+        "Dve kartové hry",
+        "Bežne 39,80 €",
+        "korttipeli",
+        "kaksi-korttipelia.webp",
+        "Ušetríte 9,80 €"
+      ],
+      [
+        "30 €",
+        "Stolová hra",
+        "Bežne 34,90 €",
+        "lautapeli",
+        "lautapeli-laatikko.webp",
+        "Ušetríte 4,90 €"
+      ],
+      [
+        "45 €",
+        "Obe hry",
+        "Bežne 49,90 €",
+        "molemmat",
+        "molemmat-pelit.webp",
+        "Ušetríte 4,90 €"
+      ],
+      [
+        "10 €",
+        "Vrecúško plné Pizza Love",
+        "55 žetónov prísad v desiatich farbách, tých istých ako v kartovej hre. Dajú sa skladať do veží. Vo vrecúšku je aj desaťstenná kocka Pizza Love a tetovačka s Bassom. Hrací plán si stiahnete z tejto stránky.",
+        "",
+        "pikkunappulat-noppa.webp",
+        "Len na veľtrhu"
+      ]
+    ],
+    "kaupanpaalle": "Pri nákupe nad 35 € dostanete vrecúško k tomu.",
+    "kaupanpaalle_lisa": "Vrecúšok je 450.",
+    "tuotteet_otsikko": "Čo prinesieme",
+    "avaa": "Viac informácií",
+    "tuotteet": [
+      [
+        "Kartová hra Pizza Love",
+        "Tri spôsoby hry, 2–6 hráčov",
+        "korttipeli.html",
+        "kansi-family.webp"
+      ],
+      [
+        "Stolová hra Pizza Love",
+        "Tri spôsoby hry, 2–4 hráči",
+        "lautapeli.html",
+        "lautapeli-laatikko.webp"
+      ],
+      [
+        "Malé vrecúško plné Pizza Love",
+        "55 prísad, kocka a tetovačka s Bassom",
+        "#peli",
+        "pikkunappulat-noppa.webp"
+      ]
+    ],
+    "editiot_otsikko": "Tri obaly, tie isté karty",
+    "editiot_teksti": "Kartová hra má tri obaly. Balíčky vo vnútri sú rovnaké, vyberte si ten, ktorý sa vám páči.",
+    "editiot": [
+      [
+        "Family Edition",
+        "kansi-family.webp"
+      ],
+      [
+        "Friends Edition",
+        "kansi-friends.webp"
+      ],
+      [
+        "Winter Edition",
+        "kansi-winter.webp"
+      ]
+    ],
+    "tatuointi": "Na veľtrhu je tetovačka len v tomto vrecúšku."
+  }
+}

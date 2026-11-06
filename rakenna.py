@@ -21,8 +21,8 @@ SISALTO = os.path.join(JUURI, 'sisalto')
 JULKINEN = os.path.join(JUURI, 'julkinen')
 ULOS = os.path.join(JUURI, 'docs')
 
-KIELET = ['fi', 'sv', 'en', 'de', 'nl', 'fr', 'es']      # järjestys kielivalikossa (NL/FR/ES lisätty 25.10.2026)
-LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE', 'nl': 'nl_NL', 'fr': 'fr_FR', 'es': 'es_ES'}
+KIELET = ['fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk']      # järjestys kielivalikossa (NL/FR/ES lisätty 25.10.2026, SK 6.11.2026)
+LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE', 'nl': 'nl_NL', 'fr': 'fr_FR', 'es': 'es_ES', 'sk': 'sk_SK'}
 OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään näistä
 OSOITE = 'https://pizzalove.fi'
 SAHKOPOSTI = 'info@merkitysten.fi'
@@ -50,7 +50,7 @@ KAUPPA_KIELI = {
            'molemmat': 'https://merkitysten.fi/en/tuote/pizza-love-both-games/'},
 }
 # DE/NL/FR/ES: ei omaa kauppaa → EN-tuotesivut.
-for _k in ('de', 'nl', 'fr', 'es'):
+for _k in ('de', 'nl', 'fr', 'es', 'sk'):
     KAUPPA_KIELI[_k] = KAUPPA_KIELI['en']
 MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp (huomio-laatikko käyttää 3.11.2026 alkaen basso-pohtii.webp 560×601)
 VAAKA_W, VAAKA_H = 720, 489  # julkinen/kuvat/apinavaaka.webp (koottu Apinavaa'an valikkoapinan kerroksista, Marko 20.10.2026)
@@ -126,7 +126,18 @@ PELIN_NIMI = 'Topping Ten'
 # (apina on siina Bruno, ja Basson tapa on eri saanto).
 KORTTIPELI_PDF = {
     'de': ('pdf/pizza-love-kartenspiel-regeln-de.pdf', 'korttipeli'),
+    'sk': ('pdf/pizza-love-kartova-hra-pravidla-sk.pdf', 'korttipeli'),
 }
+
+def korttipeli_pdf(lang):
+    """Kielen oma saanto-PDF, jos `korttisaannot.py` on jo tehnyt sen;
+    muuten painettu arkki ja varoitus (uusi kieli ennen ensimmaista ajoa)."""
+    polku = KORTTIPELI_PDF.get(lang)
+    if polku and not os.path.exists(os.path.join(JULKINEN, polku[0])):
+        print('⚠️  %s puuttuu – aja: python3 korttisaannot.py %s' % (polku[0], lang))
+        polku = None
+    return polku or PDF['korttipeli']
+
 
 PDF = {
     'korttipeli': ('pdf/pizza-love-korttipeli-saannot.pdf', 'korttipeli'),
@@ -471,7 +482,7 @@ def korttipeli(t, kaikki):
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']},
-                 dict(PDF, korttipeli=KORTTIPELI_PDF.get(lang, PDF['korttipeli']))),
+                 dict(PDF, korttipeli=korttipeli_pdf(lang))),
        ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 

@@ -1,0 +1,216 @@
+{
+  "title": "Stolová hra Pizza Love®: opičie karty 01–33",
+  "kuvaus": "Všetkých 33 opičích kariet stolovej hry Pizza Love® a čo robiť. Kartu nájdete podľa čísla.",
+  "h1": "Opičie karty",
+  "ingressi": "Ak ste vo svojom ťahu pripravili aspoň jednu pizzu, na konci ťahu si vezmite opičiu kartu. Nájdite číslo karty a urobte, čo hovorí.",
+  "kaytto": "Opičie karty sa používajú v základnej hre a v Tajných pizzách, nie v Hladných opiciach. Ak chcete hru zjednodušiť, opičie karty vynechajte.",
+  "takaisin": "Stolová hra",
+  "linkki": "Opičie karty 01–33",
+  "hae": "Číslo karty",
+  "huom": "POZOR!",
+  "tarkennus": "Spresnenie",
+  "yleista": "Váš ťah končí, keď si vezmete opičiu kartu. Ďalší hráč hodí kockou a presunie prísady skôr, ako pripraví pizze. Karta, ktorú si možno odložiť, patrí hráčovi, ktorý si ju vzal.",
+  "kortit": [
+    {
+      "n": 1,
+      "nimi": "Páni, aké tenké a chrumkavé cesto!",
+      "ohje": "Hoďte kockou a hrajte ešte jeden ťah."
+    },
+    {
+      "n": 2,
+      "nimi": "Mech je voľný!",
+      "ohje": "Vezmite jednu prísadu zo skladu na linku a ak chcete, odstráňte jednu prísadu z linky."
+    },
+    {
+      "n": 3,
+      "nimi": "S prísadami sa deje niečo zvláštne.",
+      "ohje": "K číslu na kocke pripočítajte jedna.",
+      "huom": "Kartu si môžete odložiť a zahrať v ťahu ktoréhokoľvek hráča.",
+      "tarkennus": "Zahrajte ju hneď po hode kockou."
+    },
+    {
+      "n": 4,
+      "nimi": "S prísadami sa deje niečo zvláštne.",
+      "ohje": "Od čísla na kocke odpočítajte jedna.",
+      "huom": "Kartu si môžete odložiť a zahrať v ťahu ktoréhokoľvek hráča.",
+      "tarkennus": "Zahrajte ju hneď po hode kockou. Číslo môže byť 0 a vtedy sa žiadne prísady nepresúvajú."
+    },
+    {
+      "n": 5,
+      "nimi": "Linka potrebuje viac prísad!",
+      "ohje": "Hoďte kockou dvakrát – zakaždým pridajte prísady na linku. Pizze sa pripravujú až po oboch hodoch.",
+      "huom": "Kartu si môžete odložiť a zahrať v ťahu ktoréhokoľvek hráča.",
+      "tarkennus": "Znova hádže hráč, ktorý je na ťahu."
+    },
+    {
+      "n": 6,
+      "nimi": "Kontrola krabíc!",
+      "ohje": "Hráči získajú alebo stratia kúsky: Kto vedie, stratí jeden kúsok. Kto je v strede, získa jeden kúsok. Kto je posledný, získa dva kúsky.",
+      "huom": "Karta platí hneď pre všetkých hráčov. Kúsky si hráči vyberajú sami.",
+      "tarkennus": "Najviac kúskov: vediete. Najmenej: ste posledný. Ak majú všetci rovnako, každý získa jeden."
+    },
+    {
+      "n": 7,
+      "nimi": "Ochutnaj moju pizzu!",
+      "ohje": "Dajte jeden kúsok zo svojej krabice inému hráčovi.",
+      "huom": "Kúsok musí byť pre druhého hráča nový.",
+      "tarkennus": "Dajte kúsok, ktorý druhý hráč ešte nemá."
+    },
+    {
+      "n": 8,
+      "nimi": "Pumpovanie mechom unavuje.",
+      "ohje": "Jedno kolo odpočívate.",
+      "tarkennus": "Váš ďalší hod vynecháte."
+    },
+    {
+      "n": 9,
+      "nimi": "Zamiešajte krabice!",
+      "ohje": "Krabice hráčov menia majiteľa v smere hodinových ručičiek."
+    },
+    {
+      "n": 10,
+      "nimi": "Zamiešajte krabice!",
+      "ohje": "Krabice hráčov menia majiteľa proti smeru hodinových ručičiek."
+    },
+    {
+      "n": 11,
+      "nimi": "V rozmanitosti je krása.",
+      "ohje": "Smer hry sa mení.",
+      "huom": "V hre dvoch hráčov hneď hráte ďalší ťah."
+    },
+    {
+      "n": 12,
+      "nimi": "Výmena krabíc!",
+      "ohje": "Vymeňte si krabicu s ktorýmkoľvek hráčom."
+    },
+    {
+      "n": 13,
+      "nimi": "Obedňajšia prestávka! Opice zjedia svoje kúsky.",
+      "ohje": "Všetci hráči stratia kúsky podľa čísla na karte.",
+      "huom": "Ak má hráč len jeden kúsok, ten sa neodoberá.",
+      "tarkennus": "2–3 kúsky: stratíte 1. 4–5 kúskov: stratíte 2. 6–7 kúskov: stratíte 3. 8–9 kúskov: stratíte 4."
+    },
+    {
+      "n": 14,
+      "nimi": "Niekto zabudol na údržbu nasávacieho systému a zasekol sa.",
+      "ohje": "Všetky prísady z linky sa presunú do skladu."
+    },
+    {
+      "n": 15,
+      "nimi": "Pizza párty!",
+      "ohje": "Všetky prísady sa presunú na linku.",
+      "huom": "Ťah môžete pokračovať prípravou pízz. Na konci si vezmite novú opičiu kartu.",
+      "tarkennus": "Ak pripravíte pizze, na konci si vezmite novú opičiu kartu."
+    },
+    {
+      "n": 16,
+      "nimi": "Mech zlobí.",
+      "ohje": "Najmenšie prísady sa presunú do skladu. Od najmenšej prísady na linke odstráňte toľko prísad, koľko je v hre hráčov.",
+      "tarkennus": "Napríklad v hre troch hráčov idú do skladu tri najmenšie prísady."
+    },
+    {
+      "n": 17,
+      "nimi": "Mech robí žarty.",
+      "ohje": "Najväčšie prísady sa presunú do skladu. Od najväčšej prísady na linke odstráňte toľko prísad, koľko je v hre hráčov.",
+      "tarkennus": "Napríklad v hre troch hráčov idú do skladu tri najväčšie prísady."
+    },
+    {
+      "n": 18,
+      "nimi": "Čas pumpovať!",
+      "ohje": "Hodnota linky sa zvýši o jedna. Presúvajte prísady podľa vlastného výberu medzi linkou a skladom.",
+      "tarkennus": "Súčet prísad na linke sa zvýši o jedna. Príklad: ananás (3) + paradajka (2) = 5. Prineste na linku olivu (1) a súčet je 6."
+    },
+    {
+      "n": 19,
+      "nimi": "Znova čas pumpovať!",
+      "ohje": "Hodnota linky sa zníži o jedna. Presúvajte prísady podľa vlastného výberu medzi linkou a skladom.",
+      "tarkennus": "Súčet prísad na linke sa zníži o jedna. Príklad: ananás (3) + paradajka (2) = 5. Vymeňte paradajku za olivu (1) a súčet je 4."
+    },
+    {
+      "n": 20,
+      "nimi": "Pri pumpovaní mechom sa rozkašlete.",
+      "ohje": "Všetky nepárne prísady si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Nepárne: 1, 3, 5, 7 a 9."
+    },
+    {
+      "n": 21,
+      "nimi": "Pri stláčaní mechu kýchnete.",
+      "ohje": "Všetky párne prísady si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Párne: 2, 4, 6, 8 a 10."
+    },
+    {
+      "n": 22,
+      "nimi": "Nahlas sa smejete a skotúľate sa na mech.",
+      "ohje": "Všetky prísady deliteľné tromi si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Deliteľné tromi: 3, 6 a 9."
+    },
+    {
+      "n": 23,
+      "nimi": "Unikne vám prd a ovplyvní tlak v nasávacom systéme.",
+      "ohje": "Všetky prísady deliteľné piatimi si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Deliteľné piatimi: 5 a 10."
+    },
+    {
+      "n": 24,
+      "nimi": "Malé prísady máte obzvlášť radi.",
+      "ohje": "Malé prísady si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Malé: 1–5."
+    },
+    {
+      "n": 25,
+      "nimi": "Ach, ako zbožňujete veľké prísady.",
+      "ohje": "Veľké prísady si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Veľké: 6–10."
+    },
+    {
+      "n": 26,
+      "nimi": "Nemôžete prestať pumpovať!",
+      "ohje": "Všetky prísady si vymenia miesto medzi linkou a skladom.",
+      "tarkennus": "Ak bola linka prázdna, je pizza párty: pokračujte v ťahu ako pri karte 15."
+    },
+    {
+      "n": 27,
+      "nimi": "Máte pevnú vôľu!",
+      "ohje": "Môžete zrušiť účinok opičej karty.",
+      "huom": "Kartu si môžete odložiť a zahrať v ťahu ktoréhokoľvek hráča.",
+      "tarkennus": "Zahrajte ju hneď, ako si niekto vezme opičiu kartu. Účinok tej karty sa ruší."
+    },
+    {
+      "n": 28,
+      "nimi": "Krabice na pizzu vám poďakujú.",
+      "ohje": "Získate jeden kúsok navyše zadarmo!"
+    },
+    {
+      "n": 29,
+      "nimi": "Pizza vás úplne pobláznila!",
+      "ohje": "Prísady na linke sa vymenia podľa ikon na karte.",
+      "huom": "Ak sú na linke obe prísady, nič sa s nimi nedeje.",
+      "tarkennus": "Dvojice: oliva–šunka, paradajka–šampiňón, ananás–rukola, plesňový syr–baklažán, kreveta–ryba. Dvojica si vymení miesto, ak je jedna na linke a druhá v sklade."
+    },
+    {
+      "n": 30,
+      "nimi": "Myslíte len na pizzu.",
+      "ohje": "Pripravte pizzu buď pred hodom kockou, alebo po ňom.",
+      "huom": "Kartu si môžete odložiť a zahrať neskôr.",
+      "virhe": "V tlačených anglických pravidlách má táto karta omylom číslo 31.",
+      "tarkennus": "Pizze môžete pripravovať pred hodom kockou aj po ňom."
+    },
+    {
+      "n": 31,
+      "nimi": "To vyzeralo chutne!",
+      "ohje": "Hráči si môžu vybrať kúsok od predchádzajúceho hráča.",
+      "huom": "Začína hráč, ktorý bol na ťahu. Kúsok musí byť nový. Ak nový kúsok nie je, hráč nedostane nič. Jeden zo svojich kúskov však aj tak musí dať ďalšiemu hráčovi.",
+      "tarkennus": "Vezmite si od hráča pred vami kúsok, ktorý ešte nemáte. Kúsky idú do krabíc až potom, čo si vyberú všetci."
+    },
+    {
+      "n": 32,
+      "nimi": "Medzi krabicami na pizzu ste legenda!",
+      "ohje": "Získate dva kúsky navyše!"
+    },
+    {
+      "n": 33,
+      "nimi": "Och! Zrazu dostanete hlad.",
+      "ohje": "Stratíte všetky svoje kúsky."
+    }
+  ]
+}
