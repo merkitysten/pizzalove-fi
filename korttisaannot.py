@@ -511,6 +511,9 @@ def sivu_html(kieli, lahde):
   .huomio.koti img {{ width: 19mm; margin: 0; align-self: center }}
   .koti-osat {{ flex: 1; display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm }}
   .koti-osat h3 {{ grid-column: 1 / -1; margin: 0 0 .6mm }}
+  /* 🔵 Marko 6.11.2026: vaihtoehdon nimi omalle rivilleen ja selitys
+     kokonaan omalle rivilleen (ei katkea kahteen) */
+  .koti-osat li > b:first-child {{ display: block }}
   .koti p {{ margin-bottom: .8mm }}
   .koti ul.lista {{ margin-bottom: 0; font-size: 8.8pt }}
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
