@@ -528,10 +528,12 @@ def sivu_html(kieli, lahde):
         color: {oranssi}; letter-spacing: .005em }}
   .ala {{ font-weight: 700; font-size: 9.4pt; margin-top: 1.2mm }}
   .ingressi {{ font-size: 9pt; margin-top: 1.4mm }}
-  .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1.4mm;
+  .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1.8mm;
              margin-top: 2.2mm }}
-  .tiedot li {{ background: {musta}; color: #fff; border-radius: 1mm;
-                padding: .7mm 2mm .4mm; font: 700 9pt/1 Otsikko, sans-serif;
+  /* 🔵 Marko 6.11.2026: teksti keskelle ja väljemmin. Pehmusteet on
+     mitattu versaalien mukaan (400 dpi), ei rivilaatikon. */
+  .tiedot li {{ background: {musta}; color: #fff; border-radius: 1.2mm;
+                padding: 1.3mm 3mm 1.1mm; font: 700 9pt/1 Otsikko, sans-serif;
                 text-transform: uppercase; letter-spacing: .02em }}
   .qr {{ flex: none; width: {qrmm}mm; text-align: center; padding-top: 3.2mm }}
   .qr span {{ display: block; margin-top: .8mm; font: 700 7pt/1.15 Otsikko,
