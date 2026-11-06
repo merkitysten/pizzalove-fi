@@ -563,6 +563,8 @@ def sivu_html(kieli, lahde):
      perussaanto ja esimerkki · kaksi tapaa (CSS-palstat repisivat esimerkin). */
   .kaksi {{ display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: {vali}mm }}
   .kaksi h3.osa {{ margin-top: 0 }}
+  /* perusteissa tekstipalsta (perussaanto + pizzan arvo) levein */
+  .perusteet .kaksi {{ grid-template-columns: .88fr .88fr 1.24fr }}
   .kaksi > div > .palkki:first-child {{ margin-top: 0 }}
   .johdanto {{ font-size: 9.8pt; margin-bottom: 3mm }}
   .rivi {{ display: flex; gap: 2mm; margin: 0 0 2mm }}
@@ -572,7 +574,7 @@ def sivu_html(kieli, lahde):
   .pelit {{ font: 700 9pt/1.2 Otsikko, sans-serif; text-transform: uppercase;
             letter-spacing: .02em; color: {oranssi}; margin-bottom: 1.6mm }}
   .lasku {{ gap: 1mm; margin: 2.4mm 0 0 }}
-  .lasku img {{ flex: 0 1 10mm; min-width: 0; width: 10mm }}
+  .lasku img {{ flex: 0 1 9.2mm; min-width: 0; width: 9.2mm }}
   .lasku b {{ font-size: 12pt }}
   .uusi-sivu {{ break-before: page; margin-top: 0 }}
   .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 2.4mm;
@@ -600,13 +602,19 @@ def sivu_html(kieli, lahde):
      (korttipeli.laskut.paperi). Kupla oikein pain (paperi/kortit, reunan
      irtoviiva poistettu), pikkupallot nousevat kohti Basson paata. */
   .huomio.alalaatikko {{ padding-left: 3mm }}
-  .ajattelee {{ flex: none; position: relative; width: 55mm; align-self: stretch;
-                min-height: 22mm }}
+  .ajattelee {{ flex: none; position: relative; width: 56mm; align-self: stretch;
+                min-height: 28mm }}
   /* Basson vartalon suora leikkaus laatikon alareunaan, kyynarpaa
      (15,36 % leveydesta) jaa sen alle (Marko 3.11. ja 6.11.2026) */
   .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0;
-      bottom: calc(-1.4mm - 21mm * .1536); width: 21mm; margin: 0 }}
-  .kupla {{ position: absolute; right: 0; bottom: 0; width: 36mm }}
+      bottom: calc(-1.4mm - 27mm * .1536); width: 27mm; margin: 0 }}
+  /* 🔵 Marko 6.11.2026: hanta (Markon kuva) tulee laatikon takaa Basson
+     vierest, kulkee kuplan alareunan yli (piilottaa kuplan ruman kohdan) ja
+     kayy laatikon alapuolella kuten kyynarpaa. */
+  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 11mm;
+      bottom: .6mm; width: 34mm; margin: 0;
+      transform-origin: 0 70%; transform: rotate(13deg) }}
+  .kupla {{ position: absolute; right: 0; bottom: 4.8mm; width: 35mm }}
   .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
   .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
              display: grid; grid-template-columns: repeat(4, 1fr);
@@ -616,6 +624,12 @@ def sivu_html(kieli, lahde):
   .merkit sup {{ font-size: .6em }}
   .alalaatikko h3 {{ margin: 0 0 .6mm }}
   .alalaatikko p {{ font-size: 8.8pt; margin: 0 }}
+  .alalaatikko .osa.laskut {{ flex: 1.75 }}
+  .alalaatikko .osa p {{ line-height: 1.32 }}
+  .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto);
+                 justify-content: space-between; column-gap: 2mm; row-gap: .2mm;
+                 margin: .8mm 0; font-weight: 700; font-size: 8.2pt; line-height: 1.3 }}
+  .alalaatikko p.konstit {{ font-size: 8.4pt }}
   .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
@@ -722,10 +736,10 @@ def sivu_html(kieli, lahde):
 </section>
 
 <div class="huomio tieto kehys alalaatikko">
-  <div class="ajattelee"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp">
-    <div class="kupla"><img src="paperi/kortit/ajatuskupla.webp">
-      <div class="merkit" aria-label="+ − · : xⁿ √ log n!"><span>+</span><span>−</span><span>·</span><span>:</span><span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div></div>
-  <div class="osa"><h3>{laskut_otsikko}</h3><p>{laskut}</p></div>
+  <div class="ajattelee"><div class="kupla"><img src="paperi/kortit/ajatuskupla.webp">
+      <div class="merkit" aria-label="+ − · : xⁿ √ log n!"><span>+</span><span>−</span><span>·</span><span>:</span><span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div>
+    <img class="hanta" src="paperi/kortit/hanta.webp"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp"></div>
+  <div class="osa laskut"><h3>{laskut_otsikko}</h3>{laskut}</div>
   <div class="osa"><h3>{tieto_otsikko}</h3><p>{tieto}</p></div>
 </div>
 

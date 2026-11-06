@@ -82,7 +82,7 @@
     "laskut": {
       "otsikko": "Alle Rechenarten zählen",
       "html": "Neben Plus, Minus, Mal und Geteilt gehen auch Potenzen, Logarithmen oder Fakultäten, zum Beispiel <b>5 = 2² + 1</b> oder <b>5 = 3! – 1</b>. Jeder rechnet auf seinem Niveau.",
-      "paperi": "Jeder rechnet auf seinem Niveau, zum Beispiel <b>5 = 2² + 1</b> oder <b>5 = 3! – 1</b>."
+      "paperi": "<p>Jeder rechnet auf seinem Niveau. Die 5 bekommst du mit zwei verschiedenen Belägen zum Beispiel so:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 4 + 1</li><li>5 = 7 – 2</li><li>5 = 9 – 4</li><li>5 = 8 – 3</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2 · 2 + 1</li><li>5 = 4 + 2 : 2</li><li>5 = 6 – 3 : 3</li><li>5 = 3 · 3 – 4</li><li>5 = 6 – 1</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = 3! – 1</li><li>5 = log₂ 8 + 2</li></ul><p class=\"konstit\"><b>Praktische Tricks:</b> mit eins malnehmen oder eine Zahl durch sich selbst teilen – das ergibt eins (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Beispiel: Tomaten-Ananas-Pizza",
     "esimerkki_alt": "Eine Pizzakarte mit dem Wert 5 und die Belagkarten 10 und 2: 10 : 2 = 5",
