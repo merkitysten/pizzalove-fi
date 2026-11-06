@@ -297,11 +297,14 @@ def kaavio(k):
 def kotisaanto(x):
     """🔵 Marko 6.11.2026: kodit ovat laskeneet pisteiksi korttien arvoja –
     se on kotisaanto, ei virallinen saanto, joten se on oma laatikkonsa
-    pelimuodon alla (kuten «Bruno vai Basso?»). sisalto/xx.json →
+    pelimuodon laatikon ALLA, ei sen sisalla (kuten «Bruno vai Basso?»). sisalto/xx.json →
     korttipeli.muodot[i].kotisaanto."""
     if not x:
         return ''
-    return ('<div class="kotisaanto"><h3>%s</h3><p>%s</p></div>'
+    # Kuvana rakastunut pizzalaatikko sydamineen (Marko 6.11.2026).
+    return ('<div class="huomio tieto kehys koti">'
+            '<img src="julkinen/play/kuvat/halaus.webp">'
+            '<div><h3>%s</h3>%s</div></div>'
             % (e(x['otsikko']), x['html']))
 
 
@@ -321,7 +324,7 @@ def muoto(m, k):
     return ('<section class="muoto kehys%s"><div class="muoto-yla">'
             '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
             '<p class="kuvaus">%s</p></div>'
-            '<div class="palstat">%s</div>%s</section>'
+            '<div class="palstat">%s</div></section>%s'
             % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko,
                kotisaanto(m.get('kotisaanto'))))
 
@@ -480,10 +483,11 @@ def sivu_html(kieli, lahde):
   .lasku img {{ flex: 0 1 10.5mm; min-width: 0; width: 10.5mm }}
   .lasku b {{ font-size: 12pt }}
   .uusi-sivu {{ break-before: page; margin-top: 0 }}
-  .kotisaanto {{ display: flex; gap: 4mm; align-items: baseline;
-                 border: .35mm solid {musta}; padding: 2mm 4mm;
-                 margin: 2.4mm 0 1.4mm; break-inside: avoid }}
-  .kotisaanto h3 {{ margin: 0; white-space: nowrap }}
+  .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 3mm;
+                  padding: 2.6mm 5mm 2.6mm 4mm; gap: 4mm }}
+  .huomio.koti img {{ width: 19mm; margin: 0; align-self: center }}
+  .koti p {{ margin-bottom: .8mm }}
+  .koti ul.lista {{ margin-bottom: 0; font-size: 8.8pt }}
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
   .palstat p:has(+ ul.lista), .palstat p:has(+ ol.lista) {{ break-after: avoid }}
   .kotisaanto p {{ margin: 0 }}
@@ -491,6 +495,11 @@ def sivu_html(kieli, lahde):
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
   .palstat > *, .kortti {{ break-inside: avoid }}
+  /* 🔵 Marko 6.11.2026: palstat taittuvat tasapainoisesti – pitkat luettelot
+     saavat jatkua seuraavaan palstaan, mutta ei kesken luettelokohdan;
+     kappaleet pysyvat ehjina. */
+  .palstat > ul.lista, .palstat > ol.lista {{ break-inside: auto }}
+  .palstat li {{ break-inside: avoid }}
   .palstat > .laatikko {{ break-inside: auto }}
   .laatikko > p, .esimerkki {{ break-inside: avoid }}
   ul.lista, ol.lista {{ margin: 0 0 1.1mm 4.2mm }}
