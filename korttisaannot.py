@@ -268,9 +268,12 @@ def kaavio(k):
         return ('<text x="%.1f" y="%.1f" text-anchor="%s">%s</text>'
                 % (x, y, ankkuri, sana))
 
-    def rivit(x, y, sana):
+    def rivit(x, cy, sana):
+        """Nimi kortin viereen pystysuunnassa keskitettyna (cy = kortin
+        keskikohta); pitka nimi kahdelle riville."""
         osat = sana.split(' ', 1) if len(sana) > 12 else [sana]
-        return ''.join(teksti(x, y + i * 3.6, o, 'start')
+        eka = cy - (len(osat) - 1) * 3.6 / 2 + 1.2
+        return ''.join(teksti(x, eka + i * 3.6, o, 'start')
                        for i, o in enumerate(osat))
 
     def laatta(y, sana):
@@ -278,34 +281,46 @@ def kaavio(k):
                 '<text x="44" y="%.1f" text-anchor="middle" fill="#fff">%s</text>'
                 % (y, y + 4.1, sana))
 
-    # 🔵 Marko 6.11.2026: ilmaa pelaajan nimen ja korttien valiin –
-    # poytä siirtyy ILMA mm alaspain ja B:n nimi 2 * ILMA.
-    ILMA = 2.2
-    v = [laatta(0, pa), '<g transform="translate(0 %.1f)">' % ILMA]
+    def keski(x0, maara):
+        """Varastopaikkojen (L + 4 mm valein) keskikohta nimea varten."""
+        return x0 + (maara * L + (maara - 1) * 4) / 2
+
+    # 🔵 Marko 6.11.2026: ilmaa pelaajan nimen ja korttien valiin (ILMA)
+    # seka pelaajien alueiden ja keskialueen valiin (VALI), jotta erottuu
+    # mika on poydan keskella ja mika pelaajien omaa.
+    ILMA, VALI = 2.2, 5.0
+    A, KESKI, B = ILMA, ILMA + VALI, ILMA + 2 * VALI
+    v = [laatta(0, pa)]
     # pelaaja A: pino vasemmalla, varasto oikealla (6 ja 2), nimet alla
+    v.append('<g transform="translate(0 %.1f)">' % A)
     v.append(pakka(2, 8, 'tausta-pizza', 'pizza-16'))
     v.append(kortti(22, 8, 'tayte-6', True))
     v.append(kortti(37, 8, 'tayte-2', True))
     v += [kortti(52 + i * 15, 8) for i in range(2)]
-    v.append(teksti(8.5, 30, pino))
-    v.append(teksti(55.5, 30, varasto))
-    # keskella nostopakka ja vaihtopizza
+    v.append(teksti(2 + L / 2, 30, pino))
+    v.append(teksti(keski(22, 4), 30, varasto))
+    v.append('</g>')
+    # keskella nostopakka ja vaihtopizza, nimet kortin keskikohdalla
+    v.append('<g transform="translate(0 %.1f)">' % KESKI)
     v.append(pakka(5, 34.5, 'tausta-tayte', 'tausta-tayte'))
-    v.append(rivit(20, 41.5, nosto))
+    v.append(rivit(20, 34.5 + K / 2, nosto))
     v.append(kortti(48, 34.5, 'pizza-38'))
-    v.append(rivit(62, 41.5, vaihto))
+    v.append(rivit(62, 34.5 + K / 2, vaihto))
+    v.append('</g>')
     # pelaaja B peilikuvana: varasto vasemmalla (4), pino oikealla, nimet ylla
-    v.append(teksti(32.5, 59.5, varasto))
-    v.append(teksti(80.5, 59.5, pino))
+    v.append('<g transform="translate(0 %.1f)">' % B)
+    v.append(teksti(keski(3, 4), 59.5, varasto))
+    v.append(teksti(74 + L / 2, 59.5, pino))
     v.append(kortti(3, 61.5, 'tayte-4', True))
     v += [kortti(18 + i * 15, 61.5) for i in range(3)]
     v.append(pakka(74, 61.5, 'tausta-pizza', 'pizza-34'))
     v.append('</g>')
-    v.append(laatta(82.2 + 2 * ILMA, pb))
+    v.append(laatta(82.2 + B + ILMA, pb))
+    korkeus = 88 + B + ILMA
     return ('<figure class="kaavio"><svg viewBox="0 0 88 %.1f" '
             'font-family="Otsikko, sans-serif" font-weight="700" '
             'font-size="3.4" letter-spacing=".08" style="text-transform:uppercase">'
-            '%s</svg></figure>' % (88 + 2 * ILMA, ''.join(v)))
+            '%s</svg></figure>' % (korkeus, ''.join(v)))
 
 
 def vaihtoesimerkki(k):
