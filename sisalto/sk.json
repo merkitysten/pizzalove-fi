@@ -81,7 +81,8 @@
     "arvo": "Pripravte pizzu z vlastných kariet prísad a nahlas povedzte výpočet, ktorý dá hodnotu pizze. Všetky výpočty sú povolené a dajú sa kombinovať, ak sa výsledok rovná hodnote pizze. Napríklad <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Platia všetky výpočty",
-      "html": "Okrem sčítania, odčítania, násobenia a delenia môžete použiť aj mocniny, logaritmy či faktoriál, napríklad <b>5 = 2² + 1</b> alebo <b>5 = 3! – 1</b>. Každý počíta na svojej úrovni."
+      "html": "Okrem sčítania, odčítania, násobenia a delenia môžete použiť aj mocniny, logaritmy či faktoriál, napríklad <b>5 = 2² + 1</b> alebo <b>5 = 3! – 1</b>. Každý počíta na svojej úrovni.",
+      "paperi": "Každý počíta na svojej úrovni, napríklad <b>5 = 2² + 1</b> alebo <b>5 = 3! – 1</b>."
     },
     "esimerkki_otsikko": "Príklad: pizza s paradajkou a ananásom",
     "esimerkki_alt": "Karta pizze s hodnotou 5 a karty prísad 10 a 2: 10 : 2 = 5",

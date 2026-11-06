@@ -81,7 +81,8 @@
     "arvo": "Bereite die Pizza mit deinen eigenen Belagkarten zu und sage laut die Rechnung, die den Wert der Pizza ergibt. Alle Rechenarten sind erlaubt und dürfen kombiniert werden, solange das Ergebnis dem Wert der Pizza entspricht. Zum Beispiel <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Alle Rechenarten zählen",
-      "html": "Neben Plus, Minus, Mal und Geteilt gehen auch Potenzen, Logarithmen oder Fakultäten, zum Beispiel <b>5 = 2² + 1</b> oder <b>5 = 3! – 1</b>. Jeder rechnet auf seinem Niveau."
+      "html": "Neben Plus, Minus, Mal und Geteilt gehen auch Potenzen, Logarithmen oder Fakultäten, zum Beispiel <b>5 = 2² + 1</b> oder <b>5 = 3! – 1</b>. Jeder rechnet auf seinem Niveau.",
+      "paperi": "Jeder rechnet auf seinem Niveau, zum Beispiel <b>5 = 2² + 1</b> oder <b>5 = 3! – 1</b>."
     },
     "esimerkki_otsikko": "Beispiel: Tomaten-Ananas-Pizza",
     "esimerkki_alt": "Eine Pizzakarte mit dem Wert 5 und die Belagkarten 10 und 2: 10 : 2 = 5",

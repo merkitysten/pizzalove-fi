@@ -595,6 +595,24 @@ def sivu_html(kieli, lahde):
      laskutoimitukset | Bruno vai Basso */
   .huomio.alalaatikko {{ gap: {vali}mm; align-items: flex-start }}
   .alalaatikko .osa {{ flex: 1 }}
+  /* 🔵 Marko 6.11.2026: Basson ajatuskuplassa laskutoimitusten symbolit –
+     kuva kertoo saman kuin pitka teksti, joten paperin teksti on lyhyt
+     (korttipeli.laskut.paperi). Kupla (paperi/kortit) on kaannetty pystysuunnassa, jotta
+     pikkupallot osoittavat Basson paahan. */
+  .huomio.alalaatikko {{ padding-left: 3mm }}
+  .ajattelee {{ flex: none; position: relative; width: 50mm; height: 24mm;
+                align-self: stretch }}
+  .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0; bottom: 0;
+      width: 15mm; margin: 0 0 calc(-2.6mm - 15mm * .1536) }}
+  .kupla {{ position: absolute; right: 0; top: 0; width: 39mm }}
+  .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block;
+                               }}
+  .merkit {{ position: absolute; left: 25%; right: 8%; top: 10%; bottom: 24%;
+             display: grid; grid-template-columns: repeat(4, 1fr);
+             align-items: center; justify-items: center;
+             font: 900 13pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 10.5pt/1 Otsikko, sans-serif }}
+  .merkit sup {{ font-size: .6em }}
   .alalaatikko h3 {{ margin: 0 0 .6mm }}
   .alalaatikko p {{ font-size: 8.8pt; margin: 0 }}
   .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
@@ -703,7 +721,9 @@ def sivu_html(kieli, lahde):
 </section>
 
 <div class="huomio tieto kehys alalaatikko">
-  <img src="julkinen/kuvat/basso-pohtii.webp">
+  <div class="ajattelee"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp">
+    <div class="kupla"><img src="paperi/kortit/ajatuskupla.webp">
+      <div class="merkit" aria-label="+ − · : xⁿ √ log n!"><span>+</span><span>−</span><span>·</span><span>:</span><span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div></div>
   <div class="osa"><h3>{laskut_otsikko}</h3><p>{laskut}</p></div>
   <div class="osa"><h3>{tieto_otsikko}</h3><p>{tieto}</p></div>
 </div>
@@ -735,7 +755,8 @@ def sivu_html(kieli, lahde):
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
         tieto_otsikko=tieto_jaettu(s)[0], tieto=tieto_jaettu(s)[1],
-        laskut_otsikko=e(s['laskut']['otsikko']), laskut=s['laskut']['html'],
+        laskut_otsikko=e(s['laskut']['otsikko']),
+        laskut=s['laskut'].get('paperi', s['laskut']['html']),
         portaat_otsikko=e(s['portaat_otsikko']),
         portaat_ingressi=e(s['portaat_ingressi']),
         portaat=''.join(porras(x) for x in s['portaat']),

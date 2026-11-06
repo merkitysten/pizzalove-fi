@@ -82,7 +82,8 @@
     "arvo": "Valmista pizza omilla täytekorteillasi ja sano ääneen laskutoimitus, jolla saat pizzan arvon. Kaikki laskutoimitukset ovat sallittuja ja niitä saa yhdistää, kunhan tulos on pizzan arvo. Esimerkiksi <b>5 = 10 : 2</b>.",
     "laskut": {
       "otsikko": "Kaikki laskutoimitukset käyvät",
-      "html": "Yhteen-, vähennys-, kerto- ja jakolaskun lisäksi käyvät myös vaikkapa potenssit, logaritmit ja kertoma, esimerkiksi <b>5 = 2² + 1</b> tai <b>5 = 3! – 1</b>. Jokainen laskee omalla tasollaan."
+      "html": "Yhteen-, vähennys-, kerto- ja jakolaskun lisäksi käyvät myös vaikkapa potenssit, logaritmit ja kertoma, esimerkiksi <b>5 = 2² + 1</b> tai <b>5 = 3! – 1</b>. Jokainen laskee omalla tasollaan.",
+      "paperi": "Jokainen laskee omalla tasollaan, esimerkiksi <b>5 = 2² + 1</b> tai <b>5 = 3! – 1</b>."
     },
     "esimerkki_otsikko": "Esimerkki: tomaatti-ananaspizza",
     "esimerkki_alt": "Pizzakortti, jonka arvo on 5, sekä täytekortit 10 ja 2: 10 : 2 = 5",
