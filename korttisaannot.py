@@ -74,6 +74,7 @@ KIELET = {
         'kansio': os.path.join('paperi', 'luonnokset'),
         'alaotsikko': 'Kaikkien kolmen pelimuodon säännöt',
         'iskulause': 'JOKAINEN PIZZA LASKETAAN',
+        'bruno_huomio': '*Vuoden 2025 ohjeissa Pizza Bruno.',
         'hyva_tietaa': 'Hyvä tietää',
         'kaavio': ('Pelaaja A', 'Pelaaja B', 'Pizzapino', 'Varasto',
                    'Nostopakka', 'Vaihtopizza'),
@@ -90,6 +91,7 @@ KIELET = {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
         'alaotsikko': 'Die Regeln aller drei Spielvarianten',
         'iskulause': 'JEDE PIZZA ZÄHLT',
+        'bruno_huomio': '*In den Regeln von 2025: Pizza Bruno.',
         'hyva_tietaa': 'Gut zu wissen',
         'kaavio': ('Spieler A', 'Spieler B', 'Pizzastapel', 'Vorrat',
                    'Nachziehstapel', 'Tauschpizza'),
@@ -106,6 +108,7 @@ KIELET = {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
         'alaotsikko': 'The rules of all three game modes',
         'iskulause': 'EVERY PIZZA COUNTS',
+        'bruno_huomio': '*In the 2025 rules: Pizza Bruno.',
         'hyva_tietaa': 'Good to know',
         'kaavio': ('Player A', 'Player B', 'Pizza pile', 'Storage',
                    'Draw pile', 'Exchange pizza'),
@@ -123,6 +126,7 @@ KIELET = {
         'tiedosto': 'pizza-love-kartova-hra-pravidla-sk.pdf',
         'alaotsikko': 'Pravidlá všetkých troch spôsobov hry',
         'iskulause': 'KAŽDÁ PIZZA SA POČÍTA',
+        'bruno_huomio': '*V pravidlách z roku 2025: Pizza Bruno.',
         'hyva_tietaa': 'Dobré vedieť',
         'kaavio': ('Hráč A', 'Hráč B', 'Kôpka pízz', 'Sklad',
                    'Dobierací balíček', 'Výmenná pizza'),
@@ -343,13 +347,22 @@ def muoto(m, k):
         # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
         runko = runko[:i] + kaavio(k) + runko[i:]
+    # 🔵 Marko 6.11.2026: palstan alussa oleva «Vanhemmissa ohjeissa: Pizza
+    # Bruno» rivitti otsikot eri tasoille. Arkilla se on pieni lisähuomio
+    # otsikkorivin oikeassa reunassa, viitattuna tahdella viirista.
+    tahti, huomio = '', ''
+    pieni = re.match(r'<p class="pieni">[^<]*Bruno[^<]*</p>', runko)
+    if pieni:
+        runko = runko[pieni.end():]
+        tahti = '<span class="tahti">*</span>'
+        huomio = '<p class="lisahuomio">%s</p>' % e(k['bruno_huomio'])
     uusi = ' uusi-sivu' if m['numero'] == '#1' else ''
     return ('<section class="muoto kehys%s"><div class="muoto-yla">'
-            '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
-            '<p class="kuvaus">%s</p></div>'
+            '<h2 class="banneri"><span class="oranssi">%s %s</span>%s%s</h2>'
+            '<p class="kuvaus">%s</p>%s</div>'
             '<div class="palstat">%s</div></section>%s'
-            % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko,
-               kotisaanto(koti, siirretty)))
+            % (uusi, e(m['numero']), e(sanat[0]), e(loppu), tahti, e(m['kuvaus']),
+               huomio, runko, kotisaanto(koti, siirretty)))
 
 
 # ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
@@ -568,6 +581,9 @@ def sivu_html(kieli, lahde):
               font: 900 14pt/1 Viiri, sans-serif; letter-spacing: .01em;
               clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%) }}
   .banneri .oranssi {{ color: {oranssi} }}
+  .banneri .tahti {{ font-size: .7em; vertical-align: .45em; margin-left: .3mm }}
+  .lisahuomio {{ flex: none; align-self: flex-start; margin: 1.6mm 0 0;
+                 font-size: 7.6pt; opacity: .75 }}
   .muoto .kuvaus {{ flex: 1; font-weight: 700; font-size: 9pt; margin: 0 }}
   .kaavio {{ break-inside: avoid; margin: 3mm 0 2mm }}
   .kaavio svg {{ width: 100%; height: auto; display: block }}
