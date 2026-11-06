@@ -78,9 +78,11 @@ KIELET = {
         'hyva_tietaa': 'Hyvä tietää',
         'kaavio': ('Pelaaja A', 'Pelaaja B', 'Pizzapino', 'Varasto',
                    'Nostopakka', 'Vaihtopizza'),
-        'vaihto': ('Vaihto: pelaaja B:n nelonen pelaaja A:n kutoseen ja '
-                   'kakkoseen, koska 4 = 6 – 2. Sen jälkeen molemmat voivat '
-                   'valmistaa pizzansa.'),
+        'vaihto_luku': 'Varastokorttien vaihtaminen',
+        'vaihto_otsikko': 'Esimerkki vaihdosta',
+        'vaihto': ('Pelaaja B vaihtaa nelosensa pelaaja A:n kutoseen ja '
+                   'kakkoseen, koska 4 = 6 – 2. Nyt B voi valmistaa pizzansa. '
+                   'Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'),
         'qr_teksti': 'Säännöt ja<br>videot netissä',
         'osoite': 'https://pizzalove.fi/fi/korttipeli.html',
         'videot': 'Jokaisen pelimuodon opetusvideot löydät netistä.',
@@ -95,9 +97,12 @@ KIELET = {
         'hyva_tietaa': 'Gut zu wissen',
         'kaavio': ('Spieler A', 'Spieler B', 'Pizzastapel', 'Vorrat',
                    'Nachziehstapel', 'Tauschpizza'),
-        'vaihto': ('Tausch: die 4 von Spieler B gegen die 6 und die 2 von '
-                   'Spieler A, denn 4 = 6 – 2. Danach können beide ihre '
-                   'Pizza zubereiten.'),
+        'vaihto_luku': 'Vorratskarten tauschen',
+        'vaihto_otsikko': 'Beispiel für einen Tausch',
+        'vaihto': ('Spieler B tauscht seine 4 gegen die 6 und die 2 von '
+                   'Spieler A, denn 4 = 6 – 2. Jetzt kann B seine Pizza '
+                   'zubereiten. Der Tausch hat auch A geholfen, aber für B hat '
+                   'er sich trotzdem gelohnt.'),
         'qr_teksti': 'Regeln und<br>Videos online',
         'osoite': 'https://pizzalove.fi/de/korttipeli.html',
         'videot': 'Erklärvideos zu jeder Spielvariante findest du online.',
@@ -112,8 +117,11 @@ KIELET = {
         'hyva_tietaa': 'Good to know',
         'kaavio': ('Player A', 'Player B', 'Pizza pile', 'Storage',
                    'Draw pile', 'Exchange pizza'),
-        'vaihto': ('Exchange: player B’s 4 for player A’s 6 and 2, because '
-                   '4 = 6 – 2. After that, both players can make their pizza.'),
+        'vaihto_luku': 'Exchanging storage cards',
+        'vaihto_otsikko': 'Example of an exchange',
+        'vaihto': ('Player B exchanges their 4 for player A’s 6 and 2, because '
+                   '4 = 6 – 2. Now B can make their pizza. The exchange helped '
+                   'A too, but it was still worth it for B.'),
         'qr_teksti': 'Rules and<br>videos online',
         'osoite': 'https://pizzalove.fi/en/korttipeli.html',
         'videot': 'Watch the how-to videos for every game mode online.',
@@ -130,8 +138,11 @@ KIELET = {
         'hyva_tietaa': 'Dobré vedieť',
         'kaavio': ('Hráč A', 'Hráč B', 'Kôpka pízz', 'Sklad',
                    'Dobierací balíček', 'Výmenná pizza'),
-        'vaihto': ('Výmena: štvorka hráča B za šestku a dvojku hráča A, '
-                   'pretože 4 = 6 – 2. Potom môžu obaja pripraviť svoju pizzu.'),
+        'vaihto_luku': 'Výmena kariet v sklade',
+        'vaihto_otsikko': 'Príklad výmeny',
+        'vaihto': ('Hráč B vymení svoju štvorku za šestku a dvojku hráča A, '
+                   'pretože 4 = 6 – 2. Teraz môže B pripraviť svoju pizzu. '
+                   'Výmena pomohla aj hráčovi A, ale hráčovi B sa aj tak oplatila.'),
         'qr_teksti': 'Pravidlá a<br>videá online',
         'osoite': 'https://pizzalove.fi/sk/korttipeli.html',
         'videot': 'Videonávody ku každému spôsobu hry nájdete online.',
@@ -287,15 +298,23 @@ def kaavio(k):
     v += [kortti(18 + i * 15, 61.5) for i in range(3)]
     v.append(pakka(74, 61.5, 'tausta-pizza', 'pizza-34'))
     v.append(laatta(82.2, pb))
-    vaihtokuva = ('<div class="esimerkki vaihto" role="img" aria-label="4 = 6 – 2">'
-                  '<img src="paperi/kortit/tayte-4.webp"><b>=</b>'
-                  '<img src="paperi/kortit/tayte-6.webp"><b>–</b>'
-                  '<img src="julkinen/kuvat/tayte-2.webp"></div>')
     return ('<figure class="kaavio"><svg viewBox="0 0 88 88" '
             'font-family="Otsikko, sans-serif" font-weight="700" '
             'font-size="3.4" letter-spacing=".08" style="text-transform:uppercase">'
-            '%s</svg>%s<figcaption>%s</figcaption></figure>'
-            % (''.join(v), vaihtokuva, e(k['vaihto'])))
+            '%s</svg></figure>' % ''.join(v))
+
+
+def vaihtoesimerkki(k):
+    '''🔵 Marko 6.11.2026: vaihto omana otsikoituna osionaan vaihtosaannon
+    perassa, ei poytakuvan osana. Kuvateksti kertoo ensin OMAN hyodyn;
+    se, etta vaihto auttaa myos vastustajaa, on taktinen huomio
+    («kannatti silti»), ei vaihdon tarkoitus.'''
+    return ('<div class="vaihtoesim"><h3>%s</h3>'
+            '<div class="esimerkki vaihto" role="img" aria-label="4 = 6 – 2">'
+            '<img src="paperi/kortit/tayte-4.webp"><b>=</b>'
+            '<img src="paperi/kortit/tayte-6.webp"><b>–</b>'
+            '<img src="julkinen/kuvat/tayte-2.webp"></div><p>%s</p></div>'
+            % (e(k['vaihto_otsikko']), e(k['vaihto'])))
 
 
 def kotisaanto(x, siirretty=''):
@@ -347,6 +366,9 @@ def muoto(m, k):
         # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
         runko = runko[:i] + kaavio(k) + runko[i:]
+        j = runko.index('<h3>%s</h3>' % k['vaihto_luku'])
+        j = runko.index('</p>', j) + 4
+        runko = runko[:j] + vaihtoesimerkki(k) + runko[j:]
     # 🔵 Marko 6.11.2026: palstan alussa oleva «Vanhemmissa ohjeissa: Pizza
     # Bruno» rivitti otsikot eri tasoille. Arkilla se on pieni lisähuomio
     # otsikkorivin oikeassa reunassa, viitattuna tahdella viirista.
@@ -587,9 +609,9 @@ def sivu_html(kieli, lahde):
   .muoto .kuvaus {{ flex: 1; font-weight: 700; font-size: 9pt; margin: 0 }}
   .kaavio {{ break-inside: avoid; margin: 3mm 0 2mm }}
   .kaavio svg {{ width: 100%; height: auto; display: block }}
-  .kaavio .vaihto {{ justify-content: center; margin: 3mm 0 1mm }}
-  .kaavio .vaihto img {{ width: 11mm; border-color: {oranssi}; border-width: .4mm }}
-  .kaavio figcaption {{ font-size: 8.4pt; text-align: center }}
+  .vaihtoesim {{ break-inside: avoid }}
+  .vaihtoesim .vaihto {{ justify-content: center; margin: 1.6mm 0 1.4mm }}
+  .vaihtoesim .vaihto img {{ width: 11mm; border-color: {oranssi}; border-width: .4mm }}
 
   footer {{ margin-top: 2.6mm; padding-top: 1.4mm;
             border-top: .35mm solid {musta}; font-size: 7pt;
