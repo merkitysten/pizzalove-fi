@@ -305,13 +305,18 @@ def kotisaanto(x, siirretty=''):
     sisalto/xx.json → korttipeli.muodot[i].kotisaanto."""
     if not x:
         return ''
-    # Kaksi rinnakkaista osaa omine otsikkoineen: kotisaannot | valinnaiset.
-    osat = '<div><h3>%s</h3>%s</div>' % (e(x['otsikko']), x['html'])
+    # 🔵 Marko 6.11.2026: «kotisaannot» ja «valinnaiset saannot» tarkoittavat
+    # melkein samaa, joten laatikolla on YKSI paaotsikko (Valinnaiset
+    # saannot) ja alla kaksi vaihtoehtoryhmaa: pisteet | laskutoimitukset.
+    osat = '<div>%s</div>' % x['html']
     if siirretty:
-        osat += '<div>%s</div>' % siirretty
+        # sivun oma otsikko ja johdanto korvautuvat arkin johdannolla
+        siirretty = re.sub(r'^<h3>[^<]*</h3><p>[^<]*</p>', '', siirretty)
+        osat += '<div>%s%s</div>' % (x.get('siirra_alku', ''), siirretty)
     return ('<div class="huomio tieto kehys koti">'
             '<img src="julkinen/play/kuvat/halaus.webp">'
-            '<div class="koti-osat">%s</div></div>' % osat)
+            '<div class="koti-osat"><h3>%s</h3>%s</div></div>'
+            % (e(x['otsikko']), osat))
 
 
 def irrota_luku(html, otsikko):
@@ -505,7 +510,7 @@ def sivu_html(kieli, lahde):
                   padding: 2.6mm 5mm 2.6mm 4mm; gap: 4mm }}
   .huomio.koti img {{ width: 19mm; margin: 0; align-self: center }}
   .koti-osat {{ flex: 1; display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm }}
-  .koti-osat h3 {{ margin: 0 0 .6mm }}
+  .koti-osat h3 {{ grid-column: 1 / -1; margin: 0 0 .6mm }}
   .koti p {{ margin-bottom: .8mm }}
   .koti ul.lista {{ margin-bottom: 0; font-size: 8.8pt }}
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
