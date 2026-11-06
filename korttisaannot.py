@@ -294,18 +294,32 @@ def kaavio(k):
             % (''.join(v), vaihtokuva, e(k['vaihto'])))
 
 
-def kotisaanto(x):
+def kotisaanto(x, siirretty=''):
     """🔵 Marko 6.11.2026: kodit ovat laskeneet pisteiksi korttien arvoja –
     se on kotisaanto, ei virallinen saanto, joten se on oma laatikkonsa
-    pelimuodon laatikon ALLA, ei sen sisalla (kuten «Bruno vai Basso?»). sisalto/xx.json →
-    korttipeli.muodot[i].kotisaanto."""
+    pelimuodon laatikon ALLA, ei sen sisalla (kuten «Bruno vai Basso?»).
+    Kuvana rakastunut pizzalaatikko sydamineen.
+    🔵 Marko 6.11.2026: myos «Valinnaiset saannot» tahan laatikkoon, jotta
+    pelimuodon palstat lyhenevat. Sivulla ne pysyvat paikallaan; arkilla
+    siirrettava luku nimetaan kentalla `siirra`.
+    sisalto/xx.json → korttipeli.muodot[i].kotisaanto."""
     if not x:
         return ''
-    # Kuvana rakastunut pizzalaatikko sydamineen (Marko 6.11.2026).
+    # Kaksi rinnakkaista osaa omine otsikkoineen: kotisaannot | valinnaiset.
+    osat = '<div><h3>%s</h3>%s</div>' % (e(x['otsikko']), x['html'])
+    if siirretty:
+        osat += '<div>%s</div>' % siirretty
     return ('<div class="huomio tieto kehys koti">'
             '<img src="julkinen/play/kuvat/halaus.webp">'
-            '<div><h3>%s</h3>%s</div></div>'
-            % (e(x['otsikko']), x['html']))
+            '<div class="koti-osat">%s</div></div>' % osat)
+
+
+def irrota_luku(html, otsikko):
+    """Leikkaa <h3>otsikko</h3> ja sen sisallon seuraavaan <h3>:hon asti."""
+    m = re.search(r'<h3>%s</h3>.*?(?=<h3>|$)' % re.escape(otsikko), html, re.S)
+    if not m:
+        raise SystemExit('Lukua %r ei loytynyt siirrettavaksi' % otsikko)
+    return html[:m.start()] + html[m.end():], m.group(0)
 
 
 def muoto(m, k):
@@ -316,6 +330,10 @@ def muoto(m, k):
     sanat = m['nimi'].split(' ', 1)
     loppu = sanat[1] if len(sanat) > 1 else ''
     runko = m['html']
+    koti = m.get('kotisaanto')
+    siirretty = ''
+    if koti and koti.get('siirra'):
+        runko, siirretty = irrota_luku(runko, koti['siirra'])
     if m['numero'] == '#3':
         # kaavio heti varaston selityksen jalkeen, kuten painetussa arkissa
         i = runko.find('</p>', runko.find('<h3>', runko.find('</ol>'))) + 4
@@ -326,7 +344,7 @@ def muoto(m, k):
             '<p class="kuvaus">%s</p></div>'
             '<div class="palstat">%s</div></section>%s'
             % (uusi, e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']), runko,
-               kotisaanto(m.get('kotisaanto'))))
+               kotisaanto(koti, siirretty)))
 
 
 # ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
@@ -486,6 +504,8 @@ def sivu_html(kieli, lahde):
   .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 3mm;
                   padding: 2.6mm 5mm 2.6mm 4mm; gap: 4mm }}
   .huomio.koti img {{ width: 19mm; margin: 0; align-self: center }}
+  .koti-osat {{ flex: 1; display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm }}
+  .koti-osat h3 {{ margin: 0 0 .6mm }}
   .koti p {{ margin-bottom: .8mm }}
   .koti ul.lista {{ margin-bottom: 0; font-size: 8.8pt }}
   /* luettelon johdanto ei jaa eri palstaan kuin luettelo (pisteet, 6.11.2026) */
