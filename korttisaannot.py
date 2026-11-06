@@ -72,7 +72,7 @@ KIELET = {
     'fi': {
         'tiedosto': 'pizza-love-korttipeli-saannot-fi-luonnos.pdf',
         'kansio': os.path.join('paperi', 'luonnokset'),
-        'alaotsikko': 'Kaikkien kolmen pelimuodon säännöt',
+        'alaotsikko': 'Kolme peliä samalla pakalla',
         'iskulause': 'JOKAINEN PIZZA LASKETAAN',
         'bruno_huomio': '*Vuoden 2025 ohjeissa Pizza Bruno.',
         'hyva_tietaa': 'Hyvä tietää',
@@ -91,7 +91,7 @@ KIELET = {
     },
     'de': {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
-        'alaotsikko': 'Die Regeln aller drei Spielvarianten',
+        'alaotsikko': 'Drei Spiele mit einem Kartenstapel',
         'iskulause': 'JEDE PIZZA ZÄHLT',
         'bruno_huomio': '*In den Regeln von 2025: Pizza Bruno.',
         'hyva_tietaa': 'Gut zu wissen',
@@ -111,7 +111,7 @@ KIELET = {
     },
     'en': {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
-        'alaotsikko': 'The rules of all three game modes',
+        'alaotsikko': 'Three games with one deck',
         'iskulause': 'EVERY PIZZA COUNTS',
         'bruno_huomio': '*In the 2025 rules: Pizza Bruno.',
         'hyva_tietaa': 'Good to know',
@@ -132,7 +132,7 @@ KIELET = {
     # nettisivuista sekä ohjeesta.» Odottaa natiivitarkistusta.
     'sk': {
         'tiedosto': 'pizza-love-kartova-hra-pravidla-sk.pdf',
-        'alaotsikko': 'Pravidlá všetkých troch spôsobov hry',
+        'alaotsikko': 'Tri hry s jedným balíčkom',
         'iskulause': 'KAŽDÁ PIZZA SA POČÍTA',
         'bruno_huomio': '*V pravidlách z roku 2025: Pizza Bruno.',
         'hyva_tietaa': 'Dobré vedieť',
@@ -492,6 +492,16 @@ def porras(x):
 # ja basso_tapa ennallaan).
 
 
+def ingressi_ilman_toistoa(s, k):
+    """🔵 Marko 6.11.2026: otsikkoalueella oli turhaa toistoa kolmesta
+    pelista. Alaotsikko kertoo «kolme pelia samalla pakalla», joten
+    sivun ingressista jatetaan sama ensimmainen virke pois."""
+    ekat = s['ingressi'].split('. ', 1)
+    if len(ekat) == 2 and ekat[0].rstrip('.') == k['alaotsikko'].rstrip('.'):
+        return ekat[1]
+    return s['ingressi']
+
+
 def tieto_jaettu(s):
     """«<b>Bruno vai Basso?</b> teksti» → (otsikko, teksti). 🔵 Marko
     6.11.2026: laskutoimitukset ja Bruno vai Basso samaan laatikkoon omiin
@@ -759,7 +769,7 @@ def sivu_html(kieli, lahde):
         hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=VIIVA, musta=MUSTA, oranssi=ORANSSI, kirjasimet=KIRJASIMET,
         viiri=viiri(k['iskulause']), qr=qr,
         qrmm=QR_MM, qr_teksti=k['qr_teksti'], title=e(s['title']),
-        h1=e(s['h1']), alaotsikko=e(k['alaotsikko']), ingressi=e(s['ingressi']),
+        h1=e(s['h1']), alaotsikko=e(k['alaotsikko']), ingressi=e(ingressi_ilman_toistoa(s, k)),
         tiedot=tiedot, perusteet_otsikko=e(s['perusteet_otsikko']),
         perusteet_ingressi=e(s['perusteet_ingressi']),
         pizzakortit_otsikko=e(s['pizzakortit_otsikko']),
