@@ -369,6 +369,14 @@ def lasku(lauseke):
             % (e(lauseke), ''.join(html)))
 
 
+def pelit_rivi(pelit):
+    """Pelin nimi ei katkea kesken («#2 / PIZZA BASSO», mitattu saksassa
+    6.11.2026): rivi saa katketa vain ennen sulkeita tai pisteen jalkeen."""
+    osat = [e(o).replace(' ', '\u00a0').replace('\u00a0(', ' (')
+            for o in pelit.split(' · ')]
+    return ' · '.join(osat)
+
+
 def porras(x):
     """🔵 Marko 6.11.2026: kolme selkeaa porrasta. 1) maaralla tai
     taytteilla ei valia, kunhan arvo tasmaa (myos yksi kortti kay),
@@ -377,7 +385,7 @@ def porras(x):
     taytteet. Teksti: sisalto/xx.json → korttipeli.portaat."""
     return ('<div class="porras"><h3 class="palkki">%s</h3>'
             '<p class="pelit">%s</p>%s%s</div>'
-            % (e(x['otsikko']), e(x['pelit']), x['html'],
+            % (e(x['otsikko']), pelit_rivi(x['pelit']), x['html'],
                ''.join(lasku(l) for l in x['esimerkit'])))
 
 

@@ -104,7 +104,7 @@
       },
       {
         "otsikko": "2. Basso-apinan tapa",
-        "pelit": "#2 Pizza Basso · #1 Pizza Party",
+        "pelit": "#1 Pizza Party (lisähaaste) · #2 Pizza Basso",
         "html": "<p>Käytä yhtä monta <b>eri</b> täytettä kuin pizzassa on täytteitä. Niiden ei tarvitse olla pizzan omia täytteitä. Kortteja saa olla enemmän, esimerkiksi kaksi samaa.</p><p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, vaikkakin vähän vaikeammaksi.</p><p>Tomaatti-ananaspizzassa on kaksi täytettä, joten yksi kortti ei riitä.</p>",
         "esimerkit": [
           "5 = 10 : 2",
