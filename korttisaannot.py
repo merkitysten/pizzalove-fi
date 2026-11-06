@@ -467,7 +467,7 @@ def sivu_html(kieli, lahde):
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
   body {{ font-family: Teksti, 'Helvetica Neue', Arial, sans-serif;
           color: {musta}; background: #fff;
-          font-size: 9.4pt; line-height: 1.4;
+          font-size: 9pt; line-height: 1.4;
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   b {{ font-weight: 700 }}
   .kehys {{ border: .35mm solid {musta}; -webkit-box-decoration-break: clone;
@@ -495,7 +495,7 @@ def sivu_html(kieli, lahde):
   h2 {{ font: 700 17pt/1 Otsikko, sans-serif; text-transform: uppercase;
         color: {oranssi}; margin-bottom: 2mm; break-after: avoid }}
   h3 {{ font: 700 10pt/1.1 Otsikko, sans-serif; text-transform: uppercase;
-        letter-spacing: .015em; margin: 4mm 0 1mm; break-after: avoid }}
+        letter-spacing: .015em; margin: 3.4mm 0 1mm; break-after: avoid }}
   h3.osa {{ font-size: 13pt; color: {oranssi}; margin: 5mm 0 0 }}
   .palkki {{ background: {musta}; color: #fff; margin: 3mm 0 1.6mm;
              padding: 1.1mm 2.2mm .8mm }}
@@ -519,9 +519,9 @@ def sivu_html(kieli, lahde):
   .lasku img {{ flex: 0 1 10.5mm; min-width: 0; width: 10.5mm }}
   .lasku b {{ font-size: 12pt }}
   .uusi-sivu {{ break-before: page; margin-top: 0 }}
-  .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 3mm;
-                  padding: 2.6mm 5mm 2.6mm 4mm; gap: 4mm }}
-  .huomio.koti img {{ width: 19mm; margin: 0; align-self: center }}
+  .huomio.koti {{ break-before: avoid; break-inside: avoid; margin-top: 2.4mm;
+                  padding: 2mm 5mm 2mm 4mm; gap: 4mm }}
+  .huomio.koti img {{ width: 16mm; margin: 0; align-self: center }}
   .koti-osat {{ flex: 1; display: grid; grid-template-columns: 1fr 1fr; column-gap: {vali}mm }}
   .koti-osat h3 {{ grid-column: 1 / -1; margin: 0 0 .6mm }}
   /* 🔵 Marko 6.11.2026: vaihtoehdon nimi omalle rivilleen ja selitys
