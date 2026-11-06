@@ -85,9 +85,9 @@ KIELET = {
                    'Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'),
         'qr_teksti': 'Säännöt ja<br>videot netissä',
         'osoite': 'https://pizzalove.fi/fi/korttipeli.html',
-        'videot': 'Jokaisen pelimuodon opetusvideot löydät netistä.',
-        'oikeudet': ('Merkitysten® on Merkitysten Oy:n rekisteröity '
-                     'tavaramerkki. Kaikki oikeudet pidätetään.'),
+        'videot': 'Lisätietoja ja videoita osoitteessa',
+        'oikeudet': ('Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n '
+                     'rekisteröityjä tavaramerkkejä. Kaikki oikeudet pidätetään.'),
     },
     'de': {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
@@ -105,9 +105,9 @@ KIELET = {
                    'er sich trotzdem gelohnt.'),
         'qr_teksti': 'Regeln und<br>Videos online',
         'osoite': 'https://pizzalove.fi/de/korttipeli.html',
-        'videot': 'Erklärvideos zu jeder Spielvariante findest du online.',
-        'oikeudet': ('Merkitysten® ist eine eingetragene Marke der '
-                     'Merkitysten Oy. Alle Rechte vorbehalten.'),
+        'videot': 'Mehr Infos und Videos unter',
+        'oikeudet': ('Pizza Love® und Merkitysten® sind eingetragene Marken '
+                     'der Merkitysten Oy. Alle Rechte vorbehalten.'),
     },
     'en': {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
@@ -124,9 +124,9 @@ KIELET = {
                    'A too, but it was still worth it for B.'),
         'qr_teksti': 'Rules and<br>videos online',
         'osoite': 'https://pizzalove.fi/en/korttipeli.html',
-        'videot': 'Watch the how-to videos for every game mode online.',
-        'oikeudet': ('Merkitysten® is a registered trademark of '
-                     'Merkitysten Oy. All rights reserved.'),
+        'videot': 'More information and videos at',
+        'oikeudet': ('Pizza Love® and Merkitysten® are registered trademarks '
+                     'of Merkitysten Oy. All rights reserved.'),
     },
     # 🔵 Marko 6.11.2026: «Nyt tarvittaisiin slovakian kielinen versio
     # nettisivuista sekä ohjeesta.» Odottaa natiivitarkistusta.
@@ -145,9 +145,9 @@ KIELET = {
                    'Výmena pomohla aj hráčovi A, ale hráčovi B sa aj tak oplatila.'),
         'qr_teksti': 'Pravidlá a<br>videá online',
         'osoite': 'https://pizzalove.fi/sk/korttipeli.html',
-        'videot': 'Videonávody ku každému spôsobu hry nájdete online.',
-        'oikeudet': ('Merkitysten® je registrovaná ochranná známka '
-                     'spoločnosti Merkitysten Oy. Všetky práva vyhradené.'),
+        'videot': 'Viac informácií a videá nájdete na',
+        'oikeudet': ('Pizza Love® a Merkitysten® sú registrované ochranné '
+                     'známky spoločnosti Merkitysten Oy. Všetky práva vyhradené.'),
     },
 }
 
@@ -601,18 +601,19 @@ def sivu_html(kieli, lahde):
      kuva kertoo saman kuin pitka teksti, joten paperin teksti on lyhyt
      (korttipeli.laskut.paperi). Kupla oikein pain (paperi/kortit, reunan
      irtoviiva poistettu), pikkupallot nousevat kohti Basson paata. */
-  .huomio.alalaatikko {{ padding-left: 3mm }}
+  /* 🔵 Marko 6.11.2026: enemman tilaa reunojen ja tekstien valiin */
+  .huomio.tieto.alalaatikko {{ padding: 3.2mm 6mm 2.6mm 3mm }}
   /* 🔵 Marko 6.11.2026 (oma luonnos): iso Basso vasemmalla, iso kupla
      oikealla, pikkupallot niiden valissa; hanta nousee laatikon alareunan
      takaa kuplan alle ja kiemurtelee laatikon alapuolelle. */
-  .ajattelee {{ flex: none; position: relative; width: 80mm; align-self: stretch;
+  .ajattelee {{ flex: none; position: relative; width: 74mm; align-self: stretch;
                 min-height: 36mm }}
   .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0;
-      bottom: calc(-1.4mm - 37mm * .1536); width: 37mm; margin: 0 }}
-  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 36mm;
-      bottom: calc(-1.4mm - 4.6mm); width: 34mm; margin: 0;
+      bottom: calc(-2.6mm - 37mm * .1536); width: 37mm; margin: 0 }}
+  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 32.5mm;
+      bottom: calc(-2.6mm - 4.6mm); width: 34mm; margin: 0;
       clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
-  .kupla {{ position: absolute; right: 0; bottom: 5.6mm; width: 44mm }}
+  .kupla {{ position: absolute; left: 29mm; bottom: 5.6mm; width: 44mm }}
   .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
   .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
              display: grid; grid-template-columns: repeat(4, 1fr);
@@ -691,7 +692,9 @@ def sivu_html(kieli, lahde):
 
   footer {{ margin-top: 2.6mm; padding-top: 1.4mm;
             border-top: .35mm solid {musta}; font-size: 7pt;
-            display: flex; justify-content: space-between; gap: 4mm }}
+            display: flex; flex-direction: column; gap: .6mm }}
+  /* 🔵 Marko 6.11.2026: ©-teksti yhdella rivilla; Pizza Love® mukana */
+  footer .oikeudet {{ white-space: nowrap }}
   footer b {{ color: {oranssi} }}
 </style>
 <header class="kehys">
@@ -746,7 +749,7 @@ def sivu_html(kieli, lahde):
 
 <footer>
   <span>{videot} <b>{nakyva}</b></span>
-  <span>{oikeudet} © Merkitysten Oy 2026</span>
+  <span class="oikeudet">{oikeudet} © Merkitysten Oy 2026</span>
 </footer>
 </html>'''
     return runko.format(
