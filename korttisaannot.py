@@ -491,7 +491,9 @@ def sivu_html(kieli, lahde):
   .esimerkki {{ display: flex; align-items: center; gap: 1.6mm;
                 margin: 2mm 0 }}
   .esimerkki img {{ width: 14mm; height: auto }}
-  .esimerkki b {{ font: 900 15pt/1 Viiri, sans-serif; color: {oranssi} }}
+  /* 🔵 Marko 6.11.2026: laskumerkit mustina – erottuvat valkoisella
+     vahvemmin, myos mustavalkotulosteessa */
+  .esimerkki b {{ font: 900 15pt/1 Viiri, sans-serif; color: {musta} }}
   .huomio {{ display: flex; gap: 2.4mm; align-items: center;
              border: .35mm solid {musta}; padding: 1.4mm 2.6mm 1.4mm 2.2mm }}
   .huomio img {{ width: 17mm; height: auto; flex: none; align-self: flex-end;
