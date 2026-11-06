@@ -83,7 +83,7 @@
     "laskut": {
       "otsikko": "Kaikki laskutoimitukset käyvät",
       "html": "Yhteen-, vähennys-, kerto- ja jakolaskun lisäksi käyvät myös vaikkapa potenssit, logaritmit ja kertoma, esimerkiksi <b>5 = 2² + 1</b> tai <b>5 = 3! – 1</b>. Jokainen laskee omalla tasollaan.",
-      "paperi": "<p>Jokainen laskee omalla tasollaan. Luvun 5 saa kahdella eri täytteellä esimerkiksi näin:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 4 + 1</li><li>5 = 7 – 2</li><li>5 = 9 – 4</li><li>5 = 8 – 3</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2 · 2 + 1</li><li>5 = 4 + 2 : 2</li><li>5 = 6 – 3 : 3</li><li>5 = 3 · 3 – 4</li><li>5 = 6 – 1</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = 3! – 1</li><li>5 = log₂ 8 + 2</li></ul><p class=\"konstit\"><b>Näppärät konstit:</b> kerro ykkösellä tai jaa luku itsellään, niin saat ykkösen (2 : 2 = 1).</p>"
+      "paperi": "<p>Jokainen laskee omalla tasollaan, esimerkiksi näin:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Näppärät konstit:</b> kerro ykkösellä tai jaa luku itsellään, niin saat ykkösen (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Esimerkki: tomaatti-ananaspizza",
     "esimerkki_alt": "Pizzakortti, jonka arvo on 5, sekä täytekortit 10 ja 2: 10 : 2 = 5",

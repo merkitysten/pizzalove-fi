@@ -602,34 +602,33 @@ def sivu_html(kieli, lahde):
      (korttipeli.laskut.paperi). Kupla oikein pain (paperi/kortit, reunan
      irtoviiva poistettu), pikkupallot nousevat kohti Basson paata. */
   .huomio.alalaatikko {{ padding-left: 3mm }}
-  .ajattelee {{ flex: none; position: relative; width: 56mm; align-self: stretch;
-                min-height: 28mm }}
-  /* Basson vartalon suora leikkaus laatikon alareunaan, kyynarpaa
-     (15,36 % leveydesta) jaa sen alle (Marko 3.11. ja 6.11.2026) */
+  /* 🔵 Marko 6.11.2026 (oma luonnos): iso Basso vasemmalla, iso kupla
+     oikealla, pikkupallot niiden valissa; hanta nousee laatikon alareunan
+     takaa kuplan alle ja kiemurtelee laatikon alapuolelle. */
+  .ajattelee {{ flex: none; position: relative; width: 80mm; align-self: stretch;
+                min-height: 36mm }}
   .alalaatikko .ajattelee img.basso {{ position: absolute; left: 0;
-      bottom: calc(-1.4mm - 27mm * .1536); width: 27mm; margin: 0 }}
-  /* 🔵 Marko 6.11.2026: hanta (Markon kuva) tulee laatikon takaa Basson
-     vierest, kulkee kuplan alareunan yli (piilottaa kuplan ruman kohdan) ja
-     kayy laatikon alapuolella kuten kyynarpaa. */
-  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 11mm;
-      bottom: .6mm; width: 34mm; margin: 0;
-      transform-origin: 0 70%; transform: rotate(13deg) }}
-  .kupla {{ position: absolute; right: 0; bottom: 4.8mm; width: 35mm }}
+      bottom: calc(-1.4mm - 37mm * .1536); width: 37mm; margin: 0 }}
+  .alalaatikko .ajattelee img.hanta {{ position: absolute; left: 36mm;
+      bottom: calc(-1.4mm - 4.6mm); width: 34mm; margin: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
+  .kupla {{ position: absolute; right: 0; bottom: 5.6mm; width: 44mm }}
   .alalaatikko .kupla > img {{ width: 100%; margin: 0; display: block }}
   .merkit {{ position: absolute; left: 26%; right: 7%; top: 24%; bottom: 8%;
              display: grid; grid-template-columns: repeat(4, 1fr);
              align-items: center; justify-items: center;
-             font: 900 12pt/1 Viiri, sans-serif; color: {musta} }}
-  .merkit span:nth-child(n+5) {{ font: 700 10pt/1 Otsikko, sans-serif }}
+             font: 900 15pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 12pt/1 Otsikko, sans-serif }}
   .merkit sup {{ font-size: .6em }}
   .alalaatikko h3 {{ margin: 0 0 .6mm }}
-  .alalaatikko p {{ font-size: 8.8pt; margin: 0 }}
-  .alalaatikko .osa.laskut {{ flex: 1.75 }}
+  .alalaatikko p {{ font-size: 8.6pt; margin: 0 }}
+  .alalaatikko h3.bruno {{ margin-top: 1.8mm }}
+  .alalaatikko .tekstit p {{ font-size: 8.6pt }}
   .alalaatikko .osa p {{ line-height: 1.32 }}
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto);
-                 justify-content: space-between; column-gap: 2mm; row-gap: .2mm;
+                 justify-content: start; column-gap: 7mm; row-gap: .2mm;
                  margin: .8mm 0; font-weight: 700; font-size: 8.2pt; line-height: 1.3 }}
-  .alalaatikko p.konstit {{ font-size: 8.4pt }}
+  .alalaatikko p.konstit {{ font-size: 8.2pt }}
   .tieto {{ margin-top: 3mm; padding: 2.4mm 5mm 1.4mm 4mm; align-items: center }}
   .tieto h3 {{ margin: 0 0 .6mm }}
   .tieto p {{ font-size: 8.8pt }}
@@ -739,8 +738,8 @@ def sivu_html(kieli, lahde):
   <div class="ajattelee"><div class="kupla"><img src="paperi/kortit/ajatuskupla.webp">
       <div class="merkit" aria-label="+ − · : xⁿ √ log n!"><span>+</span><span>−</span><span>·</span><span>:</span><span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div>
     <img class="hanta" src="paperi/kortit/hanta.webp"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp"></div>
-  <div class="osa laskut"><h3>{laskut_otsikko}</h3>{laskut}</div>
-  <div class="osa"><h3>{tieto_otsikko}</h3><p>{tieto}</p></div>
+  <div class="osa tekstit"><h3>{laskut_otsikko}</h3>{laskut}
+    <h3 class="bruno">{tieto_otsikko}</h3><p>{tieto}</p></div>
 </div>
 
 {muodot}
@@ -751,7 +750,8 @@ def sivu_html(kieli, lahde):
 </footer>
 </html>'''
     return runko.format(
-        kieli=kieli, vali=PALSTAVALI, viiva=VIIVA, musta=MUSTA, oranssi=ORANSSI, kirjasimet=KIRJASIMET,
+        kieli=kieli, vali=PALSTAVALI,
+        hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=VIIVA, musta=MUSTA, oranssi=ORANSSI, kirjasimet=KIRJASIMET,
         viiri=viiri(k['iskulause']), qr=qr,
         qrmm=QR_MM, qr_teksti=k['qr_teksti'], title=e(s['title']),
         h1=e(s['h1']), alaotsikko=e(k['alaotsikko']), ingressi=e(s['ingressi']),

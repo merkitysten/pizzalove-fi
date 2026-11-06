@@ -82,7 +82,7 @@
     "laskut": {
       "otsikko": "All calculations count",
       "html": "Besides addition, subtraction, multiplication and division, you can also use powers, logarithms or factorials, for example <b>5 = 2² + 1</b> or <b>5 = 3! – 1</b>. Everyone calculates at their own level.",
-      "paperi": "<p>Everyone calculates at their own level. For example, you can make 5 with two different toppings like this:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 4 + 1</li><li>5 = 7 – 2</li><li>5 = 9 – 4</li><li>5 = 8 – 3</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2 · 2 + 1</li><li>5 = 4 + 2 : 2</li><li>5 = 6 – 3 : 3</li><li>5 = 3 · 3 – 4</li><li>5 = 6 – 1</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = 3! – 1</li><li>5 = log₂ 8 + 2</li></ul><p class=\"konstit\"><b>Handy tricks:</b> multiply by one, or divide a number by itself to get one (2 : 2 = 1).</p>"
+      "paperi": "<p>Everyone calculates at their own level, for example:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Handy tricks:</b> multiply by one, or divide a number by itself to get one (2 : 2 = 1).</p>"
     },
     "esimerkki_otsikko": "Example: tomato–pineapple pizza",
     "esimerkki_alt": "A pizza card with the value 5 and the topping cards 10 and 2: 10 : 2 = 5",
