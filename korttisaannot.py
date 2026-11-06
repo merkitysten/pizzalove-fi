@@ -44,7 +44,7 @@ CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 
 ORANSSI = '#EE7203'
 MUSTA = '#1A1A1A'
-ISKULAUSE_KIRJASIN = "'DIN Alternate','DIN Condensed',Helvetica,Arial,sans-serif"
+ISKULAUSE_KIRJASIN = "Otsikko,'DIN Condensed',sans-serif"
 PELIVALINTA = os.path.join(TANNE, 'julkinen', 'play', 'pelivalinta.js')
 QRJS = os.path.join(TANNE, 'julkinen', 'play', 'qr.js')
 JSQR = os.path.join(TANNE, 'julkinen', 'play', 'vendor', 'jsqr', 'jsQR.js')
@@ -63,6 +63,7 @@ KIELET = {
     'de': {
         'tiedosto': 'pizza-love-kartenspiel-regeln-de.pdf',
         'alaotsikko': 'Die Regeln aller drei Spielvarianten',
+        'iskulause': 'JEDE PIZZA ZÄHLT',
         'qr_teksti': 'Regeln und<br>Videos online',
         'osoite': 'https://pizzalove.fi/de/korttipeli.html',
         'videot': 'Erklärvideos zu jeder Spielvariante findest du online.',
@@ -72,11 +73,24 @@ KIELET = {
     'en': {
         'tiedosto': 'pizza-love-card-game-rules-en.pdf',
         'alaotsikko': 'The rules of all three game modes',
+        'iskulause': 'EVERY PIZZA COUNTS',
         'qr_teksti': 'Rules and<br>videos online',
         'osoite': 'https://pizzalove.fi/en/korttipeli.html',
         'videot': 'Watch the how-to videos for every game mode online.',
         'oikeudet': ('Merkitysten® is a registered trademark of '
                      'Merkitysten Oy. All rights reserved.'),
+    },
+    # 🔵 Marko 6.11.2026: «Nyt tarvittaisiin slovakian kielinen versio
+    # nettisivuista sekä ohjeesta.» Odottaa natiivitarkistusta.
+    'sk': {
+        'tiedosto': 'pizza-love-kartova-hra-pravidla-sk.pdf',
+        'alaotsikko': 'Pravidlá všetkých troch spôsobov hry',
+        'iskulause': 'KAŽDÁ PIZZA SA POČÍTA',
+        'qr_teksti': 'Pravidlá a<br>videá online',
+        'osoite': 'https://pizzalove.fi/sk/korttipeli.html',
+        'videot': 'Videonávody ku každému spôsobu hry nájdete online.',
+        'oikeudet': ('Merkitysten® je registrovaná ochranná známka '
+                     'spoločnosti Merkitysten Oy. Všetky práva vyhradené.'),
     },
 }
 
@@ -92,18 +106,21 @@ def e(s):
     return html.escape(str(s), quote=False)
 
 
-def viiri():
+def viiri(iskulause):
     """Pizza Love -viiri pelin omasta lahteesta — EI uutta piirrosta.
-    Iskulauseen kirjasin on annettava: pelissa se tulee CSS:sta, paperilla
-    sita ei ole (sama korjaus kuin `korttilappu.py`:ssa ja alustassa)."""
+    Iskulause kielen omana kuten painetussa arkissa (JOKAINEN PIZZA
+    LASKETAAN · VARJE PIZZA RÄKNAS · EVERY PIZZA COUNTS). Kirjasin on
+    annettava: pelissa se tulee CSS:sta, paperilla sita ei ole."""
     teksti = open(PELIVALINTA, encoding='utf-8').read()
     m = re.search(r'const VIIRI_SVG = "(.*?)";\n', teksti, re.S)
     if not m:
         raise SystemExit('VIIRI_SVG ei loytynyt %s:sta' % PELIVALINTA)
-    return m.group(1).replace('\\"', '"').replace(
+    svg = m.group(1).replace('\\"', '"').replace(
         '<text class="viiri-iskulause"',
-        '<text font-family="%s" font-size="5.1" font-weight="700" '
+        '<text font-family="%s" font-size="5.6" font-weight="700" '
         'letter-spacing="0.1" fill="#fff"' % ISKULAUSE_KIRJASIN)
+    return re.sub(r'(<text[^>]*>)[^<]*(</text>)',
+                  lambda t: t.group(1) + e(iskulause) + t.group(2), svg)
 
 
 QR_AJURI = """ObjC.import('Foundation');
@@ -154,14 +171,66 @@ def qr_koko_koe(svg):
 
 
 def muoto(m):
-    return ('<section class="muoto">'
-            '<h2><span class="numero">%s</span>%s'
-            '<span class="kuvaus">%s</span></h2>'
+    """Pelimuodon otsikko painetun arkin tapaan: musta viiri, jossa
+    «#1 PIZZA» oranssina ja loppu valkoisena (PIZZAPARTY, PIZZABASSO)."""
+    sanat = m['nimi'].split(' ', 1)
+    loppu = sanat[1] if len(sanat) > 1 else ''
+    return ('<section class="muoto kehys">'
+            '<h2 class="banneri"><span class="oranssi">%s %s</span>%s</h2>'
+            '<p class="kuvaus">%s</p>'
             '<div class="palstat">%s</div></section>'
-            % (e(m['numero']), e(m['nimi']), e(m['kuvaus']), m['html']))
+            % (e(m['numero']), e(sanat[0]), e(loppu), e(m['kuvaus']),
+               m['html']))
+
+
+# ⚠️ KIRJASIMET OVAT REPOSSA (paperi/fontit, ei julkaista), EI KONEELLA. Painettu arkki on tehty
+# InDesignilla (DIN Condensed, VAG Rounded, Adobe Clean); niita ei voi jakaa,
+# joten tilalla ovat lahimmat OFL-vastineet. Koneen kirjasimiin ei nojata,
+# koska slovakin č ľ ť ň puuttuvat sivuston omista osajoukoista (mitattu
+# 6.11.2026: poppins-*.woff2 ja d-din-condensed-700.woff2) ja Chrome
+# paikkaisi ne kirjain kerrallaan eri kirjasimella.
+#  · otsikot: D-DIN Condensed (pelin oma) + Barlow Condensed niille
+#    kirjaimille joita D-DIN-osajoukossa ei ole
+#  · viirit: Nunito Black (VAG Roundedin tilalle)
+#  · leipateksti: Source Sans 3 (Adobe Cleanin tilalle)
+LATIN = ('U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, '
+         'U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, '
+         'U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD')
+LATIN_EXT = ('U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, '
+             'U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, '
+             'U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF')
+# D-DIN-osajoukossa on Latin-1 + š ž Œ Ÿ, ei muuta (luettu cmapista).
+DDIN = ('U+0000-00FF, U+0152-0153, U+0160-0161, U+0178, U+017D-017E, '
+        'U+2000-206F, U+20AC, U+2122')
+KIRJASIMET = '''
+  @font-face {{ font-family: Otsikko; font-weight: 700;
+    src: url(paperi/fontit/barlow-condensed-700-ext.woff2); unicode-range: {ext} }}
+  @font-face {{ font-family: Otsikko; font-weight: 700;
+    src: url(julkinen/play/fontit/d-din-condensed-700.woff2); unicode-range: {ddin} }}
+  @font-face {{ font-family: Viiri; font-weight: 900;
+    src: url(paperi/fontit/nunito-900-latin-ext.woff2); unicode-range: {ext} }}
+  @font-face {{ font-family: Viiri; font-weight: 900;
+    src: url(paperi/fontit/nunito-900-latin.woff2); unicode-range: {latin} }}
+  @font-face {{ font-family: Teksti; font-weight: 400;
+    src: url(paperi/fontit/source-sans-3-400-latin-ext.woff2); unicode-range: {ext} }}
+  @font-face {{ font-family: Teksti; font-weight: 400;
+    src: url(paperi/fontit/source-sans-3-400-latin.woff2); unicode-range: {latin} }}
+  @font-face {{ font-family: Teksti; font-weight: 700;
+    src: url(paperi/fontit/source-sans-3-700-latin-ext.woff2); unicode-range: {ext} }}
+  @font-face {{ font-family: Teksti; font-weight: 700;
+    src: url(paperi/fontit/source-sans-3-700-latin.woff2); unicode-range: {latin} }}
+'''.format(ext=LATIN_EXT, latin=LATIN, ddin=DDIN)
 
 
 def sivu_html(kieli, lahde):
+    """🔵 Marko 6.11.2026: «Haluaisin vähän täsmentää sitä paperi pdf:ää,
+    että se olisi enemmän Pizza Love brändin mukainen. Tässä alkuperäinen
+    pdf, jossa näet miten musta, oranssi ja valkoinen toimii keskenään.»
+
+    Painetun arkin kieli: ohuet mustat kehykset, oranssit tiivistetyt
+    isot otsikot, mustat palkit valkoisella tekstillä, mustat pelimuotoviirit.
+    ⚠️ Oranssilla pohjalla teksti on aina valkoinen; tassa arkissa oranssi
+    on vain tekstin vari, ei pohja. Pyoristetyt suorakaiteet, ei kapseleita."""
     k = KIELET[kieli]
     s = json.load(open(lahde, encoding='utf-8'))['korttipeli']
     qr = qr_svg(k['osoite'])
@@ -169,84 +238,103 @@ def sivu_html(kieli, lahde):
     runko = '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
-  @page {{ size: A4; margin: 0 }}
+{kirjasimet}
+  @page {{ size: A4; margin: 6mm 7mm 5mm }}
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
-  body {{ width: 210mm; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          color: {musta}; background: #fff; padding: 8mm 10mm 5mm;
-          font-size: 8.2pt; line-height: 1.33;
+  body {{ font-family: Teksti, 'Helvetica Neue', Arial, sans-serif;
+          color: {musta}; background: #fff;
+          font-size: 8.6pt; line-height: 1.3;
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
-  header {{ display: flex; align-items: flex-start; gap: 5mm;
-            border-bottom: .5mm solid {oranssi}; padding-bottom: 3mm }}
-  .viiri {{ width: 19mm; flex: none }}
+  b {{ font-weight: 700 }}
+  .kehys {{ border: .35mm solid {musta}; -webkit-box-decoration-break: clone;
+            box-decoration-break: clone }}
   .viiri svg, .qr svg {{ width: 100%; height: auto; display: block }}
-  .otsikko {{ flex: 1 }}
-  h1 {{ font-size: 18pt; line-height: 1.02; letter-spacing: -.01em }}
-  .ala {{ font-size: 8.6pt; font-weight: 700; color: {oranssi};
-          margin-top: 1.2mm }}
-  .qr {{ flex: none; width: {qrmm}mm; text-align: center }}
-  .qr span {{ display: block; margin-top: .8mm; font-size: 5.6pt;
-              line-height: 1.2; font-weight: 700; opacity: .75 }}
-  .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1.6mm;
-             margin: 2.2mm 0 1.6mm }}
-  .tiedot li {{ border: .25mm solid #cfcfcf; border-radius: 1.4mm;
-                padding: .5mm 2mm; font-size: 7.2pt; font-weight: 700 }}
-  .ingressi {{ font-size: 9pt; margin-bottom: 2mm }}
-  h2 {{ font-size: 11pt; margin: 3mm 0 1.6mm; padding-bottom: 1mm;
-        border-bottom: .3mm solid #ddd; break-after: avoid }}
-  .muoto h2 {{ border: 0; background: {oranssi}; color: #fff;
-               padding: 1.2mm 2.4mm; border-radius: 1.4mm; margin-bottom: 2mm }}
-  .numero {{ font-weight: 800; margin-right: 1.8mm; opacity: .75 }}
-  .kuvaus {{ display: block; font-size: 7pt; font-weight: 400; opacity: .9 }}
-  h3 {{ font-size: 8.4pt; color: {oranssi}; margin: 2mm 0 .6mm;
-        break-after: avoid }}
-  p {{ margin-bottom: 1.2mm }}
+
+  header {{ display: flex; align-items: flex-start; gap: 4.5mm;
+            padding: 0 3.5mm 3mm 3mm }}
+  .viiri {{ width: 31mm; flex: none }}
+  .otsikko {{ flex: 1; padding-top: 3.2mm }}
+  h1 {{ font: 700 22pt/1 Otsikko, sans-serif; text-transform: uppercase;
+        color: {oranssi}; letter-spacing: .005em }}
+  .ala {{ font-weight: 700; font-size: 9.4pt; margin-top: 1.2mm }}
+  .ingressi {{ font-size: 9pt; margin-top: 1.4mm }}
+  .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1.4mm;
+             margin-top: 2.2mm }}
+  .tiedot li {{ background: {musta}; color: #fff; border-radius: 1mm;
+                padding: .7mm 2mm .4mm; font: 700 9pt/1 Otsikko, sans-serif;
+                text-transform: uppercase; letter-spacing: .02em }}
+  .qr {{ flex: none; width: {qrmm}mm; text-align: center; padding-top: 3.2mm }}
+  .qr span {{ display: block; margin-top: .8mm; font: 700 7pt/1.15 Otsikko,
+              sans-serif; text-transform: uppercase; letter-spacing: .02em }}
+
+  .perusteet {{ margin-top: 2.6mm; padding: 2.6mm 4mm 1.6mm }}
+  h2 {{ font: 700 17pt/1 Otsikko, sans-serif; text-transform: uppercase;
+        color: {oranssi}; margin-bottom: 2mm; break-after: avoid }}
+  h3 {{ font: 700 10pt/1.1 Otsikko, sans-serif; text-transform: uppercase;
+        letter-spacing: .015em; margin: 1.9mm 0 .6mm; break-after: avoid }}
+  h3.osa {{ font-size: 13pt; color: {oranssi}; margin: 2.6mm 0 0 }}
+  .palkki {{ background: {musta}; color: #fff; margin: 1.6mm 0 1.2mm;
+             padding: 1.1mm 2.2mm .8mm }}
+  p {{ margin-bottom: 1.1mm }}
   .palstat {{ columns: 2; column-gap: 7mm }}
-  .palstat > *, .laatikko, .kortti {{ break-inside: avoid }}
-  ul.lista, ol.lista {{ margin: 0 0 1.2mm 4.2mm }}
-  ul.lista li, ol.lista li {{ margin-bottom: .6mm }}
-  .pieni {{ font-size: 6.8pt; opacity: .72 }}
-  .kortti {{ display: flex; gap: 2.4mm; align-items: flex-start;
-             margin-bottom: 1.6mm }}
+  .palstat > *, .kortti {{ break-inside: avoid }}
+  .palstat > .laatikko {{ break-inside: auto }}
+  .laatikko > p, .esimerkki {{ break-inside: avoid }}
+  ul.lista, ol.lista {{ margin: 0 0 1.1mm 4.2mm }}
+  ul.lista li, ol.lista li {{ margin-bottom: .5mm }}
+  .pieni {{ font-size: 7.4pt; opacity: .75 }}
+  .kortti {{ display: flex; gap: 2.6mm; align-items: flex-start;
+             margin-bottom: 1.8mm }}
   .kortti img {{ width: 14mm; height: auto; flex: none; border-radius: 1mm }}
-  .laatikko {{ border: .25mm solid #e2e2e2; border-radius: 1.6mm;
-               padding: 2.2mm 2.6mm; background: #fcfbfa;
-               margin-bottom: 1.8mm }}
+  .kortti h3 {{ margin-top: 0 }}
+  .laatikko {{ margin-bottom: 1.4mm }}
   .esimerkki {{ display: flex; align-items: center; gap: 1.6mm;
-                margin: 1.4mm 0 }}
+                margin: 1.2mm 0 }}
   .esimerkki img {{ width: 13mm; height: auto; border-radius: 1mm }}
-  .esimerkki b {{ font-size: 11pt; color: {oranssi} }}
+  .esimerkki b {{ font: 900 14pt/1 Viiri, sans-serif; color: {oranssi} }}
   .huomio {{ display: flex; gap: 2.4mm; align-items: center;
-             border-left: .8mm solid {oranssi}; padding: 1.4mm 0 1.4mm 2.2mm }}
+             border: .35mm solid {musta}; padding: 1.4mm 2.6mm 1.4mm 2.2mm }}
   .huomio img {{ width: 17mm; height: auto; flex: none; align-self: flex-end;
                  margin-bottom: calc(-1.4mm - 17mm * .1536) }}
   /* rajattu Basso: vartalon leikkaus huomion alareunaan, kyynärpää (15,36 % leveydestä)
      jää sen alapuolelle (Marko 3.11.2026) */
+  .huomio p {{ margin: 0 }}
+
+  .muoto {{ margin-top: 2.6mm; padding: 0 4mm 1mm }}
+  .banneri {{ background: {musta}; color: #fff; text-align: center;
+              margin: 0 -4mm; padding: 1.5mm 0 3.8mm;
+              font: 900 14pt/1 Viiri, sans-serif; letter-spacing: .01em;
+              clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%) }}
+  .banneri .oranssi {{ color: {oranssi} }}
+  .muoto .kuvaus {{ text-align: center; font-weight: 700; font-size: 8pt;
+                    margin: .8mm 0 1mm }}
+
   footer {{ margin-top: 2.6mm; padding-top: 1.4mm;
-            border-top: .3mm solid #d8d8d8; font-size: 6.6pt; opacity: .82;
+            border-top: .35mm solid {musta}; font-size: 7pt;
             display: flex; justify-content: space-between; gap: 4mm }}
   footer b {{ color: {oranssi} }}
 </style>
-<header>
+<header class="kehys">
   <div class="viiri">{viiri}</div>
   <div class="otsikko">
     <h1>{h1}</h1>
     <div class="ala">{alaotsikko}</div>
+    <p class="ingressi">{ingressi}</p>
+    <ul class="tiedot">{tiedot}</ul>
   </div>
   <div class="qr">{qr}<span>{qr_teksti}</span></div>
 </header>
 
-<p class="ingressi">{ingressi}</p>
-<ul class="tiedot">{tiedot}</ul>
-
+<section class="perusteet kehys">
 <h2>{perusteet_otsikko}</h2>
 <div class="palstat">
   <p>{perusteet_ingressi}</p>
   <div class="kortti"><img src="julkinen/kuvat/tausta-pizza.webp">
-    <div><h3 style="margin-top:0">{pizzakortit_otsikko}</h3><p>{pizzakortit}</p></div></div>
+    <div><h3>{pizzakortit_otsikko}</h3><p>{pizzakortit}</p></div></div>
   <div class="kortti"><img src="julkinen/kuvat/tausta-tayte.webp">
-    <div><h3 style="margin-top:0">{taytekortit_otsikko}</h3><p>{taytekortit}</p></div></div>
+    <div><h3>{taytekortit_otsikko}</h3><p>{taytekortit}</p></div></div>
   <div class="laatikko">
-    <h3 style="margin-top:0">{perussaanto_otsikko}</h3><p>{perussaanto}</p>
+    <h3 class="palkki">{perussaanto_otsikko}</h3><p>{perussaanto}</p>
     <h3>{arvo_otsikko}</h3><p>{arvo}</p>
     <h3>{esimerkki_otsikko}</h3>
     <div class="esimerkki" role="img" aria-label="{esimerkki_alt}">
@@ -255,14 +343,15 @@ def sivu_html(kieli, lahde):
       <img src="julkinen/kuvat/tayte-2.webp"></div>
     <p>{esimerkki}</p>
   </div>
-  <h3>{tavat_otsikko}</h3>
-  <div class="laatikko"><h3 style="margin-top:0">{helpompi_otsikko}</h3>
+  <h3 class="osa">{tavat_otsikko}</h3>
+  <div class="laatikko"><h3 class="palkki">{helpompi_otsikko}</h3>
     <p>{helpompi}</p></div>
-  <div class="laatikko"><h3 style="margin-top:0">{basso_tapa_otsikko}</h3>
+  <div class="laatikko"><h3 class="palkki">{basso_tapa_otsikko}</h3>
     <p>{basso_tapa}</p></div>
   <div class="huomio"><img src="julkinen/kuvat/basso-pohtii.webp">
     <p>{huomio_bruno}</p></div>
 </div>
+</section>
 
 {muodot}
 
@@ -272,7 +361,8 @@ def sivu_html(kieli, lahde):
 </footer>
 </html>'''
     return runko.format(
-        kieli=kieli, musta=MUSTA, oranssi=ORANSSI, viiri=viiri(), qr=qr,
+        kieli=kieli, musta=MUSTA, oranssi=ORANSSI, kirjasimet=KIRJASIMET,
+        viiri=viiri(k['iskulause']), qr=qr,
         qrmm=QR_MM, qr_teksti=k['qr_teksti'], title=e(s['title']),
         h1=e(s['h1']), alaotsikko=e(k['alaotsikko']), ingressi=e(s['ingressi']),
         tiedot=tiedot, perusteet_otsikko=e(s['perusteet_otsikko']),
