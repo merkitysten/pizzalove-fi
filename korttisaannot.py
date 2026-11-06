@@ -389,11 +389,10 @@ def porras(x):
                ''.join(lasku(l) for l in x['esimerkit'])))
 
 
-def painettu_huomautus(s):
-    """«Painetuissa saannoissa lukee vielä…» on tietoa, ei saanto, joten se
-    siirtyy Basson tavasta hyva tietaa -laatikkoon (Marko 6.11.2026)."""
-    m = re.search(r'<span class="pieni">(.*?)</span>', s['basso_tapa'])
-    return m.group(1) if m else ''
+# 🔵 Marko 6.11.2026: «Hyvä tietää» kiteytetysti – Bruno 2025 painetuissa
+# ohjeissa ja videoissa, ja Basson tapa puhuu taytteista eika taytekorteista.
+# Teksti: sisalto/xx.json → korttipeli.tieto (arkin oma; sivun huomio_bruno
+# ja basso_tapa ennallaan).
 
 
 def sivu_html(kieli, lahde):
@@ -566,7 +565,7 @@ def sivu_html(kieli, lahde):
 </section>
 
 <div class="huomio tieto kehys"><img src="julkinen/kuvat/basso-pohtii.webp">
-  <div><h3>{hyva_tietaa}</h3><p>{huomio_bruno} {painettu}</p></div></div>
+  <div><h3>{hyva_tietaa}</h3><p>{tieto}</p></div></div>
 
 {muodot}
 
@@ -594,7 +593,7 @@ def sivu_html(kieli, lahde):
         helpompi_otsikko=e(s['helpompi_otsikko']), helpompi=e(s['helpompi']),
         basso_tapa_otsikko=e(s['basso_tapa_otsikko']),
         basso_tapa=s['basso_tapa'], huomio_bruno=s['huomio_bruno'],
-        hyva_tietaa=e(k['hyva_tietaa']), painettu=painettu_huomautus(s),
+        hyva_tietaa=e(k['hyva_tietaa']), tieto=s['tieto'],
         portaat_otsikko=e(s['portaat_otsikko']),
         portaat_ingressi=e(s['portaat_ingressi']),
         portaat=''.join(porras(x) for x in s['portaat']),
