@@ -752,8 +752,64 @@ def essen2026(t, kaikki):
        e(a['vuoro_otsikko']), vaiheet, e(a['vuoro_huom']), e(a['vuoro_raja']),
        saannot,
        e(a['muunnelmat_otsikko']), muunnelmat)
-    return kehys(t, kaikki, 'essen', tt('title'), tt('kuvaus'), runko)
+    return kehys(t, kaikki, 'essen', tt('title'), tt('kuvaus'),
+                 qr_hyppy(t['lang']) + runko)
 
+
+
+# ⚠️ ESSEN-LAPUN QR ON JO PAINETTU: se osoittaa
+# https://pizzalove.fi/de/essen-2026.html (pizzaparty/essen-lappu.py). Pusseja
+# jaettiin myos suomalaisissa lasten syntymapaivajuhlissa, ja Marko 7.11.2026:
+# «olisi tärkeää, että juhlavieraat löytävät kotona heti oikeaan paikkaan.»
+# Siksi QR:lla tuleva (ei tule pizzalove.fi:n sisalta, ei #-kohtaa):
+#   1. siirretaan oman kielensa Essen-sivulle (valittu kieli > selaimen kieli;
+#      muuten saksa pysyy), ja
+#   2. sivu avautuu suoraan pussin peliin (#peli).
+# Valikosta tai kielivalikosta tuleva nakee sivun alusta kuten ennenkin.
+# Ehto on «ei pizzalove.fi:sta» eika «ei referreria», koska Androidin
+# kamera/Lens voi antaa referreriksi android-app://-osoitteen.
+# Laiskat kuvat ilman mittoja ovat #peli-kohdan ylapuolella ja venyttavat
+# sivua latautuessaan, joten kohta asetetaan uudelleen kuvien latautuessa
+# (enintaan 4 s), kunnes kavija itse vierittaa.
+def qr_hyppy(lang):
+    return '''<script>
+(function () {
+  var kielet = %s, nyt = '%s';
+  var sisalta = /^https?:\\/\\/(www\\.)?pizzalove\\.fi\\//.test(document.referrer);
+  if (!location.hash && !sisalta) {
+    var valittu = null;
+    try { valittu = localStorage.getItem('pizzalove-kieli'); } catch (e) {}
+    if (kielet.indexOf(valittu) < 0) {
+      valittu = null;
+      var selain = navigator.languages || [navigator.language || ''];
+      for (var i = 0; i < selain.length && !valittu; i++) {
+        var k = String(selain[i]).slice(0, 2).toLowerCase();
+        if (kielet.indexOf(k) >= 0) valittu = k;
+      }
+    }
+    if (valittu && valittu !== nyt) {
+      location.replace('../' + valittu + '/essen-2026.html#peli');
+      return;
+    }
+    try { history.replaceState(null, '', '#peli'); } catch (e) {}
+  }
+  if (location.hash !== '#peli') return;
+  var loppu = Date.now() + 4000, ohi = false;
+  function kohdalle() {
+    var el = document.getElementById('peli');
+    if (!el || ohi || Date.now() > loppu) return;
+    try { el.scrollIntoView({ behavior: 'instant', block: 'start' }); }
+    catch (e) { el.scrollIntoView(true); }   // vanha Safari ei tunne 'instant'
+  }
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) {
+    addEventListener(ev, function () { ohi = true; }, { once: true, passive: true });
+  });
+  document.addEventListener('DOMContentLoaded', kohdalle);
+  document.addEventListener('load', kohdalle, true);
+  addEventListener('load', kohdalle);
+})();
+</script>
+''' % (json.dumps(KIELET), lang)
 
 def juurisivu(kaikki):
     """pizzalove.fi/ — ohjaa selaimen kielen mukaan. QR-koodit osoittavat tänne."""
