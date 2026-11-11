@@ -135,6 +135,82 @@
         '<p><b>Verschwendung:</b> der Würfel zeigt mehr als das Lager. Türme gehen von der Linie ins Lager.</p>' +
         '<p><b>Pizzaparty:</b> die Linie ist voll!</p>',
       taytteet: ['Olive', 'Tomate', 'Ananas', 'Blauschimmelkäse', 'Garnele', 'Aubergine', 'Rucola', 'Champignon', 'Schinken', 'Fisch']
+    },
+    nl: {
+      heita: 'Gooi de dobbelsteen!', seuraavaVuoro: 'Volgende beurt', eiYhdistaPerus: 'Een basiszet kan niet met andere zetten gecombineerd worden.', taiHeita: 'Maak er meer of gooi de dobbelsteen.', eiRiita: 'Niet genoeg toppings voor de pizza’s.', lisapala: 'Hartpizza! Kies een extra stuk.',
+      valmista: "Maak de pizza!", eiPizzaa: "Nog geen pizza. Gooi opnieuw!", apinat: "Hongerige apen", uusiPeli: "Nieuw spel", harjoittele: "Oefenen", tasot: ["AARGH! Lege maag.", "Uh… Wat eten we nu?", "Mmm. Een paar stukken meer was lekker geweest.", "Dat is ’m – de lievelingspizza van de aap!"], palaa: "stukken", boksi: "Gedeelde doos", infoA: "<h3>Hongerige apen</h3><p>Speel samen. Als de topping van een pizza op de lijn ligt, tik je op de pizza. Het stuk gaat in de gedeelde doos.</p><p>Als er in een beurt geen pizza gemaakt wordt, eten de hongerige apen de stukken op en is het spel afgelopen. Vul de doos met tien stukken!</p>",
+      vihjeet: { A: 'Zoek een toren die even hoog is.', B: 'Bouw hem uit kleinere torens.',
+        C: 'Til een toren van de lijn op de gewichten.', X: 'Maak de torens even hoog.', H: 'Verspilling! Breng torens van de lijn naar de voorraad.' },
+      vainYksi: 'Maar één toren van de lijn.',
+      vie: 'Naar de lijn', vieV: 'Naar de voorraad',
+      hyva: 'Goed gedaan!', party: 'Pizzafeest!',
+      varasto: 'Voorraad', linjasto: 'Lijn', noppa: 'Dobbelsteen', ohjeet: 'Uitleg', sulje: 'Sluiten',
+      alusta: 'Opnieuw beginnen', vapaa: 'Vrij spelen',
+      info: '<h2>Apenweegschaal</h2><ol><li>Gooi de dobbelsteen. De gewichten komen in de linkerhand van de aap.</li>' +
+        '<li>Tik op de torens. Maak de torens even hoog.</li><li>Als de lamp aangaat, breng je de torens naar de lijn.</li></ol>' +
+        '<p>Een toren beweegt altijd in zijn geheel. De hoogte van de toren is het getal van de topping.</p>' +
+        '<dl class="av__tavat"><dt>A</dt><dd>Basiszet <b>3 = 3</b></dd><dt>B</dt><dd>Somzet <b>1 + 2 = 3</b></dd>' +
+        '<dt>C</dt><dd>Verschilzet <b>5 − 2 = 3</b></dd></dl>' +
+        '<p><b>Verspilling:</b> de dobbelsteen is hoger dan de voorraad. De torens gaan van de lijn naar de voorraad.</p>' +
+        '<p><b>Pizzafeest:</b> de lijn is vol!</p>',
+      taytteet: ['Olijf', 'Tomaat', 'Ananas', 'Blauwe kaas', 'Garnaal', 'Aubergine', 'Rucola', 'Champignon', 'Ham', 'Vis']
+    },
+    fr: {
+      heita: 'Lance le dé !', seuraavaVuoro: 'Tour suivant', eiYhdistaPerus: 'Un coup de base ne peut pas être combiné avec d’autres coups.', taiHeita: 'Fais-en d’autres ou lance le dé.', eiRiita: 'Pas assez de garnitures pour les pizzas.', lisapala: 'Pizza cœur ! Choisis une part en plus.',
+      valmista: "Fais la pizza !", eiPizzaa: "Pas encore de pizza. Relance !", apinat: "Singes affamés", uusiPeli: "Nouvelle partie", harjoittele: "S’entraîner", tasot: ["AARGH ! Ventre vide.", "Euh… On mange quoi alors ?", "Miam. Quelques parts de plus auraient été bienvenues.", "Ça y est – la pizza préférée du singe !"], palaa: "parts", boksi: "Boîte commune", infoA: "<h3>Singes affamés</h3><p>Jouez ensemble. Quand la garniture d’une pizza est sur la ligne, touche la pizza. La part va dans la boîte commune.</p><p>Si aucune pizza n’est faite pendant un tour, les singes affamés mangent les parts et la partie s’arrête. Remplissez la boîte avec dix parts !</p>",
+      vihjeet: { A: 'Trouve une tour de la même hauteur.', B: 'Construis-la avec des tours plus petites.',
+        C: 'Monte une tour de la ligne sur les poids.', X: 'Rends les tours de la même hauteur.', H: 'Gaspillage ! Ramène des tours de la ligne au stock.' },
+      vainYksi: 'Une seule tour depuis la ligne.',
+      vie: 'Vers la ligne', vieV: 'Vers le stock',
+      hyva: 'Bravo !', party: 'Pizza party !',
+      varasto: 'Stock', linjasto: 'Ligne', noppa: 'Dé', ohjeet: 'Règles', sulje: 'Fermer',
+      alusta: 'Recommencer', vapaa: 'Jeu libre',
+      info: '<h2>La balance du singe</h2><ol><li>Lance le dé. Les poids arrivent dans la main gauche du singe.</li>' +
+        '<li>Touche les tours. Rends les tours de la même hauteur.</li><li>Quand la lampe s’allume, amène les tours sur la ligne.</li></ol>' +
+        '<p>Une tour se déplace toujours entière. Sa hauteur est le numéro de la garniture.</p>' +
+        '<dl class="av__tavat"><dt>A</dt><dd>Coup de base <b>3 = 3</b></dd><dt>B</dt><dd>Coup somme <b>1 + 2 = 3</b></dd>' +
+        '<dt>C</dt><dd>Coup différence <b>5 − 2 = 3</b></dd></dl>' +
+        '<p><b>Gaspillage :</b> le dé est plus grand que le stock. Les tours vont de la ligne au stock.</p>' +
+        '<p><b>Pizza party :</b> la ligne est pleine !</p>',
+      taytteet: ['Olive', 'Tomate', 'Ananas', 'Fromage bleu', 'Crevette', 'Aubergine', 'Roquette', 'Champignon', 'Jambon', 'Poisson']
+    },
+    es: {
+      heita: '¡Tira el dado!', seuraavaVuoro: 'Siguiente turno', eiYhdistaPerus: 'Un movimiento básico no se puede combinar con otros movimientos.', taiHeita: 'Haz más o tira el dado.', eiRiita: 'No hay ingredientes suficientes para las pizzas.', lisapala: '¡Pizza corazón! Elige un trozo extra.',
+      valmista: "¡Haz la pizza!", eiPizzaa: "Todavía no hay pizza. ¡Tira otra vez!", apinat: "Monos hambrientos", uusiPeli: "Partida nueva", harjoittele: "Practicar", tasot: ["¡AARGH! Barriga vacía.", "Uhh… ¿Y ahora qué comemos?", "Mmm. Unos trozos más habrían estado bien.", "¡Eso es: la pizza favorita del mono!"], palaa: "trozos", boksi: "Caja común", infoA: "<h3>Monos hambrientos</h3><p>Jugad juntos. Cuando el ingrediente de una pizza está en la línea, toca la pizza. El trozo va a la caja común.</p><p>Si en un turno no se hace ninguna pizza, los monos hambrientos se comen los trozos y la partida termina. ¡Llenad la caja con diez trozos!</p>",
+      vihjeet: { A: 'Busca una torre igual de alta.', B: 'Constrúyela con torres más pequeñas.',
+        C: 'Sube una torre de la línea sobre las pesas.', X: 'Haz que las torres queden igual de altas.', H: '¡Desperdicio! Lleva torres de la línea al almacén.' },
+      vainYksi: 'Solo una torre desde la línea.',
+      vie: 'A la línea', vieV: 'Al almacén',
+      hyva: '¡Muy bien!', party: '¡Fiesta de pizza!',
+      varasto: 'Almacén', linjasto: 'Línea', noppa: 'Dado', ohjeet: 'Instrucciones', sulje: 'Cerrar',
+      alusta: 'Empezar de nuevo', vapaa: 'Juego libre',
+      info: '<h2>La balanza del mono</h2><ol><li>Tira el dado. Las pesas van a la mano izquierda del mono.</li>' +
+        '<li>Toca las torres. Haz que queden igual de altas.</li><li>Cuando se encienda la lámpara, lleva las torres a la línea.</li></ol>' +
+        '<p>Una torre se mueve siempre entera. Su altura es el número del ingrediente.</p>' +
+        '<dl class="av__tavat"><dt>A</dt><dd>Movimiento básico <b>3 = 3</b></dd><dt>B</dt><dd>Movimiento suma <b>1 + 2 = 3</b></dd>' +
+        '<dt>C</dt><dd>Movimiento resta <b>5 − 2 = 3</b></dd></dl>' +
+        '<p><b>Desperdicio:</b> el dado es mayor que el almacén. Las torres van de la línea al almacén.</p>' +
+        '<p><b>Fiesta de pizza:</b> ¡la línea está llena!</p>',
+      taytteet: ['Aceituna', 'Tomate', 'Piña', 'Queso azul', 'Gamba', 'Berenjena', 'Rúcula', 'Champiñón', 'Jamón', 'Pescado']
+    },
+    sk: {
+      heita: 'Hoď kockou!', seuraavaVuoro: 'Ďalší ťah', eiYhdistaPerus: 'Základný ťah sa nedá spojiť s inými ťahmi.', taiHeita: 'Urob ďalšiu alebo hoď kockou.', eiRiita: 'Na pizze nie je dosť prísad.', lisapala: 'Srdcová pizza! Vyber si kúsok navyše.',
+      valmista: "Urob pizzu!", eiPizzaa: "Zatiaľ žiadna pizza. Hoď znova!", apinat: "Hladné opice", uusiPeli: "Nová hra", harjoittele: "Trénovať", tasot: ["AARGH! Prázdne brucho.", "Hm… Čo budeme jesť?", "Mňam. Pár kúskov navyše by ešte padlo vhod.", "To je ono – obľúbená pizza opice!"], palaa: "kúskov", boksi: "Spoločná škatuľa", infoA: "<h3>Hladné opice</h3><p>Hrajte spolu. Keď je prísada pizze na linke, ťukni na pizzu. Kúsok ide do spoločnej škatule.</p><p>Ak v ťahu nevznikne žiadna pizza, hladné opice kúsky zjedia a hra sa skončí. Naplňte škatuľu desiatimi kúskami!</p>",
+      vihjeet: { A: 'Nájdi rovnako vysokú vežu.', B: 'Zlož ju z menších veží.',
+        C: 'Zdvihni vežu z linky na závažia.', X: 'Urob veže rovnako vysoké.', H: 'Plytvanie! Prenes veže z linky do skladu.' },
+      vainYksi: 'Len jedna veža z linky.',
+      vie: 'Na linku', vieV: 'Do skladu',
+      hyva: 'Výborne!', party: 'Pizza párty!',
+      varasto: 'Sklad', linjasto: 'Linka', noppa: 'Kocka', ohjeet: 'Návod', sulje: 'Zavrieť',
+      alusta: 'Začať odznova', vapaa: 'Voľná hra',
+      info: '<h2>Opičia váha</h2><ol><li>Hoď kockou. Závažia prídu opici do ľavej ruky.</li>' +
+        '<li>Ťukaj na veže. Urob veže rovnako vysoké.</li><li>Keď sa rozsvieti lampa, prenes veže na linku.</li></ol>' +
+        '<p>Veža sa vždy hýbe celá. Výška veže je číslo prísady.</p>' +
+        '<dl class="av__tavat"><dt>A</dt><dd>Základný ťah <b>3 = 3</b></dd><dt>B</dt><dd>Súčtový ťah <b>1 + 2 = 3</b></dd>' +
+        '<dt>C</dt><dd>Rozdielový ťah <b>5 − 2 = 3</b></dd></dl>' +
+        '<p><b>Plytvanie:</b> kocka je väčšia ako sklad. Veže idú z linky do skladu.</p>' +
+        '<p><b>Pizza párty:</b> linka je plná!</p>',
+      taytteet: ['Oliva', 'Paradajka', 'Ananás', 'Plesňový syr', 'Kreveta', 'Baklažán', 'Rukola', 'Šampiňón', 'Šunka', 'Ryba']
     }
   };
 
@@ -168,9 +244,33 @@
       harjoitus: ['Mach die Türme gleich hoch.', 'Die Lampe leuchtet, wenn der Zug stimmt.', 'Ein Turm bewegt sich immer ganz.'],
       vapaa: ['Es gibt immer einen Zug – finde ihn!', 'Würfel zu hoch? Bring Türme zurück ins Lager.'],
       apinat: ['Bring die Zutat der Pizza in ihre Schüssel.', 'Tippe auf die Pizza – sie backt im Ofen.', 'Keine Pizza? Die Affen essen die Stücke!'],
-      pulmat: ['Back die Pizza mit einem Zug.', 'Alle Zutaten der Pizza müssen auf die Linie.', 'Steckst du fest? Die Lampe verrät die Zugart.'] }
+      pulmat: ['Back die Pizza mit einem Zug.', 'Alle Zutaten der Pizza müssen auf die Linie.', 'Steckst du fest? Die Lampe verrät die Zugart.'] },
+    nl: { valikko: 'Menu', peli: 'Spel', muodot: 'Spelvormen', kieli: 'Taal', paavalikko: 'Beginmenu', takaisin: 'Terug',
+      nimet: { harjoitus: 'Leer de weegschaal kennen', vapaa: 'Vrij spelen', apinat: 'Hongerige apen', pulmat: 'Help Basso' },
+      harjoitus: ['Maak de torens even hoog.', 'De lamp gaat aan als de zet klopt.', 'Een toren beweegt altijd in zijn geheel.'],
+      vapaa: ['Er is altijd een zet – zoek hem!', 'Dobbelsteen te hoog? Breng torens terug naar de voorraad.'],
+      apinat: ['Breng de topping van de pizza in de kom.', 'Tik op de pizza – hij gaat de oven in.', 'Geen pizza? Dan eten de apen de stukken op!'],
+      pulmat: ['Maak de pizza met één zet.', 'Alle toppings van de pizza moeten op de lijn komen.', 'Vast? De lamp verraadt het soort zet.'] },
+    fr: { valikko: 'Menu', peli: 'Jeu', muodot: 'Modes de jeu', kieli: 'Langue', paavalikko: 'Menu principal', takaisin: 'Retour',
+      nimet: { harjoitus: 'Découvrir la balance', vapaa: 'Jeu libre', apinat: 'Singes affamés', pulmat: 'Aide Basso' },
+      harjoitus: ['Rends les tours de la même hauteur.', 'La lampe s’allume quand le coup est juste.', 'Une tour se déplace toujours entière.'],
+      vapaa: ['Il y a toujours un coup – trouve-le !', 'Dé trop grand ? Ramène des tours au stock.'],
+      apinat: ['Mets la garniture de la pizza dans son bol.', 'Touche la pizza – elle cuit au four.', 'Pas de pizza ? Les singes mangent les parts !'],
+      pulmat: ['Fais la pizza en un seul coup.', 'Toutes les garnitures de la pizza doivent arriver sur la ligne.', 'Bloqué ? La lampe indique le type de coup.'] },
+    es: { valikko: 'Menú', peli: 'Juego', muodot: 'Modos de juego', kieli: 'Idioma', paavalikko: 'Menú principal', takaisin: 'Atrás',
+      nimet: { harjoitus: 'Conoce la balanza', vapaa: 'Juego libre', apinat: 'Monos hambrientos', pulmat: 'Ayuda a Basso' },
+      harjoitus: ['Haz que las torres queden igual de altas.', 'La lámpara se enciende cuando el movimiento es correcto.', 'Una torre se mueve siempre entera.'],
+      vapaa: ['Siempre hay un movimiento: ¡encuéntralo!', '¿Dado demasiado grande? Lleva torres de vuelta al almacén.'],
+      apinat: ['Lleva el ingrediente de la pizza a su cuenco.', 'Toca la pizza: se hornea en el horno.', '¿No hay pizza? ¡Los monos se comen los trozos!'],
+      pulmat: ['Haz la pizza con un solo movimiento.', 'Todos los ingredientes de la pizza tienen que llegar a la línea.', '¿Atascado? La lámpara indica el tipo de movimiento.'] },
+    sk: { valikko: 'Ponuka', peli: 'Hra', muodot: 'Herné režimy', kieli: 'Jazyk', paavalikko: 'Hlavná ponuka', takaisin: 'Späť',
+      nimet: { harjoitus: 'Spoznaj opičiu váhu', vapaa: 'Voľná hra', apinat: 'Hladné opice', pulmat: 'Pomôž Bassovi' },
+      harjoitus: ['Urob veže rovnako vysoké.', 'Lampa sa rozsvieti, keď je ťah správny.', 'Veža sa vždy hýbe celá.'],
+      vapaa: ['Ťah existuje vždy – nájdi ho!', 'Priveľká kocka? Prenes veže späť do skladu.'],
+      apinat: ['Prines prísadu pizze do misky.', 'Ťukni na pizzu – pečie sa v peci.', 'Žiadna pizza? Opice zjedia kúsky!'],
+      pulmat: ['Urob pizzu jedným ťahom.', 'Všetky prísady pizze sa musia dostať na linku.', 'Zasekol si sa? Lampa prezradí druh ťahu.'] }
   };
-  var KIELET = [['fi', 'Suomi'], ['sv', 'Svenska'], ['en', 'English'], ['de', 'Deutsch']];
+  var KIELET = [['fi', 'Suomi'], ['sv', 'Svenska'], ['en', 'English'], ['de', 'Deutsch'], ['nl', 'Nederlands'], ['fr', 'Français'], ['es', 'Español'], ['sk', 'Slovenčina']];
 
 
   // ---------------------------------------------------------------- opastettu harjoitus (tutoriaali)
@@ -395,7 +495,35 @@
       kysy: 'Bring die Zutaten der Pizza mit einem Zug auf die Linie.', kysyMonta: 'Eine Pizza kann gebacken werden. Welche?', kysyKaikki: 'Back alle Pizzen mit einem Zug.', eiKaikki: 'Gleichgewicht, aber nicht alle Pizzen werden fertig.', pizzat: 'Back die Pizzen!', valitse: 'Stufe wählen', vihjeNappi: 'Tipp',
       eiPizza: 'Gleichgewicht, aber die Pizza wird nicht fertig. Schau auf die Pizza!', ok: 'Gleichgewicht!', pizza: 'Back die Pizza!', hyva: 'Super!',
       vinkki: ['Tipp: Grundzug.', 'Tipp: Summenzug.', 'Tipp: Differenzzug.', 'Tipp: Summe und Differenz zusammen.'],
-      hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Pizzameister!', 'Du hast alle Rätsel gelöst.'] }
+      hohto: 'Schau auf die leuchtenden Zutaten.', tasoValmis: 'Stufe {n} geschafft!', loppu: ['Pizzameister!', 'Du hast alle Rätsel gelöst.'] },
+    nl: { boksiTaynna: 'De doos is vol!', vihjeellaEi: 'Pizza klaar – met een hint krijg je geen stuk.', lukossa: 'Vul eerst de doos van het vorige niveau', nimi: 'Help Basso', taso: 'Niveau', aloita: 'Start', seuraava: 'Volgend niveau', alusta: 'Opnieuw beginnen',
+      intro: 'Basso heeft hulp nodig! Maak de pizza met één zet.',
+      kuvaus: ['Basiszet', 'Somzet', 'Pizza met twee toppings', 'Verschilzet', 'Twee toppings tegelijk', 'Grote pizza’s', 'Som en verschil samen', 'Meerdere pizza’s met één zet', 'Pas op voor de val!', 'Meesterniveau'],
+      kysy: 'Breng de toppings van de pizza met één zet naar de lijn.', kysyMonta: 'Eén pizza kan gemaakt worden. Welke?', kysyKaikki: 'Maak alle pizza’s met één zet.', eiKaikki: 'In evenwicht, maar niet alle pizza’s zijn klaar.', pizzat: 'Maak de pizza’s!', valitse: 'Kies een niveau', vihjeNappi: 'Hint',
+      eiPizza: 'In evenwicht, maar de pizza is niet klaar. Kijk naar de pizza!', ok: 'In evenwicht!', pizza: 'Maak de pizza!', hyva: 'Goed gedaan!',
+      vinkki: ['Hint: basiszet.', 'Hint: somzet.', 'Hint: verschilzet.', 'Hint: som en verschil samen.'],
+      hohto: 'Kijk naar de oplichtende toppings.', tasoValmis: 'Niveau {n} klaar!', loppu: ['Pizzameester!', 'Je hebt alle puzzels opgelost.'] },
+    fr: { boksiTaynna: 'La boîte est pleine !', vihjeellaEi: 'Pizza faite – avec un indice, pas de part.', lukossa: 'Remplis d’abord la boîte du niveau précédent', nimi: 'Aide Basso', taso: 'Niveau', aloita: 'Commencer', seuraava: 'Niveau suivant', alusta: 'Recommencer',
+      intro: 'Basso a besoin d’aide ! Fais la pizza en un seul coup.',
+      kuvaus: ['Coup de base', 'Coup somme', 'Pizza à deux garnitures', 'Coup différence', 'Deux garnitures d’un coup', 'Grandes pizzas', 'Somme et différence ensemble', 'Plusieurs pizzas en un coup', 'Attention au piège !', 'Niveau maître'],
+      kysy: 'Amène les garnitures de la pizza sur la ligne en un seul coup.', kysyMonta: 'Une pizza peut être faite. Laquelle ?', kysyKaikki: 'Fais toutes les pizzas en un seul coup.', eiKaikki: 'En équilibre, mais toutes les pizzas ne sont pas prêtes.', pizzat: 'Fais les pizzas !', valitse: 'Choisis un niveau', vihjeNappi: 'Indice',
+      eiPizza: 'En équilibre, mais la pizza n’est pas prête. Regarde la pizza !', ok: 'En équilibre !', pizza: 'Fais la pizza !', hyva: 'Bravo !',
+      vinkki: ['Indice : coup de base.', 'Indice : coup somme.', 'Indice : coup différence.', 'Indice : somme et différence ensemble.'],
+      hohto: 'Regarde les garnitures qui brillent.', tasoValmis: 'Niveau {n} terminé !', loppu: ['Maître de la pizza !', 'Tu as résolu toutes les énigmes.'] },
+    es: { boksiTaynna: '¡La caja está llena!', vihjeellaEi: 'Pizza lista: con una pista no se consigue trozo.', lukossa: 'Llena primero la caja del nivel anterior', nimi: 'Ayuda a Basso', taso: 'Nivel', aloita: 'Empezar', seuraava: 'Siguiente nivel', alusta: 'Empezar de nuevo',
+      intro: '¡Basso necesita ayuda! Haz la pizza con un solo movimiento.',
+      kuvaus: ['Movimiento básico', 'Movimiento suma', 'Pizza de dos ingredientes', 'Movimiento resta', 'Dos ingredientes a la vez', 'Pizzas grandes', 'Suma y resta juntas', 'Varias pizzas con un movimiento', '¡Cuidado con la trampa!', 'Nivel maestro'],
+      kysy: 'Lleva los ingredientes de la pizza a la línea con un solo movimiento.', kysyMonta: 'Se puede hacer una pizza. ¿Cuál?', kysyKaikki: 'Haz todas las pizzas con un solo movimiento.', eiKaikki: 'En equilibrio, pero no están listas todas las pizzas.', pizzat: '¡Haz las pizzas!', valitse: 'Elige un nivel', vihjeNappi: 'Pista',
+      eiPizza: 'En equilibrio, pero la pizza no está lista. ¡Mira la pizza!', ok: '¡En equilibrio!', pizza: '¡Haz la pizza!', hyva: '¡Muy bien!',
+      vinkki: ['Pista: movimiento básico.', 'Pista: movimiento suma.', 'Pista: movimiento resta.', 'Pista: suma y resta juntas.'],
+      hohto: 'Fíjate en los ingredientes que brillan.', tasoValmis: '¡Nivel {n} superado!', loppu: ['¡Maestro de la pizza!', 'Has resuelto todos los rompecabezas.'] },
+    sk: { boksiTaynna: 'Škatuľa je plná!', vihjeellaEi: 'Pizza hotová – s pomôckou kúsok nedostaneš.', lukossa: 'Najprv naplň škatuľu predchádzajúcej úrovne', nimi: 'Pomôž Bassovi', taso: 'Úroveň', aloita: 'Spustiť', seuraava: 'Ďalšia úroveň', alusta: 'Začať odznova',
+      intro: 'Basso potrebuje pomoc! Urob pizzu jedným ťahom.',
+      kuvaus: ['Základný ťah', 'Súčtový ťah', 'Pizza s dvoma prísadami', 'Rozdielový ťah', 'Dve prísady naraz', 'Veľké pizze', 'Súčet a rozdiel spolu', 'Viac pízz jedným ťahom', 'Pozor na pascu!', 'Majstrovská úroveň'],
+      kysy: 'Prines prísady pizze na linku jedným ťahom.', kysyMonta: 'Jednu pizzu sa dá urobiť. Ktorú?', kysyKaikki: 'Urob všetky pizze jedným ťahom.', eiKaikki: 'Rovnováha, ale nie všetky pizze sú hotové.', pizzat: 'Urob pizze!', valitse: 'Vyber si úroveň', vihjeNappi: 'Pomôcka',
+      eiPizza: 'Rovnováha, ale pizza nie je hotová. Pozri sa na pizzu!', ok: 'Rovnováha!', pizza: 'Urob pizzu!', hyva: 'Výborne!',
+      vinkki: ['Pomôcka: základný ťah.', 'Pomôcka: súčtový ťah.', 'Pomôcka: rozdielový ťah.', 'Pomôcka: súčet a rozdiel spolu.'],
+      hohto: 'Pozri sa na svietiace prísady.', tasoValmis: 'Úroveň {n} hotová!', loppu: ['Majster pizze!', 'Vyriešil si všetky hlavolamy.'] }
   };
 
   // ---------------------------------------------------------------- Auta Bassoa: pulmat
