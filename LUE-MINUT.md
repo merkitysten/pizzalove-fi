@@ -17,6 +17,7 @@ Taustalla: `../Hankehakemukset/pizzalove_fi_TOIMEKSIANTO.md`.
 | `tyokalut/joulukalenteri.py` | joulukalenterin 24 luukkua ja 28 pulmaa → `julkinen/joulu/pulmat.json` |
 | `julkinen/joulu/` | joulukalenterisivu (pelilauta taustana, luukut sen päällä) |
 | `docs/` | valmis sivusto, jonka GitHub Pages julkaisee. **Älä muokkaa käsin.** |
+| `julkinen/play/` | peli. **Lähde on `../pizzaparty/`** — älä muokkaa täällä, ks. alla. |
 
 ## Muutoksen tekeminen
 
@@ -35,6 +36,29 @@ Pelin päivitys: tee muutos `../pizzaparty/`-repossa, kopioi tiedostot
 2. Lisää `xx` listaan `KIELET` tiedoston `rakenna.py` alussa.
 3. Peli: lisää kielen lohko `../pizzaparty/kielet.js`:ään (ohje tiedoston alussa).
 4. `python3 rakenna.py`. Kielivalikko päivittyy itsestään.
+
+## Peli tulee pizzapartysta (11.11.2026)
+
+`julkinen/play/` on **kopio** `../pizzaparty/`:sta, ja kopiointi tehdään
+työkalulla eikä käsin:
+
+```
+python3 tyokalut/peli-kopio.py            # tilanne, ei kirjoita mitään
+python3 tyokalut/peli-kopio.py --kopioi   # kopioi sen mikä on turvallista
+```
+
+⚠️ **Tee pelimuutokset pizzapartyssa.** Täällä tehty muutos katoaa seuraavassa
+kopioinnissa — tai estää sen.
+
+📐 **Miksi työkalu eikä `cp`:** 11.11.2026 mitattuna 18 tiedostoa oli
+ajautunut erilleen, ja useimmat MOLEMPIIN suuntiin. Kumpi tahansa suunta
+pelkkänä kopiointina olisi pyyhkinyt toisen puolen työn ilman yhtäkään
+virhettä. Työkalu kieltäytyy sellaisesta tiedostosta ja kertoo nimeltä, mitkä
+on sulautettava pizzapartyyn ensin — ja montako riviä kummallakin puolella on.
+
+`?v=`-leimat ovat sivuston omaa tietoa eivätkä tule lähteestä: työkalu laskee
+ne **sisällön tiivisteestä** kopioinnin jälkeen. Leimaa ei siis enää nosteta
+käsin, eikä «leima jäi nostamatta» ole enää mahdollinen vika.
 
 ## Moninpeli
 
