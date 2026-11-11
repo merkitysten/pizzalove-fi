@@ -43,6 +43,16 @@ varainhankinta.merkitysten.fi/pizzaparty/ (Domainhotelli). Peli kutsuu sitä
 osoitteesta, joka on `pizzaparty/yhteys.js`:n rivillä `HUONE_OSOITE`.
 `huone.php` sallii kutsut pizzalove.fi:stä ja *.github.io:sta (CORS).
 ⚠️ Uusi `huone.php` on ladattava palvelimelle, ennen kuin moninpeli toimii pizzalove.fi:ssä.
+Lähde on **`../pizzaparty/huone.php`** — vienti SSH:lla (`../SSH-VIENTI-OHJE.md`).
+
+⚠️ **`huone.php`:tä EI ole tässä reposssa (poistettu 11.11.2026).** Täällä oli
+kopio, joka oli ajautunut 53 riviä oikeasta jälkeen. Se ei tehnyt mitään —
+Pages ei aja PHP:tä, joten se vain tarjoiltiin raakana lähdekoodina — mutta
+se riitti pettämään: muutos todennettiin paikallisesti sitä vasten ja
+näytti vihreältä, vaikka tuotannon palvelin ajaa toista tiedostoa.
+Sama ratkaisu kuin `basso-huone.php`:lla, jota täällä ei ole koskaan ollut.
+Moninpelin paikallinen testaus tehdään **pizzaparty-kansiosta**, jossa
+oikea `huone.php` on oman `party.html`:nsä vieressä.
 
 ## Käyttöönotto (kerran)
 
