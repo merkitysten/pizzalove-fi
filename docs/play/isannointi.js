@@ -288,9 +288,17 @@ async function isannointiPaataPeli(h) {
   return j.tila;
 }
 
-async function isannointiUudelleen(h) {
-  const j = await api('uudelleen', isannointiTunnus(h));
+/* `asetukset` vapaaehtoinen: ilman sitä vanhat jäävät voimaan.
+ * ⚠️ `h.peli` päivitetään PALVELIMEN vahvistamasta tilasta eikä siitä mitä
+ * lähetettiin — jako ja pisteytys lukevat `h.peli`ä, ja jos se erkanisi
+ * huoneen omista asetuksista, isäntä jakaisi eri sääntöjen mukaan kuin
+ * millä palvelin tarkistaa vastaukset. */
+async function isannointiUudelleen(h, asetukset) {
+  const runko = isannointiTunnus(h);
+  if (asetukset) runko.asetukset = asetukset;
+  const j = await api('uudelleen', runko);
   h.tila = j.tila;
+  h.peli = j.tila.asetukset;
   h.kierros = null;
   h.kaytetytPizzat = [];
   h.paatetaan = false;

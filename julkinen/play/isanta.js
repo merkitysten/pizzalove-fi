@@ -78,8 +78,20 @@ function merkitseValinta(ryhmaId, arvo) {
   });
 }
 
+/* ⚠️ ASETUSNÄKYMÄLLÄ ON KAKSI TEHTÄVÄÄ (3.11.2026). Ilman huonetta se luo
+ * uuden pelin; elossa olevan huoneen kanssa se aloittaa SAMAN huoneen
+ * uudelleen uusilla asetuksilla — koodi ja oppilaat säilyvät. Tila luetaan
+ * `isanta.koodi`sta eikä omasta lipusta: lippu voisi ajautua erilleen siitä
+ * onko huonetta oikeasti olemassa, ja silloin «Aloita uudelleen» yrittäisi
+ * huonetta jota ei ole. */
+function huoneElossa() { return !!isanta.koodi; }
+
 function piirraAsetukset() {
   const s = isanta.asetukset;
+  const elossa = huoneElossa();
+  $('luoPeli').textContent = t(elossa ? 'isanta.aloitaUudelleen' : 'isanta.luo');
+  $('valikkoon').hidden = elossa;
+  $('peruAsetukset').hidden = !elossa;
   merkitseValinta('valKierroksia', String(s.kierroksia));
   merkitseValinta('valTapa', s.vaikea ? 'vaikea' : 'helppo');
   $('aikaArvo').textContent = t('aika.sekuntia', { n: s.aikaMs / 1000 });
@@ -116,6 +128,7 @@ function unohdaPeli() {
 
 function peliKatosi() {
   unohdaPeli();
+  piirraAsetukset();
   naytaNakyma('nAsetukset');
   const el = $('asetusVirhe');
   el.textContent = t('isanta.peliPoistui');
@@ -172,17 +185,32 @@ async function luoPeli() {
   nappi.disabled = true;
   $('asetusVirhe').hidden = true;
   try {
-    await isannointiLuo(isanta, isanta.asetukset);
-    tallennaIstunto();
-    naytaAula();
-    aloitaKysely();
+    if (huoneElossa()) {
+      /* Sama huone, samat oppilaat, uudet säännöt. Kysely on jo käynnissä. */
+      await isannointiUudelleen(isanta, isanta.asetukset);
+      tallennaIstunto();
+      naytaAula();
+    } else {
+      await isannointiLuo(isanta, isanta.asetukset);
+      tallennaIstunto();
+      naytaAula();
+      aloitaKysely();
+    }
   } catch (e) {
+    if (e.virhe === 'eiHuonetta') { peliKatosi(); return; }
     const el = $('asetusVirhe');
     el.textContent = virheTeksti(e);
     el.hidden = false;
   } finally {
     nappi.disabled = false;
   }
+}
+
+/* Loppuruudusta asetuksiin: huone jää eloon, joten paluu on mahdollinen. */
+function avaaAsetukset() {
+  $('asetusVirhe').hidden = true;
+  piirraAsetukset();
+  naytaNakyma('nAsetukset');
 }
 
 /* ---------- 2 · aula ---------- */
@@ -425,6 +453,7 @@ async function lopetaPeli() {
   const poistettava = tunnus();
   unohdaPeli();
   $('asetusVirhe').hidden = true;
+  piirraAsetukset();
   naytaNakyma('nAsetukset');
   await isannointiPoista(poistettava);
 }
@@ -492,6 +521,8 @@ function kytke() {
   $('lopetaKierros').addEventListener('click', paataKierros);
   $('seuraava').addEventListener('click', seuraavaTaiLoppu);
   $('uudelleen').addEventListener('click', pelaaUudelleen);
+  $('vaihdaAsetukset').addEventListener('click', avaaAsetukset);
+  $('peruAsetukset').addEventListener('click', function () { naytaNakyma('nLoppu'); });
   [].forEach.call(document.querySelectorAll('.isanta-lopeta'), function (b) {
     isannointiVarmistaEnsin(b, lopetaPeli);
   });
@@ -509,7 +540,7 @@ function isantaVahti() {
     'kierrosNro', 'vastanneet', 'kierrosKoodi', 'lahtolaskenta', 'poyta', 'kPizza', 'kKortit',
     'kello', 'kelloPalkki', 'aikaJaljella', 'lopetaKierros', 'tulosOtsikko', 'esimerkki',
     'kierrosRivit', 'kokonaisRivit', 'seuraava', 'podium', 'loppuRivit', 'uudelleen',
-    'lopetaPeli', 'valikkoon', 'yhteysVirhe',
+    'lopetaPeli', 'valikkoon', 'yhteysVirhe', 'vaihdaAsetukset', 'peruAsetukset',
   ]).forEach(function (id) { if (!$(id)) puuttuu.push('#' + id); });
   ['pizzapakka', 'taytepakka', 'sekoita', 'etsiRatkaisu', 'ratkaisuTekstina', 'laske', 'osuuko',
    'api', 'palvelinAika', 'virheTeksti', 'norsuQrSvg', 'isannointiPiirraQr', 'isannointiKirjoitaOsoite', 'isannointiVarmistaEnsin', 'valikkoAlkuun',

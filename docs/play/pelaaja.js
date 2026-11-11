@@ -59,6 +59,7 @@ const verkkopeli = {
   virheita: 0,        // peräkkäiset epäonnistuneet kyselyt
   tilanne: '',        // viimeksi näytetty odotusteksti (palautetaan yhteyden palattua)
   kierrosTeksti: '',  // «Kierros 3 / 10» — ylapalkkiin ja odotusnäkymään
+  saannot: '',        // viimeksi nähdyt säännöt (tunniste, ei teksti)
   laskuri: null,
   kello: null,
   /* Pelaava isäntä: { paivita(), unohda() } kun TÄMÄ laite isännöi, muuten
@@ -199,6 +200,7 @@ function verkkoOdotaNakyma(tilanne, aula) {
   verkkoEl('verkkoTilanne').textContent = verkkopeli.tilanne;
   verkkoEl('verkkoTulos').textContent = '';
   verkkoEl('verkkoUusi').hidden = true;
+  verkkoEl('verkkoSaannot').hidden = true;
   /* Pelaajan poistumistie jokaisessa odotusnäkymässä. Isäntä ei «poistu»:
    * ilman isäntää peli jäisi kaikilta jumiin, joten hänellä on Lopeta peli. */
   const poistu = verkkoEl('verkkoPoistu');
@@ -214,6 +216,46 @@ function verkkoOdotaNakyma(tilanne, aula) {
   verkkoEl('verkkoPeite').querySelector('.verkko-laatikko').classList.remove('nayta-taulu');
   verkkoPeite('odota');
   if (verkkopeli.isanta) verkkopeli.isanta.paivita();
+}
+
+/* ---------- voimassa olevat säännöt ----------
+ * Opettajan palaute 3.11.2026: hän vaihtoi vaikeamman pelin, eikä oppilaan
+ * ruudulla näkynyt siitä mitään. Rivi on aulassa AINA näkyvissä eikä vain
+ * muutoksen hetkellä: ilman lähtötasoa «säännöt vaihtuivat» olisi ilmoitus
+ * jota vasten ei ole mitään verrattavaa, eikä oppilas ole ennenkään nähnyt
+ * millä säännöillä pelataan.
+ *
+ * Sanat ovat samat kuin isännän asetusruudussa (`as.tapa`, `tapa.*`), jotta
+ * opettajan «vaihdoin vaikeamman» ja oppilaan ruutu puhuvat samaa kieltä. */
+const VERKKO_MERKIT = [['kerto', '×'], ['jako', '÷'], ['potenssi', 'x^y'],
+                       ['log', 'log'], ['sulut', '( )']];
+
+function verkkoSaantoTunnus(a) {
+  if (!a) return '';
+  return (a.vaikea ? 'v' : 'h') + ':' + VERKKO_MERKIT
+    .filter(function (m) { return a.sallitut && a.sallitut[m[0]]; })
+    .map(function (m) { return m[0]; }).join(',');
+}
+
+function verkkoSaantoTeksti(a) {
+  const merkit = VERKKO_MERKIT
+    .filter(function (m) { return a.sallitut && a.sallitut[m[0]]; })
+    .map(function (m) { return m[1]; });
+  return t('as.tapa') + ': ' + t(a.vaikea ? 'tapa.vaikea' : 'tapa.helppo') +
+    (merkit.length ? '  ·  + − ' + merkit.join(' ') : '  ·  + −');
+}
+
+/* Palauttaa true jos säännöt VAIHTUIVAT (eivät siis näy ensi kertaa). */
+function verkkoPiirraSaannot(asetukset) {
+  const el = verkkoEl('verkkoSaannot');
+  if (!el || !asetukset) return false;
+  const tunnus = verkkoSaantoTunnus(asetukset);
+  const vaihtui = !!verkkopeli.saannot && verkkopeli.saannot !== tunnus;
+  verkkopeli.saannot = tunnus;
+  el.textContent = verkkoSaantoTeksti(asetukset);
+  el.classList.toggle('verkko-saannot--uusi', vaihtui);
+  el.hidden = false;
+  return vaihtui;
 }
 
 /* Oma sija: 1 + montako on ohittanut. Tasapisteet jakavat sijan. */
@@ -586,13 +628,19 @@ function verkkoKasitteleTila(s) {
   /* Peite piirretään vain kun näytettävä muuttui: kerran sekunnissa
    * uudelleen rakennettu tulos nykisi. */
   const avain = s.vaihe + ':' + (s.tulos ? s.tulos.n : '') + ':' +
-    (s.oma ? s.oma.pisteet : '') + ':' + s.pelaajat.length;
+    (s.oma ? s.oma.pisteet : '') + ':' + s.pelaajat.length + ':' +
+    verkkoSaantoTunnus(s.asetukset);
   if (avain === verkkopeli.naytetty) return;
   verkkopeli.naytetty = avain;
   if (s.vaihe === 'aula') {
     verkkopeli.n = 0;
     verkkoLopetaPaikallisesti();
     verkkoOdotaNakyma(t('verkko.odota'), true);
+    /* Piirretään vasta näkymän jälkeen: `verkkoOdotaNakyma` piilottaa rivin. */
+    if (verkkoPiirraSaannot(s.asetukset)) {
+      verkkopeli.tilanne = t('verkko.saannotVaihtui');
+      verkkoEl('verkkoTilanne').textContent = verkkopeli.tilanne;
+    }
   } else if (s.vaihe === 'tulos') {
     verkkoTulosNakyma(s);
   } else if (s.vaihe === 'loppu') {

@@ -11,7 +11,7 @@
      ⚠️ peli.css ladataan ENSIN: tokenit, fontit ja korttien kuvasäännöt
      tulevat sieltä. isanta.css koskee vain tätä sivua. -->
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="peli.css?v=20261104a">
+<link rel="stylesheet" href="peli.css?v=20261111a">
 <link rel="stylesheet" href="isanta.css?v=20260917b">
 </head>
 <body>
@@ -57,6 +57,7 @@
   <!-- Kulmassa eikä virrassa: näkymä on 1280 × 720:ssa jo 721 px korkea, ja
        napin lisääminen virtaan vei Luo peli -rivin alta tilaa (784 px, mitattu). -->
   <button type="button" id="valikkoon" class="isanta-toissijainen isanta-kulma" data-t="valikko.alkuun"></button>
+  <button type="button" id="peruAsetukset" class="isanta-toissijainen isanta-kulma" data-t="isanta.peruuta" hidden></button>
   <p id="asetusVirhe" class="isanta-virhe" hidden></p>
 </section>
 
@@ -126,6 +127,10 @@
   <ol id="loppuRivit" class="isanta-rivit isanta-kokonais"></ol>
   <div class="isanta-napit">
     <button type="button" id="uudelleen" class="isanta-iso" data-t="isanta.uudelleen"></button>
+    <!-- Opettajan palaute 3.11.2026: kymmenen kierroksen jälkeen vaikeamman
+         pelin vaihtaminen ei onnistunut. Tästä pääsee asetuksiin niin, että
+         huone, koodi ja oppilaat säilyvät. -->
+    <button type="button" id="vaihdaAsetukset" class="isanta-toissijainen" data-t="isanta.vaihdaAsetukset"></button>
     <button type="button" id="lopetaPeli" class="isanta-toissijainen isanta-lopeta" data-t="isanta.lopetaPeli"></button>
   </div>
 </section>
@@ -133,16 +138,16 @@
 <p id="yhteysVirhe" class="isanta-yhteys" role="status" hidden></p>
 </main>
 
-<script src="kielet.js?v=20261020h"></script>
+<script src="kielet.js?v=20261111a"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="ratkoja.js?v=20261009a"></script>
 <script src="laskin.js?v=20260909c"></script>
 <script src="kierros.js?v=20261019a"></script>
 <script src="yhteys.js?v=20261020a"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="isannointi.js?v=20261020a"></script>
+<script src="isannointi.js?v=20261111a"></script>
 <!-- valikko.js ENNEN isanta.js:ää: isanta.js käynnistyy heti ja sen vahti kysyy valikkoAlkuun(). -->
 <script src="valikko.js?v=20261020h"></script>
-<script src="isanta.js?v=20260918a"></script>
+<script src="isanta.js?v=20261111a"></script>
 </body>
 </html>

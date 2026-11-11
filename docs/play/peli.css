@@ -1276,6 +1276,14 @@ body.verkkopeli #pelaajarivi{display:none}
  * kaksi erikseen oikeaa arvoa, 22 px tyhjaa). */
 .verkko-ylapalkki{width:100%;margin:0}
 .verkko-tilanne{margin:0;color:var(--himmea);text-align:center}
+/* Voimassa olevat säännöt aulassa (3.11.2026). Himmeämpi kuin tilannerivi:
+   se on taustatieto, ei ohje — paitsi kun se juuri vaihtui, jolloin se saa
+   korostuksen ja oppilas huomaa muutoksen ilman että mitään vilkkuu. */
+.verkko-saannot{margin:6px 0 0;text-align:center;font-size:13px;line-height:1.35;
+  color:var(--himmea);border:1px solid var(--line2, #D6C7AF);border-radius:9px;
+  padding:6px 10px;align-self:center}
+.verkko-saannot--uusi{color:var(--ink, #1A1A1A);font-weight:700;
+  border-color:var(--orange, #EE7203);background:var(--warm, #FFF3E9)}
 .verkko-tulos{display:grid;gap:4px;justify-items:center;text-align:center}
 .verkko-merkki{font-size:44px;font-weight:700;line-height:1}
 /* Toiminnallinen väri (oikein / väärin), ei brändiväri. */

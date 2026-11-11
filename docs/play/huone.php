@@ -630,8 +630,20 @@ if ($toiminto === 'paata') {
 }
 
 /* --- uudelleen: samat pelaajat ja koodi, pisteet nollaan --- */
+/* --- uudelleen: sama huone, samat pelaajat, uusi peli ---
+ * ⚠️ ASETUKSET SAA VAIHTAA TÄSSÄ (3.11.2026). Opettajan palaute: kymmenen
+ * kierroksen jälkeen vaikeamman pelin vaihtaminen ei onnistunut, koska
+ * `asetukset` kirjoitettiin VAIN `luo`-toiminnossa — ainoa reitti oli
+ * poistaa huone, jolloin oppilaat putoavat ja koodi vaihtuu.
+ * `asetukset` on vapaaehtoinen: ilman sitä vanhat jäävät voimaan, eli
+ * «Pelaa uudelleen» käyttäytyy kuten ennenkin. `siistiAsetukset` tarkistaa
+ * jokaisen kentän, ja `isannanToiminto` vaatii isännän avaimen — oppilas ei
+ * voi vaihtaa sääntöjä kesken pelin. */
 if ($toiminto === 'uudelleen') {
-    $tulos = isannanToiminto($pyynto, function ($huone) {
+    $uudetAsetukset = isset($pyynto['asetukset']) && is_array($pyynto['asetukset'])
+        ? siistiAsetukset($pyynto['asetukset']) : null;
+    $tulos = isannanToiminto($pyynto, function ($huone) use ($uudetAsetukset) {
+        if ($uudetAsetukset !== null) $huone['asetukset'] = $uudetAsetukset;
         $huone['vaihe'] = 'aula';
         $huone['kierros'] = null;
         $huone['vastaukset'] = array();

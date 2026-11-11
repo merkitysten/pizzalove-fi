@@ -54,7 +54,7 @@
      näkyi hetken tyhjä pohja ja tyhjä ympyrä pallilla (mitattu 9.10.2026). -->
 <link rel="preload" href="kuvat/kuosi.svg?v=20261006a" as="image">
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
-<link rel="stylesheet" href="peli.css?v=20261104a">
+<link rel="stylesheet" href="peli.css?v=20261111a">
 <link rel="stylesheet" href="opetus.css?v=20261020b">
 <link rel="stylesheet" href="yhteinen.css?v=20261104a">
 <link rel="stylesheet" href="pelivalinta.css?v=20261020a">
@@ -516,6 +516,10 @@
       </div>
       <p id="verkkoKierrosRivi" class="verkko-kierros"></p>
       <p id="verkkoTilanne" class="verkko-tilanne"></p>
+      <!-- Voimassa olevat säännöt aulassa. Oppilas ei ole ennen nähnyt millä
+           säännöillä pelataan, vaikka tarkistus on niiden varassa — ja kun
+           opettaja vaihtaa ne kesken pelin, muutoksen on näyttävä jossain. -->
+      <p id="verkkoSaannot" class="verkko-saannot" hidden></p>
       <div id="verkkoTulos" class="verkko-tulos"></div>
       <ol id="verkkoTaulu" class="verkko-taulu" data-ta="verkko.pistetaulu" hidden></ol>
       <button id="verkkoUusi" type="button" class="toinen-nappi" data-t="verkko.uusi" hidden></button>
@@ -754,7 +758,7 @@
   </div>
 </div>
 
-<script src="kielet.js?v=20261020h"></script>
+<script src="kielet.js?v=20261111a"></script>
 <script src="kortit.js?v=20260912b"></script>
 <script src="vieteri.js?v=20261019a"></script>
 <script src="qrluku.js?v=20261020b"></script>
@@ -767,10 +771,10 @@
 <script src="kierros.js?v=20261019a"></script>
 <script src="yhteys.js?v=20261020a"></script>
 <script src="qr.js?v=20260916a"></script>
-<script src="isannointi.js?v=20261020a"></script>
+<script src="isannointi.js?v=20261111a"></script>
 <script src="peli.js?v=20261020g"></script>
-<script src="pelaaja.js?v=20261020d"></script>
-<script src="pelaavaisanta.js?v=20261020a"></script>
+<script src="pelaaja.js?v=20261111a"></script>
+<script src="pelaavaisanta.js?v=20261111a"></script>
 <script src="valikko.js?v=20261020h"></script>
 <!-- ⚠️ OPETUS VIIMEISENA JA MOLEMMILLE SIVUILLE. Se lukee `tila`a,
      `aloitaPeli`a ja (Bassossa) `basso`a, joten se on ladattava niiden
