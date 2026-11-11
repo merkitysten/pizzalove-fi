@@ -105,9 +105,47 @@ function verkkoIsantaAsetusMuuttui() {
   verkkoIsantaPiirraLomake();
 }
 
+/* ⚠️ LOMAKKEELLA ON KAKSI TEHTÄVÄÄ (11.11.2026), kuten isäntänäytöllä.
+ * Ilman huonetta se luo pelin; elossa olevan huoneen kanssa se aloittaa
+ * SAMAN huoneen uudelleen uusilla asetuksilla — koodi ja pelaajat säilyvät.
+ * Tila luetaan `h.koodi`sta eikä omasta lipusta: lippu voisi ajautua
+ * erilleen siitä onko huonetta oikeasti olemassa. */
+function verkkoIsantaMuutosTila() { return !!verkkoIsanta.koodi; }
+
+function verkkoIsantaLomakeTila() {
+  const muutos = verkkoIsantaMuutosTila();
+  verkkoEl('verkkoLuoNimi').hidden = muutos;
+  verkkoEl('verkkoLuoVariRivi').hidden = muutos;
+  verkkoEl('verkkoLuoNappi').textContent = t(muutos ? 'isanta.aloitaUudelleen' : 'isanta.luo');
+  verkkoEl('verkkoLuoTakaisin').textContent = t(muutos ? 'isanta.peruuta' : 'as.takaisin');
+}
+
+/* Loppuruudusta asetuksiin. ⚠️ Lähtöarvot PALVELIMEN vahvistamista
+ * asetuksista (`h.peli`) eikä laitteen muistista: muistissa voi olla toisen
+ * pelin asetukset, ja silloin lomake näyttäisi eri säännöt kuin ne joilla
+ * juuri pelattiin. */
+function verkkoIsantaMuutaLomake() {
+  const h = verkkoIsanta;
+  h.asetukset = isannointiLataaAsetukset();
+  if (h.peli) {
+    h.asetukset.kierroksia = h.peli.kierroksia;
+    h.asetukset.aikaMs = h.peli.aikaMs;
+    h.asetukset.odotaKaikkia = h.peli.odotaKaikkia;
+    h.asetukset.vaikea = h.peli.vaikea;
+    Object.keys(h.asetukset.sallitut).forEach(function (k) {
+      h.asetukset.sallitut[k] = !!h.peli.sallitut[k];
+    });
+  }
+  verkkoIsantaPiirraLomake();
+  verkkoIsantaLomakeTila();
+  verkkoEl('verkkoLuoVirhe').hidden = true;
+  verkkoPeite('luo');
+}
+
 function verkkoIsantaLomake() {
   verkkoIsanta.asetukset = isannointiLataaAsetukset();
   verkkoIsantaPiirraLomake();
+  verkkoIsantaLomakeTila();
   /* Liittymislomakkeelle kirjoitettu nimi kulkee mukana. */
   if (!verkkoEl('verkkoLuoNimi').value) verkkoEl('verkkoLuoNimi').value = verkkoEl('verkkoNimi').value;
   verkkoEl('verkkoLuoVirhe').hidden = true;
@@ -120,7 +158,23 @@ async function verkkoIsantaLuo(e) {
   const h = verkkoIsanta;
   const nappi = verkkoEl('verkkoLuoNappi');
   const virhe = verkkoEl('verkkoLuoVirhe');
-  if (h.koodi) return;
+  if (h.koodi) {
+    /* Sama huone, samat pelaajat, uudet säännöt. */
+    nappi.disabled = true;
+    virhe.hidden = true;
+    try {
+      await isannointiUudelleen(h, h.asetukset);
+      verkkoIsantaTallenna();
+      verkkoPeite('odota');
+      verkkoAjastaKysely(0);
+    } catch (err) {
+      virhe.textContent = virheTeksti(err);
+      virhe.hidden = false;
+    } finally {
+      nappi.disabled = false;
+    }
+    return;
+  }
   nappi.disabled = true;
   virhe.hidden = true;
   let luotu = false;
@@ -231,6 +285,13 @@ function verkkoIsantaPaivita() {
     harjNappi.hidden = !harjVaihe;
     if (harjVaihe) harjNappi.textContent = t(aulassa ? 'harjoitus.aloita' : 'harjoitus.viela');
     harjNappi.disabled = h.kesken;
+  }
+  /* Asetusnappi vain loppuruudussa — harjoitusnapin paikalla, joka on
+     silloin piilossa, joten palkin korkeus ei muutu. */
+  const asNappi = verkkoEl('verkkoIsantaAsetukset');
+  if (asNappi) {
+    asNappi.hidden = s.vaihe !== 'loppu';
+    asNappi.disabled = h.kesken;
   }
   const lopetaKierros = verkkoEl('verkkoIsantaLopetaKierros');
   const eiKierrosta = s.vaihe !== 'kierros';
@@ -401,7 +462,12 @@ async function verkkoIsantaJatkaIstuntoa() {
 }
 
 function verkkoIsantaKytke() {
-  verkkoEl('verkkoLuoTakaisin').addEventListener('click', valikkoAlkuun);
+  verkkoEl('verkkoLuoTakaisin').addEventListener('click', function () {
+    /* Asetusten muutoksessa huone on elossa: paluu peliin, ei valikkoon. */
+    if (verkkoIsantaMuutosTila()) { verkkoPeite('odota'); verkkoAjastaKysely(0); return; }
+    valikkoAlkuun();
+  });
+  verkkoEl('verkkoIsantaAsetukset').addEventListener('click', verkkoIsantaMuutaLomake);
   verkkoEl('verkkoLuo').addEventListener('submit', verkkoIsantaLuo);
   [].forEach.call(verkkoEl('verkkoLuoKierroksia').querySelectorAll('button[data-arvo]'), function (b) {
     b.addEventListener('click', function () {
@@ -460,7 +526,7 @@ function verkkoIsantaVahti() {
   ['verkkoIsantaQr', 'verkkoLuo', 'verkkoLuoNimi', 'verkkoLuoKierroksia', 'verkkoLuoAikaMiinus',
    'verkkoLuoAika', 'verkkoLuoAikaPlus', 'verkkoLuoOdota', 'verkkoLuoTapa', 'verkkoLuoLuvat',
    'verkkoLuoNappi', 'verkkoLuoVirhe', 'verkkoLuoTakaisin', 'verkkoIsanta', 'verkkoIsantaKoodi',
-   'verkkoIsantaOsoite', 'verkkoIsantaPelaajat', 'verkkoIsantaJatka', 'verkkoIsantaVirhe', 'verkkoIsantaLopetaKierros', 'verkkoIsantaHarjoitus', 'verkkoIsantaNapit',
+   'verkkoIsantaOsoite', 'verkkoIsantaPelaajat', 'verkkoIsantaJatka', 'verkkoIsantaVirhe', 'verkkoIsantaLopetaKierros', 'verkkoIsantaHarjoitus', 'verkkoIsantaAsetukset', 'verkkoLuoVariRivi', 'verkkoIsantaNapit',
    'verkkoIsantaLopeta'].forEach(function (id) { if (!verkkoEl(id)) puuttuu.push('#' + id); });
   ['isannointiUusi', 'isannointiLuo', 'isannointiJatka', 'isannointiAloitaKierros', 'isannointiPitaaPaattaa',
    'isannointiPaataKierros', 'isannointiPaataPeli', 'isannointiUudelleen', 'isannointiPoista',

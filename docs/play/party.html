@@ -440,7 +440,7 @@
     <form id="verkkoLuo" class="verkko-osa" hidden>
       <input id="verkkoLuoNimi" class="verkko-kentta" maxlength="16" autocomplete="off"
              data-tp="verkko.nimi" data-ta="verkko.nimi">
-      <div class="verkko-asetus">
+      <div class="verkko-asetus" id="verkkoLuoVariRivi">
         <span data-t="bverkko.vari"></span>
         <div id="verkkoLuoVarit" class="hahmo-varit"></div>
       </div>
@@ -564,6 +564,11 @@
            ⚠️ Partyn verkkopelissä tämä on ISÄNNÄN PALKISSA eikä tulosruudussa
            (toisin kuin Bassossa): Party ei käytä tulosruutua verkossa. -->
       <button id="verkkoIsantaHarjoitus" type="button" class="toinen-nappi" hidden></button>
+      <!-- Vain loppuruudussa, harjoitusnapin paikalla (se on silloin piilossa,
+           joten palkin korkeus ei muutu). Opettajan palaute 3.11.2026: pelin
+           jälkeen vaikeamman vaihtaminen ei onnistunut ilman huoneen
+           poistamista — myös puhelimesta isännöivä tarvitsee tämän. -->
+      <button id="verkkoIsantaAsetukset" type="button" class="toinen-nappi" data-t="isanta.vaihdaAsetukset" hidden></button>
       <button id="verkkoIsantaLopetaKierros" type="button" class="toinen-nappi varattu" data-t="isanta.lopetaKierros"></button>
       <button id="verkkoIsantaLopeta" type="button" class="toinen-nappi" data-t="isanta.lopetaPeli"></button>
     </div>
