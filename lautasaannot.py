@@ -197,6 +197,22 @@ def palalasku(lasku):
     return '<div class="palat">%s</div>' % ''.join(osat)
 
 
+# Pelin omat taytevarit (julkinen/play/apinavaaka/apinavaaka.js, VARIT).
+TAYTEVARIT = ['#090A0D', '#E62448', '#FFDF00', '#1072B9', '#EF7925',
+              '#824292', '#16A74F', '#7F3B1E', '#E473AA', '#6AC0B2']
+
+
+def torni(n):
+    """Taytetorni kuten verkkopelin varastossa: n samanvarista nappulaa
+    pinossa ja paalla taytteen tarra. 🔵 Marko 13.11.2026: esimerkissa
+    linjastolla on TORNEJA, ei paloja — kuvan ja tekstin on tasmattava."""
+    vari = TAYTEVARIT[n - 1]
+    return ('<span class="torni-kuva"><span class="tarra" style="background:%s">'
+            '<img src="julkinen/play/apinavaaka/tayte/%d.webp" alt=""></span>%s'
+            '<span class="torni-luku">%d</span></span>'
+            % (vari, n, '<i style="background:%s"></i>' % vari * n, n))
+
+
 def kuva(nimi, luokka=''):
     return '<img class="%s" src="paperi/lauta/%s.webp" alt="">' % (luokka, nimi)
 
@@ -317,9 +333,12 @@ PAA = '''<!doctype html>
   .vinkki {{ background: {musta}; color: #fff; border-radius: 1.2mm; padding: 2mm 3mm; margin-top: 2mm }}
   .vinkki h3 {{ color: {oranssi}; margin: 0 0 .6mm }}
   .vinkki p {{ margin: 0 }}
-  .vaaka {{ border: .45mm dashed {musta}; display: grid; grid-template-columns: 44mm 1fr 30mm; column-gap: 5mm;
+  .vaaka {{ border: .45mm dashed {musta}; display: grid; grid-template-columns: 54mm 1fr 28mm; column-gap: 5mm; align-items: center;
             align-items: start }}
-  .vaaka-apina {{ width: 100%; margin-top: 4mm }}
+  .vaaka-peli {{ position: relative }}
+  .vaaka-apina {{ width: 100%; margin-top: 1mm }}
+  /* noppa vasempaan ylakulmaan: pelissa nopan luku = punnukset vasemmalla */
+  .vaaka-noppa {{ position: absolute; left: 1mm; top: 2mm; width: 8mm }}
   .vaaka {{ font-size: 8.4pt; line-height: 1.32; padding-top: 2.6mm; padding-bottom: 2mm }}
   .vaaka ol.lista li {{ margin-bottom: .3mm }}
   .vaaka-linkki {{ padding-top: 21mm }}
@@ -331,6 +350,21 @@ PAA = '''<!doctype html>
 
   /* sivu 3 */
   .esim-pizzat {{ display: flex; gap: 6mm; margin: 1mm 0 1.6mm }}
+  .linjasto-esim {{ background: #D6E9F0; border-radius: 1.6mm; padding: 1.4mm 2mm 1.6mm; margin: 1.4mm 0 1.8mm }}
+  .linjasto-nimi {{ font: 700 7.6pt/1 Otsikko, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #4B6470 }}
+  .ryhmat {{ display: flex; gap: 4mm; align-items: flex-end; margin-top: 1.2mm }}
+  .ryhma {{ display: flex; flex-direction: column; align-items: center; gap: .8mm;
+            border: .3mm dashed #7A9AA6; border-radius: 1.4mm; padding: 1.2mm 1.4mm .8mm }}
+  .ryhma > span {{ font: 700 7.4pt/1.1 Otsikko, sans-serif; text-transform: uppercase; color: #3B4F58 }}
+  .tornit {{ display: flex; gap: 1.6mm; align-items: flex-end }}
+  .torni-kuva {{ display: flex; flex-direction: column; align-items: center; gap: .22mm }}
+  .torni-kuva i {{ display: block; width: 6.4mm; height: .8mm; border-radius: .3mm;
+                   box-shadow: inset 0 -.18mm 0 rgba(0,0,0,.22) }}
+  .torni-kuva .tarra {{ width: 5.6mm; height: 5.6mm; border-radius: 50%; border: .35mm solid #fff;
+                        display: flex; align-items: center; justify-content: center; margin-bottom: .3mm;
+                        box-shadow: 0 0 0 .15mm rgba(0,0,0,.25) }}
+  .torni-kuva .tarra img {{ width: 72%; filter: brightness(0) invert(1) }}
+  .torni-luku {{ font: 700 7.6pt/1 Otsikko, sans-serif; margin-top: .5mm }}
   .palat {{ display: flex; align-items: center; gap: 1mm }}
   .palat .pala {{ width: 8mm }}
   .palat b {{ font: 900 13pt/1 Viiri, sans-serif }}
@@ -442,7 +476,8 @@ BLOKIT = {
     # -harjoitukseen (?tila=harjoitus).
     'vaaka': '''<section class="vaaka">
   {leima_lapset}
-  <div class="vaaka-peli"><img class="vaaka-apina" src="julkinen/kuvat/apinavaaka.webp" alt=""></div>
+  <div class="vaaka-peli"><img class="vaaka-apina" src="paperi/lauta/balance-jeu.webp" alt="">
+    <img class="vaaka-noppa" src="julkinen/play/apinavaaka/noppa/3.svg" alt="3"></div>
   <div><h2>{vaaka_otsikko}</h2><p>{vaaka}</p><p><b>{vaaka_valmistelu}</b></p>{vaaka_vaiheet}</div>
   <div class="vaaka-linkki"><div class="vaaka-qr" data-qr="{vaaka_peli_osoite}"></div>
     <p><b>{vaaka_peli_otsikko}</b> {vaaka_peli}</p></div>
@@ -523,9 +558,11 @@ def regles_html(kieli, s, a, rakenne):
                         % (kuva(n, 'kuva'), e(c)) for n, c in zip(t['kuvat'], t['kuvateksti']))
         tavat.append('<div class="tapa"><h3 class="palkki">%s) %s</h3><p>%s</p>%s</div>'
                      % (t['kirjain'], e(t['otsikko']), e(t['html']), kuvat))
-    esim = '<div class="esim-pizzat">%s</div>' % ''.join(
-        '<div class="palat">%s</div>' % '<b>+</b>'.join(pala(n) for n in pizza)
-        for pizza in s.get('esimerkki_palat', [[9], [1, 3, 5]]))
+    esim = '<div class="linjasto-esim"><span class="linjasto-nimi">%s</span><div class="ryhmat">%s</div></div>' % (
+        e(s['linjasto_nimi']), ''.join(
+            '<div class="ryhma"><div class="tornit">%s</div><span>%s</span></div>'
+            % (''.join(torni(n) for n in pizza), e(' · '.join(s['taytteet'][n - 1] for n in pizza)))
+            for pizza in s.get('esimerkki_palat', [[9], [1, 3, 5]])))
     hoyry = ''.join('<div class="hoyry-esim">%s<p>%s</p></div>'
                     % (palalasku(x['lasku']), e(x['teksti'])) for x in s['hoyry_esimerkit'])
     pisteet = ''.join('<tr><th>%s</th><td>%s</td></tr>' % (e(p), e(t))
