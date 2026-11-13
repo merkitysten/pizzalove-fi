@@ -78,6 +78,20 @@ olivat korvattuja eivätkä kadotettuja** — vanha nimentarkistus, jonka tilall
 tuli jaettu sääntö (`hahmot.js`), ja vanha nopan kuva, jonka tilalle tuli
 oikea 3D-noppa.
 
+### Työkalu muistaa, mitä viimeksi tuotiin (13.11.2026)
+
+`tyokalut/peli-kopio-tila.json` on kirjanpito: jokaisen tiedoston tiiviste
+sellaisena kuin se viimeksi kopioitiin. **Ilman sitä työkalu kysyi väärää
+kysymystä** — se vertasi repojen HEADeja toisiinsa, mutta erilliset repot
+eroavat aina, eikä erosta näe onko lähde EDELLÄ vai ovatko molemmat
+liikkuneet. 📐 13.11. tämä esti kopioinnin tiedostosta, jota ei ollut täällä
+koskaan muokattu.
+
+Kirjanpidolla kysymys on oikea ja sillä on kolme vastausta:
+kohde ennallaan → **kopioidaan** · vain täällä muokattu → **ei kopioida**
+(muutos katoaisi) · molemmat liikkuneet → **sulauta lähteeseen ensin**.
+Todennettu mutaatiolla kaikissa kolmessa suunnassa.
+
 ⚠️ **Jos työkalu estää kopioinnin uudelleen, se ei ole historiaa vaan uusi
 ajautuma:** joku on muokannut `julkinen/play/`:ta. Sulauta pizzapartyyn äläkä
 pakota. `--pakota` on tarkoitettu tilanteeseen, jossa sulautus on JO tehty ja

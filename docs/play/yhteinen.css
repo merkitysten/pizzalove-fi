@@ -681,8 +681,25 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
    * palkki peitti pelivalinnan yläreunan ja ruutu vieritti 10 px (mitattu 9.10.2026). */
   /* Logo nousee irti alareunasta (Marko 10.10.2026: «Vaakanäytöllä merkitysten logo on liian
    * alhaalla»): turva-alue (kotiviiva) + väli joka kasvaa korkeuden mukana. */
-  .peite > .aloitusruutu{gap:4px;padding-top:calc(env(safe-area-inset-top, 0px) + 50px);
+  /* ⚠️ VAAKATILASSA PALKKEJA ON KAKSI, EI YKSI (Marko 13.11.2026: «Katso vielä
+   * se vaakatilan nappi lajipalkin alla»). Tämä varaus kirjoitettiin 9.10.2026
+   * oranssille palkille (46 px + 4 px pelivaraa = 50). Valkoinen lajipalkki
+   * lisättiin 14.10.2026 palkin ALAPUOLELLE, eikä varausta kasvatettu — joten
+   * sisältö alkaa yhä oranssin palkin alta ja menee lajipalkin alle.
+   * 📐 Mitattu kolmessa vaakakoossa: lajipalkki on 46…93 px eli **47 px**
+   * kaikissa (sen korkeus tulee välilehtien tekstistä, joka ei skaalaudu):
+   *     812 × 375  ensimmäinen nappi y = 84  → 9 px palkin alla
+   *     568 × 320  ensimmäinen nappi y = 58  → 35 px palkin alla
+   *     926 × 428  ensimmäinen nappi y = 76  → 17 px palkin alla
+   * Sama koskee korttipelin etuovea: `.alku-paa` alkoi 76:sta kun palkit
+   * päättyvät 93:een — siellä maskottialue sattui vaimentamaan sen.
+   * Varaus on muuttujassa, koska sillä on kaksi arvoa: alasivuilla (luo,
+   * liity, aula) lajipalkki on piilossa, ja silloin vanha 50 px on oikein.
+   * Ehto on sama `:has(.alku-paa[hidden])` jolla palkki piilotetaankin. */
+  .peite > .aloitusruutu{--vaakapalkit:50px;gap:4px;
+    padding-top:calc(env(safe-area-inset-top, 0px) + var(--vaakapalkit));
     padding-bottom:calc(env(safe-area-inset-bottom, 0px) + clamp(4px, 6vh - 14px, 22px))}
+  .peite > .aloitusruutu:not(:has(.alku-paa[hidden])){--vaakapalkit:97px}
   /* Ylälaita pois virrasta: korkeus kuuluu valinnoille. Viiri mahtuu sarakkeen vasemmalle
    * puolelle myös 568 px:n leveydellä (16 + 84 < 104). */
   .alku-yla{--viiri-l:84px;--palkki:46px;position:absolute;top:0;left:0;right:0;margin:0}

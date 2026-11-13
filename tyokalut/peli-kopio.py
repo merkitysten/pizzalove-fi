@@ -41,6 +41,34 @@ LAHDE = os.path.abspath(os.path.join(JUURI, '..', 'pizzaparty'))
 KOHDE = os.path.join(JUURI, 'julkinen', 'play')
 LEIMA = re.compile(r'\?v=[\w.-]+')
 TEKSTI = ('.js', '.css', '.html', '.json', '.py', '.svg', '.txt', '.md')
+KIRJANPITO = os.path.join(TANNE, 'peli-kopio-tila.json')
+
+
+def kirjanpito_lue():
+    """Mitä viime kopioinnissa tuotiin: {polku: tiiviste leimat normalisoituna}.
+
+    ⚠️ TÄMÄ ON SE TIETO JOTA GIT EI ANNA. Repot ovat erillisiä, joten niiden
+    HEADit eroavat aina — ja pelkästä erosta ei näe, onko lähde EDELLÄ vai
+    ovatko molemmat liikkuneet. 📐 13.11.2026 tämä esti kopioinnin tiedostosta
+    jossa kohde ei ollut muuttunut lainkaan: työkalu kysyi väärää kysymystä."""
+    try:
+        import json
+        with io.open(KIRJANPITO, encoding='utf-8') as f:
+            return json.load(f).get('tiedostot', {})
+    except Exception:
+        return {}
+
+
+def kirjanpito_kirjoita():
+    import json
+    tiedot = {}
+    for suht in julkaistut():
+        p = os.path.join(KOHDE, suht)
+        if os.path.exists(p):
+            tiedot[suht] = hashlib.sha256(vertailtava(p)).hexdigest()
+    with io.open(KIRJANPITO, 'w', encoding='utf-8') as f:
+        f.write(json.dumps({'tiedostot': tiedot}, ensure_ascii=False,
+                           indent=0, sort_keys=True))
 
 
 def julkaistut():
@@ -80,6 +108,7 @@ def git_vanha(repo, polku):
 def tila():
     """Luokittelee jokaisen julkaistun tiedoston."""
     ulos = {'sama': [], 'puuttuu': [], 'lahde': [], 'kohde': [], 'molemmat': []}
+    kirjanpito = kirjanpito_lue()
     for suht in julkaistut():
         a = os.path.join(KOHDE, suht)
         b = os.path.join(LAHDE, suht)
@@ -90,14 +119,26 @@ def tila():
         if va == vb:
             ulos['sama'].append(suht)
             continue
-        # Kumpi on liikkunut? Vertailukohtana kummankin repon HEAD.
+        # Onko KOHDE liikkunut viime kopioinnin jälkeen? Jos ei, lähde on
+        # yksin edellä eikä kopiointi voi hävittää mitään.
+        viime = kirjanpito.get(suht)
+        if viime is not None:
+            kohde_liikkui = hashlib.sha256(va).hexdigest() != viime
+            lahde_liikkui = hashlib.sha256(vb).hexdigest() != viime
+            if not kohde_liikkui:
+                ulos['lahde'].append(suht)
+            elif not lahde_liikkui:
+                # Vain täällä muokattu — se katoaisi. Sano se oikealla nimellä:
+                # «molemmat» lähettäisi sulauttamaan muutosta jota lähteessä ei ole.
+                ulos['kohde'].append(suht)
+            else:
+                ulos['molemmat'].append(suht)
+            continue
+        # Ei kirjanpitoa (ensimmäinen ajo): varovainen vertailu HEADeihin.
         pa = git_vanha(JUURI, os.path.join('julkinen', 'play', suht))
         pb = git_vanha(LAHDE, suht)
         kohde_muuttui = pa is not None and LEIMA.sub(
             '?v=X', pa.decode('utf-8', 'replace')).encode('utf-8') != va
-        lahde_muuttui = pb is not None and LEIMA.sub(
-            '?v=X', pb.decode('utf-8', 'replace')).encode('utf-8') != vb
-        # HEADiin committoitu ero on se joka ratkaisee: kumpi sisältää toisen?
         if pa is not None and pb is not None and pa == pb:
             ulos['lahde' if not kohde_muuttui else 'molemmat'].append(suht)
         else:
@@ -185,6 +226,7 @@ def main():
             print('\n⚠️ PAKOTETTU %d tiedostoa (mahdollinen työn menetys):' % len(estetty))
             for f in estetty:
                 print('      %s' % f)
+        kirjanpito_kirjoita()
         print('\nKopioitu %d tiedostoa · leimat laskettu %d sivulle' % (len(vietavat), n))
         return 0
     if estetty:
