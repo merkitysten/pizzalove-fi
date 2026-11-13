@@ -251,14 +251,16 @@
       }
     ],
     "lataa_otsikko": "Règles en PDF",
-    "lataa_teksti": "Les règles complètes en français, avec les trois façons de jouer et les 33 cartes singe, et un guide de démarrage à imprimer. Les règles de la boîte (en finnois, en suédois et en anglais) sont aussi ici.",
+    "lataa_teksti": "Les règles complètes en français, un guide de démarrage à imprimer et des règles à part pour Singes affamés et Pizzas secrètes. Les règles de la boîte (en finnois, en suédois et en anglais) sont aussi ici.",
     "lataukset": {
       "pikaohje": "Aide-mémoire (à imprimer)",
       "peruspeli": "Jeu de base – règles de la boîte (FI · SV · EN)",
       "apinat": "Singes affamés – règles de la boîte (FI · SV · EN)",
       "salatut": "Pizzas secrètes – règles de la boîte (FI · SV · EN)",
       "lauta_saannot": "Règles du jeu en français",
-      "lauta_opas": "Guide de démarrage en français (à imprimer)"
+      "lauta_opas": "Guide de démarrage en français (à imprimer)",
+      "lauta_apinat": "Singes affamés – règles en français",
+      "lauta_salatut": "Pizzas secrètes – règles en français"
     },
     "pelaa_otsikko": "Balance des singes",
     "pelaa_teksti": "Découvre en ligne la balance du jeu de plateau : nourris des singes affamés et aide Basso à résoudre des énigmes.",

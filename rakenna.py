@@ -161,6 +161,8 @@ PDF = {
     # Lautapelin omankieliset ohjeet: `lautasaannot.py` (sisalto/lautasaannot-xx.json).
     'lauta_saannot_fr': ('pdf/pizza-love-jeu-de-plateau-regles-fr.pdf', 'lauta_saannot'),
     'lauta_opas_fr': ('pdf/pizza-love-jeu-de-plateau-guide-fr.pdf', 'lauta_opas'),
+    'lauta_apinat_fr': ('pdf/pizza-love-jeu-de-plateau-singes-affames-fr.pdf', 'lauta_apinat'),
+    'lauta_salatut_fr': ('pdf/pizza-love-jeu-de-plateau-pizzas-secretes-fr.pdf', 'lauta_salatut'),
 }
 
 # 🔵 Marko 13.11.2026: lautapelille ranskankieliset saannot ja aloitusopas.
@@ -168,7 +170,7 @@ PDF = {
 # laatikon FI · SV · EN -ohjeet jaavat niiden alle. Painetun pikaohjeen
 # korvaa oman kielen aloitusopas.
 LAUTA_OMAT = {
-    'fr': ['lauta_saannot_fr', 'lauta_opas_fr'],
+    'fr': ['lauta_saannot_fr', 'lauta_opas_fr', 'lauta_apinat_fr', 'lauta_salatut_fr'],
 }
 
 

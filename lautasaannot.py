@@ -77,8 +77,36 @@ KIELET = {
         'kortit': 'apinakortit-fr.json',
         'regles': 'pizza-love-jeu-de-plateau-regles-fr.pdf',
         'guide': 'pizza-love-jeu-de-plateau-guide-fr.pdf',
+        'singes': 'pizza-love-jeu-de-plateau-singes-affames-fr.pdf',
+        'secretes': 'pizza-love-jeu-de-plateau-pizzas-secretes-fr.pdf',
         'lippu': ('#002654', '#FFFFFF', '#CE1126'),
     },
+}
+
+
+# 🔵 Marko 13.11.2026: «Käännä myös lisäpelimuotojen ohjeet» → omat PDF:t
+# Nälkäisille apinoille ja Salatuille pizzoille, kuten laatikon erilliset
+# vihkoset (PIZZALOVE_Nälkäiset apinat_kaikki kielet_2.12.2025.pdf ja
+# PIZZA LOVE_Salatut pizzat_kaikki kielet_4.12.2025.pdf). Sama runko ja samat
+# lohkot kuin koko saannoissa; pelimuodon omat tekstit ovat JSONissa
+# avaimessa `kirjaset.<laji>` ja korvaavat perussaantojen tekstit.
+#   singes:  ei apinakortteja, ei erityistilanteita (ei vihkosessakaan),
+#            vuoro = heitto + yhdessa valmistaminen, loppu pisteytetaan.
+#   secretes: vuoron jarjestys 1 pizza · 2 apinakortti · 3 noppa, salaisen
+#            pizzan vaihto ja variantti; apinakorttien yleissaannosta vain
+#            saastettavan kortin omistus (muu koskee peruspelin jarjestysta).
+RAKENTEET = {
+    'regles': [('otsake', 0), ('tarina', 0), ('materiel', 0), ('valmistelu', 0),
+               ('vuoro', 1), ('siirto', 0), ('vaaka', 0),
+               ('pizza', 1), ('apina', 0), ('erityis', 0), ('koti', 0),
+               ('muodot', 1), ('kortit', 1), ('alatunniste', 0)],
+    'singes': [('otsake', 0), ('tarina', 0), ('materiel', 0), ('valmistelu', 0),
+               ('vuoro', 1), ('siirto', 0), ('vaaka', 0),
+               ('pizza', 1), ('nalka_loppu', 0), ('alatunniste', 0)],
+    'secretes': [('otsake', 0), ('tarina', 0), ('materiel', 0), ('valmistelu', 0),
+                 ('vuoro', 1), ('pizza', 0), ('salaiset_vaihto', 0), ('apina', 0),
+                 ('siirto', 1), ('vaaka', 0),
+                 ('erityis', 1), ('koti', 0), ('kortit', 1), ('alatunniste', 0)],
 }
 
 
@@ -208,50 +236,7 @@ YHTEINEN_CSS = '''
 '''
 
 
-def regles_html(kieli, s, a):
-    k = KIELET[kieli]
-    taytteet = ''.join(
-        '<figure>%s<figcaption>%s</figcaption></figure>' % (pala(i + 1), e(n))
-        for i, n in enumerate(s['taytteet']))
-    vaiheet = ''.join('<li><span class="nro">%d</span>%s</li>' % (i + 1, e(v))
-                      for i, v in enumerate(s['vaiheet']))
-    tavat = []
-    for t in s['tavat']:
-        kuvat = ''.join('<figure>%s<figcaption>%s</figcaption></figure>'
-                        % (kuva(n, 'kuva'), e(c)) for n, c in zip(t['kuvat'], t['kuvateksti']))
-        tavat.append('<div class="tapa"><h3 class="palkki">%s) %s</h3><p>%s</p>%s</div>'
-                     % (t['kirjain'], e(t['otsikko']), e(t['html']), kuvat))
-    esim = ('<div class="esim-pizzat"><div class="palat">%s</div><div class="palat">%s<b>+</b>%s<b>+</b>%s</div></div>'
-            % (pala(9), pala(1), pala(3), pala(5)))
-    hoyry = ''.join('<div class="hoyry-esim">%s<p>%s</p></div>'
-                    % (palalasku(x['lasku']), e(x['teksti'])) for x in s['hoyry_esimerkit'])
-    pisteet = ''.join('<tr><th>%s</th><td>%s</td></tr>' % (e(p), e(t))
-                      for p, t in s['apinat']['pisteet'])
-
-    def muoto(m, kuvaosa=''):
-        """Kolme palstaa: kolme ensimmaista osaa rinnakkain; neljas osa
-        (Salatut pizzat: Variante) ensimmaisen palstan alle ja lisaosa
-        (Nalkaiset apinat: pisteet) viimeisen palstan loppuun — sinne minne
-        se sisallossa kuuluu, ei uudelle riville."""
-        sanat = m['nimi'].split(' ', 1)
-        osa = ['<h3 class="palkki">%s</h3>%s' % (e(o['otsikko']), o['html'])
-               for o in m['osat']]
-        sarakkeet = osa[:3]
-        for x in osa[3:]:
-            sarakkeet[0] += '<div class="m-lisa">%s</div>' % x
-        sarakkeet[-1] += kuvaosa
-        palstat = ''.join('<div class="m-osa">%s</div>' % x for x in sarakkeet)
-        return ('<section class="muoto kehys"><div class="muoto-yla">'
-                '<h2 class="banneri"><span class="oranssi">%s</span> %s</h2>'
-                '<p class="kuvaus">%s</p></div><p class="m-ingressi">%s</p>'
-                '<div class="m-palstat">%s</div></section>'
-                % (e(sanat[0]), e(sanat[1] if len(sanat) > 1 else ''), e(m['kuvaus']),
-                   e(m['ingressi']), palstat))
-
-    apinat_lisa = ('<div class="pisteet"><table>%s</table><p class="pieni">%s</p>%s</div>'
-                   % (pisteet, e(s['apinat']['huom']), kuva('singe-mange', 'apina-syo')))
-
-    runko = '''<!doctype html>
+PAA = '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
 {yhteinen}
@@ -259,7 +244,11 @@ def regles_html(kieli, s, a):
   body {{ font-size: 8.7pt; line-height: 1.36 }}
   .kehys {{ border: .35mm solid {musta} }}
   section {{ margin-top: 2.6mm; padding: 3mm 5mm 2.4mm; position: relative }}
-  .uusi-sivu {{ break-before: page; margin-top: 0 }}
+  .sivunvaihto {{ break-before: page; height: 0 }}
+  .sivunvaihto + section {{ margin-top: 0 }}
+  .vaihto {{ grid-template-columns: 1.4fr 1fr }}
+  .loppu {{ display: grid; grid-template-columns: 1fr 1fr 30mm; column-gap: 6mm; align-items: start }}
+  .loppu .apina-syo {{ width: 100%; margin: 0 }}
   .viiri svg, .qr svg {{ width: 100%; height: auto; display: block }}
   header {{ display: flex; align-items: flex-start; gap: 4.5mm; padding: 0 3.5mm 3mm 3mm }}
   .viiri {{ width: 31mm; flex: none }}
@@ -389,8 +378,10 @@ def regles_html(kieli, s, a):
   footer .oikeudet {{ white-space: nowrap }}
   footer b {{ color: {oranssi} }}
 </style>
+'''
 
-<header class="kehys">
+BLOKIT = {
+    'otsake': '''<header class="kehys">
   <div class="viiri">{viiri}</div>
   <div class="otsikko">
     <h1>{h1}</h1>
@@ -399,14 +390,12 @@ def regles_html(kieli, s, a):
     <ul class="tiedot">{tiedot}</ul>
   </div>
   <div class="qr"><div id="qr"></div><span>{qr_teksti}</span></div>
-</header>
-
-<section class="kehys tarina">
+</header>''',
+    'tarina': '''<section class="kehys tarina">
   <div><h3>{tarina_otsikko}</h3><p>{tarina}</p></div>
   {kuva_singe}
-</section>
-
-<section class="kehys materiel">
+</section>''',
+    'materiel': '''<section class="kehys materiel">
   <h2>{osat_otsikko}</h2>
   <p class="sisalto">{sisalto}</p>
   <div class="ruudukko">
@@ -415,23 +404,20 @@ def regles_html(kieli, s, a):
     <div>{osat_c}</div>
   </div>
   <div class="taytteet"><h3>{taytteet_otsikko}</h3>{taytteet}</div>
-</section>
-
-<section class="kehys">
+</section>''',
+    'valmistelu': '''<section class="kehys">
   <div class="ruudukko r2">
     <div><h2>{ennen_otsikko}</h2>{ennen}<p class="pieni">{ennen_video}</p></div>
     <div><h2>{valmistelut_otsikko}</h2>{valmistelut}</div>
   </div>
-</section>
-
-<section class="kehys uusi-sivu">
+</section>''',
+    'vuoro': '''<section class="kehys">
   <h2>{vuoro_otsikko}</h2>
   <p>{vuoro}</p>
   <ol class="vaiheet">{vaiheet}</ol>
-  <p class="pieni">{perusmuoto}</p>
-</section>
-
-<section class="kehys">
+  {perusmuoto_p}
+</section>''',
+    'siirto': '''<section class="kehys">
   <h2>{siirto_otsikko}</h2>
   <p>{siirto}</p>
   <div class="ruudukko r3">
@@ -440,15 +426,13 @@ def regles_html(kieli, s, a):
       <h3>{ei_siirtoa_otsikko}</h3><p>{ei_siirtoa}</p></div>
     <div>{tapa_c}</div>
   </div>
-</section>
-
-<section class="vaaka">
+</section>''',
+    'vaaka': '''<section class="vaaka">
   {leima_lapset}
   <div><img class="skeema" src="paperi/lauta/balance-schema.webp" alt=""></div>
   <div><h2>{vaaka_otsikko}</h2><p>{vaaka}</p><p><b>{vaaka_valmistelu}</b></p>{vaaka_vaiheet}</div>
-</section>
-
-<section class="kehys uusi-sivu">
+</section>''',
+    'pizza': '''<section class="kehys">
   <h2>{pizza_otsikko}</h2>
   <div class="ruudukko r3">
     <div><p>{pizza}</p>{pizza_vaiheet}</div>
@@ -458,52 +442,102 @@ def regles_html(kieli, s, a):
     <div><h3 style="margin-top:0">{esimerkki_otsikko}</h3><p>{esimerkki}</p>{esim}
       <p class="pieni">{ei_pizzaa}</p></div>
   </div>
-</section>
-
-<section class="kehys apina">
+</section>''',
+    'apina': '''<section class="kehys apina">
   <img src="julkinen/play/apinavaaka/apinakortti.webp" alt="">
   <div><h2>{apina_otsikko}</h2><p>{apina}</p></div>
-</section>
-
-<section class="kehys">
+</section>''',
+    'erityis': '''<section class="kehys">
   <h2>{erityis_otsikko}</h2>
   <p>{erityis}</p>
   <div class="ruudukko r2">
     <div><h3>{havikki_otsikko}</h3><p>{havikki}</p>{havikki_lista}</div>
     <div><h3>{juhla_otsikko}</h3><p>{juhla}</p></div>
   </div>
-</section>
-
-<section class="kehys koti">
+</section>''',
+    'koti': '''<section class="kehys koti">
   {kuva_amour}
   <h2>{valinnaiset_otsikko}</h2>
   <div><h3 style="margin-top:0">{kaikille_otsikko}</h3><p>{kaikille}</p></div>
   <div><h3 style="margin-top:0">{hoyry_otsikko}</h3><p>{hoyry}</p>{hoyry_esim}</div>
-</section>
-
-<section class="kehys uusi-sivu">
+</section>''',
+    'muodot': '''<section class="kehys">
   <h2>{muodot_otsikko}</h2>
   <p class="johdanto">{muodot_ingressi}</p>
 </section>
 {apinat}
-{salatut}
-
-<section class="kehys uusi-sivu">
+{salatut}''',
+    'kortit': '''<section class="kehys">
   <div class="kortit-otsake">
     <img src="julkinen/play/apinavaaka/apinakortti.webp" alt="">
     <div><h2>{kortit_otsikko}</h2><p>{kortit_ingressi}</p><p>{kortit_kaytto}</p>
-      <p><b>{kortit_huom}</b> {kortit_yleista}</p></div>
+      {kortit_yleinen_p}</div>
   </div>
   <ol class="kortit">{kortit}</ol>
-</section>
-
-<footer>
+</section>''',
+    'alatunniste': '''<footer>
   <span>{videot} <b>{nakyva}</b></span>
   <span class="oikeudet">{oikeudet} © Merkitysten Oy 2026</span>
-</footer>
-{qr_skripti}
-</html>'''
-    return runko.format(
+</footer>''',
+    'nalka_loppu': '''<section class="kehys loppu">
+  <div><h2>{loppu_otsikko}</h2>{loppu_html}<p class="pieni">{loppu_huom}</p></div>
+  <div class="pisteet"><table>{pisteet}</table></div>
+  {kuva_syo}
+</section>''',
+    'salaiset_vaihto': '''<section class="kehys">
+  <div class="ruudukko vaihto">
+    <div><h2>{vaihto_otsikko}</h2>{vaihto_html}</div>
+    <div><h2>{variante_otsikko}</h2>{variante_html}</div>
+  </div>
+</section>''',
+}
+
+
+def regles_html(kieli, s, a, rakenne):
+    k = KIELET[kieli]
+    taytteet = ''.join(
+        '<figure>%s<figcaption>%s</figcaption></figure>' % (pala(i + 1), e(n))
+        for i, n in enumerate(s['taytteet']))
+    vaiheet = ''.join('<li><span class="nro">%d</span>%s</li>' % (i + 1, e(v))
+                      for i, v in enumerate(s['vaiheet']))
+    tavat = []
+    for t in s['tavat']:
+        kuvat = ''.join('<figure>%s<figcaption>%s</figcaption></figure>'
+                        % (kuva(n, 'kuva'), e(c)) for n, c in zip(t['kuvat'], t['kuvateksti']))
+        tavat.append('<div class="tapa"><h3 class="palkki">%s) %s</h3><p>%s</p>%s</div>'
+                     % (t['kirjain'], e(t['otsikko']), e(t['html']), kuvat))
+    esim = '<div class="esim-pizzat">%s</div>' % ''.join(
+        '<div class="palat">%s</div>' % '<b>+</b>'.join(pala(n) for n in pizza)
+        for pizza in s.get('esimerkki_palat', [[9], [1, 3, 5]]))
+    hoyry = ''.join('<div class="hoyry-esim">%s<p>%s</p></div>'
+                    % (palalasku(x['lasku']), e(x['teksti'])) for x in s['hoyry_esimerkit'])
+    pisteet = ''.join('<tr><th>%s</th><td>%s</td></tr>' % (e(p), e(t))
+                      for p, t in s['apinat']['pisteet'])
+
+    def muoto(m, kuvaosa=''):
+        """Kolme palstaa: kolme ensimmaista osaa rinnakkain; neljas osa
+        (Salatut pizzat: Variante) ensimmaisen palstan alle ja lisaosa
+        (Nalkaiset apinat: pisteet) viimeisen palstan loppuun — sinne minne
+        se sisallossa kuuluu, ei uudelle riville."""
+        sanat = m['nimi'].split(' ', 1)
+        osa = ['<h3 class="palkki">%s</h3>%s' % (e(o['otsikko']), o['html'])
+               for o in m['osat']]
+        sarakkeet = osa[:3]
+        for x in osa[3:]:
+            sarakkeet[0] += '<div class="m-lisa">%s</div>' % x
+        sarakkeet[-1] += kuvaosa
+        palstat = ''.join('<div class="m-osa">%s</div>' % x for x in sarakkeet)
+        return ('<section class="muoto kehys"><div class="muoto-yla">'
+                '<h2 class="banneri"><span class="oranssi">%s</span> %s</h2>'
+                '<p class="kuvaus">%s</p></div><p class="m-ingressi">%s</p>'
+                '<div class="m-palstat">%s</div></section>'
+                % (e(sanat[0]), e(sanat[1] if len(sanat) > 1 else ''), e(m['kuvaus']),
+                   e(m['ingressi']), palstat))
+
+    apinat_lisa = ('<div class="pisteet"><table>%s</table><p class="pieni">%s</p>%s</div>'
+                   % (pisteet, e(s['apinat']['huom']), kuva('singe-mange', 'apina-syo')))
+
+    v = dict(
         kieli=kieli, title=e(s['title']), musta=MUSTA, oranssi=ORANSSI, viiva=VIIVA,
         qrmm=QR_MM,
         yhteinen=YHTEINEN_CSS.format(kirjasimet=KIRJASIMET, musta=MUSTA, leima=LEIMA),
@@ -547,12 +581,23 @@ def regles_html(kieli, s, a):
         hoyry_otsikko=e(s['hoyry_otsikko']), hoyry=e(s['hoyry']), hoyry_esim=hoyry,
         muodot_otsikko=e(s['muodot_otsikko']), muodot_ingressi=e(s['muodot_ingressi']),
         apinat=muoto(s['apinat'], apinat_lisa), salatut=muoto(s['salatut']),
-        kortit_otsikko=e(s['kortit_otsikko']), kortit_ingressi=e(a['ingressi']),
+        kortit_otsikko=e(s['kortit_otsikko']), kortit_ingressi=e(s.get('kortit_ingressi', a['ingressi'])),
         kortit_kaytto=e(a['kaytto']), kortit_huom=e(a['huom']), kortit_yleista=e(a['yleista']),
         kortit=kortit_html(a),
         videot=e(s['videot']), nakyva=s['osoite'].replace('https://', ''),
         oikeudet=e(s['oikeudet']),
-        qr_skripti=QR_SKRIPTI % json.dumps(s['osoite']))
+        qr_skripti=QR_SKRIPTI % json.dumps(s['osoite']),
+        perusmuoto_p=('<p class="pieni">%s</p>' % e(s['perusmuoto'])) if s.get('perusmuoto') else '',
+        kortit_yleinen_p=('<p><b>%s</b> %s</p>' % (e(a['huom']), e(s.get('kortit_yleista', a['yleista']))))
+                         if s.get('kortit_yleista', a['yleista']) else '',
+        loppu_otsikko=e(s['apinat']['osat'][2]['otsikko']), loppu_html=s['apinat']['osat'][2]['html'],
+        loppu_huom=e(s['apinat']['huom']), pisteet=pisteet, kuva_syo=kuva('singe-mange', 'apina-syo'),
+        vaihto_otsikko=e(s['salatut']['osat'][2]['otsikko']), vaihto_html=s['salatut']['osat'][2]['html'],
+        variante_otsikko=e(s['salatut']['osat'][3]['otsikko']), variante_html=s['salatut']['osat'][3]['html'])
+    osat = []
+    for nimi, vaihto in rakenne:
+        osat.append(('<div class="sivunvaihto"></div>' if vaihto else '') + BLOKIT[nimi].format(**v))
+    return (PAA.format(**v) + '\n'.join(osat) + '\n' + v['qr_skripti'] + '\n</html>')
 
 
 def osat_html(osat, s):
@@ -704,6 +749,24 @@ def sisaltokoe(pdf, s, a):
     return True
 
 
+def kirjaskoe(pdf, s, a, laji):
+    """Pelimuodon vihkosen omat luvut loytyvat valmiista PDF:sta."""
+    t = norm(teksti(pdf))
+    otsikot = [s['h1'], s['pizza_otsikko'], s['siirto_otsikko'], s['vaaka_otsikko']] + s['vaiheet']
+    otsikot += [x['otsikko'] for x in s['osat']] + [x['otsikko'] for x in s['tavat']]
+    if laji == 'singes':
+        otsikot += [s['apinat']['osat'][2]['otsikko']] + [p for p, _ in s['apinat']['pisteet']]
+    if laji == 'secretes':
+        otsikot += [o['otsikko'] for o in s['salatut']['osat'][2:]] + [s['apina_otsikko'],
+                    s['erityis_otsikko'], s['hoyry_otsikko']] + [k['nimi'] for k in a['kortit']]
+    puuttuu = [o for o in otsikot if norm(o) not in t]
+    if puuttuu:
+        print('🔴 %s: PUUTTUU PDF:STA: %s' % (laji, puuttuu))
+        return False
+    print('Sisaltokoe %s: %d lukua loytyi — OK' % (laji, len(otsikot)))
+    return True
+
+
 def sivuja(pdf):
     return len(re.findall(rb'/Type\s*/Page[^s]', open(pdf, 'rb').read()))
 
@@ -714,8 +777,10 @@ def tee(kieli):
     a = json.load(open(os.path.join(TANNE, 'sisalto', k['kortit']), encoding='utf-8'))
     korjaa = ranska if kieli == 'fr' else (lambda x: x)
     virhe = 0
-    for laji, tee_html in (('regles', lambda: regles_html(kieli, s, a)),
-                           ('guide', lambda: guide_html(kieli, s))):
+    tehtavat = [('regles', s)] + [(x, dict(s, **s['kirjaset'][x])) for x in ('singes', 'secretes')]
+    for laji, sx in tehtavat + [('guide', s)]:
+        tee_html = ((lambda sx=sx, laji=laji: regles_html(kieli, sx, a, RAKENTEET[laji]))
+                    if laji != 'guide' else (lambda: guide_html(kieli, s)))
         sivu = os.path.join(TANNE, '.lautasaannot-%s-%s.html' % (kieli, laji))
         kohde = os.path.join(TANNE, 'julkinen', 'pdf', k[laji])
         with open(sivu, 'w', encoding='utf-8') as f:
@@ -733,6 +798,12 @@ def tee(kieli):
                 print('🔴 SAANNOT KASVOIVAT: %d sivua, katto %d.' % (n, SIVU_KATTO))
                 virhe = 1
             if sisaltokoe(kohde, s, a) is False:
+                virhe = 1
+        elif laji in RAKENTEET:
+            if n > SIVU_KATTO:
+                print('🔴 %s KASVOI: %d sivua, katto %d.' % (laji, n, SIVU_KATTO))
+                virhe = 1
+            if kirjaskoe(kohde, sx, a, laji) is False:
                 virhe = 1
         elif n != 1:
             print('🔴 ALOITUSOPAS EI MAHDU YHDELLE SIVULLE (%d).' % n)
