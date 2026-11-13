@@ -345,7 +345,7 @@ PAA = '''<!doctype html>
   .vaaka-linkki {{ padding-top: 21mm }}
   .vaaka-qr {{ width: 25mm; margin: 0 auto 1.2mm }}
   .vaaka-qr svg {{ width: 100%; height: auto; display: block }}
-  .vaaka-linkki p {{ margin: 0; font-size: 7.4pt; line-height: 1.25 }}
+  .vaaka-linkki p {{ margin: 0; font-size: 8pt; line-height: 1.28; text-align: center }}
 
   .leima.lapset {{ width: 22mm; height: 22mm; right: 4mm; top: -4mm }}
 
@@ -484,7 +484,7 @@ BLOKIT = {
     <img class="vaaka-noppa" src="paperi/lauta/noppa-3.webp" alt="3"><p class="vaaka-kuvateksti">{vaaka_kuvateksti}</p></div>
   <div><h2>{vaaka_otsikko}</h2><p>{vaaka}</p><p><b>{vaaka_valmistelu}</b></p>{vaaka_vaiheet}</div>
   <div class="vaaka-linkki"><div class="vaaka-qr" data-qr="{vaaka_peli_osoite}"></div>
-    <p><b>{vaaka_peli_otsikko}</b> {vaaka_peli}</p></div>
+    <p><b>{vaaka_peli_otsikko}</b><br>{vaaka_peli}</p></div>
 </section>''',
     'pizza': '''<section class="kehys">
   <h2>{pizza_otsikko}</h2>
