@@ -338,7 +338,8 @@ PAA = '''<!doctype html>
   .vaaka-peli {{ position: relative }}
   .vaaka-apina {{ width: 100%; margin-top: 1mm }}
   /* noppa vasempaan ylakulmaan: pelissa nopan luku = punnukset vasemmalla */
-  .vaaka-noppa {{ position: absolute; left: 1mm; top: 2mm; width: 8mm }}
+  .vaaka-noppa {{ position: absolute; left: 0; top: 1mm; width: 12mm }}
+  .vaaka-kuvateksti {{ text-align: center; font-weight: 700; font-size: 7.8pt; margin: .6mm 0 0 }}
   .vaaka {{ font-size: 8.4pt; line-height: 1.32; padding-top: 2.6mm; padding-bottom: 2mm }}
   .vaaka ol.lista li {{ margin-bottom: .3mm }}
   .vaaka-linkki {{ padding-top: 21mm }}
@@ -470,6 +471,9 @@ BLOKIT = {
     <div>{tapa_c}</div>
   </div>
 </section>''',
+    # 🔵 Marko 13.11.2026: kuvana pelin SUMMASIIRTO tasapainossa (3 = 1 + 2,
+    # lamppu palaa) ja oikea 3D-noppa, ei 3 = 3 -tilannetta eika nopan tahkoa.
+    # Kuvat otettu pelista (avPulma {d:3, lin:[], pizzat:[[1,2]]}).
     # 🔵 Marko 13.11.2026: painetun ohjeen nuolikaavio on «mallia insinööreille»;
     # lapsille on verkon apinavaaka (sama apina, punnitus, lamppu syttyy), joten
     # kaavion tilalla on pelin apina ja suora linkki «Apinavaaka tutuksi»
@@ -477,7 +481,7 @@ BLOKIT = {
     'vaaka': '''<section class="vaaka">
   {leima_lapset}
   <div class="vaaka-peli"><img class="vaaka-apina" src="paperi/lauta/balance-jeu.webp" alt="">
-    <img class="vaaka-noppa" src="julkinen/play/apinavaaka/noppa/3.svg" alt="3"></div>
+    <img class="vaaka-noppa" src="paperi/lauta/noppa-3.webp" alt="3"><p class="vaaka-kuvateksti">{vaaka_kuvateksti}</p></div>
   <div><h2>{vaaka_otsikko}</h2><p>{vaaka}</p><p><b>{vaaka_valmistelu}</b></p>{vaaka_vaiheet}</div>
   <div class="vaaka-linkki"><div class="vaaka-qr" data-qr="{vaaka_peli_osoite}"></div>
     <p><b>{vaaka_peli_otsikko}</b> {vaaka_peli}</p></div>
@@ -622,7 +626,7 @@ def regles_html(kieli, s, a, rakenne):
         ei_siirtoa_otsikko=e(s['ei_siirtoa_otsikko']), ei_siirtoa=e(s['ei_siirtoa']),
         leima_lapset=leima(s['leima_lapsille'], 'lapset'),
         vaaka_peli_otsikko=e(s['vaaka_peli_otsikko']), vaaka_peli=e(s['vaaka_peli']),
-        vaaka_peli_osoite=s['vaaka_peli_osoite'],
+        vaaka_peli_osoite=s['vaaka_peli_osoite'], vaaka_kuvateksti=e(s['vaaka_kuvateksti']),
         vaaka_otsikko=e(s['vaaka_otsikko']), vaaka=e(s['vaaka']),
         vaaka_valmistelu=e(s['vaaka_valmistelu']), vaaka_vaiheet=lista(s['vaaka_vaiheet'], 'ol'),
         pizza_otsikko=e(s['pizza_otsikko']), pizza=e(s['pizza']),

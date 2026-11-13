@@ -463,8 +463,9 @@
       "kortit_yleista": "Une carte que l’on peut garder appartient au joueur qui l’a piochée."
     }
   },
-  "vaaka_peli_otsikko": "Apprends à jouer en ligne :",
-  "vaaka_peli": "le singe pèse les tours, et la lampe s’allume quand elles ont la même hauteur. Scanne le code avec ton téléphone.",
+  "vaaka_peli_otsikko": "Apprends à jouer – joue pour de vrai sur ton téléphone !",
+  "vaaka_peli": "Scanne le code.",
   "vaaka_peli_osoite": "https://pizzalove.fi/play/apinavaaka.html?kieli=fr&tila=harjoitus",
-  "linjasto_nimi": "Chaîne"
+  "linjasto_nimi": "Chaîne",
+  "vaaka_kuvateksti": "Déplacement somme : 3 = 1 + 2"
 }
