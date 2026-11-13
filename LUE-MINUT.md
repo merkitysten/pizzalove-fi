@@ -11,7 +11,7 @@ Taustalla: `../Hankehakemukset/pizzalove_fi_TOIMEKSIANTO.md`.
 | `sisalto/fi.json` … `de.json` | **kaikki sivujen tekstit**. Muokkaa näitä. |
 | `julkinen/tyyli.css` | ulkoasu (värit ja täytekuosi samat kuin varainhankinnassa) |
 | `julkinen/kuvat/`, `julkinen/pdf/` | kuvat ja ladattavat ohjeet |
-| `julkinen/pizzaparty/` | **kopio** pelistä (`../pizzaparty/`). Älä muokkaa täällä. |
+| `julkinen/pizzaparty/` | **vain ohjaus** vanhasta osoitteesta `/play/`:hin (Marko 20.10.2026). Viisi sivua, ei peliä. Älä kopioi tänne mitään. |
 | `rakenna.py` | tekee sivut. Videot, kauppalinkit ja PDF:t on lueteltu tiedoston alussa. |
 | `korttisaannot.py` | korttipelin säännöt A4-PDF:nä kielikohtaisesti (`julkinen/pdf/`) |
 | `tyokalut/joulukalenteri.py` | joulukalenterin 24 luukkua ja 28 pulmaa → `julkinen/joulu/pulmat.json` |
@@ -26,9 +26,14 @@ python3 rakenna.py      # tekee docs/-kansion uudelleen
 git add -A && git commit -m "mitä muuttui" && git push
 ```
 
-Pelin päivitys: tee muutos `../pizzaparty/`-repossa, kopioi tiedostot
-`julkinen/pizzaparty/`-kansioon (ei `*.md`, `*.php`, `.htaccess`, `testit/`,
-`laskinkoe.js`, `kellokoe.html`) ja aja `rakenna.py`.
+Pelin päivitys: tee muutos `../pizzaparty/`-repossa, aja
+`python3 tyokalut/peli-kopio.py --kopioi` ja sitten `rakenna.py`.
+
+⚠️ **Tässä luki 13.11.2026 asti, että tiedostot kopioidaan käsin
+`julkinen/pizzaparty/`-kansioon.** Se on vanhentunut kahdesti: peli siirtyi
+`/play/`:hin 20.10., ja kopiointi koneellistui 11.11. Vanhassa kansiossa on
+enää viisi ohjaussivua, joten ohjeen seuraaminen olisi kirjoittanut pelin
+ohjausten päälle — ja uusi koodi ei olisi näkynyt missään.
 
 ## Uuden kielen lisääminen
 
