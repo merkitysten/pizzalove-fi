@@ -213,7 +213,21 @@ def torni(n):
             % (vari, n, '<i style="background:%s"></i>' % vari * n, n))
 
 
+# 🔵 Marko 13.11.2026: «Mikset käytä niitä oikeita pizzakortin kuvia?» →
+# esimerkin pizzat ovat painetun ohjeen OIKEAT kortit (sivu 6, rasteroitu
+# 400 dpi:lla, nuolen viiva korvattu kortin peilikuvalla):
+# paperi/lauta/pizzakortti-<taytteet>.webp. Koottu kortti on vain varalla.
+OIKEAT_KORTIT = {(9,): 'pizzakortti-9', (1, 3, 5): 'pizzakortti-1-3-5'}
+
+
 def pizzakortti(taytteet):
+    if tuple(taytteet) in OIKEAT_KORTIT:
+        return ('<span class="pizzakortti"><img src="paperi/lauta/%s.webp" alt=""></span>'
+                % OIKEAT_KORTIT[tuple(taytteet)])
+    return koottu_pizzakortti(taytteet)
+
+
+def koottu_pizzakortti(taytteet):
     """Lautapelin pizzakortti painetun kortin tapaan: oranssireunainen
     pizzalaatikko (paperi/lauta/pizzakortti-pohja.webp, painetusta ohjeesta)
     ja taytteiden tarrat pizzan paalla. 🔵 Marko 13.11.2026: esimerkissa on
@@ -374,7 +388,8 @@ PAA = '''<!doctype html>
             border: .3mm dashed #7A9AA6; border-radius: 1.4mm; padding: 1.2mm 1.4mm .8mm }}
   .ryhma > span {{ font: 700 7.4pt/1.1 Otsikko, sans-serif; text-transform: uppercase; color: #3B4F58 }}
   .tornit {{ display: flex; gap: 1.6mm; align-items: flex-end }}
-  .pizzakortti {{ position: relative; display: block; width: 15mm }}
+  .pizzakortti {{ position: relative; display: block; width: 16mm }}
+  .pizzakortti > img {{ border-radius: 1.2mm }}
   .pizzakortti > img {{ width: 100%; display: block }}
   .kortti-tarra {{ position: absolute; transform: translate(-50%, -50%); aspect-ratio: 1; border-radius: 50%;
                    border: .25mm solid #fff; display: flex; align-items: center; justify-content: center }}
