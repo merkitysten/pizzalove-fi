@@ -213,6 +213,22 @@ def torni(n):
             % (vari, n, '<i style="background:%s"></i>' % vari * n, n))
 
 
+def pizzakortti(taytteet):
+    """Lautapelin pizzakortti painetun kortin tapaan: oranssireunainen
+    pizzalaatikko (paperi/lauta/pizzakortti-pohja.webp, painetusta ohjeesta)
+    ja taytteiden tarrat pizzan paalla. 🔵 Marko 13.11.2026: esimerkissa on
+    nayttava PIZZAT, muuten tornien ja pizzojen yhteys ei aukea."""
+    paikat = {1: [(50, 50)], 2: [(37, 50), (63, 50)], 3: [(37, 39), (63, 39), (50, 63)],
+              4: [(37, 37), (63, 37), (37, 63), (63, 63)]}[len(taytteet)]
+    koko = 40 if len(taytteet) == 1 else 28
+    tarrat = ''.join(
+        '<span class="kortti-tarra" style="left:%d%%;top:%d%%;width:%d%%;background:%s">'
+        '<img src="julkinen/play/apinavaaka/tayte/%d.webp" alt=""></span>'
+        % (x, y, koko, TAYTEVARIT[n - 1], n) for n, (x, y) in zip(taytteet, paikat))
+    return ('<span class="pizzakortti"><img src="paperi/lauta/pizzakortti-pohja.webp" alt="">%s</span>'
+            % tarrat)
+
+
 def kuva(nimi, luokka=''):
     return '<img class="%s" src="paperi/lauta/%s.webp" alt="">' % (luokka, nimi)
 
@@ -358,6 +374,12 @@ PAA = '''<!doctype html>
             border: .3mm dashed #7A9AA6; border-radius: 1.4mm; padding: 1.2mm 1.4mm .8mm }}
   .ryhma > span {{ font: 700 7.4pt/1.1 Otsikko, sans-serif; text-transform: uppercase; color: #3B4F58 }}
   .tornit {{ display: flex; gap: 1.6mm; align-items: flex-end }}
+  .pizzakortti {{ position: relative; display: block; width: 15mm }}
+  .pizzakortti > img {{ width: 100%; display: block }}
+  .kortti-tarra {{ position: absolute; transform: translate(-50%, -50%); aspect-ratio: 1; border-radius: 50%;
+                   border: .25mm solid #fff; display: flex; align-items: center; justify-content: center }}
+  .kortti-tarra img {{ width: 70%; filter: brightness(0) invert(1) }}
+  .ryhma .nuoli {{ font-size: 6pt; line-height: 1; color: #7A9AA6 }}
   .torni-kuva {{ display: flex; flex-direction: column; align-items: center; gap: .22mm }}
   .torni-kuva i {{ display: block; width: 6.4mm; height: .8mm; border-radius: .3mm;
                    box-shadow: inset 0 -.18mm 0 rgba(0,0,0,.22) }}
@@ -564,8 +586,9 @@ def regles_html(kieli, s, a, rakenne):
                      % (t['kirjain'], e(t['otsikko']), e(t['html']), kuvat))
     esim = '<div class="linjasto-esim"><span class="linjasto-nimi">%s</span><div class="ryhmat">%s</div></div>' % (
         e(s['linjasto_nimi']), ''.join(
-            '<div class="ryhma"><div class="tornit">%s</div><span>%s</span></div>'
-            % (''.join(torni(n) for n in pizza), e(' · '.join(s['taytteet'][n - 1] for n in pizza)))
+            '<div class="ryhma">%s<span class="nuoli">▲</span><div class="tornit">%s</div><span>%s</span></div>'
+            % (pizzakortti(pizza), ''.join(torni(n) for n in pizza),
+               e(' · '.join(s['taytteet'][n - 1] for n in pizza)))
             for pizza in s.get('esimerkki_palat', [[9], [1, 3, 5]])))
     hoyry = ''.join('<div class="hoyry-esim">%s<p>%s</p></div>'
                     % (palalasku(x['lasku']), e(x['teksti'])) for x in s['hoyry_esimerkit'])
