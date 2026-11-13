@@ -60,6 +60,31 @@ on sulautettava pizzapartyyn ensin — ja montako riviä kummallakin puolella on
 ne **sisällön tiivisteestä** kopioinnin jälkeen. Leimaa ei siis enää nosteta
 käsin, eikä «leima jäi nostamatta» ole enää mahdollinen vika.
 
+### Ajautuma sulautettiin 13.11.2026 — `--pakota` ei pitäisi enää tarvita
+
+Kahden kuukauden ajautuma purettiin kolmisuuntaisena sulautuksena pizzapartyyn
+(`ea3ddf7`): jokaiselle 19 tiedostolle etsittiin yhteinen pohja vertaamalla
+repojen historioita leimat normalisoituna, ja `git merge-file` teki työn.
+📐 Konflikteja 10, joista 9 oli pelkkiä `?v=`-leimoja; aito oli yksi.
+
+Sen jälkeen seitsemän tiedostoa kopioitiin `--pakota`lla, koska niissä oli
+rivejä vain täällä. **Jokainen tarkistettiin rivi riviltä, ja kaikki seitsemän
+olivat korvattuja eivätkä kadotettuja** — vanha nimentarkistus, jonka tilalle
+tuli jaettu sääntö (`hahmot.js`), ja vanha nopan kuva, jonka tilalle tuli
+oikea 3D-noppa.
+
+⚠️ **Jos työkalu estää kopioinnin uudelleen, se ei ole historiaa vaan uusi
+ajautuma:** joku on muokannut `julkinen/play/`:ta. Sulauta pizzapartyyn äläkä
+pakota. `--pakota` on tarkoitettu tilanteeseen, jossa sulautus on JO tehty ja
+jäljellä olevat erot on luettu — se kirjoittaa pakotetut tiedostot nimeltä
+ulos juuri siksi, ettei ohitus jää hiljaiseksi.
+
+📐 Ja sulautus löysi aukon, jota kumpikaan puoli ei olisi nähnyt yksin:
+`huone.nimiPakollinen` puuttui kaikista neljästä uudesta kielestä, koska
+pakollinen nimi syntyi 21.10. ja kielet 11.11. Hollantilainen lapsi olisi
+nähnyt tyhjällä nimellä avaimen eikä ohjetta. **Kun lähteitä on kaksi, puute
+ei synny kummassakaan vaan niiden väliin.**
+
 ## Moninpeli
 
 GitHub Pages ei aja PHP:tä. Moninpelin palvelin (`huone.php`) on

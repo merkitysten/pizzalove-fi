@@ -175,21 +175,37 @@ async function verkkoIsantaLuo(e) {
     }
     return;
   }
+  /* ⚠️ NIMI TARKISTETAAN ENNEN HUONEEN LUONTIA (Marko 21.10.2026: nimi on
+   * pakollinen). Tässä luki ettei lomake saa tarkistaa nimeä, koska «kaksi
+   * toteutusta ajautuisi erilleen» — perustelu oli oikea silloin, kun
+   * tarkistus olisi ollut tämän lomakkeen oma. Nyt sääntö on yksi ja jaettu
+   * (`hahmot.js` `hahmoNimiVirhe`, sama jota palvelin noudattaa), joten
+   * kahdennusta ei synny.
+   * 📐 Ja ilman tätä tyhjä nimi maksaa huoneen: alla näkyvä polku LUO
+   * huoneen ensin ja poistaa sen vasta kun palvelin torjuu nimen. */
+  const nimi = hahmoSiistiNimi(verkkoEl('verkkoLuoNimi').value);
+  const nimiVirhe = hahmoNimiVirhe(nimi);
+  if (nimiVirhe) {
+    virhe.textContent = t('huone.' + nimiVirhe);
+    virhe.hidden = false;
+    verkkoEl('verkkoLuoNimi').focus();
+    return;
+  }
   nappi.disabled = true;
   virhe.hidden = true;
   let luotu = false;
   try {
     await isannointiLuo(h, h.asetukset);
     luotu = true;
-    const j = await api('liity', { koodi: h.koodi, nimi: verkkoEl('verkkoLuoNimi').value, vari: verkkoOmaVari() });
+    const j = await api('liity', { koodi: h.koodi, nimi: nimi, vari: verkkoOmaVari() });
     verkkoIsantaTallenna();
     verkkoIsantaAloita();
     verkkoOtaPelaaja(h.koodi, j);
   } catch (err) {
-    /* ⚠️ Nimen tarkistaa palvelin liittyessä (huone.php siistiNimi), ei tämä
-     * lomake — kaksi toteutusta ajautuisi erilleen. Siksi huone voi syntyä
-     * ennen kuin nimi torjutaan, ja silloin se poistetaan heti: tyhjää
-     * huonetta ei jätetä odottamaan vanhenemista. */
+    /* ⚠️ Palvelin on yhä nimen auktoriteetti (huone.php `siistiNimi`), ja
+     * sen torjuma nimi voi silti tulla läpi yllä olevasta tarkistuksesta jos
+     * säännöt joskus eroavat. Silloin huone ehti syntya, ja se poistetaan
+     * heti: tyhjää huonetta ei jätetä odottamaan vanhenemista. */
     if (luotu) {
       const tunnus = isannointiTunnus(h);
       verkkoIsantaUnohda();

@@ -179,6 +179,12 @@ def main():
         for suht in vietavat:
             shutil.copy2(os.path.join(LAHDE, suht), os.path.join(KOHDE, suht))
         n = leimaa()
+        if pakota and estetty:
+            # ⚠️ Ohitus kirjataan nimeltä: «pakotettu» ilman listaa on sama kuin
+            # vaiennettu hälytys — jälkikäteen ei näe mitä se kosketti.
+            print('\n⚠️ PAKOTETTU %d tiedostoa (mahdollinen työn menetys):' % len(estetty))
+            for f in estetty:
+                print('      %s' % f)
         print('\nKopioitu %d tiedostoa · leimat laskettu %d sivulle' % (len(vietavat), n))
         return 0
     if estetty:

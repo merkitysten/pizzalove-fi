@@ -1471,9 +1471,25 @@
         '<img class="av__kulho-takana" src="' + KANSIO + 'kulho/tausta.webp" alt="">' +
         '<span class="av__hylly-torni">' + torni(3).outerHTML + '</span>' +
         '<img class="av__kulho-edessa" src="' + KANSIO + 'kulho/3.webp" alt=""></span></span>';
-      if (avain === 'noppa') return '<img class="av__esittelykuva av__esittelykuva--noppa" src="' + KANSIO + 'noppa/' + ESITTELY_NOPPA + '.svg" alt="">';
+      /* ⚠️ NOPPA, EI YKSI TAHKO (Marko 13.11.2026: «Tämä ei ole noppa vaan yksi
+         nopan tahkoista. Eli tee tähän noppa.»). `noppa/3.svg` on tahkokuva eli
+         yksi kolmio — se kelpaa nopan pinnaksi muttei nopaksi. Oikea kappale
+         kootaan samalla `Noppa3D`:llä jota peli käyttää; tässä vain jätetään
+         paikka, ja kappale rakennetaan ruudun piirryttyä (ks. esittelyNoppa). */
+      if (avain === 'noppa') return '<span class="av__esittelynoppa"><span class="av__d10"></span></span>';
       if (avain === 'vaaka') return '<img class="av__esittelykuva" src="' + KANSIO + 'vaaka-kansi.webp" alt="">';
       return '<img class="av__esittelykuva av__esittelykuva--kortti" src="' + KANSIO + 'apinakortti.webp' + PALA_V + '" alt="">';
+    }
+    /* Esittelykortin noppa on oikea kappale eikä kuva: sama `Noppa3D` jota peli
+       pyörittää, pysäytettynä siihen lukuun jolla ensimmäinen siirtovaihe alkaa.
+       ⚠️ Rakennetaan vasta kun kortti on DOMissa — `naytaRuutu` korvaa
+       `opasRuutu.innerHTML`:n, joten sitä ennen luotu kappale katoaisi.
+       `heita(..., true)` on «vähennä liikettä» -haara: se asettaa asennon
+       suoraan ilman pyöritystä, mikä on tässä juuri se mitä halutaan. */
+    function esittelyNoppa() {
+      var kohde = opasRuutu.querySelector('.av__esittelynoppa .av__d10');
+      if (!kohde || typeof window.Noppa3D !== 'function') return;
+      window.Noppa3D(kohde, KANSIO + 'noppa/').heita(ESITTELY_NOPPA, null, true);
     }
     function aloitaEsittely(nro) {
       clearTimeout(vihjeAjastin); clearTimeout(osaAjastin);
@@ -1499,6 +1515,7 @@
           if (o.osoita) return piirra();
           seuraavaOsa();
         });
+      if (o.avain === 'noppa') esittelyNoppa();
       piirra();
     }
     function seuraavaOsa() {

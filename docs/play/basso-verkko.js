@@ -187,18 +187,20 @@ function bvVarit(sailio, varatut, valittu, valitse) {
  * kanssa luonti ei tehnyt «mitään», ilman nimeä toimi. Mitattu palvelimelta:
  * iPhonen kaareva heittomerkki (’), huutomerkki ja emoji → nimiKelpaa — ja
  * virheteksti jäi napin alle laatikon vieritettävään osaan eikä näkynyt.
- * Nyt virheellistä nimeä ei lähetetä, ja ohje näkyy heti kentän alla. */
-const BV_NIMI_KUVIO = /^[\p{L}\p{N}][\p{L}\p{N} ._\-]*$/u;
-function bvNimiKelpaa(n) {
-  return n === '' || (BV_NIMI_KUVIO.test(n) && Array.from(n).length <= HAHMO_NIMI_ENINTAAN);
-}
+ * Nyt virheellistä nimeä ei lähetetä, ja ohje näkyy heti kentän alla.
+ *
+ * ⚠️ KUVIO JA SÄÄNTÖ MUUTTIVAT `hahmot.js`:ään 21.10.2026 (`hahmoNimiKelpaa`),
+ * koska sama sääntö tarvitaan nyt myös Partyn liittymislomakkeessa — ja
+ * `hahmot.js` on ainoa näistä joka ladataan molemmille sivuille. Tässä oli
+ * `BV_NIMI_KUVIO`, ja se salli tyhjän nimen. */
 
 /* Nimi kentästä tai null jos ei kelpaa (ohje näytetään kentän alle).
  * Kelpaava nimi muistiin tälle laitteelle (asetusten 1. pelaaja). */
 function bvNimi(id) {
   const n = hahmoSiistiNimi(bvEl(id).value);
-  if (!bvNimiKelpaa(n)) {
-    bvNaytaVirhe({ virhe: 'nimiKelpaa' });
+  const virhe = hahmoNimiVirhe(n);
+  if (virhe) {
+    bvNaytaVirhe({ virhe: virhe });
     bvEl(id).focus();
     return null;
   }
@@ -207,15 +209,22 @@ function bvNimi(id) {
   return n;
 }
 
-/* Kirjoittaessa: ohje näkyviin heti kun nimi ei kelpaa, pois kun kelpaa. */
+/* Kirjoittaessa: ohje näkyviin heti kun nimi ei kelpaa, pois kun kelpaa.
+ * ⚠️ TYHJÄ KENTTÄ EI SAA HUUTAA ENNEN KUIN SIIHEN ON KOSKETTU: ohje
+ * «Kirjoita pelaajanimi» näytetään vasta kun kenttään on kirjoitettu ja
+ * pyyhitty tyhjäksi, tai kun liittymistä yritetään (`bvNimi`). */
 function bvNimiKentta(id, enter) {
   const kentta = bvEl(id);
   kentta.maxLength = HAHMO_NIMI_ENINTAAN;
+  let koskettu = false;
   kentta.addEventListener('input', function () {
     const p = kentta.parentNode.querySelector('.bv-virhe');
-    const ok = bvNimiKelpaa(hahmoSiistiNimi(kentta.value));
-    if (!ok) { p.textContent = bvVirheTeksti({ virhe: 'nimiKelpaa' }); p.hidden = false; }
-    else if (p.textContent === bvVirheTeksti({ virhe: 'nimiKelpaa' })) p.hidden = true;
+    const n = hahmoSiistiNimi(kentta.value);
+    if (n !== '') koskettu = true;
+    const virhe = koskettu ? hahmoNimiVirhe(n) : null;
+    if (virhe) { p.textContent = bvVirheTeksti({ virhe: virhe }); p.hidden = false; }
+    else if (p.textContent === bvVirheTeksti({ virhe: 'nimiKelpaa' }) ||
+             p.textContent === bvVirheTeksti({ virhe: 'nimiPakollinen' })) p.hidden = true;
   });
   kentta.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;

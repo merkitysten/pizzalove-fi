@@ -34,6 +34,34 @@ function hahmoSiistiNimi(s) {
   return String(s || '').replace(/\s+/g, ' ').trim().slice(0, HAHMO_NIMI_ENINTAAN);
 }
 
+/* ---------- VERKKOPELIN PELAAJANIMI ----------
+ * ⚠️ YKSI SÄÄNTÖ MOLEMMILLE PELEILLE, ja se asuu täällä koska `hahmot.js`
+ * ladataan sekä party.html:lle että basso.html:lle. Tämä kuvio oli ennen
+ * `basso-verkko.js`:ssä (BV_NIMI_KUVIO), eli Partyn liittymislomake ei
+ * tarkistanut nimestä mitään vaan odotti palvelimen virhettä.
+ *
+ * ⚠️ NIMI ON PAKOLLINEN (Marko 21.10.2026). Se ei ole pelkkä kohteliaisuus
+ * vaan se mikä korvaa värin tunnisteena: Partyn huoneessa väri saa nyt
+ * toistua (huone.php), joten pistetaulussa pelaajat erottaa nimi.
+ *
+ * Sama kuvio kuin palvelimella (huone.php / basso-huone.php `siistiNimi`),
+ * jotta selain ei lähetä nimeä jonka palvelin hylkää. Palvelin on silti
+ * auktoriteetti — tämä vain estää turhan käynnin. */
+const HAHMO_NIMI_KUVIO = /^[\p{L}\p{N}][\p{L}\p{N} ._\-]*$/u;
+
+/* Tyhjä ei kelpaa. Palauttaa `true` vain kelvollisesta nimestä. */
+function hahmoNimiKelpaa(n) {
+  return n !== '' && HAHMO_NIMI_KUVIO.test(n) && Array.from(n).length <= HAHMO_NIMI_ENINTAAN;
+}
+
+/* Virheavain kentän sisällölle: tyhjälle oma teksti, muuten muoto-ohje.
+ * Tyhjä on eri virhe kuin väärä merkki, ja «Nimessä saa olla kirjaimia…»
+ * ei kerro tyhjälle kentälle mitään siitä mitä pitäisi tehdä. */
+function hahmoNimiVirhe(n) {
+  if (n === '') return 'nimiPakollinen';
+  return hahmoNimiKelpaa(n) ? null : 'nimiKelpaa';
+}
+
 function hahmoVari(nro) {
   const x = TAYTTEET.filter(function (t) { return t.arvo === nro; })[0];
   return x ? x.vari : null;

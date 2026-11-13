@@ -668,11 +668,26 @@ function verkkoOtaPelaaja(koodi, j) {
 async function verkkoLiity(e) {
   e.preventDefault();
   const nappi = verkkoEl('verkkoLiityNappi');
+  const koodi = verkkoEl('verkkoKoodi').value.trim();
+  /* ⚠️ NIMI TARKISTETAAN ENNEN LÄHETYSTÄ (Marko 21.10.2026: «muuta se
+   * pelaajanimi pakolliseksi»). Palvelin on hylännyt tyhjän nimen jo ennenkin,
+   * mutta tämä lomake lähetti sen silti ja näytti vasta palvelimen vastauksen
+   * «Nimessä saa olla kirjaimia…» — teksti joka ei kerro tyhjälle kentälle
+   * mitään. Nyt syy sanotaan heti ja oikealla nimellä.
+   * Sääntö on `hahmot.js`:ssä, yhteisenä Basson kanssa. */
+  const nimi = hahmoSiistiNimi(verkkoEl('verkkoNimi').value);
+  const nimiVirhe = hahmoNimiVirhe(nimi);
+  if (nimiVirhe) {
+    const el = verkkoEl('verkkoVirhe');
+    el.textContent = t('huone.' + nimiVirhe);
+    el.hidden = false;
+    verkkoEl('verkkoNimi').focus();
+    return;
+  }
   nappi.disabled = true;
   verkkoEl('verkkoVirhe').hidden = true;
-  const koodi = verkkoEl('verkkoKoodi').value.trim();
   try {
-    verkkoOtaPelaaja(koodi, await api('liity', { koodi: koodi, nimi: verkkoEl('verkkoNimi').value, vari: verkkoOmaVari() }));
+    verkkoOtaPelaaja(koodi, await api('liity', { koodi: koodi, nimi: nimi, vari: verkkoOmaVari() }));
   } catch (err) {
     const el = verkkoEl('verkkoVirhe');
     /* ⚠️ KOODI VOI OLLA TOISEN PELIN (Marko 20.10.2026). Huoneet ovat eri

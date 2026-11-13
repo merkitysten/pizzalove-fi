@@ -661,7 +661,6 @@
    `.av__esittelykortti` (0,1,0) hävisi sille — mitattu: kortti piirtyi
    52 px:n levyisenä vaikka sääntö sanoi 140. Sama koskee tornia ja kulhoa. */
 .av__opaskortti .av__esittelykuva{display:block;width:100%;max-width:250px;height:auto;margin:0 auto 6px}
-.av__opaskortti .av__esittelykuva--noppa{max-width:128px}
 /* Apinakortti on neliö ja pienempi kuin apina, jotta kortti näyttää kortilta. */
 .av__opaskortti .av__esittelykuva--kortti{max-width:140px;border-radius:12px;box-shadow:0 4px 12px rgba(60,30,0,.3)}
 /* Esittelyssä pizzakortti on kortti: pahvi takaisin, koska juuri se on se
@@ -673,10 +672,30 @@
 /* Torni ja kulho piirretään pelin omilla säännöillä; tässä vain mittakaava. */
 .av__opaskortti .av__esittelytorni{display:block;margin:0 auto 6px;--pala:16px;--leveys:58px}
 .av__opaskortti .av__esittelytorni .av__torni{align-items:center}
-.av__opaskortti .av__esittelylinjasto{display:block;position:relative;height:160px;margin:0 auto 6px}
+.av__opaskortti .av__esittelylinjasto{display:block;position:relative;height:196px;margin:0 auto 6px}
+/* 📐 TORNIN JA TARRAN SUHDE KULHOON ON MITATTU LAUDALTA (Marko 13.11.2026:
+   «nuo ananakset ovat tosi pienet verrattuna kulhoon»).
+   📐 Mitattu linjastolta 390 px:n ruudulla: kulho 33,3 px, tornin pala 18 px
+   = 54 % kulhosta, tarra 20 px = 60 % kulhosta.
+   📐 Ja syy mitattiin: kortin kulho on 104 px eli 3,1-kertainen, mutta pala ja
+   tarra pysyivät laudan pikseleissä (18 ja 20) eli 17 % ja 19 % kulhosta.
+   Syy on `.av__hylly-torni .av__torni i{width:18px}` ja
+   `.av__hylly-torni .av__tarra{width:20px}` — kiinteitä laudan mittoja, jotka
+   kortti peri kun torni käärittiin `.av__hylly-torni`iin kulhon asemoinnin
+   vuoksi. Ne kumotaan tässä ja mitat johdetaan kulhon leveydestä, jolloin
+   yksi luku (`--kulho`) riittää ja suhde säilyy myös matalalla ruudulla. */
 .av__opaskortti .av__esittelykulho{position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-  width:104px;max-width:104px;margin:0;--pala:14px;--leveys:50px}
+  --kulho:104px;width:var(--kulho);max-width:var(--kulho);margin:0;
+  --leveys:calc(var(--kulho) * .54);--pala:calc(var(--kulho) * .15)}
 .av__opaskortti .av__esittelykulho .av__hylly-torni{background:none;border:0;padding:0;bottom:78%}
+.av__opaskortti .av__esittelykulho .av__torni i{width:var(--leveys)}
+.av__opaskortti .av__esittelykulho .av__tarra{width:calc(var(--kulho) * .6);height:calc(var(--kulho) * .6);
+  margin-bottom:calc(var(--pala) * -.4)}
+/* Esittelykortin noppa on oikea kappale (`Noppa3D`), joka piirtyy 80 × 76 px:n
+   `.av__d10`:hin. Suurennus on `scale`, kuten pelissäkin; lokero varaa tilan,
+   jottei skaalattu kappale mene otsikon päälle. */
+.av__opaskortti .av__esittelynoppa{display:grid;place-items:center;height:132px;margin:0 auto 4px}
+.av__opaskortti .av__esittelynoppa .av__d10{transform:scale(1.65)}
 .av__opaskortti .av__vuoro{text-align:left;margin:4px 0 8px;padding-left:22px;font-size:16px}
 .av__opaskortti .av__vuoro li{margin:0 0 5px}
 .av__opaskortti .av__huomio{font-size:14px;color:var(--soft,#6E6357)}
@@ -696,8 +715,13 @@
 /* Esittelyssä lauta on katseltavaa: osoitin ei lupaa napautusta muualla. */
 .av--esittely .av__paikka--kulho,.av--esittely .av__kortti{cursor:default}
 .av--esittely .av__osoita .av__kortti,.av--esittely .av__noppa.av__osoita{cursor:pointer}
-/* Noppa on ympyrä, joten sen hohtokin on: nelikulmainen kehys näyttäisi vieraalta. */
-.av--esittely .av__noppa.av__osoita{border-radius:50%}
+/* ⚠️ NOPALLE EI HOHTORENGASTA (Marko 13.11.2026: «Nopan efekti on ruma.»).
+   Rengas piirtyi `box-shadow`ina nopan napin ympärille, ja kolmiulotteisen
+   kappaleen ympärillä se näytti irralliselta levyltä eikä korostukselta.
+   Nopalla on jo oma kutsuanimaationsa (`av__noppa--odottaa` → `av-kutsu`), ja
+   muu lauta on himmennetty — se riittää osoittamaan mitä napautetaan. Kaksi
+   päällekkäistä korostusta oli yksi liikaa. */
+.av--esittely .av__noppa.av__osoita{animation:none;box-shadow:none;filter:none}
 
 /* Matala ruutu (puhelin poikittain): sama kortti tiiviimpänä, jotta
    vieritystä tarvitaan mahdollisimman vähän. Rajana sama 520 px kuin
@@ -708,13 +732,14 @@
   .av__opaskortti p{font-size:14px;margin:0 0 4px}
   .av__opaskortti .av__lainaus{font-size:15px;margin:0 0 6px}
   .av__opaskortti .av__esittelykuva{max-width:128px;margin-bottom:2px}
-  .av__opaskortti .av__esittelykuva--noppa{max-width:76px}
   .av__opaskortti .av__esittelykuva--kortti{max-width:80px}
   .av__opaskortti .av__esittelykortti{width:80px;height:80px;border-radius:12px;margin-bottom:2px}
   .av__opaskortti .av__esittelykortti .av__kortti-pizza{width:64px;height:64px}
   .av__opaskortti .av__esittelytorni{--pala:9px;--leveys:34px;margin-bottom:2px}
-  .av__opaskortti .av__esittelylinjasto{height:92px;margin-bottom:2px}
-  .av__opaskortti .av__esittelykulho{width:62px;max-width:62px;--pala:9px;--leveys:30px}
+  .av__opaskortti .av__esittelylinjasto{height:118px;margin-bottom:2px}
+  .av__opaskortti .av__esittelykulho{--kulho:62px}
+  .av__opaskortti .av__esittelynoppa{height:84px}
+  .av__opaskortti .av__esittelynoppa .av__d10{transform:scale(1.05)}
   .av__opaskortti .av__vuoro{font-size:14px;margin:2px 0 4px;padding-left:20px}
   .av__opaskortti .av__vuoro li{margin:0 0 3px}
   .av__opaskortti .av__huomio{font-size:12px}
