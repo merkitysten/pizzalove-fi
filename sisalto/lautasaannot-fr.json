@@ -381,7 +381,7 @@
       ],
       "sydan_otsikko": "Pizza poisson (10)",
       "sydan": "La pizza poisson vaut 10 : elle donne une part en plus, au choix. Tu la reconnais à ce symbole.",
-      "esimerkki": "Sur la chaîne, il y a le jambon : vous pouvez préparer la pizza jambon.",
+      "esimerkki": "Sur la chaîne, il y a le jambon et l’olive : vous pouvez préparer la pizza jambon.",
       "esimerkki_palat": [
         [
           9
@@ -467,5 +467,7 @@
   "vaaka_peli": "Scanne le code et joue sur ton téléphone.",
   "vaaka_peli_osoite": "https://pizzalove.fi/play/apinavaaka.html?kieli=fr&tila=harjoitus",
   "linjasto_nimi": "Chaîne",
-  "vaaka_kuvateksti": "Déplacement somme : 3 = 1 + 2"
+  "vaaka_kuvateksti": "Déplacement somme : 3 = 1 + 2",
+  "linjasto_teksti": "Quand on utilise un ingrédient, toute la tour se déplace.",
+  "varasto_nimi": "Réserve"
 }

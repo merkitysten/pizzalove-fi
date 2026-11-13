@@ -264,5 +264,7 @@
   "vaaka_peli": "Skannaa koodi ja pelaa puhelimellasi.",
   "vaaka_peli_osoite": "https://pizzalove.fi/play/apinavaaka.html?kieli=fi&tila=harjoitus",
   "linjasto_nimi": "Linjasto",
-  "vaaka_kuvateksti": "Summasiirto: 3 = 1 + 2"
+  "vaaka_kuvateksti": "Summasiirto: 3 = 1 + 2",
+  "linjasto_teksti": "Kun täytettä käytetään, koko torni liikkuu.",
+  "varasto_nimi": "Varasto"
 }

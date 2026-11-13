@@ -381,28 +381,13 @@ PAA = '''<!doctype html>
 
   /* sivu 3 */
   .esim-pizzat {{ display: flex; gap: 6mm; margin: 1mm 0 1.6mm }}
-  .linjasto-esim {{ background: #D6E9F0; border-radius: 1.6mm; padding: 1.4mm 2mm 1.6mm; margin: 1.4mm 0 1.8mm }}
-  .linjasto-nimi {{ font: 700 7.6pt/1 Otsikko, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #4B6470 }}
-  .ryhmat {{ display: flex; gap: 4mm; align-items: flex-end; margin-top: 1.2mm }}
-  .ryhma {{ display: flex; flex-direction: column; align-items: center; gap: .8mm;
-            border: .3mm dashed #7A9AA6; border-radius: 1.4mm; padding: 1.2mm 1.4mm .8mm }}
-  .ryhma > span {{ font: 700 7.4pt/1.1 Otsikko, sans-serif; text-transform: uppercase; color: #3B4F58 }}
-  .tornit {{ display: flex; gap: 1.6mm; align-items: flex-end }}
-  .pizzakortti {{ position: relative; display: block; width: 16mm }}
-  .pizzakortti > img {{ border-radius: 1.2mm }}
-  .pizzakortti > img {{ width: 100%; display: block }}
-  .kortti-tarra {{ position: absolute; transform: translate(-50%, -50%); aspect-ratio: 1; border-radius: 50%;
-                   border: .25mm solid #fff; display: flex; align-items: center; justify-content: center }}
-  .kortti-tarra img {{ width: 70%; filter: brightness(0) invert(1) }}
-  .ryhma .nuoli {{ font-size: 6pt; line-height: 1; color: #7A9AA6 }}
-  .torni-kuva {{ display: flex; flex-direction: column; align-items: center; gap: .22mm }}
-  .torni-kuva i {{ display: block; width: 7mm; height: 1.25mm; border-radius: .45mm;
-                   box-shadow: inset 0 -.3mm 0 rgba(0,0,0,.25), inset 0 .15mm 0 rgba(255,255,255,.35) }}
-  .torni-kuva .tarra {{ width: 5.6mm; height: 5.6mm; border-radius: 50%; border: .35mm solid #fff;
-                        display: flex; align-items: center; justify-content: center; margin-bottom: .3mm;
-                        box-shadow: 0 0 0 .15mm rgba(0,0,0,.25) }}
-  .torni-kuva .tarra img {{ width: 72%; filter: brightness(0) invert(1) }}
-  .torni-luku {{ font: 700 7.6pt/1 Otsikko, sans-serif; margin-top: .5mm }}
+  .linjasto-esim {{ position: relative; margin: 1.4mm 0 1.6mm; break-inside: avoid }}
+  .linjasto-kuva {{ width: 46mm; display: block; margin: 0 auto }}
+  .nimi-linjasto, .nimi-varasto {{ position: absolute; font: 700 7pt/1 Otsikko, sans-serif;
+                                   text-transform: uppercase; letter-spacing: .04em; color: #555 }}
+  .nimi-linjasto {{ left: 57%; top: 50%; transform: translate(-50%, -50%) }}
+  .nimi-varasto {{ right: 2mm; top: -2.6mm }}
+  .linjasto-esim figcaption {{ font-weight: 700; font-size: 8pt; text-align: center; margin-top: 1.2mm }}
   .palat {{ display: flex; align-items: center; gap: 1mm }}
   .palat .pala {{ width: 8mm }}
   .palat b {{ font: 900 13pt/1 Viiri, sans-serif }}
@@ -597,12 +582,18 @@ def regles_html(kieli, s, a, rakenne):
                         % (kuva(n, 'kuva'), e(c)) for n, c in zip(t['kuvat'], t['kuvateksti']))
         tavat.append('<div class="tapa"><h3 class="palkki">%s) %s</h3><p>%s</p>%s</div>'
                      % (t['kirjain'], e(t['otsikko']), e(t['html']), kuvat))
-    esim = '<div class="linjasto-esim"><span class="linjasto-nimi">%s</span><div class="ryhmat">%s</div></div>' % (
-        e(s['linjasto_nimi']), ''.join(
-            '<div class="ryhma">%s<span class="nuoli">▲</span><div class="tornit">%s</div><span>%s</span></div>'
-            % (pizzakortti(pizza), ''.join(torni(n) for n in pizza),
-               e(' · '.join(s['taytteet'][n - 1] for n in pizza)))
-            for pizza in s.get('esimerkki_palat', [[9], [1, 3, 5]])))
+    # 🔵 Marko 13.11.2026: «Mikset käytä sitä peliohjeen kuvaa, jossa linjasto
+    # on pyöreänä ja siinä on jopa ne oikeat täytteet kuvattuna?» → painetun
+    # ohjeen esimerkkikuva (sivu 6; Nälkäisille apinoille sen oma vihko),
+    # vektorista 300 dpi:lla: paperi/lauta/linjasto-<tornit>.webp.
+    # Pizzakortit ja ympyröinnit ovat kuvassa valmiina.
+    palat = s.get('esimerkki_palat', [[9], [1, 3, 5]])
+    tornit = sorted(n for pizza in palat for n in pizza)
+    esim = ('<figure class="linjasto-esim"><img class="linjasto-kuva" src="paperi/lauta/linjasto-%s.webp" alt="">'
+            '<span class="nimi-linjasto">%s</span><span class="nimi-varasto">%s</span>'
+            '<figcaption>%s</figcaption></figure>'
+            % ('-'.join(map(str, tornit)), e(s['linjasto_nimi']), e(s['varasto_nimi']),
+               e(s['linjasto_teksti'])))
     hoyry = ''.join('<div class="hoyry-esim">%s<p>%s</p></div>'
                     % (palalasku(x['lasku']), e(x['teksti'])) for x in s['hoyry_esimerkit'])
     pisteet = ''.join('<tr><th>%s</th><td>%s</td></tr>' % (e(p), e(t))
