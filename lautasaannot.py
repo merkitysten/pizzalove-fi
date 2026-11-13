@@ -412,12 +412,10 @@ PAA = '''<!doctype html>
   .apina {{ display: flex; gap: 4mm; align-items: center }}
   .apina img {{ width: 20mm; flex: none; border-radius: 1.4mm }}
   .apina p {{ margin: 0 }}
-  .koti {{ display: grid; grid-template-columns: 28mm 1fr 1.25fr; column-gap: 5mm; align-items: start }}
-  .koti > img {{ width: 100%; align-self: center; grid-column: 1; grid-row: 1 / span 2 }}
-  .koti h2 {{ grid-column: 2 / -1; grid-row: 1 }}
+  .koti {{ display: grid; grid-template-columns: 1fr 1.25fr; column-gap: 6mm; align-items: start }}
+  .koti h2 {{ grid-column: 1 / -1; grid-row: 1 }}
   .koti > div {{ grid-row: 2 }}
-  .koti > div:nth-of-type(1) {{ grid-column: 2 }}
-  .koti > div:nth-of-type(2) {{ grid-column: 3 }}
+  .koti > div img {{ width: 30mm; margin: 1.5mm auto 0 }}
   .hoyry-esim {{ display: flex; align-items: center; gap: 3mm; margin-top: 1mm }}
   .hoyry-esim p {{ margin: 0; font-size: 8.2pt }}
 
@@ -546,10 +544,10 @@ BLOKIT = {
     <div><h3>{juhla_otsikko}</h3><p>{juhla}</p></div>
   </div>
 </section>''',
+    # 🔵 Marko 13.11.2026: pizzalaatikko tekstin alle, ei vasempaan reunaan.
     'koti': '''<section class="kehys koti">
-  {kuva_amour}
   <h2>{valinnaiset_otsikko}</h2>
-  <div><h3 style="margin-top:0">{kaikille_otsikko}</h3><p>{kaikille}</p></div>
+  <div><h3 style="margin-top:0">{kaikille_otsikko}</h3><p>{kaikille}</p>{kuva_amour}</div>
   <div><h3 style="margin-top:0">{hoyry_otsikko}</h3><p>{hoyry}</p>{hoyry_esim}</div>
 </section>''',
     'muodot': '''<section class="kehys">
