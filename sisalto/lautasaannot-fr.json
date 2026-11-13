@@ -462,5 +462,8 @@
       "kortit_ingressi": "Si tu as préparé au moins une pizza au début de ton tour, pioche une carte singe. Cherche le numéro de la carte et fais ce qu’elle dit.",
       "kortit_yleista": "Une carte que l’on peut garder appartient au joueur qui l’a piochée."
     }
-  }
+  },
+  "vaaka_peli_otsikko": "Découvrir la balance en ligne :",
+  "vaaka_peli": "le singe pèse les tours, et la lampe s’allume quand elles ont la même hauteur. Scanne le code avec ton téléphone.",
+  "vaaka_peli_osoite": "https://pizzalove.fi/play/apinavaaka.html?kieli=fr&tila=harjoitus"
 }

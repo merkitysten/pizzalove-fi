@@ -259,5 +259,8 @@
     ]
   },
   "kortit_otsikko": "Apinakortit 01–33",
-  "kortit_huom": "Etsi korttisi numeron avulla."
+  "kortit_huom": "Etsi korttisi numeron avulla.",
+  "vaaka_peli_otsikko": "Apinavaaka tutuksi verkossa:",
+  "vaaka_peli": "apina punnitsee tornit, ja lamppu syttyy, kun ne ovat yhtä korkeat. Skannaa koodi puhelimella.",
+  "vaaka_peli_osoite": "https://pizzalove.fi/play/apinavaaka.html?kieli=fi&tila=harjoitus"
 }

@@ -175,7 +175,9 @@ KIRJASIMET = '''
 
 # QR piirretaan sivulla repon omalla koodaajalla (julkinen/play/qr.js).
 QR_SKRIPTI = '''<script src="julkinen/play/qr.js"></script>
-<script>document.getElementById('qr').innerHTML = norsuQrSvg(%s, { reunus: 4 });</script>'''
+<script>document.getElementById('qr').innerHTML = norsuQrSvg(%s, { reunus: 4 });
+document.querySelectorAll('[data-qr]').forEach(function (el) {
+  el.innerHTML = norsuQrSvg(el.getAttribute('data-qr'), { reunus: 4 }); });</script>'''
 
 
 def lista(kohdat, tagi='ul'):
@@ -308,17 +310,23 @@ PAA = '''<!doctype html>
                    color: #fff; display: flex; align-items: center; justify-content: center;
                    font: 900 12pt/1 Viiri, sans-serif }}
   .tapa figure {{ margin-bottom: 1.6mm; break-inside: avoid }}
-  .tapa .kuva {{ width: 100%; border-radius: 1mm }}
+  .tapa .kuva {{ width: 100%; border-radius: 1mm; aspect-ratio: 640 / 300; object-fit: cover }}
   figcaption {{ font-size: 7.8pt; line-height: 1.25; margin-top: .6mm; font-weight: 700 }}
   .tapa h3.palkki {{ min-height: 9.4mm; display: flex; align-items: center }}
   .huomiot {{ margin-top: 1mm }}
   .vinkki {{ background: {musta}; color: #fff; border-radius: 1.2mm; padding: 2mm 3mm; margin-top: 2mm }}
   .vinkki h3 {{ color: {oranssi}; margin: 0 0 .6mm }}
   .vinkki p {{ margin: 0 }}
-  .vaaka {{ border: .45mm dashed {musta}; display: grid; grid-template-columns: 70mm 1fr; column-gap: 6mm;
+  .vaaka {{ border: .45mm dashed {musta}; display: grid; grid-template-columns: 44mm 1fr 30mm; column-gap: 5mm;
             align-items: start }}
-  .vaaka img.skeema {{ width: 100% }}
-  .vaaka h2, .vaaka h2 + p {{ padding-right: 22mm }}
+  .vaaka-apina {{ width: 100%; margin-top: 4mm }}
+  .vaaka {{ font-size: 8.4pt; line-height: 1.32; padding-top: 2.6mm; padding-bottom: 2mm }}
+  .vaaka ol.lista li {{ margin-bottom: .3mm }}
+  .vaaka-linkki {{ padding-top: 21mm }}
+  .vaaka-qr {{ width: 25mm; margin: 0 auto 1.2mm }}
+  .vaaka-qr svg {{ width: 100%; height: auto; display: block }}
+  .vaaka-linkki p {{ margin: 0; font-size: 7.4pt; line-height: 1.25 }}
+
   .leima.lapset {{ width: 22mm; height: 22mm; right: 4mm; top: -4mm }}
 
   /* sivu 3 */
@@ -360,6 +368,7 @@ PAA = '''<!doctype html>
   .pisteet td {{ padding: .9mm 0; vertical-align: top }}
   .pisteet tr + tr {{ border-top: .2mm solid #d6d6d6 }}
   .apina-syo {{ width: 26mm; margin: 1mm auto 0 }}
+  .apina-koko {{ width: 34mm; margin: 4mm auto 0 }}
 
   /* sivu 5: apinakortit */
   .kortit-otsake {{ display: flex; gap: 5mm; align-items: center }}
@@ -427,10 +436,16 @@ BLOKIT = {
     <div>{tapa_c}</div>
   </div>
 </section>''',
+    # 🔵 Marko 13.11.2026: painetun ohjeen nuolikaavio on «mallia insinööreille»;
+    # lapsille on verkon apinavaaka (sama apina, punnitus, lamppu syttyy), joten
+    # kaavion tilalla on pelin apina ja suora linkki «Apinavaaka tutuksi»
+    # -harjoitukseen (?tila=harjoitus).
     'vaaka': '''<section class="vaaka">
   {leima_lapset}
-  <div><img class="skeema" src="paperi/lauta/balance-schema.webp" alt=""></div>
+  <div class="vaaka-peli"><img class="vaaka-apina" src="julkinen/kuvat/apinavaaka.webp" alt=""></div>
   <div><h2>{vaaka_otsikko}</h2><p>{vaaka}</p><p><b>{vaaka_valmistelu}</b></p>{vaaka_vaiheet}</div>
+  <div class="vaaka-linkki"><div class="vaaka-qr" data-qr="{vaaka_peli_osoite}"></div>
+    <p><b>{vaaka_peli_otsikko}</b> {vaaka_peli}</p></div>
 </section>''',
     'pizza': '''<section class="kehys">
   <h2>{pizza_otsikko}</h2>
@@ -528,6 +543,7 @@ def regles_html(kieli, s, a, rakenne):
         for x in osa[3:]:
             sarakkeet[0] += '<div class="m-lisa">%s</div>' % x
         sarakkeet[-1] += kuvaosa
+        sarakkeet[0] += m.get('kuva_alle', '')
         palstat = ''.join('<div class="m-osa">%s</div>' % x for x in sarakkeet)
         return ('<section class="muoto kehys"><div class="muoto-yla">'
                 '<h2 class="banneri"><span class="oranssi">%s</span> %s</h2>'
@@ -536,8 +552,11 @@ def regles_html(kieli, s, a, rakenne):
                 % (e(sanat[0]), e(sanat[1] if len(sanat) > 1 else ''), e(m['kuvaus']),
                    e(m['ingressi']), palstat))
 
-    apinat_lisa = ('<div class="pisteet"><table>%s</table><p class="pieni">%s</p>%s</div>'
-                   % (pisteet, e(s['apinat']['huom']), kuva('singe-mange', 'apina-syo')))
+    # 🔵 Marko 13.11.2026: apina vasempaan palstaan, jossa on tilaa, eika
+    # sita leikata: kokonainen syova apina (julkinen/kuvat/basso-syo.webp).
+    apinat_lisa = ('<div class="pisteet"><table>%s</table><p class="pieni">%s</p></div>'
+                   % (pisteet, e(s['apinat']['huom'])))
+    s = dict(s, apinat=dict(s['apinat'], kuva_alle='<img class="apina-koko" src="julkinen/kuvat/basso-syo.webp" alt="">'))
 
     v = dict(
         kieli=kieli, title=e(s['title']), musta=MUSTA, oranssi=ORANSSI, viiva=VIIVA,
@@ -565,6 +584,8 @@ def regles_html(kieli, s, a, rakenne):
         vinkki_otsikko=e(s['vinkki_otsikko']), vinkki=e(s['vinkki']),
         ei_siirtoa_otsikko=e(s['ei_siirtoa_otsikko']), ei_siirtoa=e(s['ei_siirtoa']),
         leima_lapset=leima(s['leima_lapsille'], 'lapset'),
+        vaaka_peli_otsikko=e(s['vaaka_peli_otsikko']), vaaka_peli=e(s['vaaka_peli']),
+        vaaka_peli_osoite=s['vaaka_peli_osoite'],
         vaaka_otsikko=e(s['vaaka_otsikko']), vaaka=e(s['vaaka']),
         vaaka_valmistelu=e(s['vaaka_valmistelu']), vaaka_vaiheet=lista(s['vaaka_vaiheet'], 'ol'),
         pizza_otsikko=e(s['pizza_otsikko']), pizza=e(s['pizza']),
@@ -593,7 +614,7 @@ def regles_html(kieli, s, a, rakenne):
         kortit_yleinen_p=('<p><b>%s</b> %s</p>' % (e(a['huom']), e(s.get('kortit_yleista', a['yleista']))))
                          if s.get('kortit_yleista', a['yleista']) else '',
         loppu_otsikko=e(s['apinat']['osat'][2]['otsikko']), loppu_html=s['apinat']['osat'][2]['html'],
-        loppu_huom=e(s['apinat']['huom']), pisteet=pisteet, kuva_syo=kuva('singe-mange', 'apina-syo'),
+        loppu_huom=e(s['apinat']['huom']), pisteet=pisteet, kuva_syo='<img class="apina-syo" src="julkinen/kuvat/basso-syo.webp" alt="">',
         vaihto_otsikko=e(s['salatut']['osat'][2]['otsikko']), vaihto_html=s['salatut']['osat'][2]['html'],
         variante_otsikko=e(s['salatut']['osat'][3]['otsikko']), variante_html=s['salatut']['osat'][3]['html'])
     osat = []
