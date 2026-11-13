@@ -1,0 +1,263 @@
+{
+  "lahde": "Tarkistusversio ranskankielisistä säännöistä (sisalto/lautasaannot-fr.json), Markon tarkastettavaksi 13.11.2026.",
+  "title": "Pizza Love® -lautapeli – säännöt (tarkistusversio)",
+  "h1": "Pizza Love® -lautapeli",
+  "alaotsikko": "Höyryävän hauska perhepeli – rakkaudesta pizzaan",
+  "ingressi": "Valmista pizzalaatikoiden lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa boksiisi!",
+  "tiedot": [
+    "2–4 pelaajaa",
+    "6+",
+    "3 tapaa pelata",
+    "10–20 min tai enemmän"
+  ],
+  "iskulause": "JOKAINEN PIZZA LASKETAAN",
+  "osoite": "https://pizzalove.fi/fi/lautapeli.html",
+  "qr_teksti": "Säännöt ja<br>videot verkossa",
+  "videot": "Lisätietoja ja videoita osoitteessa",
+  "oikeudet": "Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n rekisteröityjä tavaramerkkejä. Kaikki oikeudet pidätetään.",
+  "tarina_otsikko": "Pelin tarina",
+  "tarina": "Pizzalaatikoilla on ollut kautta aikain sydäntä särkevä ongelma: ne rakastavat pizzoja, mutta eivät osaa valmistaa niitä itse! Apinat, jotka myös rakastavat pizzaa – omalla tavallaan – ehdottivat yksinkertaista ratkaisua: pizzatehdas, jossa palkeilla pumpattava imuri kuljettaa täytteitä. Yhdellä pienellä ehdolla… että laatikot jakavat apinoiden kanssa höyryävän kuumat ja mehukkaat palansa. Sopimus syntyi! Tässä tehtaassa jokainen pizza lasketaan. Mutta varo: mikään ei tyhjennä boksiasi nopeammin kuin oma muriseva mahasi…",
+  "osat_otsikko": "Pelin osat",
+  "sisalto": "Pelilauta · 10 täytettä (55 nappulaa) · 10 punnusta · Merkitysten®-noppa · 42 pizzakorttia · 33 apinakorttia · 4 boksia · ohjeet · tarra-arkki",
+  "osat": [
+    {
+      "otsikko": "Boksit ja palat",
+      "kuva": "boite-pleine",
+      "html": "Pelin alussa jokaisella on tyhjä boksi. Siihen kerätään paloja valmistamalla pizzoja."
+    },
+    {
+      "otsikko": "Täytteet",
+      "kuva": "tours",
+      "html": "55 värikästä nappulaa muodostavat pelin 10 täytettä. Samanväriset nappulat liikkuvat aina yhdessä, yhtenä tornina. <b>Nappuloiden lukumäärä on täytteen arvo.</b> Et siis voi ottaa vain yhtä sieninappulaa: kaikki sienet liikkuvat yhtä aikaa."
+    },
+    {
+      "otsikko": "Varasto ja linjasto",
+      "kuva": null,
+      "html": "Jokainen täyte on aina omalla paikallaan joko varastossa tai linjastolla. Pizzoja valmistetaan vain linjaston täytteillä. Täytteen arvo näkyy sen paikalla varastossa ja paloissa."
+    },
+    {
+      "otsikko": "Pizzakortit",
+      "kuva": null,
+      "html": "42 erilaista pizzaa, joissa on yksi, kaksi, kolme tai neljä täytettä. Pizzan arvo on sen täytteiden summa: 1–10."
+    },
+    {
+      "otsikko": "Apinakortit",
+      "kuva": null,
+      "html": "Ne tuovat peliin sattumaa, tarinoita ja voimakkaita tunteita. Apinakortti nostetaan vuoron lopuksi, jos on valmistanut vähintään yhden pizzan."
+    },
+    {
+      "otsikko": "Apinavaaka ja punnukset",
+      "kuva": null,
+      "html": "Pelilaudan keskellä oleva vaaka ja 10 valkoista punnusta auttavat lapsia hahmottamaan siirtoja. <b>Niitä ei ole pakko käyttää.</b>"
+    }
+  ],
+  "taytteet_otsikko": "10 täytettä ja niiden arvot",
+  "taytteet": [
+    "oliivi",
+    "tomaatti",
+    "ananas",
+    "homejuusto",
+    "katkarapu",
+    "munakoiso",
+    "rucola",
+    "herkkusieni",
+    "kinkku",
+    "kala"
+  ],
+  "leima_torni": "TORNI<br>=<br>LUKU",
+  "leima_lapsille": "LAPSILLE",
+  "ennen_otsikko": "Ennen ensimmäistä peliä",
+  "ennen": [
+    "Valmistele boksit: kiinnitä pienet pyöreät kaksipuoliset tarrat merkityille paikoille boksin sisään ja sulje boksi tiiviisti.",
+    "Kiinnitä 1–10-tarrat valkoisiin punnuksiin.",
+    "Kiinnitä täytetarrat samanvärisiin nappuloihin.",
+    "Mukana on yksi valkoinen varanappula: kiinnitä siihen valkoinen tarra."
+  ],
+  "ennen_video": "Videot näyttävät, miten se tehdään (QR-koodi ylhäällä).",
+  "valmistelut_otsikko": "Pelivalmistelut",
+  "valmistelut": [
+    "Pinoa kunkin värin nappulat torneiksi paikoilleen varastoon.",
+    "Jokainen ottaa boksin ja tyhjentää sen. Laita kaikki palat kasaan helposti ulottuville.",
+    "Sekoita pizzakortit ja vie 4 pelilaudalle kuvapuoli ylöspäin. Muut kortit jäävät pakaksi pöydälle.",
+    "Sekoita apinakortit ja aseta ne pakaksi pöydälle."
+  ],
+  "vuoro_otsikko": "Vuoron kulku",
+  "vuoro": "Viimeksi pizzaa syönyt aloittaa. Tee vuorollasi vaiheet 1–3 järjestyksessä. Sitten vuoro siirtyy seuraavalle myötäpäivään.",
+  "vaiheet": [
+    "Nopan heitto ja nappuloiden siirtäminen",
+    "Pizzan valmistaminen",
+    "Apinakortin nostaminen"
+  ],
+  "perusmuoto": "Nämä ovat peruspelin säännöt. Nälkäiset apinat ja Salatut pizzat muuttavat vain muutamaa sääntöä (sivu 4).",
+  "siirto_otsikko": "1. Nopan heitto ja nappuloiden siirtäminen",
+  "siirto": "Heitä noppaa. <b>Linjaston arvo kasvaa nopan luvun verran.</b> Siirrä sitä varten täytteitä varaston ja linjaston välillä, aina kokonainen torni kerrallaan. Siirron voi tehdä kolmella tavalla. Esimerkeissä nopasta tuli 3.",
+  "tavat": [
+    {
+      "kirjain": "A",
+      "otsikko": "Perussiirto – ”yhtä suuri kuin”",
+      "html": "Tuo linjastolle täyte, jonka arvo on nopan luku.",
+      "kuvat": [
+        "deplacement-a"
+      ],
+      "kuvateksti": [
+        "Ananas (3) linjastolle: 3 = 3."
+      ]
+    },
+    {
+      "kirjain": "B",
+      "otsikko": "Summasiirto – ”lisätään pieniä täytteitä”",
+      "html": "Tuo linjastolle nopan lukua pienempiä täytteitä, kunnes niiden summa on nopan luku.",
+      "kuvat": [
+        "deplacement-b"
+      ],
+      "kuvateksti": [
+        "Oliivi (1) ja tomaatti (2) linjastolle: 3 = 1 + 2."
+      ]
+    },
+    {
+      "kirjain": "C",
+      "otsikko": "Erotussiirto – ”vähennetään täytteitä”",
+      "html": "Tuo linjastolle nopan lukua suurempia täytteitä ja vie linjastolta varastoon erotuksen suuruinen täyte.",
+      "kuvat": [
+        "deplacement-c1",
+        "deplacement-c2",
+        "deplacement-c3"
+      ],
+      "kuvateksti": [
+        "Katkarapu (5) on liikaa: 3 < 5.",
+        "Linjaston tomaatti (2) punnusten päälle: 3 + 2 = 5.",
+        "Katkarapu linjastolle, tomaatti varastoon: 3 = 5 − 2."
+      ]
+    }
+  ],
+  "huomautukset_otsikko": "Huomautuksia",
+  "huomautukset": [
+    "Perussiirtoon (A) <b>ei voi yhdistää</b> muita siirtotapoja.",
+    "Erotussiirrossa (C) vähennät linjastolta vain <b>yhden</b> täytteen.",
+    "Summasiirron (B) ja erotussiirron (C) voi yhdistää. Esimerkki, kun nopasta tuli 3: tomaatti (2) ja rucola (7) linjastolle, munakoiso (6) varastoon. 3 = (2 + 7) − 6"
+  ],
+  "vinkki_otsikko": "Vinkki",
+  "vinkki": "Kun vähennät linjastolta arvoltaan suuren täytteen, voit tuoda varastosta useampia pieniä täytteitä.",
+  "ei_siirtoa_otsikko": "Ei siirtoa?",
+  "ei_siirtoa": "Jos et löydä siirtoa, muut saavat auttaa. Jos joku löytää siirron, se tehdään. Jos kukaan ei löydä, vuorosi päättyy: ilman siirtoa ei valmisteta pizzaa.",
+  "vaaka_otsikko": "Apinavaaka",
+  "vaaka": "Vaaka näyttää siirron punnuksilla ja torneilla. Se auttaa lasta ymmärtämään siirron.",
+  "vaaka_valmistelu": "Ennen peliä: pinoa punnukset numerojärjestykseen (1, 2, 3…) apinavaa’an vasemmalle puolelle.",
+  "vaaka_vaiheet": [
+    "Noppa määrää, paljonko linjaston arvo kasvaa.",
+    "Jätä apinavaa’an vasemmalle puolelle nopan luvun verran punnuksia. Siirrä loput punnukset sivuun vuorosi loppuun asti.",
+    "Muodosta kaksi yhtä korkeaa tornia tuomalla täytteitä vaa’alle (A, B tai C). Vasemmalle puolelle tuodaan täytteitä vain erotussiirrossa (C).",
+    "Vie oikean puolen täytteet linjastolle ja vasemman puolen täytteet varastoon.",
+    "Palauta punnukset paikoilleen."
+  ],
+  "pizza_otsikko": "2. Pizzan valmistaminen",
+  "pizza": "Pizzat valmistetaan aina linjaston täytteillä.",
+  "pizza_vaiheet": [
+    "<b>Käytä täytteet</b>: vie tarvittavat täytteet pizzan päälle.",
+    "<b>Ansaitse palat</b>: laita boksiisi pizzan täytteiden mukaiset palat. Palaa, joka sinulla jo on, et saa.",
+    "<b>Palauta käytetyt täytteet</b> varastoon heti.",
+    "<b>Nosta uusi pizzakortti</b>: valmistettu pizza poistuu pelistä ja uusi kortti tulee sen tilalle pelilaudalle. Voit valmistaa sen heti, jos sen täytteet ovat linjastolla."
+  ],
+  "pizza_saannot": [
+    "Voit valmistaa vuorollasi useita pizzoja, jos linjastolla on niihin riittävästi täytteitä.",
+    "Täytettä voi käyttää vuoron aikana vain <b>yhteen pizzaan</b>."
+  ],
+  "esimerkki_otsikko": "Esimerkki",
+  "esimerkki": "Linjastolla on kinkku, oliivi, ananas ja katkarapu. Voit valmistaa kaksi pizzaa: kinkkupizzan ja oliivi-ananas-katkarapupizzan.",
+  "sydan_otsikko": "Sydänpizza",
+  "sydan": "Sydänpizzan täytteiden yhteenlaskettu arvo on 10. Siitä saat yhden vapaavalintaisen lisäpalan. Tunnistat sen tästä kuvakkeesta.",
+  "ei_pizzaa": "Jos et valmista yhtään pizzaa, vuorosi päättyy, etkä nosta apinakorttia.",
+  "apina_otsikko": "3. Apinakortin nostaminen",
+  "apina": "Jos valmistit vähintään yhden pizzan, nosta vuoron lopuksi apinakortti ja toimi sen mukaan. Kortit on numeroitu: niiden selitykset ovat sivulla 5.",
+  "erityis_otsikko": "Erityistilanteet linjastolla",
+  "erityis": "Kun linjasto on lähes täynnä, jännitys tiivistyy: voit aiheuttaa hävikkiä… tai hyvällä onnella järjestää pizzapartyt!",
+  "havikki_otsikko": "Hävikki – linjastolta poistetaan täytteitä",
+  "havikki": "Jos nopan luku on suurempi kuin varaston täytteiden yhteenlaskettu arvo, linjastolle ei tuoda täytteitä. Sen sijaan linjastolta viedään täytteitä varastoon nopan luvun verran.",
+  "havikki_lista": [
+    "Täytteet poistetaan siirroilla A, B ja C.",
+    "Menetät boksistasi poistettuja täytteitä vastaavat palat.",
+    "Jos sinulla ei ole niitä paloja, et menetä mitään."
+  ],
+  "juhla_otsikko": "Pizzapartyt – saat uuden vuoron",
+  "juhla": "Jos heittosi täyttää linjaston, järjestetään pizzapartyt! Saat vuorosi jälkeen heti uuden vuoron.",
+  "valinnaiset_otsikko": "Valinnaiset säännöt",
+  "kaikille_otsikko": "Pizza Love sopii kaikille",
+  "kaikille": "Pelkillä yhden ja kahden täytteen pizzoilla peliä voi pelata yhdessä jo 4–5-vuotiaiden kanssa. Peliä voi helpottaa myös jättämällä apinakortit pois. Voitte jopa keksiä omia sääntöjä.",
+  "hoyry_otsikko": "Lisähöyry – palojen vaihtaminen",
+  "hoyry": "Lisää taktisuutta ja vauhtia. Vuorosi alussa, ennen nopan heittoa, voit vaihtaa boksisi paloja puuttuviin paloihin: yhteenlasketun arvon on oltava sama. Luovutetut palat palaavat kasaan. Ottakaa lisähöyry käyttöön, kun peruspeli on tuttu.",
+  "hoyry_esimerkit": [
+    {
+      "lasku": "1 + 9 = 10",
+      "teksti": "Oliivi ja kinkku kalaan."
+    },
+    {
+      "lasku": "9 = 4 + 5",
+      "teksti": "Kinkku homejuustoon ja katkarapuun."
+    }
+  ],
+  "muodot_otsikko": "Kaksi muuta tapaa pelata",
+  "muodot_ingressi": "Nopan heitto, täytteiden siirtäminen ja pizzan valmistaminen toimivat kuten peruspelissä. Tässä se, mikä muuttuu.",
+  "apinat": {
+    "nimi": "Nälkäiset apinat",
+    "kuvaus": "Yhteistyöpeli · 4-vuotiaasta aikuisen kanssa · n. 10 min · myös yksin",
+    "ingressi": "Helpoin tapa aloittaa. Pelaatte yhdessä ja täytätte yhteistä boksia. Mutta nälkäisten apinoiden on vaikea odottaa: jos uusia paloja ei tule, ne syövät kaiken!",
+    "osat": [
+      {
+        "otsikko": "Pelivalmistelut",
+        "html": "<ul class=\"lista\"><li>Yksi yhteinen boksi kaikille.</li><li>Ottakaa 10 yhden täytteen pizzakorttia, sekoittakaa ja viekää 4 pelilaudalle. Muut ovat pakka.</li><li>Apinakortteja ei käytetä.</li></ul>"
+      },
+      {
+        "otsikko": "Vuoro",
+        "html": "<p>Yksi pelaaja heittää noppaa ja siirtää täytteet. Valmistatte pizzat yhdessä ja laitatte palat yhteiseen boksiin. Kalapizzasta (10) saa yhden vapaavalintaisen lisäpalan. Sitten noppa siirtyy seuraavalle myötäpäivään.</p>"
+      },
+      {
+        "otsikko": "Pelin päättyminen",
+        "html": "<p>Peli päättyy, kun boksi täyttyy tai kun ette valmista vuoron aikana yhtään pizzaa. Laskekaa silloin boksin palat:</p>"
+      }
+    ],
+    "pisteet": [
+      [
+        "1–3 palaa",
+        "AARGH! Tyhjä maha."
+      ],
+      [
+        "4–6 palaa",
+        "Öö… Mitä sitten syödään?"
+      ],
+      [
+        "7–9 palaa",
+        "Nam. Muutama pala olisi vielä maistunut."
+      ],
+      [
+        "10 palaa",
+        "Se on siinä – apinan lempipizza!"
+      ]
+    ],
+    "huom": "Joskus ensimmäisen heiton jälkeen ei voi valmistaa yhtään pizzaa. Voitte silloin jatkaa: heittäkää uudelleen ja siirtäkää uusia täytteitä."
+  },
+  "salatut": {
+    "nimi": "Salatut pizzat",
+    "kuvaus": "Jännittävä ja strateginen · 8+ · 20 min tai enemmän",
+    "ingressi": "Jokaisella on kaksi salaista pizzaa: kukaan ei tiedä, mitä pizzoja aiot valmistaa. Boksinsa ensimmäisenä 10 erilaisella palalla täyttänyt voittaa.",
+    "osat": [
+      {
+        "otsikko": "Pelivalmistelut",
+        "html": "<p>Sekoita pizzakortit, vie 4 pelilaudalle ja jaa jokaiselle 2 salaista pizzaa. Saat katsoa omiasi, mutta niitä ei kannata näyttää. Muut kortit ovat pakka.</p>"
+      },
+      {
+        "otsikko": "Vuoro – eri järjestyksessä!",
+        "html": "<ol class=\"lista\"><li><b>Pizzan valmistaminen</b> vuoron alussa linjaston täytteillä: pelilaudan pizza tai jokin salaisista pizzoistasi. Korvaa valmistettu pizza pakan kortilla, pelilaudalle tai käteen.</li><li><b>Apinakortin nostaminen</b>, jos valmistit vähintään yhden pizzan. Apinakortin jälkeen et valmista enää pizzoja samalla vuorolla.</li><li><b>Nopan heitto ja nappuloiden siirtäminen.</b> Sitten vuoro siirtyy seuraavalle.</li></ol><p>Jos et valmista vuorosi alussa yhtään pizzaa, heitä noppaa ja siirrä täytteitä, sitten vuoro siirtyy seuraavalle.</p>"
+      },
+      {
+        "otsikko": "Salaisen pizzan vaihtaminen",
+        "html": "<p>Vuorollasi voit vaihtaa toisen salaisista pizzoistasi. Se maksaa yhden vapaavalintaisen palan boksistasi (ilmainen, jos boksisi on tyhjä).</p><ol class=\"lista\"><li>Vie pizza, josta luovut, pakan alimmaiseksi.</li><li>Nosta pakasta kaksi ylintä korttia ja valitse niistä toinen.</li><li>Vie toinen pakan alimmaiseksi.</li></ol>"
+      },
+      {
+        "otsikko": "Muunnelma",
+        "html": "<p>Jakakaa jokaiselle 7 salaista pizzaa. Ensimmäisenä kaikki salaiset pizzansa valmistanut voittaa.</p>"
+      }
+    ]
+  },
+  "kortit_otsikko": "Apinakortit 01–33",
+  "kortit_huom": "Etsi korttisi numeron avulla."
+}

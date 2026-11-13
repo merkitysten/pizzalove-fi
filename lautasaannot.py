@@ -327,7 +327,7 @@ PAA = '''<!doctype html>
   .palat .pala {{ width: 8mm }}
   .palat b {{ font: 900 13pt/1 Viiri, sans-serif }}
   .sydan {{ display: flex; gap: 2.4mm; align-items: center; margin-top: 1.6mm }}
-  .sydan img {{ width: 9mm; flex: none }}
+  .sydan img {{ width: 15mm; flex: none }}
   .sydan p {{ margin: 0 }}
   .apina {{ display: flex; gap: 4mm; align-items: center }}
   .apina img {{ width: 20mm; flex: none; border-radius: 1.4mm }}
@@ -437,7 +437,7 @@ BLOKIT = {
   <div class="ruudukko r3">
     <div><p>{pizza}</p>{pizza_vaiheet}</div>
     <div>{pizza_saannot}
-      <div class="sydan"><img src="julkinen/play/apinavaaka/sydan.webp" alt=""><div>
+      <div class="sydan"><img src="julkinen/play/kuvat/halaus.webp" alt=""><div>
         <h3 style="margin-top:0">{sydan_otsikko}</h3><p>{sydan}</p></div></div></div>
     <div><h3 style="margin-top:0">{esimerkki_otsikko}</h3><p>{esimerkki}</p>{esim}
       <p class="pieni">{ei_pizzaa}</p></div>
@@ -493,6 +493,8 @@ BLOKIT = {
 }
 
 
+# 🔵 Marko 13.11.2026: sydänpizzojen (arvo 10) kuvake on halaava pizzalaatikko
+# sydämineen (julkinen/play/kuvat/halaus.webp), ei pelkkä sydän.
 def regles_html(kieli, s, a, rakenne):
     k = KIELET[kieli]
     taytteet = ''.join(

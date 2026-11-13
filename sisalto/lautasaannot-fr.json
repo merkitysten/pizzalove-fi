@@ -164,7 +164,7 @@
   "esimerkki_otsikko": "Exemple",
   "esimerkki": "Sur la chaîne, il y a le jambon, l’olive, l’ananas et la crevette. Tu peux préparer deux pizzas : une pizza jambon et une pizza olive-ananas-crevette.",
   "sydan_otsikko": "Pizza cœur",
-  "sydan": "Les ingrédients d’une pizza cœur valent 10 en tout. Elle te donne une part en plus, au choix. Tu la reconnais à son cœur.",
+  "sydan": "Les ingrédients d’une pizza cœur valent 10 en tout. Elle te donne une part en plus, au choix. Tu la reconnais à ce symbole.",
   "ei_pizzaa": "Si tu ne prépares aucune pizza, ton tour se termine et tu ne pioches pas de carte singe.",
   "apina_otsikko": "3. Piocher une carte singe",
   "apina": "Si tu as préparé au moins une pizza, pioche une carte singe à la fin de ton tour et fais ce qu’elle dit. Les cartes sont numérotées : leurs explications sont en page 5.",
@@ -380,7 +380,7 @@
         "Chaque ingrédient ne sert qu’à <b>une seule pizza</b> par tour."
       ],
       "sydan_otsikko": "Pizza poisson (10)",
-      "sydan": "La pizza poisson vaut 10 : elle donne une part en plus, au choix.",
+      "sydan": "La pizza poisson vaut 10 : elle donne une part en plus, au choix. Tu la reconnais à ce symbole.",
       "esimerkki": "Sur la chaîne, il y a le jambon : vous pouvez préparer la pizza jambon.",
       "esimerkki_palat": [
         [
