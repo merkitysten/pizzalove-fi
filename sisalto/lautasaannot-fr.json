@@ -1,0 +1,313 @@
+{
+  "lahde": "Painettu pitkä ohje (FI/EN, 2025), Nälkäiset apinat ja Salatut pizzat (FI/EN, 12/2025), lautapelin pikaohje (lukittu 17.5.2026) ja Markon apinakorttitarkennukset (25.10.2026). Ks. lautasaannot.py.",
+  "title": "Jeu de plateau Pizza Love® – règles du jeu",
+  "h1": "Jeu de plateau Pizza Love®",
+  "alaotsikko": "Un jeu familial délicieusement drôle – pour l’amour de la pizza",
+  "ingressi": "Prépare les pizzas préférées des boîtes à pizza et sois le premier à réunir 10 parts différentes dans ta boîte !",
+  "tiedot": [
+    "2 à 4 joueurs",
+    "dès 6 ans",
+    "3 façons de jouer",
+    "10 à 20 min ou plus"
+  ],
+  "iskulause": "CHAQUE PIZZA COMPTE",
+  "osoite": "https://pizzalove.fi/fr/lautapeli.html",
+  "qr_teksti": "Règles et<br>vidéos en ligne",
+  "videot": "Plus d’informations et de vidéos sur",
+  "oikeudet": "Pizza Love® et Merkitysten® sont des marques déposées de Merkitysten Oy. Tous droits réservés.",
+  "tarina_otsikko": "L’histoire",
+  "tarina": "Les boîtes à pizza ont depuis toujours un problème qui leur brise le cœur : elles adorent les pizzas, mais ne savent pas les préparer ! Les singes, qui adorent eux aussi la pizza – à leur façon –, ont proposé une solution simple : une usine à pizza, où un système d’aspiration actionné par un soufflet transporte les ingrédients. À une petite condition… que les boîtes partagent avec eux leurs parts toutes chaudes et fondantes. Marché conclu ! Dans cette usine, chaque pizza compte. Mais attention : rien ne vide ta boîte plus vite que ton propre ventre qui gargouille…",
+  "osat_otsikko": "Le matériel",
+  "sisalto": "Plateau de jeu · 10 ingrédients (55 pions) · 10 poids · dé Merkitysten® · 42 cartes pizza · 33 cartes singe · 4 boîtes · règles · planche d’autocollants",
+  "osat": [
+    {
+      "otsikko": "Boîtes et parts",
+      "kuva": "boite-pleine",
+      "html": "Au début, chaque joueur a une boîte vide. On y réunit des parts en préparant des pizzas."
+    },
+    {
+      "otsikko": "Ingrédients",
+      "kuva": "tours",
+      "html": "Les 55 pions colorés forment les 10 ingrédients. Les pions de même couleur se déplacent toujours ensemble, en une seule tour. <b>Le nombre de pions est la valeur de l’ingrédient.</b> Tu ne peux donc pas prendre un seul pion champignon : tous les champignons bougent en même temps."
+    },
+    {
+      "otsikko": "Réserve et chaîne",
+      "kuva": null,
+      "html": "Chaque ingrédient est toujours à sa place, soit dans la réserve, soit sur la chaîne. Seuls les ingrédients de la chaîne servent à préparer des pizzas. La valeur de chaque ingrédient est indiquée à sa place dans la réserve et sur les parts."
+    },
+    {
+      "otsikko": "Cartes pizza",
+      "kuva": null,
+      "html": "42 pizzas différentes, avec un, deux, trois ou quatre ingrédients. La valeur d’une pizza est la somme de ses ingrédients : de 1 à 10."
+    },
+    {
+      "otsikko": "Cartes singe",
+      "kuva": null,
+      "html": "Elles apportent du hasard, des histoires et des émotions fortes. On en pioche une à la fin de son tour, si l’on a préparé au moins une pizza."
+    },
+    {
+      "otsikko": "Balance des singes et poids",
+      "kuva": null,
+      "html": "La balance au milieu du plateau et les 10 poids blancs aident les enfants à visualiser les déplacements. <b>Tu n’es pas obligé de les utiliser.</b>"
+    }
+  ],
+  "taytteet_otsikko": "Les 10 ingrédients et leur valeur",
+  "taytteet": [
+    "olive",
+    "tomate",
+    "ananas",
+    "fromage bleu",
+    "crevette",
+    "aubergine",
+    "roquette",
+    "champignon",
+    "jambon",
+    "poisson"
+  ],
+  "leima_torni": "TOUR<br>=<br>NOMBRE",
+  "leima_lapsille": "POUR<br>LES<br>ENFANTS",
+  "ennen_otsikko": "Avant ta première partie",
+  "ennen": [
+    "Prépare les boîtes : colle les petits autocollants ronds double face aux endroits marqués à l’intérieur de chaque boîte, puis ferme bien la boîte.",
+    "Colle les autocollants 1 à 10 sur les poids blancs.",
+    "Colle les autocollants d’ingrédients sur les pions de la même couleur.",
+    "Il y a un pion blanc en plus : colle dessus l’autocollant blanc."
+  ],
+  "ennen_video": "Des vidéos montrent comment faire (QR code en haut).",
+  "valmistelut_otsikko": "Mise en place",
+  "valmistelut": [
+    "Empile les pions de chaque couleur en tours, à leur place dans la réserve.",
+    "Chaque joueur prend une boîte et la vide. Mets toutes les parts en tas, à portée de main.",
+    "Mélange les cartes pizza et pose-en 4 sur le plateau, face visible. Les autres forment la pioche, sur la table.",
+    "Mélange les cartes singe et pose-les en pioche sur la table."
+  ],
+  "vuoro_otsikko": "Déroulement d’un tour",
+  "vuoro": "Le dernier joueur à avoir mangé de la pizza commence. À ton tour, fais les étapes 1 à 3 dans l’ordre. Puis c’est au joueur suivant, dans le sens des aiguilles d’une montre.",
+  "vaiheet": [
+    "Lancer le dé et déplacer les pions",
+    "Préparer une pizza",
+    "Piocher une carte singe"
+  ],
+  "perusmuoto": "Ces règles sont celles du jeu de base. Les modes « Singes affamés » et « Pizzas secrètes » ne changent que quelques règles (page 4).",
+  "siirto_otsikko": "1. Lancer le dé et déplacer les pions",
+  "siirto": "Lance le dé. <b>La valeur de la chaîne augmente du nombre indiqué par le dé.</b> Pour cela, déplace des ingrédients entre la réserve et la chaîne, toujours une tour entière à la fois. Il y a trois façons de le faire. Dans les exemples, le dé montre 3.",
+  "tavat": [
+    {
+      "kirjain": "A",
+      "otsikko": "Déplacement de base – « égal à »",
+      "html": "Mets sur la chaîne l’ingrédient qui a la valeur du dé.",
+      "kuvat": [
+        "deplacement-a"
+      ],
+      "kuvateksti": [
+        "L’ananas (3) va sur la chaîne : 3 = 3."
+      ]
+    },
+    {
+      "kirjain": "B",
+      "otsikko": "Déplacement somme – « on ajoute de petits ingrédients »",
+      "html": "Mets sur la chaîne des ingrédients plus petits que le dé, jusqu’à ce que leur somme soit égale au dé.",
+      "kuvat": [
+        "deplacement-b"
+      ],
+      "kuvateksti": [
+        "L’olive (1) et la tomate (2) vont sur la chaîne : 3 = 1 + 2."
+      ]
+    },
+    {
+      "kirjain": "C",
+      "otsikko": "Déplacement différence – « on retire des ingrédients »",
+      "html": "Mets sur la chaîne des ingrédients plus grands que le dé, et remets dans la réserve un ingrédient de la chaîne égal à la différence.",
+      "kuvat": [
+        "deplacement-c1",
+        "deplacement-c2",
+        "deplacement-c3"
+      ],
+      "kuvateksti": [
+        "La crevette (5), c’est trop : 3 < 5.",
+        "La tomate (2) de la chaîne rejoint les poids : 3 + 2 = 5.",
+        "La crevette va sur la chaîne, la tomate dans la réserve : 3 = 5 − 2."
+      ]
+    }
+  ],
+  "huomautukset_otsikko": "Remarques",
+  "huomautukset": [
+    "Le déplacement de base (A) <b>ne se combine</b> avec aucun autre.",
+    "Dans le déplacement différence (C), tu ne retires qu’<b>un seul</b> ingrédient de la chaîne.",
+    "Les déplacements somme (B) et différence (C) peuvent se combiner. Exemple avec un 3 : la tomate (2) et la roquette (7) vont sur la chaîne, l’aubergine (6) retourne dans la réserve. 3 = (2 + 7) − 6"
+  ],
+  "vinkki_otsikko": "Astuce",
+  "vinkki": "Quand tu retires de la chaîne un ingrédient de grande valeur, tu peux apporter plusieurs petits ingrédients de la réserve.",
+  "ei_siirtoa_otsikko": "Pas de déplacement ?",
+  "ei_siirtoa": "Si tu ne trouves pas de déplacement, les autres peuvent t’aider. Si quelqu’un en trouve un, on le fait. Si personne n’en trouve, ton tour se termine : sans déplacement, pas de pizza.",
+  "vaaka_otsikko": "La balance des singes",
+  "vaaka": "La balance montre le déplacement avec des poids et des tours. Elle aide les enfants à le comprendre.",
+  "vaaka_vaiheet": [
+    "Le dé indique de combien la valeur de la chaîne augmente.",
+    "Laisse à gauche de la balance autant de poids que l’indique le dé. Mets les autres poids de côté jusqu’à la fin de ton tour.",
+    "Forme deux tours de même hauteur en posant des ingrédients sur la balance (A, B ou C). On ne pose des ingrédients à gauche que dans le déplacement C.",
+    "Mets les ingrédients de droite sur la chaîne, et ceux de gauche dans la réserve.",
+    "Remets les poids à leur place."
+  ],
+  "pizza_otsikko": "2. Préparer une pizza",
+  "pizza": "Les pizzas se préparent toujours avec les ingrédients de la chaîne.",
+  "pizza_vaiheet": [
+    "<b>Utilise les ingrédients</b> : pose les ingrédients nécessaires sur la pizza.",
+    "<b>Gagne les parts</b> : mets dans ta boîte les parts des ingrédients de la pizza. Tu ne reçois pas une part que tu as déjà.",
+    "<b>Remets les ingrédients utilisés</b> dans la réserve, tout de suite.",
+    "<b>Pioche une nouvelle carte pizza</b> : la pizza préparée quitte le jeu et une nouvelle carte prend sa place sur le plateau. Tu peux la préparer tout de suite si ses ingrédients sont sur la chaîne."
+  ],
+  "pizza_saannot": [
+    "Tu peux préparer plusieurs pizzas pendant ton tour, s’il y a assez d’ingrédients sur la chaîne.",
+    "Chaque ingrédient ne sert qu’à <b>une seule pizza</b> par tour."
+  ],
+  "esimerkki_otsikko": "Exemple",
+  "esimerkki": "Sur la chaîne, il y a le jambon, l’olive, l’ananas et la crevette. Tu peux préparer deux pizzas : une pizza jambon et une pizza olive-ananas-crevette.",
+  "sydan_otsikko": "Pizza cœur",
+  "sydan": "Les ingrédients d’une pizza cœur valent 10 en tout. Elle te donne une part en plus, au choix. Tu la reconnais à son cœur.",
+  "ei_pizzaa": "Si tu ne prépares aucune pizza, ton tour se termine et tu ne pioches pas de carte singe.",
+  "apina_otsikko": "3. Piocher une carte singe",
+  "apina": "Si tu as préparé au moins une pizza, pioche une carte singe à la fin de ton tour et fais ce qu’elle dit. Les cartes sont numérotées : leurs explications sont en page 5.",
+  "erityis_otsikko": "Situations particulières sur la chaîne",
+  "erityis": "Quand la chaîne est presque pleine, ça devient palpitant : tu risques le gaspillage… ou, avec de la chance, une fête de la pizza !",
+  "havikki_otsikko": "Gaspillage – des ingrédients quittent la chaîne",
+  "havikki": "Si le dé montre plus que la valeur totale des ingrédients de la réserve, aucun ingrédient ne va sur la chaîne. À la place, des ingrédients de la chaîne retournent dans la réserve, selon le nombre du dé.",
+  "havikki_lista": [
+    "On les retire avec les déplacements A, B et C.",
+    "Tu perds les parts de ta boîte qui correspondent aux ingrédients retirés.",
+    "Si tu n’as pas ces parts, tu ne perds rien."
+  ],
+  "juhla_otsikko": "Fête de la pizza – un nouveau tour",
+  "juhla": "Si ton lancer remplit la chaîne, c’est la fête de la pizza ! Après ton tour, tu rejoues tout de suite.",
+  "valinnaiset_otsikko": "Règles optionnelles",
+  "kaikille_otsikko": "Pizza Love pour tous",
+  "kaikille": "Avec seulement les pizzas à un ou deux ingrédients, on peut jouer ensemble dès 4–5 ans. Pour un jeu plus simple, laissez aussi les cartes singe de côté. Vous pouvez même inventer vos propres règles.",
+  "hoyry_otsikko": "À toute vapeur – échanger des parts",
+  "hoyry": "De la tactique et de la vitesse en plus. Au début de ton tour, avant de lancer le dé, tu peux échanger des parts de ta boîte contre des parts qui te manquent : la valeur totale doit être la même. Les parts rendues retournent dans le tas. Utilisez cette règle quand vous connaissez bien le jeu de base.",
+  "hoyry_esimerkit": [
+    {
+      "lasku": "1 + 9 = 10",
+      "teksti": "L’olive et le jambon contre le poisson."
+    },
+    {
+      "lasku": "9 = 4 + 5",
+      "teksti": "Le jambon contre le fromage bleu et la crevette."
+    }
+  ],
+  "muodot_otsikko": "Deux autres façons de jouer",
+  "muodot_ingressi": "Lancer le dé, déplacer les ingrédients et préparer les pizzas : tout se fait comme dans le jeu de base. Voici ce qui change.",
+  "apinat": {
+    "nimi": "Singes affamés",
+    "kuvaus": "Jeu coopératif · dès 4 ans avec un adulte · env. 10 min · aussi en solo",
+    "ingressi": "La façon la plus facile de commencer. Vous jouez ensemble et remplissez une boîte commune. Mais les singes affamés ont du mal à attendre : si aucune nouvelle part n’arrive, ils mangent tout !",
+    "osat": [
+      {
+        "otsikko": "Mise en place",
+        "html": "<ul class=\"lista\"><li>Une seule boîte, commune à tous.</li><li>Prenez les 10 cartes pizza à un seul ingrédient, mélangez-les et posez-en 4 sur le plateau. Les autres forment la pioche.</li><li>On n’utilise pas les cartes singe.</li></ul>"
+      },
+      {
+        "otsikko": "Un tour",
+        "html": "<p>Un joueur lance le dé et déplace les ingrédients. Ensemble, vous préparez les pizzas et mettez les parts dans la boîte commune. La pizza poisson (10) donne une part en plus, au choix. Puis le dé passe au joueur suivant, dans le sens des aiguilles d’une montre.</p>"
+      },
+      {
+        "otsikko": "Fin de la partie",
+        "html": "<p>La partie se termine quand la boîte est pleine, ou quand vous ne préparez aucune pizza pendant un tour. Comptez alors les parts de la boîte :</p>"
+      }
+    ],
+    "pisteet": [
+      [
+        "1–3 parts",
+        "AARGH ! Ventre vide."
+      ],
+      [
+        "4–6 parts",
+        "Euh… On mange quoi, alors ?"
+      ],
+      [
+        "7–9 parts",
+        "Miam. Quelques parts de plus n’auraient pas été de refus."
+      ],
+      [
+        "10 parts",
+        "Ça y est – la pizza préférée du singe !"
+      ]
+    ],
+    "huom": "Parfois, on ne peut préparer aucune pizza après le premier lancer. Vous pouvez alors continuer : relancez le dé et déplacez de nouveaux ingrédients."
+  },
+  "salatut": {
+    "nimi": "Pizzas secrètes",
+    "kuvaus": "Palpitant et stratégique · dès 8 ans · 20 min et plus",
+    "ingressi": "Chaque joueur a deux pizzas secrètes : personne ne sait quelles pizzas tu vas préparer. Le premier qui réunit 10 parts différentes dans sa boîte gagne.",
+    "osat": [
+      {
+        "otsikko": "Mise en place",
+        "html": "<p>Mélange les cartes pizza, pose-en 4 sur le plateau et donne 2 pizzas secrètes à chaque joueur. Tu peux regarder les tiennes, mais mieux vaut ne pas les montrer. Les autres cartes forment la pioche.</p>"
+      },
+      {
+        "otsikko": "Un tour – dans un autre ordre !",
+        "html": "<ol class=\"lista\"><li><b>Préparer une pizza</b> au début de ton tour, avec les ingrédients de la chaîne : une pizza du plateau ou une de tes pizzas secrètes. Remplace chaque pizza préparée par une carte de la pioche, sur le plateau ou dans ta main.</li><li><b>Piocher une carte singe</b>, si tu as préparé au moins une pizza. Après la carte singe, tu ne prépares plus de pizza pendant ce tour.</li><li><b>Lancer le dé et déplacer les pions.</b> Puis c’est au joueur suivant.</li></ol><p>Si tu ne prépares aucune pizza au début de ton tour, lance le dé et déplace des ingrédients, puis c’est au joueur suivant.</p>"
+      },
+      {
+        "otsikko": "Changer une pizza secrète",
+        "html": "<p>À ton tour, tu peux changer une de tes pizzas secrètes. Cela coûte une part de ta boîte, au choix (gratuit si ta boîte est vide).</p><ol class=\"lista\"><li>Mets la pizza dont tu ne veux plus sous la pioche.</li><li>Prends les deux cartes du dessus de la pioche et gardes-en une.</li><li>Mets l’autre sous la pioche.</li></ol>"
+      },
+      {
+        "otsikko": "Variante",
+        "html": "<p>Donnez 7 pizzas secrètes à chaque joueur. Le premier qui prépare toutes ses pizzas secrètes gagne.</p>"
+      }
+    ]
+  },
+  "kortit_otsikko": "Les cartes singe 01–33",
+  "kortit_huom": "Trouve ta carte grâce à son numéro.",
+  "guide": {
+    "lisez": "LISEZ-MOI",
+    "nimi": "GUIDE DE DÉMARRAGE",
+    "voitto_otsikko": "POUR GAGNER",
+    "voitto": [
+      "Sois le premier à réunir <b>10 parts différentes</b> dans ta boîte (A).",
+      "Prépare les pizzas du plateau (B) pour recevoir les parts correspondantes dans ta boîte (C).",
+      "Une pizza cœur (D) te donne une part en plus, au choix."
+    ],
+    "valmistelut_otsikko": "MISE EN PLACE",
+    "valmistelut": [
+      "Avant la première partie : colle les autocollants sur les pions et prépare les boîtes (voir les règles).",
+      "Empile les pions de chaque couleur en tours (E), à leur place dans la réserve (F).",
+      "Mélange les cartes pizza et pose-en 4 sur le plateau (B). Pose les autres cartes pizza en pioche sur la table.",
+      "Mélange les cartes singe (G) et pose-les en pioche sur la table.",
+      "Donne une boîte vide (A) à chaque joueur."
+    ],
+    "vaiheet": [
+      {
+        "otsikko": "1. LANCER LE DÉ ET DÉPLACER LES PIONS",
+        "kohdat": [
+          "Le dernier joueur à avoir mangé de la pizza commence en lançant le dé.",
+          "Le dé indique combien de pions (E) on déplace.",
+          "Les pions se déplacent entre la réserve (F) et la chaîne (H).",
+          "Les pions de même couleur se déplacent toujours ensemble, comme une seule tour.",
+          "Le déplacement peut se faire de trois façons (voir les règles).",
+          "La balance des singes et les poids (I) aident les enfants à visualiser les déplacements. <b>Tu n’es pas obligé de les utiliser.</b>",
+          "Si tu ne peux faire aucun déplacement, ton tour se termine."
+        ]
+      },
+      {
+        "otsikko": "2. PRÉPARER UNE PIZZA",
+        "kohdat": [
+          "Les ingrédients (E) de la pizza (B) doivent être sur la chaîne (H).",
+          "Tu peux préparer plusieurs pizzas pendant ton tour.",
+          "Chaque ingrédient ne sert qu’à une seule pizza par tour.",
+          "Remets les ingrédients utilisés dans la réserve (F).",
+          "Mets les parts dans ta boîte (C).",
+          "Pioche une nouvelle carte pizza pour le plateau."
+        ]
+      },
+      {
+        "otsikko": "3. PIOCHER UNE CARTE SINGE",
+        "kohdat": [
+          "Si tu as préparé au moins une pizza (B), pioche une carte singe (G) à la fin de ton tour et fais ce qu’elle dit.",
+          "On joue dans le sens des aiguilles d’une montre."
+        ]
+      }
+    ]
+  },
+  "vaaka_valmistelu": "Avant la partie : empile les poids dans l’ordre (1, 2, 3…) à gauche de la balance."
+}

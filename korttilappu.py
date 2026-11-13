@@ -45,6 +45,10 @@ KIELET = {
     'de': {'tiedosto': 'affenkarten-a4.pdf',
            'alatunniste': 'Alle Karten auch online:',
            'qr_teksti': 'Alle Karten<br>online'},
+    # 🔵 Marko 13.11.2026: «Tee myös apinakorteista ranskankielinen lappu.»
+    'fr': {'tiedosto': 'cartes-singe-a4.pdf',
+           'alatunniste': 'Toutes les cartes aussi en ligne :',
+           'qr_teksti': 'Toutes les cartes<br>en ligne'},
     'fi': {'tiedosto': 'apinakortit-a4.pdf',
            'alatunniste': 'Kaikki kortit myös verkossa:',
            'qr_teksti': 'Kaikki kortit<br>verkossa'},
@@ -145,7 +149,7 @@ def kortit(a):
             lisa += ('<span class="huom"><b>%s</b> %s</span>'
                      % (e(a['huom']), e(k['huom'])))
         if k.get('tarkennus'):
-            lisa += ('<span class="huom"><b>%s:</b> %s</span>'
+            lisa += ('<span class="huom"><b>%s :</b> %s</span>'
                      % (e(a['tarkennus']), e(k['tarkennus'])))
         if k.get('virhe'):
             lisa += '<span class="huom">%s</span>' % e(k['virhe'])
@@ -162,7 +166,7 @@ def sivu_html(kieli, lahde, osoite):
     if len(a['kortit']) != 33:
         raise SystemExit('Odotettiin 33 korttia, loytyi %d' % len(a['kortit']))
     return '''<!doctype html>
-<html lang="{kieli}"><meta charset="utf-8"><title>Affenkarten 01–33</title>
+<html lang="{kieli}"><meta charset="utf-8"><title>{h1} 01–33</title>
 <style>
   @page {{ size: A4; margin: 0 }}
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
@@ -298,10 +302,18 @@ def sivuja(pdf):
     return len(re.findall(rb'/Type\s*/Page[^s]', d))
 
 
+def valimerkit(kieli, s):
+    """Ranskassa sitova valilyonti ennen : ; ! ? (ATTENTION !, Précision :).
+    Muissa kielissa kaksoispiste kiinni sanassa (Hinweis:, Tarkennus:)."""
+    if kieli == 'fr':
+        return re.sub(r' ([:;!?])', '\u00a0\\1', s)
+    return s.replace(' :</b>', ':</b>')
+
+
 def tee(kieli):
     lahde, kohde, sivu, osoite = polut(kieli)
     with open(sivu, 'w', encoding='utf-8') as f:
-        f.write(sivu_html(kieli, lahde, osoite))
+        f.write(valimerkit(kieli, sivu_html(kieli, lahde, osoite)))
     subprocess.run([CHROME, '--headless', '--disable-gpu',
                     '--no-pdf-header-footer', '--print-to-pdf=' + kohde,
                     'file://' + sivu], check=True,

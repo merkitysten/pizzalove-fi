@@ -158,7 +158,28 @@ PDF = {
     # A4:ksi paattomalla Chromella. ⛔ Ala muokkaa naita kasin: aja generaattori.
     'tt_vari': ('pdf/topping-ten-alusta-vari.pdf', 'tt_vari'),
     'tt_viiva': ('pdf/topping-ten-alusta-viiva.pdf', 'tt_viiva'),
+    # Lautapelin omankieliset ohjeet: `lautasaannot.py` (sisalto/lautasaannot-xx.json).
+    'lauta_saannot_fr': ('pdf/pizza-love-jeu-de-plateau-regles-fr.pdf', 'lauta_saannot'),
+    'lauta_opas_fr': ('pdf/pizza-love-jeu-de-plateau-guide-fr.pdf', 'lauta_opas'),
 }
+
+# 🔵 Marko 13.11.2026: lautapelille ranskankieliset saannot ja aloitusopas.
+# Kielella, jolla on omat ohjeet, ne ovat latauslistan karjessa; painetun
+# laatikon FI · SV · EN -ohjeet jaavat niiden alle. Painetun pikaohjeen
+# korvaa oman kielen aloitusopas.
+LAUTA_OMAT = {
+    'fr': ['lauta_saannot_fr', 'lauta_opas_fr'],
+}
+
+
+def lauta_lataukset(lang):
+    omat = [a for a in LAUTA_OMAT.get(lang, [])
+            if os.path.exists(os.path.join(JULKINEN, PDF[a][0]))]
+    for a in LAUTA_OMAT.get(lang, []):
+        if a not in omat:
+            print('⚠️  %s puuttuu – aja: python3 lautasaannot.py %s' % (PDF[a][0], lang))
+    vakio = ['peruspeli', 'apinat', 'salatut']
+    return omat + (vakio if omat else ['pikaohje'] + vakio)
 
 
 def lue(kieli):
@@ -565,7 +586,7 @@ def lautapeli(t, kaikki):
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
        VAAKA_W, VAAKA_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
-       lataukset(['pikaohje', 'peruspeli', 'apinat', 'salatut'], s['lataukset'], PDF),
+       lataukset(lauta_lataukset(lang), dict(s['lataukset'], **{a: s['lataukset'][PDF[a][1]] for a in LAUTA_OMAT.get(lang, [])}), PDF),
        ristiinmyynti(t, 'korttipeli', 'lautapelisivu'))
     return kehys(t, kaikki, 'lautapeli', s['title'], s['kuvaus'], runko)
 

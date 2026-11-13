@@ -32,7 +32,7 @@
     "ingressi": "Tu trouveras ici les règles et les vidéos explicatives des jeux Pizza Love®. Choisis ton jeu : tu pourras jouer dans quelques minutes.",
     "valitse": "Choisis ton jeu",
     "korttipeli_tiedot": "2 à 5 joueurs · dès 6 ans · 3 façons de jouer · 5 à 15 min",
-    "lautapeli_tiedot": "2 à 4 joueurs · dès 6 ans · 3 façons de jouer · 10 à 20 min et plus",
+    "lautapeli_tiedot": "2 à 4 joueurs · dès 6 ans · 3 façons de jouer · 10 à 20 min ou plus",
     "avaa": "Règles et vidéos",
     "pelaa_otsikko": "Jouer à Pizza Love en ligne",
     "pelaa_teksti": "Pizza Party et Pizza Basso du jeu de cartes, Balance des singes et Singes affamés du jeu de plateau. Tu peux aussi jouer aux jeux de cartes avec tes amis, chacun sur son téléphone.",
@@ -190,7 +190,7 @@
       "2 à 4 joueurs",
       "dès 6 ans",
       "3 façons de jouer",
-      "10 à 20 min et plus"
+      "10 à 20 min ou plus"
     ],
     "hyppy": {
       "kokoaminen": "Avant ta première partie",
@@ -211,7 +211,7 @@
     "voittaminen": "Pour gagner, sois le premier à réunir <b>10 parts différentes</b> dans ta boîte. Prépare les pizzas du plateau pour gagner les parts correspondantes pour ta boîte. Une pizza cœur te donne une part en plus, au choix.",
     "valmistelut_otsikko": "Mise en place",
     "valmistelut": [
-      "Empile les tours d’ingrédients colorées dans la réserve.",
+      "Empile les pions de chaque couleur en tours, à leur place dans la réserve.",
       "Mélange les cartes pizza et pose-en 4 sur le plateau. Pose les autres cartes pizza en pioche sur la table.",
       "Mélange les cartes singe et pose-les en pioche sur la table.",
       "Donne une boîte vide à chaque joueur."
@@ -220,7 +220,7 @@
     "vaiheet": [
       {
         "otsikko": "Lancer le dé et déplacer les pions",
-        "html": "<p>Le dernier joueur à avoir mangé une pizza commence en lançant le dé. Le dé indique combien de pions on déplace entre la réserve et la chaîne. Les pions de même couleur se déplacent toujours ensemble, comme une seule tour. Si tu ne trouves pas de déplacement, les autres peuvent t’aider. Si quelqu’un en trouve un, on le fait. Si personne n’en trouve, ton tour se termine.</p><p class=\"pieni\">La balance des singes et les poids aident les enfants à visualiser les déplacements. <b>Tu n’es pas obligé de les utiliser.</b></p>"
+        "html": "<p>Le dernier joueur à avoir mangé de la pizza commence en lançant le dé. Le dé indique combien de pions on déplace entre la réserve et la chaîne. Les pions de même couleur se déplacent toujours ensemble, comme une seule tour. Si tu ne trouves pas de déplacement, les autres peuvent t’aider. Si quelqu’un en trouve un, on le fait. Si personne n’en trouve, ton tour se termine.</p><p class=\"pieni\">La balance des singes et les poids aident les enfants à visualiser les déplacements. <b>Tu n’es pas obligé de les utiliser.</b></p>"
       },
       {
         "otsikko": "Préparer une pizza",
@@ -251,12 +251,14 @@
       }
     ],
     "lataa_otsikko": "Règles en PDF",
-    "lataa_teksti": "Les règles complètes de chaque mode de jeu, en finnois, en suédois et en anglais.",
+    "lataa_teksti": "Les règles complètes en français, avec les trois façons de jouer et les 33 cartes singe, et un guide de démarrage à imprimer. Les règles de la boîte (en finnois, en suédois et en anglais) sont aussi ici.",
     "lataukset": {
       "pikaohje": "Aide-mémoire (à imprimer)",
-      "peruspeli": "Jeu de base – règles complètes",
-      "apinat": "Singes affamés – règles complètes",
-      "salatut": "Pizzas secrètes – règles complètes"
+      "peruspeli": "Jeu de base – règles de la boîte (FI · SV · EN)",
+      "apinat": "Singes affamés – règles de la boîte (FI · SV · EN)",
+      "salatut": "Pizzas secrètes – règles de la boîte (FI · SV · EN)",
+      "lauta_saannot": "Règles du jeu en français",
+      "lauta_opas": "Guide de démarrage en français (à imprimer)"
     },
     "pelaa_otsikko": "Balance des singes",
     "pelaa_teksti": "Découvre en ligne la balance du jeu de plateau : nourris des singes affamés et aide Basso à résoudre des énigmes.",
