@@ -207,10 +207,10 @@ def torni(n):
     pinossa ja paalla taytteen tarra. 🔵 Marko 13.11.2026: esimerkissa
     linjastolla on TORNEJA, ei paloja — kuvan ja tekstin on tasmattava."""
     vari = TAYTEVARIT[n - 1]
-    return ('<span class="torni-kuva"><span class="tarra" style="background:%s">'
-            '<img src="julkinen/play/apinavaaka/tayte/%d.webp" alt=""></span>%s'
-            '<span class="torni-luku">%d</span></span>'
-            % (vari, n, '<i style="background:%s"></i>' % vari * n, n))
+    # 🔵 Marko 13.11.2026: pyöreät tarrat eivät näytä oikeilta — pelkkä pino
+    # kertoo, että täytteet liikkuvat pinoina. Luku alla.
+    return ('<span class="torni-kuva">%s<span class="torni-luku">%d</span></span>'
+            % ('<i style="background:%s"></i>' % vari * n, n))
 
 
 # 🔵 Marko 13.11.2026: «Mikset käytä niitä oikeita pizzakortin kuvia?» →
@@ -396,8 +396,8 @@ PAA = '''<!doctype html>
   .kortti-tarra img {{ width: 70%; filter: brightness(0) invert(1) }}
   .ryhma .nuoli {{ font-size: 6pt; line-height: 1; color: #7A9AA6 }}
   .torni-kuva {{ display: flex; flex-direction: column; align-items: center; gap: .22mm }}
-  .torni-kuva i {{ display: block; width: 6.4mm; height: .8mm; border-radius: .3mm;
-                   box-shadow: inset 0 -.18mm 0 rgba(0,0,0,.22) }}
+  .torni-kuva i {{ display: block; width: 7mm; height: 1.25mm; border-radius: .45mm;
+                   box-shadow: inset 0 -.3mm 0 rgba(0,0,0,.25), inset 0 .15mm 0 rgba(255,255,255,.35) }}
   .torni-kuva .tarra {{ width: 5.6mm; height: 5.6mm; border-radius: 50%; border: .35mm solid #fff;
                         display: flex; align-items: center; justify-content: center; margin-bottom: .3mm;
                         box-shadow: 0 0 0 .15mm rgba(0,0,0,.25) }}
