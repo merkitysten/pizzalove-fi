@@ -35,10 +35,10 @@ ei mahdu, siirtyy seuraavaan ruutuun, ja otsikko (luokka `pida`) seuraa
 sisaltoaan. Jos jokin ei mahdu tai ruudut loppuvat, sivulle kirjoitetaan
 `YLIVUOTO`, ja koe loytaa sen valmiista PDF:sta.
 
-LUONNOS (oletus): taitosviivat ja ruutujen numerot nakyvat (Marko: «jotta
-voin tulostaa, taitella ja arvioida lukujärjestyksen»). `--puhdas` piilottaa.
+TAITOSVIIVAT: oletuksena pois (Marko 15.11.2026: «Ota pois ne taittoviivat
+tulostettavasta sääntölapusta»). `--luonnos` näyttää ne arviointia varten.
 
-AJO: python3 koteloarkki.py [fi] [--puhdas]
+AJO: python3 koteloarkki.py [fi] [--luonnos]
   Macilla Chrome kuten muut generaattorit, muualla Playwright.
 """
 
@@ -484,7 +484,7 @@ def tee(kieli, luonnos):
 
 
 def main():
-    luonnos = '--puhdas' not in sys.argv
+    luonnos = '--luonnos' in sys.argv
     pyydetyt = [a for a in sys.argv[1:] if not a.startswith('-')]
     for kieli in (pyydetyt or sorted(KIELET)):
         if kieli not in KIELET:
