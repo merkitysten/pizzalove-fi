@@ -55,6 +55,17 @@ import korttisaannot as ks
 
 TANNE = os.path.dirname(os.path.abspath(__file__))
 SIVUJA = 2
+# PDF-sivun koko (Marko 15.11.2026: «tulostin ei pysty sitä tulostamaan
+# kuitenkaan paperin reunasta reunaan. Se käytännössä skaalaa tulostettavan
+# alan 93 %. Pystytkö säätämään sen arkin koon siten, että tulostimen ei
+# tarvitse skaalata kuvaa ollenkaan?»). Sivu = 93 % A4:stä (195 x 276 mm),
+# eli juuri se ala, johon Markon tulostin A4:n mahtui: tulostin tulostaa sen
+# 100 %:na keskelle A4-paperia, eikä mikään pienene. Taitokset tehdään
+# paperiin kuten ennenkin; pystytaite osuu keskelle, koska sivu on keskellä.
+ARKKI_L, ARKKI_K = 195.0, 276.0     # mm
+REUNA = 2.0                         # mm sivun reunasta (tulostimen oma marginaali on jo sivun ulkopuolella)
+PALSTAVALI = 9.0                    # mm
+PALSTA_L = (ARKKI_L - 2 * REUNA - PALSTAVALI) / 2
 LEIPA_PT = 7.0          # painetun arkin leipateksti 2,479 mm
 KIELET = {
     'fi': {'tiedosto': 'pizza-love-korttipeli-koteloarkki-fi.pdf',
@@ -250,7 +261,8 @@ def sivu_html(kieli, luonnos=True):
     # «Aloita Pizza Partystä» pois otsakkeesta (Marko 15.11.2026: «Sehän lukee
     # myös pizza partyn alapuolella uudelleen eli ajattelisin, että se on turha»)
     atomit = [otsake] + atomit
-    taitteet = ''.join('<i class="taite vaaka" style="top:%smm"></i>' % y for y in ('74.25', '148.5', '222.75'))
+    yla = (297 - ARKKI_K) / 2
+    taitteet = ''.join('<i class="taite vaaka" style="top:%.2fmm"></i>' % (y - yla) for y in (74.25, 148.5, 222.75))
     # Palstojen tiheys (Marko 15.11.2026): etupuolen vasen palsta saa lisää
     # tilaa pystysuunnassa (ilmava), oikeaan mahtuvat Party ja Basso (tiivis),
     # takapuolen Pizza Love ilmavasti kahdelle palstalle.
@@ -264,16 +276,16 @@ def sivu_html(kieli, luonnos=True):
 <style>
 {kirjasimet}
   {viiri_face}
-  @page {{ size: 210mm 297mm; margin: 0 }}
+  @page {{ size: {arkki_l}mm {arkki_k}mm; margin: 0 }}
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
   html, body {{ background: #fff }}
   body {{ font-family: Teksti, Arial, sans-serif; color: {musta}; font-size: {pt}pt; line-height: 1.2;
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   b {{ font-weight: 700 }}
-  .sivu {{ position: relative; width: 210mm; height: 297mm; overflow: hidden }}
-  .palsta {{ position: absolute; top: 6mm; bottom: 6mm }}
-  .palsta.vasen {{ left: 6mm; right: calc(105mm + 4.5mm) }}
-  .palsta.oikea {{ left: calc(105mm + 4.5mm); right: 6mm }}
+  .sivu {{ position: relative; width: {arkki_l}mm; height: {arkki_k}mm; overflow: hidden }}
+  .palsta {{ position: absolute; top: {reuna}mm; bottom: {reuna}mm }}
+  .palsta.vasen {{ left: {reuna}mm; right: calc({puoli}mm + {puolivali}mm) }}
+  .palsta.oikea {{ left: calc({puoli}mm + {puolivali}mm); right: {reuna}mm }}
   .palsta .sisus {{ position: absolute; inset: 0 }}
   .ilmava {{ line-height: 1.3 }}
   .ilmava h2 {{ margin-top: 4.6mm }}
@@ -295,19 +307,19 @@ def sivu_html(kieli, luonnos=True):
      (Marko 15.11.2026: «Pidä tekstin välykset samana kuin on lapun ykköspuolella») */
   .vapaa .kaavio svg {{ width: 80mm }}
   .vapaa .vaihtoesim .vaihto img {{ width: 10.4mm }}
-  .tiivis {{ line-height: 1.2 }}
-  .tiivis h3 {{ margin: 1.7mm 0 .4mm }}
-  .tiivis p {{ margin-bottom: .6mm }}
-  .tiivis ul.lista li, .tiivis ol.lista li {{ margin-bottom: .5mm }}
+  .tiivis {{ line-height: 1.15 }}
+  .tiivis h3 {{ margin: 1.4mm 0 .3mm }}
+  .tiivis p {{ margin-bottom: .45mm }}
+  .tiivis ul.lista li, .tiivis ol.lista li {{ margin-bottom: .35mm }}
   .tiivis .koti {{ margin-top: 2mm; padding: 1.2mm 1.6mm .5mm }}
   .tiivis .banneri {{ padding: 1.3mm 0 3mm; margin-bottom: 1.6mm }}
   .tiivis .banneri {{ margin-top: 0 }}
-  .tiivis .banneri ~ .banneri {{ margin-top: 5mm }}
+  .tiivis .banneri ~ .banneri {{ margin-top: 4mm }}
   .sivu + .sivu {{ break-before: page }}
   .sisus > :first-child {{ margin-top: 0 !important }}
   .taite {{ display: {luonnos_nako}; position: absolute; pointer-events: none }}
   .taite.vaaka {{ left: 0; right: 0; border-top: .2mm dashed #9BB8DD }}
-  .taite.pysty {{ top: 0; bottom: 0; left: 105mm; border-left: .2mm dashed #E3A0A0 }}
+  .taite.pysty {{ top: 0; bottom: 0; left: {puoli}mm; border-left: .2mm dashed #E3A0A0 }}
 
   h1 {{ font: 700 15pt/1 Otsikko, sans-serif; text-transform: uppercase; color: {oranssi}; margin-top: 1.6mm }}
   h2 {{ font: 700 11pt/1.05 Otsikko, sans-serif; text-transform: uppercase; color: {oranssi};
@@ -354,7 +366,7 @@ def sivu_html(kieli, luonnos=True):
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
-  .lisat {{ position: absolute; left: 6mm; right: 6mm; border-top: .2mm solid {musta}; padding-top: 9mm;
+  .lisat {{ position: absolute; left: {reuna}mm; right: {reuna}mm; border-top: .2mm solid {musta}; padding-top: 9mm;
             line-height: 1.3 }}
   /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta) */
   .alalaatikko {{ display: flex; gap: 12mm; align-items: center; padding: 0 4mm 2.6mm 14mm;
@@ -401,7 +413,7 @@ def sivu_html(kieli, luonnos=True):
   .vaihtoesim .vaihto {{ justify-content: flex-start; margin: 0 }}
   .vaihtoesim .vierekkain {{ margin: 1mm 0 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
-  #lahde {{ position: absolute; left: -9999mm; width: 94.5mm }}
+  #lahde {{ position: absolute; left: -9999mm; width: {palsta_l}mm }}
   .ylivuoto {{ position: absolute; left: 4mm; top: 4mm; color: red; font: 700 14pt Otsikko, sans-serif }}
 </style>
 {ruudut}
@@ -413,7 +425,7 @@ function pakkaa() {{
   var lisat = document.querySelector('.lisat'), mm = 96 / 25.4, VALI = 10 * mm;
   var viimeiset = [].slice.call(document.querySelectorAll('.sivu:last-of-type .palsta'));
   if (lisat) viimeiset.forEach(function (p) {{
-    p.style.bottom = (6 * mm + lisat.getBoundingClientRect().height + VALI) + 'px';
+    p.style.bottom = ({reuna} * mm + lisat.getBoundingClientRect().height + VALI) + 'px';
   }});
   var lahde = document.getElementById('lahde');
   var atomit = [].slice.call(lahde.children);
@@ -482,6 +494,8 @@ function pakkaa() {{
 </script>
 </html>'''.format(
         kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET,
+        arkki_l=ARKKI_L, arkki_k=ARKKI_K, reuna=REUNA, puoli=ARKKI_L / 2, puolivali=PALSTAVALI / 2,
+        palsta_l=PALSTA_L,
         viiri_face=viirikirjasin()[0], viiri_font=viirikirjasin()[1], musta=ks.MUSTA, oranssi=ks.ORANSSI,
         hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(osoite(k)),
