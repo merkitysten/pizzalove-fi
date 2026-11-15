@@ -147,6 +147,10 @@ def sisalto(kieli):
             # loppuun, kuten verkko-PDF:ssa (korttisaannot.muoto)
             i = next(n for n, x in enumerate(osat) if x.startswith('<h3') and k['kaavio'][3] in x)
             osat.insert(i + 2, ks.kaavio(k))
+            # Marko 15.11.2026: «Siirrä aloittaminen oikean puolen palstaan» ->
+            # kaavion jälkeinen ensimmäinen väliotsikko aloittaa oikean palstan
+            m3 = next(n for n in range(i + 3, len(osat)) if osat[n].startswith('<h3'))
+            osat[m3] = osat[m3].replace('class="pida"', 'class="pida uusi-palsta"', 1)
             j = next(n for n, x in enumerate(osat) if k['vaihto_luku'] in x)
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
             osat.insert(loppu, ks.vaihtoesimerkki(k))
@@ -236,14 +240,10 @@ def sivu_html(kieli, luonnos=True):
   .ilmava .vaihtoesim .vaihto img {{ width: 9mm }}
   .ilmava ul.lista li, .ilmava ol.lista li {{ margin-bottom: .7mm }}
   /* takapuoli: Pizza Love väljästi, tilaa on */
-  .vapaa {{ line-height: 1.42 }}
-  .vapaa h3 {{ margin-top: 4.2mm }}
-  .vapaa p {{ margin-bottom: 1.6mm }}
-  .vapaa .banneri {{ margin-bottom: 3mm }}
+  /* takapuoli: tekstin välykset samat kuin etupuolella (ilmava), vain kuvat isompina
+     (Marko 15.11.2026: «Pidä tekstin välykset samana kuin on lapun ykköspuolella») */
   .vapaa .kaavio svg {{ width: 80mm }}
   .vapaa .vaihtoesim .vaihto img {{ width: 11mm }}
-  .vapaa .rivi img {{ width: 11mm }}
-  .vapaa ul.lista li, .vapaa ol.lista li {{ margin-bottom: 1.1mm }}
   .tiivis {{ line-height: 1.2 }}
   .tiivis h3 {{ margin: 1.7mm 0 .4mm }}
   .tiivis p {{ margin-bottom: .6mm }}
@@ -305,7 +305,7 @@ def sivu_html(kieli, luonnos=True):
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
   .lisat {{ position: absolute; left: 6mm; right: 6mm; display: grid; grid-template-columns: 1fr 1fr;
-            column-gap: 9mm; border-top: .2mm solid {musta}; padding-top: 4mm; line-height: 1.3 }}
+            column-gap: 9mm; border-top: .2mm solid {musta}; padding-top: 9mm; line-height: 1.3 }}
   .lisat h3 {{ margin-top: 0 }}
   .lisat .tieto {{ margin-top: 0 }}
   .lisat .oikeudet {{ grid-column: 1 / -1; margin-top: 4mm }}
@@ -338,7 +338,7 @@ def sivu_html(kieli, luonnos=True):
 <script>
 document.getElementById('qr').innerHTML = norsuQrSvg({osoite}, {{ reunus: 4 }});
 function pakkaa() {{
-  var lisat = document.querySelector('.lisat'), mm = 96 / 25.4, VALI = 7 * mm;
+  var lisat = document.querySelector('.lisat'), mm = 96 / 25.4, VALI = 10 * mm;
   var viimeiset = [].slice.call(document.querySelectorAll('.sivu:last-of-type .palsta'));
   if (lisat) viimeiset.forEach(function (p) {{
     p.style.bottom = (6 * mm + lisat.getBoundingClientRect().height + VALI) + 'px';
@@ -388,16 +388,6 @@ function pakkaa() {{
         break;
       }}
     }}
-  }}
-  if (!virheet.length && i === ruudut.length - 1) {{
-    // Marko 15.11.2026: «Tasaa se pizza loven säännöt nätisti vasempaan ja
-    // oikeaan sarakkeeseen» -> lyhyemmän palstan ero jaetaan väliotsikoiden
-    // yläpuolelle, jolloin molemmat palstat päättyvät samaan korkeuteen.
-    var lyhyt = kork(V) < kork(O) ? V : O, ero = Math.abs(kork(V) - kork(O));
-    var vali = [].slice.call(lyhyt.children).filter(function (x, n) {{ return n > 0 && x.tagName === 'H3'; }});
-    if (vali.length && ero > 0) vali.forEach(function (x) {{
-      x.style.marginTop = (parseFloat(getComputedStyle(x).marginTop) + ero / vali.length) + 'px';
-    }});
   }}
   if (lisat) {{
     // hiusviiva ja lisätiedot heti Pizza Loven palstojen alle
