@@ -62,7 +62,10 @@ KIELET = {
            'pois': ['>Näin pizza tehdään<', 'Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
                     'Arvon on aina täsmättävä. ',
                     '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
-                    'vaikkakin vähän vaikeammaksi.</p>']},
+                    'vaikkakin vähän vaikeammaksi.</p>'],
+           # rivinvaihto ennen näitä sanoja (Marko 15.11.2026: «Muuta selitystekstin
+           # "Nyt B" alkamaan uudelta riviltä»)
+           'rivinvaihto': [' Nyt B ']},
 }
 
 
@@ -189,6 +192,9 @@ def sisalto(kieli):
         osumia = sum(pois in x for x in a)
         assert osumia == 1, 'karsittava teksti ei löydy yksikäsitteisesti: ' + pois
         a = [x.replace(pois, '><' if pois.startswith('>') else '') for x in a]
+    for rv in KIELET[kieli].get('rivinvaihto', []):
+        assert sum(rv in x for x in a) == 1, 'rivinvaihdon kohta ei löydy yksikäsitteisesti: ' + rv
+        a = [x.replace(rv, '<br>' + rv.lstrip()) for x in a]
     a = [x for x in a if not re.fullmatch(r'<(p|h2|h3)[^>]*>\s*</\1>', x)]
     return s, k, a, lisat
 
@@ -251,6 +257,7 @@ def sivu_html(kieli, luonnos=True):
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
   .ilmava .kaavio svg {{ width: 70mm }}
+  .ilmava .kaavio {{ margin-top: 4mm }}
   .ilmava .vaihtoesim .vaihto img {{ width: 9mm }}
   .ilmava ul.lista li, .ilmava ol.lista li {{ margin-bottom: .7mm }}
   /* takapuoli: Pizza Love väljästi, tilaa on */
@@ -360,7 +367,7 @@ def sivu_html(kieli, luonnos=True):
   .tapateksti, .vierekkain p {{ min-width: 0; text-wrap: pretty; hyphens: manual }}
   .tapateksti .pelit {{ margin-bottom: 1mm }}
   .tapateksti p:last-child {{ margin-bottom: 0 }}
-  .vaihtoesim h3 {{ margin-top: 1.4mm }}
+  .vaihtoesim h3 {{ margin-top: 4.4mm }}
   .vaihtoesim .vaihto {{ justify-content: flex-start; margin: 0 }}
   .vaihtoesim .vierekkain {{ margin: 1mm 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
