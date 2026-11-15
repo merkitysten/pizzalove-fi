@@ -59,7 +59,7 @@ KIELET = {
            'ylivuoto': 'YLIVUOTO',
            # Marko 15.11.2026: «mieti mitä tällä palstalla voidaan vielä ottaa
            # pois, jotta selkeytetään». Vain koteloarkista; verkko-PDF ennallaan.
-           'pois': ['Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
+           'pois': ['>Näin pizza tehdään<', 'Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
                     'Arvon on aina täsmättävä. ',
                     '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
                     'vaikkakin vähän vaikeammaksi.</p>']},
@@ -165,8 +165,8 @@ def sisalto(kieli):
     for pois in KIELET[kieli].get('pois', []):
         osumia = sum(pois in x for x in a)
         assert osumia == 1, 'karsittava teksti ei löydy yksikäsitteisesti: ' + pois
-        a = [x.replace(pois, '') for x in a]
-    a = [x for x in a if not re.fullmatch(r'<p[^>]*>\s*</p>', x)]
+        a = [x.replace(pois, '><' if pois.startswith('>') else '') for x in a]
+    a = [x for x in a if not re.fullmatch(r'<(p|h2|h3)[^>]*>\s*</\1>', x)]
     return s, k, a
 
 
@@ -221,7 +221,7 @@ def sivu_html(kieli, luonnos=True):
   .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
   .ilmava .rivi img {{ width: 9mm }}
-  .ilmava .pieni-lasku img {{ width: 7.2mm }}
+  .ilmava .pieni-lasku img {{ width: 7.6mm }}
   .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; flex-direction: column; gap: 1.2mm }}
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
@@ -439,8 +439,10 @@ def tee(kieli, luonnos):
         virhe = 1
     # Sama otsikkolista kuin verkko-PDF:n kokeessa (korttisaannot.otsikot),
     # luettuna valmiista PDF:sta.
+    # Tarkoituksella karsitut otsikot (KIELET[kieli]['pois'], muoto '>otsikko<') ohitetaan.
+    karsitut = {ks.norm(x.strip('><')) for x in KIELET[kieli].get('pois', []) if x.startswith('>')}
     puuttuu = [o for o in ks.otsikot(os.path.join(TANNE, 'sisalto', kieli + '.json'))
-               if ks.norm(o) not in ks.norm(t)]
+               if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut]
     if len(t) < 2000:
         print('Sisaltokoe: PDF:sta ei saatu tekstia — EI MITATTAVISSA')
     elif puuttuu:
