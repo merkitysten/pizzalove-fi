@@ -153,7 +153,11 @@ def sisalto(kieli):
             osat[m3] = osat[m3].replace('class="pida"', 'class="pida uusi-palsta"', 1)
             j = next(n for n, x in enumerate(osat) if k['vaihto_luku'] in x)
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
-            osat.insert(loppu, ks.vaihtoesimerkki(k))
+            # Marko 15.11.2026: vaihtoesimerkkikin kortit vasemmalle ja selitys oikealle
+            vesim = ks.vaihtoesimerkki(k).replace('</h3><div class="esimerkki vaihto"',
+                                                  '</h3><div class="vierekkain"><div class="esimerkki vaihto"', 1)
+            assert vesim.endswith('</p></div>')
+            osat.insert(loppu, vesim[:-len('</div>')] + '</div></div>')
         a += osat
         if koti:
             a.append('<div class="koti"><h3>%s</h3>%s%s%s</div>'
@@ -253,7 +257,7 @@ def sivu_html(kieli, luonnos=True):
   /* takapuoli: tekstin välykset samat kuin etupuolella (ilmava), vain kuvat isompina
      (Marko 15.11.2026: «Pidä tekstin välykset samana kuin on lapun ykköspuolella») */
   .vapaa .kaavio svg {{ width: 80mm }}
-  .vapaa .vaihtoesim .vaihto img {{ width: 11mm }}
+  .vapaa .vaihtoesim .vaihto img {{ width: 10.4mm }}
   .tiivis {{ line-height: 1.2 }}
   .tiivis h3 {{ margin: 1.7mm 0 .4mm }}
   .tiivis p {{ margin-bottom: .6mm }}
@@ -317,26 +321,28 @@ def sivu_html(kieli, luonnos=True):
   .lisat {{ position: absolute; left: 6mm; right: 6mm; border-top: .2mm solid {musta}; padding-top: 9mm;
             line-height: 1.3 }}
   /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta) */
-  .alalaatikko {{ display: flex; gap: 6mm; align-items: flex-start; padding-bottom: 2.4mm;
+  .alalaatikko {{ display: flex; gap: 12mm; align-items: center; padding: 0 4mm 2.6mm 14mm;
                   border-bottom: .2mm solid {musta} }}
-  .ajattelee {{ flex: none; position: relative; width: 60mm; align-self: stretch; min-height: 30mm }}
+  .ajattelee {{ flex: none; position: relative; width: 74mm; align-self: stretch; min-height: 38mm }}
   .ajattelee img {{ position: absolute; display: block }}
-  .ajattelee img.basso {{ left: 0; width: 30mm; bottom: calc(-2.4mm - .2mm - 30mm * .1536) }}
-  .ajattelee img.hanta {{ left: 27.5mm; width: 27.5mm; bottom: calc(-2.4mm - .2mm - 3.7mm);
+  .ajattelee img.basso {{ left: 0; width: 37mm; bottom: calc(-2.6mm - .2mm - 37mm * .1536) }}
+  .ajattelee img.hanta {{ left: 34mm; width: 34mm; bottom: calc(-2.6mm - .2mm - 4.6mm);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
-  .kupla {{ position: absolute; left: 23.5mm; bottom: 2.4mm; width: 36mm }}
+  .kupla {{ position: absolute; left: 29mm; bottom: 3mm; width: 44mm }}
   .kupla > img {{ position: static !important; width: 100% }}
   .merkit {{ position: absolute; left: 29%; right: 11.2%; top: 22%; bottom: 17%;
              display: grid; grid-template-columns: repeat(4, 1fr);
              align-content: space-evenly; align-items: center; justify-items: center;
-             font: 900 12pt/1 Viiri, sans-serif; color: {musta} }}
-  .merkit span:nth-child(n+5) {{ font: 700 9.7pt/1 Otsikko, sans-serif }}
+             font: 900 15pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 12pt/1 Otsikko, sans-serif }}
   .merkit sup {{ font-size: .6em }}
   .tekstit {{ flex: 1; min-width: 0 }}
   .tekstit h3 {{ margin: 0 0 .6mm }}
-  .tekstit h3.bruno {{ margin-top: 3mm }}
+  .tekstit {{ line-height: 1.4 }}
+  .tekstit h3.bruno {{ margin-top: 4mm }}
+  .tekstit .laskulista {{ column-gap: 6mm; row-gap: .8mm; margin: 1.2mm 0 1.4mm; font-size: 7.6pt }}
   .tekstit p {{ margin-bottom: .6mm }}
-  .lisat .oikeudet {{ border-top: 0; margin-top: 7mm; padding-top: 0 }}
+  .lisat .oikeudet {{ border-top: 0; margin-top: 8mm; padding-top: 0 }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
@@ -355,7 +361,8 @@ def sivu_html(kieli, luonnos=True):
   .tapateksti .pelit {{ margin-bottom: 1mm }}
   .tapateksti p:last-child {{ margin-bottom: 0 }}
   .vaihtoesim h3 {{ margin-top: 1.4mm }}
-  .vaihtoesim .vaihto {{ justify-content: center; margin: .6mm 0 }}
+  .vaihtoesim .vaihto {{ justify-content: flex-start; margin: 0 }}
+  .vaihtoesim .vierekkain {{ margin: 1mm 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
   #lahde {{ position: absolute; left: -9999mm; width: 94.5mm }}
   .ylivuoto {{ position: absolute; left: 4mm; top: 4mm; color: red; font: 700 14pt Otsikko, sans-serif }}
@@ -438,7 +445,7 @@ function pakkaa() {{
 </script>
 </html>'''.format(
         kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET, musta=ks.MUSTA, oranssi=ks.ORANSSI,
-        hanta_raja=round(100 * (27.5 * 374 / 1030 - 3.7) / (27.5 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
+        hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(k['osoite']),
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
