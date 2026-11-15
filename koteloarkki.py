@@ -145,7 +145,9 @@ def sisalto(kieli):
         # alle Pizza Basso; Pizza Love takapuolelle kahdelle palstalle.
         # `uusi-palsta` aloittaa uuden palstan (Party ja Love).
         uusi = ' uusi-palsta' if m['numero'] in ('#1', '#3') else ''
-        a.append('<h2 class="banneri pida%s"><span class="oranssi">%s %s</span> %s</h2>'
+        # Marko 15.11.2026: «Saatko muutettua viireissä olevat fontit alkuperäiseksi?»
+        # -> kuten painetussa ohjeessa: versaalit, PIZZA ja nimi yhteen (#1 PIZZAPARTY)
+        a.append('<h2 class="banneri pida%s"><span class="oranssi">%s %s</span>%s</h2>'
                  % (uusi, e(m['numero']), e(sanat[0]), e(sanat[1] if len(sanat) > 1 else '')))
         a.append('<p class="kuvaus pida">%s</p>' % e(m['kuvaus']))
         runko = m['html']
@@ -362,7 +364,7 @@ def sivu_html(kieli, luonnos=True):
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
-              font: 900 10.5pt/1 Viiri, sans-serif; text-transform: none;
+              font: 900 14pt/1 Viiri, sans-serif; text-transform: uppercase; letter-spacing: -.01em;
               clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%) }}
   .banneri .oranssi {{ color: {oranssi} }}
   .kuvaus {{ font-weight: 700; margin-bottom: .4mm }}
