@@ -78,7 +78,10 @@ KIELET = {
                     'vaikkakin vähän vaikeammaksi.</p>',
                     # Marko 15.11.2026: «Onko selitystekstissä tuo "Mutta B:n kannatti
                     # tehdä se silti" taas joku tekoälyn oma pikku lisäys?» -> pois
-                    ' Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'],
+                    ' Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.',
+                    # Marko 15.11.2026: «vie pelaajan fokusta pois ja kun se on
+                    # mainittu ohjeen lopussa» (Bruno vai Basso? -kohta)
+                    '<p class="pieni">Vanhemmissa ohjeissa: Pizza Bruno.</p>'],
            # rivinvaihto ennen näitä sanoja (Marko 15.11.2026: «Muuta selitystekstin
            # "Nyt B" alkamaan uudelta riviltä»)
            'rivinvaihto': [' Nyt B ']},
