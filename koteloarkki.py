@@ -56,7 +56,13 @@ SIVUJA = 2
 LEIPA_PT = 7.0          # painetun arkin leipateksti 2,479 mm
 KIELET = {
     'fi': {'tiedosto': 'pizza-love-korttipeli-koteloarkki-fi.pdf',
-           'ylivuoto': 'YLIVUOTO'},
+           'ylivuoto': 'YLIVUOTO',
+           # Marko 15.11.2026: «mieti mitä tällä palstalla voidaan vielä ottaa
+           # pois, jotta selkeytetään». Vain koteloarkista; verkko-PDF ennallaan.
+           'pois': ['Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
+                    'Arvon on aina täsmättävä. ',
+                    '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
+                    'vaikkakin vähän vaikeammaksi.</p>']},
 }
 
 
@@ -155,6 +161,12 @@ def sisalto(kieli):
     otsikko, teksti = ks.tieto_jaettu(s)
     a.append('<div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div>'
              % (otsikko, teksti))
+    # karsinnat (KIELET[kieli]['pois']); tyhjiksi jäävät kappaleet pois
+    for pois in KIELET[kieli].get('pois', []):
+        osumia = sum(pois in x for x in a)
+        assert osumia == 1, 'karsittava teksti ei löydy yksikäsitteisesti: ' + pois
+        a = [x.replace(pois, '') for x in a]
+    a = [x for x in a if not re.fullmatch(r'<p[^>]*>\s*</p>', x)]
     return s, k, a
 
 
@@ -205,12 +217,12 @@ def sivu_html(kieli, luonnos=True):
   .ilmava {{ line-height: 1.3 }}
   .ilmava h2 {{ margin-top: 4.6mm }}
   .ilmava h3 {{ margin-top: 2.6mm }}
-  .ilmava .palkki {{ margin: 3.6mm 0 1.5mm }}
+  .ilmava .palkki {{ margin: 3mm 0 1.3mm }}
   .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
   .ilmava .rivi img {{ width: 9mm }}
-  .ilmava .pieni-lasku img {{ width: 8mm }}
-  .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; gap: 1mm 3.4mm }}
+  .ilmava .pieni-lasku img {{ width: 7.2mm }}
+  .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; flex-direction: column; gap: 1.2mm }}
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
   .ilmava .kaavio svg {{ width: 70mm }}
