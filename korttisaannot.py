@@ -79,8 +79,7 @@ KIELET = {
         'vaihto_luku': 'Varastokorttien vaihtaminen',
         'vaihto_otsikko': 'Esimerkki vaihdosta',
         'vaihto': ('Pelaaja B vaihtaa nelosensa pelaaja A:n kutoseen ja '
-                   'kakkoseen, koska 4 = 6 – 2. Nyt B voi valmistaa pizzansa. '
-                   'Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'),
+                   'kakkoseen, koska 4 = 6 – 2. Nyt B voi valmistaa pizzansa.'),
         'qr_teksti': 'Säännöt ja<br>videot netissä',
         'osoite': 'https://pizzalove.fi/fi/korttipeli',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Lisätietoja ja videoita osoitteessa',
@@ -98,9 +97,7 @@ KIELET = {
         'vaihto_luku': 'Vorratskarten tauschen',
         'vaihto_otsikko': 'Beispiel für einen Tausch',
         'vaihto': ('Spieler B tauscht seine 4 gegen die 6 und die 2 von '
-                   'Spieler A, denn 4 = 6 – 2. Jetzt kann B seine Pizza '
-                   'zubereiten. Der Tausch hat auch A geholfen, aber für B hat '
-                   'er sich trotzdem gelohnt.'),
+                   'Spieler A, denn 4 = 6 – 2. Jetzt kann B seine Pizza zubereiten.'),
         'qr_teksti': 'Regeln und<br>Videos online',
         'osoite': 'https://pizzalove.fi/de/kartenspiel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Mehr Infos und Videos unter',
@@ -117,9 +114,8 @@ KIELET = {
                    'Draw pile', 'Exchange pizza'),
         'vaihto_luku': 'Exchanging storage cards',
         'vaihto_otsikko': 'Example of an exchange',
-        'vaihto': ('Player B exchanges their 4 for player A’s 6 and 2, because '
-                   '4 = 6 – 2. Now B can make their pizza. The exchange helped '
-                   'A too, but it was still worth it for B.'),
+        'vaihto': ('Player B exchanges their 4 for player A’s 6 and '
+                   '2, because 4 = 6 – 2. Now B can make their pizza.'),
         'qr_teksti': 'Rules and<br>videos online',
         'osoite': 'https://pizzalove.fi/en/card-game',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'More information and videos at',
@@ -136,9 +132,8 @@ KIELET = {
                    'Draghög', 'Bytespizza'),
         'vaihto_luku': 'Att byta lagerkort',
         'vaihto_otsikko': 'Exempel på ett byte',
-        'vaihto': ('Spelare B byter sin 4:a mot spelare A:s 6:a och 2:a, '
-                   'eftersom 4 = 6 – 2. Nu kan B tillaga sin pizza. Bytet '
-                   'hjälpte A också, men för B var det ändå värt det.'),
+        'vaihto': ('Spelare B byter sin 4:a mot spelare A:s 6:a och '
+                   '2:a, eftersom 4 = 6 – 2. Nu kan B tillaga sin pizza.'),
         'qr_teksti': 'Regler och<br>videor online',
         'osoite': 'https://pizzalove.fi/sv/kortspel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Mer information och videor på',
@@ -157,9 +152,8 @@ KIELET = {
                    'Trekstapel', 'Ruilpizza'),
         'vaihto_luku': 'Voorraadkaarten ruilen',
         'vaihto_otsikko': 'Voorbeeld van een ruil',
-        'vaihto': ('Speler B ruilt zijn 4 tegen de 6 en de 2 van speler A, want '
-                   '4 = 6 – 2. Nu kan B zijn pizza maken. De ruil hielp A ook, '
-                   'maar voor B was hij toch de moeite waard.'),
+        'vaihto': ('Speler B ruilt zijn 4 tegen de 6 en de 2 van '
+                   'speler A, want 4 = 6 – 2. Nu kan B zijn pizza maken.'),
         'qr_teksti': 'Regels en<br>video’s online',
         'osoite': 'https://pizzalove.fi/nl/kaartspel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Meer informatie en video’s op',
@@ -178,10 +172,8 @@ KIELET = {
                    'Pioche', 'Pizza d’échange'),
         'vaihto_luku': 'Échanger des cartes de réserve',
         'vaihto_otsikko': 'Exemple d’échange',
-        'vaihto': ('Le joueur B échange son 4 contre le 6 et le 2 du joueur A, '
-                   'car 4 = 6 – 2. B peut maintenant préparer sa pizza. '
-                   'L’échange a aussi aidé A, mais il valait quand même le coup '
-                   'pour B.'),
+        'vaihto': ('Le joueur B échange son 4 contre le 6 et le 2 du '
+                   'joueur A, car 4 = 6 – 2. B peut maintenant préparer sa pizza.'),
         'qr_teksti': 'Règles et<br>vidéos en ligne',
         'osoite': 'https://pizzalove.fi/fr/jeu-de-cartes',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Plus d’informations et de vidéos sur',
@@ -200,9 +192,8 @@ KIELET = {
                    'Mazo de robo', 'Pizza de intercambio'),
         'vaihto_luku': 'Intercambiar cartas del almacén',
         'vaihto_otsikko': 'Ejemplo de intercambio',
-        'vaihto': ('El jugador B cambia su 4 por el 6 y el 2 del jugador A, '
-                   'porque 4 = 6 – 2. Ahora B puede preparar su pizza. El '
-                   'intercambio también ayudó a A, pero a B le compensó igualmente.'),
+        'vaihto': ('El jugador B cambia su 4 por el 6 y el 2 del jugador '
+                   'A, porque 4 = 6 – 2. Ahora B puede preparar su pizza.'),
         'qr_teksti': 'Reglas y<br>vídeos en línea',
         'osoite': 'https://pizzalove.fi/es/juego-de-cartas',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Más información y vídeos en',
@@ -221,9 +212,8 @@ KIELET = {
                    'Dobierací balíček', 'Výmenná pizza'),
         'vaihto_luku': 'Výmena kariet v sklade',
         'vaihto_otsikko': 'Príklad výmeny',
-        'vaihto': ('Hráč B vymení svoju štvorku za šestku a dvojku hráča A, '
-                   'pretože 4 = 6 – 2. Teraz môže B pripraviť svoju pizzu. '
-                   'Výmena pomohla aj hráčovi A, ale hráčovi B sa aj tak oplatila.'),
+        'vaihto': ('Hráč B vymení svoju štvorku za šestku a dvojku hráča '
+                   'A, pretože 4 = 6 – 2. Teraz môže B pripraviť svoju pizzu.'),
         'qr_teksti': 'Pravidlá a<br>videá online',
         'osoite': 'https://pizzalove.fi/sk/kartova-hra',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Viac informácií a videá nájdete na',
@@ -413,9 +403,10 @@ def kaavio(k):
 
 def vaihtoesimerkki(k):
     '''🔵 Marko 6.11.2026: vaihto omana otsikoituna osionaan vaihtosaannon
-    perassa, ei poytakuvan osana. Kuvateksti kertoo ensin OMAN hyodyn;
-    se, etta vaihto auttaa myos vastustajaa, on taktinen huomio
-    («kannatti silti»), ei vaihdon tarkoitus.'''
+    perassa, ei poytakuvan osana. Kuvateksti kertoo vaihdon ja oman hyodyn.
+    🔵 Marko 15.11.2026: kolmas virke («Vaihto auttoi myös A:ta, mutta B:n
+    kannatti tehdä se silti») oli Clauden lisays ja poistettiin kaikista
+    kielista («taas joku tekoälyn oma pikku lisäys?» → «Poista myös verkon pdf:stä»).'''
     return ('<div class="vaihtoesim"><h3>%s</h3>'
             '<div class="esimerkki vaihto" role="img" aria-label="4 = 6 – 2">'
             '<img src="paperi/kortit/tayte-4.webp"><b>=</b>'
@@ -487,9 +478,10 @@ def muoto(m, k):
     tahti, huomio = '', ''
     pieni = re.match(r'<p class="pieni">[^<]*Bruno[^<]*</p>', runko)
     if pieni:
+        # 🔵 Marko 15.11.2026: huomautus pois myös verkko-PDF:stä («vie pelaajan
+        # fokusta pois ja kun se on mainittu ohjeen lopussa» → «Poista myös
+        # verkon pdf:stä»). Bruno mainitaan lopun Bruno vai Basso? -kohdassa.
         runko = runko[pieni.end():]
-        tahti = '<span class="tahti">*</span>'
-        huomio = '<p class="lisahuomio">%s</p>' % e(k['bruno_huomio'])
     uusi = ' uusi-sivu' if m['numero'] == '#1' else ''
     return ('<section class="muoto kehys%s"><div class="muoto-yla">'
             '<h2 class="banneri"><span class="oranssi">%s %s</span>%s%s</h2>'

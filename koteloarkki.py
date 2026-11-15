@@ -78,8 +78,8 @@ KIELET = {k: {'tiedosto': 'pizza-love-korttipeli-koteloarkki-%s.pdf' % k, 'ylivu
 #  2. Kolme tapaa -ingressi tavallisella painolla, virkkeet omille riveilleen.
 #  3. Tavan 2 kappale, jossa on <b>#1 Pizza Party…</b> («Kokeile tätä myös …»),
 #     pois: pelirivi kertoo saman («#1 Pizza Party (lisähaaste)»).
-#  4. Vaihtoesimerkin kolmas virke pois («taas joku tekoälyn oma pikku
-#     lisäys?»), toinen virke omalle rivilleen («"Nyt B" alkamaan uudelta riviltä»).
+#  4. Vaihtoesimerkin toinen virke omalle rivilleen («"Nyt B" alkamaan uudelta
+#     riviltä»). Kolmas virke poistettiin 15.11. lähteestä (korttisaannot.KIELET).
 #  5. Basson alun <p class="pieni"> … Pizza Bruno pois («vie pelaajan fokusta
 #     pois»); asia kerrotaan lopun Bruno vai Basso? -kohdassa.
 
@@ -200,7 +200,7 @@ def sisalto(kieli):
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
             # Marko 15.11.2026: vaihtoesimerkkikin kortit vasemmalle ja selitys oikealle
             virkkeet = re.split(r'(?<=\.)\s+', k['vaihto'])
-            assert len(virkkeet) == 3, 'vaihtoesimerkki: odotettiin 3 virkettä: %r' % k['vaihto']
+            assert len(virkkeet) == 2, 'vaihtoesimerkki: odotettiin 2 virkettä: %r' % k['vaihto']
             vesim = ks.vaihtoesimerkki(dict(k, vaihto=virkkeet[0] + '\n' + virkkeet[1])).replace('\n', '<br>').replace('</h3><div class="esimerkki vaihto"',
                                                   '</h3><div class="vierekkain"><div class="esimerkki vaihto"', 1)
             assert vesim.endswith('</p></div>')
