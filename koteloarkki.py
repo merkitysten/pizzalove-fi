@@ -226,7 +226,7 @@ def sisalto(kieli):
              '<div class="tekstit"><h3>%s</h3>%s<h3 class="bruno">%s</h3><p>%s</p></div></div>'
              '<p class="oikeudet">%s © Merkitysten Oy 2026</p></div>'
              % (e(s['laskut']['otsikko']), s['laskut'].get('paperi', s['laskut']['html']),
-                otsikko, teksti, e(k['oikeudet'])))
+                otsikko, teksti, e(k['oikeudet']).replace('. ', '.<br>', 1)))
     # karsinnat (KIELET[kieli]['pois']); tyhjiksi jäävät kappaleet pois
     for pois in KIELET[kieli].get('pois', []):
         osumia = sum(pois in x for x in a)
@@ -368,29 +368,33 @@ def sivu_html(kieli, luonnos=True):
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
   .lisat {{ position: absolute; left: {reuna}mm; right: {reuna}mm; border-top: .2mm solid {musta}; padding-top: 9mm;
             line-height: 1.3 }}
-  /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta) */
-  .alalaatikko {{ display: flex; gap: 12mm; align-items: center; padding: 0 4mm 2.6mm 14mm;
-                  border-bottom: .2mm solid {musta} }}
-  .ajattelee {{ flex: none; position: relative; width: 74mm; align-self: stretch; min-height: 38mm }}
+  /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta).
+     Marko 15.11.2026: «suurennat Bassoa vieläkin, mutta siten että se mahtuu
+     kokonaan vasemmalle palstalle» -> 1,15 x verkko-PDF:n mitat; Basso ja kupla
+     vasemmassa palstassa (84 mm), tekstit oikean palstan linjassa. */
+  .alalaatikko {{ display: grid; grid-template-columns: {palsta_l}mm {palsta_l}mm; column-gap: {palstavali}mm;
+                  align-items: center; padding-bottom: 2.6mm; border-bottom: .2mm solid {musta} }}
+  .ajattelee {{ position: relative; width: 84mm; margin-left: 2mm; align-self: stretch; min-height: 44mm }}
   .ajattelee img {{ position: absolute; display: block }}
-  .ajattelee img.basso {{ left: 0; width: 37mm; bottom: calc(-2.6mm - .2mm - 37mm * .1536) }}
-  .ajattelee img.hanta {{ left: 34mm; width: 34mm; bottom: calc(-2.6mm - .2mm - 4.6mm);
+  .ajattelee img.basso {{ left: 0; width: 42.5mm; bottom: calc(-2.6mm - .2mm - 42.5mm * .1536) }}
+  .ajattelee img.hanta {{ left: 39mm; width: 39mm; bottom: calc(-2.6mm - .2mm - 5.3mm);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
-  .kupla {{ position: absolute; left: 29mm; bottom: 3mm; width: 44mm }}
+  .kupla {{ position: absolute; left: 33.4mm; bottom: 3.4mm; width: 50.6mm }}
   .kupla > img {{ position: static !important; width: 100% }}
   .merkit {{ position: absolute; left: 29%; right: 11.2%; top: 22%; bottom: 17%;
              display: grid; grid-template-columns: repeat(4, 1fr);
              align-content: space-evenly; align-items: center; justify-items: center;
-             font: 900 15pt/1 Viiri, sans-serif; color: {musta} }}
-  .merkit span:nth-child(n+5) {{ font: 700 12pt/1 Otsikko, sans-serif }}
+             font: 900 17pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 13.8pt/1 Otsikko, sans-serif }}
   .merkit sup {{ font-size: .6em }}
-  .tekstit {{ flex: 1; min-width: 0 }}
+  .tekstit {{ min-width: 0 }}
   .tekstit h3 {{ margin: 0 0 .6mm }}
   .tekstit {{ line-height: 1.4 }}
   .tekstit h3.bruno {{ margin-top: 4mm }}
   .tekstit .laskulista {{ column-gap: 6mm; row-gap: .8mm; margin: 1.2mm 0 1.4mm; font-size: 7.6pt }}
   .tekstit p {{ margin-bottom: .6mm }}
-  .lisat .oikeudet {{ border-top: 0; margin-top: 8mm; padding-top: 0 }}
+  /* Marko 15.11.2026: «Vaihda ®-rivi mustaksi» + kahdelle riville oikeaan palstaan */
+  .lisat .oikeudet {{ border-top: 0; margin: 7mm 0 0 calc({palsta_l}mm + {palstavali}mm); padding-top: 0; opacity: 1; color: {musta} }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
@@ -495,9 +499,9 @@ function pakkaa() {{
 </html>'''.format(
         kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET,
         arkki_l=ARKKI_L, arkki_k=ARKKI_K, reuna=REUNA, puoli=ARKKI_L / 2, puolivali=PALSTAVALI / 2,
-        palsta_l=PALSTA_L,
+        palsta_l=PALSTA_L, palstavali=PALSTAVALI,
         viiri_face=viirikirjasin()[0], viiri_font=viirikirjasin()[1], musta=ks.MUSTA, oranssi=ks.ORANSSI,
-        hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
+        hanta_raja=round(100 * (39 * 374 / 1030 - 5.3) / (39 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(osoite(k)),
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
