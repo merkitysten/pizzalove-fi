@@ -122,9 +122,12 @@ def sisalto(kieli):
     # --- pelimuodot
     for m in s['muodot']:
         sanat = m['nimi'].split(' ', 1)
-        # pelimuoto alkaa mieluiten ruudun ylaosasta (luokka `alku`)
-        a.append('<h2 class="banneri pida alku"><span class="oranssi">%s %s</span> %s</h2>'
-                 % (e(m['numero']), e(sanat[0]), e(sanat[1] if len(sanat) > 1 else '')))
+        # 🔵 Marko 15.11.2026: etupuolen oikeaan palstaan Pizza Party ja sen
+        # alle Pizza Basso; Pizza Love takapuolelle kahdelle palstalle.
+        # `uusi-palsta` aloittaa uuden palstan (Party ja Love).
+        uusi = ' uusi-palsta' if m['numero'] in ('#1', '#3') else ''
+        a.append('<h2 class="banneri pida%s"><span class="oranssi">%s %s</span> %s</h2>'
+                 % (uusi, e(m['numero']), e(sanat[0]), e(sanat[1] if len(sanat) > 1 else '')))
         a.append('<p class="kuvaus pida">%s</p>' % e(m['kuvaus']))
         runko = m['html']
         koti = m.get('kotisaanto')
@@ -169,9 +172,13 @@ def sivu_html(kieli, luonnos=True):
                  e(ks.ingressi_ilman_toistoa(s, k))))
     atomit = [otsake] + atomit + ['<p class="oikeudet">%s © Merkitysten Oy 2026</p>' % e(k['oikeudet'])]
     taitteet = ''.join('<i class="taite vaaka" style="top:%smm"></i>' % y for y in ('74.25', '148.5', '222.75'))
-    ruudut = ['<section class="sivu"><div class="palsta vasen"><div class="sisus"></div></div>'
-              '<div class="palsta oikea"><div class="sisus"></div></div>%s<i class="taite pysty"></i></section>'
-              % taitteet for _ in range(SIVUJA)]
+    # Palstojen tiheys (Marko 15.11.2026): etupuolen vasen palsta saa lisää
+    # tilaa pystysuunnassa (ilmava), oikeaan mahtuvat Party ja Basso (tiivis),
+    # takapuolen Pizza Love ilmavasti kahdelle palstalle.
+    tiheys = (('ilmava', 'tiivis'), ('ilmava vapaa', 'ilmava vapaa'))
+    ruudut = ['<section class="sivu"><div class="palsta vasen %s"><div class="sisus"></div></div>'
+              '<div class="palsta oikea %s"><div class="sisus"></div></div>%s<i class="taite pysty"></i></section>'
+              % (tiheys[n][0], tiheys[n][1], taitteet) for n in range(SIVUJA)]
     return '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
@@ -187,6 +194,35 @@ def sivu_html(kieli, luonnos=True):
   .palsta.vasen {{ left: 6mm; right: calc(105mm + 4.5mm) }}
   .palsta.oikea {{ left: calc(105mm + 4.5mm); right: 6mm }}
   .palsta .sisus {{ position: absolute; inset: 0 }}
+  .ilmava {{ line-height: 1.3 }}
+  .ilmava h2 {{ margin-top: 4.6mm }}
+  .ilmava h3 {{ margin-top: 2.6mm }}
+  .ilmava .palkki {{ margin: 2.4mm 0 1.1mm }}
+  .ilmava p {{ margin-bottom: 1.1mm }}
+  .ilmava .rivi img {{ width: 9mm }}
+  .ilmava .pieni-lasku img {{ width: 6.6mm }}
+  .ilmava .laskut {{ margin: 1mm 0 1.4mm }}
+  .ilmava .banneri {{ margin-top: 0 }}
+  .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
+  .ilmava .kaavio svg {{ width: 70mm }}
+  .ilmava .vaihtoesim .vaihto img {{ width: 9mm }}
+  .ilmava ul.lista li, .ilmava ol.lista li {{ margin-bottom: .7mm }}
+  /* takapuoli: Pizza Love väljästi, tilaa on */
+  .vapaa {{ line-height: 1.42 }}
+  .vapaa h3 {{ margin-top: 4.2mm }}
+  .vapaa p {{ margin-bottom: 1.6mm }}
+  .vapaa .banneri {{ margin-bottom: 3mm }}
+  .vapaa .kaavio svg {{ width: 80mm }}
+  .vapaa .vaihtoesim .vaihto img {{ width: 11mm }}
+  .vapaa ul.lista li, .vapaa ol.lista li {{ margin-bottom: 1.1mm }}
+  .tiivis {{ line-height: 1.14 }}
+  .tiivis h3 {{ margin: 1mm 0 .25mm }}
+  .tiivis p {{ margin-bottom: .4mm }}
+  .tiivis ul.lista li, .tiivis ol.lista li {{ margin-bottom: .2mm }}
+  .tiivis .koti {{ margin-top: 1mm; padding: .8mm 1.4mm .2mm }}
+  .tiivis .banneri {{ padding: 1mm 0 2.4mm }}
+  .tiivis .banneri {{ margin-top: 0 }}
+  .tiivis .banneri ~ .banneri {{ margin-top: 3.4mm }}
   .sivu + .sivu {{ break-before: page }}
   .sisus > :first-child {{ margin-top: 0 !important }}
   .taite {{ display: {luonnos_nako}; position: absolute; pointer-events: none }}
@@ -268,9 +304,8 @@ function pakkaa() {{
     var a = atomit[n];
     if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
     var p = ruudut[i];
-    // pelimuodon viiri ruudun alaosassa -> seuraavaan ruutuun, jos ruutuja riittaa
-    if (a.classList.contains('alku') && p.children.length && p.scrollHeight > p.clientHeight * 0.72
-        && i + 1 < ruudut.length) {{ i++; p = ruudut[i]; }}
+    // pelimuoto, joka aloittaa uuden palstan (Markon jako 15.11.2026)
+    if (a.classList.contains('uusi-palsta') && p.children.length && i + 1 < ruudut.length) {{ i++; p = ruudut[i]; }}
     p.appendChild(a);
     if (!yli(p)) continue;
     p.removeChild(a);
@@ -282,6 +317,29 @@ function pakkaa() {{
     if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
     siirto.forEach(function (x) {{ ruudut[i].appendChild(x); }});
     if (yli(ruudut[i])) virheet.push('ei mahdu ruutuun: ' + a.textContent.slice(0, 40));
+  }}
+  // Viimeinen sivu tasataan kahdelle palstalle (Markon toive 15.11.2026:
+  // Love "ilmavasti kahdelle palstalle", koko paperia ei tarvitse käyttää).
+  function kork(p) {{
+    var c = p.lastElementChild; if (!c) return 0;
+    return c.getBoundingClientRect().bottom - p.getBoundingClientRect().top;
+  }}
+  var V = ruudut[ruudut.length - 2], O = ruudut[ruudut.length - 1];
+  if (!virheet.length && i === ruudut.length - 1) {{
+    while (V.children.length > 1) {{
+      var ennen = Math.max(kork(V), kork(O));
+      var ryhma = [V.lastElementChild];
+      if (ryhma[0].classList.contains('uusi-palsta')) break;
+      V.removeChild(ryhma[0]);
+      while (V.lastElementChild && V.lastElementChild.classList.contains('pida')) {{
+        ryhma.unshift(V.lastElementChild); V.removeChild(V.lastElementChild);
+      }}
+      for (var k = ryhma.length - 1; k >= 0; k--) O.insertBefore(ryhma[k], O.firstChild);
+      if (yli(O) || Math.max(kork(V), kork(O)) >= ennen) {{
+        ryhma.forEach(function (x) {{ V.appendChild(x); }});
+        break;
+      }}
+    }}
   }}
   if (virheet.length) {{
     var v = document.createElement('div'); v.className = 'ylivuoto';
