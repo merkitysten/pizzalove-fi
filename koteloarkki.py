@@ -154,28 +154,31 @@ def sisalto(kieli):
         if koti:
             a.append('<div class="koti"><h3>%s</h3>%s%s%s</div>'
                      % (e(koti['otsikko']), koti['html'], koti.get('siirra_alku', ''), siirretty))
-    # Lisätiedot ohjeen loppuun hiusviivan alle (Marko 15.11.2026: «kaikki
-    # laskutoimitukset käyvät -laatikko voisi olla sellainen next-level-tieto,
-    # jolle voisi tehdä oman paikkansa aivan ohjeen loppuun» ja «hiusviivan
-    # poikittain, jolloin sen todella ymmärtää, että pelimuodon ohje päättyy»)
-    a.append('<h3 class="pida lisatieto">%s</h3>' % e(s['laskut']['otsikko']))
-    a.append('<div class="laskulaatikko">%s</div>' % s['laskut'].get('paperi', s['laskut']['html']))
-    # Bruno vai Basso takapuolen loppuun (Marko 15.11.2026: «tuon bruno vai
-    # basso -faktan laittaa sinne toiselle sivulle alas, jossa on paljon tilaa»)
+    # Lisätiedot ohjeen loppuun koko sivun levyisen hiusviivan alle (Marko
+    # 15.11.2026: «kaikki laskutoimitukset käyvät -laatikko voisi olla sellainen
+    # next-level-tieto, jolle voisi tehdä oman paikkansa aivan ohjeen loppuun»;
+    # «tuon bruno vai basso -faktan laittaa sinne toiselle sivulle alas»;
+    # «Pizza Loven säännöt loppuu ja sitten on koko sivun leveydeltä hiusviiva.
+    # Vasta tämän viivan jälkeen nämä meidän lisäinfot»). Lohko sijoitetaan
+    # selaimessa Pizza Loven palstojen alle; vasemmalle laskutoimitukset,
+    # oikealle Bruno vai Basso, alle ©.
     otsikko, teksti = ks.tieto_jaettu(s)
-    a.append('<div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div>'
-             % (otsikko, teksti))
+    lisat = ('<div class="lisat"><div><h3>%s</h3><div class="laskulaatikko">%s</div></div>'
+             '<div><div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div></div>'
+             '<p class="oikeudet">%s © Merkitysten Oy 2026</p></div>'
+             % (e(s['laskut']['otsikko']), s['laskut'].get('paperi', s['laskut']['html']),
+                otsikko, teksti, e(k['oikeudet'])))
     # karsinnat (KIELET[kieli]['pois']); tyhjiksi jäävät kappaleet pois
     for pois in KIELET[kieli].get('pois', []):
         osumia = sum(pois in x for x in a)
         assert osumia == 1, 'karsittava teksti ei löydy yksikäsitteisesti: ' + pois
         a = [x.replace(pois, '><' if pois.startswith('>') else '') for x in a]
     a = [x for x in a if not re.fullmatch(r'<(p|h2|h3)[^>]*>\s*</\1>', x)]
-    return s, k, a
+    return s, k, a, lisat
 
 
 def sivu_html(kieli, luonnos=True):
-    s, k, atomit = sisalto(kieli)
+    s, k, atomit, lisat = sisalto(kieli)
     tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
     # 🔵 Marko 15.11.2026: «Asemointi ei ole nyt hyvä. Esim. nämä kaksi menee
     # helposti samaan ruutuun. A4-lapun avaaminen kokonaan ei ole lukijalle
@@ -193,15 +196,15 @@ def sivu_html(kieli, luonnos=True):
               % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
                  k['qr_teksti'], e(k['videot']), k['osoite'].replace('https://', ''),
                  e(ks.ingressi_ilman_toistoa(s, k))))
-    atomit = [otsake] + atomit + ['<p class="oikeudet">%s © Merkitysten Oy 2026</p>' % e(k['oikeudet'])]
+    atomit = [otsake] + atomit
     taitteet = ''.join('<i class="taite vaaka" style="top:%smm"></i>' % y for y in ('74.25', '148.5', '222.75'))
     # Palstojen tiheys (Marko 15.11.2026): etupuolen vasen palsta saa lisää
     # tilaa pystysuunnassa (ilmava), oikeaan mahtuvat Party ja Basso (tiivis),
     # takapuolen Pizza Love ilmavasti kahdelle palstalle.
     tiheys = (('ilmava', 'tiivis'), ('ilmava vapaa', 'ilmava vapaa'))
     ruudut = ['<section class="sivu"><div class="palsta vasen %s"><div class="sisus"></div></div>'
-              '<div class="palsta oikea %s"><div class="sisus"></div></div>%s<i class="taite pysty"></i></section>'
-              % (tiheys[n][0], tiheys[n][1], taitteet)
+              '<div class="palsta oikea %s"><div class="sisus"></div></div>%s%s<i class="taite pysty"></i></section>'
+              % (tiheys[n][0], tiheys[n][1], lisat if n == SIVUJA - 1 else '', taitteet)
               for n in range(SIVUJA)]
     return '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
@@ -301,7 +304,11 @@ def sivu_html(kieli, luonnos=True):
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
-  .sisus h3.lisatieto {{ border-top: .2mm solid {musta}; padding-top: 4mm; margin-top: 6mm }}
+  .lisat {{ position: absolute; left: 6mm; right: 6mm; display: grid; grid-template-columns: 1fr 1fr;
+            column-gap: 9mm; border-top: .2mm solid {musta}; padding-top: 4mm; line-height: 1.3 }}
+  .lisat h3 {{ margin-top: 0 }}
+  .lisat .tieto {{ margin-top: 0 }}
+  .lisat .oikeudet {{ grid-column: 1 / -1; margin-top: 4mm }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
@@ -331,6 +338,11 @@ def sivu_html(kieli, luonnos=True):
 <script>
 document.getElementById('qr').innerHTML = norsuQrSvg({osoite}, {{ reunus: 4 }});
 function pakkaa() {{
+  var lisat = document.querySelector('.lisat'), mm = 96 / 25.4, VALI = 7 * mm;
+  var viimeiset = [].slice.call(document.querySelectorAll('.sivu:last-of-type .palsta'));
+  if (lisat) viimeiset.forEach(function (p) {{
+    p.style.bottom = (6 * mm + lisat.getBoundingClientRect().height + VALI) + 'px';
+  }});
   var lahde = document.getElementById('lahde');
   var atomit = [].slice.call(lahde.children);
   var ruudut = [].slice.call(document.querySelectorAll('.palsta .sisus'));
@@ -376,6 +388,21 @@ function pakkaa() {{
         break;
       }}
     }}
+  }}
+  if (!virheet.length && i === ruudut.length - 1) {{
+    // Marko 15.11.2026: «Tasaa se pizza loven säännöt nätisti vasempaan ja
+    // oikeaan sarakkeeseen» -> lyhyemmän palstan ero jaetaan väliotsikoiden
+    // yläpuolelle, jolloin molemmat palstat päättyvät samaan korkeuteen.
+    var lyhyt = kork(V) < kork(O) ? V : O, ero = Math.abs(kork(V) - kork(O));
+    var vali = [].slice.call(lyhyt.children).filter(function (x, n) {{ return n > 0 && x.tagName === 'H3'; }});
+    if (vali.length && ero > 0) vali.forEach(function (x) {{
+      x.style.marginTop = (parseFloat(getComputedStyle(x).marginTop) + ero / vali.length) + 'px';
+    }});
+  }}
+  if (lisat) {{
+    // hiusviiva ja lisätiedot heti Pizza Loven palstojen alle
+    var ala = Math.max(kork(V), kork(O)) + V.getBoundingClientRect().top - V.closest('.sivu').getBoundingClientRect().top;
+    lisat.style.top = (ala + VALI) + 'px';
   }}
   if (virheet.length) {{
     var v = document.createElement('div'); v.className = 'ylivuoto';
