@@ -25,6 +25,13 @@ KIELET = ['fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk']      # järjestys kiel
 LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE', 'nl': 'nl_NL', 'fr': 'fr_FR', 'es': 'es_ES', 'sk': 'sk_SK'}
 OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään näistä
 OSOITE = 'https://pizzalove.fi'
+# Korttipelin sivun nimi kielen mukaan (Marko 15.11.2026: «voisko se olla vain
+# korttipeli ja voiko se sivun nimi muuttua kielen mukaan?»). Painettu osoite
+# ja QR ilman .html-päätettä, esim. pizzalove.fi/nl/kaartspel (GitHub Pages
+# palvelee kaartspel.html:n). Sanat samat kuin saanto-PDF:ien nimissä.
+# Vanha xx/korttipeli.html jää ohjaussivuksi, koska se on painetuissa QR-koodeissa.
+KORTTIPELI_SIVU = {'fi': 'korttipeli', 'sv': 'kortspel', 'en': 'card-game', 'de': 'kartenspiel',
+                   'nl': 'kaartspel', 'fr': 'jeu-de-cartes', 'es': 'juego-de-cartas', 'sk': 'kartova-hra'}
 SAHKOPOSTI = 'info@merkitysten.fi'
 
 # ⚠️ OMA DOMAIN PÄÄLLE VASTA DNS-VAIHDOSSA. Kun docs/CNAME on olemassa, GitHub
@@ -89,7 +96,7 @@ def ristiinmyynti(t, tuote, paikka):
     kuva = ('lautapeli-laatikko.webp', 793, 900) if tuote == 'lautapeli' else ('tuote-pakkaus.webp', 900, 686)
     return kauppa_banneri(t, kuva[0], kuva[1], kuva[2], s['ristiin_otsikko'], s['ristiin_teksti'],
                           [(kauppa(t, tuote, paikka), ui['kauppa_' + tuote]),
-                           (tuote + '.html', s['ristiin_saannot'])])
+                           (sivutiedosto(tuote, t['lang']), s['ristiin_saannot'])])
 
 # Videot: (YouTube-tunnus, puhutun/kirjoitetun tekstin kieli, muoto)
 # muoto 'pysty' = Shorts (9:16), 'vaaka' = tavallinen video (16:9)
@@ -214,7 +221,7 @@ def koko_mt(polku):
 def ylaosa(t, sivu, kaikki):
     ui = t['ui']
     nav = [('index.html', ui['nav_etusivu'], 'etusivu'),
-           ('korttipeli.html', ui['nav_korttipeli'], 'korttipeli'),
+           (sivutiedosto('korttipeli', t['lang']), ui['nav_korttipeli'], 'korttipeli'),
            ('lautapeli.html', ui['nav_lautapeli'], 'lautapeli'),
            ('essen-2026.html', 'Essen 2026', 'essen'),
            ('../play/?kieli=' + t['lang'], ui['nav_pelaa'], 'pelaa')]
@@ -228,7 +235,7 @@ def ylaosa(t, sivu, kaikki):
     # Uusi kieli = uusi rivi KIELET-listaan ja sisalto/xx.json. (Marko 6.10.2026)
     kielet = ''.join(
         '<li><a href="../%s/%s" hreflang="%s" lang="%s"%s>%s</a></li>' % (
-            k, sivutiedosto(sivu), k, k,
+            k, sivutiedosto(sivu, k), k, k,
             ' aria-current="true"' if k == t['lang'] else '', e(kaikki[k]['nimi']))
         for k in KIELET)
     kielet = '''<details class="kielet">
@@ -247,8 +254,8 @@ def ylaosa(t, sivu, kaikki):
 </header>''' % (e(ui['ohita']), e(ui['nav_etusivu']), e(ui['kielivalinta']), kielet, navi)
 
 
-def sivutiedosto(sivu):
-    return {'etusivu': '', 'korttipeli': 'korttipeli.html', 'lautapeli': 'lautapeli.html',
+def sivutiedosto(sivu, lang):
+    return {'etusivu': '', 'korttipeli': KORTTIPELI_SIVU[lang] + '.html', 'lautapeli': 'lautapeli.html',
             'apinakortit': 'apinakortit.html', 'essen': 'essen-2026.html'}[sivu]
 
 
@@ -285,7 +292,7 @@ def leima(nimi):
 
 def kehys(t, kaikki, sivu, title, kuvaus, runko):
     lang = t['lang']
-    alt = ''.join('<link rel="alternate" hreflang="%s" href="%s/%s/%s">' % (k, OSOITE, k, sivutiedosto(sivu))
+    alt = ''.join('<link rel="alternate" hreflang="%s" href="%s/%s/%s">' % (k, OSOITE, k, sivutiedosto(sivu, k))
                   for k in KIELET)
     alt += '<link rel="alternate" hreflang="x-default" href="%s/">' % OSOITE
     return '''<!doctype html>
@@ -324,7 +331,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <script src="../%s" defer></script>
 </body>
 </html>
-''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu), LOKAALIT[lang],
+''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT[lang],
        ylaosa(t, sivu, kaikki), runko, alaosa(t), leima('sivu.js'))
 
 
@@ -928,6 +935,21 @@ a{color:#C2580C}</style>
        json.dumps(kohde))
 
 
+def korttipeli_ohjaus(k):
+    """Vanha osoite xx/korttipeli.html on painetuissa QR-koodeissa: ohjaa uuteen
+    kielen mukaiseen nimeen (kysely ja #-osa säilyvät)."""
+    uusi = KORTTIPELI_SIVU[k]
+    return '''<!doctype html>
+<html lang="%s"><meta charset="utf-8"><title>Pizza Love</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="%s/%s/%s.html">
+<meta http-equiv="refresh" content="0; url=%s.html">
+<script>location.replace(%s + location.search + location.hash);</script>
+<a href="%s.html">Pizza Love</a>
+</html>
+''' % (k, OSOITE, k, uusi, uusi, json.dumps(uusi), uusi)
+
+
 def main():
     kaikki = {k: lue(k) for k in KIELET if os.path.exists(os.path.join(SISALTO, k + '.json'))}
     puuttuu = [k for k in KIELET if k not in kaikki]
@@ -947,8 +969,14 @@ def main():
         for nimi, f in (('index.html', etusivu), ('korttipeli.html', korttipeli), ('lautapeli.html', lautapeli),
                         ('apinakortit.html', apinakortit),
                         ('essen-2026.html', essen2026)):
+            sisalto = f(t, kaikki).replace('href="korttipeli.html"', 'href="%s"' % sivutiedosto('korttipeli', k))
+            if nimi == 'korttipeli.html':
+                nimi = sivutiedosto('korttipeli', k)
             with open(os.path.join(ULOS, k, nimi), 'w', encoding='utf-8') as out:
-                out.write(f(t, kaikki))
+                out.write(sisalto)
+        if sivutiedosto('korttipeli', k) != 'korttipeli.html':
+            with open(os.path.join(ULOS, k, 'korttipeli.html'), 'w', encoding='utf-8') as out:
+                out.write(korttipeli_ohjaus(k))
     os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)
     with open(os.path.join(ULOS, 'varainhankinta', 'index.html'), 'w', encoding='utf-8') as out:
         out.write(varainhankinta_ohjaus(kaikki))

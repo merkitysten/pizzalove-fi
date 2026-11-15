@@ -82,7 +82,7 @@ KIELET = {
                    'kakkoseen, koska 4 = 6 – 2. Nyt B voi valmistaa pizzansa. '
                    'Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'),
         'qr_teksti': 'Säännöt ja<br>videot netissä',
-        'osoite': 'https://pizzalove.fi/fi/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/fi/korttipeli',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Lisätietoja ja videoita osoitteessa',
         'oikeudet': ('Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n '
                      'rekisteröityjä tavaramerkkejä. Kaikki oikeudet pidätetään.'),
@@ -102,7 +102,7 @@ KIELET = {
                    'zubereiten. Der Tausch hat auch A geholfen, aber für B hat '
                    'er sich trotzdem gelohnt.'),
         'qr_teksti': 'Regeln und<br>Videos online',
-        'osoite': 'https://pizzalove.fi/de/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/de/kartenspiel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Mehr Infos und Videos unter',
         'oikeudet': ('Pizza Love® und Merkitysten® sind eingetragene Marken '
                      'der Merkitysten Oy. Alle Rechte vorbehalten.'),
@@ -121,7 +121,7 @@ KIELET = {
                    '4 = 6 – 2. Now B can make their pizza. The exchange helped '
                    'A too, but it was still worth it for B.'),
         'qr_teksti': 'Rules and<br>videos online',
-        'osoite': 'https://pizzalove.fi/en/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/en/card-game',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'More information and videos at',
         'oikeudet': ('Pizza Love® and Merkitysten® are registered trademarks '
                      'of Merkitysten Oy. All rights reserved.'),
@@ -140,7 +140,7 @@ KIELET = {
                    'eftersom 4 = 6 – 2. Nu kan B tillaga sin pizza. Bytet '
                    'hjälpte A också, men för B var det ändå värt det.'),
         'qr_teksti': 'Regler och<br>videor online',
-        'osoite': 'https://pizzalove.fi/sv/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/sv/kortspel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Mer information och videor på',
         'oikeudet': ('Pizza Love® och Merkitysten® är registrerade varumärken '
                      'som tillhör Merkitysten Oy. Alla rättigheter förbehållna.'),
@@ -161,7 +161,7 @@ KIELET = {
                    '4 = 6 – 2. Nu kan B zijn pizza maken. De ruil hielp A ook, '
                    'maar voor B was hij toch de moeite waard.'),
         'qr_teksti': 'Regels en<br>video’s online',
-        'osoite': 'https://pizzalove.fi/nl/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/nl/kaartspel',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Meer informatie en video’s op',
         'oikeudet': ('Pizza Love® en Merkitysten® zijn geregistreerde '
                      'handelsmerken van Merkitysten Oy. Alle rechten voorbehouden.'),
@@ -183,7 +183,7 @@ KIELET = {
                    'L’échange a aussi aidé A, mais il valait quand même le coup '
                    'pour B.'),
         'qr_teksti': 'Règles et<br>vidéos en ligne',
-        'osoite': 'https://pizzalove.fi/fr/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/fr/jeu-de-cartes',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Plus d’informations et de vidéos sur',
         'oikeudet': ('Pizza Love® et Merkitysten® sont des marques déposées de '
                      'Merkitysten Oy. Tous droits réservés.'),
@@ -204,7 +204,7 @@ KIELET = {
                    'porque 4 = 6 – 2. Ahora B puede preparar su pizza. El '
                    'intercambio también ayudó a A, pero a B le compensó igualmente.'),
         'qr_teksti': 'Reglas y<br>vídeos en línea',
-        'osoite': 'https://pizzalove.fi/es/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/es/juego-de-cartas',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Más información y vídeos en',
         'oikeudet': ('Pizza Love® y Merkitysten® son marcas registradas de '
                      'Merkitysten Oy. Todos los derechos reservados.'),
@@ -225,7 +225,7 @@ KIELET = {
                    'pretože 4 = 6 – 2. Teraz môže B pripraviť svoju pizzu. '
                    'Výmena pomohla aj hráčovi A, ale hráčovi B sa aj tak oplatila.'),
         'qr_teksti': 'Pravidlá a<br>videá online',
-        'osoite': 'https://pizzalove.fi/sk/korttipeli.html',
+        'osoite': 'https://pizzalove.fi/sk/kartova-hra',  # kielen mukainen nimi, ilman .html (Marko 15.11.2026)
         'videot': 'Viac informácií a videá nájdete na',
         'oikeudet': ('Pizza Love® a Merkitysten® sú registrované ochranné '
                      'známky spoločnosti Merkitysten Oy. Všetky práva vyhradené.'),
@@ -1025,6 +1025,9 @@ def osoitekoe(osoite):
     rikkinaisesta osoitteesta vaan mittaamattomasta — ja ne eivat saa nayttaa
     samalta."""
     polku = os.path.join(TANNE, 'docs', osoite.replace('https://pizzalove.fi/', ''))
+    # GitHub Pages palvelee /nl/kaartspel tiedostosta kaartspel.html
+    if not os.path.splitext(polku)[1]:
+        polku += '.html'
     if not os.path.isdir(os.path.join(TANNE, 'docs')):
         print('Osoitekoe: docs/ puuttuu (aja rakenna.py) — EI MITATTAVISSA')
         return None
