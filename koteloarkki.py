@@ -100,12 +100,12 @@ def sisalto(kieli):
     a.append('<h2 class="pida">%s</h2>' % e(s['perusteet_otsikko']))
     a.append('<p class="johdanto">%s</p>' % e(s['perusteet_ingressi']))
     a.append('<div class="korttirivi"><div><h3 class="palkki">%s</h3>'
-             '<div class="rivi"><img src="julkinen/kuvat/tausta-pizza.webp"><img src="julkinen/kuvat/pizza-31.webp">'
-             '<img src="paperi/kortit/pizza-22.webp"></div><p>%s</p></div></div>'
+             '<div class="vierekkain"><div class="rivi"><img src="julkinen/kuvat/tausta-pizza.webp"><img src="julkinen/kuvat/pizza-31.webp">'
+             '<img src="paperi/kortit/pizza-22.webp"></div><p>%s</p></div></div></div>'
              % (e(s['pizzakortit_otsikko']), e(s['pizzakortit'])))
     a.append('<div class="korttirivi"><div><h3 class="palkki">%s</h3>'
-             '<div class="rivi"><img src="julkinen/kuvat/tausta-tayte.webp"><img src="paperi/kortit/tayte-8.webp">'
-             '<img src="julkinen/kuvat/tayte-x.webp"></div><p>%s</p></div></div>'
+             '<div class="vierekkain"><div class="rivi"><img src="julkinen/kuvat/tausta-tayte.webp"><img src="paperi/kortit/tayte-8.webp">'
+             '<img src="julkinen/kuvat/tayte-x.webp"></div><p>%s</p></div></div></div>'
              % (e(s['taytekortit_otsikko']), e(s['taytekortit'])))
     a.append('<h3 class="palkki pida">%s</h3>' % e(s['perussaanto_otsikko']))
     a.append('<p>%s</p>' % e(s['perussaanto']))
@@ -224,7 +224,7 @@ def sivu_html(kieli, luonnos=True):
   .ilmava .palkki {{ margin: 4.4mm 0 2mm }}
   .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
-  .ilmava .rivi img {{ width: 9mm }}
+  .ilmava .rivi img {{ width: 10mm }}
   .ilmava .pieni-lasku img {{ width: 8.4mm }}
   .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; flex-direction: column; gap: 1.2mm }}
   .ilmava .banneri {{ margin-top: 0 }}
@@ -287,8 +287,11 @@ def sivu_html(kieli, luonnos=True):
   .oikeudet {{ font-size: 5.8pt; opacity: .75; margin-top: 2mm; border-top: .25mm solid #ccc; padding-top: 1mm }}
   .rivi {{ display: flex; gap: 1mm; margin: .4mm 0 .8mm }}
   .rivi img, .esimerkki img {{ width: 8mm; height: auto; border: .15mm solid {viiva}; border-radius: 8% / 5.3% }}
-  .korttirivi .rivi {{ float: right; margin: 0 0 .4mm 2mm }}
-  .korttirivi {{ overflow: hidden }}
+  /* Marko 15.11.2026: kortit vasempaan laitaan ja tekstit samaan pystylinjaan
+     (korttirivit ja kolme tapaa): kiinteä kuvasarake + tekstisarake */
+  .vierekkain, .tapa {{ display: grid; grid-template-columns: 44mm 1fr; column-gap: 4mm; align-items: start }}
+  .vierekkain .rivi {{ margin: 0 }}
+  .vierekkain p {{ margin: 0 }}
   .pelit {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase; color: {oranssi}; margin-bottom: .6mm }}
   .laskut {{ display: flex; flex-wrap: wrap; gap: .5mm 3mm; margin: .2mm 0 .6mm }}
   .esimerkki {{ display: flex; align-items: center; gap: .7mm }}
@@ -310,10 +313,10 @@ def sivu_html(kieli, luonnos=True):
   .koti h3 {{ margin-top: 0 }}
   .kaavio {{ margin: .8mm 0 }}
   .kaavio svg {{ width: 56mm; height: auto; display: block; margin: 0 auto }}
-  .tapa {{ display: flex; gap: 4mm; align-items: flex-start; margin: 1.2mm 0 1.6mm }}
+  .tapa {{ margin: 1.2mm 0 1.6mm }}
   .ilmava .tapa .laskut {{ gap: 1.8mm }}
   .tapa .laskut {{ flex: none; flex-direction: column; gap: 1.2mm; margin: 0 }}
-  .tapateksti {{ flex: 1; min-width: 0; text-wrap: pretty; hyphens: manual }}
+  .tapateksti, .vierekkain p {{ min-width: 0; text-wrap: pretty; hyphens: manual }}
   .tapateksti .pelit {{ margin-bottom: 1mm }}
   .tapateksti p:last-child {{ margin-bottom: 0 }}
   .vaihtoesim h3 {{ margin-top: 1.4mm }}
