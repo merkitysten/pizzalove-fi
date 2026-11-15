@@ -115,8 +115,6 @@ def sisalto(kieli):
         a += atomit_html(x['html'])
         a.append('<div class="laskut">%s</div>' % ''.join(lasku_pieni(l) for l in x['esimerkit']))
     # --- laskutoimitukset ja Bruno vai Basso
-    a.append('<h3 class="pida">%s</h3>' % e(s['laskut']['otsikko']))
-    a.append('<div class="laskulaatikko">%s</div>' % s['laskut'].get('paperi', s['laskut']['html']))
     # --- pelimuodot
     for m in s['muodot']:
         sanat = m['nimi'].split(' ', 1)
@@ -146,6 +144,12 @@ def sisalto(kieli):
         if koti:
             a.append('<div class="koti"><h3>%s</h3>%s%s%s</div>'
                      % (e(koti['otsikko']), koti['html'], koti.get('siirra_alku', ''), siirretty))
+    # Lisätiedot ohjeen loppuun hiusviivan alle (Marko 15.11.2026: «kaikki
+    # laskutoimitukset käyvät -laatikko voisi olla sellainen next-level-tieto,
+    # jolle voisi tehdä oman paikkansa aivan ohjeen loppuun» ja «hiusviivan
+    # poikittain, jolloin sen todella ymmärtää, että pelimuodon ohje päättyy»)
+    a.append('<h3 class="pida lisatieto">%s</h3>' % e(s['laskut']['otsikko']))
+    a.append('<div class="laskulaatikko">%s</div>' % s['laskut'].get('paperi', s['laskut']['html']))
     # Bruno vai Basso takapuolen loppuun (Marko 15.11.2026: «tuon bruno vai
     # basso -faktan laittaa sinne toiselle sivulle alas, jossa on paljon tilaa»)
     otsikko, teksti = ks.tieto_jaettu(s)
@@ -201,11 +205,11 @@ def sivu_html(kieli, luonnos=True):
   .ilmava {{ line-height: 1.3 }}
   .ilmava h2 {{ margin-top: 4.6mm }}
   .ilmava h3 {{ margin-top: 2.6mm }}
-  .ilmava .palkki {{ margin: 2.9mm 0 1.3mm }}
+  .ilmava .palkki {{ margin: 3.6mm 0 1.5mm }}
   .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
   .ilmava .rivi img {{ width: 9mm }}
-  .ilmava .pieni-lasku img {{ width: 7.2mm }}
+  .ilmava .pieni-lasku img {{ width: 8mm }}
   .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; gap: 1mm 3.4mm }}
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
@@ -278,6 +282,7 @@ def sivu_html(kieli, luonnos=True):
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
+  .sisus h3.lisatieto {{ border-top: .2mm solid {musta}; padding-top: 4mm; margin-top: 6mm }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
