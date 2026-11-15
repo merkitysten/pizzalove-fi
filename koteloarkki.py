@@ -241,7 +241,13 @@ def sisalto(kieli):
 
 def sivu_html(kieli, luonnos=True):
     s, k, atomit, lisat = sisalto(kieli)
-    tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
+    # Marko 15.11.2026: ylärivillä pelaajat, ikä ja kesto, alarivillä korttimäärät.
+    # sisalto/*.json:n järjestys kaikilla kielillä: pelaajat, ikä, pizzakortit,
+    # täytekortit, kesto.
+    t = s['tiedot']
+    assert len(t) == 5, 'tiedot: odotettiin 5 kohtaa'
+    tiedot = (''.join('<li>%s</li>' % e(x) for x in (t[0], t[1], t[4])) + '</ul><ul class="tiedot">'
+              + ''.join('<li>%s</li>' % e(x) for x in (t[2], t[3])))
     # 🔵 Marko 15.11.2026: «Asemointi ei ole nyt hyvä. Esim. nämä kaksi menee
     # helposti samaan ruutuun. A4-lapun avaaminen kokonaan ei ole lukijalle
     # ongelma, joten voimme tehdä hyvin kompromisseja siihen kuinka hyvin
@@ -341,6 +347,7 @@ def sivu_html(kieli, luonnos=True):
   .kansi h1 {{ margin-top: 0 }}
   .kansi .ala {{ font-weight: 700; font-size: 8pt; margin: .8mm 0 1.2mm }}
   .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1mm }}
+  .tiedot + .tiedot {{ margin-top: 1mm }}
   .tiedot li {{ background: {musta}; color: #fff; border-radius: .9mm; padding: .8mm 1.5mm .6mm;
                 font: 700 6.4pt/1 Otsikko, sans-serif; text-transform: uppercase }}
   .netti {{ display: flex; gap: 3mm; align-items: center; margin-top: 3.4mm }}  /* harmaa viiva pois (Marko 15.11.2026) */
