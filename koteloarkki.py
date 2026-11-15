@@ -49,6 +49,7 @@ import re
 import subprocess
 import pathlib
 import sys
+import tempfile
 
 import korttisaannot as ks
 
@@ -516,6 +517,42 @@ def teksti(pdf):
         return ulos.stderr if len(ulos.stderr) > len(ulos.stdout) else ulos.stdout
 
 
+# Marko 15.11.2026: «Tulosteessa nuo pienet kortit on aika suttuisia.»
+# PDF:ssä kortit ovat terävät (351 × 532 px, 900–1160 ppi), joten sumeus syntyy
+# tulostuksessa: läpinäkyvät kulmat (smask) pakottavat tulostusketjun
+# litistämään kuvat, ja tulostin skaalaa 1000 ppi:n kuvan itse alas. Siksi
+# korttikuvat valmistellaan painoa varten: valkoiselle litistettyinä (ei
+# läpinäkyvyyttä), valmiiksi n. 700 ppi:hin pienennettyinä (300 px, kortti
+# on arkilla 7–11 mm) ja kevyesti terävöityinä, häviöttömänä PNG:nä.
+# Basso, ajatuskupla ja häntä jäävät läpinäkyviksi, koska ne menevät viivan päälle.
+PAINOKUVA = re.compile(r'(?:julkinen/kuvat|paperi/kortit)/(?:pizza|tayte|tausta)-[\w-]+\.webp')
+PAINOKUVA_LEVEYS = 300
+
+
+def painokuvat(sivu):
+    try:
+        from PIL import Image, ImageFilter
+    except ImportError:
+        print('⚠️  Pillow puuttuu — korttikuvat alkuperäisinä (läpinäkyvät kulmat)')
+        return sivu, 0
+    kansio = os.path.join(tempfile.gettempdir(), 'koteloarkki-painokuvat')
+    os.makedirs(kansio, exist_ok=True)
+    uudet = {}
+    for polku in sorted(set(PAINOKUVA.findall(sivu))):
+        lahde = os.path.join(TANNE, polku)
+        kohde = os.path.join(kansio, polku.replace('/', '_').replace('.webp', '.png'))
+        if not os.path.exists(kohde) or os.path.getmtime(kohde) < os.path.getmtime(lahde):
+            im = Image.open(lahde).convert('RGBA')
+            pohja = Image.new('RGBA', im.size, (255, 255, 255, 255))
+            im = Image.alpha_composite(pohja, im).convert('RGB')
+            korkeus = round(im.height * PAINOKUVA_LEVEYS / im.width)
+            im = im.resize((PAINOKUVA_LEVEYS, korkeus), Image.LANCZOS)
+            im = im.filter(ImageFilter.UnsharpMask(radius=1, percent=60, threshold=2))
+            im.save(kohde, optimize=True)
+        uudet[polku] = pathlib.Path(kohde).as_uri()
+    return PAINOKUVA.sub(lambda m: uudet[m.group(0)], sivu), len(uudet)
+
+
 def tee(kieli, luonnos):
     # ⚠️ EI julkinen/:iin: rakenna.py kopioi sen verkkoon, ja arkki on
     # painettava luonnos, ei sivuston lataus. Painotiedosto tehdaan erikseen.
@@ -523,7 +560,9 @@ def tee(kieli, luonnos):
     os.makedirs(os.path.dirname(kohde), exist_ok=True)
     sivu = os.path.join(TANNE, '.koteloarkki-%s.html' % kieli)
     with open(sivu, 'w', encoding='utf-8') as f:
-        f.write(sivu_html(kieli, luonnos))
+        html_, kuvia = painokuvat(sivu_html(kieli, luonnos))
+        f.write(html_)
+    print('Painokuvat: %d korttikuvaa litistetty valkoiselle, %d px, terävöity' % (kuvia, PAINOKUVA_LEVEYS))
     tulosta(sivu, kohde)
     os.unlink(sivu)
     # ⚠️ EI kuvien pakkausta (lautasaannot.pakkaa): mitattu 15.11.2026, se
