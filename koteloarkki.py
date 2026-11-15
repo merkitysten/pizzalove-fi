@@ -115,11 +115,15 @@ def sisalto(kieli):
     # (Marko 15.11.2026: «Pizzojen tekeminen on paljon tärkeämpi info»)
     a.append('<h2 class="pida">%s</h2>' % e(s['portaat_otsikko']))
     a.append('<p class="johdanto">%s</p>' % e(s['portaat_ingressi']))
+    # Marko 15.11.2026: «Miltä se näyttää, jos tekstit toisi kuvien viereen
+    # omaksi pikkusarakkeekseensa» -> esimerkit vasemmalle päällekkäin,
+    # pelirivi ja teksti oikealle omaan sarakkeeseen; jokainen peli omalle rivilleen.
     for x in s['portaat']:
         a.append('<h3 class="palkki pida">%s</h3>' % e(x['otsikko']))
-        a.append('<p class="pelit pida">%s</p>' % ks.pelit_rivi(x['pelit']))
-        a += atomit_html(x['html'])
-        a.append('<div class="laskut">%s</div>' % ''.join(lasku_pieni(l) for l in x['esimerkit']))
+        pelit = ks.pelit_rivi(x['pelit']).replace(' · ', '<br>')
+        a.append('<div class="tapa"><div class="laskut">%s</div><div class="tapateksti">'
+                 '<p class="pelit">%s</p>%s</div></div>'
+                 % (''.join(lasku_pieni(l) for l in x['esimerkit']), pelit, ''.join(atomit_html(x['html']))))
     # --- laskutoimitukset ja Bruno vai Basso
     # --- pelimuodot
     for m in s['muodot']:
@@ -217,11 +221,11 @@ def sivu_html(kieli, luonnos=True):
   .ilmava {{ line-height: 1.3 }}
   .ilmava h2 {{ margin-top: 4.6mm }}
   .ilmava h3 {{ margin-top: 2.6mm }}
-  .ilmava .palkki {{ margin: 3mm 0 1.3mm }}
+  .ilmava .palkki {{ margin: 4.4mm 0 2mm }}
   .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
   .ilmava .rivi img {{ width: 9mm }}
-  .ilmava .pieni-lasku img {{ width: 7.6mm }}
+  .ilmava .pieni-lasku img {{ width: 8.4mm }}
   .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; flex-direction: column; gap: 1.2mm }}
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
@@ -306,6 +310,12 @@ def sivu_html(kieli, luonnos=True):
   .koti h3 {{ margin-top: 0 }}
   .kaavio {{ margin: .8mm 0 }}
   .kaavio svg {{ width: 56mm; height: auto; display: block; margin: 0 auto }}
+  .tapa {{ display: flex; gap: 4mm; align-items: flex-start; margin: 1.2mm 0 1.6mm }}
+  .ilmava .tapa .laskut {{ gap: 1.8mm }}
+  .tapa .laskut {{ flex: none; flex-direction: column; gap: 1.2mm; margin: 0 }}
+  .tapateksti {{ flex: 1; min-width: 0; text-wrap: pretty; hyphens: manual }}
+  .tapateksti .pelit {{ margin-bottom: 1mm }}
+  .tapateksti p:last-child {{ margin-bottom: 0 }}
   .vaihtoesim h3 {{ margin-top: 1.4mm }}
   .vaihtoesim .vaihto {{ justify-content: center; margin: .6mm 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
