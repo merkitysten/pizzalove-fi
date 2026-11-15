@@ -1066,6 +1066,12 @@ def tee(kieli):
 
 
 def main():
+    # 🔵 Marko 15.11.2026: verkon sääntö-PDF on nyt koteloarkki (koteloarkki.py
+    # kirjoittaa samoihin julkinen/pdf-tiedostoihin). Tämän tiedoston vanha
+    # 3-sivuinen asettelu ylikirjoittaisi ne, joten se ajetaan vain pyynnöstä.
+    if '--vanha-3-sivuinen' not in sys.argv:
+        raise SystemExit('Verkon sääntö-PDF tehdään nyt koteloarkki.py:llä. '
+                         'Vanha asettelu: python3 korttisaannot.py --vanha-3-sivuinen')
     pyydetyt = [a for a in sys.argv[1:] if not a.startswith('-')]
     for kieli in (pyydetyt or sorted(KIELET)):
         if kieli not in KIELET:

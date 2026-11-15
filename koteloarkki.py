@@ -6,6 +6,11 @@ tulostusmuoto: koteloon taiteltava A4-arkki, suomi ensin. Tämä on eri asia
 kuin nykyinen korttisaannot.py:n tuottama 3-sivuinen A4-PDF — se jää verkkoon
 jaettavaksi, tämä menee laatikkoon.»
 
+🔵 Marko 15.11.2026 (myöhemmin): «Eikös se verkon pdf:kin pitäisi olla tämä
+sama kuin koteloarkkikin, jotta asiakas voisi sen halutessaan tulostaa
+itselleen.» -> Koteloarkki korvaa vanhan 3-sivuisen verkko-PDF:n. Tulos
+kirjoitetaan julkinen/pdf/:iin verkko-PDF:n nimellä (ks. verkkopolku).
+
 MITAT JA TAITTO (Markon toimeksianto)
   * A4 210 x 297, kaksipuoleinen, TASAN 2 sivua. Kolmas sivu on virhe.
   * Ensin pituussuunnassa haitariksi neljaan (297 -> 74,25), sitten kerran
@@ -67,7 +72,7 @@ REUNA = 2.0                         # mm sivun reunasta (tulostimen oma marginaa
 PALSTAVALI = 9.0                    # mm
 PALSTA_L = (ARKKI_L - 2 * REUNA - PALSTAVALI) / 2
 LEIPA_PT = 7.0          # painetun arkin leipateksti 2,479 mm
-KIELET = {k: {'tiedosto': 'pizza-love-korttipeli-koteloarkki-%s.pdf' % k, 'ylivuoto': 'YLIVUOTO'}
+KIELET = {k: {'ylivuoto': 'YLIVUOTO'}
           for k in ('fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk')}
 # Markon suomen arkkiin 15.11.2026 tekemät karsinnat koskevat kaikkia kieliä.
 # Ne tehdään RAKENTEELLISESTI (sama kohta jokaisen kielen sisällössä), ei
@@ -604,10 +609,19 @@ TIIVISTYS_O = ['', _O1, _O2, _O3]
 PORTAAT = sorted(((v, o) for v in range(4) for o in range(4)), key=lambda p: (p[0] + p[1], p[0]))
 
 
+def verkkopolku(kieli):
+    return os.path.join(TANNE, 'julkinen', 'pdf', ks.KIELET[kieli]['tiedosto'])
+
+
 def tee(kieli, luonnos):
-    # ⚠️ EI julkinen/:iin: rakenna.py kopioi sen verkkoon, ja arkki on
-    # painettava luonnos, ei sivuston lataus. Painotiedosto tehdaan erikseen.
-    kohde = os.path.join(TANNE, 'paperi', 'koteloarkki', KIELET[kieli]['tiedosto'])
+    # 🔵 Marko 15.11.2026: «Eikös se verkon pdf:kin pitäisi olla tämä sama kuin
+    # koteloarkkikin, jotta asiakas voisi sen halutessaan tulostaa itselleen.»
+    # -> Koteloarkki ON verkon sääntö-PDF: se kirjoitetaan julkinen/pdf/:iin
+    # verkko-PDF:n vanhalla nimellä (korttisaannot.KIELET[..]['tiedosto']),
+    # jotta sivuston linkit ja jo jaetut osoitteet toimivat. rakenna.py
+    # kopioi sen docs/pdf/:iin. Vanha 3-sivuinen korttisaannot.py-asettelu
+    # ei ole enää käytössä.
+    kohde = verkkopolku(kieli)
     os.makedirs(os.path.dirname(kohde), exist_ok=True)
     sivu = os.path.join(TANNE, '.koteloarkki-%s.html' % kieli)
     for v, o in PORTAAT:
@@ -648,6 +662,12 @@ def tee(kieli, luonnos):
         virhe = 1
     else:
         print('Sisaltokoe: kaikki luvut loytyvat arkilta — OK')
+    # QR luetaan VALMIISTA PDF:stä ja osoitteen sivu tarkistetaan docs/:sta
+    # (samat kokeet kuin vanhassa verkko-PDF:ssä)
+    if ks.qr_lukukoe(kohde, osoite(ks.KIELET[kieli])) is False:
+        virhe = 1
+    if ks.osoitekoe(osoite(ks.KIELET[kieli])) is False:
+        virhe = 1
     return virhe
 
 
