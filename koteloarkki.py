@@ -105,7 +105,8 @@ def sisalto(kieli):
     a.append('<p>%s</p>' % e(s['perussaanto']))
     a.append('<h3 class="pida">%s</h3>' % e(s['arvo_otsikko']))
     a.append('<p>%s</p>' % s['arvo'])
-    # --- kolme porrasta
+    # --- kolme tapaa valmistaa pizza: etupuolen vasempaan palstaan väljästi
+    # (Marko 15.11.2026: «Pizzojen tekeminen on paljon tärkeämpi info»)
     a.append('<h2 class="pida">%s</h2>' % e(s['portaat_otsikko']))
     a.append('<p class="johdanto">%s</p>' % e(s['portaat_ingressi']))
     for x in s['portaat']:
@@ -116,9 +117,6 @@ def sisalto(kieli):
     # --- laskutoimitukset ja Bruno vai Basso
     a.append('<h3 class="pida">%s</h3>' % e(s['laskut']['otsikko']))
     a.append('<div class="laskulaatikko">%s</div>' % s['laskut'].get('paperi', s['laskut']['html']))
-    otsikko, teksti = ks.tieto_jaettu(s)
-    a.append('<div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div>'
-             % (otsikko, teksti))
     # --- pelimuodot
     for m in s['muodot']:
         sanat = m['nimi'].split(' ', 1)
@@ -148,6 +146,11 @@ def sisalto(kieli):
         if koti:
             a.append('<div class="koti"><h3>%s</h3>%s%s%s</div>'
                      % (e(koti['otsikko']), koti['html'], koti.get('siirra_alku', ''), siirretty))
+    # Bruno vai Basso takapuolen loppuun (Marko 15.11.2026: «tuon bruno vai
+    # basso -faktan laittaa sinne toiselle sivulle alas, jossa on paljon tilaa»)
+    otsikko, teksti = ks.tieto_jaettu(s)
+    a.append('<div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div>'
+             % (otsikko, teksti))
     return s, k, a
 
 
@@ -178,7 +181,8 @@ def sivu_html(kieli, luonnos=True):
     tiheys = (('ilmava', 'tiivis'), ('ilmava vapaa', 'ilmava vapaa'))
     ruudut = ['<section class="sivu"><div class="palsta vasen %s"><div class="sisus"></div></div>'
               '<div class="palsta oikea %s"><div class="sisus"></div></div>%s<i class="taite pysty"></i></section>'
-              % (tiheys[n][0], tiheys[n][1], taitteet) for n in range(SIVUJA)]
+              % (tiheys[n][0], tiheys[n][1], taitteet)
+              for n in range(SIVUJA)]
     return '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
@@ -197,11 +201,12 @@ def sivu_html(kieli, luonnos=True):
   .ilmava {{ line-height: 1.3 }}
   .ilmava h2 {{ margin-top: 4.6mm }}
   .ilmava h3 {{ margin-top: 2.6mm }}
-  .ilmava .palkki {{ margin: 2.4mm 0 1.1mm }}
+  .ilmava .palkki {{ margin: 2.9mm 0 1.3mm }}
+  .ilmava .pelit {{ margin-bottom: 1mm }}
   .ilmava p {{ margin-bottom: 1.1mm }}
   .ilmava .rivi img {{ width: 9mm }}
-  .ilmava .pieni-lasku img {{ width: 6.6mm }}
-  .ilmava .laskut {{ margin: 1mm 0 1.4mm }}
+  .ilmava .pieni-lasku img {{ width: 7.2mm }}
+  .ilmava .laskut {{ margin: 1.4mm 0 2.4mm; gap: 1mm 3.4mm }}
   .ilmava .banneri {{ margin-top: 0 }}
   .ilmava .koti {{ margin-top: 3mm; padding: 1.6mm 2mm .8mm }}
   .ilmava .kaavio svg {{ width: 70mm }}
@@ -214,15 +219,16 @@ def sivu_html(kieli, luonnos=True):
   .vapaa .banneri {{ margin-bottom: 3mm }}
   .vapaa .kaavio svg {{ width: 80mm }}
   .vapaa .vaihtoesim .vaihto img {{ width: 11mm }}
+  .vapaa .rivi img {{ width: 11mm }}
   .vapaa ul.lista li, .vapaa ol.lista li {{ margin-bottom: 1.1mm }}
-  .tiivis {{ line-height: 1.14 }}
-  .tiivis h3 {{ margin: 1mm 0 .25mm }}
-  .tiivis p {{ margin-bottom: .4mm }}
-  .tiivis ul.lista li, .tiivis ol.lista li {{ margin-bottom: .2mm }}
-  .tiivis .koti {{ margin-top: 1mm; padding: .8mm 1.4mm .2mm }}
-  .tiivis .banneri {{ padding: 1mm 0 2.4mm }}
+  .tiivis {{ line-height: 1.2 }}
+  .tiivis h3 {{ margin: 1.7mm 0 .4mm }}
+  .tiivis p {{ margin-bottom: .6mm }}
+  .tiivis ul.lista li, .tiivis ol.lista li {{ margin-bottom: .5mm }}
+  .tiivis .koti {{ margin-top: 2mm; padding: 1.2mm 1.6mm .5mm }}
+  .tiivis .banneri {{ padding: 1.3mm 0 3mm; margin-bottom: 1.6mm }}
   .tiivis .banneri {{ margin-top: 0 }}
-  .tiivis .banneri ~ .banneri {{ margin-top: 3.4mm }}
+  .tiivis .banneri ~ .banneri {{ margin-top: 5mm }}
   .sivu + .sivu {{ break-before: page }}
   .sisus > :first-child {{ margin-top: 0 !important }}
   .taite {{ display: {luonnos_nako}; position: absolute; pointer-events: none }}
@@ -271,7 +277,7 @@ def sivu_html(kieli, luonnos=True):
   .laskulaatikko {{ border: .25mm solid {musta}; padding: 1mm 1.6mm .4mm }}
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
-  .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 1mm }}
+  .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
@@ -328,12 +334,12 @@ function pakkaa() {{
   if (!virheet.length && i === ruudut.length - 1) {{
     while (V.children.length > 1) {{
       var ennen = Math.max(kork(V), kork(O));
-      var ryhma = [V.lastElementChild];
-      if (ryhma[0].classList.contains('uusi-palsta')) break;
-      V.removeChild(ryhma[0]);
-      while (V.lastElementChild && V.lastElementChild.classList.contains('pida')) {{
-        ryhma.unshift(V.lastElementChild); V.removeChild(V.lastElementChild);
-      }}
+      // siirretään kokonainen luku (väliotsikosta loppuun), ei puolikasta luetteloa
+      var lapset = [].slice.call(V.children), alku = -1;
+      for (var q = lapset.length - 1; q > 0; q--) if (lapset[q].tagName === 'H3') {{ alku = q; break; }}
+      if (alku < 1 || lapset[alku].classList.contains('uusi-palsta')) break;
+      var ryhma = lapset.slice(alku);
+      ryhma.forEach(function (x) {{ V.removeChild(x); }});
       for (var k = ryhma.length - 1; k >= 0; k--) O.insertBefore(ryhma[k], O.firstChild);
       if (yli(O) || Math.max(kork(V), kork(O)) >= ennen) {{
         ryhma.forEach(function (x) {{ V.appendChild(x); }});
