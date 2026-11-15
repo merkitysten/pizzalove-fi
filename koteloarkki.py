@@ -73,7 +73,6 @@ KIELET = {
            # Marko 15.11.2026: «mieti mitä tällä palstalla voidaan vielä ottaa
            # pois, jotta selkeytetään». Vain koteloarkista; verkko-PDF ennallaan.
            'pois': ['>Näin pizza tehdään<', 'Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
-                    'Arvon on aina täsmättävä. ',
                     '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
                     'vaikkakin vähän vaikeammaksi.</p>',
                     # Marko 15.11.2026: «Onko selitystekstissä tuo "Mutta B:n kannatti
@@ -84,7 +83,7 @@ KIELET = {
                     '<p class="pieni">Vanhemmissa ohjeissa: Pizza Bruno.</p>'],
            # rivinvaihto ennen näitä sanoja (Marko 15.11.2026: «Muuta selitystekstin
            # "Nyt B" alkamaan uudelta riviltä»)
-           'rivinvaihto': [' Nyt B ']},
+           'rivinvaihto': [' Nyt B ', ' Kaikissa esimerkeissä ']},
 }
 
 
@@ -158,7 +157,8 @@ def sisalto(kieli):
     # --- kolme tapaa valmistaa pizza: etupuolen vasempaan palstaan väljästi
     # (Marko 15.11.2026: «Pizzojen tekeminen on paljon tärkeämpi info»)
     a.append('<h2 class="pida">%s</h2>' % e(s['portaat_otsikko']))
-    a.append('<p class="johdanto">%s</p>' % e(s['portaat_ingressi']))
+    # Marko 15.11.2026: «kaikki on nyt boldattu» -> tavallinen paino
+    a.append('<p class="tapajohdanto">%s</p>' % e(s['portaat_ingressi']))
     # Marko 15.11.2026: «Miltä se näyttää, jos tekstit toisi kuvien viereen
     # omaksi pikkusarakkeekseensa» -> esimerkit vasemmalle päällekkäin,
     # pelirivi ja teksti oikealle omaan sarakkeeseen; jokainen peli omalle rivilleen.
