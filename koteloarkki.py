@@ -151,30 +151,27 @@ def sisalto(kieli):
 def sivu_html(kieli, luonnos=True):
     s, k, atomit = sisalto(kieli)
     tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
-    # ruudut: etupuoli 1–8, takapuoli 9–16, rivi kerrallaan vasemmalta oikealle
-    ruudut = []
-    for sivu in (0, 1):
-        r = []
-        for n in range(8):
-            nro = sivu * 8 + n + 1
-            if nro == 1:
-                sis = ('<div class="kansi"><div class="viiri">%s</div><div><h1>%s</h1><p class="ala">%s</p>'
-                       '<ul class="tiedot">%s</ul></div></div>'
-                       % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot))
-            elif nro == 2:
-                sis = ('<div class="takakansi"><div id="qr"></div><p class="qr-teksti">%s</p>'
-                       '<p>%s <b>%s</b></p><p class="ingressi">%s</p>'
-                       '<p class="oikeudet">%s<br>© Merkitysten Oy 2026</p></div>'
-                       % (k['qr_teksti'], e(k['videot']), k['osoite'].replace('https://', ''),
-                          e(ks.ingressi_ilman_toistoa(s, k)), e(k['oikeudet'])))
-            else:
-                sis = ''
-            r.append('<div class="ruutu%s" data-nro="%d"><div class="sisus">%s</div>'
-                     '<span class="nro">%d</span></div>'
-                     % ('' if nro <= 2 else ' virta', nro, sis, nro))
-        ruudut.append('<section class="sivu">%s<i class="taite vaaka" style="top:74.25mm"></i>'
-                      '<i class="taite vaaka" style="top:148.5mm"></i><i class="taite vaaka" style="top:222.75mm"></i>'
-                      '<i class="taite pysty"></i></section>' % ''.join(r))
+    # 🔵 Marko 15.11.2026: «Asemointi ei ole nyt hyvä. Esim. nämä kaksi menee
+    # helposti samaan ruutuun. A4-lapun avaaminen kokonaan ei ole lukijalle
+    # ongelma, joten voimme tehdä hyvin kompromisseja siihen kuinka hyvin
+    # taitokset osuvat. Ohjeen pitää olla selkeä.»
+    # -> Kumpikin puoli on yksi A4-sivu kahtena palstana (palstat = poikki-
+    #    taitoksen puolikkaat). Kansi ja takakannen tiedot ovat YHDESSA
+    #    otsakkeessa etupuolen vasemmassa ylakulmassa, joka jaa taiteltuna
+    #    paallimmaiseksi. Haitaritaitokset saavat osua tekstiin.
+    #    Lukujarjestys: etupuoli vasen, oikea; takapuoli vasen, oikea.
+    otsake = ('<div class="otsake"><div class="kansi"><div class="viiri">%s</div><div><h1>%s</h1>'
+              '<p class="ala">%s</p><ul class="tiedot">%s</ul></div></div>'
+              '<div class="netti"><div id="qr"></div><div><p class="qr-teksti">%s</p>'
+              '<p>%s <b>%s</b></p><p class="ingressi">%s</p></div></div></div>'
+              % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
+                 k['qr_teksti'], e(k['videot']), k['osoite'].replace('https://', ''),
+                 e(ks.ingressi_ilman_toistoa(s, k))))
+    atomit = [otsake] + atomit + ['<p class="oikeudet">%s © Merkitysten Oy 2026</p>' % e(k['oikeudet'])]
+    taitteet = ''.join('<i class="taite vaaka" style="top:%smm"></i>' % y for y in ('74.25', '148.5', '222.75'))
+    ruudut = ['<section class="sivu"><div class="palsta vasen"><div class="sisus"></div></div>'
+              '<div class="palsta oikea"><div class="sisus"></div></div>%s<i class="taite pysty"></i></section>'
+              % taitteet for _ in range(SIVUJA)]
     return '''<!doctype html>
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
@@ -185,23 +182,20 @@ def sivu_html(kieli, luonnos=True):
   body {{ font-family: Teksti, Arial, sans-serif; color: {musta}; font-size: {pt}pt; line-height: 1.2;
           -webkit-print-color-adjust: exact; print-color-adjust: exact }}
   b {{ font-weight: 700 }}
-  .sivu {{ position: relative; width: 210mm; height: 297mm; display: grid;
-           grid-template-columns: 105mm 105mm; grid-template-rows: repeat(4, 74.25mm);
-           overflow: hidden }}
+  .sivu {{ position: relative; width: 210mm; height: 297mm; overflow: hidden }}
+  .palsta {{ position: absolute; top: 6mm; bottom: 6mm }}
+  .palsta.vasen {{ left: 6mm; right: calc(105mm + 4.5mm) }}
+  .palsta.oikea {{ left: calc(105mm + 4.5mm); right: 6mm }}
+  .palsta .sisus {{ position: absolute; inset: 0 }}
   .sivu + .sivu {{ break-before: page }}
-  .ruutu {{ position: relative; overflow: hidden }}
-  .sisus {{ position: absolute; inset: 3.6mm 4.4mm 3.2mm }}
   .sisus > :first-child {{ margin-top: 0 !important }}
-  .nro {{ display: {luonnos_nako}; position: absolute; right: 1.2mm; bottom: 1mm; width: 4.4mm; height: 4.4mm;
-          border-radius: 50%; background: #2B7BD6; color: #fff; font: 700 7pt/4.4mm Otsikko, sans-serif;
-          text-align: center; opacity: .85 }}
   .taite {{ display: {luonnos_nako}; position: absolute; pointer-events: none }}
-  .taite.vaaka {{ left: 0; right: 0; border-top: .25mm dashed #2B7BD6 }}
-  .taite.pysty {{ top: 0; bottom: 0; left: 105mm; border-left: .25mm dashed #D62B2B }}
+  .taite.vaaka {{ left: 0; right: 0; border-top: .2mm dashed #9BB8DD }}
+  .taite.pysty {{ top: 0; bottom: 0; left: 105mm; border-left: .2mm dashed #E3A0A0 }}
 
   h1 {{ font: 700 15pt/1 Otsikko, sans-serif; text-transform: uppercase; color: {oranssi}; margin-top: 1.6mm }}
   h2 {{ font: 700 11pt/1.05 Otsikko, sans-serif; text-transform: uppercase; color: {oranssi};
-        margin: 2.2mm 0 1mm }}
+        margin: 3.6mm 0 1.2mm }}
   h3 {{ font: 700 7.8pt/1.1 Otsikko, sans-serif; text-transform: uppercase; letter-spacing: .015em;
         margin: 1.3mm 0 .4mm }}
   .palkki {{ background: {musta}; color: #fff; padding: .6mm 1.5mm .4mm; margin: 1.3mm 0 .6mm }}
@@ -212,22 +206,23 @@ def sivu_html(kieli, luonnos=True):
   ul.lista li, ol.lista li {{ margin-bottom: .35mm }}
   ol.lista + ol.lista, ul.lista + ul.lista {{ margin-top: -.15mm }}
 
-  .kansi {{ display: flex; gap: 4mm; align-items: center; height: 100% }}
-  .kansi .viiri {{ width: 30mm; flex: none }}
+  .otsake {{ border: .35mm solid {musta}; padding: 3mm 3.4mm 2.6mm; margin-bottom: 2mm }}
+  .kansi {{ display: flex; gap: 3.6mm; align-items: center }}
+  .kansi .viiri {{ width: 24mm; flex: none }}
   .kansi .viiri svg {{ width: 100%; height: auto; display: block }}
   .kansi h1 {{ margin-top: 0 }}
-  .kansi .ala {{ font-weight: 700; font-size: 8pt; margin: 1mm 0 }}
+  .kansi .ala {{ font-weight: 700; font-size: 8pt; margin: .8mm 0 1.2mm }}
   .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1mm }}
-  .tiedot li {{ background: {musta}; color: #fff; border-radius: .9mm; padding: .8mm 1.6mm .6mm;
-                font: 700 6.6pt/1 Otsikko, sans-serif; text-transform: uppercase }}
-  .takakansi {{ display: grid; grid-template-columns: 22mm 1fr; column-gap: 3.4mm; align-items: start }}
-  .takakansi #qr {{ grid-row: 1 / span 4 }}
-  .takakansi #qr svg {{ width: 22mm; height: auto; display: block }}
-  .takakansi .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
-  .takakansi .ingressi {{ font-weight: 700 }}
-  .takakansi .oikeudet {{ font-size: 5.8pt; opacity: .8 }}
-  .takakansi b {{ color: {oranssi} }}
-
+  .tiedot li {{ background: {musta}; color: #fff; border-radius: .9mm; padding: .8mm 1.5mm .6mm;
+                font: 700 6.4pt/1 Otsikko, sans-serif; text-transform: uppercase }}
+  .netti {{ display: flex; gap: 3mm; align-items: center; margin-top: 2.4mm; padding-top: 2.2mm;
+            border-top: .25mm solid #ccc }}
+  .netti #qr svg {{ width: 17mm; height: auto; display: block }}
+  .netti p {{ margin: 0 0 .5mm }}
+  .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
+  .netti .ingressi {{ font-weight: 700 }}
+  .netti b {{ color: {oranssi} }}
+  .oikeudet {{ font-size: 5.8pt; opacity: .75; margin-top: 2mm; border-top: .25mm solid #ccc; padding-top: 1mm }}
   .rivi {{ display: flex; gap: 1mm; margin: .4mm 0 .8mm }}
   .rivi img, .esimerkki img {{ width: 8mm; height: auto; border: .15mm solid {viiva}; border-radius: 8% / 5.3% }}
   .korttirivi .rivi {{ float: right; margin: 0 0 .4mm 2mm }}
@@ -243,7 +238,7 @@ def sivu_html(kieli, luonnos=True):
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 1mm }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
-  .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.1mm 0 2.8mm; margin: 0 0 .9mm;
+  .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
               font: 900 10.5pt/1 Viiri, sans-serif; text-transform: none;
               clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%) }}
   .banneri .oranssi {{ color: {oranssi} }}
@@ -251,11 +246,11 @@ def sivu_html(kieli, luonnos=True):
   .koti {{ border: .25mm solid {musta}; padding: 1mm 1.6mm .3mm; margin-top: 1.4mm }}
   .koti h3 {{ margin-top: 0 }}
   .kaavio {{ margin: .8mm 0 }}
-  .kaavio svg {{ width: 44mm; height: auto; display: block; margin: 0 auto }}
+  .kaavio svg {{ width: 56mm; height: auto; display: block; margin: 0 auto }}
   .vaihtoesim h3 {{ margin-top: 1.4mm }}
   .vaihtoesim .vaihto {{ justify-content: center; margin: .6mm 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
-  #lahde {{ position: absolute; left: -9999mm; width: 95.8mm }}
+  #lahde {{ position: absolute; left: -9999mm; width: 94.5mm }}
   .ylivuoto {{ position: absolute; left: 4mm; top: 4mm; color: red; font: 700 14pt Otsikko, sans-serif }}
 </style>
 {ruudut}
@@ -266,7 +261,7 @@ document.getElementById('qr').innerHTML = norsuQrSvg({osoite}, {{ reunus: 4 }});
 function pakkaa() {{
   var lahde = document.getElementById('lahde');
   var atomit = [].slice.call(lahde.children);
-  var ruudut = [].slice.call(document.querySelectorAll('.virta .sisus'));
+  var ruudut = [].slice.call(document.querySelectorAll('.palsta .sisus'));
   var i = 0, virheet = [];
   function yli(p) {{ return p.scrollHeight > p.clientHeight + 0.5; }}
   for (var n = 0; n < atomit.length; n++) {{
@@ -274,7 +269,7 @@ function pakkaa() {{
     if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
     var p = ruudut[i];
     // pelimuodon viiri ruudun alaosassa -> seuraavaan ruutuun, jos ruutuja riittaa
-    if (a.classList.contains('alku') && p.children.length && p.scrollHeight > p.clientHeight * 0.45
+    if (a.classList.contains('alku') && p.children.length && p.scrollHeight > p.clientHeight * 0.72
         && i + 1 < ruudut.length) {{ i++; p = ruudut[i]; }}
     p.appendChild(a);
     if (!yli(p)) continue;
@@ -293,7 +288,7 @@ function pakkaa() {{
     v.textContent = '{ylivuoto}: ' + virheet.join(' | ');
     document.querySelector('.sivu').appendChild(v);
   }}
-  document.title = 'VALMIS ' + (i + 3) + '/16' + (virheet.length ? ' {ylivuoto}' : '');
+  document.title = 'VALMIS palsta ' + (i + 1) + '/' + ruudut.length + (virheet.length ? ' {ylivuoto}' : '');
 }}
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {{
   var kuvat = [].slice.call(document.images).map(function (im) {{
@@ -348,11 +343,9 @@ def tee(kieli, luonnos):
         f.write(sivu_html(kieli, luonnos))
     tulosta(sivu, kohde)
     os.unlink(sivu)
-    try:  # kuvat kevyemmiksi, jos pymupdf on asennettu (lautasaannot.pakkaa)
-        import lautasaannot
-        lautasaannot.pakkaa(kohde)
-    except Exception:
-        pass
+    # ⚠️ EI kuvien pakkausta (lautasaannot.pakkaa): mitattu 15.11.2026, se
+    # pikselöi pienet korttikuvat (sama kuva kahdessa koossa). Painotiedosto
+    # saa olla iso.
     n = ks.sivuja(kohde)
     print('%s  (%.0f kt, %d sivua)' % (kohde, os.path.getsize(kohde) / 1024, n))
     virhe = 0
