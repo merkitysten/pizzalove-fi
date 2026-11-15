@@ -67,24 +67,21 @@ REUNA = 2.0                         # mm sivun reunasta (tulostimen oma marginaa
 PALSTAVALI = 9.0                    # mm
 PALSTA_L = (ARKKI_L - 2 * REUNA - PALSTAVALI) / 2
 LEIPA_PT = 7.0          # painetun arkin leipateksti 2,479 mm
-KIELET = {
-    'fi': {'tiedosto': 'pizza-love-korttipeli-koteloarkki-fi.pdf',
-           'ylivuoto': 'YLIVUOTO',
-           # Marko 15.11.2026: «mieti mitä tällä palstalla voidaan vielä ottaa
-           # pois, jotta selkeytetään». Vain koteloarkista; verkko-PDF ennallaan.
-           'pois': ['>Näin pizza tehdään<', 'Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
-                    '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
-                    'vaikkakin vähän vaikeammaksi.</p>',
-                    # Marko 15.11.2026: «Onko selitystekstissä tuo "Mutta B:n kannatti
-                    # tehdä se silti" taas joku tekoälyn oma pikku lisäys?» -> pois
-                    ' Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.',
-                    # Marko 15.11.2026: «vie pelaajan fokusta pois ja kun se on
-                    # mainittu ohjeen lopussa» (Bruno vai Basso? -kohta)
-                    '<p class="pieni">Vanhemmissa ohjeissa: Pizza Bruno.</p>'],
-           # rivinvaihto ennen näitä sanoja (Marko 15.11.2026: «Muuta selitystekstin
-           # "Nyt B" alkamaan uudelta riviltä»)
-           'rivinvaihto': [' Nyt B ', ' Kaikissa esimerkeissä ']},
-}
+KIELET = {k: {'tiedosto': 'pizza-love-korttipeli-koteloarkki-%s.pdf' % k, 'ylivuoto': 'YLIVUOTO'}
+          for k in ('fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk')}
+# Markon suomen arkkiin 15.11.2026 tekemät karsinnat koskevat kaikkia kieliä.
+# Ne tehdään RAKENTEELLISESTI (sama kohta jokaisen kielen sisällössä), ei
+# kielikohtaisilla merkkijonoilla:
+#  1. Perusteiden otsikko ja ingressi pois («Onko tuo Näin pizza tehdään oikea
+#     otsikko? Pitäisikö sekin ottaa kylmästi pois» / «mikä on se sääntö, joka
+#     pitää opetella ensin?»).
+#  2. Kolme tapaa -ingressi tavallisella painolla, virkkeet omille riveilleen.
+#  3. Tavan 2 kappale, jossa on <b>#1 Pizza Party…</b> («Kokeile tätä myös …»),
+#     pois: pelirivi kertoo saman («#1 Pizza Party (lisähaaste)»).
+#  4. Vaihtoesimerkin kolmas virke pois («taas joku tekoälyn oma pikku
+#     lisäys?»), toinen virke omalle rivilleen («"Nyt B" alkamaan uudelta riviltä»).
+#  5. Basson alun <p class="pieni"> … Pizza Bruno pois («vie pelaajan fokusta
+#     pois»); asia kerrotaan lopun Bruno vai Basso? -kohdassa.
 
 
 # Viirien alkuperäinen kirjasin VAG Rounded (Marko toi tiedoston 15.11.2026).
@@ -139,9 +136,7 @@ def sisalto(kieli):
     k = ks.KIELET[kieli]
     s = json.load(open(os.path.join(TANNE, 'sisalto', kieli + '.json'), encoding='utf-8'))['korttipeli']
     a = []
-    # --- perusteet
-    a.append('<h2 class="pida">%s</h2>' % e(s['perusteet_otsikko']))
-    a.append('<p class="johdanto">%s</p>' % e(s['perusteet_ingressi']))
+    # --- perusteet (otsikko ja ingressi karsittu, ks. KIELET-kommentti kohta 1)
     a.append('<div class="korttirivi"><div><h3 class="palkki">%s</h3>'
              '<div class="vierekkain"><div class="rivi"><img src="julkinen/kuvat/tausta-pizza.webp"><img src="julkinen/kuvat/pizza-31.webp">'
              '<img src="paperi/kortit/pizza-22.webp"></div><p>%s</p></div></div></div>'
@@ -158,7 +153,7 @@ def sisalto(kieli):
     # (Marko 15.11.2026: «Pizzojen tekeminen on paljon tärkeämpi info»)
     a.append('<h2 class="pida">%s</h2>' % e(s['portaat_otsikko']))
     # Marko 15.11.2026: «kaikki on nyt boldattu» -> tavallinen paino
-    a.append('<p class="tapajohdanto">%s</p>' % e(s['portaat_ingressi']))
+    a.append('<p class="tapajohdanto">%s</p>' % e(s['portaat_ingressi']).replace('. ', '.<br>', 1))
     # Marko 15.11.2026: «Miltä se näyttää, jos tekstit toisi kuvien viereen
     # omaksi pikkusarakkeekseensa» -> esimerkit vasemmalle päällekkäin,
     # pelirivi ja teksti oikealle omaan sarakkeeseen; jokainen peli omalle rivilleen.
@@ -167,7 +162,8 @@ def sisalto(kieli):
         pelit = ks.pelit_rivi(x['pelit']).replace(' · ', '<br>')
         a.append('<div class="tapa"><div class="laskut">%s</div><div class="tapateksti">'
                  '<p class="pelit">%s</p>%s</div></div>'
-                 % (''.join(lasku_pieni(l) for l in x['esimerkit']), pelit, ''.join(atomit_html(x['html']))))
+                 % (''.join(lasku_pieni(l) for l in x['esimerkit']), pelit,
+                    ''.join(p for p in atomit_html(x['html']) if '<b>#1 Pizza Party' not in p)))
     # --- laskutoimitukset ja Bruno vai Basso
     # --- pelimuodot
     for m in s['muodot']:
@@ -181,7 +177,7 @@ def sisalto(kieli):
         a.append('<h2 class="banneri pida%s"><span class="oranssi">%s %s</span>%s</h2>'
                  % (uusi, e(m['numero']), e(sanat[0]), e(sanat[1] if len(sanat) > 1 else '')))
         a.append('<p class="kuvaus pida">%s</p>' % e(m['kuvaus']))
-        runko = m['html']
+        runko = re.sub(r'<p class="pieni">[^<]*Bruno[^<]*</p>', '', m['html'])
         koti = m.get('kotisaanto')
         siirretty = ''
         if koti and koti.get('siirra'):
@@ -191,7 +187,10 @@ def sisalto(kieli):
         if m['numero'] == '#3':
             # kaavio varaston selityksen jalkeen ja vaihtoesimerkki vaihtoluvun
             # loppuun, kuten verkko-PDF:ssa (korttisaannot.muoto)
-            i = next(n for n, x in enumerate(osat) if x.startswith('<h3') and k['kaavio'][3] in x)
+            # varaston luku = ensimmäinen väliotsikko valmistelujen luettelon jälkeen
+            # (sama sääntö kuin korttisaannot.muoto; ruotsissa otsikko «Lagret» ≠ kaavion «Lager»)
+            ol = next(n for n, x in enumerate(osat) if x.startswith('<ol'))
+            i = next(n for n in range(ol, len(osat)) if osat[n].startswith('<h3'))
             osat.insert(i + 2, ks.kaavio(k))
             # Marko 15.11.2026: «Siirrä aloittaminen oikean puolen palstaan» ->
             # kaavion jälkeinen ensimmäinen väliotsikko aloittaa oikean palstan
@@ -200,7 +199,9 @@ def sisalto(kieli):
             j = next(n for n, x in enumerate(osat) if k['vaihto_luku'] in x)
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
             # Marko 15.11.2026: vaihtoesimerkkikin kortit vasemmalle ja selitys oikealle
-            vesim = ks.vaihtoesimerkki(k).replace('</h3><div class="esimerkki vaihto"',
+            virkkeet = re.split(r'(?<=\.)\s+', k['vaihto'])
+            assert len(virkkeet) == 3, 'vaihtoesimerkki: odotettiin 3 virkettä: %r' % k['vaihto']
+            vesim = ks.vaihtoesimerkki(dict(k, vaihto=virkkeet[0] + '\n' + virkkeet[1])).replace('\n', '<br>').replace('</h3><div class="esimerkki vaihto"',
                                                   '</h3><div class="vierekkain"><div class="esimerkki vaihto"', 1)
             assert vesim.endswith('</p></div>')
             osat.insert(loppu, vesim[:-len('</div>')] + '</div></div>')
@@ -230,15 +231,6 @@ def sisalto(kieli):
              '<p class="oikeudet">%s © Merkitysten Oy 2026</p></div>'
              % (e(s['laskut']['otsikko']), s['laskut'].get('paperi', s['laskut']['html']),
                 otsikko, teksti, e(k['oikeudet']).replace('. ', '.<br>', 1)))
-    # karsinnat (KIELET[kieli]['pois']); tyhjiksi jäävät kappaleet pois
-    for pois in KIELET[kieli].get('pois', []):
-        osumia = sum(pois in x for x in a)
-        assert osumia == 1, 'karsittava teksti ei löydy yksikäsitteisesti: ' + pois
-        a = [x.replace(pois, '><' if pois.startswith('>') else '') for x in a]
-    for rv in KIELET[kieli].get('rivinvaihto', []):
-        assert sum(rv in x for x in a) == 1, 'rivinvaihdon kohta ei löydy yksikäsitteisesti: ' + rv
-        a = [x.replace(rv, '<br>' + rv.lstrip()) for x in a]
-    a = [x for x in a if not re.fullmatch(r'<(p|h2|h3)[^>]*>\s*</\1>', x)]
     return s, k, a, lisat
 
 
@@ -358,7 +350,7 @@ def sivu_html(kieli, luonnos=True):
   .netti p {{ margin: 0 0 .5mm }}
   .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
   .netti .ingressi {{ font-weight: 700 }}
-  .netti b {{ color: {musta} }}  /* oranssi ei luettava valkoisella (Marko 15.11.2026) */
+  .netti b {{ color: {musta}; white-space: nowrap }}  /* osoite ei saa katketa tavuviivasta (fr/sk) */  /* oranssi ei luettava valkoisella (Marko 15.11.2026) */
   .oikeudet {{ font-size: 5.8pt; opacity: .75; margin-top: 2mm; border-top: .25mm solid #ccc; padding-top: 1mm }}
   .rivi {{ display: flex; gap: 1mm; margin: .4mm 0 .8mm }}
   .rivi img, .esimerkki img {{ width: 8mm; height: auto; border: .15mm solid {viiva}; border-radius: 8% / 5.3% }}
@@ -581,17 +573,53 @@ def painokuvat(sivu):
     return PAINOKUVA.sub(lambda m: uudet[m.group(0)], sivu), len(uudet)
 
 
+# Pidemmät kielet (esim. ranska, espanja) eivät mahdu suomen väleillä. Silloin
+# välejä tiivistetään porras kerrallaan, kunnes arkki on tasan 2 sivua ilman
+# ylivuotoa. Kirjasinkoko (7 pt), sivukoko, palstat ja asettelu pysyvät samoina
+# (Marko 15.11.2026: «Muista pitää taitto samana kuin tässä»). Suomi = 0/0.
+# Kaksi erillistä porrasta: V = väljät palstat (etupuolen vasen ja takapuoli),
+# O = etupuolen oikea (Party + Basso). Kumpaakin tiivistetään vain tarpeen mukaan.
+_V1 = '''
+  .ilmava { line-height: 1.24 } .ilmava h2 { margin-top: 3.8mm } .ilmava h3 { margin-top: 2.1mm }
+  .ilmava .palkki { margin: 2.4mm 0 1.1mm } .ilmava p { margin-bottom: .9mm }
+  .ilmava .pieni-lasku img { width: 7.6mm } .ilmava .tapa .laskut { gap: 1.4mm }
+  .ilmava .kaavio { margin-top: 3mm }'''
+_V2 = _V1 + '''
+  .ilmava { line-height: 1.2 } .ilmava h3 { margin-top: 1.7mm } .ilmava .palkki { margin: 1.9mm 0 .9mm }
+  .ilmava p { margin-bottom: .7mm } .ilmava .pieni-lasku img { width: 7mm } .ilmava .rivi img { width: 9mm }
+  .ilmava ul.lista li, .ilmava ol.lista li { margin-bottom: .5mm } .vapaa .kaavio svg { width: 72mm }'''
+_V3 = _V2 + '''
+  .ilmava { line-height: 1.16 } .ilmava .pieni-lasku img { width: 6.4mm }
+  .vapaa .kaavio svg { width: 64mm } .lisat { padding-top: 3mm }'''
+_O1 = '''
+  .tiivis { line-height: 1.12 } .tiivis h3 { margin: 1.2mm 0 .25mm }'''
+_O2 = _O1 + '''
+  .tiivis { line-height: 1.1 } .tiivis p { margin-bottom: .35mm }
+  .tiivis ul.lista li, .tiivis ol.lista li { margin-bottom: .25mm }'''
+_O3 = _O2 + '''
+  .tiivis { line-height: 1.07 } .tiivis h3 { margin: 1mm 0 .2mm }'''
+TIIVISTYS_V = ['', _V1, _V2, _V3]
+TIIVISTYS_O = ['', _O1, _O2, _O3]
+# kokeilujärjestys: pienin yhteistiivistys ensin, väljä puoli säästetään
+PORTAAT = sorted(((v, o) for v in range(4) for o in range(4)), key=lambda p: (p[0] + p[1], p[0]))
+
+
 def tee(kieli, luonnos):
     # ⚠️ EI julkinen/:iin: rakenna.py kopioi sen verkkoon, ja arkki on
     # painettava luonnos, ei sivuston lataus. Painotiedosto tehdaan erikseen.
     kohde = os.path.join(TANNE, 'paperi', 'koteloarkki', KIELET[kieli]['tiedosto'])
     os.makedirs(os.path.dirname(kohde), exist_ok=True)
     sivu = os.path.join(TANNE, '.koteloarkki-%s.html' % kieli)
-    with open(sivu, 'w', encoding='utf-8') as f:
-        html_, kuvia = painokuvat(sivu_html(kieli, luonnos))
-        f.write(html_)
+    for v, o in PORTAAT:
+        lisa = TIIVISTYS_V[v] + TIIVISTYS_O[o]
+        with open(sivu, 'w', encoding='utf-8') as f:
+            html_, kuvia = painokuvat(sivu_html(kieli, luonnos).replace('</style>', lisa + '\n</style>', 1))
+            f.write(html_)
+        tulosta(sivu, kohde)
+        if ks.sivuja(kohde) == SIVUJA and KIELET[kieli]['ylivuoto'] not in teksti(kohde):
+            break
     print('Painokuvat: %d korttikuvaa litistetty valkoiselle, %d px, terävöity' % (kuvia, PAINOKUVA_LEVEYS))
-    tulosta(sivu, kohde)
+    print('Välien tiivistys: väljät palstat %d/3, oikea palsta %d/3' % (v, o))
     os.unlink(sivu)
     # ⚠️ EI kuvien pakkausta (lautasaannot.pakkaa): mitattu 15.11.2026, se
     # pikselöi pienet korttikuvat (sama kuva kahdessa koossa). Painotiedosto
@@ -608,8 +636,9 @@ def tee(kieli, luonnos):
         virhe = 1
     # Sama otsikkolista kuin verkko-PDF:n kokeessa (korttisaannot.otsikot),
     # luettuna valmiista PDF:sta.
-    # Tarkoituksella karsitut otsikot (KIELET[kieli]['pois'], muoto '>otsikko<') ohitetaan.
-    karsitut = {ks.norm(x.strip('><')) for x in KIELET[kieli].get('pois', []) if x.startswith('>')}
+    # Tarkoituksella karsittu otsikko (perusteiden otsikko, ks. KIELET-kommentti) ohitetaan.
+    lahde = json.load(open(os.path.join(TANNE, 'sisalto', kieli + '.json'), encoding='utf-8'))['korttipeli']
+    karsitut = {ks.norm(lahde['perusteet_otsikko'])}
     puuttuu = [o for o in ks.otsikot(os.path.join(TANNE, 'sisalto', kieli + '.json'))
                if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut]
     if len(t) < 2000:

@@ -94,7 +94,7 @@
     "basso_tapa": "Utilise autant d’<b>ingrédients différents</b> que la pizza a d’ingrédients. Tu peux utiliser plus de cartes : la pizza tomate-ananas (valeur 5) peut se faire avec deux tomates et une olive, 2 + 2 + 1 = 5, car il y a deux sortes d’ingrédients. Utilise cette façon dans Pizza Basso, ou pour un défi en plus dans Pizza Party.<br><span class=\"pieni\">Les règles imprimées disent encore « autant de cartes ingrédient que la pizza a d’ingrédients ». La nouvelle façon donne plus de possibilités au jeu.</span>",
     "huomio_bruno": "<b>Bruno ou Basso ?</b> Le singe du jeu s’appelle maintenant Basso. Dans les anciennes règles et vidéos, il s’appelle Bruno, et le deuxième mode de jeu s’appelle Pizza Bruno. Les règles sont les mêmes.",
     "portaat_otsikko": "Trois façons de préparer une pizza",
-    "portaat_ingressi": "La valeur doit toujours correspondre. Les jeux diffèrent par les cartes ingrédient que tu peux utiliser. L’exemple est la pizza tomate-ananas (valeur 5).",
+    "portaat_ingressi": "Les façons diffèrent par les cartes ingrédient que tu peux utiliser. Tous les exemples utilisent la même pizza : tomate-ananas, valeur 5.",
     "portaat": [
       {
         "otsikko": "1. N’importe quels ingrédients",

@@ -94,7 +94,7 @@
     "basso_tapa": "Gebruik evenveel <b>verschillende toppings</b> als de pizza toppings heeft. Je mag meer kaarten gebruiken: de tomaat-ananaspizza (waarde 5) kun je maken met twee tomaten en één olijf, 2 + 2 + 1 = 5, want dat zijn twee verschillende soorten topping. Gebruik deze manier bij Pizza Basso, of als extra uitdaging bij Pizza Party.<br><span class=\"pieni\">In de gedrukte regels staat nog “evenveel toppingkaarten als de pizza toppings heeft”. De nieuwe manier geeft het spel meer mogelijkheden.</span>",
     "huomio_bruno": "<b>Bruno of Basso?</b> De aap in het spel heet nu Basso. In oudere regels en video’s heet hij Bruno, en heet de tweede spelvorm Pizza Bruno. De regels zijn hetzelfde.",
     "portaat_otsikko": "Drie manieren om een pizza te maken",
-    "portaat_ingressi": "De waarde moet altijd kloppen. De spellen verschillen in welke toppingkaarten je mag gebruiken. Het voorbeeld is de tomaat-ananaspizza (waarde 5).",
+    "portaat_ingressi": "De manieren verschillen in welke toppingkaarten je mag gebruiken. Alle voorbeelden gebruiken dezelfde pizza: tomaat-ananas, waarde 5.",
     "portaat": [
       {
         "otsikko": "1. Willekeurige toppings",

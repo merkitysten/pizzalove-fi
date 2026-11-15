@@ -94,7 +94,7 @@
     "basso_tapa": "Usa tantos <b>ingredientes distintos</b> como ingredientes tenga la pizza. Puedes usar más cartas: la pizza de tomate y piña (valor 5) se puede preparar con dos tomates y una aceituna, 2 + 2 + 1 = 5, porque hay dos tipos de ingrediente distintos. Usa esta forma en Pizza Basso o como reto extra en Pizza Party.<br><span class=\"pieni\">Las reglas impresas todavía dicen «tantas cartas de ingrediente como ingredientes tenga la pizza». La nueva forma da más posibilidades al juego.</span>",
     "huomio_bruno": "<b>¿Bruno o Basso?</b> El mono del juego ahora se llama Basso. En las reglas y los vídeos antiguos se llama Bruno, y el segundo modo de juego se llama Pizza Bruno. Las reglas son las mismas.",
     "portaat_otsikko": "Tres formas de preparar una pizza",
-    "portaat_ingressi": "El valor siempre tiene que coincidir. Los juegos se diferencian en qué cartas de ingrediente puedes usar. El ejemplo es la pizza de tomate y piña (valor 5).",
+    "portaat_ingressi": "Las formas se diferencian en qué cartas de ingrediente puedes usar. Todos los ejemplos usan la misma pizza: tomate y piña, valor 5.",
     "portaat": [
       {
         "otsikko": "1. Cualquier ingrediente",

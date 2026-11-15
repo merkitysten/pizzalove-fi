@@ -94,7 +94,7 @@
     "basso_tapa": "Použite toľko <b>rôznych prísad</b>, koľko prísad má pizza. Kariet môže byť viac: pizzu s paradajkou a ananásom (hodnota 5) pripravíte aj z dvoch paradajok a jednej olivy, 2 + 2 + 1 = 5, pretože sú to dva rôzne druhy prísad. Použite ho v hre Pizza Basso alebo ako výzvu navyše v Pizza Party.<br><span class=\"pieni\">V tlačených pravidlách je ešte „toľko kariet prísad, koľko prísad má pizza“. Nový spôsob dáva hre viac možností.</span>",
     "huomio_bruno": "<b>Bruno alebo Basso?</b> Opica v hre sa teraz volá Basso. V starších pravidlách a videách sa volá Bruno a druhý spôsob hry sa volá Pizza Bruno. Pravidlá sú rovnaké.",
     "portaat_otsikko": "Tri spôsoby, ako pripraviť pizzu",
-    "portaat_ingressi": "Hodnota musí vždy sedieť. Spôsoby hry sa líšia v tom, aké karty prísad môžete použiť. Príkladom je pizza s paradajkou a ananásom (hodnota 5).",
+    "portaat_ingressi": "Spôsoby sa líšia v tom, aké karty prísad môžete použiť. Všetky príklady používajú tú istú pizzu: paradajka a ananás, hodnota 5.",
     "portaat": [
       {
         "otsikko": "1. Ľubovoľné prísady",

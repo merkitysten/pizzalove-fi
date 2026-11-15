@@ -88,7 +88,7 @@
     "basso_tapa": "Använd lika många <b>olika fyllningar</b> som pizzan har fyllningar. Korten får vara fler: tomat-ananas-pizzan (värde 5) kan du till exempel göra med två tomater och en oliv, 2 + 2 + 1 = 5, eftersom det är två olika sorters fyllningar. Använd detta i Pizza Basso eller för en extra utmaning i Pizza Party.<br><span class=\"pieni\">I de tryckta reglerna står det ännu ”lika många fyllningskort som fyllningar”. Det nya sättet ger spelet fler möjligheter.</span>",
     "huomio_bruno": "<b>Bruno eller Basso?</b> Apan i spelet heter numera Basso. I äldre regler och videor heter han Bruno, och det andra spelläget heter Pizza Bruno. Reglerna är desamma.",
     "portaat_otsikko": "Tre sätt att tillaga en pizza",
-    "portaat_ingressi": "Värdet måste alltid stämma. Spelen skiljer sig åt i vilka fyllningskort du får använda. Exemplet är tomat-ananas-pizzan (värde 5).",
+    "portaat_ingressi": "Sätten skiljer sig åt i vilka fyllningskort du får använda. Alla exempel har samma pizza: tomat-ananas, värde 5.",
     "portaat": [
       {
         "otsikko": "1. Vilka fyllningar som helst",
