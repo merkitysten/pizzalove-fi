@@ -166,9 +166,17 @@ def sisalto(kieli):
     # Vasta tämän viivan jälkeen nämä meidän lisäinfot»). Lohko sijoitetaan
     # selaimessa Pizza Loven palstojen alle; vasemmalle laskutoimitukset,
     # oikealle Bruno vai Basso, alle ©.
+    # Marko 15.11.2026: «Meillähän oli se miettivä basso-apina aikaisemmin,
+    # jonka ajatuskuplassa oli ne laskumerkit» -> sama asettelu kuin verkko-
+    # PDF:n alalaatikossa (korttisaannot, Marko 6.11.2026): Basso nojaa
+    # viivaan, kupla oikealla, häntä kiemurtelee viivan alle; tekstit viereen.
     otsikko, teksti = ks.tieto_jaettu(s)
-    lisat = ('<div class="lisat"><div><h3>%s</h3><div class="laskulaatikko">%s</div></div>'
-             '<div><div class="tieto"><img src="julkinen/kuvat/basso-pohtii.webp"><p><b>%s</b> %s</p></div></div>'
+    lisat = ('<div class="lisat"><div class="alalaatikko">'
+             '<div class="ajattelee"><div class="kupla"><img src="paperi/kortit/ajatuskupla.webp">'
+             '<div class="merkit"><span>+</span><span>−</span><span>·</span><span>:</span>'
+             '<span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div>'
+             '<img class="hanta" src="paperi/kortit/hanta.webp"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp"></div>'
+             '<div class="tekstit"><h3>%s</h3>%s<h3 class="bruno">%s</h3><p>%s</p></div></div>'
              '<p class="oikeudet">%s © Merkitysten Oy 2026</p></div>'
              % (e(s['laskut']['otsikko']), s['laskut'].get('paperi', s['laskut']['html']),
                 otsikko, teksti, e(k['oikeudet'])))
@@ -196,10 +204,12 @@ def sivu_html(kieli, luonnos=True):
     otsake = ('<div class="otsake"><div class="kansi"><div class="viiri">%s</div><div><h1>%s</h1>'
               '<p class="ala">%s</p><ul class="tiedot">%s</ul></div></div>'
               '<div class="netti"><div id="qr"></div><div><p class="qr-teksti">%s</p>'
-              '<p>%s <b>%s</b></p><p class="ingressi">%s</p></div></div></div>'
+              '<p>%s <b>%s</b></p></div></div></div>'
               % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
-                 k['qr_teksti'], e(k['videot']), k['osoite'].replace('https://', ''),
-                 e(ks.ingressi_ilman_toistoa(s, k))))
+                 # Marko 15.11.2026: «tässä tuo otsikko saisi olla yhdellä rivillä»
+                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), k['osoite'].replace('https://', '')))
+    # «Aloita Pizza Partystä» pois otsakkeesta (Marko 15.11.2026: «Sehän lukee
+    # myös pizza partyn alapuolella uudelleen eli ajattelisin, että se on turha»)
     atomit = [otsake] + atomit
     taitteet = ''.join('<i class="taite vaaka" style="top:%smm"></i>' % y for y in ('74.25', '148.5', '222.75'))
     # Palstojen tiheys (Marko 15.11.2026): etupuolen vasen palsta saa lisää
@@ -304,11 +314,29 @@ def sivu_html(kieli, luonnos=True):
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
-  .lisat {{ position: absolute; left: 6mm; right: 6mm; display: grid; grid-template-columns: 1fr 1fr;
-            column-gap: 9mm; border-top: .2mm solid {musta}; padding-top: 9mm; line-height: 1.3 }}
-  .lisat h3 {{ margin-top: 0 }}
-  .lisat .tieto {{ margin-top: 0 }}
-  .lisat .oikeudet {{ grid-column: 1 / -1; margin-top: 4mm }}
+  .lisat {{ position: absolute; left: 6mm; right: 6mm; border-top: .2mm solid {musta}; padding-top: 9mm;
+            line-height: 1.3 }}
+  /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta) */
+  .alalaatikko {{ display: flex; gap: 6mm; align-items: flex-start; padding-bottom: 2.4mm;
+                  border-bottom: .2mm solid {musta} }}
+  .ajattelee {{ flex: none; position: relative; width: 60mm; align-self: stretch; min-height: 30mm }}
+  .ajattelee img {{ position: absolute; display: block }}
+  .ajattelee img.basso {{ left: 0; width: 30mm; bottom: calc(-2.4mm - .2mm - 30mm * .1536) }}
+  .ajattelee img.hanta {{ left: 27.5mm; width: 27.5mm; bottom: calc(-2.4mm - .2mm - 3.7mm);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 60% {hanta_raja}%, 0 {hanta_raja}%) }}
+  .kupla {{ position: absolute; left: 23.5mm; bottom: 2.4mm; width: 36mm }}
+  .kupla > img {{ position: static !important; width: 100% }}
+  .merkit {{ position: absolute; left: 29%; right: 11.2%; top: 22%; bottom: 17%;
+             display: grid; grid-template-columns: repeat(4, 1fr);
+             align-content: space-evenly; align-items: center; justify-items: center;
+             font: 900 12pt/1 Viiri, sans-serif; color: {musta} }}
+  .merkit span:nth-child(n+5) {{ font: 700 9.7pt/1 Otsikko, sans-serif }}
+  .merkit sup {{ font-size: .6em }}
+  .tekstit {{ flex: 1; min-width: 0 }}
+  .tekstit h3 {{ margin: 0 0 .6mm }}
+  .tekstit h3.bruno {{ margin-top: 3mm }}
+  .tekstit p {{ margin-bottom: .6mm }}
+  .lisat .oikeudet {{ border-top: 0; margin-top: 7mm; padding-top: 0 }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
@@ -410,7 +438,7 @@ function pakkaa() {{
 </script>
 </html>'''.format(
         kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET, musta=ks.MUSTA, oranssi=ks.ORANSSI,
-        viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
+        hanta_raja=round(100 * (27.5 * 374 / 1030 - 3.7) / (27.5 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(k['osoite']),
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
