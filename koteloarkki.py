@@ -62,7 +62,10 @@ KIELET = {
            'pois': ['>Näin pizza tehdään<', 'Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.',
                     'Arvon on aina täsmättävä. ',
                     '<p>Kokeile tätä myös <b>#1 Pizza Partyssä</b>: peli muuttuu hauskemmaksi, '
-                    'vaikkakin vähän vaikeammaksi.</p>'],
+                    'vaikkakin vähän vaikeammaksi.</p>',
+                    # Marko 15.11.2026: «Onko selitystekstissä tuo "Mutta B:n kannatti
+                    # tehdä se silti" taas joku tekoälyn oma pikku lisäys?» -> pois
+                    ' Vaihto auttoi myös A:ta, mutta B:n kannatti tehdä se silti.'],
            # rivinvaihto ennen näitä sanoja (Marko 15.11.2026: «Muuta selitystekstin
            # "Nyt B" alkamaan uudelta riviltä»)
            'rivinvaihto': [' Nyt B ']},
@@ -367,9 +370,10 @@ def sivu_html(kieli, luonnos=True):
   .tapateksti, .vierekkain p {{ min-width: 0; text-wrap: pretty; hyphens: manual }}
   .tapateksti .pelit {{ margin-bottom: 1mm }}
   .tapateksti p:last-child {{ margin-bottom: 0 }}
-  .vaihtoesim h3 {{ margin-top: 4.4mm }}
+  .vaihtoesim h3 {{ margin-top: 3.2mm }}
+  .vaihtoesim {{ padding-bottom: 1.3mm }}
   .vaihtoesim .vaihto {{ justify-content: flex-start; margin: 0 }}
-  .vaihtoesim .vierekkain {{ margin: 1mm 0 }}
+  .vaihtoesim .vierekkain {{ margin: 1mm 0 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
   #lahde {{ position: absolute; left: -9999mm; width: 94.5mm }}
   .ylivuoto {{ position: absolute; left: 4mm; top: 4mm; color: red; font: 700 14pt Otsikko, sans-serif }}
