@@ -72,6 +72,13 @@ KIELET = {
 }
 
 
+def osoite(k):
+    '''Painettu osoite ja QR ilman .html-päätettä (Marko 15.11.2026: «Tuo on vähän
+    ruma nettiosoite, erityisesti tuo html-loppu»). Sivusto palvelee
+    /fi/korttipeli suoraan (tarkistettu selaimella 15.11.2026).'''
+    return re.sub(r'\.html$', '', k['osoite'])
+
+
 def e(s):
     return html.escape(str(s), quote=False)
 
@@ -220,7 +227,7 @@ def sivu_html(kieli, luonnos=True):
               '<p>%s <b>%s</b></p></div></div></div>'
               % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
                  # Marko 15.11.2026: «tässä tuo otsikko saisi olla yhdellä rivillä»
-                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), k['osoite'].replace('https://', '')))
+                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), osoite(k).replace('https://', '')))
     # «Aloita Pizza Partystä» pois otsakkeesta (Marko 15.11.2026: «Sehän lukee
     # myös pizza partyn alapuolella uudelleen eli ajattelisin, että se on turha»)
     atomit = [otsake] + atomit
@@ -304,13 +311,12 @@ def sivu_html(kieli, luonnos=True):
   .tiedot {{ list-style: none; display: flex; flex-wrap: wrap; gap: 1mm }}
   .tiedot li {{ background: {musta}; color: #fff; border-radius: .9mm; padding: .8mm 1.5mm .6mm;
                 font: 700 6.4pt/1 Otsikko, sans-serif; text-transform: uppercase }}
-  .netti {{ display: flex; gap: 3mm; align-items: center; margin-top: 2.4mm; padding-top: 2.2mm;
-            border-top: .25mm solid #ccc }}
+  .netti {{ display: flex; gap: 3mm; align-items: center; margin-top: 3.4mm }}  /* harmaa viiva pois (Marko 15.11.2026) */
   .netti #qr svg {{ width: 17mm; height: auto; display: block }}
   .netti p {{ margin: 0 0 .5mm }}
   .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
   .netti .ingressi {{ font-weight: 700 }}
-  .netti b {{ color: {oranssi} }}
+  .netti b {{ color: {musta} }}  /* oranssi ei luettava valkoisella (Marko 15.11.2026) */
   .oikeudet {{ font-size: 5.8pt; opacity: .75; margin-top: 2mm; border-top: .25mm solid #ccc; padding-top: 1mm }}
   .rivi {{ display: flex; gap: 1mm; margin: .4mm 0 .8mm }}
   .rivi img, .esimerkki img {{ width: 8mm; height: auto; border: .15mm solid {viiva}; border-radius: 8% / 5.3% }}
@@ -457,7 +463,7 @@ function pakkaa() {{
 </html>'''.format(
         kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET, musta=ks.MUSTA, oranssi=ks.ORANSSI,
         hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
-        ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(k['osoite']),
+        ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(osoite(k)),
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
 
