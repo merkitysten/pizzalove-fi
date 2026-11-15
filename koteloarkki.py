@@ -366,7 +366,7 @@ def sivu_html(kieli, luonnos=True):
   .laskulista {{ list-style: none; display: grid; grid-template-columns: repeat(4, auto); justify-content: start;
                  column-gap: 4mm; font-weight: 700; margin: .4mm 0 .6mm }}
   .tieto {{ display: flex; gap: 2mm; align-items: center; margin-top: 4mm }}
-  .lisat {{ position: absolute; left: {reuna}mm; right: {reuna}mm; border-top: .2mm solid {musta}; padding-top: 9mm;
+  .lisat {{ position: absolute; left: {reuna}mm; right: {reuna}mm; border-top: .2mm solid {musta}; padding-top: 3.7mm;
             line-height: 1.3 }}
   /* Basso nojaa alalaatikon alareunan viivaan (kuvan leikkaus 84,6 %:ssa korkeudesta).
      Marko 15.11.2026: «suurennat Bassoa vieläkin, mutta siten että se mahtuu
@@ -374,7 +374,7 @@ def sivu_html(kieli, luonnos=True):
      vasemmassa palstassa (84 mm), tekstit oikean palstan linjassa. */
   .alalaatikko {{ display: grid; grid-template-columns: {palsta_l}mm {palsta_l}mm; column-gap: {palstavali}mm;
                   align-items: center; padding-bottom: 2.6mm; border-bottom: .2mm solid {musta} }}
-  .ajattelee {{ position: relative; width: 84mm; margin-left: 2mm; align-self: stretch; min-height: 44mm }}
+  .ajattelee {{ position: relative; width: 84mm; margin-left: 2mm; align-self: stretch; min-height: 40mm }}
   .ajattelee img {{ position: absolute; display: block }}
   .ajattelee img.basso {{ left: 0; width: 42.5mm; bottom: calc(-2.6mm - .2mm - 42.5mm * .1536) }}
   .ajattelee img.hanta {{ left: 39mm; width: 39mm; bottom: calc(-2.6mm - .2mm - 5.3mm);
@@ -394,7 +394,7 @@ def sivu_html(kieli, luonnos=True):
   .tekstit .laskulista {{ column-gap: 6mm; row-gap: .8mm; margin: 1.2mm 0 1.4mm; font-size: 7.6pt }}
   .tekstit p {{ margin-bottom: .6mm }}
   /* Marko 15.11.2026: «Vaihda ®-rivi mustaksi» + kahdelle riville oikeaan palstaan */
-  .lisat .oikeudet {{ border-top: 0; margin: 7mm 0 0 calc({palsta_l}mm + {palstavali}mm); padding-top: 0; opacity: 1; color: {musta} }}
+  .lisat .oikeudet {{ border-top: 0; margin: 2.6mm 0 0 calc({palsta_l}mm + {palstavali}mm); padding-top: 0; opacity: 1; color: {musta} }}
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
