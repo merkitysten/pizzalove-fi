@@ -47,6 +47,7 @@ import json
 import os
 import re
 import subprocess
+import pathlib
 import sys
 
 import korttisaannot as ks
@@ -70,6 +71,21 @@ KIELET = {
            # "Nyt B" alkamaan uudelta riviltä»)
            'rivinvaihto': [' Nyt B ']},
 }
+
+
+# Viirien alkuperäinen kirjasin VAG Rounded (Marko toi tiedoston 15.11.2026).
+# Maksullinen kirjasin: EI repoon (sivusto on julkinen), vaan reposta
+# erilliseen kansioon «Fontit vain tälle koneelle». fsType 14 sallii PDF-
+# upotuksen. Jos tiedostoa ei ole, viirit tehdään Nunito Blackilla ja ajo varoittaa.
+VAG = os.path.normpath(os.path.join(TANNE, '..', 'Fontit vain tälle koneelle', 'VAGRoundedBT.ttf'))
+
+
+def viirikirjasin():
+    if os.path.exists(VAG):
+        return ('@font-face { font-family: VAG; font-weight: 400; src: url("%s"); }'
+                % pathlib.Path(VAG).as_uri(), '400 14pt/1 VAG')
+    print('⚠️  VAG Rounded puuttuu (%s) — viirit Nunito Blackilla' % VAG)
+    return '', '900 14pt/1 Viiri'
 
 
 def osoite(k):
@@ -246,6 +262,7 @@ def sivu_html(kieli, luonnos=True):
 <html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
 <style>
 {kirjasimet}
+  {viiri_face}
   @page {{ size: 210mm 297mm; margin: 0 }}
   * {{ box-sizing: border-box; margin: 0; padding: 0 }}
   html, body {{ background: #fff }}
@@ -364,7 +381,7 @@ def sivu_html(kieli, luonnos=True):
   .tieto img {{ width: 11mm; flex: none }}
   .tieto p {{ margin: 0 }}
   .banneri {{ background: {musta}; color: #fff; text-align: center; padding: 1.3mm 0 3mm; margin: 4mm 0 1mm;
-              font: 900 14pt/1 Viiri, sans-serif; text-transform: uppercase; letter-spacing: -.01em;
+              font: {viiri_font}, sans-serif; text-transform: uppercase;
               clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%) }}
   .banneri .oranssi {{ color: {oranssi} }}
   .kuvaus {{ font-weight: 700; margin-bottom: .4mm }}
@@ -463,7 +480,8 @@ function pakkaa() {{
 }});
 </script>
 </html>'''.format(
-        kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET, musta=ks.MUSTA, oranssi=ks.ORANSSI,
+        kieli=kieli, title=e(s['h1']), kirjasimet=ks.KIRJASIMET,
+        viiri_face=viirikirjasin()[0], viiri_font=viirikirjasin()[1], musta=ks.MUSTA, oranssi=ks.ORANSSI,
         hanta_raja=round(100 * (34 * 374 / 1030 - 4.6) / (34 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(osoite(k)),
         ylivuoto=KIELET[kieli]['ylivuoto'])
