@@ -27,6 +27,8 @@
     "pyynto_ei_onnistunut": "No ha funcionado. Inténtalo más tarde o escribe a info@merkitysten.fi.",
     "kauppaan": "Tienda",
     "katso_video": "Ver vídeo",
+    "apinakortti_nayta": "Mostrar",
+    "apinakortti_piilota": "Ocultar",
     "video_kieli": {
       "fi": "en finlandés",
       "en": "en inglés"

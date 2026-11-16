@@ -27,6 +27,8 @@
     "pyynto_ei_onnistunut": "Dat lukte niet. Probeer het later of schrijf naar info@merkitysten.fi.",
     "kauppaan": "Winkel",
     "katso_video": "Bekijk video",
+    "apinakortti_nayta": "Tonen",
+    "apinakortti_piilota": "Verbergen",
     "video_kieli": {
       "fi": "in het Fins",
       "en": "in het Engels"

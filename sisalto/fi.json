@@ -27,6 +27,8 @@
     "pyynto_ei_onnistunut": "Ei onnistunut. Yritä myöhemmin uudelleen tai kirjoita info@merkitysten.fi.",
     "kauppaan": "Kauppaan",
     "katso_video": "Katso video",
+    "apinakortti_nayta": "Näytä",
+    "apinakortti_piilota": "Piilota",
     "video_kieli": {
       "fi": "FI",
       "en": "EN"
