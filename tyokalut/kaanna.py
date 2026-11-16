@@ -248,8 +248,21 @@ def kysy(viestit, jarjestelma):
                     raise SystemExit('API-virhe: %s' % t)
     except urllib.error.HTTPError as v:
         raise SystemExit('API-virhe %s: %s' % (v.code, v.read().decode()[:800]))
-    print('Malli %s, tokeneita: syöte %s, tuloste %s, lopetus %s'
-          % (MALLI, kaytto.get('input_tokens'), kaytto.get('output_tokens'), syy))
+    # 📐 Erittely lokiin, jotta kustannus voidaan MITATA eikä arvata (Marko
+    # 16.11.2026: «voidaanko säästöjä hakea jotenkin muuten»). Kolme lukua
+    # ratkaisevat, kannattaako mitään vaihtaa:
+    #   ajattelu  — osa tulosteesta, hinnoiteltu kuin tuloste. Jos se on iso,
+    #               output_config.effort = 'low' säästäisi; jos pieni, ei.
+    #   välimuisti — luettu = 5 % syötteen hinnasta, kirjoitus kalliimpi kuin
+    #               tavallinen syöte. Nollat kertovat, ettei välimuistista ole
+    #               tässä hyötyä (pyynnöt tulevat päivien välein).
+    yksityiskohdat = kaytto.get('output_tokens_details') or {}
+    print('Malli %s, tokeneita: syöte %s, tuloste %s (ajattelu %s), '
+          'välimuisti luettu %s / kirjoitettu %s, lopetus %s'
+          % (MALLI, kaytto.get('input_tokens'), kaytto.get('output_tokens'),
+             yksityiskohdat.get('thinking_tokens', '–'),
+             kaytto.get('cache_read_input_tokens', 0),
+             kaytto.get('cache_creation_input_tokens', 0), syy))
     if syy == 'max_tokens':
         # Ei yritetä uudelleen: sama pyyntö katkeaisi samaan kohtaan. Viesti
         # kertoo luvut, jotta syy näkyy lokista ilman API-kyselyä.
