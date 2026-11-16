@@ -76,10 +76,19 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .kielet[open] .kielet__nuoli{transform:rotate(180deg)}
 .kielet__lista{position:absolute;right:0;top:calc(100% + 8px);z-index:60;margin:0;padding:6px;list-style:none;
   min-width:170px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
-.kielet__lista a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;
+.kielet__lista a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;
   border-radius:8px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px}
 .kielet__lista a:hover{background:var(--tint)}
 .kielet__lista a[aria-current="true"]::after{content:"✓";color:var(--deep);font-weight:800}
+/* 🔵 Marko 16.11.2026: «ne eri maiden liput, jolloin navigointi on helpompaa.
+   Ehkä lippu ennen kielen nimeä.» Pyöreä kuten koteloarkissa (10 mm -> 20 px).
+   Nimi venyy (margin-right:auto), joten valitun kielen ✓ pysyy oikeassa reunassa.
+   Kehys siksi, että valkoreunainen lippu (Suomi, Puola) erottuu valkoiselta valikolta;
+   SVG:ssä valkoinen on jo sävytetty #f1f0f0:ksi. Puuttuva lippu = tyhjä paikka. */
+.kielet__nimi{margin-right:auto}
+.kielet__lippu{flex:0 0 20px;width:20px;height:20px;border-radius:50%;object-fit:cover;
+  box-sizing:border-box;border:1px solid rgba(0,0,0,.18)}
+.kielet__lippu--puuttuu{border:0}
 
 /* ⚠️ SIVURIVI ON VALKOINEN, EI LÄPIKUULTAVA (Marko 14.10.2026: «se pitäisi
    olla valkoinen, jotta se erottuisi taustasta»). Tässä luki

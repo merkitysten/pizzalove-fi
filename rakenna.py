@@ -256,6 +256,33 @@ def koko_mt(polku, lang='fi'):
 
 # ---------------------------------------------------------------- osat
 
+# 🔵 Marko 16.11.2026: «Haluaisin tähän näkymään vielä ne eri maiden liput, jolloin
+# navigointi on helpompaa. Ehkä lippu ennen kielen nimeä.» -> Pyöreä lippu nimen eteen
+# kielivalikossa. SAMAT TIEDOSTOT kuin koteloarkissa ja konekäännöksessä:
+# julkinen/kuvat/liput/<KIELIkoodi>.svg (flag-icons, MIT; ks. kansion LUE-MINUT.md).
+# Lipun valinta on siis tehty jo kerran (kaanna.py:n lippu(): kielen tavallisimman
+# maan lippu, en=GB, es=ES, fr=FR) — tässä ei tehdä toista karttaa.
+# Lippu on koriste (alt=""): kieli ei ole maa, eikä ruudunlukija saa lukea maata
+# kielen nimen tilalle. Jos lippua ei ole (kaanna.py ei tee sitä esim. es-419:lle
+# eikä zh-Hantille), rivillä on tyhjä paikka ja pelkkä nimi — puute näkyy, ei arvausta.
+#
+# 📐 EI loading="lazy" (mitattu 16.11.2026). Liput ovat suljetun <details>-valikon
+# sisällä, eli piilossa sivun latautuessa. Mitattuna selaimessa ne EIVÄT latautuneet
+# lainkaan senkään jälkeen, kun valikko avattiin ja liput olivat näkyvissä 3,7 s
+# (complete=false, naturalWidth=0 kaikilla kymmenellä). Lippu, joka ei näy, on pahempi
+# kuin lippu, joka latautuu heti. Siksi eager + fetchpriority="low": liput eivät kilpaile
+# sivun omien kuvien kanssa. Hinta mitattu: 10 lippua = 96 kB raakana, 19 kB pakattuna,
+# josta Espanja yksin 17 kB (vaakuna). Sama välimuisti kaikilla sivuilla ja kielillä.
+LIPUT = os.path.join(JULKINEN, 'kuvat', 'liput')
+
+
+def valikkolippu(k):
+    if not os.path.exists(os.path.join(LIPUT, k + '.svg')):
+        return '<span class="kielet__lippu kielet__lippu--puuttuu"></span>'
+    return ('<img class="kielet__lippu" src="../kuvat/liput/%s.svg" width="20" height="20"'
+            ' alt="" fetchpriority="low" decoding="async">' % k)
+
+
 def ylaosa(t, sivu, kaikki):
     ui = t['ui']
     nav = [('index.html', ui['nav_etusivu'], 'etusivu'),
@@ -272,16 +299,17 @@ def ylaosa(t, sivu, kaikki):
     # Kielivalinta: yksi nappi (maapallo + nykyinen kieli), joka avaa listan.
     # Uusi kieli = uusi rivi KIELET-listaan ja sisalto/xx.json. (Marko 6.10.2026)
     kielet = ''.join(
-        '<li><a href="../%s/%s" hreflang="%s" lang="%s"%s>%s</a></li>' % (
+        '<li><a href="../%s/%s" hreflang="%s" lang="%s"%s>%s<span class="kielet__nimi">%s</span></a></li>' % (
             k, sivutiedosto(sivu if t['lang'] in KIELET else 'korttipeli', k), k, k,
-            ' aria-current="true"' if k == t['lang'] else '', e(kaikki[k]['nimi']))
+            ' aria-current="true"' if k == t['lang'] else '', valikkolippu(k), e(kaikki[k]['nimi']))
         for k in KIELET)
     if KONEKIELET:
         # Konekäännökset: vain korttipelin säännöt (Marko 16.11.2026)
         kielet += '<li class="kielet__ryhma">%s</li>' % e(ui.get('konekaannos_ryhma', 'Machine translation · card game rules'))
         kielet += ''.join(
-            '<li><a href="../%s/%s.html" hreflang="%s" lang="%s"%s>%s</a></li>' % (
-                k, KONE_SIVU, k, k, ' aria-current="true"' if k == t['lang'] else '', e(d['nimi']))
+            '<li><a href="../%s/%s.html" hreflang="%s" lang="%s"%s>%s<span class="kielet__nimi">%s</span></a></li>' % (
+                k, KONE_SIVU, k, k, ' aria-current="true"' if k == t['lang'] else '',
+                valikkolippu(k), e(d['nimi']))
             for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     kielet = '''<details class="kielet">
       <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
