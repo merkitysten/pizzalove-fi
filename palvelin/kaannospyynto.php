@@ -88,7 +88,7 @@ if ($tila !== 204) vastaa(502, array('virhe' => 'käännöksen käynnistys epäo
 if (!empty($cfg['ilmoitus'])) {
     @mail($cfg['ilmoitus'], 'Pizza Love: kielipyyntö ' . $kieli,
         "Sivustolla pyydettiin korttipelin sääntöjä kielellä «" . $kieli . "».\n" .
-        "Konekäännös, sivu ja arkki tehdään automaattisesti (noin 5–10 min):\n" .
+        "Konekäännös, sivu ja arkki tehdään automaattisesti (yleensä noin 3 min):\n" .
         "https://github.com/merkitysten/pizzalove-fi/actions\n" .
         "Valmis sivu: " . $sivu . "\n",
         'Content-Type: text/plain; charset=utf-8');

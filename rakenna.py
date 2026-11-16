@@ -322,13 +322,34 @@ def ylaosa(t, sivu, kaikki):
     # sisäänkäyntiä. Tekstit tulevat tästä, jotta JS:ään ei tule käännöksiä.
     # Konekäännetyillä kielillä ui-avaimia ei vielä ole: silloin englanti, kuten
     # konekaannos_ryhma-rivillä yllä.
+    # ⚠️ KAIKKI pyynnön tekstit kulkevat tätä kautta, myös bannerin, jonka
+    # julkinen/sivu.js rakentaa. 📐 Marko 16.11.2026: hän näki suomenkielisen
+    # otsikon ja englanninkielisen vahvistuksen samassa ikkunassa, koska
+    # vahvistus oli kovakoodattuna JS:ään. Kieli ei saa vaihtua kesken lauseen.
+    # %s tekstissä = kielen oma nimi; sivu.js korvaa sen.
+    pyyntoteksti = [
+        ('hakemisto', '../kielet.json'),
+        ('haku', ui.get('pyynto_haku', 'Search for a language')),
+        ('pyyda', ui.get('pyynto_pyyda', 'Request')),
+        ('eituettu', ui.get('pyynto_ei_tuettu', 'Not supported yet')),
+        ('otsikko', ui.get('pyynto_otsikko', 'All languages')),
+        ('sulje', ui.get('pyynto_sulje', 'Close')),
+        ('kysymys', ui.get('pyynto_kysymys', 'Want the Pizza Love card game rules in %s?'
+                           ' We’ll make them now – machine-translated, free.')),
+        ('kylla', ui.get('pyynto_kylla', 'Yes, please')),
+        ('tekeilla', ui.get('pyynto_tekeilla', 'Thank you! We’re making the rules in %s.'
+                            ' It usually takes about three minutes, and the link will appear here.'
+                            ' You can also close this – the language will appear in the language'
+                            ' menu when it’s ready.')),
+        ('avaa', ui.get('pyynto_avaa_saannot', 'Open the rules in %s')),
+        ('kone', ui.get('pyynto_konekaannos', '(machine translation – corrections welcome)')),
+        ('eionnistunut', ui.get('pyynto_ei_onnistunut', 'That didn’t work this time.'
+                                ' Please try again later or write to info@merkitysten.fi.')),
+    ]
     kielet += ('<li class="kielet__pyynto"><button type="button" class="kielet__pyynto-nappi"'
-               ' data-valitsin data-hakemisto="../kielet.json" data-haku="%s" data-pyyda="%s"'
-               ' data-eituettu="%s">%s</button></li>') % (
-        e(ui.get('pyynto_haku', 'Search for a language')),
-        e(ui.get('pyynto_pyyda', 'Request')),
-        e(ui.get('pyynto_ei_tuettu', 'Not supported yet')),
-        e(ui.get('pyynto_avaa', 'Your language missing? Ask for it')))
+               ' data-valitsin%s>%s</button></li>') % (
+        ''.join(' data-%s="%s"' % (a, e(v)) for a, v in pyyntoteksti),
+        e(ui.get('pyynto_avaa', 'Ask for your language')))
     kielet = '''<details class="kielet">
       <summary aria-label="%s: %s">%s<span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
       <ul class="kielet__lista">%s</ul>

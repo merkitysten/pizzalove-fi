@@ -201,16 +201,66 @@
                                          lippu: kuva ? kuva.getAttribute('src') : '' };
   });
 
+  /* ---------------------------------------------------------------- tekstit */
+  /* ⚠️ KAIKKI pyynnön tekstit tulevat kielivalikon rivin data-attribuuteista
+     (rakenna.py ylaosa(), sisalto/xx.json «ui»), ei tästä tiedostosta.
+     📐 Marko 16.11.2026 näki suomenkielisen otsikon ja englanninkielisen
+     vahvistuksen samassa ikkunassa: kieli vaihtui kesken lauseen, koska
+     vahvistus oli kovakoodattuna tänne. Oletukset alla ovat varalta, jos rivi
+     puuttuu (konekäännöskieli ennen seuraavaa täydennysajoa). */
+  var painike = document.querySelector('.kielet [data-valitsin]');
+  function teksti(nimi, oletus) {
+    var v = painike && painike.getAttribute('data-' + nimi);
+    return v || oletus;
+  }
+  var T = {
+    otsikko: teksti('otsikko', 'All languages'),
+    haku: teksti('haku', 'Search for a language'),
+    pyyda: teksti('pyyda', 'Request'),
+    eituettu: teksti('eituettu', 'Not supported yet'),
+    sulje: teksti('sulje', 'Close'),
+    kysymys: teksti('kysymys', 'Want the Pizza Love card game rules in %s?'
+                    + ' We’ll make them now – machine-translated, free.'),
+    kylla: teksti('kylla', 'Yes, please'),
+    tekeilla: teksti('tekeilla', 'Thank you! We’re making the rules in %s.'
+                     + ' It usually takes about three minutes, and the link will appear here.'
+                     + ' You can also close this – the language will appear in the language'
+                     + ' menu when it’s ready.'),
+    avaaSaannot: teksti('avaa', 'Open the rules in %s'),
+    kone: teksti('kone', '(machine translation – corrections welcome)'),
+    eiOnnistunut: teksti('eionnistunut', 'That didn’t work this time.'
+                         + ' Please try again later or write to info@merkitysten.fi.')
+  };
+  function korvaa(s, n) { return s.replace('%s', n); }
+
   /* ---------------------------------------------------------------- pyyntö */
   /* Yksi mekanismi, kaksi sisäänkäyntiä. tila(mitä, sivu): 'tekeillä' heti kun
-     ajo on käynnissä, 'valmis' kun sivu vastaa, 'virhe' jos ei onnistunut. */
+     ajo on käynnissä, 'valmis' kun sivu vastaa, 'virhe' jos ei onnistunut.
+
+     ⚠️ EPÄONNISTUMISEN ON TAVOITETTAVA PYYTÄJÄ. 📐 Mitattu 16.11.2026
+     GitHubin julkisesta rajapinnasta: yhdeksästä konekäännösajosta onnistui
+     kuusi ja KAATUI KOLME (33 %). Onnistuneen kesto: mediaani 3,1 min,
+     vaihteluväli 2,4–5,1 min. Aiemmin kaatunut ajo ei näkynyt pyytäjälle
+     mitenkään: sivu kysyi 25 minuuttia tyhjään ja vaikeni. Marko odotti
+     hindiä yli 20 minuuttia saamatta mitään.
+
+     Nyt: ODOTUS kertoo kymmenen minuutin kohdalla rehellisesti, ettei tämä
+     onnistunut (kaksi kertaa pisin mitattu onnistuminen), MUTTA kysely jatkuu
+     hiljaa 25 minuuttiin asti — jos sivu ilmestyy myöhemmin, linkki tulee
+     silti näkyviin. Ei palvelinmuutosta: palvelin ei tiedä ajon tilaa. */
+  var KYSELYVALI = 30000, LUOVUTUS = 10 * 60 * 1000, LOPETUS = 25 * 60 * 1000;
   function pyyda(k, tila) {
-    var sivu = SIVU.replace('%s', k);
+    var sivu = SIVU.replace('%s', k), kerrottu = false;
     function odota(alku) {
       fetch(sivu, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
         if (r.ok) return tila('valmis', sivu);
-        if (Date.now() - alku < 25 * 60 * 1000) setTimeout(function () { odota(alku); }, 30000);
-      }).catch(function () { setTimeout(function () { odota(alku); }, 30000); });
+        jatka(alku);
+      }).catch(function () { jatka(alku); });
+    }
+    function jatka(alku) {
+      var kulunut = Date.now() - alku;
+      if (kulunut >= LUOVUTUS && !kerrottu) { kerrottu = true; tila('virhe', sivu); }
+      if (kulunut < LOPETUS) setTimeout(function () { odota(alku); }, KYSELYVALI);
     }
     fetch(osoite, { method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ kieli: k }) })
@@ -223,11 +273,6 @@
       })
       .catch(function () { tila('virhe', sivu); });
   }
-  function tekeilla(n) {
-    return 'Thank you! We’re making the rules in ' + n + ' now. It usually takes 5–10 minutes' +
-           ' – keep this page open and the link will appear here.';
-  }
-  var VIRHE = 'Sorry, that didn’t work. Please try again later or write to info@merkitysten.fi.';
 
   /* ?pyynto=xx: Marko näkee bannerin ja hakemiston ehdotuksen omalla
      selaimellaan (Marko 16.11.2026: «Minun pitäisi päästä tätä testaamaan»).
@@ -247,43 +292,42 @@
     var laatikko = document.createElement('div');
     laatikko.className = 'kielipyynto';
     laatikko.setAttribute('role', 'region');
-    laatikko.setAttribute('aria-label', 'Pizza Love rules in ' + n);
-    var teksti = document.createElement('p');
-    var b = document.createElement('b'); b.lang = k; b.textContent = n;
-    teksti.append('Want the Pizza Love card game rules in ', b, '? We’ll make them now – machine-translated, free.');
+    laatikko.setAttribute('aria-label', 'Pizza Love · ' + n);
+    var kappale = document.createElement('p');
+    var nimilohko = document.createElement('b'); nimilohko.lang = k; nimilohko.textContent = n;
+    var osat = T.kysymys.split('%s');
+    kappale.append(osat[0], nimilohko, osat[1] || '');
     var nappi = document.createElement('button');
-    nappi.className = 'nappi'; nappi.type = 'button'; nappi.textContent = 'Yes, please';
+    nappi.className = 'nappi'; nappi.type = 'button'; nappi.textContent = T.kylla;
     var sulje = document.createElement('button');
     sulje.className = 'kielipyynto__sulje'; sulje.type = 'button';
-    sulje.setAttribute('aria-label', 'Close'); sulje.textContent = '×';
+    sulje.setAttribute('aria-label', T.sulje); sulje.textContent = '×';
     sulje.onclick = function () { laatikko.remove(); };
-    laatikko.append(teksti, nappi, sulje);
+    laatikko.append(kappale, nappi, sulje);
     main.insertBefore(laatikko, main.firstChild);
     nappi.onclick = function () {
       nappi.disabled = true;
       pyyda(k, function (mita, sivu) {
         if (mita === 'valmis') {
-          teksti.textContent = '';
+          kappale.textContent = '';
           var a = document.createElement('a'); a.href = sivu; a.lang = k;
-          a.textContent = 'Open the rules in ' + n;
-          teksti.append(a, ' (machine translation – corrections welcome).');
+          a.textContent = korvaa(T.avaaSaannot, n);
+          kappale.append(a, ' ' + T.kone);
           nappi.remove();
         } else if (mita === 'tekeillä') {
-          teksti.textContent = tekeilla(n);
+          kappale.textContent = korvaa(T.tekeilla, n);
           nappi.remove();
         } else {
           nappi.disabled = false;
-          teksti.textContent = VIRHE;
+          kappale.textContent = T.eiOnnistunut;
         }
       });
     };
   })();
 
   /* ------------------------------------------------------------- hakemisto */
-  var avaa = document.querySelector('.kielet [data-valitsin]');
+  var avaa = painike;
   if (!avaa || !window.HTMLDialogElement) return;
-  var T = { haku: avaa.getAttribute('data-haku'), pyyda: avaa.getAttribute('data-pyyda'),
-            eituettu: avaa.getAttribute('data-eituettu'), otsikko: avaa.textContent };
   var sivunKieli = html.getAttribute('lang') || 'en';
   var dlg, kentta, lista, tila, ehdotus, rivit;
 
@@ -369,20 +413,20 @@
     var k = nappi.getAttribute('data-k'), n = nappi.getAttribute('data-nimi') || nimi(k);
     var kohta = nappi.parentNode;
     nappi.disabled = true;
-    tila.textContent = tekeilla(n);
+    tila.textContent = korvaa(T.tekeilla, n);
     pyyda(k, function (mita, sivu) {
       if (mita === 'valmis') {
         nappi.remove();
         var a = document.createElement('a');
         a.href = sivu; a.hreflang = k; a.className = 'valitsin__valmis';
-        a.textContent = 'Open the rules in ' + n;
+        a.textContent = korvaa(T.avaaSaannot, n);
         kohta.appendChild(a);
-        tila.textContent = 'Open the rules in ' + n + ' (machine translation – corrections welcome).';
+        tila.textContent = korvaa(T.avaaSaannot, n) + ' ' + T.kone;
       } else if (mita === 'tekeillä') {
-        tila.textContent = tekeilla(n);
+        tila.textContent = korvaa(T.tekeilla, n);
       } else {
         nappi.disabled = false;
-        tila.textContent = VIRHE;
+        tila.textContent = T.eiOnnistunut;
       }
     });
   }
@@ -416,7 +460,7 @@
     }).catch(function () {
       /* Puute näkyy: hakemistoa ei saatu, mutta pyyntö on yhä mahdollinen
          bannerin kautta. Ei arvattua listaa. */
-      tila.textContent = VIRHE;
+      tila.textContent = T.eiOnnistunut;
     });
   }
 
@@ -425,7 +469,7 @@
     dlg.className = 'valitsin';
     dlg.innerHTML =
       '<div class="valitsin__ylaosa"><h2 class="valitsin__otsikko">' + p(T.otsikko) + '</h2>' +
-      '<button type="button" class="valitsin__sulje" aria-label="Close">×</button></div>' +
+      '<button type="button" class="valitsin__sulje" aria-label="' + p(T.sulje) + '">×</button></div>' +
       '<div class="valitsin__ehdotus" hidden></div>' +
       '<input class="valitsin__kentta" type="search" autocomplete="off" spellcheck="false" placeholder="' +
       p(T.haku) + '" aria-label="' + p(T.haku) + '">' +
