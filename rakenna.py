@@ -748,6 +748,20 @@ def korttipeli(t, kaikki):
 </details>''' % (m['avain'], ' open' if i == 0 else '', e(m['numero']), e(m['nimi']), e(m['kuvaus']),
                  porras_viittaus(s, m['numero']), vblock, m['html']))
 
+    # ── «Näin pizza tehdään» ei enää lupaa yhtä sääntöä (16.11.2026) ────────
+    # Marko osiota katsoessaan: «Pelit perustuvat samaan sääntöön? Eikö me tämä
+    # juuri poistettu kirjallisista ohjeista.»
+    #
+    # `perusteet_ingressi` («Kaikki kolme peliä perustuvat samaan sääntöön.»)
+    # oli sivun AINOA paikka, joka väitti niin — mitattu grepillä kaikista sivun
+    # sääntö-virkkeistä: muut osumat ovat <h3>Perussääntö</h3> ja kielivalikon
+    # data-attribuutit. Väite on myös saman päivän päätöksen vastainen: tapoja
+    # on kolme, koska Pizza Lovessa pitää olla juuri oikeat täytteet.
+    #
+    # Avain JÄÄ sisältötiedostoihin: `korttisaannot.py` (A4-sääntöarkki) lukee
+    # sen yhä, eikä se tiedosto ole tämän istunnon. Siksi tässä poistetaan vain
+    # sivun kappale. ⚠️ Jos arkki joskus päivitetään kolmeen tapaan, poista
+    # avain samalla kaikista sisalto/*.json-tiedostoista.
     runko = '''
 <h1>%s</h1>
 <p class="ingressi">%s</p>
@@ -755,7 +769,6 @@ def korttipeli(t, kaikki):
 <nav class="hyppylinkit">%s</nav>
 
 <h2 id="perusteet">%s</h2>
-<p>%s</p>
 <div class="korttiparit">
   <div class="korttipari"><img src="../kuvat/tausta-pizza.webp" width="351" height="532" alt=""><div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
   <div class="korttipari"><img src="../kuvat/tausta-tayte.webp" width="351" height="532" alt=""><div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
@@ -799,7 +812,7 @@ def korttipeli(t, kaikki):
 %s
 %s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
-       e(s['perusteet_otsikko']), e(s['perusteet_ingressi']),
+       e(s['perusteet_otsikko']),
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
        e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
