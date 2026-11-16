@@ -13,8 +13,13 @@ HAARA=konekaannokset
 KK="$(mktemp -d)/kk"
 
 avaa() {
+  # Aiemman vaiheen (hae) työpuu voi vielä varata haaran → vapautetaan ensin
+  for vanha in $(git worktree list --porcelain | sed -n 's/^worktree //p' | tail -n +2); do
+    git worktree remove --force "$vanha" 2>/dev/null || true
+  done
+  git worktree prune
   if git ls-remote --exit-code --heads origin "$HAARA" >/dev/null 2>&1; then
-    git fetch -q origin "$HAARA"
+    git fetch -q origin "+refs/heads/$HAARA:refs/remotes/origin/$HAARA"
     git worktree add -q -B "$HAARA" "$KK" "origin/$HAARA"
   else
     git worktree add -q --orphan -b "$HAARA" "$KK"
@@ -30,6 +35,7 @@ case "${1:-}" in
       cp -f "$KK"/julkinen/pdf/*.pdf julkinen/pdf/ 2>/dev/null || true
       cp -f "$KK"/julkinen/kuvat/liput/*.svg julkinen/kuvat/liput/ 2>/dev/null || true
       echo "Konekäännökset haarasta: $(ls "$KK"/sisalto/konekaannos 2>/dev/null | tr '\n' ' ')"
+      git worktree remove --force "$KK"
     else
       echo "Haaraa $HAARA ei vielä ole — käytetään main-haaran konekäännöksiä."
     fi
