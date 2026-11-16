@@ -89,6 +89,11 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .kielet__lippu{flex:0 0 20px;width:20px;height:20px;border-radius:50%;object-fit:cover;
   box-sizing:border-box;border:1px solid rgba(0,0,0,.18)}
 .kielet__lippu--puuttuu{border:0}
+/* 🔵 Marko 16.11.2026: «Lisää lippu myös globe-nappiin.» Maapallo kertoo, ETTÄ
+   tästä vaihdetaan kieltä; lippu kertoo, MIKÄ on valittuna. Napissa kehys on
+   valkoinen eikä musta, koska nappi on oranssilla (sama logiikka kuin napin
+   omassa reunuksessa: «Musta oranssin päällä on aina vähän tunkkaisen näköinen»). */
+.kielet__lippu--nappi{width:18px;height:18px;flex:0 0 18px;border-color:rgba(255,255,255,.75)}
 
 /* ⚠️ SIVURIVI ON VALKOINEN, EI LÄPIKUULTAVA (Marko 14.10.2026: «se pitäisi
    olla valkoinen, jotta se erottuisi taustasta»). Tässä luki

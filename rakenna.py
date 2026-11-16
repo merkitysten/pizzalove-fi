@@ -276,11 +276,15 @@ def koko_mt(polku, lang='fi'):
 LIPUT = os.path.join(JULKINEN, 'kuvat', 'liput')
 
 
-def valikkolippu(k):
+def valikkolippu(k, lisaluokka='', paikanpitaja=True):
+    luokka = 'kielet__lippu' + (' ' + lisaluokka if lisaluokka else '')
     if not os.path.exists(os.path.join(LIPUT, k + '.svg')):
-        return '<span class="kielet__lippu kielet__lippu--puuttuu"></span>'
-    return ('<img class="kielet__lippu" src="../kuvat/liput/%s.svg" width="20" height="20"'
-            ' alt="" fetchpriority="low" decoding="async">' % k)
+        # Listassa tyhjä paikka pitää nimet samassa sarakkeessa ja näyttää puutteen.
+        # Napissa ei ole saraketta, johon kohdistaa, joten tyhjä paikka olisi pelkkä
+        # outo rako maapallon vieressä: siellä jää näkyviin maapallo ja nimi.
+        return '<span class="%s kielet__lippu--puuttuu"></span>' % luokka if paikanpitaja else ''
+    return ('<img class="%s" src="../kuvat/liput/%s.svg" width="20" height="20"'
+            ' alt="" fetchpriority="low" decoding="async">' % (luokka, k))
 
 
 def ylaosa(t, sivu, kaikki):
@@ -312,9 +316,11 @@ def ylaosa(t, sivu, kaikki):
                 valikkolippu(k), e(d['nimi']))
             for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     kielet = '''<details class="kielet">
-      <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>%s<span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
       <ul class="kielet__lista">%s</ul>
-    </details>''' % (e(ui['kielivalinta']), e(t['nimi']), e(t['nimi']), kielet)
+    </details>''' % (e(ui['kielivalinta']), e(t['nimi']),
+                      valikkolippu(t['lang'], 'kielet__lippu--nappi', paikanpitaja=False),
+                      e(t['nimi']), kielet)
     return '''<a class="ohita" href="#sisalto">%s</a>
 <header class="ylaosa">
   <div class="palkki">
