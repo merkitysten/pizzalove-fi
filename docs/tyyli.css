@@ -592,6 +592,12 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 .lautakartta__lauta{position:relative;width:min(440px,100%);margin:0 auto;
   border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(60,34,12,.18)}
 .lautakartta__lauta img{width:100%;height:auto;display:block}
+/* Alueiden varjo ja ääriviiva. Varjo on koko lauta, josta alue on reikä
+   (fill-rule evenodd, ks. rakenna.py). Siksi himmennys osuu tarkalleen muun
+   laudan päälle eikä alueen päälle — kuvaa itseään ei tarvitse suodattaa. */
+.lautakartta__alueet{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.lautakartta__varjo{fill:var(--ground);fill-opacity:.76;opacity:0}
+.lautakartta__reuna{fill:none;stroke:var(--orange);stroke-width:7;stroke-linejoin:round;opacity:0}
 /* Merkin ja nimen numero ovat sama asia, joten ne saavat saman ulkoasun.
    Värin ja koon ohjaus kulkee muuttujien kautta, jotta korostus voi vaihtaa ne
    yhdessä paikassa — ks. korostussäännöt alempana. */
@@ -627,19 +633,19 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
    :has() puuttuu vain vanhoista selaimista, ja silloin kartta toimii
    numeroilla kuten kosketusnäytöllä. */
 @media (hover:hover){
-  .lautakartta [data-osa]{transition:opacity var(--liike-nopea) var(--liike-saapuu),
+  .lautakartta [data-osa],.lautakartta [data-alue]{
+    transition:opacity var(--liike-nopea) var(--liike-saapuu),
     transform var(--liike-nopea) var(--liike-saapuu)}
-  .lautakartta__lauta img{transition:filter var(--liike-nopea) var(--liike-saapuu)}
-  /* 1. Osoittimen ollessa jommassakummassa päässä kaikki himmenee ja lauta
-        vaimenee — myös se pari, joka kohta palautetaan säännössä 2. */
+  /* 1. Osoittimen ollessa jommassakummassa päässä kaikki himmenee — myös se
+        pari, joka kohta palautetaan säännössä 2. */
   .lautakartta:has([data-osa]:hover) [data-osa]{opacity:.3}
-  .lautakartta:has([data-osa]:hover) .lautakartta__lauta img{filter:brightness(.9) saturate(.72)}
   /* 2. Osoitettu pari palautuu täyteen näkyvyyteen ja korostuu: nimi ja
-        molemmat numerot oranssiksi, laudan merkki hieman isommaksi. */
-  .lautakartta:has([data-osa="varasto"]:hover) [data-osa="varasto"],
-  .lautakartta:has([data-osa="linjasto"]:hover) [data-osa="linjasto"],
-  .lautakartta:has([data-osa="vaaka"]:hover) [data-osa="vaaka"],
-  .lautakartta:has([data-osa="pizzat"]:hover) [data-osa="pizzat"]{
+        molemmat numerot oranssiksi, laudalta sen OMA ALUE esiin varjon
+        reiästä ja oranssi ääriviiva sen ympärille. */
+  .lautakartta:has([data-osa="varasto"]:hover) :is([data-osa="varasto"],[data-alue="varasto"]),
+  .lautakartta:has([data-osa="linjasto"]:hover) :is([data-osa="linjasto"],[data-alue="linjasto"]),
+  .lautakartta:has([data-osa="vaaka"]:hover) :is([data-osa="vaaka"],[data-alue="vaaka"]),
+  .lautakartta:has([data-osa="pizzat"]:hover) :is([data-osa="pizzat"],[data-alue="pizzat"]){
     opacity:1;--korosta-vari:var(--orange);--korosta-tausta:var(--orange)}
   .lautakartta:has([data-osa="varasto"]:hover) .lautakartta__merkki[data-osa="varasto"],
   .lautakartta:has([data-osa="linjasto"]:hover) .lautakartta__merkki[data-osa="linjasto"],

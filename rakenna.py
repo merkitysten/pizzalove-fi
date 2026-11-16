@@ -962,6 +962,69 @@ def korttipeli(t, kaikki):
 LAUTA_MERKIT = [('varasto', '93', '50'), ('linjasto', '76.5', '47'),
                 ('vaaka', '38', '41'), ('pizzat', '19', '11')]
 
+# ── Laudan alueet (Marko 16.11.2026) ──────────────────────────────────────
+# Marko: «Kyllä se koko alue pitäisi korostua siinä pelilaudalla. Eli kun
+# puhutaan varastosta, niin ne varastopaikat pitäisi korostua. Kun puhutaan
+# linjastosta, niin linjaston pitäisi korostua.»
+#
+# Koordinaatisto on pelilauta.webp:n oma 900×900, joten muodot eivät riipu
+# siitä, minkä kokoisena lauta näytetään.
+#
+# 📐 MITATTU KUVASTA, EI ARVATTU. Lauta piirrettiin selaimeen 100 pikselin
+# ruudukon kanssa, ehdotetut muodot piirrettiin sen päälle ja niitä siirrettiin
+# kunnes ne osuivat. Mitatut luvut, joista muodot on johdettu:
+#   · varastotornien paikat ovat pystyrivissä, keskipisteet x≈839, ylin y≈57,
+#     alin y≈819, ympyrän säde ≈35
+#   · linjaston kymmenen täyteympyrän KESKIPISTEET ovat soikiolla
+#     rx 240, ry 218 (keskipiste 438,430) ja ympyrän säde on 48 — rengas on
+#     siis keskisoikio ± (48 + 6 px marginaali)
+#   · apina punnuksineen ulottuu x 280…605, y 290…610; punnusvadit ovat
+#     keskipisteissä (345,365) ja (540,365), säde ≈48 — soikio on leveämpi
+#     kuin apina, koska ensimmäinen versio leikkasi vadit reunoiltaan pois
+#   · neljä pizzakorttipaikkaa ovat katkoviivalaatikoita, mitatut nurkat
+#     (95,24) (18,219) (22,530) (95,717), koko ≈ 140×146; alla olevissa
+#     luvuissa on 8 px marginaali joka suuntaan
+#
+# ⚠️ Jos lauta piirretään uusiksi, nämä on mitattava uudelleen. Väärään
+# kohtaan osuva korostus on pahempi kuin ei korostusta lainkaan.
+LAUTA_ALUEET = {
+    'varasto':  [('rect', 798, 16, 84, 846, 42)],
+    'linjasto': [('rengas', 438, 430, 294, 285, 186, 164)],
+    'vaaka':    [('soikio', 442, 445, 192, 172)],
+    'pizzat':   [('rect', 87, 16, 155, 162, 10),
+                 ('rect', 10, 211, 162, 160, 10),
+                 ('rect', 14, 522, 154, 160, 10),
+                 ('rect', 87, 709, 156, 163, 10)],
+}
+
+
+def _soikio(cx, cy, rx, ry):
+    """Soikio kahtena puolikaarena — <ellipse> ei kelpaa, koska muodot
+    yhdistetään yhdeksi poluksi (evenodd tekee reiän varjoon)."""
+    return 'M%g %gA%g %g 0 1 0 %g %gA%g %g 0 1 0 %g %gZ' % (
+        cx - rx, cy, rx, ry, cx + rx, cy, rx, ry, cx - rx, cy)
+
+
+def _suorakulmio(x, y, w, h, r):
+    return ('M%g %gH%gA%g %g 0 0 1 %g %gV%gA%g %g 0 0 1 %g %gH%gA%g %g 0 0 1 %g %gV%gA%g %g 0 0 1 %g %gZ'
+            % (x + r, y, x + w - r, r, r, x + w, y + r, y + h - r, r, r, x + w - r, y + h,
+               x + r, r, r, x, y + h - r, y + r, r, r, x + r, y))
+
+
+def alue_polku(muodot):
+    """Alueen muodot yhdeksi SVG-poluksi."""
+    osat = []
+    for m in muodot:
+        if m[0] == 'rect':
+            osat.append(_suorakulmio(*m[1:]))
+        elif m[0] == 'soikio':
+            osat.append(_soikio(*m[1:]))
+        elif m[0] == 'rengas':
+            cx, cy, rox, roy, rix, riy = m[1:]
+            osat.append(_soikio(cx, cy, rox, roy))
+            osat.append(_soikio(cx, cy, rix, riy))   # evenodd → keskus jää ulos
+    return ''.join(osat)
+
 
 def opasmountti(nimi, t):
     """Animaation kiinnityskohta lautapelisivulla. ⚠️ Nappi renderöidään vain
@@ -1004,12 +1067,21 @@ def lautakartta(s):
         % (osa, x, y, i + 1) for i, (osa, x, y) in enumerate(LAUTA_MERKIT))
     nimet = ''.join('<li data-osa="%s"><b>%d</b>%s</li>' % (osa, i + 1, e(s['lauta'][osa]))
                     for i, (osa, _, _) in enumerate(LAUTA_MERKIT))
+    # Varjo on yksi polku: koko lauta + alueen muodot, fill-rule evenodd.
+    # Alue jää siis reiäksi, ja reikiä voi olla monta (pizzakorttipaikkoja on
+    # neljä) tai se voi olla rengas. Reuna piirtää saman muodon ääriviivana.
+    alueet = ''.join(
+        '<path class="lautakartta__varjo" data-alue="%s" fill-rule="evenodd" d="M0 0H900V900H0Z%s"/>'
+        '<path class="lautakartta__reuna" data-alue="%s" d="%s"/>'
+        % (osa, alue_polku(LAUTA_ALUEET[osa]), osa, alue_polku(LAUTA_ALUEET[osa]))
+        for osa, _, _ in LAUTA_MERKIT if LAUTA_ALUEET.get(osa))
     return ('<figure class="lautakartta liike">\n'
             '  <div class="lautakartta__lauta">'
             '<img src="../kuvat/pelilauta.webp" width="900" height="900" alt="" loading="lazy">'
+            '<svg class="lautakartta__alueet" viewBox="0 0 900 900" aria-hidden="true" focusable="false">%s</svg>'
             '%s</div>\n'
             '  <figcaption><ol class="lautakartta__nimet">%s</ol></figcaption>\n'
-            '</figure>' % (merkit, nimet))
+            '</figure>' % (alueet, merkit, nimet))
 
 
 def lautapeli(t, kaikki):
