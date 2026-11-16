@@ -72,8 +72,8 @@ REUNA = 2.0                         # mm sivun reunasta (tulostimen oma marginaa
 PALSTAVALI = 9.0                    # mm
 PALSTA_L = (ARKKI_L - 2 * REUNA - PALSTAVALI) / 2
 LEIPA_PT = 7.0          # painetun arkin leipateksti 2,479 mm
-KIELET = {k: {'ylivuoto': 'YLIVUOTO'}
-          for k in ('fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk')}
+# Kaikki korttisaannot.KIELET:n kielet, myös konekäännökset (sisalto/konekaannos/).
+KIELET = {k: {'ylivuoto': 'YLIVUOTO'} for k in ks.KIELET}
 # Markon suomen arkkiin 15.11.2026 tekemät karsinnat koskevat kaikkia kieliä.
 # Ne tehdään RAKENTEELLISESTI (sama kohta jokaisen kielen sisällössä), ei
 # kielikohtaisilla merkkijonoilla:
@@ -93,7 +93,8 @@ KIELET = {k: {'ylivuoto': 'YLIVUOTO'}
 # Maksullinen kirjasin: EI repoon (sivusto on julkinen), vaan reposta
 # erilliseen kansioon «Fontit vain tälle koneelle». fsType 14 sallii PDF-
 # upotuksen. Jos tiedostoa ei ole, viirit tehdään Nunito Blackilla ja ajo varoittaa.
-VAG = os.path.normpath(os.path.join(TANNE, '..', 'Fontit vain tälle koneelle', 'VAGRoundedBT.ttf'))
+VAG = os.environ.get('VAG_FONTTI') or os.path.normpath(os.path.join(TANNE, '..', 'Fontit vain tälle koneelle', 'VAGRoundedBT.ttf'))
+# GitHub Actionsissa VAG tulee salaisuudesta VAG_FONTTI_B64 (osajoukko, ei repossa).
 
 
 def viirikirjasin():
@@ -139,7 +140,7 @@ def lasku_pieni(lauseke):
 
 def sisalto(kieli):
     k = ks.KIELET[kieli]
-    s = json.load(open(os.path.join(TANNE, 'sisalto', kieli + '.json'), encoding='utf-8'))['korttipeli']
+    s = json.load(open(ks.lahdepolku(kieli), encoding='utf-8'))['korttipeli']
     a = []
     # --- perusteet (otsikko ja ingressi karsittu, ks. KIELET-kommentti kohta 1)
     a.append('<div class="korttirivi"><div><h3 class="palkki">%s</h3>'
@@ -233,9 +234,12 @@ def sisalto(kieli):
              '<span>x<sup>n</sup></span><span>√</span><span>log</span><span>n!</span></div></div>'
              '<img class="hanta" src="paperi/kortit/hanta.webp"><img class="basso" src="julkinen/kuvat/basso-pohtii.webp"></div>'
              '<div class="tekstit"><h3>%s</h3>%s<h3 class="bruno">%s</h3><p>%s</p></div></div>'
-             '<p class="oikeudet">%s © Merkitysten Oy 2026</p></div>'
+             '<p class="oikeudet">%s%s © Merkitysten Oy 2026</p></div>'
              % (e(s['laskut']['otsikko']), s['laskut'].get('paperi', s['laskut']['html']),
-                otsikko, teksti, e(k['oikeudet']).replace('. ', '.<br>', 1)))
+                otsikko, teksti,
+                # Konekäännöksen merkintä (Marko 16.11.2026) omalle rivilleen
+                ('<b>%s</b><br>' % e(k['konekaannos_merkinta'])) if k.get('konekaannos_merkinta') else '',
+                e(k['oikeudet']).replace('. ', '.<br>', 1)))
     return s, k, a, lisat
 
 
@@ -651,9 +655,9 @@ def tee(kieli, luonnos):
     # Sama otsikkolista kuin verkko-PDF:n kokeessa (korttisaannot.otsikot),
     # luettuna valmiista PDF:sta.
     # Tarkoituksella karsittu otsikko (perusteiden otsikko, ks. KIELET-kommentti) ohitetaan.
-    lahde = json.load(open(os.path.join(TANNE, 'sisalto', kieli + '.json'), encoding='utf-8'))['korttipeli']
+    lahde = json.load(open(ks.lahdepolku(kieli), encoding='utf-8'))['korttipeli']
     karsitut = {ks.norm(lahde['perusteet_otsikko'])}
-    puuttuu = [o for o in ks.otsikot(os.path.join(TANNE, 'sisalto', kieli + '.json'))
+    puuttuu = [o for o in ks.otsikot(ks.lahdepolku(kieli))
                if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut]
     if len(t) < 2000:
         print('Sisaltokoe: PDF:sta ei saatu tekstia — EI MITATTAVISSA')

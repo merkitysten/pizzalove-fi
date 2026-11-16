@@ -41,7 +41,11 @@ import sys
 import tempfile
 
 TANNE = os.path.dirname(os.path.abspath(__file__))
-CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+# Macilla Chrome; GitHub Actionsissa (Linux) polku annetaan ympäristömuuttujalla
+# tai käytetään Playwrightia (koteloarkki.tulosta, qr_lukukoe).
+CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+MAC = sys.platform == 'darwin'
+KONEKAANNOS = os.path.join(TANNE, 'sisalto', 'konekaannos')
 
 ORANSSI = '#EE7203'
 MUSTA = '#1A1A1A'
@@ -223,9 +227,36 @@ KIELET = {
 }
 
 
+# 🔵 Marko 16.11.2026: asiakas voi pyytää säännöt omalla kielellään
+# (täysautomaattinen konekäännös, yksi pyyntö kieltä kohden). Konekäännökset
+# ovat tiedostoissa sisalto/konekaannos/xx.json (tyokalut/kaanna.py), ja
+# niiden arkin omat tekstit liitetään tähän samaan KIELET-tauluun.
+def _lataa_konekaannokset():
+    if not os.path.isdir(KONEKAANNOS):
+        return
+    for nimi in sorted(os.listdir(KONEKAANNOS)):
+        if not nimi.endswith('.json'):
+            continue
+        d = json.load(open(os.path.join(KONEKAANNOS, nimi), encoding='utf-8'))
+        if d.get('kieli') in KIELET and not d.get('konekaannos'):
+            continue
+        KIELET[d['kieli']] = d['kielet']
+
+
+_lataa_konekaannokset()
+
+
+def lahdepolku(kieli):
+    '''Kielen sisältö: ihmisen tarkastama sisalto/xx.json tai konekäännös.'''
+    oma = os.path.join(TANNE, 'sisalto', kieli + '.json')
+    if os.path.exists(oma):
+        return oma
+    return os.path.join(KONEKAANNOS, kieli + '.json')
+
+
 def polut(kieli):
     k = KIELET[kieli]
-    return (os.path.join(TANNE, 'sisalto', kieli + '.json'),
+    return (lahdepolku(kieli),
             os.path.join(TANNE, k.get('kansio', os.path.join('julkinen', 'pdf')),
                          k['tiedosto']),
             os.path.join(TANNE, '.korttisaannot-%s.html' % kieli))
@@ -264,12 +295,18 @@ console.log(norsuQrSvg(%r, { reunus: 4 }));
 
 def qr_svg(osoite):
     """QR repon omalla koodaajalla. ⚠️ JXA:n console.log menee STDERRIIN."""
-    ajuri = os.path.join(TANNE, '.qr-aja-saannot.js')
-    with open(ajuri, 'w') as f:
-        f.write(QR_AJURI % (QRJS, osoite))
-    ulos = subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
-                          capture_output=True, text=True)
-    os.unlink(ajuri)
+    if MAC:
+        ajuri = os.path.join(TANNE, '.qr-aja-saannot.js')
+        with open(ajuri, 'w') as f:
+            f.write(QR_AJURI % (QRJS, osoite))
+        ulos = subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
+                              capture_output=True, text=True)
+        os.unlink(ajuri)
+    else:
+        # Linux (GitHub Actions): sama qr.js Nodella
+        js = ('global.window = global;\n' + open(QRJS, encoding='utf-8').read()
+              + '\nconsole.log(norsuQrSvg(%s, { reunus: 4 }));' % json.dumps(osoite))
+        ulos = subprocess.run(['node', '-e', js], capture_output=True, text=True)
     for virta in (ulos.stdout, ulos.stderr):
         if virta.strip().startswith('<svg'):
             return virta.strip()
@@ -919,12 +956,15 @@ def norm(s):
 def sisaltokoe(pdf, lahde):
     """Onko jokainen luku VALMIILLA arkilla? Palstat ja sivunvaihdot voivat
     pudottaa sisaltoa hiljaa."""
-    ajuri = os.path.join(TANNE, '.pdfteksti.js')
-    with open(ajuri, 'w') as f:
-        f.write(PDF_TEKSTI % pdf)
-    ulos = subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
-                          capture_output=True, text=True)
-    os.unlink(ajuri)
+    if MAC:
+        ajuri = os.path.join(TANNE, '.pdfteksti.js')
+        with open(ajuri, 'w') as f:
+            f.write(PDF_TEKSTI % pdf)
+        ulos = subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
+                              capture_output=True, text=True)
+        os.unlink(ajuri)
+    else:
+        ulos = subprocess.run(['pdftotext', pdf, '-'], capture_output=True, text=True)
     teksti = norm(ulos.stderr if len(ulos.stderr) > len(ulos.stdout)
                   else ulos.stdout)
     if len(teksti) < 2000:
@@ -975,11 +1015,16 @@ def qr_lukukoe(pdf, osoite):
     tyo = tempfile.mkdtemp(prefix='saannot-qr-')
     try:
         png = os.path.join(tyo, 'sivu.png')
-        ajuri = os.path.join(tyo, 'sivu.js')
-        with open(ajuri, 'w') as f:
-            f.write(SIVU_AJURI % (pdf, png))
-        subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
-                       capture_output=True, text=True)
+        if MAC:
+            ajuri = os.path.join(tyo, 'sivu.js')
+            with open(ajuri, 'w') as f:
+                f.write(SIVU_AJURI % (pdf, png))
+            subprocess.run(['osascript', '-l', 'JavaScript', ajuri],
+                           capture_output=True, text=True)
+        else:
+            subprocess.run(['pdftoppm', '-r', '200', '-png', '-singlefile',
+                            '-f', '1', '-l', '1', pdf, png[:-4]],
+                           capture_output=True, text=True)
         if not os.path.exists(png):
             print('QR-lukukoe: sivua ei saatu kuvaksi — EI MITATTAVISSA')
             return None
@@ -987,11 +1032,21 @@ def qr_lukukoe(pdf, osoite):
         sivu = os.path.join(tyo, 'lue.html')
         with open(sivu, 'w') as f:
             f.write(LUKU_SIVU)
-        ulos = subprocess.run(
-            [CHROME, '--headless', '--disable-gpu',
-             '--allow-file-access-from-files', '--virtual-time-budget=6000',
-             '--dump-dom', 'file://' + sivu], capture_output=True, text=True)
-        osuma = re.search(r'TULOS (\{.*?\})', ulos.stdout)
+        if os.path.exists(CHROME):
+            ulos = subprocess.run(
+                [CHROME, '--headless', '--disable-gpu',
+                 '--allow-file-access-from-files', '--virtual-time-budget=6000',
+                 '--dump-dom', 'file://' + sivu], capture_output=True, text=True).stdout
+        else:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as p:
+                b = p.chromium.launch(args=['--allow-file-access-from-files'])
+                s_ = b.new_page()
+                s_.goto('file://' + sivu)
+                s_.wait_for_function("document.title.indexOf('TULOS') === 0", timeout=20000)
+                ulos = s_.title()
+                b.close()
+        osuma = re.search(r'TULOS (\{.*?\})', ulos)
         if not osuma:
             print('QR-lukukoe: lukijalta ei tullut tulosta — EI MITATTAVISSA')
             return None
