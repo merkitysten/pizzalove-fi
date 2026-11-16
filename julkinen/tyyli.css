@@ -30,6 +30,70 @@
 }
 @media (min-width:1000px){:root{--viiri-w:124px}}
 
+/* ╔═══════════════════════════════════════════════════════════════════════╗
+   ║  LIIKEKIELI — sivuston yhteinen animaatiokerros (16.11.2026)           ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+ *
+ * ⚠️ TÄMÄ ON TEHTY KÄYTETTÄVÄKSI UUDELLEEN. Kun lisäät liikettä mille tahansa
+ * sääntösivulle — korttipeli, lautapeli, apinakortit — käytä näitä muuttujia
+ * ja keyframejä äläkä kirjoita omia. Jos tarvitset liikkeen jota täällä ei
+ * ole, LISÄÄ SE TÄHÄN LOHKOON nimettynä. Kolme eri tapaa pudottaa kortti
+ * pöytään on vika, jota kukaan ei huomaa katsomatta kaikkia kolmea vierekkäin.
+ *
+ * 📐 Miksi juuri nämä arvot, mitattu 16.11.2026. Pelin tyyleissä
+ * (julkinen/play/*.css) on 45 @keyframes-sääntöä, 23 cubic-bezier-kohtaa ja
+ * 59 alle 1,5 sekunnin kestoa. Eri käyriä on 17 ja eri kestoja 22 — yhtäkään
+ * ei ole jaettu, vaan jokainen on keksitty käyttökohdassa. Muodoltaan ne ovat
+ * silti vain muutama perhe, ja alla on kunkin perheen YLEISIN arvo. Uutta ei
+ * siis ole keksitty: nämä ovat pelin omia arvoja, nyt vain nimettyinä.
+ *     kestot   .15s (15 kpl) · .22s (15) · .40s (10) · .72s (10) · .90s (8)
+ *     käyrät   saapuu (11 kpl) · pomppu (10) · lähtee (2)
+ *
+ * ⚠️ SAAVUTETTAVUUS — lohkon tärkein sääntö. Liikkuva osa saa luokan `liike`.
+ * Luokka ei tee mitään näkyvää: se kytkee alimman prefers-reduced-motion-
+ * säännön, joka pysäyttää kaiken liikkeen lohkon sisällä. Siksi liike saa
+ * olla VAIN koristetta — sisällön on oltava oikein ja käytettävissä myös
+ * silloin kun yksikään animaatio ei aja. Liike voi aiheuttaa pahoinvointia
+ * ja migreeniä; pois kytkeminen ei ole lisäominaisuus vaan lupaus. */
+:root{
+  --liike-pika:.15s;    /* napin palaute, pieni tilamerkki */
+  --liike-nopea:.22s;   /* tilanvaihto: korostus syttyy, valitsin aukeaa */
+  --liike-perus:.40s;   /* kortti siirtyy paikasta toiseen */
+  --liike-pitka:.72s;   /* korostus, joka pitää ehtiä lukea */
+  --liike-hidas:.90s;   /* iso heilahdus: kerran kerrottava tapahtuma */
+  --liike-saapuu:cubic-bezier(.3,.75,.35,1);   /* tasainen jarrutus paikalleen */
+  --liike-pomppu:cubic-bezier(.3,1.6,.5,1);    /* pieni yliheitto: jokin napsahtaa kiinni */
+  --liike-lahtee:cubic-bezier(.45,0,.75,.3);   /* nopea lähtö: jokin katoaa */
+}
+
+/* PERUSLIIKE 1 — kortti tulee pöytään: alhaalta, pienenä ja hieman vinossa.
+ * Sama liike kuin pelissä (play/peli.css @keyframes pieni-sisaan), nyt jaettuna.
+ * --kortti-kulma antaa kullekin kortille oman kallistuksensa. */
+@keyframes kortti-poytaan{
+  from{opacity:0;transform:translateY(34%) scale(.74) rotate(var(--kortti-kulma,-6deg))}
+}
+/* PERUSLIIKE 2 — kortti lyödään pizzan päälle. Tämä on pelin oikea liike:
+ * «pizza valmistetaan lyömällä omat täytekortit pöydällä olevan pizzan
+ * päälle». Kortti nousee, iskee hieman yli ja asettuu. --isku-x/--isku-y
+ * kertovat minne (mitataan JS:ssä), --isku-kulma miten vinoon. */
+@keyframes kortti-isku{
+  0%  {transform:translate(0,0) rotate(0) scale(1)}
+  40% {transform:translate(calc(var(--isku-x,0px) * .55),calc(var(--isku-y,0px) - 18px))
+       rotate(calc(var(--isku-kulma,-5deg) * .5)) scale(1.07)}
+  70% {transform:translate(var(--isku-x,0px),var(--isku-y,0px)) rotate(var(--isku-kulma,-5deg)) scale(.96)}
+  100%{transform:translate(var(--isku-x,0px),var(--isku-y,0px)) rotate(var(--isku-kulma,-5deg)) scale(1)}
+}
+/* PERUSLIIKE 3 — jokin onnistui: lyhyt syke paikallaan. */
+@keyframes kortti-syke{0%,100%{transform:scale(1)}38%{transform:scale(1.085)}}
+/* PERUSLIIKE 4 — paneeli tai korostus ilmestyy: nousee hieman ja häivähtää esiin. */
+@keyframes liike-esiin{from{opacity:0;transform:translateY(-6px)}}
+
+/* ⚠️ Liikkeen kytkin pois. Älä poista tätä äläkä lisää liikettä `liike`-lohkon
+ * ulkopuolelle ilman omaa vastaavaa sääntöä. */
+@media (prefers-reduced-motion:reduce){
+  .liike,.liike *{animation:none !important;transition:none !important}
+}
+
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:120px}
@@ -269,6 +333,90 @@ ul.lista li,ol.lista li{margin:4px 0}
 .esimerkki{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
 .esimerkki img{width:clamp(64px,18vw,104px);filter:drop-shadow(0 3px 6px rgba(60,30,0,.22))}
 .esimerkki b{font-size:26px;font-weight:800;color:var(--soft)}
+
+/* ── PIZZAKEITTIÖ — esimerkki, jota lukija saa kokeilla (16.11.2026) ───────
+ * Marko: «Sen sijaan, että nettisivulla kerrotaan, niin pitäisikö näyttää?»
+ * ja samana päivänä: «Ei tehdä digitaalista alustaa fyysisen maailman
+ * ehdoilla.» Paperilla on pakko luetella «esimerkiksi 4 + 1, 6 – 1, 2 + 3 tai
+ * 10 : 2»; ruudulla sen voi näyttää liikkeenä ja antaa lukijan kokeilla itse,
+ * meneekö hänen oma laskunsa tasan. Sääntö-PDF jää ennalleen.
+ *
+ * ⚠️ Ilman JavaScriptiä .esimerkki jää juuri siksi mitä se oli: yksi
+ * role="img" ja koko lauseen aria-label. Keittiö syntyy vasta sivu.js:ssä,
+ * joka vaihtaa myös tekstivastineen (role="group" + aria-live -lause). Älä
+ * siis tyylittele .keittio-luokkia olettaen, että ne ovat HTML:ssä valmiina.
+ *
+ * 📐 Korkeus ei saa kasvaa: sivu on puhelimessa (375×812) jo 8,3 ruutua pitkä.
+ * Siksi täytevalitsin on absoluuttisesti aseteltu tekstin PÄÄLLE eikä omaksi
+ * rivikseen, ja laskun tulos mahtuu vanhan yhtäsuuruusmerkin paikalle. */
+.keittio{flex-wrap:nowrap;gap:6px;position:relative}
+.keittio button{background:none;border:0;margin:0;padding:0;font:inherit;color:inherit;
+  display:block;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.keittio button:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:10px}
+
+/* Täytepaikka: kortti, jonka saa vaihtaa. Nuoli kertoo että siitä aukeaa
+   lista — sama merkki ja sama tint-ympyrä kuin kielivalitsimessa. */
+.keittio__paikka{border-radius:8px;transform-origin:50% 100%}
+.keittio__paikka img{transition:transform var(--liike-pika) var(--liike-saapuu)}
+.keittio__paikka:hover img{transform:translateY(-4px)}
+.keittio__nuoli{position:absolute;right:-6px;top:-6px;width:19px;height:19px;border-radius:50%;
+  background:var(--tint);color:var(--deep);display:grid;place-items:center;
+  box-shadow:0 1px 3px rgba(60,34,12,.32);transition:opacity var(--liike-pika)}
+.keittio__nuoli svg{width:11px;height:11px}
+/* Fantasiatäytteen (X) päälle luku, joksi se tässä laskussa ratkesi. Pelissä
+   pelaaja sanoo sen ääneen; ruudulla sen voi näyttää. */
+.keittio__xarvo{position:absolute;left:-6px;bottom:-6px;min-width:22px;height:22px;padding:0 4px;
+  border-radius:11px;background:var(--green);color:#fff;font-size:13px;font-weight:800;
+  line-height:22px;text-align:center;box-shadow:0 1px 3px rgba(60,34,12,.35);
+  animation:kortti-syke var(--liike-pitka) var(--liike-pomppu)}
+
+/* Laskutoimitus: napautus vaihtaa seuraavaan (+ − × :). */
+.keittio__laskin{font-size:26px;font-weight:800;line-height:1;color:var(--deep);
+  min-width:32px;text-align:center;padding:8px 2px;border-radius:9px}
+.keittio__laskin:hover{background:var(--tint)}
+
+/* Tulos vanhan yhtäsuuruusmerkin paikalla: «=» kun lasku täsmää pizzan
+   arvoon, muuten «≠» ja laskun oma arvo pienenä yläpuolella (ei omaa riviä). */
+.keittio__tulos{position:relative;font-size:26px;font-weight:800;line-height:1;
+  min-width:30px;text-align:center;color:var(--soft)}
+.keittio__tulos i{position:absolute;left:50%;top:-15px;transform:translateX(-50%);
+  font-style:normal;font-weight:700;font-size:12.5px;color:var(--deep);
+  background:var(--tint);border-radius:9px;padding:1px 6px;white-space:nowrap;
+  animation:liike-esiin var(--liike-nopea) var(--liike-saapuu)}
+.keittio.valmis .keittio__tulos{color:var(--green)}
+
+/* Valmis pizza hehkuu. drop-shadow toistetaan, koska .esimerkki img antaa
+   omansa eikä filter periydy osina. */
+.keittio__pizza{transition:filter var(--liike-nopea) var(--liike-saapuu)}
+.keittio.valmis .keittio__pizza{
+  filter:drop-shadow(0 3px 6px rgba(60,30,0,.22)) drop-shadow(0 0 13px rgba(244,121,32,.8))}
+
+/* Isku: täytekortit lyödään pizzan päälle. Nuolet pois iskun ajaksi. */
+.keittio.isku .keittio__paikka{animation:kortti-isku var(--liike-hidas) var(--liike-pomppu)}
+.keittio.isku .keittio__nuoli{opacity:0}
+.keittio.isku .keittio__pizza{animation:kortti-syke var(--liike-hidas) var(--liike-pomppu)}
+.keittio__paikka.saapuu img{animation:kortti-poytaan var(--liike-perus) var(--liike-saapuu)}
+
+/* Täytevalitsin: kaikki 11 täytekorttia. Aukeaa rivin alle tekstin päälle,
+   joten se ei kasvata sivua. Rakennetaan vasta kun se ensi kerran avataan,
+   jotta korttikuvia ei ladata turhaan. */
+.keittio__valitsin{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:6;
+  background:var(--surface);border:1px solid var(--line2);border-radius:14px;
+  box-shadow:0 12px 34px rgba(60,34,12,.3);padding:9px;
+  display:grid;grid-template-columns:repeat(6,minmax(0,58px));gap:6px;justify-content:center;
+  animation:liike-esiin var(--liike-nopea) var(--liike-saapuu)}
+/* 📐 Kuusi saraketta eikä rivitystä: 11 korttia asettuu 6 + 5, eli kaksi riviä
+   kaikilla leveyksillä. Viidellä sarakkeella viimeiselle riville jäi yksi
+   kortti ja paneeli oli 245 px korkea; kuudella se on 150 px eikä peitä
+   alla olevaa kappaletta kuin parin rivin verran. */
+.keittio__valitsin button{border-radius:7px}
+.keittio__valitsin img{width:100%}
+.keittio__valitsin button[aria-pressed="true"] img{outline:3px solid var(--orange);
+  outline-offset:2px;border-radius:5px}
+
+/* Vain ruudunlukijalle: keittiön koko lause luettavaksi. */
+.vain-ruudunlukijalle{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 .korttiparit{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0}
 .korttipari{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:start}
 .korttipari img{width:64px;filter:drop-shadow(0 3px 5px rgba(60,30,0,.2))}

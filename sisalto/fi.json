@@ -24,7 +24,12 @@
     "nav_varainhankinta": "Varainhankinta",
     "kauppa_korttipeli": "Korttipeli kaupassa",
     "kauppa_lautapeli": "Lautapeli kaupassa",
-    "kauppa_molemmat": "Molemmat pelit"
+    "kauppa_molemmat": "Molemmat pelit",
+    "keittio_otsikko": "Kokeile: millä laskulla pizza valmistuu?",
+    "keittio_vaihda": "Vaihda täytekortti",
+    "keittio_merkki": "Vaihda laskutoimitus",
+    "keittio_valmis": "Pizza valmistuu",
+    "keittio_ei": "Pizza ei valmistu"
   },
   "etusivu": {
     "title": "Pizza Love® – säännöt, videot ja verkkopelit",
@@ -68,7 +73,7 @@
     "hyppy": {
       "perusteet": "Näin pizza tehdään",
       "muodot": "Kolme tapaa pelata",
-      "lataa": "Säännöt PDF:nä"
+      "lataa": "Ohjeet paperilla"
     },
     "perusteet_otsikko": "Näin pizza tehdään",
     "perusteet_ingressi": "Kaikki kolme peliä perustuvat samaan sääntöön. Opettele tämä ensin.",
@@ -127,7 +132,7 @@
     ],
     "tieto": "<b>Bruno vai Basso?</b> Vuonna 2025 painetuissa ohjeissa ja videoissa apina on nimeltään Bruno (ja toinen peli Pizza Bruno). Basson tavassa puhutaan nyt täytekorttien sijaan täytteistä, mikä antaa pelille paljon enemmän mahdollisuuksia.",
     "muodot_otsikko": "Kolme tapaa pelata",
-    "muodot_ingressi": "Avaa pelimuoto, niin näet säännöt ja videot.",
+    "muodot_ingressi": "Avaa pelimuoto, niin näet ohjeet ja videot.",
     "videot_otsikko": "Videot",
     "muodot": [
       {
@@ -164,9 +169,9 @@
         "html": "<h3>Tavoite</h3><p>Pelaajat yrittävät valmistaa kaikki omat pizzansa ennen muita. Ensimmäisenä onnistunut voittaa.</p><p><b>Huom.</b> Nyt täytteet ratkaisevat: pizzan voi valmistaa vain oikeilla täytteillä.</p><h3>Valmistelut</h3><ol class=\"lista\"><li>Sekoita ja jaa jokaiselle 8 pizzakorttia. Pelaajat asettavat ne kuvapuoli alaspäin pinoksi eteensä ja kääntävät päällimmäisen näkyviin.</li><li>Aseta yksi pizzakortti keskelle pöytää kuvapuoli ylöspäin. Se on vaihtopizza. Loput pizzakortit poistetaan pelistä.</li><li>Sekoita täytekortit nostopakaksi pöydälle.</li></ol><h3>Varasto</h3><p>Jokaisella on edessään 4 paikkaa varastokorteille. Varaston täytekortit ovat kuvapuoli ylöspäin. Niitä voi käyttää omiin pizzoihin kuten kädessä olevia, ja muut pelaajat voivat käyttää niitä vaihtoihin.</p><h3>Aloittaminen</h3><p>Viimeksi pizzaa syönyt aloittaa ja nostaa 5 täytekorttia käteensä.</p><h3>Pelin kulku</h3><ol class=\"lista\"><li>Nosta täytekortteja, kunnes sinulla on 5 korttia kädessä.</li><li>Yritä valmistaa oman pinosi päällimmäinen pizza käden ja varaston korteilla.</li><li>Voit vaihtaa varastosi kortteja toisen pelaajan varastokortteihin laskutoimitusten avulla.</li><li>Kerran vuorossasi voit vaihtaa pinosi päällimmäisen pizzan ja vaihtopizzan paikkaa: oma pizzasi jää keskelle uudeksi vaihtopizzaksi, ja vaihtopizza tulee pinosi päälle. Voit valmistaa saamasi pizzan heti.</li><li>Laita vuoron lopuksi yksi täytekortti kädestäsi kuvapuoli ylöspäin varastoosi.</li></ol><p><b>Huom.</b> Jos pelaat kätesi tyhjäksi ennen varastokortin laittamista, nosta 5 uutta korttia ja jatka vuoroa.</p><h3>Pizzan valmistaminen</h3><p>Kun sinulla on pizzaan tarvittavat täytteet kädessä ja/tai varastossa, valmista pizza. Pizzakortti ja käytetyt täytekortit poistetaan pelistä. Käännä pinostasi uusi pizza näkyviin: jos sinulla on siihen täytteet, voit valmistaa senkin heti.</p><h3>Sydänpizza</h3><p>Kun valmistat sydänpizzan, anna seuraava pizzakorttisi katsomatta toiselle pelaajalle. Hän laittaa sen pinonsa alimmaiseksi.</p><h3>Varastokorttien vaihtaminen</h3><p>Hanki puuttuvia täytteitä vaihtamalla varastosi kortteja toisen pelaajan varastokortteihin.</p><ul class=\"lista\"><li>Antamistasi ja saamistasi korteista on saatava laskemalla sama luku. Kaikki laskutoimitukset käyvät.</li><li>Vaihtoon on pakko suostua.</li><li>Laita saamasi kortit omaan varastoosi.</li><li>Voit tehdä vuorossasi useita vaihtoja. Yksi vaihto tehdään aina yhden toisen pelaajan kanssa.</li><li>Vain päällimmäisiä kortteja voi vaihtaa.</li></ul><h3>Varaston täyttäminen</h3><ul class=\"lista\"><li>Varastopaikat voi täyttää missä järjestyksessä tahansa.</li><li>Kortteja voi pinota päällekkäin. Vain päällimmäistä voi käyttää tai vaihtaa, joten pinoamalla voit suojata kortin vaihdolta. Se on silloin lukossa myös sinulta.</li><li>Varastossa olevia kortteja ei saa siirtää.</li></ul><h3>Pelin voittaminen</h3><p>Peli päättyy, kun joku on valmistanut kaikki pinonsa pizzat.</p>"
       }
     ],
-    "lataa_otsikko": "Säännöt PDF:nä",
+    "lataa_otsikko": "Ohjeet paperilla",
     "lataa_teksti": "Kaikki kolme pelimuotoa suomeksi – kaksipuolinen arkki, joka mahtuu taiteltuna pelin koteloon.",
-    "lataa_tiedosto": "Korttipelin säännöt (suomeksi)",
+    "lataa_tiedosto": "Korttipelin ohjeet (suomeksi)",
     "pelaa_otsikko": "Pizza Party ja Pizza Basso",
     "pelaa_teksti": "Molemmat toimivat myös selaimessa. Kokeile ennen ensimmäistä peliä tai pelaa kavereiden kanssa omilla puhelimilla.",
     "videot": {
@@ -180,7 +185,7 @@
     },
     "ristiin_otsikko": "Seuraavaksi: Pizza Love® -lautapeli",
     "ristiin_teksti": "Sama pizzamaailma pelilaudalla: valmista boksien lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa. Kolme tapaa pelata, myös yhteistyönä.",
-    "ristiin_saannot": "Lautapelin säännöt"
+    "ristiin_saannot": "Lautapelin ohjeet"
   },
   "lautapeli": {
     "title": "Pizza Love® -lautapeli – säännöt ja videot",
@@ -197,7 +202,7 @@
       "kokoaminen": "Ennen ensimmäistä peliä",
       "peli": "Näin peli toimii",
       "muodot": "Kolme tapaa pelata",
-      "lataa": "Ohjeet PDF:nä"
+      "lataa": "Ohjeet paperilla"
     },
     "kokoaminen_otsikko": "Ennen ensimmäistä peliä",
     "kokoaminen": "Laatikossa on tarra-arkki ja neljä boksia, jotka kootaan kerran. Se vie hetken, ja sen jälkeen peli on aina valmis.",
@@ -251,7 +256,7 @@
         "html": "<p>Jokainen saa kaksi salaista pizzaa, joita muut eivät näe. Muut eivät tiedä, mitä pizzoja aiot valmistaa. Boksinsa ensimmäisenä 10 erilaisella palalla täyttänyt voittaa.</p>"
       }
     ],
-    "lataa_otsikko": "Ohjeet PDF:nä",
+    "lataa_otsikko": "Ohjeet paperilla",
     "lataa_teksti": "Kaikkien pelimuotojen tarkat säännöt suomeksi, ruotsiksi ja englanniksi.",
     "lataukset": {
       "pikaohje": "Pikaohje (tulostettava)",

@@ -23,7 +23,12 @@
     "ohita": "Zum Inhalt springen",
     "kauppa_korttipeli": "Kartenspiel im Shop",
     "kauppa_lautapeli": "Brettspiel im Shop",
-    "kauppa_molemmat": "Beide Spiele"
+    "kauppa_molemmat": "Beide Spiele",
+    "keittio_otsikko": "Probier es aus: Mit welcher Rechnung wird die Pizza fertig?",
+    "keittio_vaihda": "Belagkarte wechseln",
+    "keittio_merkki": "Rechenart wechseln",
+    "keittio_valmis": "Die Pizza wird fertig",
+    "keittio_ei": "Die Pizza wird nicht fertig"
   },
   "etusivu": {
     "title": "Pizza Love® – Regeln, Videos und Online-Spiele",

@@ -23,7 +23,12 @@
     "ohita": "Hoppa till innehållet",
     "kauppa_korttipeli": "Kortspelet i butiken",
     "kauppa_lautapeli": "Brädspelet i butiken",
-    "kauppa_molemmat": "Båda spelen"
+    "kauppa_molemmat": "Båda spelen",
+    "keittio_otsikko": "Prova: med vilken uträkning blir pizzan klar?",
+    "keittio_vaihda": "Byt fyllningskort",
+    "keittio_merkki": "Byt räknesätt",
+    "keittio_valmis": "Pizzan blir klar",
+    "keittio_ei": "Pizzan blir inte klar"
   },
   "etusivu": {
     "title": "Pizza Love® – regler, videor och onlinespel",

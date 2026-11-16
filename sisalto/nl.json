@@ -23,7 +23,12 @@
     "ohita": "Naar de inhoud",
     "kauppa_korttipeli": "Kaartspel in de winkel",
     "kauppa_lautapeli": "Bordspel in de winkel",
-    "kauppa_molemmat": "Beide spellen"
+    "kauppa_molemmat": "Beide spellen",
+    "keittio_otsikko": "Probeer het: met welke berekening is de pizza klaar?",
+    "keittio_vaihda": "Toppingkaart wisselen",
+    "keittio_merkki": "Berekening wisselen",
+    "keittio_valmis": "De pizza is klaar",
+    "keittio_ei": "De pizza is niet klaar"
   },
   "etusivu": {
     "title": "Pizza Love® – regels, video’s en onlinespellen",

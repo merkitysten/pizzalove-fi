@@ -23,7 +23,12 @@
     "ohita": "Skip to content",
     "kauppa_korttipeli": "Card game in the shop",
     "kauppa_lautapeli": "Board game in the shop",
-    "kauppa_molemmat": "Both games"
+    "kauppa_molemmat": "Both games",
+    "keittio_otsikko": "Try it: which calculation makes the pizza?",
+    "keittio_vaihda": "Change topping card",
+    "keittio_merkki": "Change calculation",
+    "keittio_valmis": "The pizza is made",
+    "keittio_ei": "The pizza is not made"
   },
   "etusivu": {
     "title": "Pizza Love® – rules, videos and online games",

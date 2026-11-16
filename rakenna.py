@@ -544,6 +544,48 @@ def etusivu(t, kaikki):
     return kehys(t, kaikki, 'etusivu', s['title'], s['kuvaus'], runko)
 
 
+# ── Pizzakeittiö: sääntösivun esimerkki, jota lukija saa kokeilla ──────────
+# Marko 16.11.2026: «Sen sijaan, että nettisivulla kerrotaan, niin pitäisikö
+# näyttää?» ja «Ei tehdä digitaalista alustaa fyysisen maailman ehdoilla.»
+# Nämä luvut menevät .esimerkki-lohkon data-attribuutteihin; keittiön rakentaa
+# julkinen/sivu.js. Ilman JavaScriptiä lohko jää ennalleen (role="img").
+#
+# 📐 Arvo 5 ei ole arvaus: kuva pizza-31.webp on painettu kortti nro 31, ja
+# julkinen/play/kortit.js:n mitattu sääntö on «pizzan arvo = täytteidensä
+# summa, poikkeuksetta». Kortti 31 on tomaatti 2 + ananas 3 = 5, ja sivun oma
+# otsikko sanoo saman: «Esimerkki: tomaatti-ananaspizza».
+KEITTIO_ARVO = 5
+# Lähtötilanne = sama lasku kuin painetussa säännössä ja sivun tekstissä.
+KEITTIO_ALKU = '10/2'
+# Näytös: samat neljä laskua jotka sivun teksti luettelee. Juuri tämä on pelin
+# idea — sama pizza syntyy monella eri laskulla — eikä paperi voi näyttää sitä.
+# Merkit ovat ASCIIna (+ - * /); sivu.js piirtää ne sivun omilla merkeillä
+# (+ – × :), samoilla kuin leipäteksti «esimerkiksi 4 + 1, 6 – 1, 2 + 3 tai 10 : 2».
+KEITTIO_NAYTOS = ['4+1', '6-1', '2+3', '10/2']
+# Valitsimen täytekortit: pelin kaikki täytteet 1–10 ja fantasiatäyte (x).
+KEITTIO_TAYTTEET = list(range(1, 11)) + ['x']
+# Keittiön sanat: ilman niitä ei rakenneta puolikasta keittiötä vaan jätetään
+# staattinen esimerkki ennalleen (sama periaate kuin puuttuvalla lipulla:
+# puute näkyy puutteena eikä arvauksena). Konekäännöskieli perii nämä
+# englannista, koska konekieli_sivu() yhdistää ui-lohkot.
+KEITTIO_SANAT = ['keittio_otsikko', 'keittio_vaihda', 'keittio_merkki',
+                 'keittio_valmis', 'keittio_ei']
+
+
+def keittio_data(t):
+    """Pizzakeittiön data-attribuutit .esimerkki-lohkoon; sivu.js rakentaa
+    keittiön näistä. Tyhjä merkkijono = keittiötä ei rakenneta."""
+    ui = t['ui']
+    if not all(ui.get(a) for a in KEITTIO_SANAT):
+        return ''
+    osat = [' data-pizza="%d" data-alku="%s" data-naytos="%s" data-taytteet="%s"'
+            % (KEITTIO_ARVO, KEITTIO_ALKU, ','.join(KEITTIO_NAYTOS),
+               ','.join(str(x) for x in KEITTIO_TAYTTEET))]
+    for a in KEITTIO_SANAT:
+        osat.append(' data-%s="%s"' % (a.replace('keittio_', 'sana-'), e(ui[a])))
+    return ''.join(osat)
+
+
 def korttipeli(t, kaikki):
     s = t['korttipeli']
     lang = t['lang']
@@ -589,10 +631,10 @@ def korttipeli(t, kaikki):
   <h3>%s</h3>
   <p>%s</p>
   <h3>%s</h3>
-  <div class="esimerkki" role="img" aria-label="%s">
-    <img src="../kuvat/pizza-31.webp" width="351" height="532" alt=""><b>=</b>
-    <img src="../kuvat/tayte-10.webp" width="351" height="532" alt=""><b>:</b>
-    <img src="../kuvat/tayte-2.webp" width="351" height="532" alt="">
+  <div class="esimerkki liike" role="img" aria-label="%s"%s>
+    <img src="../kuvat/kortti/pizza-31.webp" width="240" height="364" alt=""><b>=</b>
+    <img src="../kuvat/kortti/tayte-10.webp" width="240" height="364" alt=""><b>:</b>
+    <img src="../kuvat/kortti/tayte-2.webp" width="240" height="364" alt="">
   </div>
   <p>%s</p>
 </div>
@@ -628,7 +670,7 @@ def korttipeli(t, kaikki):
        e(s['perusteet_otsikko']), e(s['perusteet_ingressi']),
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
-       e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
+       e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), keittio_data(t), e(s['esimerkki']),
        e(s['laskut']['otsikko']), s['laskut']['html'],
        e(s['tavat_otsikko']), e(s['helpompi_otsikko']), e(s['helpompi']), e(s['basso_tapa_otsikko']), s['basso_tapa'],
        s['huomio_bruno'],

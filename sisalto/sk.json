@@ -23,7 +23,12 @@
     "ohita": "Preskočiť na obsah",
     "kauppa_korttipeli": "Kartová hra v obchode",
     "kauppa_lautapeli": "Stolová hra v obchode",
-    "kauppa_molemmat": "Obe hry"
+    "kauppa_molemmat": "Obe hry",
+    "keittio_otsikko": "Vyskúšajte: akým výpočtom pizza vznikne?",
+    "keittio_vaihda": "Vymeniť kartu prísady",
+    "keittio_merkki": "Zmeniť výpočet",
+    "keittio_valmis": "Pizza je hotová",
+    "keittio_ei": "Pizza nie je hotová"
   },
   "etusivu": {
     "title": "Pizza Love® – pravidlá, videá a online hry",

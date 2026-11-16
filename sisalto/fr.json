@@ -23,7 +23,12 @@
     "ohita": "Aller au contenu",
     "kauppa_korttipeli": "Jeu de cartes dans la boutique",
     "kauppa_lautapeli": "Jeu de plateau dans la boutique",
-    "kauppa_molemmat": "Les deux jeux"
+    "kauppa_molemmat": "Les deux jeux",
+    "keittio_otsikko": "Essaie : avec quel calcul la pizza est-elle prête ?",
+    "keittio_vaihda": "Changer de carte ingrédient",
+    "keittio_merkki": "Changer de calcul",
+    "keittio_valmis": "La pizza est prête",
+    "keittio_ei": "La pizza n’est pas prête"
   },
   "etusivu": {
     "title": "Pizza Love® – règles, vidéos et jeux en ligne",
