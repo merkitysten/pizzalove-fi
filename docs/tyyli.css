@@ -502,9 +502,14 @@ ul.lista li,ol.lista li{margin:4px 0}
 .korttipari{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:start}
 /* 📐 Kortti 64 → 104 px (16.11.2026). Käännettynä kortista pitää nähdä se mitä
    viereinen teksti lupaa: täytteet ja kulmien arvo. 64 px:n kortissa kulman
-   numero on 8 px korkea eikä erotu. Korkeutta tämä ei vie: 104 px:n kortti on
-   158 px korkea ja viereinen otsikko + kappale on joka kielellä sitä korkeampi,
-   joten rivin korkeuden määrää yhä teksti. */
+   numero on 8 px korkea eikä erotu; 104 px:ssä sen lukee kuvasta.
+   Korkeus mitattu kaikilta kymmeneltä kieleltä 375×812: useimmilla rivin
+   korkeuden määrää yhä viereinen teksti, eikä kortin kasvu näy. Muutos koko
+   sivun korkeuteen (sisältää samalla poistetun ingressikappaleen):
+     fi −3 · pl −1 · de 0 · ja +9 · es +9 · fr +9 · nl +9 · sv +23 · en +23
+     · sk +46 px
+   Suurin kasvu on siis 46 px eli 0,06 ruutua, ja se on slovakissa, jossa
+   täytekorttien teksti on lyhin. */
 .korttipari img{width:104px;filter:drop-shadow(0 3px 5px rgba(60,30,0,.2))}
 .korttipari p{font-size:14.5px;margin:0}
 @media (max-width:560px){.korttiparit{grid-template-columns:1fr}}
