@@ -99,7 +99,7 @@
       "n": 15,
       "nimi": "Pizza párty!",
       "ohje": "Všetky prísady sa presunú na linku.",
-      "huom": "Ťah môžete pokračovať prípravou pízz. Na konci si vezmite novú opičiu kartu.",
+      "huom": "V ťahu môžete pokračovať prípravou pízz. Na konci si vezmite novú opičiu kartu.",
       "tarkennus": "Ak pripravíte pizze, na konci si vezmite novú opičiu kartu."
     },
     {
@@ -178,7 +178,7 @@
     {
       "n": 28,
       "nimi": "Krabice na pizzu vám poďakujú.",
-      "ohje": "Získate jeden kúsok navyše zadarmo!"
+      "ohje": "Získate jeden kúsok navyše podľa vlastného výberu!"
     },
     {
       "n": 29,

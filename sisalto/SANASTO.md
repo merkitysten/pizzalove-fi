@@ -69,3 +69,4 @@ Pelimuotojen numerot #1, #2, #3 säilyvät.
 - **es:** käytössä Espanjan espanja (vosotros). Latinalaiseen Amerikkaan tarvittaisiin oma versio (ustedes).
 - **de:** «Zusatzregeln» = valinnaiset säännöt. Vaihtoehto «Optionale Regeln».
 - **nl:** onko tekstissä riittävästi flaamia, vai tarvitaanko Belgiaan oma versio? Belgian jälleenmyyjät ovat hollanninkielisiä.
+- **es, nl: pelimuotojen nimien isot kirjaimet.** Nyt «Monos Hambrientos», «Pizzas Secretas», «Balanza de Monos» ja «Hongerige Apen», «Geheime Pizza’s». Kummankin kielen normi on yleensä iso alkukirjain vain ensimmäiseen sanaan («Monos hambrientos», «Hongerige apen»). Pidetäänkö nimiä tuotenimiä (isot kirjaimet) vai muutetaanko? Muutos koskisi myös verkkopeliä.

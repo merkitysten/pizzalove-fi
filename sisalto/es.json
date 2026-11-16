@@ -208,7 +208,7 @@
     },
     "peli_otsikko": "Cómo funciona el juego",
     "voittaminen_otsikko": "Cómo se gana",
-    "voittaminen": "Gana el primero en reunir <b>10 porciones distintas</b> en su caja. Prepara pizzas en el tablero para conseguir las porciones correspondientes para tu caja. Una pizza corazón te da una porción extra a tu elección.",
+    "voittaminen": "Gana siendo el primero en reunir <b>10 porciones distintas</b> en tu caja. Prepara pizzas en el tablero para conseguir las porciones correspondientes para tu caja. Una pizza corazón te da una porción extra a tu elección.",
     "valmistelut_otsikko": "Preparación",
     "valmistelut": [
       "Apila las torres de ingredientes de colores en el almacén.",
@@ -292,7 +292,7 @@
       "Ponlos en las porciones vacías de tu pizza, un ingrediente por porción."
     ],
     "vuoro_huom": "Si sacas un 10, coges un diez, o 1 + 2 + 3 + 4. El valor es el mismo, pero el diez ocupa una porción y los cuatro pequeños ocupan cuatro.",
-    "vuoro_raja": "No puedes coger más ingredientes que porciones vacías tienes.",
+    "vuoro_raja": "No puedes coger más ingredientes que porciones vacías te queden.",
     "ohi_otsikko": "Si no puedes o no quieres coger",
     "ohi": "Pasas. Si pasas tres veces seguidas, quedas eliminado.",
     "aloitus_otsikko": "Quién empieza la ronda",

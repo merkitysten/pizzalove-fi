@@ -284,7 +284,7 @@
     "saannot_otsikko": "Regeln",
     "valmistelu": "Jede Person nimmt sich eine Pizza. Die Beläge kommen auf ihre eigenen Plätze auf der Theke.",
     "tavoite_otsikko": "Ziel",
-    "tavoite": "Belege deine Pizza so wertvoll wie möglich. Das Spiel endet, wenn jemand seine Pizza voll hat, aber gewonnen hat der Wert und nicht das Tempo.",
+    "tavoite": "Belege deine Pizza so wertvoll wie möglich. Das Spiel endet, wenn jemand seine Pizza voll hat, aber über den Sieg entscheidet der Wert, nicht das Tempo.",
     "vuoro_otsikko": "Dein Zug",
     "vuoro": [
       "Würfle.",
@@ -294,7 +294,7 @@
     "vuoro_huom": "Bei einer 10 nimmst du eine Zehn oder zum Beispiel 1 + 2 + 3 + 4. Der Wert ist derselbe, aber die Zehn belegt ein Stück und die vier kleinen belegen vier.",
     "vuoro_raja": "Mehr als du leere Stücke hast, kannst du nicht nehmen.",
     "ohi_otsikko": "Wenn du nicht nehmen kannst oder willst",
-    "ohi": "Du setzt aus. Dreimal hintereinander ausgesetzt und du bist raus.",
+    "ohi": "Du setzt aus. Setzt du dreimal hintereinander aus, bist du raus.",
     "aloitus_otsikko": "Wer die Runde beginnt",
     "aloitus": "Die Runde beginnt, wer die wenigsten Beläge hat. Bei Gleichstand, wessen Beläge am wenigsten wert sind.",
     "voitto_otsikko": "Spielende",
@@ -302,7 +302,7 @@
     "pisteet_otsikko": "Punkte",
     "pisteet": "Alle zählen den Wert der Beläge auf ihrer Pizza zusammen. Die wertvollste Pizza gewinnt.",
     "tasapeli_otsikko": "Gleichstand",
-    "tasapeli": "Sind zwei Pizzen gleich viel wert, gewinnt die mit weniger Belägen. Ist auch das gleich, teilt man den Sieg.",
+    "tasapeli": "Sind zwei Pizzas gleich viel wert, gewinnt die mit weniger Belägen. Ist auch das gleich, teilt man den Sieg.",
     "vinkki_otsikko": "Tipp",
     "vinkki": "Kleine Beläge sind knapp: eine 1 und zwei 2en. Genau mit ihnen geht die Summe auf, wenn kein passender großer da ist, und ein verfallener Zug bringt gar nichts. Große Beläge sparen dafür Stücke, und davon hast du nur zehn.",
     "muunnelmat_otsikko": "Varianten",
@@ -380,13 +380,13 @@
     "tuotteet": [
       [
         "Pizza-Love-Kartenspiel",
-        "Drei Spielarten, 2–6 Personen",
+        "Drei Spielvarianten, 2–6 Personen",
         "korttipeli.html",
         "kansi-family.webp"
       ],
       [
         "Pizza-Love-Brettspiel",
-        "Drei Spielarten, 2–4 Personen",
+        "Drei Spielvarianten, 2–4 Personen",
         "lautapeli.html",
         "lautapeli-laatikko.webp"
       ],
