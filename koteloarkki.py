@@ -105,6 +105,24 @@ def viirikirjasin():
     return '', '900 14pt/1 Viiri'
 
 
+# 🔵 Marko 16.11.2026: «pitäisikö muuten painetussa pdf:ssä olla ko. maan lippu
+# kuvana? Se voisi helpottaa minuakin ohjeiden sujauttelussa» + «Luonnollinen
+# paikka lipulle voisi olla esim. tämän ruudun oikea alakulma.» -> Pyöreä lippu
+# ja kielikoodi otsakeruudun oikeaan alakulmaan (näkyy taiteltuna päällimmäisenä).
+# Liput: julkinen/kuvat/liput/<kielikoodi>.svg (flag-icons, MIT; ks. LUE-MINUT.md).
+# Kieli ei ole maa: lippu kertoo kirjoitetun kieliversion maan, koodi kielen.
+KOODI_NAKYY = {'nb': 'NO'}
+
+
+def lippu(kieli):
+    polku = os.path.join(TANNE, 'julkinen', 'kuvat', 'liput', kieli + '.svg')
+    if not os.path.exists(polku):
+        print('⚠️  Lippu puuttuu: %s' % polku)
+        return ''
+    return ('<div class="lippu"><img src="julkinen/kuvat/liput/%s.svg" alt=""><span>%s</span></div>'
+            % (kieli, KOODI_NAKYY.get(kieli, kieli.upper())))
+
+
 def osoite(k):
     '''Painettu osoite ja QR ilman .html-päätettä (Marko 15.11.2026: «Tuo on vähän
     ruma nettiosoite, erityisesti tuo html-loppu»). Sivusto palvelee
@@ -264,10 +282,11 @@ def sivu_html(kieli, luonnos=True):
     otsake = ('<div class="otsake"><div class="kansi"><div class="viiri">%s</div><div><h1>%s</h1>'
               '<p class="ala">%s</p><ul class="tiedot">%s</ul></div></div>'
               '<div class="netti"><div id="qr"></div><div><p class="qr-teksti">%s</p>'
-              '<p>%s <b>%s</b></p></div></div></div>'
+              '<p>%s <b>%s</b></p></div>%s</div></div>'
               % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
                  # Marko 15.11.2026: «tässä tuo otsikko saisi olla yhdellä rivillä»
-                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), osoite(k).replace('https://', '')))
+                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), osoite(k).replace('https://', ''),
+                 lippu(kieli)))
     # «Aloita Pizza Partystä» pois otsakkeesta (Marko 15.11.2026: «Sehän lukee
     # myös pizza partyn alapuolella uudelleen eli ajattelisin, että se on turha»)
     atomit = [otsake] + atomit
@@ -356,6 +375,9 @@ def sivu_html(kieli, luonnos=True):
                 font: 700 6.4pt/1 Otsikko, sans-serif; text-transform: uppercase }}
   .netti {{ display: flex; gap: 3mm; align-items: center; margin-top: 3.4mm }}  /* harmaa viiva pois (Marko 15.11.2026) */
   .netti #qr svg {{ width: 17mm; height: auto; display: block }}
+  .netti .lippu {{ margin-left: auto; align-self: flex-end; text-align: center; flex: none }}
+  .netti .lippu img {{ width: 10mm; height: 10mm; border-radius: 50%; display: block; object-fit: cover }}
+  .netti .lippu span {{ display: block; font: 700 6.5pt/1 Otsikko, sans-serif; margin-top: .9mm; letter-spacing: .04em }}
   .netti p {{ margin: 0 0 .5mm }}
   .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
   .netti .ingressi {{ font-weight: 700 }}
