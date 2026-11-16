@@ -721,6 +721,88 @@ def portaat(t):
                '\n'.join(osat)))
 
 
+# ── Käännettävät kortit «Näin pizza tehdään» -osiossa (16.11.2026) ────────
+# Marko osiota katsoessaan: «Tässäkin voisi hyvin olla interaktiivisuutta, että
+# painamalla pizzakorttia se kääntyy ja paljastaa pizzakortin. Painamalla
+# uudelleen taas tulisi uusi pizzakortti näkyviin.»
+#
+# Kortti on kortti: kääntäminen on juuri se, mitä kortille pelissä tehdään.
+# Siksi vuorovaikutus ei ole tässä koriste vaan sama asia kuin sääntö.
+#
+# ⚠️ Pakkaa EI kirjoiteta käsin. `pizzapakka()` on sama sääntö kuin
+# julkinen/play/kortit.js:ssä, ja se tarkistaa itsensä. Käsin kirjoitettu
+# lista ajautuisi erilleen pelistä hiljaa.
+#
+# Selitteet ovat pelkkiä numeroita («2 + 3 = 5»). Ne ovat kortin oma sisältö,
+# eivät uutta tekstiä: ne eivät tarvitse käännöstä eivätkä vanhene millään
+# kielellä. Kortin selkäpuoli saa nimekseen viereisen otsikon, joka on jo
+# käännetty — näin osio ei tarvinnut yhtään uutta käännösavainta.
+
+def pizzapakka():
+    """Painetut 42 pizzakorttia järjestyksessä pizza-13 … pizza-54.
+
+    Sama sääntö kuin julkinen/play/kortit.js: pizzakortteja ovat tasan ne
+    joukon {1…10} osajoukot, joiden koko on 1–4 ja summa enintään 10."""
+    def osajoukot(koko):
+        tulos = []
+
+        def kavele(alkaen, valitut):
+            if len(valitut) == koko:
+                tulos.append(list(valitut))
+                return
+            for v in range(alkaen, 11):
+                if sum(valitut) + v > 10:
+                    break
+                valitut.append(v)
+                kavele(v + 1, valitut)
+                valitut.pop()
+        kavele(1, [])
+        return tulos
+    pakka = []
+    for koko in range(1, 5):
+        for taytteet in osajoukot(koko):
+            pakka.append((13 + len(pakka), taytteet))
+    # Tarkistus, ei oletus: pakassa on 42 korttia ja sivun oma esimerkkikortti
+    # pizza-31 on tomaatti 2 + ananas 3 = arvo 5.
+    assert len(pakka) == 42, pakka
+    assert dict(pakka)[31] == [2, 3], pakka
+    return dict(pakka)
+
+
+def kaanto_selite(taytteet):
+    """Kortin sisältö numeroina: «2 + 3 = 5», yhdellä täytteellä pelkkä arvo."""
+    if len(taytteet) == 1:
+        return str(taytteet[0])
+    return '%s = %d' % (' + '.join(str(x) for x in taytteet), sum(taytteet))
+
+
+# Viisi korttia, jotka näyttävät juuri sen minkä viereinen kappale väittää:
+# yhdestä neljään täytettä, ja sydänpizza sekä yhdellä että neljällä
+# täytteellä. Koko 42 kortin pakka olisi 670 kt kuvia (mitattu 16.11.2026).
+KAANTO_PIZZAT = [13, 31, 48, 54, 22]
+# Täytekortit 1–10 ja fantasiatäyte X, arvojärjestyksessä: kappale lupaa
+# arvot 1–10 ja fantasiatäytteen, ja sarja näyttää ne kaikki.
+KAANTO_TAYTTEET = [str(n) for n in range(1, 11)] + ['x']
+
+
+def kaanto_pakat():
+    """(pizzapakka, taytepakka) muodossa [[tiedosto, selite], …]."""
+    kortit = pizzapakka()
+    pizzat = [['kortti/pizza-%d.webp' % n, kaanto_selite(kortit[n])]
+              for n in KAANTO_PIZZAT]
+    taytteet = [['kortti/tayte-%s.webp' % n, n.upper()] for n in KAANTO_TAYTTEET]
+    return pizzat, taytteet
+
+
+def kaantokortti(tausta, nimi, pakka):
+    """Kortin selkäpuoli. julkinen/sivu.js tekee tästä painikkeen; ilman
+    JavaScriptiä jää täsmälleen se kuva joka sivulla on ennenkin ollut."""
+    return ('<img class="kaanto__kuva" src="../kuvat/kortti/%s" width="240" height="364"'
+            ' alt="" data-kaanto="%s" data-nimi="%s">'
+            % (tausta, e(json.dumps(pakka, ensure_ascii=False)), e(nimi)))
+
+
+
 def korttipeli(t, kaikki):
     s = t['korttipeli']
     lang = t['lang']
@@ -730,6 +812,7 @@ def korttipeli(t, kaikki):
     # ylänapin suoraan `PDF`:stä, ja nappi osoitti kaikilla kielillä vanhaan
     # tiedostoon — alalista oli oikein, koska se sai korvatun sanakirjan.
     polut = dict(PDF, korttipeli=korttipeli_pdf(lang))
+    kaanto_pizzat, kaanto_taytteet = kaanto_pakat()
     hyppy = hyppynapit(s['hyppy'], ['korttipeli'], polut)
 
     muodot = []
@@ -770,8 +853,8 @@ def korttipeli(t, kaikki):
 
 <h2 id="perusteet">%s</h2>
 <div class="korttiparit">
-  <div class="korttipari"><img src="../kuvat/tausta-pizza.webp" width="351" height="532" alt=""><div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
-  <div class="korttipari"><img src="../kuvat/tausta-tayte.webp" width="351" height="532" alt=""><div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
+  <div class="korttipari">%s<div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
+  <div class="korttipari">%s<div><h3 style="margin-top:0">%s</h3><p>%s</p></div></div>
 </div>
 
 <div class="laatikko">
@@ -813,7 +896,10 @@ def korttipeli(t, kaikki):
 %s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['perusteet_otsikko']),
-       e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
+       kaantokortti('tausta-pizza.webp', s['pizzakortit_otsikko'], kaanto_pizzat),
+       e(s['pizzakortit_otsikko']), e(s['pizzakortit']),
+       kaantokortti('tausta-tayte.webp', s['taytekortit_otsikko'], kaanto_taytteet),
+       e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
        e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
        e(s['laskut']['otsikko']), s['laskut']['html'],

@@ -896,3 +896,139 @@
     vahti.observe(k);
   }
 })();
+
+
+/* ── Käännettävä kortti: «Näin pizza tehdään» (16.11.2026) ───────────────────
+ *
+ * Marko osiota katsoessaan: «Tässäkin voisi hyvin olla interaktiivisuutta, että
+ * painamalla pizzakorttia se kääntyy ja paljastaa pizzakortin. Painamalla
+ * uudelleen taas tulisi uusi pizzakortti näkyviin.»
+ *
+ * Kortti on kortti: kääntäminen on juuri se, mitä kortille pelissä tehdään.
+ * Siksi tämä ei ole koriste sääntötekstin vieressä vaan sama asia kuin sääntö.
+ *
+ * ⚠️ ILMAN JAVASCRIPTIÄ sivulle jää täsmälleen se kortin kuva, joka siellä on
+ * ennenkin ollut. Painike syntyy vasta täällä, joten kuollutta nappia ei voi
+ * jäädä. Sama koskee virheellistä data-attribuuttia: silloin ei tehdä mitään.
+ *
+ * ⚠️ SAAVUTETTAVUUS. Painikkeen nimi on aina se kortti joka on näkyvissä:
+ * lepotilassa viereinen otsikko («Pizzakortit»), käännettynä sama otsikko ja
+ * kortin oma sisältö numeroina («Pizzakortit: 2 + 3 = 5»). Muoto on sama kuin
+ * pizzakeittiön painikkeissa («Vaihda täytekortti: 10»), eikä se ole uutta
+ * tekstiä: otsikko on jo käännetty ja selite on pelkkiä numeroita.
+ *
+ * 📐 Mitattu 16.11.2026: nimi on aria-labelissa EIKÄ kuvan alt-tekstissä.
+ * Ensimmäinen versio luotti siihen, että näkyvän puolen alt nousee painikkeen
+ * nimeksi — saavutettavuuspuuta lukemalla painike oli nimetön. Kuvat ovat nyt
+ * alt="", ja nimi on siellä missä se varmasti luetaan.
+ *
+ * Liike on luokan `liike` sisällä, joten prefers-reduced-motion pysäyttää sen;
+ * kortti vaihtuu silloin ilman kääntöä, eikä mikään sisältö katoa.
+ *
+ * 📐 PAINO. Korttikuvat haetaan vasta tarvittaessa: ensimmäinen vasta kun
+ * osoitin tai näppäinkohdistus osuu korttiin, ja sen jälkeen aina yksi
+ * etukäteen. Sivun latauksessa ei muutu mikään — päinvastoin, selkäpuolet
+ * vaihtuivat 351 px:n kuvista 240 px:n kuviin, mikä keventää sivua 39 kt.
+ */
+(function () {
+  var kortit = document.querySelectorAll('img[data-kaanto]');
+  if (!kortit.length) return;
+
+  var hidas = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  Array.prototype.forEach.call(kortit, function (selka) {
+    var pakka;
+    try {
+      pakka = JSON.parse(selka.getAttribute('data-kaanto'));
+    } catch (e) {
+      return;
+    }
+    if (!pakka || !pakka.length) return;
+    // «../kuvat/kortti/tausta-pizza.webp» → «../kuvat/»; pakassa on «kortti/…».
+    var kansio = selka.getAttribute('src').replace(/kortti\/[^/]*$/, '');
+
+    var nappi = document.createElement('button');
+    nappi.type = 'button';
+    nappi.className = 'kaanto liike';
+    var kehys = document.createElement('span');
+    kehys.className = 'kaanto__kortti';
+    var puolet = [document.createElement('span'), document.createElement('span')];
+    puolet[0].className = 'kaanto__puoli';
+    puolet[1].className = 'kaanto__puoli kaanto__puoli--taka';
+    var etu = new Image(240, 364);
+    etu.alt = '';
+
+    var nimi = selka.getAttribute('data-nimi') || '';
+    nappi.setAttribute('aria-label', nimi);
+    selka.parentNode.insertBefore(nappi, selka);
+    puolet[0].appendChild(selka);
+    puolet[1].appendChild(etu);
+    kehys.appendChild(puolet[0]);
+    kehys.appendChild(puolet[1]);
+    nappi.appendChild(kehys);
+    var vihje = document.createElement('span');
+    vihje.className = 'kaanto__vihje';
+    vihje.setAttribute('aria-hidden', 'true');
+    vihje.textContent = '↻';
+    nappi.appendChild(vihje);
+    puolet[1].setAttribute('aria-hidden', 'true');
+
+    var n = 0;             // montako kertaa käännetty
+    var kaantyy = false;   // kesken olevan käännön aikana painallus ei tee mitään
+    var kello;
+
+    function esilataa() {
+      var kuva = new Image();
+      kuva.src = kansio + pakka[n % pakka.length][0];
+    }
+
+    function vapauta() {
+      clearTimeout(kello);
+      kaantyy = false;
+      esilataa();                       // seuraava kortti valmiiksi muistiin
+    }
+
+    /* Käännetään vasta kun tuleva kuva on valmis: muuten lukija näkisi tyhjän
+     * puolen. 400 ms on katto, ettei painallus jää koskaan vastaamatta. */
+    function kunValmis(kuva, tee) {
+      var tehty = false;
+      function aja() {
+        if (tehty) return;
+        tehty = true;
+        tee();
+      }
+      if (kuva.complete && kuva.naturalWidth) return aja();
+      var katto = setTimeout(aja, 400);
+      kuva.addEventListener('load', function () { clearTimeout(katto); aja(); });
+      kuva.addEventListener('error', function () { clearTimeout(katto); aja(); });
+    }
+
+    function kaanna() {
+      if (kaantyy) return;
+      kaantyy = true;
+      var kortti = pakka[n % pakka.length];
+      var tulija = puolet[(n + 1) % 2];
+      var kuva = tulija.firstChild;
+      kuva.src = kansio + kortti[0];
+      kunValmis(kuva, function () {
+        n += 1;
+        nappi.setAttribute('aria-label', nimi ? nimi + ': ' + kortti[1] : kortti[1]);
+        kehys.style.transform = 'rotateY(' + (n * 180) + 'deg)';
+        puolet[0].setAttribute('aria-hidden', n % 2 ? 'true' : 'false');
+        puolet[1].setAttribute('aria-hidden', n % 2 ? 'false' : 'true');
+        // Ilman liikettä kortti on heti perillä; muuten odotetaan käännön
+        // loppuun. Kello on varmistus sille, ettei transitionend tule.
+        if (hidas) return vapauta();
+        kello = setTimeout(vapauta, 1200);
+      });
+    }
+
+    kehys.addEventListener('transitionend', function (t) {
+      if (t.propertyName === 'transform') vapauta();
+    });
+    nappi.addEventListener('click', kaanna);
+    nappi.addEventListener('pointerenter', esilataa, { once: true });
+    nappi.addEventListener('focus', esilataa, { once: true });
+  });
+})();
