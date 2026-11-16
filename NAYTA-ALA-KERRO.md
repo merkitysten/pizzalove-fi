@@ -10,8 +10,9 @@ Tämä tiedosto on **kartoitus, ei toteutus.** Se kertoo, mitkä kohdat kannatta
 näyttää, mitkä on jätettävä tekstiksi ja missä järjestyksessä työ voidaan jakaa
 rinnakkaisiin istuntoihin ilman että kaksi istuntoa kirjoittaa samaan tiedostoon.
 
-Löydettyjä kohtia **28**. Näistä **15 kannattaa näyttää**, **9 jää tekstiksi**,
-**3 on jo varattu** toiselle istunnolle ja **1 on jo tehty**.
+Löydettyjä kohtia **28**. Näistä **14 kannattaa näyttää**, **9 jää tekstiksi**,
+**2 on varattu** toiselle istunnolle ja **3 on tehty** (L8 bannerin apina
+20.10.2026, K2 pizzakeittiö ja L3 laudan kartta 16.11.2026).
 
 ---
 
@@ -168,7 +169,7 @@ Työmäärä:
 | # | Kohta | Mitä nyt kerrotaan sanoin | Mitä näytettäisiin | Mitä ruutu lisää paperiin | Kuvat | Työ | Riippuu |
 |---|---|---|---|---|---|---|---|
 | **K1** 🟢 | «Pizzakortit» ja «Täytekortit» | 41 sanaa: arvo on kulmissa, 10 sydänpizzaa, 3 fantasiatäytettä (X). Kuvina **korttien selkäpuolet** — juuri se puoli, jossa mitään kuvattua ei ole. | Kortti kuvapuoli ylöspäin; napautus nimeää osan kerrallaan: kulman luku, täytesymbolit, sydän, X. Sama paikka näyttää neljä korttityyppiä. | **U.** Paperi tarvitsee neljä painettua korttia; ruutu näyttää ne yhdessä paikassa ja osoittaa, mihin sana «kulmissa» viittaa. | Täytteet on jo pienennetty; **sydänpizza ja 4 täytteen pizza puuttuvat** → laajenna `tyokalut/korttikuvat.py` | S | kerros. Korvaa kaksi nykyistä kuvaa → **sivu ei pitene** |
-| **K2** 🔒 | «Perussääntö» · «Pizzan arvo» · «Esimerkki» | 69 sanaa + yksi esimerkkirivi | **Tehty 16.11.2026: pizzakeittiö** — lukija vaihtaa täytekortit ja laskutoimituksen ja näkee, tuleeko 5. | **K.** | — | — | **Varattu: pizzan valmistuksen animaatio** |
+| **K2** ✅ | «Perussääntö» · «Pizzan arvo» · «Esimerkki» | 69 sanaa + yksi esimerkkirivi | **Tehty 16.11.2026: pizzakeittiö** — lukija vaihtaa täytekortit ja laskutoimituksen ja näkee, tuleeko 5. | **K.** | — | tehty | — |
 | **K3** 🟢 | «Kaikki laskutoimitukset käyvät» | 29 sanaa ja kaksi esimerkkiä (5 = 2² + 1, 5 = 3! − 1). PDF:ssä on kahdeksan rivin lista (`laskut.paperi`); sivulla ei ole. | **Keittiö kattaa tästä jo neljä laskutapaa (+ − × :).** Jäljelle jää juuri se, mikä tämän otsikon alla on tärkeintä: potenssi, juuri, logaritmi ja kertoma. Eli joko keittiön merkkivalikoiman laajennus tai PDF:n kahdeksan rivin lista myös sivulle. | **K.** Paperi luettelee esimerkkejä; ruutu kertoo, kelpaako lukijan **oma** keksintö. Otsikon väite «kaikki käyvät» jää puolittain lunastamatta, jos ruutu tarjoaa vain neljä merkkiä. | On | S (keittiön jatko) · S (lista) | **Keittiö** — sama komponentti, sama istunto |
 | **K4** 🟢 | «Basso-apinan tapa» | 64 sanaa — sivuston pisin yksittäinen sääntö. Teksti myöntää itse, että painetussa ohjeessa sääntö on toisin. | Sama tomaatti-ananaspizza ja kolme kättä: 10 : 2 (yksi laji) ei käy · 2 + 3 käy · 2 + 2 + 1 käy. Lukija valitsee kortit itse. | **K.** Sääntö on testi, ja ruutu osaa ajaa testin; teksti voi vain väittää. Kohta tiedetään jo vaikeaksi. | On | M | **Keittiö** — sama komponentti, lisäksi uusi tarkistus «montako eri täytettä» |
 | **K5** 🟢 | «Valmistelut» × 3 pelimuotoa | 3 × n. 45 sanaa: sekoita, jaa 5 / 7 / 8 korttia, loput nostopakaksi, käännä ensimmäinen pizzakortti pinon viereen. | Yksi pöytäkuva per pelimuoto: pakka, nostopakka, käännetty pizza, käden korttimäärä. | **U.** Asetelma on paikkatietoa, ja paikkatieto luetaan kuvasta kerralla. ⚠ **Kuvana, ei liikkeenä:** jakamisen animointi olisi paperia joka vipattaa. | Koottavissa olemassa olevista korteista CSS:llä | S × 3 | **Ei mistään** — ei tarvitse kerrosta |
@@ -187,7 +188,7 @@ Työmäärä:
 |---|---|---|---|---|---|---|---|
 | **L1** ⚪ | «Ennen ensimmäistä peliä» | 25 sanaa + kolme ohjevideota | — | Pahvilaatikon taittaminen on **käsityötaito**: video näyttää sormet ja järjestyksen. CSS ei tee sitä paremmin, ja videot ovat jo olemassa. Teksti + video on tässä oikea muoto. | — | — | — |
 | **L2** 🟢 | «Pelin voittaminen» | 22 sanaa, ja koko voittoehto on yhdessä sanassa: *10 **erilaista** palaa*. | Boksi täyttyy paloilla; sama pala toistamiseen ei kelpaa. | **A.** Paperilla «erilaista» on lihavoitu sana; ruudulla se on tapahtuma joka **ei tapahdu**. | On (`play/kuvat/pala/1–10`, `play/apinavaaka/boksi.webp`) | S | kerros. ⚠ Harkitse ensin linkkiä: pelin «Nälkäiset apinat» tekee tämän jo |
-| **L3** 🟢 | «Pelivalmistelut» | Neljä riviä, 30 sanaa, joissa esiintyy neljä paikannimeä joita sivulla ei näy missään: varasto, linjasto, pakka, boksi. | Nimetty kuva laudasta: varasto, linjasto, apinavaaka, noppa, boksi. | **U.** **Sanasto saa paikan.** Tämä on sivun suurin yksittäinen puute. Lisäksi kuvana eikä liikkeenä: asetelma ei muutu. | **Ei ole.** Tarvitaan laudan kuva, piirros tai pelin oma lauta renderöitynä | M–L (kuvan hankkiminen ratkaisee) | **Ei mistään.** Kannattaa tehdä ensin: L4 ja L5 nojaavat samaan sanastoon |
+| **L3** ✅ | «Pelivalmistelut» | Neljä riviä, 30 sanaa, joissa esiintyi neljä paikannimeä joita sivulla ei näkynyt missään: varasto, linjasto, pakka, boksi. | **Tehty 16.11.2026:** laudan kuva `#peli`-otsikon alla, neljä numeroitua merkkiä sen päällä ja numerot selitettyinä alla (varasto · linjasto · apinavaaka · pizzakortit). Osoittimella muut merkit himmenevät. | **U.** Sanasto sai paikan. Kuvana eikä liikkeenä: asetelma ei muutu, ja numerot tekevät työn myös puhelimessa, jossa hoveria ei ole. | `julkinen/kuvat/pelilauta.webp`, 900 × 900, 159 kt (lähde `Peli/Gameboard_pizzabox_16.6.2025.pdf`, rajattu TrimBoxiin) | tehty | — |
 | **L4** 🟢 | Vuoro, vaihe 1: «Nopan heitto ja nappuloiden siirto» | 70 sanaa: «noppa kertoo, montako nappulaa siirretään varaston ja linjaston **välillä**. Samanväriset nappulat liikkuvat aina yhtenä tornina.» | Noppa näyttää luvun, torni siirtyy alueelta toiselle, laskuri täsmää; lukija kokeilee siirron itse. | **A + K.** Lautapelin ydinsääntö on siirto kahden alueen välillä — se on liikettä määritelmän mukaan. Suurin hyöty koko lautapelisivulla. | On (`apinavaaka/noppa/0–10.svg`, `apinavaaka/tayte/1–10`, `hihna.webp`) | L omana toteutuksena · S–M, jos käytetään pelin omaa opastusta | kerros + L3:n sanasto. ⚠ Pelin koodilla tehtynä työ kuuluu `../pizzaparty`-repoon → **sarjaan apinakorttityön kanssa** |
 | **L5** 🟢 | Vuoro, vaihe 2: «Pizzan valmistaminen» | 50 sanaa; tärkein kohta «samaa täytettä voi käyttää vain yhteen pizzaan» | Linjaston täytteet kuluvat pizzaan ja palaavat varastoon. | **A.** Täytteiden kierto näkyy; teksti kuvaa sen kolmena erillisenä lauseena. | On | S–M L4:n päälle | **L4 ehdottomasti** — sama lauta |
 | **L6** 🔒 | Vuoro, vaihe 3: «Apinakortin nostaminen» | 25 sanaa + linkki apinakorttisivulle | — | — | — | — | **Varattu:** `pizzaparty/TEHTAVA-APINAKORTTIEN-ANIMAATIO.md` |
@@ -309,8 +310,8 @@ tiedostoa**, vaikka ne olisivat eri sivuilla.
 |---|---|---|---|---|
 | **1 — keittiön jatko** | K3 → K4 | peräkkäin | heti K2:n jälkeen | **sama istunto kuin K2**: sama komponentti |
 | **2 — korttipelisivun muut** | K1 · K6 → K7 → K9 → K10 | peräkkäin | kun keittiö on committoitu | oma istunto, **oma worktree** |
-| **3 — kuvat ilman `sivu.js`:ää** | L3 · K5 · S2 | vapaa | **heti** | **aidosti rinnakkain** — ei kosketa `sivu.js`:ää |
-| **4 — lautapelisivu** | L2 · L4 → L5 | L4 ennen L5 | kun L3 on tehty | oma istunto, oma worktree |
+| **3 — kuvat ilman `sivu.js`:ää** | ~~L3~~ (tehty) · K5 · S2 | vapaa | **heti** | **aidosti rinnakkain** — ei kosketa `sivu.js`:ää |
+| **4 — lautapelisivu** | L2 · L4 → L5 | L4 ennen L5 | **heti** (L3 on tehty) | oma istunto, oma worktree |
 | **5 — Essen** | S1 | — | viimeisenä | matala prioriteetti |
 
 **Ryhmä 3 voi alkaa heti ja olla yhtä aikaa kaiken muun kanssa.** Ryhmät 1, 2, 4
@@ -342,8 +343,8 @@ worktreen tai vuoron.
    laskutoimitukset» loppuun ja Basso-apinan tapa kokeiltavaksi. Komponentti on
    jo pystyssä, joten tämä on halvin seuraava askel ja se vie korttipelin
    vaikeimman säännön maaliin.
-2. **L3** — laudan kuva ja sanasto. Suurin yksittäinen puute koko sivustolla,
-   ei riipu mistään, ja se avaa koko lautapelisivun.
+2. ~~**L3** — laudan kuva ja sanasto.~~ **Tehty 16.11.2026** (commit `e8dcd1f`,
+   päätös kirjattu `PAATOSLOKI.md`:hen). Sivu 5 356 → 5 789 px.
 3. **K1** — kortin anatomia. Pieni työ, selvä voitto, korvaa kaksi kuvaa eikä
    pidennä sivua.
 4. **K6 ja K7** — pino ja alimmaiset kortit. Yksi komponentti, kaksi sääntöä.
