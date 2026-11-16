@@ -37,13 +37,26 @@ LAATU = 80
 # samankokoinen kuin sivulla jo olevat (muuten kortti kutistuisi 9 %).
 RAJAUS = (40, 40, 351, 532)   # x, y, leveys, korkeus pelin kuvassa
 
-# Täytekortit 1–10 ja fantasiatäyte X: pizzakeittiön valitsin näyttää kaikki.
-# Pizzakortti 31 on sääntösivun esimerkki (tomaatti 2 + ananas 3 = arvo 5,
-# ks. julkinen/play/kortit.js — pizzan arvo on aina täytteidensä summa).
+# Täytekortit 1–10 ja fantasiatäyte X: pizzakeittiön valitsin näyttää kaikki,
+# ja «Näin pizza tehdään» -osion käännettävä täytekortti selaa saman sarjan.
 # `tausta-tayte` on täytekortin SELKÄPUOLI. Pizzakeittiössä se on valitsimen
 # «ei korttia» -vaihtoehto: lukija saa ottaa toisen kortin pois ja tehdä pizzan
 # yhdellä kortilla. Juuri siinä helpompi tapa ja Basso-apinan tapa eroavat.
-KORTIT = ['tayte-%d' % n for n in range(1, 11)] + ['tayte-x', 'pizza-31', 'tausta-tayte']
+# Osiossa «Näin pizza tehdään» selkäpuolet ovat korttien lepotila.
+#
+# 📐 Viisi pizzakorttia, valittu 16.11.2026 pakan omasta säännöstä (ks.
+# julkinen/play/kortit.js; sama sääntö ajettuna Pythonilla antaa 42 korttia ja
+# pizza-31 = täytteet 2+3, arvo 5 — sama kortti kuin sivun esimerkissä).
+# Sarja näyttää juuri sen minkä viereinen kappale väittää:
+#   pizza-13  yksi täyte, arvo 1        (pienin)
+#   pizza-31  kaksi täytettä, arvo 5    (sivun oma esimerkkipizza)
+#   pizza-48  kolme täytettä, arvo 8
+#   pizza-54  neljä täytettä, arvo 10   (pakan AINOA nelitäytteinen, sydän)
+#   pizza-22  yksi täyte, arvo 10       (sydänpizzassa voi olla yksi täyte)
+# Koko 42 kortin pakka olisi 670 kt kuvia reposta; viisi riittää väitteen
+# näyttämiseen. Ne latautuvat vasta painalluksesta, ks. julkinen/sivu.js.
+KORTIT = (['tayte-%d' % n for n in range(1, 11)] + ['tayte-x', 'tausta-tayte'] +
+          ['pizza-%d' % n for n in (13, 31, 48, 54, 22)] + ['tausta-pizza'])
 
 
 def main():
