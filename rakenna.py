@@ -464,7 +464,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
        # moduuli (noin 100 kt + kuvat) ladataan vasta ensimmäisestä «Näytä»-
        # painalluksesta, koska sivun tehtävä on löytää kortin sääntö nopeasti.
        ('<script src="../%s" defer></script>\n' % leima('play/laskin.js')) if sivu == 'korttipeli' else
-       ('<script src="../%s" defer></script>\n' % leima('apinakortit.js')) if sivu == 'apinakortit' else '',
+       ('<script src="../%s" defer></script>\n' % leima('apinakortit.js')) if sivu in ('apinakortit', 'lautapeli') else '',
        leima('sivu.js'))
 
 
@@ -963,6 +963,36 @@ LAUTA_MERKIT = [('varasto', '93', '50'), ('linjasto', '76.5', '47'),
                 ('vaaka', '38', '41'), ('pizzat', '19', '11')]
 
 
+def opasmountti(nimi, t):
+    """Animaation kiinnityskohta lautapelisivulla. ⚠️ Nappi renderöidään vain
+    jos käännös on olemassa — sama sääntö kuin apinakorttisivulla: puolikielinen
+    sivu olisi huonompi kuin sivu ilman nappia, ja sääntö on luettavissa ilman
+    animaatiotakin. Raskas moduuli ladataan vasta painalluksesta."""
+    ui = t.get('ui', {})
+    nayta = ui.get('apinakortti_nayta')
+    if not (nayta and ui.get('apinakortti_piilota')):
+        return ''
+    lauta = t.get('lautapeli', {}).get('lauta', {})
+    # ⚠️ Leimatut polut myös tänne: kytkentäskripti lataa moduulin ajossa eikä
+    # voi laskea tiivistettä, ja ilman leimaa selain tarjoilee vanhaa.
+    css = ','.join('../' + leima('play/apinavaaka/' + f)
+                   for f in ('apinavaaka.css', 'apinakortti.css'))
+    # kortit.js on play-juuressa (pelin oma pizzapakka), muut apinavaaka-kansiossa.
+    js = ','.join(['../' + leima('play/apinavaaka/noppa3d.js'),
+                   '../' + leima('play/apinavaaka/apinavaaka.js'),
+                   '../' + leima('play/kortit.js'),
+                   '../' + leima('play/apinavaaka/apinakortti.js')])
+    return ('<div class="ak-opas" data-opas="%s"'
+            ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
+            ' data-css="%s" data-js="%s"'
+            ' data-linjasto="%s" data-varasto="%s"'
+            ' data-nayta="%s" data-piilota="%s">'
+            '<button type="button" class="apinakortti__nayta" aria-expanded="false">%s</button>'
+            '</div>'
+            % (nimi, css, js, e(lauta.get('linjasto', '')), e(lauta.get('varasto', '')),
+               e(nayta), e(ui.get('apinakortti_piilota')), e(nayta)))
+
+
 def lautakartta(s):
     """Lauta kuvana ja osien nimet sen päällä. Nimet ovat oikeaa tekstiä
     eivätkä kuvaan poltettuja, joten ne kääntyvät ja ruudunlukija lukee ne.
@@ -1015,6 +1045,7 @@ def lautapeli(t, kaikki):
 <div class="laatikko">
   <h3 style="margin-top:0">%s</h3>
   <p>%s</p>
+  %s
   <h3>%s</h3>
   <ul class="lista">%s</ul>
 </div>
@@ -1045,7 +1076,7 @@ def lautapeli(t, kaikki):
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
        e(s['peli_otsikko']), lautakartta(s),
-       e(s['voittaminen_otsikko']), s['voittaminen'],
+       e(s['voittaminen_otsikko']), s['voittaminen'], opasmountti('voitto', t),
        e(s['valmistelut_otsikko']), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,

@@ -1265,19 +1265,27 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       if (!window.pizzapakka) return null;
       var pakka;
       try { pakka = window.pizzapakka(); } catch (_) { return null; }
-      var kolme = pakka.filter(function (k) { return k.tayteMaara === 3 && !k.sydan; });
       var sydan = pakka.filter(function (k) { return k.sydan; })[0];
-      /* Kolme pizzaa joiden täytteet eivät mene päällekkäin: silloin boksiin
-         kertyy yhdeksän ERI palaa, ja kymmenes tulee sydänpizzasta. Sääntö on
-         «10 erilaista», joten päällekkäiset täytteet kertoisivat väärin. */
-      var valitut = [], kaytetyt = {};
-      kolme.forEach(function (k) {
-        if (valitut.length >= 3) return;
-        if (k.taytteet.some(function (t) { return kaytetyt[t]; })) return;
-        k.taytteet.forEach(function (t) { kaytetyt[t] = true; });
-        valitut.push(k);
-      });
-      if (valitut.length < 3 || !sydan) return null;
+      if (!sydan) return null;
+      /* \u26a0\ufe0f AHNE VALINTA, EI KIINTE\u00c4 KOKO. Ensin vaadin kolmea kolmen
+         t\u00e4ytteen pizzaa joiden t\u00e4ytteet eiv\u00e4t mene p\u00e4\u00e4llekk\u00e4in \u2014 ja mittasin
+         ettei sellaista joukkoa ole olemassa: pakassa on 42 korttia (10 \u00b7 20 \u00b7
+         11 \u00b7 1 t\u00e4ytteen mukaan) ja kolmen t\u00e4ytteen kortteja vain seitsem\u00e4n,
+         koska pizzan arvo on t\u00e4ytteiden summa ja enint\u00e4\u00e4n 10. Siksi valitaan
+         joka kierroksella se kortti joka tuo eniten UUSIA paloja. */
+      var on = {}, valitut = [], vapaat = pakka.filter(function (k) { return !k.sydan; });
+      while (valitut.length < 3) {
+        var paras = null, eniten = 0;
+        vapaat.forEach(function (k) {
+          if (valitut.indexOf(k) >= 0) return;
+          var uusia = k.taytteet.filter(function (t) { return !on[t]; }).length;
+          if (uusia > eniten) { eniten = uusia; paras = k; }
+        });
+        if (!paras) break;
+        paras.taytteet.forEach(function (t) { on[t] = true; });
+        valitut.push(paras);
+      }
+      if (valitut.length < 2) return null;
       return { pizzat: valitut, sydan: sydan };
     }
 
@@ -1294,7 +1302,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       var boksi = el('div', 'ak__opasboksi');
       boksi.appendChild(boksiEl(tila.boksit[0], tila.tuoreet && tila.tuoreet[0], 0));
       boksi.appendChild(el('span', 'ak__maara',
-        '<b>' + tila.boksit[0].length + '</b><i>/ 10</i>'));
+        '<b>' + tila.boksit[0].length + '</b><i>/ 10</i>'));
       if (tila.boksit[0].length >= 10) boksi.classList.add('ak__opasboksi--taysi');
       rivi.appendChild(boksi);
       nayttoEl.appendChild(rivi);
@@ -1331,7 +1339,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
     }
 
     function ohjainPaivita() {
-      ohjainEl.hidden = (nykyinen === null);
+      ohjainEl.hidden = (nykyinen === null && !tila.opas);
       var h = '';
       for (var i = 0; i < askeleet.length; i++)
         h += '<span class="ak__piste' + (i === askel ? ' ak__piste--nyt' : '') + '"></span>';
@@ -1467,8 +1475,85 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
     piirra();
     kehote();
     ohjainPaivita();
+    /* ⚠️ OPAS ON OMA SISÄÄNKÄYNTINSÄ, EI KORTTI. Apinakortit tulevat
+       `VAIKUTUS`-taulukosta numerolla; opasanimaatioilla ei ole numeroa eikä
+       korttitekstiä, joten ne eivät saa kulkea samasta ovesta — muuten
+       `kortit[n]` ja `RYHMA[n]` alkaisivat tarkoittaa kahta eri asiaa. */
+    var OPAS = {
+      voitto: function () {
+        var k = pizzaKortit();
+        if (!k) return null;
+        tila.opas = true;
+        tila.boksit[0] = [];
+        tila.yksin = 0;
+        /* Pizza ilmestyy ja sen palat kasvavat boksiin SAMASSA askeleessa:
+           erillinen \u00abkortti n\u00e4kyviin\u00bb -askel oli tauko jossa ei tapahdu mit\u00e4\u00e4n,
+           ja sellaiset poistettiin apinakorteista samana p\u00e4iv\u00e4n\u00e4. */
+        var askeleet = [{ tee: function () {
+          tila.pizza = null; tila.tuoreet = null; tila.liike = null; return uudelleen();
+        } }];
+        k.pizzat.forEach(function (p) { askeleet.push({ tee: pizzaBoksiin(p) }); });
+        /* Syd\u00e4npizzasta saa YHDEN VAPAAVALINTAISEN palan, ei sen t\u00e4ytteit\u00e4. */
+        askeleet.push({ tee: function () {
+          tila.pizza = k.sydan;
+          var puuttuu = null;
+          for (var n = 1; n <= 10 && !puuttuu; n++)
+            if (tila.boksit[0].indexOf(n) < 0) puuttuu = n;
+          if (puuttuu) tila.boksit[0].push(puuttuu);
+          tila.tuoreet = {}; tila.tuoreet[0] = puuttuu ? [puuttuu] : [];
+          tila.liike = null;
+          return uudelleen();
+        } });
+        /* \u26a0\ufe0f VIIMEINEN ASKEL EI VALEHTELE PELIST\u00c4. Kymmenen eri palaa on koko
+           pelin urakka eik\u00e4 nelj\u00e4n pizzan juttu, joten t\u00e4m\u00e4 ei esit\u00e4 ett\u00e4 ne
+           tulivat n\u00e4ist\u00e4 korteista: pizza katoaa, ja loput palat kertyv\u00e4t
+           t\u00e4yteen boksiin, joka on kortin lupaus \u2014 voitto. */
+        askeleet.push({ tee: function () {
+          tila.pizza = null;
+          var uudet = [];
+          for (var n = 1; n <= 10; n++)
+            if (tila.boksit[0].indexOf(n) < 0) { tila.boksit[0].push(n); uudet.push(n); }
+          tila.tuoreet = {}; tila.tuoreet[0] = uudet;
+          tila.liike = null;
+          return uudelleen();
+        } });
+        return askeleet;
+      }
+    };
+
+    async function naytaOpas(nimi) {
+      if (!OPAS[nimi]) return;
+      var suku = ++ajo;
+      nykyinen = null;
+      looppi = true;
+      pika = false;
+      seliteEl.textContent = '';
+      alkuun();
+      askeleet = OPAS[nimi]() || [];
+      if (!askeleet.length) return;
+      askel = -1;
+      piirra();
+      ohjainPaivita();
+      while (suku === ajo && looppi) {
+        var alku = OPAS[nimi]();
+        if (!alku) return;
+        askeleet = alku;
+        askel = -1;
+        piirra();
+        await hidas(900);
+        for (var i = 0; i < askeleet.length; i++) {
+          if (suku !== ajo || !looppi) return;
+          if (!(await naytaAskel(i, suku))) return;
+          await hidas(1100);
+        }
+        if (suku !== ajo || !looppi) return;
+        await hidas(2400);
+      }
+    }
+
     return {
       nayta: nayta,
+      opas: naytaOpas,
       alkuun: function () {
         ajo++; nykyinen = null; askeleet = []; askel = -1; looppi = true;
         alkuun(); piirra(); kehote(); seliteEl.textContent = ''; ohjainPaivita();

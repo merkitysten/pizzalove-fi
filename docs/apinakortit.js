@@ -14,9 +14,14 @@
  * ja `selite:false` — muuten sama sääntö luettaisiin ruudulla kahdesti.
  */
 (function () {
+  /* Sama kytkentä palvelee kahta sivua: apinakorttisivun 33 korttia ja
+     lautapelisivun opasanimaatiot. Asetukset luetaan siltä elementiltä joka
+     ne kantaa, ei korttiä listalta — muuten lautapelisivu tarvitsisi oman
+     kopionsa tästä tiedostosta. */
+  var juuri = document.querySelector('[data-kansio]');
+  if (!juuri || !window.Promise) return;
   var lista = document.querySelector('.apinakortit');
-  if (!lista || !window.Promise) return;
-  var A = lista.dataset;            // kansio, lauta, nayta, piilota
+  var A = juuri.dataset;            // kansio, lauta, nayta, piilota, otsakkeet
   var lupaus = null, lava = null, moduuli = null, auki = null;
 
   function aineisto(tagi, polku, attrit) {
@@ -70,7 +75,7 @@
     if (moduuli) moduuli.alkuun();
   }
 
-  lista.addEventListener('click', function (e) {
+  if (lista) lista.addEventListener('click', function (e) {
     var nappi = e.target.closest ? e.target.closest('.apinakortti__nayta') : null;
     if (!nappi) return;
     var n = +nappi.dataset.n;
@@ -92,6 +97,42 @@
          Sääntö on luettavissa ilman animaatiota, joten mitään ei menetetä. */
       nappi.disabled = false;
       lupaus = null;
+    });
+  });
+
+  /* Lautapelisivun opasanimaatiot: oma moduuli-instanssi per mountti, koska
+     ne voivat olla auki yhtä aikaa eivätkä kilpaile samasta näyttämöstä
+     kuten apinakortit. */
+  [].forEach.call(document.querySelectorAll('[data-opas]'), function (mountti) {
+    var nappi = mountti.querySelector('.apinakortti__nayta');
+    if (!nappi) return;
+    var oma = null;
+    nappi.addEventListener('click', function () {
+      if (oma) {
+        var auki = mountti.classList.toggle('ak-opas--auki');
+        nappi.setAttribute('aria-expanded', String(auki));
+        nappi.textContent = auki ? A.piilota : A.nayta;
+        if (auki) oma.opas(mountti.dataset.opas); else oma.alkuun();
+        return;
+      }
+      nappi.disabled = true;
+      lataa().then(function () {
+        nappi.disabled = false;
+        var lava = document.createElement('div');
+        lava.className = 'ak-lava';
+        var sisus = document.createElement('div');
+        lava.appendChild(sisus);
+        mountti.appendChild(lava);
+        oma = window.Apinakortti(sisus, {
+          kansio: A.kansio, lautakuva: A.lauta, pelaajia: 3,
+          korttipaikka: false, selite: false,
+          otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' }
+        });
+        mountti.classList.add('ak-opas--auki');
+        nappi.setAttribute('aria-expanded', 'true');
+        nappi.textContent = A.piilota;
+        oma.opas(mountti.dataset.opas);
+      }).catch(function () { nappi.disabled = false; lupaus = null; });
     });
   });
 })();
