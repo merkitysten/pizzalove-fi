@@ -40,18 +40,53 @@ Lisää mitattua:
 - **Lautapelisivulla ei ole yhtään kuvaa pelilaudasta.** Kolme kuvaa ovat viiri,
   tuotepakkaus ja bannerin apina. Teksti nimeää varaston, linjaston, apinavaa'an,
   nopan ja boksin; mikään niistä ei näy sivulla.
-- **Animaatiokieli on jo olemassa pelipuolella:** `julkinen/tyyli.css` 6 kpl
-  `@keyframes` (kaikki bannerin apinalle), `julkinen/play/*.css` 45 kpl.
+- **Animaatiokieli on jo olemassa pelipuolella:** `julkinen/play/*.css` 45 kpl
+  `@keyframes`. Sääntösivujen puolella niitä oli mitattaessa 6 (kaikki bannerin
+  apinalle) ja on nyt 12: yhteinen kerros toi neljä perusliikettä (ks. alla).
 - **Kuvapankki on jo repossa.** `julkinen/play/kuvat/`: pizzakortit 13–54 (42 kpl,
   yhteensä 1,6 Mt), täytekortit 1–10 ja fantasia X (500 kt), palat 1–10.
   `julkinen/play/apinavaaka/`: noppa 0–10 (SVG), täytetornit 1–10, kulhot 1–10,
   hihna, uuni, boksi, vaaka. **Nämä on jo julkaistu** (`docs/play/…`), joten
   sääntösivu voi viitata niihin suoraan: `../play/kuvat/pizza-31.webp`.
-- **Yksi korttikuva painaa 36–48 kt.** Korttipelisivun omat tiedostot painavat
-  nyt yhteensä 857 kt. Kuuden lisäkortin demo kasvattaisi sivua neljänneksellä,
-  ellei kuvia ladata vasta tarvittaessa.
+- **Painettu korttikuva painaa 36–48 kt** (351 px). Korttipelisivun omat
+  tiedostot painoivat mitattaessa yhteensä 857 kt. Demoihin ei kuitenkaan käytetä
+  näitä vaan pienennettyjä kopioita: `julkinen/kuvat/kortti/`, 240 px, **17 kt**
+  kappale (ks. seuraava luku).
 - **Sivu hakee 11 videon esikatselukuvan Googlelta** (`i.ytimg.com`, 7 korttipelissä
   ja 4 lautapelissä); varsinaista upotusta ei ladata ennen klikkausta.
+
+### Yhteinen kerros on jo olemassa — lue se ennen kuin aloitat
+
+Kartoituksen aikana (16.11.2026) toinen istunto sai valmiiksi yhteisen
+animaatiokerroksen. Se **ei ole oma tiedostonsa**, vaan se asuu kahdessa jo
+olemassa olevassa tiedostossa — tällä on suora vaikutus siihen, mitkä työt
+voivat olla rinnakkain (luku 6):
+
+- **`julkinen/tyyli.css`, lohko «LIIKEKIELI»** (n. 65 riviä tiedoston alussa):
+  kestot `--liike-pika/nopea/perus/pitka/hidas` ja käyrät
+  `--liike-saapuu/pomppu/lahtee`, sekä neljä perusliikettä
+  (`kortti-poytaan`, `kortti-isku`, `kortti-syke`, `liike-esiin`).
+  Lohko sanoo itse: *«Jos tarvitset liikkeen jota täällä ei ole, LISÄÄ SE TÄHÄN
+  LOHKOON nimettynä»* — eli omia `@keyframes`-sääntöjä ei kirjoiteta muualle.
+  Arvot eivät ole keksittyjä: ne ovat pelin omien 45 keyframe-säännön yleisimmät
+  kestot ja käyrät, nyt nimettyinä.
+- **Saavutettavuuden kytkin:** liikkuva lohko saa luokan `liike`, ja yksi sääntö
+  `@media (prefers-reduced-motion:reduce)` pysäyttää kaiken sen sisällä. Reunaehto
+  1 on siis hoidettu kerralla — mutta vain sillä ehdolla, että liike on **pelkkää
+  koristetta** ja sisältö toimii ilman sitä.
+- **`julkinen/sivu.js`** rakentaa demot. Ilman JavaScriptiä `.esimerkki` jää
+  siksi mitä se oli: yksi `role="img"` ja koko lauseen `aria-label`. Reunaehto 4
+  on siis hoidettu samalla kaavalla kuin bannerin apinassa.
+- **`tyokalut/korttikuvat.py`** tekee pelin korttikuvista 240 px:n kopiot
+  kansioon `julkinen/kuvat/kortti/`. Lähde on `julkinen/play/kuvat/`, joten
+  lähteitä on yhä yksi. Mitattu: 351 px = 47 kt, 240 px = 17 kt, ja kolmen
+  kortin esimerkkilohko **kevenee 88 kt**. Nyt kansiossa on pizza-31 ja
+  täytteet 1–10 + x; **muita pizzakortteja tarvitseva demo laajentaa tätä
+  skriptiä** eikä kopioi käsin.
+- **Ensimmäinen demo, «pizzakeittiö»,** on `.esimerkki`-lohkon paikalla
+  korttipelisivulla: lukija vaihtaa täytekortteja, vaihtaa laskutoimituksen
+  (+ − × :) ja näkee heti, tuleeko pizzan arvo 5. Tämä kattaa kohdan **K2** ja
+  suuren osan kohdasta **K3**.
 
 ### Kaksi asiaa, jotka briiffi oletti toisin
 
@@ -132,10 +167,10 @@ Työmäärä:
 
 | # | Kohta | Mitä nyt kerrotaan sanoin | Mitä näytettäisiin | Mitä ruutu lisää paperiin | Kuvat | Työ | Riippuu |
 |---|---|---|---|---|---|---|---|
-| **K1** 🟢 | «Pizzakortit» ja «Täytekortit» | 41 sanaa: arvo on kulmissa, 10 sydänpizzaa, 3 fantasiatäytettä (X). Kuvina **korttien selkäpuolet** — juuri se puoli, jossa mitään kuvattua ei ole. | Kortti kuvapuoli ylöspäin; napautus nimeää osan kerrallaan: kulman luku, täytesymbolit, sydän, X. Sama paikka näyttää neljä korttityyppiä. | **U.** Paperi tarvitsee neljä painettua korttia; ruutu näyttää ne yhdessä paikassa ja osoittaa, mihin sana «kulmissa» viittaa. | On (`play/kuvat/pizza-*`, `tayte-1…10`, `tayte-x`) | S | kerros. Korvaa kaksi nykyistä kuvaa → **sivu ei pitene** |
-| **K2** 🔒 | «Perussääntö» · «Pizzan arvo» · «Esimerkki» | 69 sanaa + yksi esimerkkirivi | — | — | — | — | **Varattu: pizzan valmistuksen animaatio, työn alla** |
-| **K3** 🟢 | «Kaikki laskutoimitukset käyvät» | 29 sanaa ja kaksi esimerkkiä (5 = 2² + 1, 5 = 3! − 1). PDF:ssä on kahdeksan rivin lista (`laskut.paperi`); sivulla ei ole. | Pizzan arvo 5 näkyvissä, rivi täytekortteja; lukija kokoaa laskun ja näkee heti, tuleeko 5. | **K.** Paperi luettelee esimerkkejä; ruutu kertoo, kelpaako lukijan **oma** keksintö. Juuri tämä on pelin idea: jokainen laskee omalla tasollaan. | On | M (laajuus päätettävä: valmiit kortit ≪ vapaa tekstikenttä) | kerros + K2:n korttirivi |
-| **K4** 🟢 | «Basso-apinan tapa» | 64 sanaa — sivuston pisin yksittäinen sääntö. Teksti myöntää itse, että painetussa ohjeessa sääntö on toisin. | Sama tomaatti-ananaspizza ja kolme kättä: 10 : 2 (yksi laji) ei käy · 2 + 3 käy · 2 + 2 + 1 käy. Lukija valitsee kortit itse. | **K.** Sääntö on testi, ja ruutu osaa ajaa testin; teksti voi vain väittää. Kohta tiedetään jo vaikeaksi. | On | M | K3 (sama korttirivi ja laskenta) |
+| **K1** 🟢 | «Pizzakortit» ja «Täytekortit» | 41 sanaa: arvo on kulmissa, 10 sydänpizzaa, 3 fantasiatäytettä (X). Kuvina **korttien selkäpuolet** — juuri se puoli, jossa mitään kuvattua ei ole. | Kortti kuvapuoli ylöspäin; napautus nimeää osan kerrallaan: kulman luku, täytesymbolit, sydän, X. Sama paikka näyttää neljä korttityyppiä. | **U.** Paperi tarvitsee neljä painettua korttia; ruutu näyttää ne yhdessä paikassa ja osoittaa, mihin sana «kulmissa» viittaa. | Täytteet on jo pienennetty; **sydänpizza ja 4 täytteen pizza puuttuvat** → laajenna `tyokalut/korttikuvat.py` | S | kerros. Korvaa kaksi nykyistä kuvaa → **sivu ei pitene** |
+| **K2** 🔒 | «Perussääntö» · «Pizzan arvo» · «Esimerkki» | 69 sanaa + yksi esimerkkirivi | **Tehty 16.11.2026: pizzakeittiö** — lukija vaihtaa täytekortit ja laskutoimituksen ja näkee, tuleeko 5. | **K.** | — | — | **Varattu: pizzan valmistuksen animaatio** |
+| **K3** 🟢 | «Kaikki laskutoimitukset käyvät» | 29 sanaa ja kaksi esimerkkiä (5 = 2² + 1, 5 = 3! − 1). PDF:ssä on kahdeksan rivin lista (`laskut.paperi`); sivulla ei ole. | **Keittiö kattaa tästä jo neljä laskutapaa (+ − × :).** Jäljelle jää juuri se, mikä tämän otsikon alla on tärkeintä: potenssi, juuri, logaritmi ja kertoma. Eli joko keittiön merkkivalikoiman laajennus tai PDF:n kahdeksan rivin lista myös sivulle. | **K.** Paperi luettelee esimerkkejä; ruutu kertoo, kelpaako lukijan **oma** keksintö. Otsikon väite «kaikki käyvät» jää puolittain lunastamatta, jos ruutu tarjoaa vain neljä merkkiä. | On | S (keittiön jatko) · S (lista) | **Keittiö** — sama komponentti, sama istunto |
+| **K4** 🟢 | «Basso-apinan tapa» | 64 sanaa — sivuston pisin yksittäinen sääntö. Teksti myöntää itse, että painetussa ohjeessa sääntö on toisin. | Sama tomaatti-ananaspizza ja kolme kättä: 10 : 2 (yksi laji) ei käy · 2 + 3 käy · 2 + 2 + 1 käy. Lukija valitsee kortit itse. | **K.** Sääntö on testi, ja ruutu osaa ajaa testin; teksti voi vain väittää. Kohta tiedetään jo vaikeaksi. | On | M | **Keittiö** — sama komponentti, lisäksi uusi tarkistus «montako eri täytettä» |
 | **K5** 🟢 | «Valmistelut» × 3 pelimuotoa | 3 × n. 45 sanaa: sekoita, jaa 5 / 7 / 8 korttia, loput nostopakaksi, käännä ensimmäinen pizzakortti pinon viereen. | Yksi pöytäkuva per pelimuoto: pakka, nostopakka, käännetty pizza, käden korttimäärä. | **U.** Asetelma on paikkatietoa, ja paikkatieto luetaan kuvasta kerralla. ⚠ **Kuvana, ei liikkeenä:** jakamisen animointi olisi paperia joka vipattaa. | Koottavissa olemassa olevista korteista CSS:llä | S × 3 | **Ei mistään** — ei tarvitse kerrosta |
 | **K6** 🟢 | «Nopein saa… jos moni lyö yhtä aikaa, pizzan saa se, jonka kortit ovat alimmaisina» | Yksi virke 120 sanan luettelon keskellä | Kaksi kättä lyö, kortit asettuvat päällekkäin, alimmainen korostuu voittajaksi. | **A.** Sääntö koskee kahden tapahtuman järjestystä, eikä järjestystä voi piirtää yhteen kuvaan. | On | S | kerros |
 | **K7** 🟢 | «Jos pizzaa ei voi valmistaa» | 40 sanaa: käännä uusi pizza päälle; seuraava valmistaja saa kaikki näkyvät pizzat. | Pino kasvaa kortti kerrallaan; seuraava valmistaja korjaa koko pinon. | **A.** Kertyminen. Potin kasvu on syy pelata, ja tekstissä se on sivulause. | On | S | kerros. **Sama komponentti kuin Basson pinon kasvu** — tehdään kerran, käytetään kahdesti |
@@ -221,53 +256,75 @@ voittaa demon selvästi.
 
 ### 6.1 Mitä tiedostoja mikin kohta koskee
 
-| kohdat | `rakenna.py` | uusi moduuli | `tyyli.css` | `sivu.js` | `sisalto/*.json` | `../pizzaparty` |
+⚠️ **Tämä on kartoituksen tärkein taulukko, ja se näyttää ikävän asian:**
+yhteinen kerros ei ole oma tiedostonsa vaan asuu `julkinen/tyyli.css`:ssä ja
+`julkinen/sivu.js`:ssä (luku 1). Kaikki demot koskevat siis **samaa kahta
+tiedostoa**, vaikka ne olisivat eri sivuilla.
+
+| kohdat | `rakenna.py` | `julkinen/tyyli.css` | `julkinen/sivu.js` | `korttikuvat.py` | `sisalto/*.json` | `../pizzaparty` |
 |---|---|---|---|---|---|---|
-| K1, K3, K4, K5, K6, K7, K9, K10 | `korttipeli()` | oma | ei | ei | ei, jos ei uutta tekstiä | ei |
-| L2, L3, L4, L5 | `lautapeli()` | oma | ei | ei | ei | **L4 kyllä**, jos pelin koodilla |
-| E2 | `etusivu()` | — | ei | **kyllä** | ei | ei |
-| S1, S2 | `essen2026()` | oma | ei | ei | ei | ei |
-| K2, L6, A1 | varattu | varattu | varattu | varattu | varattu | A1/L6 kyllä |
+| K1, K3, K4, K6, K7, K9, K10 | `korttipeli()` | **kyllä** | **kyllä** | K1 kyllä | ei, jos ei uutta tekstiä | ei |
+| K5 | `korttipeli()` | kyllä (pelkkä asettelu) | ei | kyllä | ei | ei |
+| L2, L4, L5 | `lautapeli()` | **kyllä** | **kyllä** | ei | ei | **L4 kyllä**, jos pelin koodilla |
+| L3 | `lautapeli()` | kyllä (pelkkä asettelu) | ei | ei | ei (kuvateksti voi vaatia 8 käännöstä) | ei |
+| E2 | `etusivu()` | ei | **kyllä** | ei | ei | ei |
+| S1 | `essen2026()` | **kyllä** | **kyllä** | ei | ei | ei |
+| S2 | `essen2026()` | kyllä (pelkkä asettelu) | ei | ei | ei | ei |
+| K2, L6, A1 | varattu | varattu | varattu | varattu | varattu | L6/A1 kyllä |
 
 ### 6.2 Säännöt, jotka pitävät istunnot erillään
 
-1. **Jokainen demo omaan tiedostoonsa.** Ei `tyyli.css`:ään eikä `sivu.js`:ään,
-   vaan omaan moduuliin (nimeämisen päättää yhteistä kerrosta rakentava istunto).
-   Näin kaksi istuntoa ei koskaan kirjoita samaan tiedostoon.
-2. **`rakenna.py`: koske vain oman sivusi funktioon.** Funktiot ovat erillään
-   (`korttipeli()` 547, `lautapeli()` 643, `apinakortit()` 715, `essen2026()` 753,
-   `etusivu()` 492), joten rinnakkainen työ on turvallista, kunhan kukin pysyy
+1. **Liikekieli on yhteinen, ja se on tarkoitettu uudelleenkäytettäväksi.**
+   Älä kirjoita omia `@keyframes`-sääntöjä demosi kohdalle: käytä
+   `--liike-*`-muuttujia ja neljää perusliikettä, ja jos tarvitset uuden, lisää
+   se **LIIKEKIELI-lohkoon nimettynä**. Kolme eri tapaa pudottaa kortti pöytään
+   on vika, jota kukaan ei huomaa katsomatta kaikkia kolmea vierekkäin.
+2. **Mutta juuri siksi `tyyli.css` ja `sivu.js` ovat sarjassa.** Kaksi istuntoa
+   ei voi kirjoittaa niihin yhtä aikaa samassa työpuussa. Vaihtoehdot:
+   joko **yksi istunto kerrallaan** näihin tiedostoihin, tai jokainen istunto
+   **omassa worktreessa ja omalla haarallaan**, jolloin muutokset sulautetaan
+   lopuksi. Ryhmä 3 (K5, L3, S2) on ainoa, joka ei tarvitse `sivu.js`:ää
+   lainkaan.
+3. **`rakenna.py`: koske vain oman sivusi funktioon.** Funktiot ovat erillään
+   (`etusivu()` 492, `korttipeli()` 547, `lautapeli()` 643, `apinakortit()` 715,
+   `essen2026()` 753), joten rinnakkainen työ on turvallista, kunhan kukin pysyy
    omassaan.
-3. **`julkinen/play/**` on peilikopio — älä muokkaa.** Kuvia saa käyttää.
-4. **Älä kopioi kortteja `julkinen/kuvat/`-kansioon.** Siellä on jo viisi kopiota
-   pelin korteista (pizza-31, pizza-54, tayte-2, tayte-3, tayte-10, tayte-x).
-   Viittaa suoraan: `../play/kuvat/…`. Yksi lähde.
-5. **Aja `python3 rakenna.py` ja katso `git status` ennen committia.** Jos
+4. **`julkinen/play/**` on peilikopio — älä muokkaa.** Kuvia saa käyttää.
+5. **Korttikuvat tulevat `julkinen/kuvat/kortti/`-kansiosta, ja ne tehdään
+   työkalulla.** Jos demosi tarvitsee kortin jota siellä ei ole, laajenna
+   `tyokalut/korttikuvat.py`:tä (lähde `julkinen/play/kuvat/`) äläkä kopioi
+   tiedostoja käsin. Vanhat täysikokoiset kopiot `julkinen/kuvat/`-juuressa
+   (pizza-31, pizza-54, tayte-2, tayte-3, tayte-10, tayte-x) ovat sivun muiden
+   kuvien käytössä; demoihin otetaan `kortti/`-kansion 240 px:n versiot.
+6. **Aja `python3 rakenna.py` ja katso `git status` ennen committia.** Jos
    `docs/`:ssa on muutoksia joita et tehnyt, ne ovat toisen istunnon työtä — älä
    committoi niitä. (Mitattu 16.11.2026: pelkkä uudelleenrakennus ilman yhtäkään
    koodimuutosta muutti 23 sivua; ks. jaettu muistiinpano
    `liput-kielivalikkoon-valmis.md`.)
-6. **Marko pushaa itse.** Claude tekee commitit valmiiksi.
+7. **Marko pushaa itse.** Claude tekee commitit valmiiksi.
 
-### 6.3 Neljä rinnakkaista ryhmää
+### 6.3 Neljä ryhmää
 
-| ryhmä | kohdat | järjestys ryhmän sisällä | voi alkaa |
-|---|---|---|---|
-| **1 — korttipelisivu** | K1, K6, K7 → K3, K4 → K9, K10 | peräkkäin | K1, K6 ja K7 heti kun kerros on; K3 ja K4 vasta kun K2 on valmis (sama korttirivi) |
-| **2 — lautapelisivu** | L3 → L4 → L5 · L2 milloin vain | **L3 ensin**, sitten L4, sitten L5 | L3 heti (ei tarvitse kerrosta) |
-| **3 — pienet irralliset** | K5, S2, E2 | vapaa | **heti** — nämä eivät tarvitse kerrosta lainkaan |
-| **4 — Essen** | S1 | — | vasta kun kerros on vakiintunut; matala prioriteetti |
+| ryhmä | kohdat | järjestys ryhmän sisällä | voi alkaa | rinnakkaisuus |
+|---|---|---|---|---|
+| **1 — keittiön jatko** | K3 → K4 | peräkkäin | heti K2:n jälkeen | **sama istunto kuin K2**: sama komponentti |
+| **2 — korttipelisivun muut** | K1 · K6 → K7 → K9 → K10 | peräkkäin | kun keittiö on committoitu | oma istunto, **oma worktree** |
+| **3 — kuvat ilman `sivu.js`:ää** | L3 · K5 · S2 | vapaa | **heti** | **aidosti rinnakkain** — ei kosketa `sivu.js`:ää |
+| **4 — lautapelisivu** | L2 · L4 → L5 | L4 ennen L5 | kun L3 on tehty | oma istunto, oma worktree |
+| **5 — Essen** | S1 | — | viimeisenä | matala prioriteetti |
 
-**Ryhmät 1–4 voivat olla yhtä aikaa neljässä istunnossa.** Ne koskevat eri
-`rakenna.py`-funktioita ja eri moduulitiedostoja.
+**Ryhmä 3 voi alkaa heti ja olla yhtä aikaa kaiken muun kanssa.** Ryhmät 1, 2, 4
+ja 5 koskevat `sivu.js`:ää ja `tyyli.css`:ää, joten ne tarvitsevat joko oman
+worktreen tai vuoron.
 
 ### 6.4 Mikä on pakko tehdä peräkkäin
 
-- **Kaikki 🟢 paitsi ryhmä 3 ↔ yhteinen animaatiokerros.** Kerros syntyy nyt
-  pizzan valmistuksen (K2) yhteydessä.
-- **K3 ja K4 ↔ K2.** Sama korttirivi ja sama arvon laskenta.
-- **K10 ↔ K9.** Sama varastokomponentti.
+- **Kaikki 🟢 paitsi ryhmä 3 ↔ yhteinen kerros.** Kerros on valmis 16.11.2026,
+  mutta sen tiedostot ovat jaettuja (6.2 / 2).
+- **K3 ja K4 ↔ K2 (keittiö).** Sama komponentti ja sama arvon laskenta — nämä
+  kuuluvat samalle istunnolle, joka keittiön teki.
 - **K4 ↔ K3.** Sama kelpaako-tarkistus.
+- **K10 ↔ K9.** Sama varastokomponentti.
 - **L4 ja L5 ↔ L3.** Sanasto on ensin saatava paikalleen, tai lukija näkee
   liikettä jonka osia hän ei osaa nimetä.
 - **L5 ↔ L4.** Sama lauta.
@@ -275,19 +332,22 @@ voittaa demon selvästi.
 - **Kaikki `../pizzaparty`-muutokset ↔ apinakorttianimaatio.** Yksi istunto
   kerrallaan siinä repossa. Koskee L4:ää, jos se tehdään pelin koodilla.
 - **`docs/`-rakennus.** Kuka tahansa joka ajaa `rakenna.py`:n, näkee kaikkien
-  muutokset. Ks. sääntö 6.2 / 5.
+  muutokset. Ks. sääntö 6.2 / 6.
 
 ---
 
 ## 7. Järjestys, jos työ tehdään yksi istunto kerrallaan
 
-1. **L3** — laudan kuva ja sanasto. Suurin puute, ei riipu mistään, ja se avaa
-   koko lautapelisivun.
-2. **K1** — kortin anatomia. Pienin työ, selvin voitto, korvaa kaksi kuvaa eikä
+1. **K3 ja K4** — keittiön jatko samalla istunnolla, joka sen teki: «kaikki
+   laskutoimitukset» loppuun ja Basso-apinan tapa kokeiltavaksi. Komponentti on
+   jo pystyssä, joten tämä on halvin seuraava askel ja se vie korttipelin
+   vaikeimman säännön maaliin.
+2. **L3** — laudan kuva ja sanasto. Suurin yksittäinen puute koko sivustolla,
+   ei riipu mistään, ja se avaa koko lautapelisivun.
+3. **K1** — kortin anatomia. Pieni työ, selvä voitto, korvaa kaksi kuvaa eikä
    pidennä sivua.
-3. **K6 ja K7** — pino ja alimmaiset kortit. Yksi komponentti, kaksi sääntöä.
-4. **L4 ja L5** — nopan heitto ja tornien siirto. Lautapelin ydin.
-5. **K3 ja K4** — kelpaako tämä lasku, kelpaako tämä käsi. Korttipelin ydin.
+4. **K6 ja K7** — pino ja alimmaiset kortit. Yksi komponentti, kaksi sääntöä.
+5. **L4 ja L5** — nopan heitto ja tornien siirto. Lautapelin ydin.
 6. **K9 ja K10** — Pizza Loven varasto. Suurin työ, suurin tekstisäästö (230 sanaa).
 7. **L2, K5, S2, E2** — pienet, milloin vain.
 8. **S1** — Topping Ten, viimeisenä.
@@ -308,9 +368,12 @@ voittaa demon selvästi.
    tehdä kahdella tavalla: oma pieni lauta sääntösivulle (L, itsenäinen) tai
    linkki pelin opastukseen (S–M, mutta vaatii muutoksen pizzapartyyn ja vie
    lukijan pois sääntösivulta).
-3. **Yhteisen kerroksen tiedostonimet** eivät ole vielä tiedossa: K2:ta tekevä
-   istunto päättää ne. Tämän kartoituksen «oma moduuli» tarkoittaa sitä, mitä
-   kerros tarjoaa.
+3. **Rinnakkaisuuden hinta on päätettävä kerran.** Yhteinen kerros asuu
+   `tyyli.css`:ssä ja `sivu.js`:ssä, mikä on oikein yhtenäisyyden kannalta mutta
+   tekee niistä sarjallisen pullonkaulan. Joko demot tehdään yksi istunto
+   kerrallaan (hitaampi, ei sulautuksia) tai jokainen istunto saa oman
+   worktreen ja haaran (rinnakkainen, mutta `tyyli.css` sulautetaan käsin).
+   Ryhmä 3 kulkee kummassakin tapauksessa rinnalla.
 
 ---
 
