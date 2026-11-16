@@ -343,7 +343,7 @@
   /* ── Tila ─────────────────────────────────────────────────────────── */
   var alku = k.getAttribute('data-alku').match(/^(\w+)([-+*/])(\w+)$/);
   var tila = { a: alku[1], op: alku[2], b: alku[3] };
-  var valitsin = null, valittuPaikka = null, naytosKello = null;
+  var valitsin = null, valittuPaikka = null, naytosKello = null, koskettu = false;
 
   function kuva(arvo) { return kuvatie + 'tayte-' + arvo + '.webp'; }
   function nimi(arvo) { return arvo === 'x' ? 'X' : arvo; }
@@ -375,7 +375,12 @@
     tulos.innerHTML = '<b>' + (r.osuu ? '=' : '≠') + '</b>' +
       (nayta ? '<i>' + muotoile(r.arvo) + '</i>' : '');
 
-    var lasku = nimi(tila.a) + ' ' + m + ' ' + nimi(tila.b);
+    /* Fantasiakortti luetaan muodossa «X (2)»: ruudulla luku näkyy kortin
+     * päällä, mutta ruudunlukija tarvitsee sen lauseeseen. */
+    var osa = function (arvo, ratk) {
+      return arvo === 'x' && r.osuu ? 'X (' + ratk + ')' : nimi(arvo);
+    };
+    var lasku = osa(tila.a, r.a) + ' ' + m + ' ' + osa(tila.b, r.b);
     lause.textContent = lasku + (r.osuu ? ' = ' + TAVOITE : (nayta ? ' = ' + muotoile(r.arvo) : '')) +
       ' — ' + sana(r.osuu ? 'valmis' : 'ei');
     if (r.osuu && liikkuu) isku();
@@ -415,6 +420,7 @@
       valitsin.addEventListener('click', function (e) {
         var b = e.target.closest('button[data-arvo]');
         if (!b) return;
+        seis();
         tila[valittuPaikka === pA ? 'a' : 'b'] = b.getAttribute('data-arvo');
         sulje(true);
         piirra(true);
@@ -455,10 +461,16 @@
    * Tämä on se mitä paperi ei voi: pelin idea liikkeenä. Loppuu heti kun
    * lukija koskee keittiöön, ja jää viimeiseen laskuun eli painetun
    * säännön omaan esimerkkiin. */
+  /* ⚠️ `koskettu` eikä pelkkä kellon pysäytys: näytös alkaa vasta kun lohko on
+   * tullut ruudulle JA korttikuvat on haettu, joten lukija voi ehtiä koskea
+   * keittiöön ennen sitä. Silloin näytös ei saa enää käynnistyä ja pyyhkiä
+   * hänen omaa valintaansa. */
   function seis() {
+    koskettu = true;
     if (naytosKello) { clearInterval(naytosKello); naytosKello = null; }
   }
   function naytos() {
+    if (koskettu) return;
     var i = 0;
     naytosKello = setInterval(function () {
       if (document.hidden) return;
@@ -481,7 +493,7 @@
       var jaljella = jono.length;
       jono.forEach(function (v) {
         var i = new Image();
-        i.onload = i.onerror = function () { if (--jaljella === 0 && !naytosKello) naytos(); };
+        i.onload = i.onerror = function () { if (--jaljella === 0 && !naytosKello && !koskettu) naytos(); };
         i.src = kuva(v);
       });
     }, { threshold: .55 });

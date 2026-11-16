@@ -212,6 +212,12 @@
       "Ya73FhJfj54": "Pelin pystytys",
       "IN2LvbXo9eA": "Vuoron kulku ja voittaminen"
     },
+    "lauta": {
+      "varasto": "Varasto",
+      "linjasto": "Linjasto",
+      "vaaka": "Apinavaaka",
+      "pizzat": "Pizzakortit"
+    },
     "peli_otsikko": "Näin peli toimii",
     "voittaminen_otsikko": "Pelin voittaminen",
     "voittaminen": "Voita keräämällä ensimmäisenä <b>10 erilaista</b> palaa boksiisi. Valmista pelilaudalla olevia pizzoja, niin saat täytteiden mukaiset palat boksiisi. Sydänpizzasta saat yhden vapaavalintaisen lisäpalan.",

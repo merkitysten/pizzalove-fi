@@ -682,6 +682,55 @@ def korttipeli(t, kaikki):
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
 
+# ── Pelilaudan kartta: sanasto saa paikan (16.11.2026) ────────────────────
+# Marko: «Sen sijaan, että nettisivulla kerrotaan, niin pitäisikö näyttää?»
+#
+# 📐 Mitattu 16.11.2026: lautapelisivulla ei ollut yhtään kuvaa laudasta.
+# Kolme <img>-elementtiä olivat ylätunnisteen viiri, tuotepakkaus ja bannerin
+# apina. Silti teksti nimeää varaston, linjaston, apinavaa'an ja
+# pizzakorttipaikat — neljä paikkaa, joita lukija ei voinut nähdä mistään.
+# Painettu pikaohje ratkaisee saman asian kirjaimilla A)–I) ja yhdeksällä
+# erillisellä valokuvalla, koska paperilla ei ole muuta keinoa. Ruudulla osan
+# voi osoittaa siitä kohdasta, jossa se oikeasti on.
+#
+# ⚠️ Nimet EIVÄT ole uutta tekstiä. Ne ovat pelin omat, kahdeksalla kielellä
+# (play/apinavaaka/apinavaaka.js → OPAS[kieli].osat.*.nimi), ja ne täsmäävät
+# painettuun ohjevihkoon siellä missä sellainen on: fi VARASTO / sv LAGER /
+# en STORAGE, fi LINJASTO / sv LINJE / en LINE, fi APINAVAAKA / sv APVÅG /
+# en MONKEY SCALES. Sanat on kopioitu `sisalto/<kieli>.json`:iin, koska sivun
+# teksti kuuluu sinne; lähde on kirjattu tähän, jotta sitä ei arvata uudelleen.
+#
+# 📐 Merkkien paikat ovat prosentteja kuvasta `julkinen/kuvat/pelilauta.webp`
+# (900 × 900, rajattu painotiedoston TrimBoxiin, Gameboard_pizzabox_16.6.2025):
+#   varasto   numeroitu pylväs oikeassa reunassa, puoliväli
+#   linjasto  täyteympyröiden rengas, ananas renkaan oikealla laidalla
+#   vaaka     apinan vasen punnuslautanen
+#   pizzat    vasemman ylänurkan katkoviivaruutu
+# Järjestys on pelin kulku: täytteet lähtevät varastosta, siirtyvät
+# linjastolle, vaaka punnitsee siirron, ja pizzakortit valmistetaan.
+LAUTA_MERKIT = [('varasto', '93', '50'), ('linjasto', '76.5', '47'),
+                ('vaaka', '38', '41'), ('pizzat', '19', '11')]
+
+
+def lautakartta(s):
+    """Lauta kuvana ja osien nimet sen päällä. Nimet ovat oikeaa tekstiä
+    eivätkä kuvaan poltettuja, joten ne kääntyvät ja ruudunlukija lukee ne.
+    Kuva itse on koriste (alt=""): sen sisältö on juuri nämä nimet."""
+    if not s.get('lauta'):
+        return ''
+    merkit = ''.join(
+        '<span class="lautakartta__merkki" data-osa="%s" style="--x:%s%%;--y:%s%%" aria-hidden="true">%d</span>'
+        % (osa, x, y, i + 1) for i, (osa, x, y) in enumerate(LAUTA_MERKIT))
+    nimet = ''.join('<li data-osa="%s"><b>%d</b>%s</li>' % (osa, i + 1, e(s['lauta'][osa]))
+                    for i, (osa, _, _) in enumerate(LAUTA_MERKIT))
+    return ('<figure class="lautakartta">\n'
+            '  <div class="lautakartta__lauta">'
+            '<img src="../kuvat/pelilauta.webp" width="900" height="900" alt="" loading="lazy">'
+            '%s</div>\n'
+            '  <figcaption><ol class="lautakartta__nimet">%s</ol></figcaption>\n'
+            '</figure>' % (merkit, nimet))
+
+
 def lautapeli(t, kaikki):
     s = t['lautapeli']
     lang = t['lang']
@@ -711,6 +760,7 @@ def lautapeli(t, kaikki):
 %s
 
 <h2 id="peli">%s</h2>
+%s
 <div class="laatikko">
   <h3 style="margin-top:0">%s</h3>
   <p>%s</p>
@@ -743,7 +793,8 @@ def lautapeli(t, kaikki):
 %s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
-       e(s['peli_otsikko']), e(s['voittaminen_otsikko']), s['voittaminen'],
+       e(s['peli_otsikko']), lautakartta(s),
+       e(s['voittaminen_otsikko']), s['voittaminen'],
        e(s['valmistelut_otsikko']), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,

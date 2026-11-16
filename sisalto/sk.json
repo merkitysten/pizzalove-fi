@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Príprava hry",
       "IN2LvbXo9eA": "Priebeh ťahu a víťazstvo"
     },
+    "lauta": {
+      "varasto": "Sklad",
+      "linjasto": "Linka",
+      "vaaka": "Opičia váha",
+      "pizzat": "Karty pízz"
+    },
     "peli_otsikko": "Ako hra funguje",
     "voittaminen_otsikko": "Víťazstvo",
     "voittaminen": "Vyhráte, ak ako prvý nazbierate do svojej krabice <b>10 rôznych</b> kúskov. Pripravujte pizze na pláne a za ne získate zodpovedajúce kúsky do krabice. Srdcová pizza vám dá jeden kúsok navyše podľa vlastného výberu.",

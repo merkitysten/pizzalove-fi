@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Preparar el juego",
       "IN2LvbXo9eA": "Cómo es un turno y cómo se gana"
     },
+    "lauta": {
+      "varasto": "Almacén",
+      "linjasto": "Línea",
+      "vaaka": "Balanza del mono",
+      "pizzat": "Cartas de pizza"
+    },
     "peli_otsikko": "Cómo funciona el juego",
     "voittaminen_otsikko": "Cómo se gana",
     "voittaminen": "Gana siendo el primero en reunir <b>10 porciones distintas</b> en tu caja. Prepara pizzas en el tablero para conseguir las porciones correspondientes para tu caja. Una pizza corazón te da una porción extra a tu elección.",

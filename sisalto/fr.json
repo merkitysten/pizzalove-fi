@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Mettre le jeu en place",
       "IN2LvbXo9eA": "Déroulement d’un tour et victoire"
     },
+    "lauta": {
+      "varasto": "Réserve",
+      "linjasto": "Chaîne",
+      "vaaka": "Balance des singes",
+      "pizzat": "Cartes pizza"
+    },
     "peli_otsikko": "Comment fonctionne le jeu",
     "voittaminen_otsikko": "Gagner la partie",
     "voittaminen": "Pour gagner, sois le premier à réunir <b>10 parts différentes</b> dans ta boîte. Prépare les pizzas du plateau pour gagner les parts correspondantes pour ta boîte. Une pizza cœur te donne une part en plus, au choix.",

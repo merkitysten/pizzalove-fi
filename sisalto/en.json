@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Setting up the game",
       "IN2LvbXo9eA": "Taking a turn and winning"
     },
+    "lauta": {
+      "varasto": "Storage",
+      "linjasto": "Line",
+      "vaaka": "Monkey scales",
+      "pizzat": "Pizza cards"
+    },
     "peli_otsikko": "How the game works",
     "voittaminen_otsikko": "Winning the game",
     "voittaminen": "Win by being the first to collect <b>10 different</b> slices in your box. Make pizzas on the board to earn matching slices for your box. A heart pizza gives you one extra slice of your choice.",

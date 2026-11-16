@@ -205,6 +205,12 @@
       "Ya73FhJfj54": "Ställa i ordning spelet",
       "IN2LvbXo9eA": "Spelturen och hur man vinner"
     },
+    "lauta": {
+      "varasto": "Lager",
+      "linjasto": "Linje",
+      "vaaka": "Apvåg",
+      "pizzat": "Pizzakort"
+    },
     "peli_otsikko": "Så fungerar spelet",
     "voittaminen_otsikko": "Att vinna spelet",
     "voittaminen": "Vinn genom att först samla <b>10 olika</b> bitar i din box. Tillaga pizzor på spelbrädet och få motsvarande bitar i din box. En hjärtpizza ger dig en valfri extrabit.",

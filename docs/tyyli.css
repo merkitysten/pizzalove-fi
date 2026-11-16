@@ -72,16 +72,28 @@
 @keyframes kortti-poytaan{
   from{opacity:0;transform:translateY(34%) scale(.74) rotate(var(--kortti-kulma,-6deg))}
 }
-/* PERUSLIIKE 2 — kortti lyödään pizzan päälle. Tämä on pelin oikea liike:
- * «pizza valmistetaan lyömällä omat täytekortit pöydällä olevan pizzan
- * päälle». Kortti nousee, iskee hieman yli ja asettuu. --isku-x/--isku-y
- * kertovat minne (mitataan JS:ssä), --isku-kulma miten vinoon. */
+/* PERUSLIIKE 2 — kortti lyödään pizzan päälle ja palaa riviin. Tämä on pelin
+ * oikea liike: «pizza valmistetaan lyömällä omat täytekortit pöydällä olevan
+ * pizzan päälle». --isku-x/--isku-y kertovat missä pizza on (mitataan JS:ssä,
+ * koska korttien koko on clamp()-sidottu näytön leveyteen), --isku-kulma miten
+ * vinoon kortti kallistuu.
+ *
+ * 📐 Mitattu 16.11.2026: kortti menee matkasta vain 44 %, ei perille. Täysi
+ * matka peitti pizzakortin kokonaan — juuri sen, jonka liikkeen pitäisi
+ * SELITTÄÄ — ja nosto 18 px söi yläpuolisen otsikon. Nyt kortti ulottuu
+ * pizzan reunan päälle, nousee 12 px eikä kosketa otsikkoa.
+ *
+ * ⚠️ Liike päättyy sinne mistä se alkoi, joten fill-modea ei tarvita eikä
+ * lopussa ole nytkähdystä. Jos käytät tätä muualla, pidä sama sääntö. */
 @keyframes kortti-isku{
-  0%  {transform:translate(0,0) rotate(0) scale(1)}
-  40% {transform:translate(calc(var(--isku-x,0px) * .55),calc(var(--isku-y,0px) - 18px))
-       rotate(calc(var(--isku-kulma,-5deg) * .5)) scale(1.07)}
-  70% {transform:translate(var(--isku-x,0px),var(--isku-y,0px)) rotate(var(--isku-kulma,-5deg)) scale(.96)}
-  100%{transform:translate(var(--isku-x,0px),var(--isku-y,0px)) rotate(var(--isku-kulma,-5deg)) scale(1)}
+  0%  {transform:translate(0,0) rotate(0) scale(1);animation-timing-function:var(--liike-lahtee)}
+  34% {transform:translate(calc(var(--isku-x,0px) * .20),calc(var(--isku-y,0px) * .20 - 12px))
+       rotate(calc(var(--isku-kulma,-5deg) * .55)) scale(1.05);animation-timing-function:var(--liike-saapuu)}
+  56% {transform:translate(calc(var(--isku-x,0px) * .44),calc(var(--isku-y,0px) * .44 + 3px))
+       rotate(var(--isku-kulma,-5deg)) scale(.97);animation-timing-function:var(--liike-pomppu)}
+  72% {transform:translate(calc(var(--isku-x,0px) * .42),calc(var(--isku-y,0px) * .42))
+       rotate(var(--isku-kulma,-5deg)) scale(1);animation-timing-function:var(--liike-saapuu)}
+  100%{transform:translate(0,0) rotate(0) scale(1)}
 }
 /* PERUSLIIKE 3 — jokin onnistui: lyhyt syke paikallaan. */
 @keyframes kortti-syke{0%,100%{transform:scale(1)}38%{transform:scale(1.085)}}
@@ -392,7 +404,7 @@ ul.lista li,ol.lista li{margin:4px 0}
   filter:drop-shadow(0 3px 6px rgba(60,30,0,.22)) drop-shadow(0 0 13px rgba(244,121,32,.8))}
 
 /* Isku: täytekortit lyödään pizzan päälle. Nuolet pois iskun ajaksi. */
-.keittio.isku .keittio__paikka{animation:kortti-isku var(--liike-hidas) var(--liike-pomppu)}
+.keittio.isku .keittio__paikka{animation:kortti-isku var(--liike-hidas) linear}
 .keittio.isku .keittio__nuoli{opacity:0}
 .keittio.isku .keittio__pizza{animation:kortti-syke var(--liike-hidas) var(--liike-pomppu)}
 .keittio__paikka.saapuu img{animation:kortti-poytaan var(--liike-perus) var(--liike-saapuu)}
@@ -401,6 +413,7 @@ ul.lista li,ol.lista li{margin:4px 0}
    joten se ei kasvata sivua. Rakennetaan vasta kun se ensi kerran avataan,
    jotta korttikuvia ei ladata turhaan. */
 .keittio__valitsin{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:6;
+  max-width:414px;margin:0 auto;
   background:var(--surface);border:1px solid var(--line2);border-radius:14px;
   box-shadow:0 12px 34px rgba(60,34,12,.3);padding:9px;
   display:grid;grid-template-columns:repeat(6,minmax(0,58px));gap:6px;justify-content:center;
@@ -457,6 +470,45 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 .video-kortti figcaption{font-size:14px;font-weight:600;margin-top:6px;line-height:1.35}
 .kieli-merkki{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;
   background:var(--line);color:var(--soft);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+
+/* ---------- Pelilaudan kartta (16.11.2026) ----------
+ * Lautapelisivulla ei ollut yhtään kuvaa laudasta, vaikka teksti nimeää
+ * varaston, linjaston, apinavaa'an ja pizzakorttipaikat. Painettu pikaohje
+ * joutuu luettelemaan osat kirjaimilla A)–I) ja yhdeksänä erillisenä kuvana;
+ * ruutu voi osoittaa osan siitä kohdasta, jossa se on.
+ *
+ * ⚠️ Tässä EI ole liikettä, eikä se ole puute: asetelma ei muutu. Numerot
+ * tekevät työn myös ilman osoitinta — ja juuri siksi ne tekevät sen myös
+ * puhelimessa, jossa hoveria ei ole. Osoittimella saa lisäksi muiden
+ * merkkien himmennyksen, mutta se on tilanvaihto eikä animaatio, joten
+ * prefers-reduced-motion ei tarvitse tähän omaa sääntöä.
+ *
+ * 📐 Leveys 440 px: kuva on 900 px, joten 2x-näytöllä tarkkuus riittää
+ * (440 × 2 = 880). Puhelimessa (375 px) kuva on 343 px ja merkki 22 px.
+ * Merkkien paikat tulevat rakenna.py:n LAUTA_MERKIT-taulukosta --x/--y:nä,
+ * jotta kuvaa ja koordinaatteja ei tarvitse etsiä kahdesta paikasta. */
+.lautakartta{margin:16px 0 20px;padding:0}
+.lautakartta__lauta{position:relative;width:min(440px,100%);margin:0 auto;
+  border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(60,34,12,.18)}
+.lautakartta__lauta img{width:100%;height:auto;display:block}
+.lautakartta__merkki,.lautakartta__nimet b{width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;background:var(--ink);color:#fff;
+  font-weight:800;font-size:13px;line-height:1;flex:none;
+  box-shadow:0 0 0 2.5px #fff,0 1px 4px rgba(0,0,0,.4)}
+.lautakartta__merkki{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%)}
+.lautakartta__nimet{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;
+  list-style:none;margin:12px 0 0;padding:0}
+.lautakartta__nimet li{display:flex;align-items:center;gap:7px;
+  font-weight:700;font-size:15px;color:var(--deep)}
+/* Osoittimella: nimen kohdalla muut merkit himmenevät. :has() puuttuu vain
+   vanhoista selaimista, ja silloin kartta toimii numeroilla kuten puhelimessa. */
+@media (hover:hover){
+  .lautakartta__nimet li:hover{color:var(--orange)}
+  .lautakartta:has(li[data-osa="varasto"]:hover) .lautakartta__merkki:not([data-osa="varasto"]),
+  .lautakartta:has(li[data-osa="linjasto"]:hover) .lautakartta__merkki:not([data-osa="linjasto"]),
+  .lautakartta:has(li[data-osa="vaaka"]:hover) .lautakartta__merkki:not([data-osa="vaaka"]),
+  .lautakartta:has(li[data-osa="pizzat"]:hover) .lautakartta__merkki:not([data-osa="pizzat"]){opacity:.25}
+}
 
 /* ---------- Vaiheet (lautapelin vuoro) ---------- */
 ol.vaiheet{list-style:none;padding:0;margin:8px 0;counter-reset:v}

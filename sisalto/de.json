@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Das Spiel aufbauen",
       "IN2LvbXo9eA": "Spielzug und Sieg"
     },
+    "lauta": {
+      "varasto": "Lager",
+      "linjasto": "Linie",
+      "vaaka": "Affenwaage",
+      "pizzat": "Pizzakarten"
+    },
     "peli_otsikko": "So funktioniert das Spiel",
     "voittaminen_otsikko": "Spielziel",
     "voittaminen": "Gewinne, indem du als Erster <b>10 verschiedene</b> Stücke in deiner Box sammelst. Bereite die Pizzas auf dem Spielbrett zu, dann bekommst du die passenden Stücke für deine Box. Eine Herzpizza bringt dir ein zusätzliches Stück nach Wahl.",

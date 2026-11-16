@@ -211,6 +211,12 @@
       "Ya73FhJfj54": "Het spel klaarzetten",
       "IN2LvbXo9eA": "Een beurt spelen en winnen"
     },
+    "lauta": {
+      "varasto": "Voorraad",
+      "linjasto": "Lijn",
+      "vaaka": "Apenweegschaal",
+      "pizzat": "Pizzakaarten"
+    },
     "peli_otsikko": "Zo werkt het spel",
     "voittaminen_otsikko": "Het spel winnen",
     "voittaminen": "Je wint als je als eerste <b>10 verschillende</b> stukken in je doos hebt. Maak pizza’s op het bord om de bijpassende stukken voor je doos te krijgen. Een hartjespizza geeft je één extra stuk naar keuze.",
