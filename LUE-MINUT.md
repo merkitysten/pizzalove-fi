@@ -80,6 +80,15 @@ SVG-lipullaan ja ✓:lla, eikä sitä voi pyytää uudelleen.
 osoitteeseen `?pyynto=xx` (esim. `pizzalove.fi/fi/?pyynto=ko`). Ilman sitä
 banneri näkyy vain, jos selaimen oma kieli puuttuu sivustolta.
 
+⚠️ **`palvelin/kaannospyynto.php` on ladattava palvelimelle erikseen**, ennen
+kuin «Tekeillä»-merkintä näkyy muille kuin napin painajalle. Tiedosto osaa nyt
+vastata myös GET-pyyntöön listalla kielistä, jotka ovat juuri nyt työn alla.
+Tieto luetaan GitHubin ajoista ajon nimestä «Konekäännös <kieli>»
+(`run-name` tiedostossa `.github/workflows/konekaannos.yml`), **eikä sitä
+talleteta palvelimelle** — alkuperäinen «ei tietokantaa, ei lokia, ei evästettä»
+pitää. Ilman latausta sivu toimii kuten ennenkin: painaja näkee «Tekeillä»,
+muut eivät.
+
 ## Peli tulee pizzapartysta (11.11.2026)
 
 `julkinen/play/` on **kopio** `../pizzaparty/`:sta, ja kopiointi tehdään

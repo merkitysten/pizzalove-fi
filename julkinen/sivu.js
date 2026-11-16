@@ -218,6 +218,7 @@
     haku: teksti('haku', 'Search for a language'),
     pyyda: teksti('pyyda', 'Request'),
     eituettu: teksti('eituettu', 'Not supported yet'),
+    tekeillaLyhyt: teksti('tekeillalyhyt', 'In progress'),
     sulje: teksti('sulje', 'Close'),
     kysymys: teksti('kysymys', 'Want the Pizza Love card game rules in %s?'
                     + ' We’ll make them now – machine-translated, free.'),
@@ -407,16 +408,33 @@
     lista.setAttribute('data-tyhja', nakyy ? '' : 'tyhja');
   }
 
+  /* Rivin merkintä «Tekeillä»: nappi katoaa ja tilalle tulee merkki.
+     🔵 Marko 16.11.2026: «siihen pitäisi tulla jokin sellainen pending tai
+     pyydetty -teksti, jotta painaja ja myös muut tietävät, että tämä kieli on
+     jo työnalla» + «nappi saisi myös vähän muuttaa väriä ja tyyliä».
+     Merkki korvaa napin kokonaan: painettavan näköinen nappi, jota ei voi
+     painaa, on huonompi kuin merkki, joka kertoo tilan. */
+  function merkitseTekeilla(kohta) {
+    var vanha = kohta.querySelector('button[data-k]');
+    if (vanha) vanha.remove();
+    if (kohta.querySelector('.valitsin__tekeilla')) return;
+    var merkki = document.createElement('span');
+    merkki.className = 'valitsin__tekeilla';
+    merkki.textContent = T.tekeillaLyhyt;
+    kohta.appendChild(merkki);
+  }
+
   /* Pyyntö hakemistosta: rivin nappi vaihtuu tilaksi, ja valmistuessaan
      linkiksi — sama pyyda(), sama odotus, sama linkki kuin bannerissa. */
   function riviPyyda(nappi) {
     var k = nappi.getAttribute('data-k'), n = nappi.getAttribute('data-nimi') || nimi(k);
     var kohta = nappi.parentNode;
-    nappi.disabled = true;
+    merkitseTekeilla(kohta);
     tila.textContent = korvaa(T.tekeilla, n);
     pyyda(k, function (mita, sivu) {
+      var merkki = kohta.querySelector('.valitsin__tekeilla');
       if (mita === 'valmis') {
-        nappi.remove();
+        if (merkki) merkki.remove();
         var a = document.createElement('a');
         a.href = sivu; a.hreflang = k; a.className = 'valitsin__valmis';
         a.textContent = korvaa(T.avaaSaannot, n);
@@ -425,10 +443,36 @@
       } else if (mita === 'tekeillä') {
         tila.textContent = korvaa(T.tekeilla, n);
       } else {
+        /* Epäonnistui: merkki pois ja nappi takaisin, jotta voi yrittää
+           uudelleen. «Tekeillä» jäisi muuten valheeksi. */
+        if (merkki) merkki.remove();
+        if (!kohta.querySelector('button[data-k]')) kohta.appendChild(nappi);
         nappi.disabled = false;
         tila.textContent = T.eiOnnistunut;
       }
     });
+  }
+
+  /* «Myös muut tietävät» (Marko 16.11.2026): mitkä kielet ovat juuri nyt työn
+     alla. Palvelin lukee tilan GitHubin ajoista — meille ei talleteta mitään,
+     koska GitHubilla on se tieto jo valmiina. Jos palvelin ei osaa vastata
+     (vanha versio tiedostosta), rivit jäävät merkitsemättä eikä mikään hajoa:
+     puute näkyy puutteena, ei virheenä. */
+  function merkitseTyonAlla() {
+    fetch(osoite, { method: 'GET' }).then(function (r) {
+      return r.ok ? r.json() : null;
+    }).then(function (v) {
+      var kielet = v && v.tekeilla;
+      if (!kielet || !kielet.length) return;
+      for (var i = 0; i < kielet.length; i++) {
+        var k = String(kielet[i]).toLowerCase();
+        if (!kelpaa(k) || olemassa[k]) continue;
+        var nappi = lista.querySelector('button[data-k="' + k + '"]');
+        if (nappi) merkitseTekeilla(nappi.parentNode);
+        var ehd = ehdotus.querySelector('button[data-k="' + k + '"]');
+        if (ehd) merkitseTekeilla(ehd.parentNode);
+      }
+    }).catch(function () {});
   }
 
   function nouda() {
@@ -445,6 +489,7 @@
         try { return x[1].localeCompare(y[1], sivunKieli); } catch (_) { return x[1] < y[1] ? -1 : 1; }
       });
       piirra(data);
+      merkitseTyonAlla();
       /* Ehdotus ensin: puhelimen kieli, jos sitä ei vielä ole eikä se ole
          oikealta vasemmalle. Sama tunnistus kuin bannerissa (koodi()). */
       var oma = selaimenKieli();

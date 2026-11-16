@@ -37,6 +37,47 @@ function vastaa($koodi, $data) {
     exit;
 }
 
+function asetukset() {
+    $polku = dirname($_SERVER['DOCUMENT_ROOT']) . '/pizzalove-kaannos/config.php';
+    if (!is_readable($polku)) return null;
+    $cfg = require $polku;
+    return empty($cfg['github_token']) ? null : $cfg;
+}
+
+/* Mitkä kielet ovat juuri nyt työn alla?
+ * 🔵 Marko 16.11.2026: «jotta painaja ja myös muut tietävät, että tämä kieli
+ * on jo työnalla.»
+ * ⚠️ Tätä EI talleteta tänne: tieto on GitHubin ajoissa valmiina, ja
+ * alkuperäinen päätös «ei tietokantaa, ei lokia, ei evästettä» pitää. Kieli
+ * luetaan ajon nimestä «Konekäännös <kieli>» (run-name konekaannos.yml:ssä).
+ */
+function tyon_alla($token) {
+    $kielet = array();
+    $ch = curl_init('https://api.github.com/repos/merkitysten/pizzalove-fi'
+                    . '/actions/workflows/konekaannos.yml/runs?per_page=20');
+    curl_setopt_array($ch, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8,
+        CURLOPT_HTTPHEADER => array(
+            'Accept: application/vnd.github+json',
+            'Authorization: Bearer ' . $token,
+            'X-GitHub-Api-Version: 2022-11-28',
+            'User-Agent: pizzalove-kaannospyynto')));
+    $vastaus = curl_exec($ch);
+    $tila = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($tila !== 200) return $kielet;
+    $data = json_decode($vastaus, true);
+    if (!is_array($data) || !isset($data['workflow_runs'])) return $kielet;
+    $kesken = array('queued', 'in_progress', 'waiting', 'requested', 'pending');
+    foreach ($data['workflow_runs'] as $ajo) {
+        if (!isset($ajo['status']) || !in_array($ajo['status'], $kesken, true)) continue;
+        $osat = explode(' ', trim(isset($ajo['display_title']) ? $ajo['display_title'] : ''));
+        $k = strtolower(end($osat));
+        // Vanhat ajot ovat nimeltään pelkkä «Konekäännös»: ne eivät läpäise tätä.
+        if (preg_match('/^[a-z]{2,3}(-[a-z0-9]{2,8}){0,2}$/', $k)) $kielet[] = $k;
+    }
+    return array_values(array_unique($kielet));
+}
+
 function sivu_olemassa($url) {
     $ch = curl_init($url);
     curl_setopt_array($ch, array(CURLOPT_NOBODY => true, CURLOPT_RETURNTRANSFER => true,
@@ -49,8 +90,16 @@ function sivu_olemassa($url) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') vastaa(405, array('virhe' => 'vain POST'));
 if (!in_array($alkupera, $SALLITUT, true)) vastaa(403, array('virhe' => 'alkuperä'));
+
+/* GET = lista työn alla olevista kielistä (sivu merkitsee ne «Tekeillä»).
+ * Lyhyt välimuisti, jottei jokainen valitsimen avaus kysy GitHubilta. */
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $cfg = asetukset();
+    header('Cache-Control: public, max-age=30');
+    vastaa(200, array('tekeilla' => $cfg ? tyon_alla($cfg['github_token']) : array()));
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') vastaa(405, array('virhe' => 'vain POST tai GET'));
 
 $syote = json_decode(file_get_contents('php://input'), true);
 $kieli = (is_array($syote) && isset($syote['kieli'])) ? strtolower(trim((string)$syote['kieli'])) : '';
@@ -62,11 +111,13 @@ if (in_array($kieli, $IHMISEN, true)) vastaa(200, array('tila' => 'valmis', 'siv
 $sivu = 'https://pizzalove.fi/' . $kieli . '/card-game.html';
 if (sivu_olemassa($sivu)) vastaa(200, array('tila' => 'valmis', 'sivu' => $sivu));
 
-$koti = dirname($_SERVER['DOCUMENT_ROOT']);
-$asetukset = $koti . '/pizzalove-kaannos/config.php';
-if (!is_readable($asetukset)) vastaa(500, array('virhe' => 'asetukset puuttuvat'));
-$cfg = require $asetukset;
-if (empty($cfg['github_token'])) vastaa(500, array('virhe' => 'asetukset puuttuvat'));
+$cfg = asetukset();
+if (!$cfg) vastaa(500, array('virhe' => 'asetukset puuttuvat'));
+
+/* Jo työn alla: ei käynnistetä toista ajoa samalle kielelle. */
+if (in_array($kieli, tyon_alla($cfg['github_token']), true)) {
+    vastaa(200, array('tila' => 'tekeillä', 'sivu' => $sivu));
+}
 
 $ch = curl_init('https://api.github.com/repos/merkitysten/pizzalove-fi/actions/workflows/konekaannos.yml/dispatches');
 curl_setopt_array($ch, array(

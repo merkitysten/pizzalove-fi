@@ -16,6 +16,12 @@
 # Claude API ilman avainta: Workload Identity Federation. ⚠️ ÄLÄ lisää
 # ANTHROPIC_API_KEY-salaisuutta: se ohittaisi tämän.
 name: Konekäännös
+# 📐 Ajon nimeen kieli (Marko 16.11.2026). Kaksi syytä: Actions-listalta näkee
+# suoraan minkä kielen ajo kaatui — hindin syytä etsittiin lokeista, koska
+# kaikki ajot olivat nimeltään pelkkä «Konekäännös» — ja palvelin
+# (palvelin/kaannospyynto.php) lukee tästä nimestä, mitkä kielet ovat työn
+# alla, eikä sen tarvitse tallettaa sitä itse.
+run-name: Konekäännös ${{ inputs.kieli }}
 
 on:
   workflow_dispatch:

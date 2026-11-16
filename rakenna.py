@@ -332,6 +332,7 @@ def ylaosa(t, sivu, kaikki):
         ('haku', ui.get('pyynto_haku', 'Search for a language')),
         ('pyyda', ui.get('pyynto_pyyda', 'Request')),
         ('eituettu', ui.get('pyynto_ei_tuettu', 'Not supported yet')),
+        ('tekeillalyhyt', ui.get('pyynto_tekeilla_lyhyt', 'In progress')),
         ('otsikko', ui.get('pyynto_otsikko', 'All languages')),
         ('sulje', ui.get('pyynto_sulje', 'Close')),
         ('kysymys', ui.get('pyynto_kysymys', 'Want the Pizza Love card game rules in %s?'
