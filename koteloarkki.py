@@ -640,6 +640,59 @@ TIIVISTYS_O = ['', _O1, _O2, _O3]
 PORTAAT = sorted(((v, o) for v in range(4) for o in range(4)), key=lambda p: (p[0] + p[1], p[0]))
 
 
+# Rasteriviittaukset valmiista sivusta: <img src>, <image href> ja CSS url().
+# ⚠️ Luetaan SIVUSTA eikä lähdepoluista, koska painokuvat() on jo vaihtanut
+# korttikuvat väliaikaisiksi PNG-tiedostoiksi — lähdepolkuja ei enää ole.
+RASTERI = re.compile(r'(?:src|(?:xlink:)?href)="([^"]+\.(?:webp|png|jpe?g))"'
+                     r'|url\((["\']?)([^)"\']+\.(?:webp|png|jpe?g))\2\)', re.I)
+# Nämä saa litistää valkoiselle: pizza-, tayte- ja tausta-alkuiset (sama
+# rajaus kuin PAINOKUVA). Basso, ajatuskupla ja hanta EIVÄT ole mukana —
+# ne menevät hiusviivan päälle, joten läpinäkyvyys on niillä sisältöä.
+LITISTETTAVA = re.compile(r'(?:^|[/_])(?:pizza|tayte|tausta)-[\w-]+\.(?:webp|png|jpe?g)$', re.I)
+
+
+def pakattu(kieli, sivun_html):
+    """Sama arkki jälleenmyyjille: rasterikortit JPEGinä, muu ennallaan.
+
+    Palauttaa 1 jos jokin koe kaatui — pakattukin käy samat kokeet kuin
+    näyttöversio (QR, sisältö, sivumäärä) ja lisäksi kokokokeen."""
+    tiedosto = ks.KIELET[kieli]['tiedosto']
+    kohde = ks.pakattu_polku(tiedosto)
+    osumat = [m.group(1) or m.group(3) for m in RASTERI.finditer(sivun_html)]
+    valitut = sorted({u for u in osumat if LITISTETTAVA.search(u.rsplit('/', 1)[-1])})
+    kuvat = ks.jpeg_kuvat(valitut, TANNE, PAINOKUVA_LEVEYS)
+    if len(kuvat) != len(valitut):
+        print('⚠️  pakkaus sai %d/%d kuvaa — koko jää suuremmaksi'
+              % (len(kuvat), len(valitut)))
+    sivu = os.path.join(TANNE, '.koteloarkki-%s-2mb.html' % kieli)
+    teksti_html = sivun_html
+    for polku, data in kuvat.items():
+        teksti_html = teksti_html.replace(polku, data)
+    with open(sivu, 'w', encoding='utf-8') as f:
+        f.write(teksti_html)
+    tulosta(sivu, kohde)
+    os.unlink(sivu)
+    n = ks.sivuja(kohde)
+    print('%s  (%.0f kt, %d sivua, %d kuvaa JPEGinä)'
+          % (kohde, os.path.getsize(kohde) / 1024, n, len(kuvat)))
+    virhe = 0
+    if ks.kokokoe(kohde) is False:
+        virhe = 1
+    if n != SIVUJA:
+        print('🔴 PAKATUSSA SIVUJA %d, PITÄÄ OLLA TASAN %d.' % (n, SIVUJA))
+        virhe = 1
+    # Samat kokeet kuin näyttöversiolle: pakkaus ei saa viedä QR:ää eikä
+    # tekstiä. 📐 Juuri nämä kaksi ghostscript rikkoi (QR sumeni, kirjasin
+    # muuttui Type 3:ksi), joten ne ovat tämän muutoksen vartija.
+    t = teksti(kohde)
+    if len(t) < 2000:
+        print('🔴 PAKATUSTA EI SAATU TEKSTIÄ: kirjasimet eivät säilyneet.')
+        virhe = 1
+    if ks.qr_lukukoe(kohde, osoite(ks.KIELET[kieli])) is False:
+        virhe = 1
+    return virhe
+
+
 def verkkopolku(kieli):
     return os.path.join(TANNE, 'julkinen', 'pdf', ks.KIELET[kieli]['tiedosto'])
 
@@ -701,6 +754,11 @@ def tee(kieli, luonnos):
     if ks.qr_lukukoe(kohde, osoite(ks.KIELET[kieli])) is False:
         virhe = 1
     if ks.osoitekoe(osoite(ks.KIELET[kieli])) is False:
+        virhe = 1
+    # Jälleenmyyjien 2 Mt -versio SAMASTA hyväksytystä sivusta (html_ on se
+    # tiivistysporras joka mahtui kahdelle sivulle) — ei toisesta ajosta eikä
+    # käsin tehdystä kopiosta.
+    if pakattu(kieli, html_):
         virhe = 1
     return virhe
 

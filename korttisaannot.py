@@ -1093,6 +1093,142 @@ def sivuja(pdf):
     return len(re.findall(rb'/Type\s*/Page[^s]', open(pdf, 'rb').read()))
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PAKATTU RINNAKKAISVERSIO JÄLLEENMYYJILLE (Marko 16.11.2026,
+# TEHTAVA-PAKATUT-PDF.md)
+#
+# Philibert ottaa liitteeksi enintään 2 Mt ja kaatuu yli menevästä HTTP 500:aan.
+# Jokaisesta sääntöarkista syntyy siksi SAMASSA AJOSSA kaksi tiedostoa: näytön
+# (nimi ja laatu ennallaan) ja pakattu kansioon `jakelu/2mb/`.
+#
+# 📐 MITTAUS 16.11.2026, JOKA RATKAISI TAVAN. Valmiin PDF:n jälkikäsittely
+# (ghostscript) hylättiin, koska se teki kolme vahinkoa:
+#   · QR sumeni — gs rasteroi vektorin ja pienensi sen tarkkuutta
+#   · lautapelin PDF KASVOI 3,1 -> 3,3 Mt — valmis JPEG uudelleenpakattuna
+#   · kirjasimet muuttuivat Type 3:ksi — teksti ei ole enää haettavissa
+# Kaikilla kolmella on sama syy: jälkikäsittelijä ei tiedä mikä on mitäkin.
+# Lähteessä tiedetään: QR on SVG, kirjasin on kirjasin, ja vain rasterikuva
+# pakataan. Siksi pakattu versio RENDERÖIDÄÄN UUDELLEEN samasta HTML:stä,
+# jossa rasterikuvat on vaihdettu JPEGiksi — ei kosketa valmiiseen PDF:ään.
+#
+# 📐 Ja siksi pelkkä kuvien vaihto riittää: korttiarkin 3,89 Mt:sta 3,79 Mt
+# (98 %) on kuvia, ja niistä 3,34 Mt on 18 häviötöntä korttikuvaa
+# (FlateDecode 300x455, n. 186 kt kpl). Sama kuva JPEGinä (q 0,82) on 31 kt.
+#
+# ⚠️ PAKKAAJA ON SAMA CHROME JOLLA PDF SYNTYY. Ei uutta riippuvuutta: Pillow
+# ja pymupdf puuttuvat tältä koneelta, mutta Chrome on pakollinen jo nyt.
+# Canvas tekee samalla litistyksen valkoiselle, joka JPEGissä on pakko tehdä.
+#
+# ⚠️ KAIKKIA KUVIA EI SAA LITISTÄÄ. Basso, ajatuskupla ja häntä menevät
+# hiusviivan päälle, joten niiden läpinäkyvyys on sisältöä (sama rajaus kuin
+# koteloarkki.PAINOKUVA). Kutsuja kertoo mitkä saa pakata — tämä ei arvaa.
+# ─────────────────────────────────────────────────────────────────────────────
+
+PAKATTU_KATTO = 2 * 1000 * 1000          # Philibertin liiteraja, tavuina
+PAKKAUS_LAATU = 0.82                     # mitattu: 300 px kortti -> 31 kt
+PAKKAUS_KANSIO = os.path.join(TANNE, 'jakelu', '2mb')
+
+_PAKKAUSSIVU = '''<!doctype html><meta charset="utf-8"><title>ODOTA</title>
+<body><pre id="ulos"></pre><div id="kuvat" style="display:none">%s</div><script>
+/* ⚠️ KUVAT OVAT <img>-TAGEINA JA MUUNNOS ON SYNKRONINEN onloadissa.
+   📐 Mitattu 16.11.2026: async/await + new Image() EI toimi
+   `--virtual-time-budget`in kanssa — virtuaaliaika juoksee loppuun heti, kun
+   mikään ajastin ei odota, ja --dump-dom tulostaa sivun ENNEN kuin lupaukset
+   ovat ratkenneet. Kahdella kuvalla se ehti, neljällä ei, ja oire oli
+   «sivu ei palauttanut kuvia» eikä virhe. <img> on osa latausta, joten
+   onload odottaa ne, ja synkronisessa käsittelijässä ei ole mitään mitä
+   virtuaaliaika voisi ohittaa. */
+const LEVEYS = %d, LAATU = %s;
+window.addEventListener('load', () => {
+  const ulos = {};
+  for (const img of document.querySelectorAll('#kuvat img')) {
+    if (!img.naturalWidth) continue;
+    const s = Math.min(1, LEVEYS / img.naturalWidth);
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(img.naturalWidth * s));
+    c.height = Math.max(1, Math.round(img.naturalHeight * s));
+    const x = c.getContext('2d');
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, c.width, c.height);
+    x.drawImage(img, 0, 0, c.width, c.height);
+    ulos[img.dataset.polku] = c.toDataURL('image/jpeg', LAATU);
+  }
+  document.getElementById('ulos').textContent = JSON.stringify(ulos);
+  document.title = 'VALMIS';
+});
+</script></body>'''
+
+
+def jpeg_kuvat(polut, juuri, leveys, laatu=PAKKAUS_LAATU):
+    """{polku: JPEG-data-URL} — muunnos tehdään Chromen canvasilla.
+
+    ⚠️ Palauttaa TYHJÄN sanakirjan, jos muunnos ei onnistu, eikä kutsuja saa
+    lukea sitä onnistumiseksi: silloin pakattu jää yhtä suureksi kuin
+    näyttöversio ja kokokoe kertoo sen. Hiljainen puolittainen pakkaus olisi
+    pahempi kuin ei pakkausta lainkaan."""
+    if not polut:
+        return {}
+    tyo = tempfile.mkdtemp(prefix='pakkaus-')
+    try:
+        uri = [p if p.startswith('file://') else 'file://' + os.path.join(juuri, p)
+               for p in polut]
+        sivu = os.path.join(tyo, 'pakkaa.html')
+        tagit = ''.join('<img data-polku="%s" src="%s">' % (u, u) for u in uri)
+        with open(sivu, 'w') as f:
+            f.write(_PAKKAUSSIVU % (tagit, leveys, laatu))
+        # Sama kahtiajako kuin tulosta():ssa — Macilla Chrome, muualla
+        # Playwright. ⚠️ Ilman jälkimmäistä pakkaus ei toimisi GitHub
+        # Actionsissa (konekaannos.yml), jossa Chromea ei ole tässä polussa
+        # ja koko koe kaatuisi vasta kokokokeeseen.
+        if os.path.exists(CHROME):
+            dom = subprocess.run(
+                [CHROME, '--headless', '--disable-gpu', '--allow-file-access-from-files',
+                 '--virtual-time-budget=60000', '--dump-dom', 'file://' + sivu],
+                capture_output=True, text=True).stdout
+        else:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as pw:
+                selain = pw.chromium.launch(args=['--allow-file-access-from-files'])
+                lehti = selain.new_page()
+                lehti.goto('file://' + sivu, wait_until='load')
+                lehti.wait_for_function("document.title === 'VALMIS'", timeout=120000)
+                dom = lehti.content()
+                selain.close()
+        m = re.search(r'<pre id="ulos">(.*?)</pre>', dom, re.S)
+        if not m or not m.group(1).strip():
+            print('⚠️  Pakkaussivu ei palauttanut kuvia')
+            return {}
+        data = json.loads(html.unescape(m.group(1)))
+        return {p: data[u] for p, u in zip(polut, uri) if u in data}
+    finally:
+        shutil.rmtree(tyo, ignore_errors=True)
+
+
+def pakattu_polku(tiedosto):
+    os.makedirs(PAKKAUS_KANSIO, exist_ok=True)
+    return os.path.join(PAKKAUS_KANSIO, tiedosto)
+
+
+def kokokoe(pdf, katto=None):
+    """Pakattu EI SAA ylittää kattoa. Ylitys kaataa ajon, jotta kone kertoo
+    sen heti eikä Philibertin lomake myöhemmin.
+
+    ⚠️ KATTO LUETAAN KUTSUHETKELLÄ, ei oletusarvona. 📐 Ensimmäinen versio oli
+    `katto=PAKATTU_KATTO`, ja Python sitoo oletusarvon MÄÄRITTELYHETKELLÄ:
+    vakion muuttaminen ei vaikuttanut mihinkään, joten tahallisen ylityksen
+    koe meni läpi vihreänä sekä oikealla että rikotulla katolla. Vartija
+    jota ei voi koetella ei ole vartija."""
+    if katto is None:
+        katto = PAKATTU_KATTO
+    koko = os.path.getsize(pdf)
+    if koko > katto:
+        print('🔴 PAKATTU YLI RAJAN: %s on %.2f Mt, katto %.2f Mt. '
+              'Philibert ei ota liitettä vastaan.'
+              % (os.path.basename(pdf), koko / 1e6, katto / 1e6))
+        return False
+    print('Kokokoe: pakattu %.2f Mt (katto %.2f Mt) — OK' % (koko / 1e6, katto / 1e6))
+    return True
+
+
 def tee(kieli):
     lahde, kohde, sivu = polut(kieli)
     os.makedirs(os.path.dirname(kohde), exist_ok=True)
