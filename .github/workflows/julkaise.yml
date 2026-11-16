@@ -5,7 +5,7 @@
 # ⚠️ Edellyttää: Settings → Pages → Source = «GitHub Actions» (kerran).
 #
 # Käynnistyy: puskusta main-haaraan, konekäännösajon lopuksi (workflow_call)
-# tai käsin. Jos arkin pohja (koteloarkki.py, korttisaannot.py, liput) tai käännöksen rakenne (kaanna.py) muuttui,
+# tai käsin. Jos arkin pohja (koteloarkki.py, korttisaannot.py, liput) muuttui,
 # käynnistetään lisäksi konekäännösarkkien uusinta (Konekäännös, kieli «kaikki»).
 name: Julkaise
 
@@ -47,12 +47,20 @@ jobs:
         with:
           path: docs
 
+      # ⚠️ tyokalut/kaanna.py EI ole listalla. 📐 Mitattu 16.11.2026: Markon
+      # hindi-pyyntö (ajo #11) jäi jonoon, koska samaan aikaan käynnistyi
+      # «kaikki»-ajo — jonka oli laukaissut push, jossa muuttui vain kaanna.py.
+      # Konekäännösajoja voi olla vain yksi kerrallaan (concurrency), joten
+      # huoltoajo vei asiakkaan pyynnön paikan. Eikä sitä tarvittu: arkit tekee
+      # koteloarkki.py valmiista JSONista, ja «täydennä» ajetaan joka tapauksessa
+      # jokaisessa ajossa. Jos täydennyksen logiikka muuttuu ja se halutaan
+      # kaikille heti, aja «kaikki» käsin: Actions → Konekäännös → Run workflow.
       - name: Muuttuiko arkin pohja? → konekäännösarkit uudelleen
         if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -Eq '^(koteloarkki\.py|korttisaannot\.py|tyokalut/kaanna\.py|julkinen/kuvat/liput/)'; then
+          if git diff --name-only HEAD~1 HEAD | grep -Eq '^(koteloarkki\.py|korttisaannot\.py|julkinen/kuvat/liput/)'; then
             gh workflow run konekaannos.yml -f kieli=kaikki
             echo "::notice::Arkin pohja muuttui — konekäännösarkit tehdään uudelleen."
           fi
