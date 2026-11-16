@@ -8,6 +8,10 @@ ilmoittaa käännösvirheitä tai epäselvyyksistä.»
 
 Käyttö (GitHub Actions, .github/workflows/konekaannos.yml):
     python3 tyokalut/kaanna.py pl        (mikä tahansa BCP 47 -koodi: zh-Hans, ja, pt-BR, es-419 …)
+    python3 tyokalut/kaanna.py --taydenna
+        täydentää aiemmat konekäännökset, joista puuttuu myöhemmin lisätty osa
+        (sivun valikko ja napit «ui», tiedostokoon merkintä «koko»). Ei uusi
+        käännös: ei kuluta päiväkattoa eikä riko «yksi pyyntö kieltä kohden» -sääntöä.
 Paikallinen koe ilman API:a (valmis vastaus tiedostosta):
     python3 tyokalut/kaanna.py pl --vastaus vastaus.json
 
@@ -88,13 +92,41 @@ EI_KAANNETA = ('avain', 'numero', 'nimi', 'esimerkit')
 
 
 # ---------------------------------------------------------------- lähteet
+def _sivusto(k):
+    return json.load(open(os.path.join(TANNE, 'sisalto', k + '.json'), encoding='utf-8'))
+
+
+def ui_lahde(k):
+    """Sivun valikko, napit ja alaosa (sisalto/xx.json «ui»), englannin avaimin.
+    Marko 16.11.2026: «Napit ja välilehdet eivät kääntyneet.»"""
+    en = _sivusto('en')['ui']
+    s = _sivusto(k)['ui']
+    return {a: s.get(a, en[a]) for a in en}
+
+
 def lahteet():
     d = {}
     for k in LAHDEKIELET:
-        s = json.load(open(os.path.join(TANNE, 'sisalto', k + '.json'), encoding='utf-8'))
+        s = _sivusto(k)
         d[k] = {'korttipeli': s['korttipeli'],
-                'kielet': {a: ks.KIELET[k][a] for a in ARKIN_KENTAT}}
+                'kielet': {a: ks.KIELET[k][a] for a in ARKIN_KENTAT},
+                'ui': ui_lahde(k)}
     return d
+
+
+KOKO_OHJE = ('"koko": {"mb": "<abbreviation for megabyte as written in %(k)s, e.g. MB, Mo, Mt>", '
+             '"kb": "<abbreviation for kilobyte in %(k)s>", '
+             '"desimaalierotin": "<decimal separator used in %(k)s: \".\" or \",\">"}')
+
+
+def tarkista_koko(koko, virheet):
+    if not isinstance(koko, dict):
+        virheet.append('koko: pitää olla objekti {mb, kb, desimaalierotin}'); return
+    for a in ('mb', 'kb'):
+        if not isinstance(koko.get(a), str) or not 0 < len(koko[a].strip()) <= 6:
+            virheet.append('koko.%s: lyhenne, 1–6 merkkiä' % a)
+    if koko.get('desimaalierotin') not in ('.', ',', '٫'):
+        virheet.append('koko.desimaalierotin: «.» tai «,»')
 
 
 def ohje(koodi):
@@ -109,7 +141,9 @@ Output: ONE JSON object and nothing else, with exactly this shape:
   "kielet": <same keys as the source "kielet">,
   "konekaannos_merkinta": "<in {en_nimi}: 'Machine translation – not yet reviewed by a native speaker.'>",
   "lataa_kielella": "<in {en_nimi}: the language name as used in 'All three game modes in {en_nimi}'>",
-  "ilmoita_virhe": "<in {en_nimi}: 'Report a translation error' (a short link text)>"}}
+  "ilmoita_virhe": "<in {en_nimi}: 'Report a translation error' (a short link text)>",
+  "ui": <same keys as the source "ui": the website menu, buttons and footer>,
+  {KOKO_OHJE % {'k': en_nimi}}}}
 
 Rules (all are checked automatically; a violation rejects the translation):
 1. Keep every key, every list and every list length exactly as in the source. Do not add or remove keys.
@@ -124,6 +158,7 @@ Rules (all are checked automatically; a violation rejects the translation):
 10. Use one term for one thing everywhere (see the glossary below). Choose natural {en_nimi} board-game terms for: pizza card, topping card, topping, heart pizza, fantasy topping, draw pile, pile, storage, storage slot, exchange pizza, exchange, round, turn, calculation, make a pizza, slap (Pizza Party).
 11. "kielet.iskulause" is the slogan EVERY PIZZA COUNTS, in capital letters.
 12. Where the English source names its own language ("in English", "(English)"), name {en_nimi} instead, in {en_nimi}.
+13. "ui" are short website labels (menu tabs, buttons, footer). Keep them as short as the English ones. "ui.video_kieli" names the language a video is spoken in ("in Finnish", "in English"), in {en_nimi}.
 
 Glossary of the existing translations (for reference and consistency):
 {sanasto}
@@ -263,13 +298,16 @@ def tarkista(tulos):
     karsintoihin (koteloarkki.py: KIELET-kommentti)."""
     en = lahteet()['en']
     virheet = []
-    for avain in ('korttipeli', 'kielet', 'konekaannos_merkinta', 'lataa_kielella', 'ilmoita_virhe'):
+    for avain in ('korttipeli', 'kielet', 'konekaannos_merkinta', 'lataa_kielella', 'ilmoita_virhe',
+                  'ui', 'koko'):
         if avain not in tulos:
             virheet.append('puuttuu %s' % avain)
     if virheet:
         return virheet
     vertaa(en['korttipeli'], tulos['korttipeli'], 'korttipeli', virheet)
     vertaa(en['kielet'], tulos['kielet'], 'kielet', virheet)
+    vertaa(en['ui'], tulos['ui'], 'ui', virheet)
+    tarkista_koko(tulos['koko'], virheet)
     k, kp = tulos['kielet'], tulos['korttipeli']
     # Virkkeen loppu: myös kiinan/japanin 。！？ (ei välilyöntiä perään)
     if len([v for v in re.split(r'(?<=[.!?])\s+|(?<=[。！？])', k['vaihto'].strip()) if v.strip()]) != 2:
@@ -297,6 +335,7 @@ def tallenna(koodi, tulos):
          'tarkastettu': False, 'malli': MALLI,
          'luotu': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
          'lataa_kielella': tulos['lataa_kielella'], 'ilmoita_virhe': tulos['ilmoita_virhe'],
+         'ui': tulos['ui'], 'koko': tulos['koko'],
          'kielet': kielet, 'korttipeli': kp}
     os.makedirs(KONEKAANNOS, exist_ok=True)
     polku = os.path.join(KONEKAANNOS, koodi + '.json')
@@ -338,7 +377,75 @@ def ulos(**arvot):
                 f.write('%s=%s\n' % (a, b))
 
 
+# ---------------------------------------------------------------- täydennys
+TAYDENNETTAVAT = ('ui', 'koko')
+
+
+def taydenna(vastaus_tiedosto=None):
+    """Aiempien konekäännösten puuttuvat osat (ui, koko). Pieni kutsu kieltä
+    kohden; virhe yhdessä kielessä ei estä muita (sivu käyttää silloin englantia)."""
+    en_ui = lahteet()['en']['ui']
+    tehty = []
+    for nimi in sorted(os.listdir(KONEKAANNOS) if os.path.isdir(KONEKAANNOS) else []):
+        if not nimi.endswith('.json'):
+            continue
+        polku = os.path.join(KONEKAANNOS, nimi)
+        d = json.load(open(polku, encoding='utf-8'))
+        puuttuu = [a for a in TAYDENNETTAVAT if a not in d]
+        if not puuttuu:
+            continue
+        koodi, en_nimi = d['kieli'], d.get('nimi_en', d['kieli'])
+        print('Täydennetään %s: %s' % (koodi, ', '.join(puuttuu)))
+        jarjestelma = (
+            f"You translate short website labels for the Pizza Love® card game site into {en_nimi} ({d.get('nimi', '')}).\n"
+            "Output ONE JSON object and nothing else: "
+            '{"ui": <same keys as the source "ui">, ' + KOKO_OHJE % {'k': en_nimi} + '}\n'
+            "Keep every key. Keep the labels as short as the English ones. Names are never translated: "
+            "Pizza Love®, Merkitysten, Merkitysten Oy. \"ui.video_kieli\" names the language a video is "
+            f"spoken in (\"in Finnish\", \"in English\"), in {en_nimi}. Use the same terms as the existing "
+            f"{en_nimi} translation below.")
+        konteksti = {'card game title': d['korttipeli'].get('h1'),
+                     'rules in this language': d.get('lataa_kielella'),
+                     'machine translation notice': d['kielet'].get('konekaannos_merkinta')}
+        viestit = [{'role': 'user', 'content': 'Source "ui" (English, Finnish, Swedish):\n'
+                    + json.dumps({k: ui_lahde(k) for k in ('en', 'fi', 'sv')}, ensure_ascii=False, indent=1)
+                    + '\n\nExisting %s translation (for terms):\n' % en_nimi
+                    + json.dumps(konteksti, ensure_ascii=False) + '\n\nReturn only the JSON object.'}]
+        virheet = ['ei tehty']
+        for yritys in (1, 2):
+            try:
+                vastaus = (open(vastaus_tiedosto, encoding='utf-8').read() if vastaus_tiedosto
+                           else kysy(viestit, jarjestelma))
+                tulos = json_vastauksesta(vastaus)
+                virheet = []
+                vertaa(en_ui, tulos.get('ui'), 'ui', virheet)
+                tarkista_koko(tulos.get('koko'), virheet)
+            except (ValueError, KeyError, TypeError) as v:
+                vastaus, virheet = locals().get('vastaus', ''), ['vastaus ei ole kelvollista JSONia: %s' % v]
+            print('  yritys %d: %d virhettä' % (yritys, len(virheet)))
+            if not virheet or vastaus_tiedosto:
+                break
+            viestit += [{'role': 'assistant', 'content': vastaus},
+                        {'role': 'user', 'content': 'The automatic check found these problems. Fix them '
+                         'and return the complete corrected JSON object only:\n- ' + '\n- '.join(virheet)}]
+        if virheet:
+            print('  ⚠️  %s jäi täydentämättä (sivu käyttää englantia):\n  - %s' % (koodi, '\n  - '.join(virheet)))
+            continue
+        for a in puuttuu:
+            d[a] = tulos[a]
+        d['taydennetty'] = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+        with open(polku, 'w', encoding='utf-8') as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+            f.write('\n')
+        tehty.append(koodi)
+    print('Täydennetty: %s' % (' '.join(tehty) or '–'))
+    ulos(taydennetty=' '.join(tehty))
+    return 0
+
+
 def main():
+    if '--taydenna' in sys.argv:
+        return taydenna(sys.argv[sys.argv.index('--vastaus') + 1] if '--vastaus' in sys.argv else None)
     argit = [a for i, a in enumerate(sys.argv[1:], 1)
              if not a.startswith('--') and sys.argv[i - 1] != '--vastaus']
     if len(argit) != 1:

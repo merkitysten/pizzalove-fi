@@ -5,7 +5,7 @@
 # ⚠️ Edellyttää: Settings → Pages → Source = «GitHub Actions» (kerran).
 #
 # Käynnistyy: puskusta main-haaraan, konekäännösajon lopuksi (workflow_call)
-# tai käsin. Jos arkin pohja (koteloarkki.py, korttisaannot.py, liput) muuttui,
+# tai käsin. Jos arkin pohja (koteloarkki.py, korttisaannot.py, liput) tai käännöksen rakenne (kaanna.py) muuttui,
 # käynnistetään lisäksi konekäännösarkkien uusinta (Konekäännös, kieli «kaikki»).
 name: Julkaise
 
@@ -52,7 +52,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -Eq '^(koteloarkki\.py|korttisaannot\.py|julkinen/kuvat/liput/)'; then
+          if git diff --name-only HEAD~1 HEAD | grep -Eq '^(koteloarkki\.py|korttisaannot\.py|tyokalut/kaanna\.py|julkinen/kuvat/liput/)'; then
             gh workflow run konekaannos.yml -f kieli=kaikki
             echo "::notice::Arkin pohja muuttui — konekäännösarkit tehdään uudelleen."
           fi

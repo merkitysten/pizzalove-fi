@@ -72,15 +72,23 @@ jobs:
           mkdir -p "$RUNNER_TEMP/liput" && (cd "$RUNNER_TEMP/liput" && npm pack -s flag-icons@7.2.3 && tar xzf flag-icons-7.2.3.tgz)
           LIPUT_LAHDE="$RUNNER_TEMP/liput/package/flags/1x1" python3 tyokalut/kaanna.py "$KIELI"
 
+      # Aiemmista käännöksistä puuttuvat myöhemmin lisätyt osat (valikko ja napit
+      # «ui», tiedostokoko «koko»). Ei uusi käännös eikä kuluta päiväkattoa.
+      - name: Täydennä aiemmat konekäännökset
+        id: taydennys
+        run: python3 tyokalut/kaanna.py --taydenna
+
       - name: Mitä tehdään
         id: tulos
         run: |
           if [ "$KIELI" = "kaikki" ]; then
             KOODIT=$(ls sisalto/konekaannos/*.json 2>/dev/null | xargs -n1 basename | sed 's/\.json$//' | tr '\n' ' ')
             echo "koodit=$KOODIT" >> "$GITHUB_OUTPUT"; echo "uusi=1" >> "$GITHUB_OUTPUT"
+          elif [ "${{ steps.kaannos.outputs.uusi }}" = "1" ] || [ -n "${{ steps.taydennys.outputs.taydennetty }}" ]; then
+            echo "koodit=${{ steps.kaannos.outputs.koodi }} ${{ steps.taydennys.outputs.taydennetty }}" >> "$GITHUB_OUTPUT"
+            echo "uusi=1" >> "$GITHUB_OUTPUT"
           else
-            echo "koodit=${{ steps.kaannos.outputs.koodi }}" >> "$GITHUB_OUTPUT"
-            echo "uusi=${{ steps.kaannos.outputs.uusi }}" >> "$GITHUB_OUTPUT"
+            echo "koodit=" >> "$GITHUB_OUTPUT"; echo "uusi=0" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Fontit ja selain

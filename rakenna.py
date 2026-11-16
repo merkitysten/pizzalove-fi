@@ -235,12 +235,23 @@ def e(s):
     return html.escape(s, quote=True)
 
 
-def koko_mt(polku):
+# Tiedostokoon yksikkö ja desimaalierotin kielen mukaan (Marko 16.11.2026: korean
+# sivulla luki «PDF 4,5 Mt»; aiemmin kaikilla kielillä suomen Mt). Konekäännetyille
+# kielille arvot tulevat käännöksestä (kaanna.py: «koko»).
+KOKO = {'fi': ('Mt', 'kt', ','), 'fr': ('Mo', 'ko', ','), 'en': ('MB', 'kB', '.')}
+
+
+def koko_mt(polku, lang='fi'):
     p = os.path.join(JULKINEN, polku)
     if not os.path.exists(p):
         return ''
+    if lang in KONEKIELET and KONEKIELET[lang].get('koko'):
+        k = KONEKIELET[lang]['koko']
+        mb, kb, erotin = k['mb'], k['kb'], k['desimaalierotin']
+    else:
+        mb, kb, erotin = KOKO.get(lang, ('MB', 'kB', ','))
     mt = os.path.getsize(p) / 1e6
-    return ('%.1f Mt' % mt).replace('.', ',') if mt >= 1 else '%d kt' % (mt * 1000)
+    return ('%.1f' % mt).replace('.', erotin) + ' ' + mb if mt >= 1 else '%d %s' % (mt * 1000, kb)
 
 
 # ---------------------------------------------------------------- osat
@@ -388,7 +399,7 @@ def videoruudukko(videot, t, muoto):
     return '<div class="%s">%s</div>' % (luokka, ''.join(videot))
 
 
-def lataukset(avaimet, nimet, polut):
+def lataukset(avaimet, nimet, polut, lang):
     rivit = []
     for a in avaimet:
         polku, _ = polut[a]
@@ -398,7 +409,7 @@ def lataukset(avaimet, nimet, polut):
             # ?v=-leima: muuttunut PDF haetaan heti, ei selaimen välimuistista (Marko 3.11.2026:
             # päivitetty sääntö-PDF ei näkynyt)
             rivit.append('<li><a href="../%s" download><span>%s</span><small>PDF %s</small></a></li>' % (
-                leima(polku), e(nimet[a]), koko_mt(polku)))
+                leima(polku), e(nimet[a]), koko_mt(polku, lang)))
     return '<ul class="lataukset">%s</ul>' % ''.join(rivit)
 
 
@@ -557,7 +568,7 @@ def korttipeli(t, kaikki):
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
        lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']},
-                 dict(PDF, korttipeli=korttipeli_pdf(lang))),
+                 dict(PDF, korttipeli=korttipeli_pdf(lang)), lang),
        ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
@@ -629,7 +640,7 @@ def lautapeli(t, kaikki):
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
        VAAKA_W, VAAKA_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
-       lataukset(lauta_lataukset(lang), dict(s['lataukset'], **{a: s['lataukset'][PDF[a][1]] for a in LAUTA_OMAT.get(lang, [])}), PDF),
+       lataukset(lauta_lataukset(lang), dict(s['lataukset'], **{a: s['lataukset'][PDF[a][1]] for a in LAUTA_OMAT.get(lang, [])}), PDF, lang),
        ristiinmyynti(t, 'korttipeli', 'lautapelisivu'))
     return kehys(t, kaikki, 'lautapeli', s['title'], s['kuvaus'], runko)
 
@@ -812,7 +823,7 @@ def essen2026(t, kaikki):
        e(a['sisalto_otsikko']),
        ''.join('<li>%s</li>' % e(r) for r in a['sisalto']),
        e(a['lataa_otsikko']), e(a['lataa']),
-       lataukset(['tt_vari', 'tt_viiva'], nimet, PDF),
+       lataukset(['tt_vari', 'tt_viiva'], nimet, PDF, t['lang']),
        e(a['vuoro_otsikko']), vaiheet, e(a['vuoro_huom']), e(a['vuoro_raja']),
        saannot,
        e(a['muunnelmat_otsikko']), muunnelmat)
@@ -982,11 +993,14 @@ a{color:#C2580C}</style>
 def konekieli_sivu(k, d, kaikki):
     '''Konekäännetyn kielen korttipelisivu xx/card-game.html (Marko 16.11.2026).
     Sama sivupohja kuin englanniksi, mutta korttipelin sisältö konekäännöksestä.
-    Valikko ja muut sivut ovat englanniksi. Ylhäällä merkintä «konekäännös, ei
+    Muut sivut ovat englanniksi; valikko ja napit kohdekielellä. Ylhäällä merkintä «konekäännös, ei
     tarkastettu» ja linkki virheilmoitukseen (sähköposti: ei lomaketta, ei talletusta).'''
     from urllib.parse import quote
     t = copy.deepcopy(kaikki['en'])
     t['lang'], t['nimi'], t['korttipeli'] = k, d['nimi'], d['korttipeli']
+    # Valikko, napit ja alaosa kohdekielellä, jos käännöksessä on «ui» (kaanna.py);
+    # puuttuvat avaimet englanniksi. Linkit vievät silti englanninkielisille sivuille.
+    t['ui'] = dict(t['ui'], **d.get('ui', {}))
     h = korttipeli(t, kaikki)
     for sivu in ('index.html', 'lautapeli.html', 'essen-2026.html', 'apinakortit.html'):
         h = h.replace('href="%s"' % sivu, 'href="../en/%s"' % sivu)
