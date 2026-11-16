@@ -298,6 +298,26 @@
     arvot.forEach(function (v) { n[v] = true; });
     return Object.keys(n).length;
   }
+  /* Kolmannen portaan sääntö: TASAN yksi kortti kutakin pizzan täytettä.
+   *
+   * ⚠️ «Ei ylimääräisiä samoja» on Markon päätös 16.11.2026, ei oletus:
+   * «Valitaan nyt tuo ei, koska niin sitä on pelattu.» Kysymys oli, kelpaako
+   * tomaatti-ananaspizzaan tomaatti + tomaatti + ananas. Ei kelpaa.
+   * Älä siis löysää tätä myöhemmin «koska summa osuu silti».
+   *
+   * ⛔ Marko heitti samassa yhteydessä pelimekaanisen idean: «Periaatteessa
+   * voisi kai pelata niinkin, että samaa täytettä voi laittaa useamman,
+   * jolloin saisi omaa kättä enemmän tyhjäksi.» Se EI ole tämän tavan
+   * tarkennus vaan erillinen idea, ja se on kirjattu päätöslokiin omanaan.
+   * Älä toteuta sitä tänne äläkä «korjaa» tätä sen suuntaan.
+   *
+   * 📐 Pizzan täytteet ovat aina eri arvoja (kortit.js `osajoukot()` kävelee
+   * kasvavasti), joten pizzan puolella joukko riittää; monijoukko tarvitaan
+   * vain lukijan korteille. Kolmannessa portaassa «ei korttia» on siksi
+   * piilotettu valitsimesta: kortteja on aina yhtä monta kuin täytteitä.
+   *
+   * 📐 Mitattu ajamalla: 2 + 2 ei kelpaa · 4 + 1 = 5 ei kelpaa (summa osuu,
+   * täytteet väärät) · 3 + 2 kelpaa (järjestyksellä ei väliä). */
   function samatTaytteet(arvot) {
     if (arvot.length !== OMAT.length) return false;
     var a = arvot.slice().sort(), b = OMAT.slice().sort();
