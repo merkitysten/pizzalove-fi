@@ -779,7 +779,14 @@ def kaanto_selite(taytteet):
 # Viisi korttia, jotka näyttävät juuri sen minkä viereinen kappale väittää:
 # yhdestä neljään täytettä, ja sydänpizza sekä yhdellä että neljällä
 # täytteellä. Koko 42 kortin pakka olisi 670 kt kuvia (mitattu 16.11.2026).
-KAANTO_PIZZAT = [13, 31, 48, 54, 22]
+#
+# Järjestys on harkittu, ei korttien numerojärjestys. Ensimmäinen painallus
+# paljastaa sivun oman esimerkkipizzan (tomaatti-ananas, arvo 5), joka toistuu
+# vähän alempana esimerkkilohkossa — ensimmäisen käännön pitää palkita, ja
+# yhden oliivin kortti arvolla 1 ei palkitse. Sitten täytteitä tulee lisää
+# kolmeen ja neljään, ja lopuksi kaksi yhden täytteen korttia kertovat ettei
+# pizzassa tarvitse olla montaa täytettä — toinen niistä on sydänpizza.
+KAANTO_PIZZAT = [31, 48, 54, 13, 22]
 # Täytekortit 1–10 ja fantasiatäyte X, arvojärjestyksessä: kappale lupaa
 # arvot 1–10 ja fantasiatäytteen, ja sarja näyttää ne kaikki.
 KAANTO_TAYTTEET = [str(n) for n in range(1, 11)] + ['x']

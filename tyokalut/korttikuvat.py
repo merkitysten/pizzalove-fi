@@ -48,10 +48,10 @@ RAJAUS = (40, 40, 351, 532)   # x, y, leveys, korkeus pelin kuvassa
 # julkinen/play/kortit.js; sama sääntö ajettuna Pythonilla antaa 42 korttia ja
 # pizza-31 = täytteet 2+3, arvo 5 — sama kortti kuin sivun esimerkissä).
 # Sarja näyttää juuri sen minkä viereinen kappale väittää:
-#   pizza-13  yksi täyte, arvo 1        (pienin)
-#   pizza-31  kaksi täytettä, arvo 5    (sivun oma esimerkkipizza)
+#   pizza-31  kaksi täytettä, arvo 5    (sivun oma esimerkkipizza, ensimmäisenä)
 #   pizza-48  kolme täytettä, arvo 8
 #   pizza-54  neljä täytettä, arvo 10   (pakan AINOA nelitäytteinen, sydän)
+#   pizza-13  yksi täyte, arvo 1        (pienin)
 #   pizza-22  yksi täyte, arvo 10       (sydänpizzassa voi olla yksi täyte)
 # Koko 42 kortin pakka olisi 670 kt kuvia reposta; viisi riittää väitteen
 # näyttämiseen. Ne latautuvat vasta painalluksesta, ks. julkinen/sivu.js.
