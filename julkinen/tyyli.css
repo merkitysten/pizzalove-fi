@@ -361,7 +361,12 @@ ul.lista li,ol.lista li{margin:4px 0}
  * 📐 Korkeus ei saa kasvaa: sivu on puhelimessa (375×812) jo 8,3 ruutua pitkä.
  * Siksi täytevalitsin on absoluuttisesti aseteltu tekstin PÄÄLLE eikä omaksi
  * rivikseen, ja laskun tulos mahtuu vanhan yhtäsuuruusmerkin paikalle. */
-.keittio{flex-wrap:nowrap;gap:6px;position:relative}
+.keittio{flex-wrap:wrap;gap:6px;position:relative;margin:4px 0 2px}
+/* Keittiön jälkeinen kappale tulee lähemmäs: tehtävärivi on jo tekstiä, joten
+   kahta täyttä kappaleväliä ei tarvita. Näin rivi maksaa itsensä osin takaisin. */
+.keittio + p{margin-top:6px}
+/* 📐 Tiukempi marginaali kuin pelkällä .esimerkillä (10/14 px): keittiössä on
+   yksi rivi enemmän (tehtävärivi), ja se maksetaan tästä. Ks. mittaus alla. */
 .keittio button{background:none;border:0;margin:0;padding:0;font:inherit;color:inherit;
   display:block;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .keittio button:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:10px}
@@ -375,6 +380,27 @@ ul.lista li,ol.lista li{margin:4px 0}
   background:var(--tint);color:var(--deep);display:grid;place-items:center;
   box-shadow:0 1px 3px rgba(60,34,12,.32);transition:opacity var(--liike-pika)}
 .keittio__nuoli svg{width:11px;height:11px}
+/* Tyhjä täytepaikka: kortin selkäpuoli himmeänä. Paikka EI katoa, koska siitä
+   on päästävä takaisin korttiin — ja koska rivin leveys pysyy samana. */
+.keittio__paikka.tyhja img{opacity:.4;filter:none}
+.keittio__laskin.piilossa{visibility:hidden}
+.keittio__valitsin.ei-tyhjaa .keittio__tyhja{display:none}
+.keittio__valitsin .keittio__tyhja img{opacity:.55}
+
+/* Tehtävärivi: yksi rivi, joka sanoo kumpaa tapaa harjoitellaan ja miksi tämä
+   ei kelvannut. ⚠️ Tapa sanotaan aina ääneen — sama käyttöliittymä palveli
+   pelissä hiljaa kahta eri sääntöä, ja juuri siitä sekaannus syntyi.
+   `flex-basis:100%` pakottaa rivinvaihdon korttirivin jälkeen. */
+.keittio__tehtava{flex:0 0 100%;margin:0;text-align:center;font-size:13.5px;
+  line-height:1.35;color:var(--soft);min-height:2.7em}
+/* 📐 min-height on KAKSI riviä, ei yksi: mitattu 375 px:ssä, että kahdeksasta
+   kielestä seitsemän vie tehtävälauseessa kaksi riviä (sk:n lyhin yhden, nl:n
+   pisin viedä kolme ennen lyhennystä). Ilman varausta lohko nykisi korkeutta
+   joka kerta kun teksti vaihtuu, ja sen alla oleva kappale hyppisi. */
+.keittio.valmis .keittio__tehtava{color:var(--green)}
+.keittio.hienoa .keittio__teksti{color:var(--green);font-weight:700;
+  animation:kortti-syke var(--liike-pitka) var(--liike-pomppu)}
+.keittio__peli{display:inline-block;font-weight:700;color:var(--deep)}
 /* Fantasiatäytteen (X) päälle luku, joksi se tässä laskussa ratkesi. Pelissä
    pelaaja sanoo sen ääneen; ruudulla sen voi näyttää. */
 .keittio__xarvo{position:absolute;left:-6px;bottom:-6px;min-width:22px;height:22px;padding:0 4px;

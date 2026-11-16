@@ -28,7 +28,13 @@
     "keittio_vaihda": "Vymeniť kartu prísady",
     "keittio_merkki": "Zmeniť výpočet",
     "keittio_valmis": "Pizza je hotová",
-    "keittio_ei": "Pizza nie je hotová"
+    "keittio_ei": "Pizza nie je hotová",
+    "keittio_eikorttia": "Žiadna karta",
+    "keittio_tee_helppo": "Teraz vy: akýmikoľvek kartami prísad, aj jedinou.",
+    "keittio_tee_basso": "Teraz to skúste spôsobom opice Basso: toľko rôznych prísad, koľko ich má pizza.",
+    "keittio_maara": "Výpočet sedí, ale počet prísad nie.",
+    "keittio_hienoa": "Výborne!",
+    "keittio_peli": "Zvyšok vás naučí hra"
   },
   "etusivu": {
     "title": "Pizza Love® – pravidlá, videá a online hry",

@@ -28,7 +28,13 @@
     "keittio_vaihda": "Changer de carte ingrédient",
     "keittio_merkki": "Changer de calcul",
     "keittio_valmis": "La pizza est prête",
-    "keittio_ei": "La pizza n’est pas prête"
+    "keittio_ei": "La pizza n’est pas prête",
+    "keittio_eikorttia": "Aucune carte",
+    "keittio_tee_helppo": "À toi : avec n’importe quelles cartes ingrédient, même une seule.",
+    "keittio_tee_basso": "Maintenant à la manière de Basso : autant d’ingrédients différents que la pizza.",
+    "keittio_maara": "Le calcul est juste, mais le nombre d’ingrédients ne l’est pas.",
+    "keittio_hienoa": "Bravo !",
+    "keittio_peli": "Le jeu t’apprend le reste"
   },
   "etusivu": {
     "title": "Pizza Love® – règles, vidéos et jeux en ligne",

@@ -408,11 +408,17 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 %s
 </main>
 %s
-<script src="../%s" defer></script>
+%s<script src="../%s" defer></script>
 </body>
 </html>
 ''' % (lang + '" data-kielet="%s" data-pyynto="%s' % (','.join(KIELET + sorted(KONEKIELET)), PYYNTO_OSOITE), e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT.get(lang, lang.replace('-', '_')),
-       ylaosa(t, sivu, kaikki), runko, alaosa(t), leima('sivu.js'))
+       ylaosa(t, sivu, kaikki), runko, alaosa(t),
+       # Pizzakeittiön aritmetiikka on PELIN oma (julkinen/play/laskin.js), ei
+       # sivuston kopio — sama `laske()` ja `osuuko()` joilla peli tarkistaa
+       # pelaajan laskun. Ladataan vain korttipelisivulla, jossa keittiö on,
+       # ja ENNEN sivu.js:ää, koska defer-skriptit ajetaan tässä järjestyksessä.
+       ('<script src="../%s" defer></script>\n' % leima('play/laskin.js')) if sivu == 'korttipeli' else '',
+       leima('sivu.js'))
 
 
 def video(tunnus, otsikko, kieli, t, muoto='vaaka'):
@@ -557,11 +563,26 @@ def etusivu(t, kaikki):
 KEITTIO_ARVO = 5
 # Lähtötilanne = sama lasku kuin painetussa säännössä ja sivun tekstissä.
 KEITTIO_ALKU = '10/2'
-# Näytös: samat neljä laskua jotka sivun teksti luettelee. Juuri tämä on pelin
-# idea — sama pizza syntyy monella eri laskulla — eikä paperi voi näyttää sitä.
-# Merkit ovat ASCIIna (+ - * /); sivu.js piirtää ne sivun omilla merkeillä
-# (+ – × :), samoilla kuin leipäteksti «esimerkiksi 4 + 1, 6 – 1, 2 + 3 tai 10 : 2».
-KEITTIO_NAYTOS = ['4+1', '6-1', '2+3', '10/2']
+# Näytös: KAKSI laskua sivun tekstin luettelosta, sitten vuoro on lukijalla.
+# Marko 16.11.2026: «Voisimme jopa tehdä siitä animaatiosta osittain
+# osallistavan, että pelaajan tulisi itse tehdä vaikka kahden esimerkin
+# jälkeen itse se pizza.» Merkit ovat ASCIIna (+ - * /); sivu.js piirtää ne
+# sivun omilla merkeillä (+ – × :), samoilla kuin leipäteksti.
+KEITTIO_NAYTOS = ['4+1', '6-1']
+# Pizzakortin täytteiden määrä. Tätä tarvitaan VAIN Basso-apinan tavassa:
+# «Käytä yhtä monta eri täytettä kuin pizzassa on täytteitä.» Kortti 31 on
+# tomaatti + ananas, siis kaksi.
+KEITTIO_TAYTTEITA = 2
+# Harjoitusten lähtöasetelmat, sama muoto kuin KEITTIO_ALKU (tyhjä b = yksi kortti).
+#
+# 📐 Mitattu 16.11.2026, miksi juuri nämä: kahdella korttipaikalla Basson sääntö
+# EI voi mennä rikki, jos kortteja on kaksi — arvon 5 voi tehdä 13 tavalla, ja
+# kaikki 13 kelpaavat myös Bassossa, koska kaksi eri korttia on aina kaksi eri
+# täytettä. Ero syntyy vasta YHDELLÄ kortilla: pelkkä 5 kelpaa helpommassa
+# tavassa («myös yhdellä», sivun oma teksti) mutta ei Bassossa, jossa
+# tomaatti-ananaspizza vaatii kaksi eri täytettä. Siksi Basson harjoitus
+# ALKAA siitä tilasta, joka juuri meni helpommasta tavasta läpi.
+KEITTIO_HARJOITUS = {'helppo': '1', 'basso': '5'}
 # Valitsimen täytekortit: pelin kaikki täytteet 1–10 ja fantasiatäyte (x).
 KEITTIO_TAYTTEET = list(range(1, 11)) + ['x']
 # Keittiön sanat: ilman niitä ei rakenneta puolikasta keittiötä vaan jätetään
@@ -569,7 +590,9 @@ KEITTIO_TAYTTEET = list(range(1, 11)) + ['x']
 # puute näkyy puutteena eikä arvauksena). Konekäännöskieli perii nämä
 # englannista, koska konekieli_sivu() yhdistää ui-lohkot.
 KEITTIO_SANAT = ['keittio_otsikko', 'keittio_vaihda', 'keittio_merkki',
-                 'keittio_valmis', 'keittio_ei']
+                 'keittio_valmis', 'keittio_ei', 'keittio_eikorttia',
+                 'keittio_tee_helppo', 'keittio_tee_basso', 'keittio_maara',
+                 'keittio_hienoa', 'keittio_peli']
 
 
 def keittio_data(t):
@@ -578,9 +601,11 @@ def keittio_data(t):
     ui = t['ui']
     if not all(ui.get(a) for a in KEITTIO_SANAT):
         return ''
-    osat = [' data-pizza="%d" data-alku="%s" data-naytos="%s" data-taytteet="%s"'
-            % (KEITTIO_ARVO, KEITTIO_ALKU, ','.join(KEITTIO_NAYTOS),
-               ','.join(str(x) for x in KEITTIO_TAYTTEET))]
+    osat = [' data-pizza="%d" data-taytteita="%d" data-alku="%s" data-naytos="%s"'
+            ' data-taytteet="%s" data-harjoitus="%s,%s" data-peli="../play/party.html?kieli=%s"'
+            % (KEITTIO_ARVO, KEITTIO_TAYTTEITA, KEITTIO_ALKU, ','.join(KEITTIO_NAYTOS),
+               ','.join(str(x) for x in KEITTIO_TAYTTEET),
+               KEITTIO_HARJOITUS['helppo'], KEITTIO_HARJOITUS['basso'], t['lang'])]
     for a in KEITTIO_SANAT:
         osat.append(' data-%s="%s"' % (a.replace('keittio_', 'sana-'), e(ui[a])))
     return ''.join(osat)

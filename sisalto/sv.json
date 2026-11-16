@@ -28,7 +28,13 @@
     "keittio_vaihda": "Byt fyllningskort",
     "keittio_merkki": "Byt räknesätt",
     "keittio_valmis": "Pizzan blir klar",
-    "keittio_ei": "Pizzan blir inte klar"
+    "keittio_ei": "Pizzan blir inte klar",
+    "keittio_eikorttia": "Inget kort",
+    "keittio_tee_helppo": "Nu du: med vilka fyllningskort som helst, även ett enda.",
+    "keittio_tee_basso": "Gör den nu på apan Bassos sätt: lika många olika fyllningar som pizzan har.",
+    "keittio_maara": "Uträkningen stämmer, men antalet fyllningar är fel.",
+    "keittio_hienoa": "Snyggt!",
+    "keittio_peli": "Spelet lär dig resten"
   },
   "etusivu": {
     "title": "Pizza Love® – regler, videor och onlinespel",

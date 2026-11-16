@@ -29,7 +29,13 @@
     "keittio_vaihda": "Vaihda täytekortti",
     "keittio_merkki": "Vaihda laskutoimitus",
     "keittio_valmis": "Pizza valmistuu",
-    "keittio_ei": "Pizza ei valmistu"
+    "keittio_ei": "Pizza ei valmistu",
+    "keittio_eikorttia": "Ei korttia",
+    "keittio_tee_helppo": "Tee sinä: millä tahansa täytekorteilla, myös yhdellä.",
+    "keittio_tee_basso": "Tee se nyt Basso-apinan tavalla: yhtä monta eri täytettä kuin pizzassa.",
+    "keittio_maara": "Lasku menee tasan, mutta täytteitä on väärä määrä.",
+    "keittio_hienoa": "Hienoa!",
+    "keittio_peli": "Peli opettaa loput"
   },
   "etusivu": {
     "title": "Pizza Love® – säännöt, videot ja verkkopelit",
@@ -59,7 +65,7 @@
     }
   },
   "korttipeli": {
-    "title": "Pizza Love® -korttipeli – säännöt ja videot",
+    "title": "Pizza Love® -korttipeli – ohjeet, säännöt ja videot",
     "kuvaus": "Pizza Love® -korttipelin säännöt ja ohjevideot: Pizza Party, Pizza Basso ja Pizza Love.",
     "h1": "Pizza Love® -korttipeli",
     "ingressi": "Kolme peliä samalla pakalla. Aloita Pizza Partystä: se on nopein oppia.",
@@ -188,7 +194,7 @@
     "ristiin_saannot": "Lautapelin ohjeet"
   },
   "lautapeli": {
-    "title": "Pizza Love® -lautapeli – säännöt ja videot",
+    "title": "Pizza Love® -lautapeli – ohjeet, säännöt ja videot",
     "kuvaus": "Pizza Love® -lautapelin säännöt ja ohjevideot: kokoaminen, vuoron kulku ja kolme pelimuotoa.",
     "h1": "Pizza Love® -lautapeli",
     "ingressi": "Valmista boksien lempipizzoja ja kerää ensimmäisenä 10 erilaista palaa – niin voitat!",

@@ -28,7 +28,13 @@
     "keittio_vaihda": "Toppingkaart wisselen",
     "keittio_merkki": "Berekening wisselen",
     "keittio_valmis": "De pizza is klaar",
-    "keittio_ei": "De pizza is niet klaar"
+    "keittio_ei": "De pizza is niet klaar",
+    "keittio_eikorttia": "Geen kaart",
+    "keittio_tee_helppo": "Nu jij: met willekeurige toppingkaarten, ook met maar één.",
+    "keittio_tee_basso": "Nu op de manier van Basso: evenveel verschillende toppings als de pizza.",
+    "keittio_maara": "De berekening klopt, maar het aantal toppings niet.",
+    "keittio_hienoa": "Mooi!",
+    "keittio_peli": "De rest leert het spel je"
   },
   "etusivu": {
     "title": "Pizza Love® – regels, video’s en onlinespellen",

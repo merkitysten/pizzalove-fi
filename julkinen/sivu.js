@@ -223,74 +223,110 @@
 })();
 
 /* ╔══════════════════════════════════════════════════════════════════════╗
-   ║  PIZZAKEITTIÖ — sääntösivun esimerkki, jota lukija saa kokeilla       ║
+   ║  PIZZAKEITTIÖ — näytä, anna kokeilla, luovuta pelille                 ║
    ╚══════════════════════════════════════════════════════════════════════╝
  *
  * Marko 16.11.2026: «Sen sijaan, että nettisivulla kerrotaan, niin pitäisikö
- * näyttää?» ja samana päivänä: «Ei tehdä digitaalista alustaa fyysisen
- * maailman ehdoilla.» Paperilla on pakko luetella «esimerkiksi 4 + 1, 6 – 1,
- * 2 + 3 tai 10 : 2». Ruutu voi NÄYTTÄÄ ne peräkkäin ja antaa lukijan vaihtaa
- * kortit itse. Sääntö-PDF jää ennalleen fyysisen maailman tarpeeseen.
+ * näyttää?» ja «Ei tehdä digitaalista alustaa fyysisen maailman ehdoilla.»
+ * Sitten: «Voisimme jopa tehdä siitä animaatiosta osittain osallistavan, että
+ * pelaajan tulisi itse tehdä vaikka kahden esimerkin jälkeen itse se pizza.»
  *
- * ⚠️ KOLME ASIAA, JOITA EI SAA RIKKOA
- * 1. Ilman JavaScriptiä .esimerkki jää juuri siksi mitä se ennen oli: yksi
- *    role="img" ja koko lauseen aria-label. Tämä tiedosto on `defer`, joten
- *    staattinen esimerkki näkyy aina ensin ja on aina oikein.
- * 2. Kun keittiö rakennetaan, role="img" EI saa jäädä: silloin ruudunlukija
- *    lukisi vanhan lauseen eikä näkisi nappeja. Tilalle role="group" + oma
- *    aria-live-lause, joka kertoo laskun ja sen tuloksen joka vaihdon jälkeen.
- * 3. prefers-reduced-motion: näytöstä EI ajeta lainkaan, ja CSS pysäyttää
- *    animaatiot (.liike-lohkon sääntö tyyli.css:ssä). Keittiö toimii silti:
- *    kortit vaihtuvat, lasku ratkeaa, tulos näkyy — vain liike jää pois.
+ * Kulku: painettu esimerkki näkyvissä → kaksi laskua liikkeenä → lukija tekee
+ * saman pizzan itse helpommalla tavalla → sama pizza Basso-apinan tavalla →
+ * luovutus pelin omaan opetuskierrokseen. Sivu on portti peliin, ei toinen peli.
  *
- * 📐 Mitattu 16.11.2026: korttikuvat haetaan vasta tarvittaessa. Sivun kolme
- * esimerkkikorttia pienenivät 133 kt → 42 kt (tyokalut/korttikuvat.py), eli
- * sivu KEVENI vaikka keittiö tuli lisää. Näytöksen neljä uutta korttia
- * (1, 3, 4, 6) haetaan vasta kun lohko tulee ruudulle, ja valitsimen loput
- * vasta kun lukija avaa valitsimen.
+ * ⚠️ ARITMETIIKKA ON PELIN OMA. `laske()`, `osuuko()` ja `tulosTekstina()`
+ * tulevat tiedostosta julkinen/play/laskin.js, jonka rakenna.py lataa tälle
+ * sivulle ENNEN tätä tiedostoa. Älä kirjoita tänne omaa laskinta: pelin oma
+ * pitää murtoluvut tarkkoina (10 ÷ 4 ei ole 2,4999999999999996) ja noudattaa
+ * normaalia laskujärjestystä, josta on oma päätöksensä (Marko 8.9.2026).
+ * Jos tiedostoa ei ole, keittiötä ei rakenneta lainkaan — puute näkyy
+ * puutteena eikä puolikkaana keittiönä.
+ *
+ * ⚠️ YKSI TARKISTIN, TAPA PARAMETRINA. `tarkista(arvot, merkki, apinanTapa)`
+ * on sama sääntö kuin pelissä (peli.js:1205, basso.js:392):
+ *     lasku osuu pizzan arvoon
+ *     JA jos apinan tapa: eri arvojen määrä === pizzan täytteiden määrä
+ * Kahta kopioitua tarkistinta ei kirjoiteta: juuri tämä sääntö on jo kerran
+ * mennyt sekaisin («kaksi korttia» vs. «kaksi täytettä»), ja se sekaannus oli
+ * koko pelin opetuskierroksen syy.
+ *
+ * 📐 Ja siksi Basson harjoitus alkaa YHDESTÄ kortista: kahdella kortilla
+ * Basson sääntö ei voi mennä rikki (arvon 5 voi tehdä kahdella kortilla 13
+ * tavalla, ja kaikki 13 kelpaavat myös Bassossa). Ero näkyy vasta yhdellä
+ * kortilla — pelkkä 5 kelpaa helpommassa tavassa, ei Bassossa.
+ *
+ * ⚠️ Ilman JavaScriptiä .esimerkki jää ennalleen: role="img" ja koko lauseen
+ * aria-label. Kun keittiö rakennetaan, vanha tekstivastine POISTETAAN ja
+ * tilalle tulee role="group" + yksi aria-live-alue, jossa on sekä lasku ja
+ * sen tulos (ruudunlukijalle) että tehtävä (kaikille).
+ *
+ * ⚠️ prefers-reduced-motion: näytöstä ei ajeta, ja CSS pysäyttää animaatiot.
+ * Harjoitus EI ole liikettä, joten se jää — se alkaa ensimmäisestä
+ * kosketuksesta eikä näytöksen päätteeksi.
  */
 (function () {
   var k = document.querySelector('.esimerkki[data-pizza][data-sana-vaihda]');
   if (!k) return;
+  if (typeof laske !== 'function' || typeof osuuko !== 'function') return;
 
-  var TAVOITE = parseInt(k.getAttribute('data-pizza'), 10);
-  var TAYTTEET = k.getAttribute('data-taytteet').split(',');
-  var NAYTOS = k.getAttribute('data-naytos').split(',');
+  var TAVOITE   = parseInt(k.getAttribute('data-pizza'), 10);
+  var TAYTTEITA = parseInt(k.getAttribute('data-taytteita'), 10);
+  var TAYTTEET  = k.getAttribute('data-taytteet').split(',');
+  var NAYTOS    = k.getAttribute('data-naytos').split(',');
+  var HARJOITUS = k.getAttribute('data-harjoitus').split(',');
+  var PELI      = k.getAttribute('data-peli');
   var sana = function (n) { return k.getAttribute('data-sana-' + n); };
 
-  /* Merkit ovat sivun omat, samat kuin leipätekstissä «4 + 1, 6 – 1, 2 + 3
-   * tai 10 : 2»: miinus on ajatusviiva ja jako kaksoispiste. Avain on ASCII,
-   * jotta data-attribuutit pysyvät yksinkertaisina. */
-  var MERKIT = { '+': '+', '-': '–', '*': '×', '/': ':' };
+  /* Näytettävä merkki on sivun oma («4 + 1, 6 – 1, 2 + 3 tai 10 : 2»),
+   * laskimelle annettava on pelin oma (+ − × ÷). Avain on ASCII. */
+  var MERKIT = {
+    '+': { nayta: '+',      laske: '+' },
+    '-': { nayta: '–', laske: '−' },
+    '*': { nayta: '×', laske: '×' },
+    '/': { nayta: ':',      laske: '÷' }
+  };
   var MERKKIJONO = ['+', '-', '*', '/'];
+  var TYHJA = '-';                       /* täytepaikka ilman korttia */
   var kuvatie = k.querySelector('img').getAttribute('src').replace(/[^/]+$/, '');
-  var kieli = document.documentElement.lang || 'fi';
 
-  /* ── Laskenta ──────────────────────────────────────────────────────────
-   * Fantasiatäyte X on «mikä tahansa täyte 1–10, pelaaja valitsee», joten
-   * sitä ei lasketa vaan RATKAISTAAN: käydään läpi ne arvot, joilla pizza
-   * valmistuisi. Juuri tämän paperi joutuu selittämään sanoin. */
-  function laske(a, op, b) {
-    if (op === '+') return a + b;
-    if (op === '-') return a - b;
-    if (op === '*') return a * b;
-    return b === 0 ? null : a / b;
+  /* ── Sääntö ────────────────────────────────────────────────────────── */
+  function eriArvoja(arvot) {
+    var n = {};
+    arvot.forEach(function (v) { n[v] = true; });
+    return Object.keys(n).length;
   }
-  function ratkaise(a, op, b) {
-    var ax = a === 'x', bx = b === 'x', i, j, v;
-    if (!ax && !bx) {
-      v = laske(+a, op, +b);
-      return { osuu: v === TAVOITE, arvo: v, a: +a, b: +b };
+  function tarkista(arvot, merkki, apinanTapa) {
+    var tok = [{ arvo: arvot[0] }];
+    if (arvot.length > 1) tok.push(MERKIT[merkki].laske, { arvo: arvot[1] });
+    var t = laske(tok);
+    if (!osuuko(t, TAVOITE)) return { osuu: false, syy: 'lasku', tulos: t };
+    if (apinanTapa && eriArvoja(arvot) !== TAYTTEITA) return { osuu: false, syy: 'maara', tulos: t };
+    return { osuu: true, syy: null, tulos: t };
+  }
+  /* Fantasiatäyte X on «mikä tahansa täyte 1–10, pelaaja valitsee», joten sitä
+   * ei lasketa vaan ratkaistaan: käydään läpi arvot, joilla pizza valmistuisi.
+   * Sama tarkistin, ei toista sääntöä. */
+  function ratkaise(a, merkki, b, apinanTapa) {
+    var kortit = (b === TYHJA) ? [a] : [a, b];
+    var xt = kortit.map(function (v) { return v === 'x'; });
+    if (!xt.some(Boolean)) {
+      var r = tarkista(kortit.map(Number), merkki, apinanTapa);
+      r.arvot = kortit.map(Number);
+      return r;
     }
-    for (i = 1; i <= 10; i++) {
-      for (j = 1; j <= 10; j++) {
-        var va = ax ? i : +a, vb = bx ? j : +b;
-        if (laske(va, op, vb) === TAVOITE) return { osuu: true, arvo: TAVOITE, a: va, b: vb };
-        if (!bx) break;
+    var paras = null;
+    for (var i = 1; i <= 10; i++) {
+      for (var j = 1; j <= 10; j++) {
+        var arvot = kortit.map(function (v, n) { return v === 'x' ? (n ? j : i) : Number(v); });
+        var t = tarkista(arvot, merkki, apinanTapa);
+        if (t.osuu) { t.arvot = arvot; return t; }
+        if (!paras) { paras = t; paras.arvot = null; }
+        if (!xt[1]) break;
       }
-      if (!ax) break;
+      if (!xt[0]) break;
     }
-    return { osuu: false, arvo: null, a: null, b: null };
+    return paras;
   }
 
   /* ── Rakenne ───────────────────────────────────────────────────────── */
@@ -298,11 +334,6 @@
   var pizza = kuvat[0], merkit = k.querySelectorAll('b');
   pizza.className = 'keittio__pizza';
 
-  function nuoli() {
-    return '<span class="keittio__nuoli" aria-hidden="true"><svg viewBox="0 0 12 12">' +
-      '<path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" ' +
-      'stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
-  }
   function paikka(img) {
     var b = document.createElement('button');
     b.type = 'button';
@@ -311,7 +342,10 @@
     b.setAttribute('aria-expanded', 'false');
     img.parentNode.insertBefore(b, img);
     b.appendChild(img);
-    b.insertAdjacentHTML('beforeend', nuoli() +
+    b.insertAdjacentHTML('beforeend',
+      '<span class="keittio__nuoli" aria-hidden="true"><svg viewBox="0 0 12 12">' +
+      '<path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/></svg></span>' +
       '<span class="keittio__xarvo" aria-hidden="true" hidden></span>');
     return b;
   }
@@ -328,12 +362,15 @@
   laskin.className = 'keittio__laskin';
   merkit[1].parentNode.replaceChild(laskin, merkit[1]);
 
-  var lause = document.createElement('p');
-  lause.className = 'vain-ruudunlukijalle';
-  lause.setAttribute('aria-live', 'polite');
-  k.appendChild(lause);
+  /* Yksi aria-live-alue: lasku ja tulos vain ruudunlukijalle, tehtävä kaikille.
+   * Kaksi erillistä elävää aluetta puhuisi päälle. */
+  var rivi = document.createElement('p');
+  rivi.className = 'keittio__tehtava';
+  rivi.setAttribute('aria-live', 'polite');
+  rivi.innerHTML = '<span class="vain-ruudunlukijalle"></span><span class="keittio__teksti"></span>';
+  var lause = rivi.firstChild, teksti = rivi.lastChild;
+  k.appendChild(rivi);
 
-  /* ⚠️ Vanha tekstivastine pois vasta nyt, kun uusi on olemassa. */
   k.removeAttribute('role');
   k.removeAttribute('aria-label');
   k.setAttribute('role', 'group');
@@ -341,58 +378,103 @@
   k.classList.add('keittio');
 
   /* ── Tila ─────────────────────────────────────────────────────────── */
-  var alku = k.getAttribute('data-alku').match(/^(\w+)([-+*/])(\w+)$/);
-  var tila = { a: alku[1], op: alku[2], b: alku[3] };
-  var valitsin = null, valittuPaikka = null, naytosKello = null, koskettu = false;
+  function pura(s) {
+    var m = s.match(/^(\w+)(?:([-+*/])(\w+))?$/);
+    return { a: m[1], op: m[2] || '/', b: m[3] === undefined ? TYHJA : m[3] };
+  }
+  var tila = pura(k.getAttribute('data-alku'));
+  var valitsin = null, valittuPaikka = null, naytosKello = null;
+  var koskettu = false, vaihe = 0, siirtymassa = false, tuoreVaihe = true;
 
-  function kuva(arvo) { return kuvatie + 'tayte-' + arvo + '.webp'; }
-  function nimi(arvo) { return arvo === 'x' ? 'X' : arvo; }
+  function kuva(arvo) {
+    return kuvatie + (arvo === TYHJA ? 'tausta-tayte' : 'tayte-' + arvo) + '.webp';
+  }
+  function nimi(arvo) {
+    return arvo === 'x' ? 'X' : (arvo === TYHJA ? sana('eikorttia') : arvo);
+  }
 
   function piirra(liikkuu) {
-    var r = ratkaise(tila.a, tila.op, tila.b), m = MERKIT[tila.op];
-    [[pA, tila.a, r.a], [pB, tila.b, r.b]].forEach(function (p) {
-      var nappi = p[0], arvo = p[1], ratk = p[2], img = nappi.querySelector('img');
+    var apinanTapa = (vaihe === 2);
+    var r = ratkaise(tila.a, tila.op, tila.b, apinanTapa);
+    var m = MERKIT[tila.op].nayta;
+    var yksi = (tila.b === TYHJA);
+
+    [[pA, tila.a, 0], [pB, tila.b, 1]].forEach(function (p) {
+      var nappi = p[0], arvo = p[1], img = nappi.querySelector('img');
       var uusi = kuva(arvo);
       if (img.getAttribute('src') !== uusi) {
         img.setAttribute('src', uusi);
-        if (liikkuu) {
-          nappi.classList.remove('saapuu');
-          void nappi.offsetWidth;
-          nappi.classList.add('saapuu');
-        }
+        if (liikkuu) { nappi.classList.remove('saapuu'); void nappi.offsetWidth; nappi.classList.add('saapuu'); }
       }
+      nappi.classList.toggle('tyhja', arvo === TYHJA);
       nappi.setAttribute('aria-label', sana('vaihda') + ': ' + nimi(arvo));
-      /* Fantasiakortin päälle luku, joksi se tässä laskussa ratkesi. */
       var x = nappi.querySelector('.keittio__xarvo');
-      x.hidden = !(arvo === 'x' && r.osuu);
-      x.textContent = x.hidden ? '' : ratk;
+      x.hidden = !(arvo === 'x' && r.arvot);
+      x.textContent = x.hidden ? '' : r.arvot[p[2]];
     });
+
     laskin.innerHTML = '<b>' + m + '</b>';
     laskin.setAttribute('aria-label', sana('merkki') + ': ' + m);
+    laskin.classList.toggle('piilossa', yksi);
 
     k.classList.toggle('valmis', r.osuu);
-    var nayta = !r.osuu && r.arvo !== null;
+    var arvo = r.tulos ? tulosTekstina(r.tulos) : '';
+    var naytaArvo = !r.osuu && r.syy === 'lasku' && arvo !== '';
     tulos.innerHTML = '<b>' + (r.osuu ? '=' : '≠') + '</b>' +
-      (nayta ? '<i>' + muotoile(r.arvo) + '</i>' : '');
+      (naytaArvo ? '<i>' + arvo + '</i>' : '');
 
-    /* Fantasiakortti luetaan muodossa «X (2)»: ruudulla luku näkyy kortin
-     * päällä, mutta ruudunlukija tarvitsee sen lauseeseen. */
-    var osa = function (arvo, ratk) {
-      return arvo === 'x' && r.osuu ? 'X (' + ratk + ')' : nimi(arvo);
-    };
-    var lasku = osa(tila.a, r.a) + ' ' + m + ' ' + osa(tila.b, r.b);
-    lause.textContent = lasku + (r.osuu ? ' = ' + TAVOITE : (nayta ? ' = ' + muotoile(r.arvo) : '')) +
-      ' — ' + sana(r.osuu ? 'valmis' : 'ei');
+    /* Fantasiakortti luetaan muodossa «X (2)». */
+    var osa = function (v, n) { return v === 'x' && r.arvot ? 'X (' + r.arvot[n] + ')' : nimi(v); };
+    var lasku = osa(tila.a, 0) + (yksi ? '' : ' ' + m + ' ' + osa(tila.b, 1));
+    lause.textContent = lasku + (arvo !== '' ? ' = ' + arvo : '') + ' — ' +
+      sana(r.osuu ? 'valmis' : 'ei') + '. ';
+    kerro(r);
     if (r.osuu && liikkuu) isku();
-  }
-  function muotoile(v) {
-    return Number.isInteger(v) ? String(v)
-      : v.toLocaleString(kieli, { maximumFractionDigits: 2 });
+    if (r.osuu && !siirtymassa && (vaihe === 1 || vaihe === 2)) eteenpain();
   }
 
-  /* Isku: täytekortit lyödään pizzan päälle, kuten oikeassa pelissä.
-   * Matka mitataan elementeistä, koska korttien koko on clamp()-sidottu
-   * näytön leveyteen eikä sitä voi kirjoittaa CSS:ään vakiona. */
+  /* Näkyvä rivi: mitä tapaa harjoitellaan ja miksi tämä ei kelvannut.
+   * ⚠️ Tapa sanotaan AINA ääneen. Juuri siitä sekaannus syntyi pelissä: sama
+   * käyttöliittymä palveli hiljaa kahta eri sääntöä. */
+  function kerro(r) {
+    if (siirtymassa) return;
+    if (vaihe === 3) {
+      if (!teksti.querySelector('a')) {
+        teksti.innerHTML = '';
+        var a = document.createElement('a');
+        a.href = PELI;
+        a.className = 'keittio__peli';
+        a.textContent = sana('peli');
+        teksti.appendChild(a);
+      }
+      return;
+    }
+    var s = (vaihe === 2) ? sana('tee_basso') : sana('tee_helppo');
+    /* ⚠️ Vihje vasta lukijan omasta siirrosta, ei heti vaiheen alkaessa.
+     * Basson harjoitus ALKAA tilasta, joka kaatuu täytteiden määrään, joten
+     * pelkkä vihje olisi ensimmäinen asia jonka lukija näkee — eikä hän saisi
+     * koskaan tietää, KUMPAA tapaa hän harjoittelee. Juuri se hiljaisuus oli
+     * pelin opetuskierroksen syy. Tehtävä ensin, vihje vastaukseksi. */
+    if (vaihe === 2 && !tuoreVaihe && r && r.syy === 'maara') s = sana('maara');
+    if (teksti.textContent !== s) teksti.textContent = s;
+  }
+
+  function eteenpain() {
+    siirtymassa = true;
+    teksti.textContent = sana('hienoa');
+    k.classList.add('hienoa');
+    setTimeout(function () {
+      k.classList.remove('hienoa');
+      siirtymassa = false;
+      if (vaihe === 1) { vaihe = 2; tila = pura(HARJOITUS[1]); }
+      else { vaihe = 3; }
+      tuoreVaihe = true;
+      piirra(true);
+    }, 1300);
+  }
+
+  /* Isku: täytekortit lyödään pizzan päälle, kuten oikeassa pelissä. Matka
+   * mitataan elementeistä, koska korttien koko on clamp()-sidottu. */
   function isku() {
     if (k.classList.contains('isku')) return;
     var p = pizza.getBoundingClientRect();
@@ -407,14 +489,17 @@
   }
 
   /* ── Täytevalitsin ─────────────────────────────────────────────────
-   * Rakennetaan vasta ensimmäisellä avauksella, jotta kuvia ei haeta turhaan. */
+   * Rakennetaan vasta ensimmäisellä avauksella, jotta kuvia ei haeta turhaan.
+   * «Ei korttia» on mukana, koska pizzan saa tehdä yhdelläkin kortilla — ja
+   * juuri siinä helpompi tapa ja Basson tapa eroavat. */
   function avaa(nappi) {
     if (!valitsin) {
       valitsin = document.createElement('div');
       valitsin.className = 'keittio__valitsin';
-      valitsin.innerHTML = TAYTTEET.map(function (v) {
-        return '<button type="button" data-arvo="' + v + '" aria-label="' + nimi(v) + '">' +
-          '<img src="' + kuva(v) + '" width="240" height="364" alt=""></button>';
+      valitsin.innerHTML = TAYTTEET.concat([TYHJA]).map(function (v) {
+        return '<button type="button" data-arvo="' + v + '" aria-label="' + nimi(v) + '"' +
+          (v === TYHJA ? ' class="keittio__tyhja"' : '') +
+          '><img src="' + kuva(v) + '" width="240" height="364" alt=""></button>';
       }).join('');
       k.appendChild(valitsin);
       valitsin.addEventListener('click', function (e) {
@@ -426,10 +511,12 @@
         piirra(true);
       });
     }
+    /* Ensimmäisestä paikasta ei saa ottaa korttia pois: lasku tarvitsee luvun. */
+    valitsin.classList.toggle('ei-tyhjaa', nappi === pA);
     valitsin.hidden = false;
     valittuPaikka = nappi;
     nappi.setAttribute('aria-expanded', 'true');
-    var oma = valittuPaikka === pA ? tila.a : tila.b;
+    var oma = (nappi === pA) ? tila.a : tila.b;
     valitsin.querySelectorAll('button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-arvo') === oma));
     });
@@ -445,6 +532,7 @@
 
   /* ── Käyttö ────────────────────────────────────────────────────────── */
   k.addEventListener('click', function (e) {
+    if (e.target.closest('.keittio__peli')) return;      /* linkki saa toimia */
     var p = e.target.closest('.keittio__paikka');
     if (p) { seis(); (valitsin && !valitsin.hidden && valittuPaikka === p) ? sulje(false) : avaa(p); return; }
     if (e.target.closest('.keittio__laskin')) {
@@ -457,27 +545,28 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(true); });
 
   /* ── Näytös ────────────────────────────────────────────────────────
-   * Sama pizza neljällä eri laskulla, kerran kun lohko tulee ruudulle.
-   * Tämä on se mitä paperi ei voi: pelin idea liikkeenä. Loppuu heti kun
-   * lukija koskee keittiöön, ja jää viimeiseen laskuun eli painetun
-   * säännön omaan esimerkkiin. */
-  /* ⚠️ `koskettu` eikä pelkkä kellon pysäytys: näytös alkaa vasta kun lohko on
-   * tullut ruudulle JA korttikuvat on haettu, joten lukija voi ehtiä koskea
-   * keittiöön ennen sitä. Silloin näytös ei saa enää käynnistyä ja pyyhkiä
-   * hänen omaa valintaansa. */
+   * Kaksi laskua samalle pizzalle, kerran kun lohko tulee ruudulle. Sen
+   * jälkeen vuoro on lukijalla. Loppuu heti kun lukija koskee keittiöön —
+   * ⚠️ `koskettu` eikä pelkkä kellon pysäytys, koska näytös alkaa vasta kun
+   * korttikuvat on haettu ja lukija ehtii koskea ennen sitä. */
   function seis() {
     koskettu = true;
+    tuoreVaihe = false;
     if (naytosKello) { clearInterval(naytosKello); naytosKello = null; }
+    if (vaihe === 0 && !siirtymassa) { vaihe = 1; kerro(null); }
   }
   function naytos() {
     if (koskettu) return;
     var i = 0;
     naytosKello = setInterval(function () {
       if (document.hidden) return;
-      var m = NAYTOS[i % NAYTOS.length].match(/^(\w+)([-+*/])(\w+)$/);
-      tila.a = m[1]; tila.op = m[2]; tila.b = m[3];
+      if (i === NAYTOS.length) {            /* näytös ohi: vuoro lukijalle */
+        clearInterval(naytosKello); naytosKello = null;
+        vaihe = 1; tila = pura(HARJOITUS[0]); piirra(true);
+        return;
+      }
+      tila = pura(NAYTOS[i++]);
       piirra(true);
-      if (++i >= NAYTOS.length) seis();
     }, 1900);
   }
 
@@ -488,12 +577,14 @@
     var vahti = new IntersectionObserver(function (osat) {
       if (!osat[0].isIntersecting) return;
       vahti.disconnect();
-      /* Haetaan näytöksen kortit valmiiksi, ettei ensimmäinen vaihto välky. */
-      var jono = NAYTOS.join(',').split(/[-+*/,]/).filter(function (v, i, a) { return a.indexOf(v) === i; });
+      var jono = NAYTOS.concat(HARJOITUS).join(',').split(/[-+*/,]/)
+        .filter(function (v, i, a) { return v !== '' && a.indexOf(v) === i; });
       var jaljella = jono.length;
       jono.forEach(function (v) {
         var i = new Image();
-        i.onload = i.onerror = function () { if (--jaljella === 0 && !naytosKello && !koskettu) naytos(); };
+        i.onload = i.onerror = function () {
+          if (--jaljella === 0 && !naytosKello && !koskettu) naytos();
+        };
         i.src = kuva(v);
       });
     }, { threshold: .55 });

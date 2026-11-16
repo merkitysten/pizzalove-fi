@@ -40,7 +40,10 @@ RAJAUS = (40, 40, 351, 532)   # x, y, leveys, korkeus pelin kuvassa
 # Täytekortit 1–10 ja fantasiatäyte X: pizzakeittiön valitsin näyttää kaikki.
 # Pizzakortti 31 on sääntösivun esimerkki (tomaatti 2 + ananas 3 = arvo 5,
 # ks. julkinen/play/kortit.js — pizzan arvo on aina täytteidensä summa).
-KORTIT = ['tayte-%d' % n for n in range(1, 11)] + ['tayte-x', 'pizza-31']
+# `tausta-tayte` on täytekortin SELKÄPUOLI. Pizzakeittiössä se on valitsimen
+# «ei korttia» -vaihtoehto: lukija saa ottaa toisen kortin pois ja tehdä pizzan
+# yhdellä kortilla. Juuri siinä helpompi tapa ja Basso-apinan tapa eroavat.
+KORTIT = ['tayte-%d' % n for n in range(1, 11)] + ['tayte-x', 'pizza-31', 'tausta-tayte']
 
 
 def main():
