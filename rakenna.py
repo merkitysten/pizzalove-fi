@@ -276,15 +276,16 @@ def koko_mt(polku, lang='fi'):
 LIPUT = os.path.join(JULKINEN, 'kuvat', 'liput')
 
 
-def valikkolippu(k, lisaluokka='', paikanpitaja=True):
+def valikkolippu(k, lisaluokka='', paikanpitaja=True, polku='../kuvat/liput/'):
+    # polku: sivut ovat docs/<kieli>/, juurisivu docs/index.html — eri määrä ../:ia.
     luokka = 'kielet__lippu' + (' ' + lisaluokka if lisaluokka else '')
     if not os.path.exists(os.path.join(LIPUT, k + '.svg')):
         # Listassa tyhjä paikka pitää nimet samassa sarakkeessa ja näyttää puutteen.
         # Napissa ei ole saraketta, johon kohdistaa, joten tyhjä paikka olisi pelkkä
         # outo rako maapallon vieressä: siellä jää näkyviin maapallo ja nimi.
         return '<span class="%s kielet__lippu--puuttuu"></span>' % luokka if paikanpitaja else ''
-    return ('<img class="%s" src="../kuvat/liput/%s.svg" width="20" height="20"'
-            ' alt="" fetchpriority="low" decoding="async">' % (luokka, k))
+    return ('<img class="%s" src="%s%s.svg" width="20" height="20"'
+            ' alt="" fetchpriority="low" decoding="async">' % (luokka, polku, k))
 
 
 def ylaosa(t, sivu, kaikki):
@@ -316,7 +317,7 @@ def ylaosa(t, sivu, kaikki):
                 valikkolippu(k), e(d['nimi']))
             for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     kielet = '''<details class="kielet">
-      <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>%s<span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <summary aria-label="%s: %s">%s<span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
       <ul class="kielet__lista">%s</ul>
     </details>''' % (e(ui['kielivalinta']), e(t['nimi']),
                       valikkolippu(t['lang'], 'kielet__lippu--nappi', paikanpitaja=False),
@@ -922,9 +923,15 @@ def qr_hyppy(lang):
 
 def juurisivu(kaikki):
     """pizzalove.fi/ — ohjaa selaimen kielen mukaan. QR-koodit osoittavat tänne."""
-    linkit = ''.join('<li><a href="%s/" hreflang="%s" lang="%s">%s</a></li>' % (k, k, k, e(kaikki[k]['nimi']))
-                     for k in KIELET)
-    linkit += ''.join('<li><a href="%s/" hreflang="%s" lang="%s">%s</a></li>' % (k, k, k, e(d['nimi']))
+    # 🔵 Marko 16.11.2026: «Lisää liput myös juurisivun kielilistaan.» Sama lippu
+    # samasta kansiosta kuin ylävalikossa; juurisivu on docs/index.html, joten
+    # polku on kuvat/liput/ ilman ../:ia. Tyyli on sivun omassa <style>-lohkossa,
+    # koska juurisivu ei lataa tyyli.css:ää (se ohjaa eteenpäin heti).
+    def rivi(k, nimi):
+        return '<li><a href="%s/" hreflang="%s" lang="%s">%s<span>%s</span></a></li>' % (
+            k, k, k, valikkolippu(k, paikanpitaja=False, polku='kuvat/liput/'), e(nimi))
+    linkit = ''.join(rivi(k, kaikki[k]['nimi']) for k in KIELET)
+    linkit += ''.join(rivi(k, d['nimi'])
                       for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     return '''<!doctype html>
 <html lang="en">
@@ -969,7 +976,8 @@ def juurisivu(kaikki):
 </script>
 <style>body{font-family:system-ui,sans-serif;background:#FAF6EE;color:#1A1A1A;display:grid;place-items:center;min-height:90vh;margin:0}
 ul{list-style:none;padding:0;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-a{display:block;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1A1A1A;font-weight:700;text-decoration:none}</style>
+a{display:flex;align-items:center;gap:9px;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1A1A1A;font-weight:700;text-decoration:none}
+.kielet__lippu{width:20px;height:20px;flex:0 0 20px;border-radius:50%%;object-fit:cover;box-sizing:border-box;border:1px solid rgba(255,255,255,.75)}</style>
 </head>
 <body>
 <main><p style="text-align:center;font-weight:700">Pizza Love®</p><ul>%s</ul></main>
