@@ -387,15 +387,60 @@ def ulos(**arvot):
 TAYDENNETTAVAT = ('ui', 'koko')
 
 
+def taydenna_lippu(d):
+    """Puuttuva lippu vanhaan konekäännökseen (Marko 16.11.2026: «Tee sekin
+    lisäys taydenna():an»).
+
+    📐 Miksi tämä tarvittiin: lippu()-kutsu on vain varsinaisessa
+    käännöspolussa, joten ennen lippu-ominaisuutta tehty käännös jäi ilman
+    lippua EIKÄ täydennysajo korjannut sitä. Kieli olisi jäänyt valikkoon
+    ilman lippua, kunnes se käännetään kokonaan uudelleen.
+
+    Tämä ei ole API-kutsu vaan paikallinen tiedostokopio: ei päiväkattoa, ei
+    rahaa, ja lippu() palaa heti jos lippu on jo olemassa. Siksi tämän voi
+    ajaa joka kerta kaikille kielille.
+
+    Palauttaa True vain, jos lippu SYNTYI nyt — silloin kieli on saatava
+    ulos-listaan, jotta haara tallentaa tiedoston ja sivusto rakennetaan."""
+    koodi = d['kieli']
+    kohde = os.path.join(TANNE, 'julkinen', 'kuvat', 'liput', koodi + '.svg')
+    if os.path.exists(kohde):
+        return False
+    kirjoitus, alue = d.get('kirjoitus'), d.get('alue')
+    if not alue:
+        # Ennen 16.11.2026 tallennetussa tiedostossa ei ole näitä kenttiä.
+        # ⚠️ except Exception eikä except SystemExit: kieli() nostaa SystemExitin,
+        # mutta myös ModuleNotFoundErrorin jos langcodes puuttuu. Mitattu
+        # 16.11.2026: pelkkä SystemExit kaatoi koko --taydenna-ajon, eli yhden
+        # kielen puute olisi estänyt kaikkien muiden täydennyksen. Lippu on
+        # pieni lisä, joten se ei saa koskaan kaataa ajoa.
+        try:
+            _, _, _, _, kirjoitus, alue = kieli(koodi)
+        except Exception as v:
+            print('  ⚠️  %s: aluetta ei saatu (%s) — ei lippua' % (koodi, v))
+            return False
+    lippu(koodi, kirjoitus, alue)
+    return os.path.exists(kohde)
+
+
 def taydenna(vastaus_tiedosto=None):
-    """Aiempien konekäännösten puuttuvat osat (ui, koko). Pieni kutsu kieltä
-    kohden; virhe yhdessä kielessä ei estä muita (sivu käyttää silloin englantia)."""
-    en_ui = lahteet()['en']['ui']
+    """Aiempien konekäännösten puuttuvat osat (ui, koko, lippu). Pieni kutsu
+    kieltä kohden; virhe yhdessä kielessä ei estä muita (sivu käyttää silloin
+    englantia). Lippu ei vaadi kutsua lainkaan, ks. taydenna_lippu()."""
+    tiedostot = [os.path.join(KONEKAANNOS, n)
+                 for n in sorted(os.listdir(KONEKAANNOS) if os.path.isdir(KONEKAANNOS) else [])
+                 if n.endswith('.json')]
     tehty = []
-    for nimi in sorted(os.listdir(KONEKAANNOS) if os.path.isdir(KONEKAANNOS) else []):
-        if not nimi.endswith('.json'):
-            continue
-        polku = os.path.join(KONEKAANNOS, nimi)
+    # ⚠️ LIPUT ENSIN, OMANA KIERROKSENAAN. 📐 Mitattu 16.11.2026: kun lippu haettiin
+    # samassa silmukassa ui/koko-käännöksen kanssa, ensimmäisen kielen epäonnistunut
+    # API-kutsu lopetti koko ajon — ja sen jälkeiset kielet jäivät ilman lippua,
+    # vaikka lippu ei tarvitse API:a lainkaan. Omana kierroksena jokainen kieli saa
+    # lippunsa riippumatta siitä, miten käännökset onnistuvat.
+    for polku in tiedostot:
+        if taydenna_lippu(json.load(open(polku, encoding='utf-8'))):
+            tehty.append(os.path.basename(polku)[:-5])
+    en_ui = lahteet()['en']['ui']
+    for polku in tiedostot:
         d = json.load(open(polku, encoding='utf-8'))
         puuttuu = [a for a in TAYDENNETTAVAT if a not in d]
         if not puuttuu:
@@ -444,6 +489,9 @@ def taydenna(vastaus_tiedosto=None):
             json.dump(d, f, ensure_ascii=False, indent=1)
             f.write('\n')
         tehty.append(koodi)
+    # Sama kieli voi tulla listaan kahdesti (lippu + ui/koko) — haara ja
+    # rakennus saavat sen kerran.
+    tehty = sorted(set(tehty))
     print('Täydennetty: %s' % (' '.join(tehty) or '–'))
     ulos(taydennetty=' '.join(tehty))
     return 0

@@ -65,15 +65,24 @@ jobs:
       - name: Työkalut
         run: pip install -q langcodes language_data pillow playwright
 
+      # ⚠️ OMA ASKEL, EI käännösaskeleen sisällä (Marko 16.11.2026). Tässä luki
+      # npm pack käännösaskeleessa, jossa on «if: kieli != kaikki» — eli
+      # «kaikki»-ajossa lippulähdettä ei ladattu lainkaan, ja täydennysaskel jäi
+      # joka tapauksessa ilman LIPUT_LAHDE:a. Nyt molemmat askeleet näkevät sen
+      # GITHUB_ENVin kautta, joten myös vanha käännös voi saada puuttuvan lippunsa.
+      - name: Lippulähde (flag-icons)
+        run: |
+          mkdir -p "$RUNNER_TEMP/liput" && (cd "$RUNNER_TEMP/liput" && npm pack -s flag-icons@7.2.3 && tar xzf flag-icons-7.2.3.tgz)
+          echo "LIPUT_LAHDE=$RUNNER_TEMP/liput/package/flags/1x1" >> "$GITHUB_ENV"
+
       - name: Käännös (Claude API)
         id: kaannos
         if: inputs.kieli != 'kaikki'
-        run: |
-          mkdir -p "$RUNNER_TEMP/liput" && (cd "$RUNNER_TEMP/liput" && npm pack -s flag-icons@7.2.3 && tar xzf flag-icons-7.2.3.tgz)
-          LIPUT_LAHDE="$RUNNER_TEMP/liput/package/flags/1x1" python3 tyokalut/kaanna.py "$KIELI"
+        run: python3 tyokalut/kaanna.py "$KIELI"
 
       # Aiemmista käännöksistä puuttuvat myöhemmin lisätyt osat (valikko ja napit
-      # «ui», tiedostokoko «koko»). Ei uusi käännös eikä kuluta päiväkattoa.
+      # «ui», tiedostokoko «koko», sekä puuttuva lippu). Ei uusi käännös eikä
+      # kuluta päiväkattoa; lippu ei vaadi API-kutsua lainkaan.
       - name: Täydennä aiemmat konekäännökset
         id: taydennys
         run: python3 tyokalut/kaanna.py --taydenna
