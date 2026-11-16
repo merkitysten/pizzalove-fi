@@ -10,6 +10,23 @@ Muutos: valkoinen (#fff) on sävytetty vaaleanharmaaksi #f1f0f0, jotta valkoreun
 Päätös: Marko 16.11.2026 (lippu koteloarkin otsakeruudun oikeaan alakulmaan, lajittelun avuksi).
 Adobe Stock -lippuja ei käytetä julkisessa repossa (lisenssi ei salli jakoa erillisinä tiedostoina).
 
+## ⚠️ Lippu on kielen lippu, ei murteen — älä tee poikkeuksia
+
+**Marko 16.11.2026:** «Ruotsi on ruotsi, vaikka se olisi suomenruotsi. Joku antaa siitä
+sitten palautteen, jos se häiritsee. Muuten olemme kaikkien eri kielimurteiden kanssa
+helisemässä.» Kysymys nousi mitatusta ristiriidasta: sivuston ruotsi on suomenruotsi
+(`rakenna.py` `LOKAALIT['sv'] = 'sv_FI'`, ja sv-sivun `og:locale` on `sv_FI`), mutta
+lippu on Ruotsin (`sv.svg` = flag-icons `se`).
+
+**Päätös: lippu on kielen tavallisimman maan lippu, eikä kohdeyleisön maan.**
+Tämä ei ole poikkeus vaan sääntö, ja `kaanna.py`:n `lippu()` toteuttaa jo sen.
+Siksi myös en = Iso-Britannia (ei Yhdysvallat), es = Espanja (vaikka espanjan
+puhujista enemmistö on Amerikoissa), de = Saksa, nl = Alankomaat, fr = Ranska.
+
+⚠️ **Älä «korjaa» yksittäistä kieltä, vaikka se näyttäisi väärältä.** Jokainen
+poikkeus avaa saman kysymyksen kaikille muille kielille, eikä sille löydy loppua.
+Jos palautetta tulee, Marko päättää — ei agentti.
+
 Uudet konekäännöskielet saavat lipun automaattisesti (`tyokalut/kaanna.py`, funktio `lippu`):
 kielen tavallisimman maan lippu (langcodes: kielikoodista maa, esim. ja → JP, zh-Hans → CN).
 Lippua ei tehdä, jos maa ei ole yksiselitteinen (es-419) tai valinta olisi poliittinen

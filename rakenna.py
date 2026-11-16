@@ -443,9 +443,37 @@ def lataukset(avaimet, nimet, polut, lang):
         else:
             # ?v=-leima: muuttunut PDF haetaan heti, ei selaimen välimuistista (Marko 3.11.2026:
             # päivitetty sääntö-PDF ei näkynyt)
-            rivit.append('<li><a href="../%s" download><span>%s</span><small>PDF %s</small></a></li>' % (
+            # ⚠️ EI `download`-attribuuttia (Marko 16.11.2026: «tietokoneella
+            # se lataa ne. Kätevämpää voisi olla, jos se avautuisi
+            # selaimessa»). Puhelin avasi PDF:n selaimessa jo ennestään, koska
+            # se ei noudata attribuuttia — eli sama linkki käyttäytyi eri
+            # tavalla eri laitteilla. Uusi välilehti, jotta sivu ei katoa alta.
+            rivit.append('<li><a href="../%s" target="_blank" rel="noopener">'
+                         '<span>%s</span><small>PDF %s</small></a></li>' % (
                 leima(polku), e(nimet[a]), koko_mt(polku, lang)))
     return '<ul class="lataukset">%s</ul>' % ''.join(rivit)
+
+
+def hyppynapit(hyppy, avaimet, polut):
+    """Sivun ylänapit. ⚠️ «Säännöt PDF:nä» vie SUORAAN tiedostoon, kun
+    ladattavia on yksi — muuten se hyppäisi sivun alalaitaan, jossa on
+    melkein samannäköinen nappi, ja sama asia vaatisi kaksi napautusta
+    (Marko 16.11.2026: «Miksei se sääntö-pdf avaudu heti tästä napista»).
+
+    📐 Mitattu 16.11.2026, ja siksi tämä ei ole poikkeus vaan sääntö:
+    korttipelin `#lataa`-lohkossa on **1** PDF ja lautapelin **4**. Yhden
+    kohdalla hyppy on pelkkää väliä; neljän kohdalla lohko on aito
+    määränpää, koska siellä pitää valita. Ehto luetaan latauslistasta,
+    joten uusi kieli tai uusi tiedosto siirtää napin oikein itsestään."""
+    suora = polut[avaimet[0]][0] if len(avaimet) == 1 else None
+    ulos = []
+    for k, v in hyppy.items():
+        if k == 'lataa' and suora and not suora.startswith('http'):
+            ulos.append('<a href="../%s" target="_blank" rel="noopener">%s</a>'
+                        % (leima(suora), e(v)))
+        else:
+            ulos.append('<a href="#%s">%s</a>' % (k, e(v)))
+    return ''.join(ulos)
 
 
 # ---------------------------------------------------------------- sivut
@@ -520,7 +548,12 @@ def korttipeli(t, kaikki):
     s = t['korttipeli']
     lang = t['lang']
     tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
-    hyppy = ''.join('<a href="#%s">%s</a>' % (k, e(v)) for k, v in s['hyppy'].items())
+    # ⚠️ YKSI LÄHDE POLULLE. `PDF['korttipeli']` on VANHA kolmikielinen arkki;
+    # omankielinen tulee `korttipeli_pdf(lang)`:sta. Ensimmäinen versio luki
+    # ylänapin suoraan `PDF`:stä, ja nappi osoitti kaikilla kielillä vanhaan
+    # tiedostoon — alalista oli oikein, koska se sai korvatun sanakirjan.
+    polut = dict(PDF, korttipeli=korttipeli_pdf(lang))
+    hyppy = hyppynapit(s['hyppy'], ['korttipeli'], polut)
 
     muodot = []
     for i, m in enumerate(s['muodot']):
@@ -602,8 +635,7 @@ def korttipeli(t, kaikki):
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
        e(s['lataa_otsikko']), e(s['lataa_teksti']),
-       lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']},
-                 dict(PDF, korttipeli=korttipeli_pdf(lang)), lang),
+       lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']}, polut, lang),
        ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
@@ -612,7 +644,7 @@ def lautapeli(t, kaikki):
     s = t['lautapeli']
     lang = t['lang']
     tiedot = ''.join('<li>%s</li>' % e(x) for x in s['tiedot'])
-    hyppy = ''.join('<a href="#%s">%s</a>' % (k, e(v)) for k, v in s['hyppy'].items())
+    hyppy = hyppynapit(s['hyppy'], lauta_lataukset(lang), PDF)
     hyppy += '<a href="apinakortit.html">%s</a>' % e(t['apinakortit']['linkki'])
     kok = videoruudukko([video(v, s['videot'][v], None, t) for v in LAUTA_VIDEOT_KOKOAMINEN], t, 'vaaka')
     vuoro = videoruudukko([video(LAUTA_VIDEO_VUORO[0], s['videot'][LAUTA_VIDEO_VUORO[0]], LAUTA_VIDEO_VUORO[1], t)], t, 'vaaka')
