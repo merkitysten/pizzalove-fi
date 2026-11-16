@@ -170,6 +170,12 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        animaation yläpuolella, joten jokainen askelselite on sen toisinto.
        Apinavaaan «Opi pelaamaan» -askeleessa tekstiä ei ole ennestään. */
     var SELITE = asetukset.selite !== false;
+    /* ⚠️ OTSAKKEET EIVÄT SAA OLLA KOVAKOODATTUJA. «Varasto» luki moduulissa
+       suomeksi, ja se päätyi sellaisenaan myös saksan- ja ranskankielisille
+       sivuille — sanat ovat jo olemassa käännettyinä (`lautapeli.lauta`), joten
+       isäntäsivu antaa ne. Suomi jää oletukseksi esikatselua varten. */
+    var OTSAKE = asetukset.otsakkeet || {};
+    function otsake(avain, oletus) { return OTSAKE[avain] || oletus; }
     var KEHOTE = !KORTTIPAIKKA ? '' :
       asetukset.kehote !== undefined ? asetukset.kehote :
       '<b class="ak__korttinimi">Valitse apinakortti</b>' +
@@ -280,7 +286,14 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         p.style.top = RENGAS[v - 1][1] + '%';
         rengas.appendChild(p);
       }
-      nayttoEl.appendChild(rengas);
+      /* ⚠️ JOMPI KUMPI, EI TOINEN (Marko 16.11.2026: «nyt siellä lukee
+         varasto, mutta ei linjastoa. Eli jompi kumpi linja pitää valita, joko
+         lukee tai ei lue»). Molemmat lukevat, ja otsikko on alueensa yläpuolella
+         samalla tavalla kummassakin. */
+      var linjasto = el('div', 'ak__linjasto');
+      linjasto.appendChild(el('span', 'ak__otsake', otsake('linjasto', 'Linjasto')));
+      linjasto.appendChild(rengas);
+      nayttoEl.appendChild(linjasto);
 
       /* ⚠️ VARASTON ALLA ON LAUDAN OMA VARASTO HAALEANA (Marko 16.11.2026:
          «Ota varaston alle se pelilaudan varasto myös haaleana kuvana»).
@@ -306,7 +319,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         nayttoEl.appendChild(pm);
       }
       var varasto = el('div', 'ak__varasto');
-      varasto.appendChild(el('span', 'ak__otsake', 'Varasto'));
+      varasto.appendChild(el('span', 'ak__otsake', otsake('varasto', 'Varasto')));
       var lava = el('div', 'ak__varastolava');
       lava.innerHTML = '<div class="ak__varastokuva"><div class="ak__varastokierto">' +
         '<img src="' + (asetukset.lautakuva || 'apinavaaka/pelilauta.webp') + '" alt="">' +
@@ -588,6 +601,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       nayttoEl.innerHTML = '';
       var r = RYHMA[nykyinen] || 'lauta';
       if (r === 'boksi') piirraBoksit();
+      else if (tila.opas) piirraOpas();
       else if (r === 'vuoro') piirraVuoro();
       else if (r === 'noppa') piirraNoppa();
       else piirraLauta();
@@ -1230,6 +1244,74 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         tila.boksit[i] = []; tila.tuoreet = null;
         tila.siirrot = null; tila.liike = null;
         tila.menetys = {}; tila.menetys[i] = n;
+        return uudelleen();
+      };
+    }
+
+    /* ⚠️ OPASANIMAATIOT: lautapelisivun «Pelin voittaminen» ja «Pelivalmistelut»
+       (Marko 16.11.2026: «Nämä voisi myös olla sellaisena animaationa tuossa
+       pelilaudan yhteydessä» · «Ja boksinkin kohdalle animaatio boksista, joka
+       täyttyy» · «ei selitetä, kun voidaan näyttää»).
+
+       ⚠️ SAMA KONE KUIN APINAKORTEILLA, EI KOLMATTA TAPAA PIIRTÄÄ SAMAA ASIAA.
+       Boksi, palat ja niiden kasvatus ovat jo olemassa; vain näkymä ja askeleet
+       ovat uusia. Marko huomautti aiemmin samana päivänä, kun esikatselun lauta
+       ei ollut sama kuin pelin lauta — kolmas tyyli on oma vikansa.
+
+       ⚠️ PIZZAT LUETAAN PELIN OMASTA PAKASTA (`window.pizzapakka`), ei arvata.
+       Pakka on 42 korttia ja `osajoukot()` rajaa sen; oma laskelmani antoi 385.
+       Jos `kortit.js` ei ole ladattu, pizzaosuus jää pois eikä mitään keksitä. */
+    function pizzaKortit() {
+      if (!window.pizzapakka) return null;
+      var pakka;
+      try { pakka = window.pizzapakka(); } catch (_) { return null; }
+      var kolme = pakka.filter(function (k) { return k.tayteMaara === 3 && !k.sydan; });
+      var sydan = pakka.filter(function (k) { return k.sydan; })[0];
+      /* Kolme pizzaa joiden täytteet eivät mene päällekkäin: silloin boksiin
+         kertyy yhdeksän ERI palaa, ja kymmenes tulee sydänpizzasta. Sääntö on
+         «10 erilaista», joten päällekkäiset täytteet kertoisivat väärin. */
+      var valitut = [], kaytetyt = {};
+      kolme.forEach(function (k) {
+        if (valitut.length >= 3) return;
+        if (k.taytteet.some(function (t) { return kaytetyt[t]; })) return;
+        k.taytteet.forEach(function (t) { kaytetyt[t] = true; });
+        valitut.push(k);
+      });
+      if (valitut.length < 3 || !sydan) return null;
+      return { pizzat: valitut, sydan: sydan };
+    }
+
+    function piirraOpas() {
+      nayttoEl.className = 'ak__naytto ak__naytto--opas';
+      var rivi = el('div', 'ak__opas');
+      var pizza = el('div', 'ak__opaspizza');
+      if (tila.pizza) {
+        pizza.innerHTML = '<img src="' + KANSIO + '../' + tila.pizza.kuva + '" alt="">';
+        pizza.classList.add('ak__opaspizza--nakyy');
+        if (tila.pizza.sydan) pizza.classList.add('ak__opaspizza--sydan');
+      }
+      rivi.appendChild(pizza);
+      var boksi = el('div', 'ak__opasboksi');
+      boksi.appendChild(boksiEl(tila.boksit[0], tila.tuoreet && tila.tuoreet[0], 0));
+      boksi.appendChild(el('span', 'ak__maara',
+        '<b>' + tila.boksit[0].length + '</b><i>/ 10</i>'));
+      if (tila.boksit[0].length >= 10) boksi.classList.add('ak__opasboksi--taysi');
+      rivi.appendChild(boksi);
+      nayttoEl.appendChild(rivi);
+    }
+
+    function pizzaEsiin(k) {
+      return function () { tila.pizza = k; tila.tuoreet = null; tila.liike = null; return uudelleen(); };
+    }
+    function pizzaBoksiin(k) {
+      return function () {
+        tila.pizza = k;
+        var uudet = [];
+        k.taytteet.forEach(function (t) {
+          if (tila.boksit[0].indexOf(t) < 0) { tila.boksit[0].push(t); uudet.push(t); }
+        });
+        tila.tuoreet = {}; tila.tuoreet[0] = uudet;
+        tila.liike = null; tila.menetys = null;
         return uudelleen();
       };
     }

@@ -1119,11 +1119,14 @@ def apinakortit(t, kaikki):
        ('' if not nayta else
         ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
         ' data-css="%s" data-js="%s"'
+        ' data-linjasto="%s" data-varasto="%s"'
         ' data-nayta="%s" data-piilota="%s"'
         % (','.join('../' + leima('play/apinavaaka/' + f)
                     for f in ('apinavaaka.css', 'apinakortti.css')),
            ','.join('../' + leima('play/apinavaaka/' + f)
                     for f in ('noppa3d.js', 'apinavaaka.js', 'apinakortti.js')),
+           e(t.get('lautapeli', {}).get('lauta', {}).get('linjasto', '')),
+           e(t.get('lautapeli', {}).get('lauta', {}).get('varasto', '')),
            e(nayta), e(piilota))),
        '\n'.join(kortit), e(a['takaisin']))
     return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)

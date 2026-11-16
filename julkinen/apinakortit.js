@@ -51,7 +51,9 @@
         lava.appendChild(sisus);
         moduuli = window.Apinakortti(sisus, {
           kansio: A.kansio, lautakuva: A.lauta, pelaajia: 3,
-          korttipaikka: false, selite: false
+          korttipaikka: false, selite: false,
+          /* Otsakkeet sivun omalla kielellä: moduulissa ne olisivat suomeksi. */
+          otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' }
         });
       });
     return lupaus;

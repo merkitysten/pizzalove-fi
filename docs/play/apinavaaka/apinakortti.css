@@ -380,3 +380,5 @@
    luettaisiin kolmena Bassona eikä kolmena pelaajana. */
 .ak__pelaajamerkki{width:30px;height:30px;display:grid;place-items:center}
 .ak__pelaajamerkki img{width:30px;height:30px;object-fit:contain}
+/* Linjaston otsikko omassa kaaressaan, samoin kuin varaston. */
+.ak__linjasto{width:min(320px,100cqw)}
