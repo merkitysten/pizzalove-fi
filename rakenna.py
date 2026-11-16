@@ -328,7 +328,14 @@ def ylaosa(t, sivu, kaikki):
     # vahvistus oli kovakoodattuna JS:ään. Kieli ei saa vaihtua kesken lauseen.
     # %s tekstissä = kielen oma nimi; sivu.js korvaa sen.
     pyyntoteksti = [
-        ('hakemisto', '../kielet.json'),
+        # ⚠️ Leima on pakollinen: sivu.js hakee tämän «force-cache»-tilassa, eli
+        # selain käyttää välimuistiaan vaikka tiedosto olisi muuttunut. Ilman
+        # leimaa kerran avattu hakemisto jäisi selaimeen ikuisesti vanhana.
+        # Leiman kanssa osoite muuttuu heti kun sisältö muuttuu, jolloin
+        # «force-cache» on nimenomaan oikea valinta: muuttumaton osoite saa
+        # jäädä välimuistiin pysyvästi. leima() ei ole käytettävissä selaimessa,
+        # joten se on annettava sivulta.
+        ('hakemisto', '../' + leima('kielet.json')),
         ('haku', ui.get('pyynto_haku', 'Search for a language')),
         ('pyyda', ui.get('pyynto_pyyda', 'Request')),
         ('eituettu', ui.get('pyynto_ei_tuettu', 'Not supported yet')),
