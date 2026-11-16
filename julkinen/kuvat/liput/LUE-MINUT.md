@@ -9,3 +9,8 @@ Muutos: valkoinen (#fff) on sävytetty vaaleanharmaaksi #f1f0f0, jotta valkoreun
 (Suomi, Puola) erottuu valkoiselta paperilta. Sama ratkaisu on ohjeiden Adobe-lipuissa.
 Päätös: Marko 16.11.2026 (lippu koteloarkin otsakeruudun oikeaan alakulmaan, lajittelun avuksi).
 Adobe Stock -lippuja ei käytetä julkisessa repossa (lisenssi ei salli jakoa erillisinä tiedostoina).
+
+Uudet konekäännöskielet saavat lipun automaattisesti (`tyokalut/kaanna.py`, funktio `lippu`):
+kielen tavallisimman maan lippu (langcodes: kielikoodista maa, esim. ja → JP, zh-Hans → CN).
+Lippua ei tehdä, jos maa ei ole yksiselitteinen (es-419) tai valinta olisi poliittinen
+(perinteinen kiina, zh-Hant). Silloin arkissa on pelkkä kielikoodi kehyksessä.

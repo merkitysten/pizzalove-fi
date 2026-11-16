@@ -7,7 +7,7 @@ kielelle voi tehdä useampaa pyyntöä. Asiakkailla pitäisi olla mahdollisuus
 ilmoittaa käännösvirheitä tai epäselvyyksistä.»
 
 Käyttö (GitHub Actions, .github/workflows/konekaannos.yml):
-    python3 tyokalut/kaanna.py pl
+    python3 tyokalut/kaanna.py pl        (mikä tahansa BCP 47 -koodi: zh-Hans, ja, pt-BR, es-419 …)
 Paikallinen koe ilman API:a (valmis vastaus tiedostosta):
     python3 tyokalut/kaanna.py pl --vastaus vastaus.json
 
@@ -41,27 +41,33 @@ API = 'https://api.anthropic.com'
 API_VERSIO = '2026-10-21'
 MAKS_TOKENIT = 20000
 
-# Sallitut kielet: latinalaiset aakkoset (VAG Rounded -viireissä on vain
-# kääntämättömät nimet, ja leipäteksti on Source Sans 3 / Nunito, joissa
-# nämä merkit ovat). Kreikka, kyrilliset, RTL ja CJK vasta testauksen jälkeen.
-# koodi: (englanninkielinen nimi, kielen oma nimi)
-KIELET = {
-    'pl': ('Polish', 'polski'),
-    'cs': ('Czech', 'čeština'),
-    'da': ('Danish', 'dansk'),
-    'nb': ('Norwegian Bokmål', 'norsk bokmål'),
-    'is': ('Icelandic', 'íslenska'),
-    'it': ('Italian', 'italiano'),
-    'pt': ('Portuguese (Portugal)', 'português'),
-    'ro': ('Romanian', 'română'),
-    'hu': ('Hungarian', 'magyar'),
-    'et': ('Estonian', 'eesti'),
-    'lv': ('Latvian', 'latviešu'),
-    'lt': ('Lithuanian', 'lietuvių'),
-    'sl': ('Slovenian', 'slovenščina'),
-    'hr': ('Croatian', 'hrvatski'),
-    'tr': ('Turkish', 'Türkçe'),
-}
+# 🔵 Marko 16.11.2026: kielilistaa ei ole — mikä tahansa kieli kelpaa
+# («Juuri näin»). Kiina, japani, korea, kreikka, kyrilliset jne. piirtyvät
+# Noto-fonteilla (selaimen merkkikohtainen varafontti; koe 16.11. kiinalla).
+# Tarkistus hylkää käännöksen, jos jokin ei täsmää, ja jokaisen uuden
+# kirjoitusjärjestelmän ensimmäisen arkin Marko katsoo itse.
+# ⚠️ Oikealta vasemmalle kirjoitettavat (arabia, heprea, persia, urdu …) vaativat
+# peilatun asettelun, jota ei vielä ole: ne torjutaan selvällä viestillä.
+IHMISEN_TARKASTAMAT = ('fi', 'en', 'sv', 'de', 'nl', 'fr', 'es', 'sk')
+OIKEALTA_VASEMMALLE = {'Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo', 'Adlm', 'Mand', 'Samr', 'Rohg'}
+
+
+def kieli(koodi):
+    """BCP 47 -koodi (esim. pl, zh-Hans, pt-BR, es-419) -> (tiedostokoodi,
+    standardoitu tagi, englanninkielinen nimi, oma nimi, kirjoitusjärjestelmä, alue)."""
+    import langcodes
+    try:
+        k = langcodes.Language.get(koodi)
+    except Exception:
+        raise SystemExit('Virheellinen kielikoodi %r' % koodi)
+    nimi_en = k.display_name('en')
+    if not k.is_valid() or nimi_en.startswith('Unknown'):
+        raise SystemExit('Tuntematon kieli %r' % koodi)
+    m = k.maximize()
+    tagi = k.to_tag()
+    return tagi.lower(), tagi, nimi_en, k.display_name(tagi), m.script, m.territory
+
+
 LAHDEKIELET = ('fi', 'en', 'sv')
 # Arkin omat tekstit (korttisaannot.KIELET), jotka käännetään. 'tiedosto' ja
 # 'osoite' asetetaan tässä, ei käännetä.
@@ -85,7 +91,7 @@ def lahteet():
 
 
 def ohje(koodi):
-    en_nimi, oma = KIELET[koodi]
+    _, _, en_nimi, oma, _, _ = kieli(koodi)
     sanasto = open(os.path.join(TANNE, 'sisalto', 'SANASTO.md'), encoding='utf-8').read()
     return f"""You translate the rules of the Pizza Love® card game (a family maths card game, ages 6+) into {en_nimi} ({oma}).
 
@@ -119,7 +125,7 @@ Glossary of the existing translations (for reference and consistency):
 def viesti(koodi):
     return ('Source (JSON, languages fi/en/sv):\n'
             + json.dumps(lahteet(), ensure_ascii=False, indent=1)
-            + f'\n\nTranslate into {KIELET[koodi][0]}. Return only the JSON object.')
+            + f'\n\nTranslate into {kieli(koodi)[2]}. Return only the JSON object.')
 
 
 # ---------------------------------------------------------------- tunnistautuminen
@@ -257,7 +263,8 @@ def tarkista(tulos):
     vertaa(en['korttipeli'], tulos['korttipeli'], 'korttipeli', virheet)
     vertaa(en['kielet'], tulos['kielet'], 'kielet', virheet)
     k, kp = tulos['kielet'], tulos['korttipeli']
-    if len(re.split(r'(?<=[.!?])\s+', k['vaihto'].strip())) != 2:
+    # Virkkeen loppu: myös kiinan/japanin 。！？ (ei välilyöntiä perään)
+    if len([v for v in re.split(r'(?<=[.!?])\s+|(?<=[。！？])', k['vaihto'].strip()) if v.strip()]) != 2:
         virheet.append('kielet.vaihto: pitää olla tasan kaksi virkettä')
     for nimi in ('Pizza Party', 'Pizza Basso', 'Pizza Love'):
         if nimi not in json.dumps(kp, ensure_ascii=False):
@@ -271,13 +278,14 @@ def tarkista(tulos):
 
 # ---------------------------------------------------------------- tallennus
 def tallenna(koodi, tulos):
-    en_nimi, oma = KIELET[koodi]
+    _, tagi, en_nimi, oma, kirjoitus, alue = kieli(koodi)
     kp = tulos['korttipeli']
     kielet = dict(tulos['kielet'])
     kielet['tiedosto'] = 'pizza-love-card-game-rules-%s.pdf' % koodi
     kielet['osoite'] = OSOITE
     kielet['konekaannos_merkinta'] = tulos['konekaannos_merkinta']
-    d = {'kieli': koodi, 'nimi': oma, 'nimi_en': en_nimi, 'konekaannos': True,
+    d = {'kieli': koodi, 'tagi': tagi, 'nimi': oma, 'nimi_en': en_nimi, 'kirjoitus': kirjoitus,
+         'alue': alue, 'konekaannos': True,
          'tarkastettu': False, 'malli': MALLI,
          'luotu': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
          'lataa_kielella': tulos['lataa_kielella'],
@@ -290,19 +298,54 @@ def tallenna(koodi, tulos):
     return polku
 
 
+def lippu(koodi, kirjoitus, alue):
+    '''Kielen lippu koteloarkkiin (Marko 16.11.2026) flag-icons-kirjastosta (MIT):
+    alueen (kielen tavallisimman maan) 1x1-lippu, valkoinen sävytettynä #f1f0f0.
+    Ei lippua, jos alue ei ole maa (es-419) tai valinta olisi poliittinen
+    (perinteinen kiina). Silloin arkissa on pelkkä kielikoodi.'''
+    kohde = os.path.join(TANNE, 'julkinen', 'kuvat', 'liput', koodi + '.svg')
+    if os.path.exists(kohde):
+        return
+    lahde_kansio = os.environ.get('LIPUT_LAHDE', '')
+    if kirjoitus == 'Hant' or not alue or not re.fullmatch(r'[A-Z]{2}', alue):
+        print('Lippu: ei lippua (%s, alue %s) — arkissa pelkkä kielikoodi' % (koodi, alue))
+        return
+    lahde = os.path.join(lahde_kansio, alue.lower() + '.svg')
+    if not os.path.exists(lahde):
+        print('⚠️  Lippu: lähdettä ei löydy (%s) — arkissa pelkkä kielikoodi' % lahde)
+        return
+    s = open(lahde, encoding='utf-8').read()
+    s = re.sub(r'#(?:fff|FFF|ffffff|FFFFFF)\b', '#f1f0f0', s)
+    with open(kohde, 'w', encoding='utf-8') as f:
+        f.write(s)
+    print('Lippu: %s -> %s' % (alue, kohde))
+
+
+def ulos(**arvot):
+    '''GitHub Actionsin askeleen tulokset (koodi, uusi) seuraaville askelille.'''
+    polku = os.environ.get('GITHUB_OUTPUT')
+    if polku:
+        with open(polku, 'a') as f:
+            for a, b in arvot.items():
+                f.write('%s=%s\n' % (a, b))
+
+
 def main():
     argit = [a for i, a in enumerate(sys.argv[1:], 1)
              if not a.startswith('--') and sys.argv[i - 1] != '--vastaus']
     if len(argit) != 1:
         raise SystemExit('Käyttö: kaanna.py <kielikoodi> [--vastaus tiedosto] [--uudelleen]')
-    koodi = argit[0].strip().lower()
-    if koodi in ('fi', 'en', 'sv', 'de', 'nl', 'fr', 'es', 'sk'):
+    koodi, tagi, en_nimi, oma, kirjoitus, alue = kieli(argit[0].strip())
+    if koodi in IHMISEN_TARKASTAMAT:
         raise SystemExit('%s on jo ihmisen tarkastama kieli — konekäännöstä ei tehdä.' % koodi)
-    if koodi not in KIELET:
-        raise SystemExit('Kieltä %r ei ole sallittujen listalla: %s' % (koodi, ', '.join(KIELET)))
+    if kirjoitus in OIKEALTA_VASEMMALLE:
+        raise SystemExit('%s (%s) kirjoitetaan oikealta vasemmalle. Arkin peilattua asettelua ei '
+                         'vielä ole — Marko tekee tämän kielen käsin.' % (en_nimi, tagi))
+    print('Kieli: %s / %s (%s, kirjoitus %s, alue %s)' % (en_nimi, oma, tagi, kirjoitus, alue))
     polku = os.path.join(KONEKAANNOS, koodi + '.json')
     if os.path.exists(polku) and '--uudelleen' not in sys.argv:
         print('ON JO: %s on käännetty (%s). Uutta pyyntöä samalle kielelle ei tehdä.' % (koodi, polku))
+        ulos(koodi=koodi, uusi=0)
         return 0
     if '--vastaus' in sys.argv:
         tulos = json_vastauksesta(open(sys.argv[sys.argv.index('--vastaus') + 1], encoding='utf-8').read())
@@ -328,6 +371,8 @@ def main():
         print('🔴 KÄÄNNÖS HYLÄTTY:\n- ' + '\n- '.join(virheet[:60]))
         return 1
     print('Tallennettu:', tallenna(koodi, tulos))
+    lippu(koodi, kirjoitus, alue)
+    ulos(koodi=koodi, uusi=1)
     return 0
 
 

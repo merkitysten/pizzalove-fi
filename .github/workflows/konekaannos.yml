@@ -1,12 +1,14 @@
 # Korttipelin säännöt asiakkaan pyytämälle kielelle (konekäännös).
-# 🔵 Marko 16.11.2026: täysautomaattinen, yksi pyyntö kieltä kohden.
+# 🔵 Marko 16.11.2026: täysautomaattinen, yksi pyyntö kieltä kohden, kielilistaa
+# ei ole (mikä tahansa kieli; oikealta vasemmalle kirjoitettavat torjutaan
+# toistaiseksi). Uuden kirjoitusjärjestelmän ensimmäisen arkin Marko katsoo itse.
 # Suunnitelma ja tunnisteet: Verkkosivut/ASIAKASKAANNOS.md (Markon kansio).
 #
-# Käynnistys: GitHub → Actions → «Konekäännös» → Run workflow → kielikoodi (esim. pl).
-# Myöhemmin sivuston lomake käynnistää saman ajon (workflow_dispatch).
+# Käynnistys: GitHub → Actions → «Konekäännös» → Run workflow → kielikoodi
+# (BCP 47: pl, ja, ko, zh-Hans, zh-Hant, pt-BR, es-419 …).
+# Myöhemmin sivuston nappi käynnistää saman ajon (workflow_dispatch).
 #
-# Claude API ilman avainta: Workload Identity Federation. GitHubin OIDC-tunnus
-# vaihdetaan Anthropic-tunnukseen (tyokalut/kaanna.py). ⚠️ ÄLÄ lisää
+# Claude API ilman avainta: Workload Identity Federation. ⚠️ ÄLÄ lisää
 # ANTHROPIC_API_KEY-salaisuutta: se ohittaisi tämän.
 name: Konekäännös
 
@@ -14,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       kieli:
-        description: 'Kielikoodi, esim. pl (sallitut: tyokalut/kaanna.py)'
+        description: 'Kielikoodi, esim. pl, ja, ko, zh-Hans, pt-BR'
         required: true
         type: string
 
@@ -29,7 +31,7 @@ concurrency:
 
 jobs:
   kaanna:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       KIELI: ${{ inputs.kieli }}
@@ -40,37 +42,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Tarkista kielikoodi ja lukko
-        id: lukko
+      - name: Tarkista kielikoodin muoto
         run: |
-          if ! printf '%s' "$KIELI" | grep -Eq '^[a-z]{2,3}$'; then
+          if ! printf '%s' "$KIELI" | grep -Eq '^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8}){0,2}$'; then
             echo "::error::Virheellinen kielikoodi"; exit 1
-          fi
-          if [ -f "sisalto/konekaannos/$KIELI.json" ]; then
-            echo "::notice::$KIELI on jo käännetty — uutta käännöstä ei tehdä."
-            echo "on=1" >> "$GITHUB_OUTPUT"
-          else
-            echo "on=0" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/setup-python@v5
-        if: steps.lukko.outputs.on == '0'
         with:
           python-version: '3.12'
 
       - name: Työkalut
-        if: steps.lukko.outputs.on == '0'
         run: |
-          sudo apt-get update -q && sudo apt-get install -y -q poppler-utils
-          pip install -q pillow playwright
-          python -m playwright install --with-deps chromium
+          pip install -q langcodes language_data pillow playwright
 
       - name: Käännös (Claude API)
-        if: steps.lukko.outputs.on == '0'
-        run: python3 tyokalut/kaanna.py "$KIELI"
+        id: kaannos
+        run: |
+          mkdir -p "$RUNNER_TEMP/liput" && cd "$RUNNER_TEMP/liput" && npm pack -s flag-icons@7.2.3 && tar xzf flag-icons-7.2.3.tgz
+          cd "$GITHUB_WORKSPACE"
+          LIPUT_LAHDE="$RUNNER_TEMP/liput/package/flags/1x1" python3 tyokalut/kaanna.py "$KIELI"
+
+      - name: Fontit ja selain
+        if: steps.kaannos.outputs.uusi == '1'
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q poppler-utils fonts-noto-core fonts-noto-cjk
+          python -m playwright install --with-deps chromium
 
       - name: VAG Rounded -viirikirjasin (salaisuudesta, ei repoon)
-        if: steps.lukko.outputs.on == '0'
+        if: steps.kaannos.outputs.uusi == '1'
         env:
           VAG_B64: ${{ secrets.VAG_FONTTI_B64 }}
         run: |
@@ -82,17 +82,24 @@ jobs:
           fi
 
       - name: Arkki (PDF)
-        if: steps.lukko.outputs.on == '0'
-        run: python3 koteloarkki.py "$KIELI"
+        if: steps.kaannos.outputs.uusi == '1'
+        run: python3 koteloarkki.py "${{ steps.kaannos.outputs.koodi }}"
 
       - name: Julkaise
-        if: steps.lukko.outputs.on == '0'
+        if: steps.kaannos.outputs.uusi == '1'
+        env:
+          KOODI: ${{ steps.kaannos.outputs.koodi }}
         run: |
-          PDF=$(python3 -c "import json,os; print(json.load(open('sisalto/konekaannos/$KIELI.json'))['kielet']['tiedosto'])")
-          mkdir -p docs/pdf && cp "julkinen/pdf/$PDF" "docs/pdf/$PDF"
+          PDF=$(python3 -c "import json,os; print(json.load(open('sisalto/konekaannos/' + os.environ['KOODI'] + '.json'))['kielet']['tiedosto'])")
+          mkdir -p docs/pdf docs/kuvat/liput
+          cp "julkinen/pdf/$PDF" "docs/pdf/$PDF"
+          git add "sisalto/konekaannos/$KOODI.json" "julkinen/pdf/$PDF" "docs/pdf/$PDF"
+          if [ -f "julkinen/kuvat/liput/$KOODI.svg" ]; then
+            cp "julkinen/kuvat/liput/$KOODI.svg" "docs/kuvat/liput/$KOODI.svg"
+            git add "julkinen/kuvat/liput/$KOODI.svg" "docs/kuvat/liput/$KOODI.svg"
+          fi
           git config user.name "pizzalove-konekaannos"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "sisalto/konekaannos/$KIELI.json" "julkinen/pdf/$PDF" "docs/pdf/$PDF"
-          git commit -m "Konekäännös: $KIELI (ei tarkastettu)"
+          git commit -m "Konekäännös: $KOODI (ei tarkastettu)"
           git push
           echo "::notice::Valmis: https://pizzalove.fi/pdf/$PDF"

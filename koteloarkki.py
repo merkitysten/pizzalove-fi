@@ -116,11 +116,12 @@ KOODI_NAKYY = {'nb': 'NO'}
 
 def lippu(kieli):
     polku = os.path.join(TANNE, 'julkinen', 'kuvat', 'liput', kieli + '.svg')
+    koodi = KOODI_NAKYY.get(kieli, kieli.upper())
     if not os.path.exists(polku):
-        print('⚠️  Lippu puuttuu: %s' % polku)
-        return ''
+        # Ei lippua (esim. perinteinen kiina, es-419): pelkkä kielikoodi
+        return '<div class="lippu"><span class="vain-koodi">%s</span></div>' % koodi
     return ('<div class="lippu"><img src="julkinen/kuvat/liput/%s.svg" alt=""><span>%s</span></div>'
-            % (kieli, KOODI_NAKYY.get(kieli, kieli.upper())))
+            % (kieli, koodi))
 
 
 def osoite(k):
@@ -223,7 +224,8 @@ def sisalto(kieli):
             j = next(n for n, x in enumerate(osat) if k['vaihto_luku'] in x)
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
             # Marko 15.11.2026: vaihtoesimerkkikin kortit vasemmalle ja selitys oikealle
-            virkkeet = re.split(r'(?<=\.)\s+', k['vaihto'])
+            # Virkkeen loppu myös kiinan/japanin 。！？ (konekäännökset, Marko 16.11.2026)
+            virkkeet = [v for v in re.split(r'(?<=[.!?])\s+|(?<=[。！？])', k['vaihto'].strip()) if v.strip()]
             assert len(virkkeet) == 2, 'vaihtoesimerkki: odotettiin 2 virkettä: %r' % k['vaihto']
             vesim = ks.vaihtoesimerkki(dict(k, vaihto=virkkeet[0] + '\n' + virkkeet[1])).replace('\n', '<br>').replace('</h3><div class="esimerkki vaihto"',
                                                   '</h3><div class="vierekkain"><div class="esimerkki vaihto"', 1)
@@ -377,6 +379,7 @@ def sivu_html(kieli, luonnos=True):
   .netti #qr svg {{ width: 17mm; height: auto; display: block }}
   .netti .lippu {{ margin-left: auto; align-self: flex-end; text-align: center; flex: none }}
   .netti .lippu img {{ width: 10mm; height: 10mm; border-radius: 50%; display: block; object-fit: cover }}
+  .netti .lippu .vain-koodi {{ font-size: 9pt; border: .35mm solid {musta}; border-radius: 1.5mm; padding: 1.2mm 1.6mm; margin: 0 }}
   .netti .lippu span {{ display: block; font: 700 6.5pt/1 Otsikko, sans-serif; margin-top: .9mm; letter-spacing: .04em }}
   .netti p {{ margin: 0 0 .5mm }}
   .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
@@ -680,7 +683,10 @@ def tee(kieli, luonnos):
     lahde = json.load(open(ks.lahdepolku(kieli), encoding='utf-8'))['korttipeli']
     karsitut = {ks.norm(lahde['perusteet_otsikko'])}
     puuttuu = [o for o in ks.otsikot(ks.lahdepolku(kieli))
-               if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut]
+               if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut
+               # Kiinassa ym. portaan numero («1.») irtoaa PDF:n tekstissä eri
+               # kirjasimen takia: hyväksytään otsikko ilman numeroa.
+               and ks.norm(re.sub(r'^\d+\.\s*', '', o)) not in ks.norm(t)]
     if len(t) < 2000:
         print('Sisaltokoe: PDF:sta ei saatu tekstia — EI MITATTAVISSA')
     elif puuttuu:
