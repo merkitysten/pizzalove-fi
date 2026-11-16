@@ -30,8 +30,8 @@
     "keittio_valmis": "Die Pizza wird fertig",
     "keittio_ei": "Die Pizza wird nicht fertig",
     "keittio_eikorttia": "Keine Karte",
-    "keittio_tee_helppo": "Jetzt du: mit beliebigen Belagkarten, auch mit nur einer.",
-    "keittio_tee_basso": "Jetzt nach Basso-Art: genauso viele verschiedene Beläge wie die Pizza hat.",
+    "keittio_tee": "Jetzt du.",
+    "keittio_taytteet": "Das sind nicht die Beläge dieser Pizza.",
     "keittio_maara": "Die Rechnung stimmt, aber die Anzahl der Beläge nicht.",
     "keittio_hienoa": "Super!",
     "keittio_peli": "Den Rest bringt dir das Spiel bei"

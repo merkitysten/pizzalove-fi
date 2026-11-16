@@ -30,8 +30,8 @@
     "keittio_valmis": "Pizzan blir klar",
     "keittio_ei": "Pizzan blir inte klar",
     "keittio_eikorttia": "Inget kort",
-    "keittio_tee_helppo": "Nu du: med vilka fyllningskort som helst, även ett enda.",
-    "keittio_tee_basso": "Gör den nu på apan Bassos sätt: lika många olika fyllningar som pizzan har.",
+    "keittio_tee": "Nu du.",
+    "keittio_taytteet": "Det här är inte den här pizzans fyllningar.",
     "keittio_maara": "Uträkningen stämmer, men antalet fyllningar är fel.",
     "keittio_hienoa": "Snyggt!",
     "keittio_peli": "Spelet lär dig resten"

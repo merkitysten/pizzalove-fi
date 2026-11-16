@@ -573,6 +573,11 @@ KEITTIO_NAYTOS = ['4+1', '6-1']
 # «Käytä yhtä monta eri täytettä kuin pizzassa on täytteitä.» Kortti 31 on
 # tomaatti + ananas, siis kaksi.
 KEITTIO_TAYTTEITA = 2
+# Pizzan OMAT täytteet. Kolmas porras («Oikeat täytteet», #3 Pizza Love) on
+# ainoa, joka tarvitsee tämän: siinä korttien on oltava juuri nämä. Kortti 31
+# on kortit.js:n generoinnissa osajoukko (2, 3) = tomaatti + ananas, ja
+# kortit.js:n mukaan täyte on 1:1 arvonsa kanssa, joten arvot riittävät.
+KEITTIO_PIZZATAYTTEET = [2, 3]
 # Harjoitusten lähtöasetelmat, sama muoto kuin KEITTIO_ALKU (tyhjä b = yksi kortti).
 #
 # 📐 Mitattu 16.11.2026, miksi juuri nämä: kahdella korttipaikalla Basson sääntö
@@ -582,7 +587,11 @@ KEITTIO_TAYTTEITA = 2
 # tavassa («myös yhdellä», sivun oma teksti) mutta ei Bassossa, jossa
 # tomaatti-ananaspizza vaatii kaksi eri täytettä. Siksi Basson harjoitus
 # ALKAA siitä tilasta, joka juuri meni helpommasta tavasta läpi.
-KEITTIO_HARJOITUS = {'helppo': '1', 'basso': '5'}
+#
+# Kolmas porras alkaa laskusta 10 : 2 — tasan siitä, joka kelpasi kahdessa
+# ensimmäisessä. Pizzan arvo osuu, eri täytteitä on kaksi kuten pizzassa,
+# mutta ne eivät ole TÄMÄN pizzan täytteet. Sama kortti, kiristyvä vaatimus.
+KEITTIO_HARJOITUS = ['1', '5', '10/2']
 # Valitsimen täytekortit: pelin kaikki täytteet 1–10 ja fantasiatäyte (x).
 KEITTIO_TAYTTEET = list(range(1, 11)) + ['x']
 # Keittiön sanat: ilman niitä ei rakenneta puolikasta keittiötä vaan jätetään
@@ -591,7 +600,7 @@ KEITTIO_TAYTTEET = list(range(1, 11)) + ['x']
 # englannista, koska konekieli_sivu() yhdistää ui-lohkot.
 KEITTIO_SANAT = ['keittio_otsikko', 'keittio_vaihda', 'keittio_merkki',
                  'keittio_valmis', 'keittio_ei', 'keittio_eikorttia',
-                 'keittio_tee_helppo', 'keittio_tee_basso', 'keittio_maara',
+                 'keittio_tee', 'keittio_maara', 'keittio_taytteet',
                  'keittio_hienoa', 'keittio_peli']
 
 
@@ -601,14 +610,81 @@ def keittio_data(t):
     ui = t['ui']
     if not all(ui.get(a) for a in KEITTIO_SANAT):
         return ''
-    osat = [' data-pizza="%d" data-taytteita="%d" data-alku="%s" data-naytos="%s"'
-            ' data-taytteet="%s" data-harjoitus="%s,%s" data-peli="../play/party.html?kieli=%s"'
-            % (KEITTIO_ARVO, KEITTIO_TAYTTEITA, KEITTIO_ALKU, ','.join(KEITTIO_NAYTOS),
-               ','.join(str(x) for x in KEITTIO_TAYTTEET),
-               KEITTIO_HARJOITUS['helppo'], KEITTIO_HARJOITUS['basso'], t['lang'])]
+    osat = [' data-pizza="%d" data-taytteita="%d" data-pizzataytteet="%s" data-alku="%s"'
+            ' data-naytos="%s" data-taytteet="%s" data-harjoitus="%s"'
+            ' data-kuvat="../kuvat/kortti/" data-pizzakuva="pizza-31"'
+            ' data-peli="../play/party.html?kieli=%s"'
+            % (KEITTIO_ARVO, KEITTIO_TAYTTEITA,
+               ','.join(str(x) for x in KEITTIO_PIZZATAYTTEET), KEITTIO_ALKU,
+               ','.join(KEITTIO_NAYTOS), ','.join(str(x) for x in KEITTIO_TAYTTEET),
+               ','.join(KEITTIO_HARJOITUS), t['lang'])]
     for a in KEITTIO_SANAT:
         osat.append(' data-%s="%s"' % (a.replace('keittio_', 'sana-'), e(ui[a])))
     return ''.join(osat)
+
+
+def porras_viittaus(s, numero):
+    """Linkki siihen portaaseen (tai portaisiin), jota tämä pelimuoto käyttää.
+
+    📐 Mitattu 16.11.2026, miksi tämä EIKÄ tekstin poisto. Pelimuotojen
+    haitareissa on 24 virkettä, joissa puhutaan täytteistä tai valmistamisesta,
+    mutta vain KAKSI niistä toistaa portaiden säännön: «Pizzat valmistetaan
+    Basso-apinan tavalla» (#2) ja «Nyt täytteet ratkaisevat: pizzan voi
+    valmistaa vain oikeilla täytteillä» (#3). Loput ovat kunkin pelin omaa
+    mekaniikkaa — nostopakka, varasto, vaihdot, pisteet, vuoron kulku — eivätkä
+    ne ole missään muualla. Ne kaksi virkettä ovat jo valmiiksi viittauksen
+    muodossa, joten ne jätetään ennalleen ja niiden viereen tuodaan LINKKI.
+
+    ⚠️ Ei uutta käännettävää tekstiä: linkin teksti on portaan oma otsikko ja
+    pariksi osuminen luetaan portaan omasta `pelit`-kentästä. Sivu ja arkki
+    lukevat siis yhä samaa dataa, eikä viittaus voi vanhentua."""
+    osat = []
+    for i, x in enumerate(s['portaat'], 1):
+        for peli in x['pelit'].split(' \u00b7 '):
+            if peli.startswith(numero + ' '):
+                osat.append('<a href="#porras-%d">%s</a>' % (i, e(x['otsikko'])))
+                break
+    if not osat:
+        return ''
+    return '<p class="muoto__tapa">%s</p>' % ''.join(osat)
+
+
+def portaat(t):
+    """Kolme tapaa valmistaa pizza — SAMASTA datasta kuin painettu arkki.
+
+    🔴 Sivulla luki 16.11.2026 asti «Kaksi tapaa valmistaa pizza», vaikka
+    tapoja on kolme. Marko: «Oikeastihan niitä on sitä paitsi kolme, koska
+    Pizza Lovessa pitää olla juuri oikeat täytteet.» Sivu käytti myös omia
+    nimiään («Helpompi tapa») eikä kertonut mikä peli käyttää mitäkin.
+
+    ⚠️ YKSI LÄHDE. `korttipeli.portaat` on sama avain, jonka koteloarkki.py
+    lukee arkkiin (`porras()`, `pelit_rivi()`). Sivu ja arkki EIVÄT voi enää
+    ajautua erilleen, koska kumpikin lukee tämän. Älä kirjoita sivulle omaa
+    sanamuotoa tavoista: muuta dataa, niin molemmat muuttuvat.
+
+    📐 Datassa on valmiina myös `esimerkit` ja `pelit`. Esimerkit piirretään
+    tekstinä eikä kortteina: arkilla ne ovat kortteja, koska paperilla ei ole
+    muuta keinoa, mutta ruudulla kortit ovat keittiössä, jota lukija voi
+    koskea. Yhdeksän korttikuvaa pelkkiä esimerkkejä varten olisi ~170 kt
+    siitä hyvästä, että sama asia näytetään kahdesti.
+
+    Keittiö (sivu.js) asuu portaiden SISÄLLÄ ja siirtyy portaasta toiseen,
+    joten harjoiteltavan tavan nimi on aina otsikkona sen yläpuolella.
+    Marko: «Nämä pitäisi olla siinä kun niitä pizzoja valmistetaan
+    interaktiivisesti.»"""
+    s = t['korttipeli']
+    osat = []
+    for i, x in enumerate(s['portaat'], 1):
+        osat.append(
+            '<li class="porras" id="porras-%d">'
+            '<h3>%s</h3><p class="porras__pelit">%s</p>%s%s</li>'
+            % (i, e(x['otsikko']), e(x['pelit']), x['html'],
+               ('<p class="porras__esimerkit">%s</p>'
+                % ' <span>·</span> '.join('<b>%s</b>' % e(l) for l in x['esimerkit']))
+               if x.get('esimerkit') else ''))
+    return ('<h2 id="tavat">%s</h2>\n<p>%s</p>\n<ol class="portaat"%s>\n%s\n</ol>'
+            % (e(s['portaat_otsikko']), e(s['portaat_ingressi']), keittio_data(t),
+               '\n'.join(osat)))
 
 
 def korttipeli(t, kaikki):
@@ -634,8 +710,9 @@ def korttipeli(t, kaikki):
             vblock = '<h3>%s</h3>%s' % (e(s['videot_otsikko']), videoruudukko(osat, t, muoto))
         muodot.append('''<details class="muoto" id="%s"%s>
   <summary><span class="muoto__numero">%s</span><span class="muoto__nimi">%s</span><span class="muoto__kuvaus">%s</span></summary>
-  <div class="muoto__sisus">%s%s</div>
-</details>''' % (m['avain'], ' open' if i == 0 else '', e(m['numero']), e(m['nimi']), e(m['kuvaus']), vblock, m['html']))
+  <div class="muoto__sisus">%s%s%s</div>
+</details>''' % (m['avain'], ' open' if i == 0 else '', e(m['numero']), e(m['nimi']), e(m['kuvaus']),
+                 porras_viittaus(s, m['numero']), vblock, m['html']))
 
     runko = '''
 <h1>%s</h1>
@@ -656,7 +733,7 @@ def korttipeli(t, kaikki):
   <h3>%s</h3>
   <p>%s</p>
   <h3>%s</h3>
-  <div class="esimerkki liike" role="img" aria-label="%s"%s>
+  <div class="esimerkki" role="img" aria-label="%s">
     <img src="../kuvat/kortti/pizza-31.webp" width="240" height="364" alt=""><b>=</b>
     <img src="../kuvat/kortti/tayte-10.webp" width="240" height="364" alt=""><b>:</b>
     <img src="../kuvat/kortti/tayte-2.webp" width="240" height="364" alt="">
@@ -666,11 +743,7 @@ def korttipeli(t, kaikki):
 
 <div class="laatikko"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
 
-<h3>%s</h3>
-<div class="korttiparit">
-  <div class="laatikko" style="margin:0"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
-  <div class="laatikko" style="margin:0"><h3 style="margin-top:0">%s</h3><p>%s</p></div>
-</div>
+%s
 
 <div class="huomio"><img src="../kuvat/basso-pohtii.webp" width="560" height="601" alt=""><p>%s</p></div>
 
@@ -695,9 +768,9 @@ def korttipeli(t, kaikki):
        e(s['perusteet_otsikko']), e(s['perusteet_ingressi']),
        e(s['pizzakortit_otsikko']), e(s['pizzakortit']), e(s['taytekortit_otsikko']), e(s['taytekortit']),
        e(s['perussaanto_otsikko']), e(s['perussaanto']), e(s['arvo_otsikko']), s['arvo'],
-       e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), keittio_data(t), e(s['esimerkki']),
+       e(s['esimerkki_otsikko']), e(s['esimerkki_alt']), e(s['esimerkki']),
        e(s['laskut']['otsikko']), s['laskut']['html'],
-       e(s['tavat_otsikko']), e(s['helpompi_otsikko']), e(s['helpompi']), e(s['basso_tapa_otsikko']), s['basso_tapa'],
+       portaat(t),
        s['huomio_bruno'],
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),

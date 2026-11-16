@@ -30,8 +30,8 @@
     "keittio_valmis": "The pizza is made",
     "keittio_ei": "The pizza is not made",
     "keittio_eikorttia": "No card",
-    "keittio_tee_helppo": "Your turn: with any topping cards, even just one.",
-    "keittio_tee_basso": "Now do it the Basso way: as many different toppings as the pizza has.",
+    "keittio_tee": "Your turn.",
+    "keittio_taytteet": "These are not this pizza’s toppings.",
     "keittio_maara": "The calculation is right, but the number of toppings is wrong.",
     "keittio_hienoa": "Nice!",
     "keittio_peli": "The game teaches the rest"

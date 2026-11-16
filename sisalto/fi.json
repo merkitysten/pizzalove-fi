@@ -31,8 +31,8 @@
     "keittio_valmis": "Pizza valmistuu",
     "keittio_ei": "Pizza ei valmistu",
     "keittio_eikorttia": "Ei korttia",
-    "keittio_tee_helppo": "Tee sinä: millä tahansa täytekorteilla, myös yhdellä.",
-    "keittio_tee_basso": "Tee se nyt Basso-apinan tavalla: yhtä monta eri täytettä kuin pizzassa.",
+    "keittio_tee": "Tee sinä.",
+    "keittio_taytteet": "Nämä eivät ole tämän pizzan täytteet.",
     "keittio_maara": "Lasku menee tasan, mutta täytteitä on väärä määrä.",
     "keittio_hienoa": "Hienoa!",
     "keittio_peli": "Peli opettaa loput"

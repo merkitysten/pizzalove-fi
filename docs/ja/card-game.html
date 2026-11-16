@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="../favicon-180.png">
 <link rel="preload" href="../fontit/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fontit/poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../tyyli.css?v=cf65c848">
+<link rel="stylesheet" href="../tyyli.css?v=828ae11d">
 <link rel="canonical" href="https://pizzalove.fi/ja/card-game.html">
 <link rel="alternate" hreflang="fi" href="https://pizzalove.fi/fi/korttipeli.html"><link rel="alternate" hreflang="sv" href="https://pizzalove.fi/sv/kortspel.html"><link rel="alternate" hreflang="en" href="https://pizzalove.fi/en/card-game.html"><link rel="alternate" hreflang="de" href="https://pizzalove.fi/de/kartenspiel.html"><link rel="alternate" hreflang="nl" href="https://pizzalove.fi/nl/kaartspel.html"><link rel="alternate" hreflang="fr" href="https://pizzalove.fi/fr/jeu-de-cartes.html"><link rel="alternate" hreflang="es" href="https://pizzalove.fi/es/juego-de-cartas.html"><link rel="alternate" hreflang="sk" href="https://pizzalove.fi/sk/kartova-hra.html"><link rel="alternate" hreflang="x-default" href="https://pizzalove.fi/">
 <meta property="og:title" content="Pizza Love® カードゲーム – ルールと動画">
@@ -60,7 +60,7 @@
   <h3>ピザの値</h3>
   <p>自分のトッピングカードでピザを作り、ピザの値になる計算を声に出して言います。答えがピザの値になれば、どんな計算でもよく、組み合わせてもかまいません。たとえば <b>5 = 10 : 2</b>。</p>
   <h3>例：トマトとパイナップルのピザ</h3>
-  <div class="esimerkki liike" role="img" aria-label="値5のピザカードと、トッピングカード10と2：10 : 2 = 5" data-pizza="5" data-taytteita="2" data-alku="10/2" data-naytos="4+1,6-1" data-taytteet="1,2,3,4,5,6,7,8,9,10,x" data-harjoitus="1,5" data-peli="../play/party.html?kieli=ja" data-sana-otsikko="Try it: which calculation makes the pizza?" data-sana-vaihda="Change topping card" data-sana-merkki="Change calculation" data-sana-valmis="The pizza is made" data-sana-ei="The pizza is not made" data-sana-eikorttia="No card" data-sana-tee_helppo="Your turn: with any topping cards, even just one." data-sana-tee_basso="Now do it the Basso way: as many different toppings as the pizza has." data-sana-maara="The calculation is right, but the number of toppings is wrong." data-sana-hienoa="Nice!" data-sana-peli="The game teaches the rest">
+  <div class="esimerkki" role="img" aria-label="値5のピザカードと、トッピングカード10と2：10 : 2 = 5">
     <img src="../kuvat/kortti/pizza-31.webp" width="240" height="364" alt=""><b>=</b>
     <img src="../kuvat/kortti/tayte-10.webp" width="240" height="364" alt=""><b>:</b>
     <img src="../kuvat/kortti/tayte-2.webp" width="240" height="364" alt="">
@@ -70,11 +70,13 @@
 
 <div class="laatikko"><h3 style="margin-top:0">どんな計算でもOK</h3><p>たし算、ひき算、かけ算、わり算のほかに、累乗、対数、階乗なども使えます。たとえば <b>5 = 2² + 1</b> や <b>5 = 3! – 1</b>。みんな自分のレベルで計算します。</p></div>
 
-<h3>ピザの作り方は二通り</h3>
-<div class="korttiparit">
-  <div class="laatikko" style="margin:0"><h3 style="margin-top:0">かんたんなやり方</h3><p>ピザは何枚のトッピングカードでも作れます。一枚だけでもかまいません。はじめてPizza Partyを遊ぶときや、小さな子どもと遊ぶときに使いましょう。</p></div>
-  <div class="laatikko" style="margin:0"><h3 style="margin-top:0">サルのBassoのやり方</h3><p>ピザのトッピングの数と同じ数の<b>ちがうトッピング</b>を使います。カードはもっと多くてもかまいません。トマトとパイナップルのピザ（値5）は、たとえばトマト二枚とオリーブ一枚で 2 + 2 + 1 = 5 として作れます。トッピングが二種類だからです。Pizza Bassoで使うか、Pizza Partyで追加チャレンジがほしいときに使いましょう。<br><span class="pieni">印刷されたルールでは、まだ「ピザのトッピングの数と同じ枚数のトッピングカード」となっています。新しいやり方のほうが、ゲームの可能性が広がります。</span></p></div>
-</div>
+<h2 id="tavat">ピザの作り方は三通り</h2>
+<p>やり方のちがいは、使ってよいトッピングカードです。どの例も同じピザ（トマトとパイナップル、値5）を使います。</p>
+<ol class="portaat" data-pizza="5" data-taytteita="2" data-pizzataytteet="2,3" data-alku="10/2" data-naytos="4+1,6-1" data-taytteet="1,2,3,4,5,6,7,8,9,10,x" data-harjoitus="1,5,10/2" data-kuvat="../kuvat/kortti/" data-pizzakuva="pizza-31" data-peli="../play/party.html?kieli=ja" data-sana-otsikko="Try it: which calculation makes the pizza?" data-sana-vaihda="Change topping card" data-sana-merkki="Change calculation" data-sana-valmis="The pizza is made" data-sana-ei="The pizza is not made" data-sana-eikorttia="No card" data-sana-tee="Your turn." data-sana-maara="The calculation is right, but the number of toppings is wrong." data-sana-taytteet="These are not this pizza’s toppings." data-sana-hienoa="Nice!" data-sana-peli="The game teaches the rest">
+<li class="porras" id="porras-1"><h3>1. どのトッピングでもOK</h3><p class="porras__pelit">#1 Pizza Party</p><p>どのトッピングカードでも、好きな枚数だけ使えます – <b>一枚だけでもOK</b>。大事なのは値だけです。</p><p class="porras__esimerkit"><b>5 = 5</b> <span>·</span> <b>5 = 4 + 1</b> <span>·</span> <b>5 = 7 + 6 - 8</b></p></li>
+<li class="porras" id="porras-2"><h3>2. サルのBassoのやり方</h3><p class="porras__pelit">#1 Pizza Party（追加チャレンジ） · #2 Pizza Basso</p><p>ピザのトッピングの数と同じ数の<b>ちがう</b>トッピングを使います。そのピザにのっているトッピングでなくてもかまいません。カードはもっと多くてもよく、たとえば同じトッピングを二枚使えます。</p><p><b>#1 Pizza Party</b>でもためしてみましょう。少しむずかしくなりますが、ゲームがもっと楽しくなります。</p><p>トマトとパイナップルのピザにはトッピングが二つあるので、カード一枚では足りません。</p><p class="porras__esimerkit"><b>5 = 10 : 2</b> <span>·</span> <b>5 = 2 + 2 + 1</b></p></li>
+<li class="porras" id="porras-3"><h3>3. 正しいトッピング</h3><p class="porras__pelit">#3 Pizza Love</p><p><b>そのピザとまったく同じトッピング</b>でピザを作ります。</p><p>トマトとパイナップルのピザには、トマトとパイナップルが必要です。</p><p class="porras__esimerkit"><b>5 = 2 + 3</b></p></li>
+</ol>
 
 <div class="huomio"><img src="../kuvat/basso-pohtii.webp" width="560" height="601" alt=""><p><b>Bruno？それともBasso？</b> ゲームのサルの名前は、今はBassoです。古いルールや動画ではBrunoという名前で、二つ目のゲームモードはPizza Brunoと呼ばれています。ルールは同じです。</p></div>
 
@@ -82,7 +84,7 @@
 <p>ゲームモードを開くと、ルールと動画が見られます。</p>
 <details class="muoto" id="party" open>
   <summary><span class="muoto__numero">#1</span><span class="muoto__nimi">Pizza Party</span><span class="muoto__kuvaus">はじめてにいちばんかんたん、すばやくにぎやか · 約5分</span></summary>
-  <div class="muoto__sisus"><h3>動画</h3><div class="videot"><figure class="video-kortti">
+  <div class="muoto__sisus"><p class="muoto__tapa"><a href="#porras-1">1. どのトッピングでもOK</a><a href="#porras-2">2. サルのBassoのやり方</a></p><h3>動画</h3><div class="videot"><figure class="video-kortti">
   <button class="video" type="button" data-id="iRwzJghMnWc" aria-label="Watch video: Pizza Party – 遊び方">
     <img src="https://i.ytimg.com/vi/iRwzJghMnWc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
   </button>
@@ -116,7 +118,7 @@
 </details>
 <details class="muoto" id="basso">
   <summary><span class="muoto__numero">#2</span><span class="muoto__nimi">Pizza Basso</span><span class="muoto__kuvaus">落ち着いていてドキドキ · 約7分</span></summary>
-  <div class="muoto__sisus"><h3>動画</h3><div class="videot videot--vaaka"><figure class="video-kortti">
+  <div class="muoto__sisus"><p class="muoto__tapa"><a href="#porras-2">2. サルのBassoのやり方</a></p><h3>動画</h3><div class="videot videot--vaaka"><figure class="video-kortti">
   <button class="video" type="button" data-id="O3jRcwemvrk" aria-label="Watch video: Pizza Basso – 遊び方">
     <img src="https://i.ytimg.com/vi/O3jRcwemvrk/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
   </button>
@@ -125,7 +127,7 @@
 </details>
 <details class="muoto" id="love">
   <summary><span class="muoto__numero">#3</span><span class="muoto__nimi">Pizza Love</span><span class="muoto__kuvaus">いちばん戦略的でむずかしい、8+ · 約15分</span></summary>
-  <div class="muoto__sisus"><h3>目的</h3><p>プレイヤーは、ほかの人より先に自分のピザをすべて作ろうとします。最初にできた人の勝ちです。</p><p><b>注意：</b>ここではトッピングが大事です。ピザは正しいトッピングでしか作れません。</p><h3>準備</h3><ol class="lista"><li>ピザカードを混ぜて、各プレイヤーに8枚ずつ配ります。プレイヤーはそれを裏向きの山にして自分の前に置き、いちばん上のカードを表向きにします。</li><li>ピザカードを一枚、テーブルの中央に表向きに置きます。これが交換ピザです。残りのピザカードはゲームから取り除きます。</li><li>トッピングカードを混ぜて、山札としてテーブルに置きます。</li></ol><h3>ストック</h3><p>各プレイヤーは、ストック置き場を4つ持っています。ストックのトッピングカードは表向きに置きます。手札と同じように自分のピザに使えます。ほかのプレイヤーも交換に使えます。</p><h3>ゲームの始め方</h3><p>最後にピザを食べた人から始め、トッピングカードを5枚引いて手札にします。</p><h3>遊び方</h3><ol class="lista"><li>手札が5枚になるまで、トッピングカードを引きます。</li><li>手札とストックのカードで、自分の山のいちばん上のピザを作ってみます。</li><li>計算を使って、自分のストックのカードをほかのプレイヤーのストックカードと交換できます。</li><li>一回の手番に一度だけ、自分の山のいちばん上のピザと交換ピザを入れかえられます。自分のピザは中央に残って新しい交換ピザになり、交換ピザは自分の山の上にのります。もらったピザはすぐに作ってかまいません。</li><li>手番の最後に、手札からトッピングカードを一枚、表向きで自分のストックに置きます。</li></ol><p><b>注意：</b>ストックにカードを置く前に手札がなくなったら、新しいカードを5枚引いて手番を続けます。</p><h3>ピザを作る</h3><p>必要なトッピングが手札やストック（またはその両方）にそろったら、ピザを作ります。ピザカードと使ったトッピングカードはゲームから取り除きます。自分の山から次のピザカードを表向きにします。そのトッピングを持っていれば、すぐに作ってかまいません。</p><h3>ハートピザ</h3><p>ハートピザを作ったら、自分の次のピザカードを見ないで、ほかのプレイヤー一人にわたします。その人はそれを自分の山のいちばん下に入れます。</p><h3>ストックカードの交換</h3><p>自分のストックのカードをほかのプレイヤーのストックカードと交換して、必要なトッピングを手に入れます。</p><ul class="lista"><li>わたすカードともらうカードは、計算して同じ数にならなければなりません。どんな計算でもかまいません。</li><li>交換は断れません。</li><li>もらったカードは自分のストックに置きます。</li><li>一回の手番に何回か交換してもかまいません。一回の交換は、いつもほかのプレイヤー一人とだけ行います。</li><li>交換できるのは、いちばん上のカードだけです。</li></ul><h3>ストックへの置き方</h3><ul class="lista"><li>ストック置き場は、どの順番でうめてもかまいません。</li><li>カードは重ねて置けます。使ったり交換したりできるのはいちばん上のカードだけなので、重ねるとカードを交換から守れます。そのとき、そのカードは自分も使えなくなります。</li><li>ストックのカードは動かしてはいけません。</li></ul><h3>ゲームの勝利</h3><p>だれかが自分の山のピザをすべて作ったら、ゲームは終わりです。</p></div>
+  <div class="muoto__sisus"><p class="muoto__tapa"><a href="#porras-3">3. 正しいトッピング</a></p><h3>目的</h3><p>プレイヤーは、ほかの人より先に自分のピザをすべて作ろうとします。最初にできた人の勝ちです。</p><p><b>注意：</b>ここではトッピングが大事です。ピザは正しいトッピングでしか作れません。</p><h3>準備</h3><ol class="lista"><li>ピザカードを混ぜて、各プレイヤーに8枚ずつ配ります。プレイヤーはそれを裏向きの山にして自分の前に置き、いちばん上のカードを表向きにします。</li><li>ピザカードを一枚、テーブルの中央に表向きに置きます。これが交換ピザです。残りのピザカードはゲームから取り除きます。</li><li>トッピングカードを混ぜて、山札としてテーブルに置きます。</li></ol><h3>ストック</h3><p>各プレイヤーは、ストック置き場を4つ持っています。ストックのトッピングカードは表向きに置きます。手札と同じように自分のピザに使えます。ほかのプレイヤーも交換に使えます。</p><h3>ゲームの始め方</h3><p>最後にピザを食べた人から始め、トッピングカードを5枚引いて手札にします。</p><h3>遊び方</h3><ol class="lista"><li>手札が5枚になるまで、トッピングカードを引きます。</li><li>手札とストックのカードで、自分の山のいちばん上のピザを作ってみます。</li><li>計算を使って、自分のストックのカードをほかのプレイヤーのストックカードと交換できます。</li><li>一回の手番に一度だけ、自分の山のいちばん上のピザと交換ピザを入れかえられます。自分のピザは中央に残って新しい交換ピザになり、交換ピザは自分の山の上にのります。もらったピザはすぐに作ってかまいません。</li><li>手番の最後に、手札からトッピングカードを一枚、表向きで自分のストックに置きます。</li></ol><p><b>注意：</b>ストックにカードを置く前に手札がなくなったら、新しいカードを5枚引いて手番を続けます。</p><h3>ピザを作る</h3><p>必要なトッピングが手札やストック（またはその両方）にそろったら、ピザを作ります。ピザカードと使ったトッピングカードはゲームから取り除きます。自分の山から次のピザカードを表向きにします。そのトッピングを持っていれば、すぐに作ってかまいません。</p><h3>ハートピザ</h3><p>ハートピザを作ったら、自分の次のピザカードを見ないで、ほかのプレイヤー一人にわたします。その人はそれを自分の山のいちばん下に入れます。</p><h3>ストックカードの交換</h3><p>自分のストックのカードをほかのプレイヤーのストックカードと交換して、必要なトッピングを手に入れます。</p><ul class="lista"><li>わたすカードともらうカードは、計算して同じ数にならなければなりません。どんな計算でもかまいません。</li><li>交換は断れません。</li><li>もらったカードは自分のストックに置きます。</li><li>一回の手番に何回か交換してもかまいません。一回の交換は、いつもほかのプレイヤー一人とだけ行います。</li><li>交換できるのは、いちばん上のカードだけです。</li></ul><h3>ストックへの置き方</h3><ul class="lista"><li>ストック置き場は、どの順番でうめてもかまいません。</li><li>カードは重ねて置けます。使ったり交換したりできるのはいちばん上のカードだけなので、重ねるとカードを交換から守れます。そのとき、そのカードは自分も使えなくなります。</li><li>ストックのカードは動かしてはいけません。</li></ul><h3>ゲームの勝利</h3><p>だれかが自分の山のピザをすべて作ったら、ゲームは終わりです。</p></div>
 </details>
 
 <div class="pelaa-banneri" style="margin-top:28px">
@@ -166,6 +168,6 @@
   </div>
 </footer>
 <script src="../play/laskin.js?v=0fcab829" defer></script>
-<script src="../sivu.js?v=77745aa3" defer></script>
+<script src="../sivu.js?v=7b3cc377" defer></script>
 </body>
 </html>

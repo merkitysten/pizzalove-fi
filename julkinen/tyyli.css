@@ -346,6 +346,35 @@ ul.lista li,ol.lista li{margin:4px 0}
 .esimerkki img{width:clamp(64px,18vw,104px);filter:drop-shadow(0 3px 6px rgba(60,30,0,.22))}
 .esimerkki b{font-size:26px;font-weight:800;color:var(--soft)}
 
+/* Pelimuodon haitarissa: mitä tapaa tämä peli käyttää. Teksti on portaan oma
+   otsikko, joten uutta käännettävää ei synny eikä viittaus voi vanhentua. */
+.muoto__tapa{margin:0 0 12px;display:flex;flex-wrap:wrap;gap:8px}
+.muoto__tapa a{display:inline-block;padding:4px 11px;border-radius:999px;
+  background:var(--tint);color:var(--deep);font-size:13.5px;font-weight:700;text-decoration:none}
+.muoto__tapa a:hover{background:var(--line2);color:var(--ink)}
+
+/* ── KOLME TAPAA VALMISTAA PIZZA (16.11.2026) ─────────────────────────────
+ * 🔴 Sivulla luki tähän asti «Kaksi tapaa», vaikka tapoja on kolme. Lista
+ * tulee nyt samasta datasta kuin painettu arkki (`korttipeli.portaat`), joten
+ * ne eivät voi enää ajautua erilleen. Numerointi on datan otsikoissa
+ * («1. Mitkä tahansa täytteet»), joten lista EI saa numeroida uudelleen. */
+.portaat{list-style:none;counter-reset:none;margin:14px 0 8px;padding:0;display:grid;gap:12px}
+.porras{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:16px 18px 12px}
+.porras > h3{margin:0 0 2px}
+.porras p{margin:6px 0}
+/* Mikä peli käyttää tätä tapaa — sivulla ei ennen kerrottu tätä lainkaan. */
+.porras__pelit{margin:0 0 8px;font-size:13.5px;font-weight:700;color:var(--deep)}
+/* Datan omat esimerkkilaskut tekstinä. Arkilla ne ovat kortteina, koska
+   paperilla ei ole muuta keinoa; ruudulla kortit ovat keittiössä, jota voi
+   koskea, eikä samaa asiaa näytetä kahdesti. */
+.porras__esimerkit{margin:8px 0 2px;font-size:14px;color:var(--soft)}
+.porras__esimerkit b{color:var(--ink);white-space:nowrap}
+.porras__esimerkit span{opacity:.5;margin:0 2px}
+/* Porras, jonka sisällä keittiö juuri on. Korostus on hillitty: se kertoo
+   missä ollaan, ei huuda. */
+.porras--tassa{border-color:var(--line2);box-shadow:0 0 0 2px var(--tint),var(--shadow)}
+
 /* ── PIZZAKEITTIÖ — esimerkki, jota lukija saa kokeilla (16.11.2026) ───────
  * Marko: «Sen sijaan, että nettisivulla kerrotaan, niin pitäisikö näyttää?»
  * ja samana päivänä: «Ei tehdä digitaalista alustaa fyysisen maailman
@@ -361,7 +390,7 @@ ul.lista li,ol.lista li{margin:4px 0}
  * 📐 Korkeus ei saa kasvaa: sivu on puhelimessa (375×812) jo 8,3 ruutua pitkä.
  * Siksi täytevalitsin on absoluuttisesti aseteltu tekstin PÄÄLLE eikä omaksi
  * rivikseen, ja laskun tulos mahtuu vanhan yhtäsuuruusmerkin paikalle. */
-.keittio{flex-wrap:wrap;gap:6px;position:relative;margin:4px 0 2px}
+.keittio{flex-wrap:wrap;gap:6px;position:relative;margin:10px 0 2px}
 /* Keittiön jälkeinen kappale tulee lähemmäs: tehtävärivi on jo tekstiä, joten
    kahta täyttä kappaleväliä ei tarvita. Näin rivi maksaa itsensä osin takaisin. */
 .keittio + p{margin-top:6px}
@@ -384,6 +413,10 @@ ul.lista li,ol.lista li{margin:4px 0}
    on päästävä takaisin korttiin — ja koska rivin leveys pysyy samana. */
 .keittio__paikka.tyhja img{opacity:.4;filter:none}
 .keittio__laskin.piilossa{visibility:hidden}
+/* Kolmannessa portaassa laskumerkki ei ole osa tehtävää (summa osuu
+   itsestään), joten se näkyy mutta ei ole napautettava. */
+.keittio__laskin[disabled]{cursor:default;color:var(--soft)}
+.keittio__laskin[disabled]:hover{background:none}
 .keittio__valitsin.ei-tyhjaa .keittio__tyhja{display:none}
 .keittio__valitsin .keittio__tyhja img{opacity:.55}
 
