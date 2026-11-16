@@ -48,6 +48,8 @@ MAKS_TOKENIT = 20000
 # kirjoitusjärjestelmän ensimmäisen arkin Marko katsoo itse.
 # ⚠️ Oikealta vasemmalle kirjoitettavat (arabia, heprea, persia, urdu …) vaativat
 # peilatun asettelun, jota ei vielä ole: ne torjutaan selvällä viestillä.
+PUHUJIA_VAHINTAAN = 50000
+PAIVAKATTO = 10          # uusia konekäännöksiä enintään vuorokaudessa (kustannusten yläraja)
 IHMISEN_TARKASTAMAT = ('fi', 'en', 'sv', 'de', 'nl', 'fr', 'es', 'sk')
 OIKEALTA_VASEMMALLE = {'Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo', 'Adlm', 'Mand', 'Samr', 'Rohg'}
 
@@ -63,6 +65,12 @@ def kieli(koodi):
     nimi_en = k.display_name('en')
     if not k.is_valid() or nimi_en.startswith('Unknown'):
         raise SystemExit('Tuntematon kieli %r' % koodi)
+    # Väärinkäytön esto ilman talletusta: ISO 639-3:ssa on tuhansia koodeja, joten
+    # satunnaisilla koodeilla voisi teettää satoja käännöksiä. Raja 50 000 puhujaa
+    # päästää läpi esim. pohjoissaamen (53 000) ja fääriin (73 000).
+    if k.speaking_population() < PUHUJIA_VAHINTAAN:
+        raise SystemExit('%s (%s): puhujia alle %d — ei automaattista käännöstä.'
+                         % (nimi_en, koodi, PUHUJIA_VAHINTAAN))
     m = k.maximize()
     tagi = k.to_tag()
     return tagi.lower(), tagi, nimi_en, k.display_name(tagi), m.script, m.territory
@@ -75,9 +83,8 @@ ARKIN_KENTAT = ('alaotsikko', 'iskulause', 'bruno_huomio', 'hyva_tietaa', 'kaavi
                 'vaihto_luku', 'vaihto_otsikko', 'vaihto', 'qr_teksti', 'videot', 'oikeudet')
 # Kentät joita EI käännetä (pysyvät englannin arvoina)
 EI_KAANNETA = ('avain', 'numero', 'nimi', 'esimerkit')
-# Konekäännetyillä kielillä ei vielä ole omaa sivua: QR ja osoite vievät
-# englanninkieliselle sivulle (vaihe 2: oma sivu ja virheilmoitus).
-OSOITE = 'https://pizzalove.fi/en/card-game'
+# Konekäännetyn kielen oma sivu pizzalove.fi/xx/card-game syntyy samassa ajossa
+# (rakenna.py), ja QR osoittaa sinne (korttisaannot._lataa_konekaannokset).
 
 
 # ---------------------------------------------------------------- lähteet
@@ -101,7 +108,8 @@ Output: ONE JSON object and nothing else, with exactly this shape:
 {{"korttipeli": <same structure as the source "korttipeli">,
   "kielet": <same keys as the source "kielet">,
   "konekaannos_merkinta": "<in {en_nimi}: 'Machine translation – not yet reviewed by a native speaker.'>",
-  "lataa_kielella": "<in {en_nimi}: the language name as used in 'All three game modes in {en_nimi}'>"}}
+  "lataa_kielella": "<in {en_nimi}: the language name as used in 'All three game modes in {en_nimi}'>",
+  "ilmoita_virhe": "<in {en_nimi}: 'Report a translation error' (a short link text)>"}}
 
 Rules (all are checked automatically; a violation rejects the translation):
 1. Keep every key, every list and every list length exactly as in the source. Do not add or remove keys.
@@ -255,7 +263,7 @@ def tarkista(tulos):
     karsintoihin (koteloarkki.py: KIELET-kommentti)."""
     en = lahteet()['en']
     virheet = []
-    for avain in ('korttipeli', 'kielet', 'konekaannos_merkinta', 'lataa_kielella'):
+    for avain in ('korttipeli', 'kielet', 'konekaannos_merkinta', 'lataa_kielella', 'ilmoita_virhe'):
         if avain not in tulos:
             virheet.append('puuttuu %s' % avain)
     if virheet:
@@ -282,13 +290,13 @@ def tallenna(koodi, tulos):
     kp = tulos['korttipeli']
     kielet = dict(tulos['kielet'])
     kielet['tiedosto'] = 'pizza-love-card-game-rules-%s.pdf' % koodi
-    kielet['osoite'] = OSOITE
+    kielet['osoite'] = 'https://pizzalove.fi/%s/card-game' % koodi   # oma sivu (rakenna.py)
     kielet['konekaannos_merkinta'] = tulos['konekaannos_merkinta']
     d = {'kieli': koodi, 'tagi': tagi, 'nimi': oma, 'nimi_en': en_nimi, 'kirjoitus': kirjoitus,
          'alue': alue, 'konekaannos': True,
          'tarkastettu': False, 'malli': MALLI,
          'luotu': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-         'lataa_kielella': tulos['lataa_kielella'],
+         'lataa_kielella': tulos['lataa_kielella'], 'ilmoita_virhe': tulos['ilmoita_virhe'],
          'kielet': kielet, 'korttipeli': kp}
     os.makedirs(KONEKAANNOS, exist_ok=True)
     polku = os.path.join(KONEKAANNOS, koodi + '.json')
@@ -347,6 +355,18 @@ def main():
         print('ON JO: %s on käännetty (%s). Uutta pyyntöä samalle kielelle ei tehdä.' % (koodi, polku))
         ulos(koodi=koodi, uusi=0)
         return 0
+    if '--vastaus' not in sys.argv:
+        raja = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
+        tanaan = 0
+        for nimi in (os.listdir(KONEKAANNOS) if os.path.isdir(KONEKAANNOS) else []):
+            try:
+                luotu = json.load(open(os.path.join(KONEKAANNOS, nimi), encoding='utf-8')).get('luotu', '')
+                if datetime.datetime.strptime(luotu, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=datetime.timezone.utc) > raja:
+                    tanaan += 1
+            except (ValueError, OSError):
+                pass
+        if tanaan >= PAIVAKATTO:
+            raise SystemExit('Päiväkatto täynnä (%d uutta käännöstä 24 tunnissa) — yritä huomenna.' % tanaan)
     if '--vastaus' in sys.argv:
         tulos = json_vastauksesta(open(sys.argv[sys.argv.index('--vastaus') + 1], encoding='utf-8').read())
         virheet = tarkista(tulos)

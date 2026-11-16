@@ -145,3 +145,79 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', rakenna);
   else rakenna();
 })();
+
+/* 4. Puuttuva kieli = toimeksianto (Marko 16.11.2026).
+ *
+ *    Jos selaimen ensimmäistä kieltä ei ole sivustolla, kysytään yhdellä rivillä,
+ *    halutaanko korttipelin säännöt sillä kielellä. Nappi lähettää pelkän
+ *    kielikoodin palvelimelle, joka käynnistää GitHubin konekäännösajon
+ *    (käännös, oma sivu ja arkki samalla kertaa). Ei sähköpostikenttää, ei
+ *    evästettä, ei talletusta. Sivu kysyy muutaman minuutin välein, onko uusi
+ *    sivu jo julkaistu, ja näyttää linkin heti kun on.
+ *    Oikealta vasemmalle kirjoitettavia kieliä ei vielä tueta, joten niille ei kysytä.
+ */
+(function () {
+  var html = document.documentElement;
+  var kielet = (html.getAttribute('data-kielet') || '').split(',');
+  var osoite = html.getAttribute('data-pyynto');
+  if (!osoite || !kielet[0]) return;
+  function koodi(l) {
+    l = String(l || '').toLowerCase(); var p = l.split('-');
+    if (p[0] === 'zh') return /hant|-tw|-hk|-mo/.test(l) ? 'zh-hant' : 'zh-hans';
+    if (p[0] === 'pt' && p[1] === 'br') return 'pt-br';
+    if (p[0] === 'no' || p[0] === 'nn') return 'nb';
+    return p[0];
+  }
+  var k = koodi((navigator.languages && navigator.languages[0]) || navigator.language);
+  if (!/^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(k) || kielet.indexOf(k) >= 0) return;
+  if (['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'].indexOf(k.split('-')[0]) >= 0) return;
+  var nimi = k;
+  try { nimi = new Intl.DisplayNames([k], { type: 'language' }).of(k) || k; } catch (_) {}
+  var main = document.getElementById('sisalto');
+  if (!main) return;
+  var laatikko = document.createElement('div');
+  laatikko.className = 'kielipyynto';
+  laatikko.setAttribute('role', 'region');
+  laatikko.setAttribute('aria-label', 'Pizza Love rules in ' + nimi);
+  var teksti = document.createElement('p');
+  var b = document.createElement('b'); b.lang = k; b.textContent = nimi;
+  teksti.append('Want the Pizza Love card game rules in ', b, '? We’ll make them now – machine-translated, free.');
+  var nappi = document.createElement('button');
+  nappi.className = 'nappi'; nappi.type = 'button'; nappi.textContent = 'Yes, please';
+  var sulje = document.createElement('button');
+  sulje.className = 'kielipyynto__sulje'; sulje.type = 'button'; sulje.setAttribute('aria-label', 'Close'); sulje.textContent = '×';
+  sulje.onclick = function () { laatikko.remove(); };
+  laatikko.append(teksti, nappi, sulje);
+  main.insertBefore(laatikko, main.firstChild);
+  var sivu = '/' + k + '/card-game.html';
+  function valmis() {
+    teksti.textContent = '';
+    var a = document.createElement('a'); a.href = sivu; a.lang = k;
+    a.textContent = 'Open the rules in ' + nimi;
+    teksti.append(a, ' (machine translation – corrections welcome).');
+    nappi.remove();
+  }
+  function odota(alku) {
+    fetch(sivu, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      if (r.ok) return valmis();
+      if (Date.now() - alku < 25 * 60 * 1000) setTimeout(function () { odota(alku); }, 30000);
+    }).catch(function () { setTimeout(function () { odota(alku); }, 30000); });
+  }
+  nappi.onclick = function () {
+    nappi.disabled = true;
+    fetch(osoite, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kieli: k }) })
+      .then(function (r) { return r.json(); })
+      .then(function (v) {
+        if (v.tila === 'valmis') return valmis();
+        if (v.tila !== 'aloitettu' && v.tila !== 'tekeillä') throw new Error(v.virhe || 'virhe');
+        teksti.textContent = 'Thank you! We’re making the rules in ' + nimi +
+          ' now. It usually takes 5–10 minutes – keep this page open and the link will appear here.';
+        nappi.remove();
+        odota(Date.now());
+      })
+      .catch(function () {
+        nappi.disabled = false;
+        teksti.textContent = 'Sorry, that didn’t work. Please try again later or write to info@merkitysten.fi.';
+      });
+  };
+})();

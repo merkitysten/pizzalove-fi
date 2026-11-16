@@ -240,7 +240,11 @@ def _lataa_konekaannokset():
         d = json.load(open(os.path.join(KONEKAANNOS, nimi), encoding='utf-8'))
         if d.get('kieli') in KIELET and not d.get('konekaannos'):
             continue
-        KIELET[d['kieli']] = d['kielet']
+        KIELET[d['kieli']] = dict(d['kielet'])
+        # Konekäännetyn kielen oma sivu (rakenna.py tekee sen samassa ajossa):
+        # QR ja painettu osoite vievät sinne. Ei luoteta JSONiin tallennettuun
+        # osoitteeseen, jotta vanhatkin arkit päivittyvät uudella ajolla.
+        KIELET[d['kieli']]['osoite'] = 'https://pizzalove.fi/%s/card-game' % d['kieli']
 
 
 _lataa_konekaannokset()

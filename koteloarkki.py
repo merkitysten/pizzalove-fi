@@ -287,7 +287,9 @@ def sivu_html(kieli, luonnos=True):
               '<p>%s <b>%s</b></p></div>%s</div></div>'
               % (ks.viiri(k['iskulause']), e(s['h1']), e(k['alaotsikko']), tiedot,
                  # Marko 15.11.2026: «tässä tuo otsikko saisi olla yhdellä rivillä»
-                 k['qr_teksti'].replace('<br>', ' '), e(k['videot']), osoite(k).replace('https://', ''),
+                 # Kiinassa, japanissa ja koreassa ei välilyöntiä rivien väliin (Marko 16.11.2026)
+                 k['qr_teksti'].replace('<br>', '' if re.search('[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]', k['qr_teksti']) else ' '),
+                 e(k['videot']), osoite(k).replace('https://', ''),
                  lippu(kieli)))
     # «Aloita Pizza Partystä» pois otsakkeesta (Marko 15.11.2026: «Sehän lukee
     # myös pizza partyn alapuolella uudelleen eli ajattelisin, että se on turha»)

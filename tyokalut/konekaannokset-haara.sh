@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Konekäännösten oma haara `konekaannokset` (Marko 16.11.2026: ei Markon toimia,
+# käännösajo ei kirjoita main-haaraan). Haarassa on vain konekäännösten tiedostot
+# samoilla poluilla kuin repossa:
+#   sisalto/konekaannos/<koodi>.json
+#   julkinen/pdf/pizza-love-card-game-rules-<koodi>.pdf
+#   julkinen/kuvat/liput/<koodi>.svg (jos lippu tehtiin)
+#
+#   hae                      kopioi haaran tiedostot työpuuhun (ennen kokoamista)
+#   tallenna "<koodit>" <syy> kopioi koodien tiedostot haaraan, commit ja push
+set -euo pipefail
+HAARA=konekaannokset
+KK="$(mktemp -d)/kk"
+
+avaa() {
+  if git ls-remote --exit-code --heads origin "$HAARA" >/dev/null 2>&1; then
+    git fetch -q origin "$HAARA"
+    git worktree add -q -B "$HAARA" "$KK" "origin/$HAARA"
+  else
+    git worktree add -q --orphan -b "$HAARA" "$KK"
+  fi
+}
+
+case "${1:-}" in
+  hae)
+    if git ls-remote --exit-code --heads origin "$HAARA" >/dev/null 2>&1; then
+      avaa
+      mkdir -p sisalto/konekaannos julkinen/pdf julkinen/kuvat/liput
+      cp -f "$KK"/sisalto/konekaannos/*.json sisalto/konekaannos/ 2>/dev/null || true
+      cp -f "$KK"/julkinen/pdf/*.pdf julkinen/pdf/ 2>/dev/null || true
+      cp -f "$KK"/julkinen/kuvat/liput/*.svg julkinen/kuvat/liput/ 2>/dev/null || true
+      echo "Konekäännökset haarasta: $(ls "$KK"/sisalto/konekaannos 2>/dev/null | tr '\n' ' ')"
+    else
+      echo "Haaraa $HAARA ei vielä ole — käytetään main-haaran konekäännöksiä."
+    fi
+    ;;
+  tallenna)
+    KOODIT="$2"; SYY="${3:-}"
+    avaa
+    mkdir -p "$KK/sisalto/konekaannos" "$KK/julkinen/pdf" "$KK/julkinen/kuvat/liput"
+    # Ensimmäisellä kerralla mukaan myös main-haarassa jo olevat konekäännökset
+    for j in sisalto/konekaannos/*.json; do
+      k=$(basename "$j" .json)
+      KOODIT="$KOODIT $k"
+    done
+    for k in $(echo $KOODIT | tr ' ' '\n' | sort -u); do
+      cp -f "sisalto/konekaannos/$k.json" "$KK/sisalto/konekaannos/"
+      pdf=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['kielet']['tiedosto'])" "sisalto/konekaannos/$k.json")
+      [ -f "julkinen/pdf/$pdf" ] && cp -f "julkinen/pdf/$pdf" "$KK/julkinen/pdf/"
+      [ -f "julkinen/kuvat/liput/$k.svg" ] && cp -f "julkinen/kuvat/liput/$k.svg" "$KK/julkinen/kuvat/liput/"
+    done
+    cd "$KK"
+    git add -A
+    if git diff --cached --quiet; then echo "Ei muutoksia."; cd - >/dev/null; git worktree remove --force "$KK"; exit 0; fi
+    git -c user.name="pizzalove-konekaannos" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+      commit -q -m "Konekäännös: $SYY (ei tarkastettu)"
+    git push -q origin "$HAARA"
+    echo "Tallennettu haaraan $HAARA: $(git log --oneline -1)"
+    cd - >/dev/null
+    git worktree remove --force "$KK"
+    ;;
+  *) echo "käyttö: $0 hae | tallenna \"<koodit>\" <syy>"; exit 2 ;;
+esac

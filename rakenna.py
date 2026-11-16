@@ -14,7 +14,7 @@ uudelleen joka ajossa. Muuta tekstiä sisalto/*.json:ssa ja ulkoasua
 julkinen/tyyli.css:ssä. Poikkeus: docs/play/ (pelit) ja docs/pdf/
 eivät ole rakentajan tuotosta, vaan ne kopioidaan julkinen/-kansiosta.
 """
-import json, os, shutil, html
+import copy, json, os, re, shutil, html
 
 JUURI = os.path.dirname(os.path.abspath(__file__))
 SISALTO = os.path.join(JUURI, 'sisalto')
@@ -25,6 +25,31 @@ KIELET = ['fi', 'sv', 'en', 'de', 'nl', 'fr', 'es', 'sk']      # järjestys kiel
 LOKAALIT = {'fi': 'fi_FI', 'sv': 'sv_FI', 'en': 'en_GB', 'de': 'de_DE', 'nl': 'nl_NL', 'fr': 'fr_FR', 'es': 'es_ES', 'sk': 'sk_SK'}
 OLETUSKIELI = 'en'                      # jos selaimen kieli ei ole mikään näistä
 OSOITE = 'https://pizzalove.fi'
+
+# 🔵 Marko 16.11.2026: asiakkaan pyynnöstä tehdyt konekäännökset (tyokalut/kaanna.py,
+# sisalto/konekaannos/xx.json). Jokainen saa oman korttipelisivun xx/card-game.html,
+# joka syntyy samassa ajossa kuin käännös ja arkki, ilman Markon toimia. Sivun muut
+# osat (valikko, muut sivut) ovat englanniksi. Täytetään main():ssa.
+KONEKIELET = {}
+KONEKAANNOS = os.path.join(SISALTO, 'konekaannos')
+KONE_SIVU = 'card-game'
+# Puuttuvan kielen nappi (sivu.js) lähettää pyynnön tähän. PHP-skripti
+# käynnistää GitHubin konekäännösajon (palvelin/kaannospyynto.php). Ei talletusta.
+PYYNTO_OSOITE = 'https://varainhankinta.merkitysten.fi/kaannos/pyynto.php'
+# Oikealta vasemmalle kirjoitettavat: ei vielä tukea, ei kehotusta (kaanna.py torjuu).
+OIKEALTA_VASEMMALLE = ['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb']
+
+
+def lue_konekaannokset():
+    out = {}
+    if os.path.isdir(KONEKAANNOS):
+        for nimi in sorted(os.listdir(KONEKAANNOS)):
+            if nimi.endswith('.json'):
+                with open(os.path.join(KONEKAANNOS, nimi), encoding='utf-8') as f:
+                    d = json.load(f)
+                if d.get('konekaannos') and d['kieli'] not in KIELET:
+                    out[d['kieli']] = d
+    return out
 # Korttipelin sivun nimi kielen mukaan (Marko 15.11.2026: «voisko se olla vain
 # korttipeli ja voiko se sivun nimi muuttua kielen mukaan?»). Painettu osoite
 # ja QR ilman .html-päätettä, esim. pizzalove.fi/nl/kaartspel (GitHub Pages
@@ -148,6 +173,8 @@ def korttipeli_pdf(lang):
     """Kielen oma saanto-PDF, jos `korttisaannot.py` on jo tehnyt sen;
     muuten painettu arkki ja varoitus (uusi kieli ennen ensimmaista ajoa)."""
     polku = KORTTIPELI_PDF.get(lang)
+    if lang in KONEKIELET:
+        polku = ('pdf/' + KONEKIELET[lang]['kielet']['tiedosto'], 'korttipeli')
     if polku and not os.path.exists(os.path.join(JULKINEN, polku[0])):
         print('⚠️  %s puuttuu – aja: python3 korttisaannot.py %s' % (polku[0], lang))
         polku = None
@@ -235,9 +262,16 @@ def ylaosa(t, sivu, kaikki):
     # Uusi kieli = uusi rivi KIELET-listaan ja sisalto/xx.json. (Marko 6.10.2026)
     kielet = ''.join(
         '<li><a href="../%s/%s" hreflang="%s" lang="%s"%s>%s</a></li>' % (
-            k, sivutiedosto(sivu, k), k, k,
+            k, sivutiedosto(sivu if t['lang'] in KIELET else 'korttipeli', k), k, k,
             ' aria-current="true"' if k == t['lang'] else '', e(kaikki[k]['nimi']))
         for k in KIELET)
+    if KONEKIELET:
+        # Konekäännökset: vain korttipelin säännöt (Marko 16.11.2026)
+        kielet += '<li class="kielet__ryhma">%s</li>' % e(ui.get('konekaannos_ryhma', 'Machine translation · card game rules'))
+        kielet += ''.join(
+            '<li><a href="../%s/%s.html" hreflang="%s" lang="%s"%s>%s</a></li>' % (
+                k, KONE_SIVU, k, k, ' aria-current="true"' if k == t['lang'] else '', e(d['nimi']))
+            for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     kielet = '''<details class="kielet">
       <summary aria-label="%s: %s"><svg class="kielet__pallo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
       <ul class="kielet__lista">%s</ul>
@@ -255,7 +289,7 @@ def ylaosa(t, sivu, kaikki):
 
 
 def sivutiedosto(sivu, lang):
-    return {'etusivu': '', 'korttipeli': KORTTIPELI_SIVU[lang] + '.html', 'lautapeli': 'lautapeli.html',
+    return {'etusivu': '', 'korttipeli': KORTTIPELI_SIVU.get(lang, KONE_SIVU) + '.html', 'lautapeli': 'lautapeli.html',
             'apinakortit': 'apinakortit.html', 'essen': 'essen-2026.html'}[sivu]
 
 
@@ -331,7 +365,7 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 <script src="../%s" defer></script>
 </body>
 </html>
-''' % (lang, e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT[lang],
+''' % (lang + '" data-kielet="%s" data-pyynto="%s' % (','.join(KIELET + sorted(KONEKIELET)), PYYNTO_OSOITE), e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT.get(lang, lang.replace('-', '_')),
        ylaosa(t, sivu, kaikki), runko, alaosa(t), leima('sivu.js'))
 
 
@@ -845,6 +879,8 @@ def juurisivu(kaikki):
     """pizzalove.fi/ — ohjaa selaimen kielen mukaan. QR-koodit osoittavat tänne."""
     linkit = ''.join('<li><a href="%s/" hreflang="%s" lang="%s">%s</a></li>' % (k, k, k, e(kaikki[k]['nimi']))
                      for k in KIELET)
+    linkit += ''.join('<li><a href="%s/" hreflang="%s" lang="%s">%s</a></li>' % (k, k, k, e(d['nimi']))
+                      for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
     return '''<!doctype html>
 <html lang="en">
 <head>
@@ -866,12 +902,20 @@ def juurisivu(kaikki):
 <script>
 (function () {
   var kielet = %s, valittu = null;
+  // Selaimen kielestä sivuston koodi: zh-CN → zh-hans, zh-TW → zh-hant, pt-BR → pt-br, no/nn → nb
+  function koodi(l) {
+    l = String(l || '').toLowerCase(); var p = l.split('-');
+    if (p[0] === 'zh') return /hant|-tw|-hk|-mo/.test(l) ? 'zh-hant' : 'zh-hans';
+    if (p[0] === 'pt' && p[1] === 'br') return 'pt-br';
+    if (p[0] === 'no' || p[0] === 'nn') return 'nb';
+    return p[0];
+  }
   try { valittu = localStorage.getItem('pizzalove-kieli'); } catch (e) {}
   if (kielet.indexOf(valittu) < 0) {
     valittu = null;
     var selain = navigator.languages || [navigator.language || ''];
     for (var i = 0; i < selain.length && !valittu; i++) {
-      var k = String(selain[i]).slice(0, 2).toLowerCase();
+      var k = koodi(selain[i]);
       if (kielet.indexOf(k) >= 0) valittu = k;
     }
   }
@@ -886,7 +930,7 @@ a{display:block;padding:12px 18px;border-radius:12px;background:#E96E2A;color:#1
 <main><p style="text-align:center;font-weight:700">Pizza Love®</p><ul>%s</ul></main>
 </body>
 </html>
-''' % (OSOITE, OSOITE, json.dumps(KIELET), OLETUSKIELI, linkit)
+''' % (OSOITE, OSOITE, json.dumps(KIELET + sorted(KONEKIELET)), OLETUSKIELI, linkit)
 
 
 def varainhankinta_ohjaus(kaikki):
@@ -935,6 +979,34 @@ a{color:#C2580C}</style>
        json.dumps(kohde))
 
 
+def konekieli_sivu(k, d, kaikki):
+    '''Konekäännetyn kielen korttipelisivu xx/card-game.html (Marko 16.11.2026).
+    Sama sivupohja kuin englanniksi, mutta korttipelin sisältö konekäännöksestä.
+    Valikko ja muut sivut ovat englanniksi. Ylhäällä merkintä «konekäännös, ei
+    tarkastettu» ja linkki virheilmoitukseen (sähköposti: ei lomaketta, ei talletusta).'''
+    from urllib.parse import quote
+    t = copy.deepcopy(kaikki['en'])
+    t['lang'], t['nimi'], t['korttipeli'] = k, d['nimi'], d['korttipeli']
+    h = korttipeli(t, kaikki)
+    for sivu in ('index.html', 'lautapeli.html', 'essen-2026.html', 'apinakortit.html'):
+        h = h.replace('href="%s"' % sivu, 'href="../en/%s"' % sivu)
+    h = h.replace('../play/?kieli=%s' % k, '../play/?kieli=en')
+    aihe = quote('Pizza Love – käännösvirhe / translation error (%s)' % k)
+    ilmoitus = ('<div class="konekaannos" lang="%s"><p><strong>%s</strong> '
+                '<a href="mailto:%s?subject=%s">%s</a></p></div>'
+                % (k, e(d['kielet']['konekaannos_merkinta']), SAHKOPOSTI, aihe,
+                   e(d.get('ilmoita_virhe') or 'Report a translation error')))
+    return h.replace('<main id="sisalto">', '<main id="sisalto">\n' + ilmoitus, 1)
+
+
+def konekieli_ohjaus(k):
+    '''xx/ → xx/card-game.html (konekäännetyllä kielellä on vain korttipelisivu).'''
+    return ('<!doctype html><html lang="%s"><meta charset="utf-8"><title>Pizza Love</title>'
+            '<meta http-equiv="refresh" content="0; url=%s.html">'
+            '<script>location.replace(%s + location.search + location.hash);</script>'
+            '<a href="%s.html">Pizza Love</a></html>\n' % (k, KONE_SIVU, json.dumps(KONE_SIVU + '.html'), KONE_SIVU))
+
+
 def korttipeli_ohjaus(k):
     """Vanha osoite xx/korttipeli.html on painetuissa QR-koodeissa: ohjaa uuteen
     kielen mukaiseen nimeen (kysely ja #-osa säilyvät)."""
@@ -951,6 +1023,7 @@ def korttipeli_ohjaus(k):
 
 
 def main():
+    KONEKIELET.update(lue_konekaannokset())
     kaikki = {k: lue(k) for k in KIELET if os.path.exists(os.path.join(SISALTO, k + '.json'))}
     puuttuu = [k for k in KIELET if k not in kaikki]
     if puuttuu:
@@ -977,6 +1050,14 @@ def main():
         if sivutiedosto('korttipeli', k) != 'korttipeli.html':
             with open(os.path.join(ULOS, k, 'korttipeli.html'), 'w', encoding='utf-8') as out:
                 out.write(korttipeli_ohjaus(k))
+    for k, d in KONEKIELET.items():
+        os.makedirs(os.path.join(ULOS, k), exist_ok=True)
+        with open(os.path.join(ULOS, k, KONE_SIVU + '.html'), 'w', encoding='utf-8') as out:
+            out.write(konekieli_sivu(k, d, kaikki))
+        with open(os.path.join(ULOS, k, 'index.html'), 'w', encoding='utf-8') as out:
+            out.write(konekieli_ohjaus(k))
+    if KONEKIELET:
+        print('konekäännökset:', ', '.join(sorted(KONEKIELET)))
     os.makedirs(os.path.join(ULOS, 'varainhankinta'), exist_ok=True)
     with open(os.path.join(ULOS, 'varainhankinta', 'index.html'), 'w', encoding='utf-8') as out:
         out.write(varainhankinta_ohjaus(kaikki))

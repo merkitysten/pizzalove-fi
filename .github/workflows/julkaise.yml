@@ -1,0 +1,68 @@
+# pizzalove.fi:n julkaisu GitHub Pagesiin.
+# 🔵 Marko 16.11.2026: konekäännökset ilman Markon toimia. Sivusto kootaan
+# main-haarasta ja haarasta `konekaannokset` (asiakkaan pyynnöstä tehdyt
+# käännökset, sivut ja arkit), jotta käännösajo ei koskaan kirjoita main-haaraan.
+# ⚠️ Edellyttää: Settings → Pages → Source = «GitHub Actions» (kerran).
+#
+# Käynnistyy: puskusta main-haaraan, konekäännösajon lopuksi (workflow_call)
+# tai käsin. Jos arkin pohja (koteloarkki.py, korttisaannot.py, liput) muuttui,
+# käynnistetään lisäksi konekäännösarkkien uusinta (Konekäännös, kieli «kaikki»).
+name: Julkaise
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  kokoa:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Hae konekäännökset (haara konekaannokset)
+        run: bash tyokalut/konekaannokset-haara.sh hae
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Kokoa sivusto
+        run: python3 rakenna.py
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Muuttuiko arkin pohja? → konekäännösarkit uudelleen
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -Eq '^(koteloarkki\.py|korttisaannot\.py|julkinen/kuvat/liput/)'; then
+            gh workflow run konekaannos.yml -f kieli=kaikki
+            echo "::notice::Arkin pohja muuttui — konekäännösarkit tehdään uudelleen."
+          fi
+
+  julkaise:
+    needs: kokoa
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.julkaisu.outputs.page_url }}
+    steps:
+      - id: julkaisu
+        uses: actions/deploy-pages@v4

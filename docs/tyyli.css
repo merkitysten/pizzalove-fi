@@ -408,3 +408,16 @@ ol.vaiheet h3{margin:6px 0 6px}
 .peli-kortti--kuvaton{margin:0}
 .peli-kortti--kuvaton .peli-kortti__teksti{padding-bottom:16px}
 .apinakortit__yleista{background:var(--warm);border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:8px;padding:12px 16px;margin:14px 0 0}
+
+
+/* Konekäännökset (Marko 16.11.2026) ------------------------------------------ */
+.kielet__lista{max-height:min(70vh,560px);overflow-y:auto}
+.kielet__ryhma{padding:12px 12px 4px;font-size:.78rem;font-weight:700;color:var(--soft);border-top:1px solid var(--line);margin-top:4px}
+.konekaannos{max-width:var(--palsta);margin:0 auto 18px;padding:12px 16px;border:2px solid var(--ink);border-radius:12px;background:var(--surface)}
+.konekaannos p{margin:0}
+.konekaannos a{color:var(--deep);font-weight:700;white-space:nowrap}
+.kielipyynto{max-width:var(--palsta);margin:16px auto;padding:14px 16px;border-radius:12px;background:var(--warm);border:1px solid var(--line2);
+  display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.kielipyynto p{margin:0;flex:1 1 260px}
+.kielipyynto .nappi{margin:0}
+.kielipyynto__sulje{border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--soft);padding:4px 8px}
