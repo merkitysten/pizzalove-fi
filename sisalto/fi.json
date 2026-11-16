@@ -8,6 +8,10 @@
     "nav_lautapeli": "Lautapeli",
     "nav_pelaa": "Pelaa verkossa",
     "kielivalinta": "Kieli",
+    "pyynto_avaa": "Ei kieltäsi? Pyydä se",
+    "pyynto_haku": "Hae kieltä",
+    "pyynto_pyyda": "Pyydä",
+    "pyynto_ei_tuettu": "Ei vielä tuettu",
     "kauppaan": "Kauppaan",
     "katso_video": "Katso video",
     "video_kieli": {

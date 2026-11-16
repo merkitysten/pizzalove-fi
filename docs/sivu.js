@@ -148,19 +148,37 @@
 
 /* 4. Puuttuva kieli = toimeksianto (Marko 16.11.2026).
  *
- *    Jos selaimen ensimmäistä kieltä ei ole sivustolla, kysytään yhdellä rivillä,
- *    halutaanko korttipelin säännöt sillä kielellä. Nappi lähettää pelkän
- *    kielikoodin palvelimelle, joka käynnistää GitHubin konekäännösajon
- *    (käännös, oma sivu ja arkki samalla kertaa). Ei sähköpostikenttää, ei
- *    evästettä, ei talletusta. Sivu kysyy muutaman minuutin välein, onko uusi
- *    sivu jo julkaistu, ja näyttää linkin heti kun on.
- *    Oikealta vasemmalle kirjoitettavia kieliä ei vielä tueta, joten niille ei kysytä.
+ *    Kaksi sisäänkäyntiä, YKSI mekanismi (pyyda()):
+ *    a) banneri sivun yläreunassa, jos selaimen kieltä ei ole sivustolla;
+ *    b) kielivalikon viimeinen rivi «Ei kieltäsi? Pyydä se», joka avaa
+ *       hakemiston: ehdotus puhelimen kielestä ensin, sitten kaikki kielet
+ *       lipuin ja maittain (Marko: «Onko siellä joku hakemisto maittain ja
+ *       liputtain? Ehkä pitäisi olla. Tai siis pitäisikin.»).
+ *
+ *    Nappi lähettää pelkän kielikoodin palvelimelle, joka käynnistää GitHubin
+ *    konekäännösajon (käännös, oma sivu ja arkki samalla kertaa). Ei
+ *    sähköpostikenttää, ei evästettä, ei talletusta. Sivu kysyy puolen minuutin
+ *    välein, onko uusi sivu jo julkaistu, ja näyttää linkin heti kun on.
+ *
+ *    ⚠️ Oikealta vasemmalle kirjoitettavia kieliä ei vielä tueta (peilattu
+ *    asettelu puuttuu). Niille ei kysytä bannerissa, ja hakemistossa ne NÄKYVÄT
+ *    merkittynä: hiljaa katoava kieli olisi lukijalle huonompi kuin merkitty.
+ *
+ *    📐 Testattavuus (Marko 16.11.2026: «Minun pitäisi päästä tätä
+ *    testaamaan»): bannerin näkee millä tahansa selaimella osoitteen perään
+ *    lisätyllä ?pyynto=xx. Hakemisto toimii aina, myös suomalaisella selaimella.
  */
 (function () {
   var html = document.documentElement;
-  var kielet = (html.getAttribute('data-kielet') || '').split(',');
   var osoite = html.getAttribute('data-pyynto');
-  if (!osoite || !kielet[0]) return;
+  if (!osoite) return;
+  var SIVU = '/%s/card-game.html';
+  /* Oikealta vasemmalle: kaanna.py torjuu nämä kirjoitusjärjestelmän
+     perusteella. Selain ei tiedä kirjoitusjärjestelmää, joten tässä ovat
+     kielet; hakemiston riveillä (kielet.json) tieto tulee kaanna.py:n omasta
+     OIKEALTA_VASEMMALLE-joukosta. */
+  var EI_VIELA = ['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'];
+
   function koodi(l) {
     l = String(l || '').toLowerCase(); var p = l.split('-');
     if (p[0] === 'zh') return /hant|-tw|-hk|-mo/.test(l) ? 'zh-hant' : 'zh-hans';
@@ -168,58 +186,272 @@
     if (p[0] === 'no' || p[0] === 'nn') return 'nb';
     return p[0];
   }
-  var k = koodi((navigator.languages && navigator.languages[0]) || navigator.language);
-  if (!/^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(k) || kielet.indexOf(k) >= 0) return;
-  if (['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'].indexOf(k.split('-')[0]) >= 0) return;
-  var nimi = k;
-  try { nimi = new Intl.DisplayNames([k], { type: 'language' }).of(k) || k; } catch (_) {}
-  var main = document.getElementById('sisalto');
-  if (!main) return;
-  var laatikko = document.createElement('div');
-  laatikko.className = 'kielipyynto';
-  laatikko.setAttribute('role', 'region');
-  laatikko.setAttribute('aria-label', 'Pizza Love rules in ' + nimi);
-  var teksti = document.createElement('p');
-  var b = document.createElement('b'); b.lang = k; b.textContent = nimi;
-  teksti.append('Want the Pizza Love card game rules in ', b, '? We’ll make them now – machine-translated, free.');
-  var nappi = document.createElement('button');
-  nappi.className = 'nappi'; nappi.type = 'button'; nappi.textContent = 'Yes, please';
-  var sulje = document.createElement('button');
-  sulje.className = 'kielipyynto__sulje'; sulje.type = 'button'; sulje.setAttribute('aria-label', 'Close'); sulje.textContent = '×';
-  sulje.onclick = function () { laatikko.remove(); };
-  laatikko.append(teksti, nappi, sulje);
-  main.insertBefore(laatikko, main.firstChild);
-  var sivu = '/' + k + '/card-game.html';
-  function valmis() {
-    teksti.textContent = '';
-    var a = document.createElement('a'); a.href = sivu; a.lang = k;
-    a.textContent = 'Open the rules in ' + nimi;
-    teksti.append(a, ' (machine translation – corrections welcome).');
-    nappi.remove();
+  function kelpaa(k) { return /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(k); }
+  function tuettu(k) { return EI_VIELA.indexOf(k.split('-')[0]) < 0; }
+  function nimi(k, oma) {
+    try { return new Intl.DisplayNames([oma || k], { type: 'language' }).of(k) || k; } catch (_) { return k; }
   }
-  function odota(alku) {
-    fetch(sivu, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
-      if (r.ok) return valmis();
-      if (Date.now() - alku < 25 * 60 * 1000) setTimeout(function () { odota(alku); }, 30000);
-    }).catch(function () { setTimeout(function () { odota(alku); }, 30000); });
-  }
-  nappi.onclick = function () {
-    nappi.disabled = true;
-    fetch(osoite, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kieli: k }) })
+
+  /* Sivuston omat kielet luetaan kielivalikosta, ei toisesta listasta: linkki ja
+     lippu ovat jo siellä valmiina (rakenna.py ylaosa()). */
+  var olemassa = {};
+  Array.prototype.forEach.call(document.querySelectorAll('.kielet__lista a[lang]'), function (a) {
+    var kuva = a.querySelector('img');
+    olemassa[a.getAttribute('lang')] = { osoite: a.getAttribute('href'),
+                                         lippu: kuva ? kuva.getAttribute('src') : '' };
+  });
+
+  /* ---------------------------------------------------------------- pyyntö */
+  /* Yksi mekanismi, kaksi sisäänkäyntiä. tila(mitä, sivu): 'tekeillä' heti kun
+     ajo on käynnissä, 'valmis' kun sivu vastaa, 'virhe' jos ei onnistunut. */
+  function pyyda(k, tila) {
+    var sivu = SIVU.replace('%s', k);
+    function odota(alku) {
+      fetch(sivu, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        if (r.ok) return tila('valmis', sivu);
+        if (Date.now() - alku < 25 * 60 * 1000) setTimeout(function () { odota(alku); }, 30000);
+      }).catch(function () { setTimeout(function () { odota(alku); }, 30000); });
+    }
+    fetch(osoite, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ kieli: k }) })
       .then(function (r) { return r.json(); })
       .then(function (v) {
-        if (v.tila === 'valmis') return valmis();
+        if (v.tila === 'valmis') return tila('valmis', sivu);
         if (v.tila !== 'aloitettu' && v.tila !== 'tekeillä') throw new Error(v.virhe || 'virhe');
-        teksti.textContent = 'Thank you! We’re making the rules in ' + nimi +
-          ' now. It usually takes 5–10 minutes – keep this page open and the link will appear here.';
-        nappi.remove();
+        tila('tekeillä', sivu);
         odota(Date.now());
       })
-      .catch(function () {
-        nappi.disabled = false;
-        teksti.textContent = 'Sorry, that didn’t work. Please try again later or write to info@merkitysten.fi.';
+      .catch(function () { tila('virhe', sivu); });
+  }
+  function tekeilla(n) {
+    return 'Thank you! We’re making the rules in ' + n + ' now. It usually takes 5–10 minutes' +
+           ' – keep this page open and the link will appear here.';
+  }
+  var VIRHE = 'Sorry, that didn’t work. Please try again later or write to info@merkitysten.fi.';
+
+  /* ?pyynto=xx: Marko näkee bannerin ja hakemiston ehdotuksen omalla
+     selaimellaan (Marko 16.11.2026: «Minun pitäisi päästä tätä testaamaan»).
+     Ei ohita sitä, että olemassa olevalle kielelle ei kysytä. */
+  var pakko = (location.search.match(/[?&]pyynto=([A-Za-z0-9-]{2,12})/) || [])[1];
+  function selaimenKieli() {
+    return koodi(pakko || (navigator.languages && navigator.languages[0]) || navigator.language);
+  }
+
+  /* ---------------------------------------------------------------- banneri */
+  (function () {
+    var k = selaimenKieli();
+    if (!kelpaa(k) || olemassa[k] || !tuettu(k)) return;
+    var n = nimi(k);
+    var main = document.getElementById('sisalto');
+    if (!main) return;
+    var laatikko = document.createElement('div');
+    laatikko.className = 'kielipyynto';
+    laatikko.setAttribute('role', 'region');
+    laatikko.setAttribute('aria-label', 'Pizza Love rules in ' + n);
+    var teksti = document.createElement('p');
+    var b = document.createElement('b'); b.lang = k; b.textContent = n;
+    teksti.append('Want the Pizza Love card game rules in ', b, '? We’ll make them now – machine-translated, free.');
+    var nappi = document.createElement('button');
+    nappi.className = 'nappi'; nappi.type = 'button'; nappi.textContent = 'Yes, please';
+    var sulje = document.createElement('button');
+    sulje.className = 'kielipyynto__sulje'; sulje.type = 'button';
+    sulje.setAttribute('aria-label', 'Close'); sulje.textContent = '×';
+    sulje.onclick = function () { laatikko.remove(); };
+    laatikko.append(teksti, nappi, sulje);
+    main.insertBefore(laatikko, main.firstChild);
+    nappi.onclick = function () {
+      nappi.disabled = true;
+      pyyda(k, function (mita, sivu) {
+        if (mita === 'valmis') {
+          teksti.textContent = '';
+          var a = document.createElement('a'); a.href = sivu; a.lang = k;
+          a.textContent = 'Open the rules in ' + n;
+          teksti.append(a, ' (machine translation – corrections welcome).');
+          nappi.remove();
+        } else if (mita === 'tekeillä') {
+          teksti.textContent = tekeilla(n);
+          nappi.remove();
+        } else {
+          nappi.disabled = false;
+          teksti.textContent = VIRHE;
+        }
       });
-  };
+    };
+  })();
+
+  /* ------------------------------------------------------------- hakemisto */
+  var avaa = document.querySelector('.kielet [data-valitsin]');
+  if (!avaa || !window.HTMLDialogElement) return;
+  var T = { haku: avaa.getAttribute('data-haku'), pyyda: avaa.getAttribute('data-pyyda'),
+            eituettu: avaa.getAttribute('data-eituettu'), otsikko: avaa.textContent };
+  var sivunKieli = html.getAttribute('lang') || 'en';
+  var dlg, kentta, lista, tila, ehdotus, rivit;
+
+  function maa(a) {
+    if (!a) return '';
+    try { return new Intl.DisplayNames([sivunKieli], { type: 'region' }).of(a) || a; } catch (_) { return a; }
+  }
+  /* Haku osuu myös kielen nimeen sivun omalla kielellä: suomalainen lukija
+     etsii «saksa», ei «Deutsch». Ei näytetä rivillä (rivi on sen kielen oma
+     nimi), vain haussa. */
+  function omallaKielella(k) {
+    try { return new Intl.DisplayNames([sivunKieli], { type: 'language' }).of(k) || ''; } catch (_) { return ''; }
+  }
+  /* Lippuemoji maakoodista: sama maa, josta kaanna.py:n lippu() poimii arkin
+     lipun — ei toista lippukarttaa, vain sama koodi toisin piirrettynä. Jos
+     käyttöjärjestelmä ei piirrä lippuja (Windows), näkyviin jää maan kirjaimet,
+     ja maan nimi on joka tapauksessa rivillä. */
+  function emoji(a) {
+    if (!a) return '';
+    return String.fromCodePoint(0x1F1E6 + a.charCodeAt(0) - 65, 0x1F1E6 + a.charCodeAt(1) - 65);
+  }
+  function siisti(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+  function p(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function rivinSisus(r, m) {
+    var on = olemassa[r[0]];
+    var lippu = on && on.lippu
+      ? '<img class="kielet__lippu" src="' + p(on.lippu) + '" width="20" height="20" alt="" decoding="async">'
+      : '<span class="kielet__lippu kielet__lippu--emoji" aria-hidden="true">' + emoji(r[3]) + '</span>';
+    return lippu + '<span class="valitsin__nimet"><span class="valitsin__nimi" lang="' + p(r[0]) + '">' +
+           p(r[1]) + '</span>' + (m ? '<span class="valitsin__maa">' + p(m) + '</span>' : '') + '</span>';
+  }
+
+  function piirra(data) {
+    var osat = [], haut = [];
+    for (var i = 0; i < data.length; i++) {
+      var r = data[i], k = r[0], m = maa(r[3]);
+      /* Sivustolla jo olevalla kielellä on oma SVG-lippunsa (kielivalikosta).
+         Sen maa ei aina ole CLDR:n yleisin maa — en.svg on Iso-Britannia,
+         CLDR sanoo Yhdysvallat — joten maan nimeä ei näytetä noilla riveillä:
+         kahden eri maan näyttäminen samalla rivillä olisi suoranainen virhe.
+         Hakuun maa jää mukaan. */
+      var sisus = rivinSisus(r, olemassa[k] && olemassa[k].lippu ? '' : m);
+      // Haku osuu kielen omaan nimeen, englanninkieliseen nimeen, koodiin ja maahan.
+      haut.push(siisti(k + ' ' + r[1] + ' ' + r[2] + ' ' + m + ' ' + omallaKielella(k)));
+      if (olemassa[k]) {
+        osat.push('<li class="valitsin__rivi valitsin__rivi--on"><a href="' + p(olemassa[k].osoite) +
+                  '" hreflang="' + p(k) + '">' + sisus +
+                  '<span class="valitsin__on" aria-hidden="true">✓</span></a></li>');
+      } else if (r[4] || !tuettu(k)) {
+        osat.push('<li class="valitsin__rivi valitsin__rivi--ei">' + sisus +
+                  '<span class="valitsin__ei">' + p(T.eituettu) + '</span></li>');
+      } else {
+        osat.push('<li class="valitsin__rivi">' + sisus +
+                  '<button type="button" class="nappi nappi--pieni" data-k="' + p(k) +
+                  '" data-nimi="' + p(r[1]) + '" aria-label="' + p(T.pyyda + ': ' + r[1]) +
+                  '">' + p(T.pyyda) + '</button></li>');
+      }
+    }
+    lista.innerHTML = osat.join('');
+    rivit = [];
+    for (var j = 0; j < haut.length; j++) rivit.push({ el: lista.children[j], haku: haut[j] });
+  }
+
+  function suodata() {
+    var h = siisti(kentta.value.trim());
+    var nakyy = 0;
+    for (var i = 0; i < rivit.length; i++) {
+      var ok = !h || rivit[i].haku.indexOf(h) >= 0;
+      rivit[i].el.hidden = !ok;
+      if (ok) nakyy++;
+    }
+    lista.setAttribute('data-tyhja', nakyy ? '' : 'tyhja');
+  }
+
+  /* Pyyntö hakemistosta: rivin nappi vaihtuu tilaksi, ja valmistuessaan
+     linkiksi — sama pyyda(), sama odotus, sama linkki kuin bannerissa. */
+  function riviPyyda(nappi) {
+    var k = nappi.getAttribute('data-k'), n = nappi.getAttribute('data-nimi') || nimi(k);
+    var kohta = nappi.parentNode;
+    nappi.disabled = true;
+    tila.textContent = tekeilla(n);
+    pyyda(k, function (mita, sivu) {
+      if (mita === 'valmis') {
+        nappi.remove();
+        var a = document.createElement('a');
+        a.href = sivu; a.hreflang = k; a.className = 'valitsin__valmis';
+        a.textContent = 'Open the rules in ' + n;
+        kohta.appendChild(a);
+        tila.textContent = 'Open the rules in ' + n + ' (machine translation – corrections welcome).';
+      } else if (mita === 'tekeillä') {
+        tila.textContent = tekeilla(n);
+      } else {
+        nappi.disabled = false;
+        tila.textContent = VIRHE;
+      }
+    });
+  }
+
+  function nouda() {
+    var polku = avaa.getAttribute('data-hakemisto');
+    tila.textContent = '…';
+    fetch(polku, { cache: 'force-cache' }).then(function (r) { return r.json(); }).then(function (data) {
+      tila.textContent = '';
+      /* Järjestys: sivustolla jo olevat ensin (lukija näkee heti mitä ON),
+         sitten muut kielen oman nimen mukaan. Eri kirjoitusjärjestelmät
+         järjestyvät selaimen collationilla; haku kattaa loput. */
+      data.sort(function (x, y) {
+        var ox = olemassa[x[0]] ? 0 : 1, oy = olemassa[y[0]] ? 0 : 1;
+        if (ox !== oy) return ox - oy;
+        try { return x[1].localeCompare(y[1], sivunKieli); } catch (_) { return x[1] < y[1] ? -1 : 1; }
+      });
+      piirra(data);
+      /* Ehdotus ensin: puhelimen kieli, jos sitä ei vielä ole eikä se ole
+         oikealta vasemmalle. Sama tunnistus kuin bannerissa (koodi()). */
+      var oma = selaimenKieli();
+      var rivi = null;
+      for (var i = 0; i < data.length; i++) if (data[i][0] === oma) { rivi = data[i]; break; }
+      if (rivi && !olemassa[oma] && tuettu(oma) && !rivi[4]) {
+        ehdotus.innerHTML = '<div class="valitsin__rivi valitsin__rivi--ehdotus">' +
+          rivinSisus(rivi, maa(rivi[3])) + '<button type="button" class="nappi" data-k="' + p(oma) +
+          '" data-nimi="' + p(rivi[1]) + '" aria-label="' + p(T.pyyda + ': ' + rivi[1]) + '">' +
+          p(T.pyyda) + '</button></div>';
+        ehdotus.hidden = false;
+      }
+    }).catch(function () {
+      /* Puute näkyy: hakemistoa ei saatu, mutta pyyntö on yhä mahdollinen
+         bannerin kautta. Ei arvattua listaa. */
+      tila.textContent = VIRHE;
+    });
+  }
+
+  function luo() {
+    dlg = document.createElement('dialog');
+    dlg.className = 'valitsin';
+    dlg.innerHTML =
+      '<div class="valitsin__ylaosa"><h2 class="valitsin__otsikko">' + p(T.otsikko) + '</h2>' +
+      '<button type="button" class="valitsin__sulje" aria-label="Close">×</button></div>' +
+      '<div class="valitsin__ehdotus" hidden></div>' +
+      '<input class="valitsin__kentta" type="search" autocomplete="off" spellcheck="false" placeholder="' +
+      p(T.haku) + '" aria-label="' + p(T.haku) + '">' +
+      '<p class="valitsin__tila" role="status" aria-live="polite"></p>' +
+      '<ul class="valitsin__lista"></ul>';
+    document.body.appendChild(dlg);
+    kentta = dlg.querySelector('.valitsin__kentta');
+    lista = dlg.querySelector('.valitsin__lista');
+    tila = dlg.querySelector('.valitsin__tila');
+    ehdotus = dlg.querySelector('.valitsin__ehdotus');
+    dlg.querySelector('.valitsin__sulje').onclick = function () { dlg.close(); };
+    kentta.addEventListener('input', suodata);
+    dlg.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button[data-k]') : null;
+      if (b) riviPyyda(b);
+    });
+    /* Napsautus taustaan sulkee, kuten luettelosta pois napsauttaminen. */
+    dlg.addEventListener('mousedown', function (e) { if (e.target === dlg) dlg.close(); });
+  }
+
+  avaa.addEventListener('click', function () {
+    if (!dlg) luo();
+    dlg.showModal();
+    if (!rivit) nouda();
+    kentta.focus();
+  });
 })();
 
 /* ╔══════════════════════════════════════════════════════════════════════╗

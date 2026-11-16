@@ -8,6 +8,10 @@
     "nav_lautapeli": "Jeu de plateau",
     "nav_pelaa": "Jouer en ligne",
     "kielivalinta": "Langue",
+    "pyynto_avaa": "Langue absente ? Demandez-la",
+    "pyynto_haku": "Rechercher une langue",
+    "pyynto_pyyda": "Demander",
+    "pyynto_ei_tuettu": "Pas encore pris en charge",
     "kauppaan": "Boutique",
     "katso_video": "Voir la vidéo",
     "video_kieli": {

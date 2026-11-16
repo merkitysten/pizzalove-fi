@@ -696,3 +696,41 @@ ol.vaiheet h3{margin:6px 0 6px}
 .kielipyynto p{margin:0;flex:1 1 260px}
 .kielipyynto .nappi{margin:0}
 .kielipyynto__sulje{border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--soft);padding:4px 8px}
+
+/* Kielihakemisto: kielivalikon viimeisen rivin avaama valitsin (sivu.js osa 4).
+   Marko 16.11.2026: «Onko siellä joku hakemisto maittain ja liputtain?» */
+.kielet__pyynto{position:sticky;bottom:-6px;background:var(--surface);border-top:1px solid var(--line);
+  margin-top:4px;padding-top:4px}
+.kielet__pyynto-nappi{display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;
+  font:inherit;font-weight:700;color:var(--deep);padding:10px 12px;border-radius:9px}
+.kielet__pyynto-nappi:hover{background:var(--tint)}
+.valitsin{width:min(560px,calc(100vw - 24px));max-height:min(88vh,720px);padding:0;border:0;border-radius:16px;
+  background:var(--surface);color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.28);
+  display:flex;flex-direction:column;overflow:hidden}
+.valitsin::backdrop{background:rgba(26,26,26,.45)}
+.valitsin__ylaosa{display:flex;align-items:center;gap:10px;padding:14px 10px 10px 16px;border-bottom:1px solid var(--line)}
+.valitsin__otsikko{margin:0;font-size:17px;flex:1 1 auto}
+.valitsin__sulje{border:0;background:none;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--soft);padding:2px 10px}
+.valitsin__kentta{margin:12px 16px 0;padding:11px 13px;font:inherit;border:1px solid var(--line2);
+  border-radius:10px;background:var(--ground);color:var(--ink)}
+.valitsin__tila{margin:8px 16px 0;font-size:14.5px;color:var(--soft);min-height:0}
+.valitsin__tila:empty{display:none}
+.valitsin__ehdotus{padding:10px 16px 0}
+.valitsin__lista{list-style:none;margin:8px 0 0;padding:0 10px 10px;overflow-y:auto;flex:1 1 auto}
+.valitsin__lista[data-tyhja="tyhja"]::after{content:"—";display:block;text-align:center;color:var(--soft);padding:18px}
+.valitsin__rivi{display:flex;align-items:center;gap:10px;padding:7px 6px;border-radius:9px;
+  content-visibility:auto;contain-intrinsic-size:auto 42px}
+.valitsin__rivi>a{display:flex;align-items:center;gap:10px;flex:1 1 auto;text-decoration:none;color:inherit;
+  padding:3px 6px;margin:-3px -6px;border-radius:9px}
+.valitsin__rivi>a:hover{background:var(--tint)}
+.valitsin__rivi--ehdotus{background:var(--warm);border:1px solid var(--line2);padding:10px 12px}
+.valitsin__nimet{display:flex;flex-direction:column;margin-right:auto;min-width:0}
+.valitsin__nimi{font-weight:600;overflow-wrap:anywhere}
+.valitsin__maa{font-size:13px;color:var(--soft)}
+.valitsin__on{color:var(--deep);font-weight:800}
+.valitsin__ei{font-size:13px;color:var(--soft);white-space:nowrap}
+.valitsin__rivi--ei .kielet__lippu{opacity:.45}
+.valitsin__valmis{font-weight:700;color:var(--deep);white-space:nowrap}
+.kielet__lippu--emoji{display:inline-flex;align-items:center;justify-content:center;border:0;
+  font-size:17px;line-height:1;border-radius:0}
+.nappi--pieni{padding:6px 12px;font-size:14px;border-radius:9px;flex:none}

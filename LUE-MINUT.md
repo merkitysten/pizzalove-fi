@@ -55,6 +55,31 @@ committoi sen samaan ajoon. Markolta ei vaadita mitään.
 📐 Jos lippua ei ole, se **näkyy puutteena eikä arvauksena**: valikossa on tyhjä
 20 px:n paikka ja pelkkä kielen nimi, koteloarkissa pelkkä kielikoodi.
 
+### Kielihakemisto (kielivalikon «Ei kieltäsi? Pyydä se»)
+
+Valikon viimeinen rivi avaa hakemiston, jossa ovat kaikki kielet, joille
+`tyokalut/kaanna.py` suostuisi tekemään konekäännöksen. Lista on
+`julkinen/kielet.json`, ja sen tekee
+
+```
+python3 tyokalut/kielihakemisto.py      # vaatii langcodes + language_data
+```
+
+⚠️ **Älä korjaa `julkinen/kielet.json`:ia käsin.** Se ei ole kielilista vaan
+`kaanna.py`:n oman säännön (`PUHUJIA_VAHINTAAN`, `OIKEALTA_VASEMMALLE`) tulos
+tiedostona. Jos sääntö muuttuu, aja työkalu uudelleen. Tiedosto on CLDR-dataa
+kielistä, ei sivuston omista kielistä, **eikä siis vanhene uuden kielen myötä** —
+sivuston omat kielet hakemisto lukee sivun kielivalikosta ajon aikana.
+
+Hakemistoa ei ladata sivun mukana, vaan vasta kun lukija avaa valitsimen
+(21,6 kt, pakattuna 8,5 kt). Lippu on lippuemoji maakoodista — sama maa, josta
+`lippu()` poimii koteloarkin lipun. Sivustolla jo oleva kieli näkyy omalla
+SVG-lipullaan ja ✓:lla, eikä sitä voi pyytää uudelleen.
+
+📐 Bannerin ja hakemiston ehdotuksen näkee millä tahansa selaimella lisäämällä
+osoitteeseen `?pyynto=xx` (esim. `pizzalove.fi/fi/?pyynto=ko`). Ilman sitä
+banneri näkyy vain, jos selaimen oma kieli puuttuu sivustolta.
+
 ## Peli tulee pizzapartysta (11.11.2026)
 
 `julkinen/play/` on **kopio** `../pizzaparty/`:sta, ja kopiointi tehdään

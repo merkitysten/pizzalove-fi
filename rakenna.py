@@ -316,6 +316,19 @@ def ylaosa(t, sivu, kaikki):
                 k, KONE_SIVU, k, k, ' aria-current="true"' if k == t['lang'] else '',
                 valikkolippu(k), e(d['nimi']))
             for k, d in sorted(KONEKIELET.items(), key=lambda x: x[1]['nimi'].lower()))
+    # Viimeinen rivi: puuttuvan kielen pyyntö (Marko 16.11.2026: «Onko se siellä
+    # kielivalikossa? Minusta pitäisi olla»). Napin takana on valitsin, jonka
+    # julkinen/sivu.js rakentaa — sama pyyntömekanismi kuin bannerissa, kaksi
+    # sisäänkäyntiä. Tekstit tulevat tästä, jotta JS:ään ei tule käännöksiä.
+    # Konekäännetyillä kielillä ui-avaimia ei vielä ole: silloin englanti, kuten
+    # konekaannos_ryhma-rivillä yllä.
+    kielet += ('<li class="kielet__pyynto"><button type="button" class="kielet__pyynto-nappi"'
+               ' data-valitsin data-hakemisto="../kielet.json" data-haku="%s" data-pyyda="%s"'
+               ' data-eituettu="%s">%s</button></li>') % (
+        e(ui.get('pyynto_haku', 'Search for a language')),
+        e(ui.get('pyynto_pyyda', 'Request')),
+        e(ui.get('pyynto_ei_tuettu', 'Not supported yet')),
+        e(ui.get('pyynto_avaa', 'Your language missing? Ask for it')))
     kielet = '''<details class="kielet">
       <summary aria-label="%s: %s">%s<span>%s</span><svg class="kielet__nuoli" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
       <ul class="kielet__lista">%s</ul>

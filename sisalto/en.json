@@ -8,6 +8,10 @@
     "nav_lautapeli": "Board game",
     "nav_pelaa": "Play online",
     "kielivalinta": "Language",
+    "pyynto_avaa": "Your language missing? Ask for it",
+    "pyynto_haku": "Search for a language",
+    "pyynto_pyyda": "Request",
+    "pyynto_ei_tuettu": "Not supported yet",
     "kauppaan": "Shop",
     "katso_video": "Watch video",
     "video_kieli": {
