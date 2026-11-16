@@ -588,27 +588,72 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
  * (440 × 2 = 880). Puhelimessa (375 px) kuva on 343 px ja merkki 22 px.
  * Merkkien paikat tulevat rakenna.py:n LAUTA_MERKIT-taulukosta --x/--y:nä,
  * jotta kuvaa ja koordinaatteja ei tarvitse etsiä kahdesta paikasta. */
-.lautakartta{margin:16px 0 20px;padding:0}
+.lautakartta{margin:16px 0 20px;padding:0;--kartta-korostus:1.3}
 .lautakartta__lauta{position:relative;width:min(440px,100%);margin:0 auto;
   border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(60,34,12,.18)}
 .lautakartta__lauta img{width:100%;height:auto;display:block}
+/* Merkin ja nimen numero ovat sama asia, joten ne saavat saman ulkoasun.
+   Värin ja koon ohjaus kulkee muuttujien kautta, jotta korostus voi vaihtaa ne
+   yhdessä paikassa — ks. korostussäännöt alempana. */
 .lautakartta__merkki,.lautakartta__nimet b{width:22px;height:22px;border-radius:50%;
-  display:grid;place-items:center;background:var(--ink);color:#fff;
+  display:grid;place-items:center;background:var(--korosta-tausta,var(--ink));color:#fff;
   font-weight:800;font-size:13px;line-height:1;flex:none;
   box-shadow:0 0 0 2.5px #fff,0 1px 4px rgba(0,0,0,.4)}
-.lautakartta__merkki{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%)}
+.lautakartta__merkki{position:absolute;left:var(--x);top:var(--y);
+  transform:translate(-50%,-50%) scale(var(--korosta-skaala,1))}
+/* Merkki on 22 px eli pieni osumapinta. Näkymätön kehys kasvattaa sen 38
+   pikseliin ilman että mikään näkyvä muuttuu. Merkit ovat laudalla 73 px:n
+   päässä toisistaan (440 px:n lauta, lähimmät 16,5 % erillään), joten
+   kehykset eivät mene päällekkäin. */
+.lautakartta__merkki::before{content:"";position:absolute;inset:-8px;border-radius:50%}
 .lautakartta__nimet{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;
   list-style:none;margin:12px 0 0;padding:0}
 .lautakartta__nimet li{display:flex;align-items:center;gap:7px;
-  font-weight:700;font-size:15px;color:var(--deep)}
-/* Osoittimella: nimen kohdalla muut merkit himmenevät. :has() puuttuu vain
-   vanhoista selaimista, ja silloin kartta toimii numeroilla kuten puhelimessa. */
+  font-weight:700;font-size:15px;color:var(--korosta-vari,var(--deep))}
+
+/* ---------- Kartan korostus (Marko 16.11.2026) ----------
+   «kun hiiren vie noiden nimien tai pelilaudan päälle, niin silloin muut
+   himmenisivät ja vain se aktivoitu alue korostuisi.»
+
+   Osoitin voi olla kummassa tahansa päässä paria: nimessä tai laudan
+   merkissä. Molemmilla on sama `data-osa`, joten sama sääntö riittää
+   kumpaankin suuntaan — laudalta nimeen ja nimestä laudalle.
+
+   ⚠️ Osien nimet on pakko luetella: CSS ei osaa verrata kahden elementin
+   data-osa-arvoa toisiinsa. Arvot tulevat rakenna.py:n LAUTA_MERKIT-listasta.
+   Jos sinne lisätään osa, lisää se myös tähän — muuten uusi osa himmenee
+   eikä koskaan korostu.
+
+   :has() puuttuu vain vanhoista selaimista, ja silloin kartta toimii
+   numeroilla kuten kosketusnäytöllä. */
 @media (hover:hover){
-  .lautakartta__nimet li:hover{color:var(--orange)}
-  .lautakartta:has(li[data-osa="varasto"]:hover) .lautakartta__merkki:not([data-osa="varasto"]),
-  .lautakartta:has(li[data-osa="linjasto"]:hover) .lautakartta__merkki:not([data-osa="linjasto"]),
-  .lautakartta:has(li[data-osa="vaaka"]:hover) .lautakartta__merkki:not([data-osa="vaaka"]),
-  .lautakartta:has(li[data-osa="pizzat"]:hover) .lautakartta__merkki:not([data-osa="pizzat"]){opacity:.25}
+  .lautakartta [data-osa]{transition:opacity var(--liike-nopea) var(--liike-saapuu),
+    transform var(--liike-nopea) var(--liike-saapuu)}
+  .lautakartta__lauta img{transition:filter var(--liike-nopea) var(--liike-saapuu)}
+  /* 1. Osoittimen ollessa jommassakummassa päässä kaikki himmenee ja lauta
+        vaimenee — myös se pari, joka kohta palautetaan säännössä 2. */
+  .lautakartta:has([data-osa]:hover) [data-osa]{opacity:.3}
+  .lautakartta:has([data-osa]:hover) .lautakartta__lauta img{filter:brightness(.9) saturate(.72)}
+  /* 2. Osoitettu pari palautuu täyteen näkyvyyteen ja korostuu: nimi ja
+        molemmat numerot oranssiksi, laudan merkki hieman isommaksi. */
+  .lautakartta:has([data-osa="varasto"]:hover) [data-osa="varasto"],
+  .lautakartta:has([data-osa="linjasto"]:hover) [data-osa="linjasto"],
+  .lautakartta:has([data-osa="vaaka"]:hover) [data-osa="vaaka"],
+  .lautakartta:has([data-osa="pizzat"]:hover) [data-osa="pizzat"]{
+    opacity:1;--korosta-vari:var(--orange);--korosta-tausta:var(--orange)}
+  .lautakartta:has([data-osa="varasto"]:hover) .lautakartta__merkki[data-osa="varasto"],
+  .lautakartta:has([data-osa="linjasto"]:hover) .lautakartta__merkki[data-osa="linjasto"],
+  .lautakartta:has([data-osa="vaaka"]:hover) .lautakartta__merkki[data-osa="vaaka"],
+  .lautakartta:has([data-osa="pizzat"]:hover) .lautakartta__merkki[data-osa="pizzat"]{
+    --korosta-skaala:var(--kartta-korostus);z-index:1;
+    box-shadow:0 0 0 3px #fff,0 2px 8px rgba(0,0,0,.45)}
+}
+/* ⚠️ Korostus ei saa hypätä, kun liike on kytketty pois. Himmennys on
+   silloin välitön (LIIKEKIELEN `liike`-sääntö katkaisee siirtymät), mutta
+   merkin kasvu olisi nytkähdys — se jätetään kokonaan pois. Väri ja
+   himmennys kertovat saman asian ilman liikettä. */
+@media (prefers-reduced-motion:reduce){
+  .lautakartta{--kartta-korostus:1}
 }
 
 /* ---------- Vaiheet (lautapelin vuoro) ---------- */

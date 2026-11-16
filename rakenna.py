@@ -974,7 +974,7 @@ def lautakartta(s):
         % (osa, x, y, i + 1) for i, (osa, x, y) in enumerate(LAUTA_MERKIT))
     nimet = ''.join('<li data-osa="%s"><b>%d</b>%s</li>' % (osa, i + 1, e(s['lauta'][osa]))
                     for i, (osa, _, _) in enumerate(LAUTA_MERKIT))
-    return ('<figure class="lautakartta">\n'
+    return ('<figure class="lautakartta liike">\n'
             '  <div class="lautakartta__lauta">'
             '<img src="../kuvat/pelilauta.webp" width="900" height="900" alt="" loading="lazy">'
             '%s</div>\n'
