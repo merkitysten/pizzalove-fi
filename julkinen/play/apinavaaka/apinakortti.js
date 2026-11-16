@@ -432,24 +432,46 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         }
       });
       if (tila.rengas) {
-        /* ⚠️ YKSI KIERTÄVÄ NUOLI, EI KOLMEA PAIKALLAAN PYSYVÄÄ (Marko 16.11.2026:
-           «Siihen voi lisätä jonkin nuolenkin, joka pyörii ja näyttää sitä
-           liikettä»). Paikallaan pysyvä kärki kertoo suunnan vasta luettuna;
-           kiertävä näyttää sen liikkeenä, eli samalla tavalla kuin kortti itse
-           toimii. Kortissa 12 ei ole kiertosuuntaa, joten nuolta ei ole. */
-        /* ⚠️ OMA LUOKKANIMI, KOSKA `ak__rengas` ON JO LAUDAN LINJASTOLLA.
-           Otin sen nimen ensin käyttöön tähän, ja uusi sääntö syötti vanhan:
-           linjaston rengas kutistui 4 × 4 pikseliin, eli kaikki 16 lautakorttia
-           menettivät linjastonsa. Mittaus löysi sen vasta kun Marko kysyi
-           «Linjasto?» — oma läpiajoni mittasi vain laattojen päällekkäisyyttä,
-           eli vastasi eri kysymykseen kuin se jonka olisi pitänyt. */
+        /* ⚠️ KOLME ISOA KIERRÄTYSNUOLTA, YKSI JOKAISEN BOKSIN VÄLIIN (Marko
+           16.11.2026: «Tässä se nuoli saisi olla tosi paljon isompi ja niitä
+           voisi olla vaikka jokaisen boksin välissä. Tiedätkö vähän sellainen
+           kierrätysnuolimainen nuoli. Oikeasti selkeä, koska se nuoli on se joka
+           kertoo suunnan.»).
+
+           Ensin oli yksi pieni kolmio, joka kiersi kehää — liike kertoi suunnan,
+           mutta vasta kun sitä ehti katsoa. Kaari boksien välissä kertoo sen
+           yhdellä silmäyksellä ja myös sen, MISTÄ MIHIN kukin boksi menee.
+
+           Kaari piirretään SVG:nä viewBoxiin 100×100: keskipiste (50,50), säde
+           40. Kulma mitataan ylöspäin nollasta myötäpäivään, kuten istuimetkin,
+           joten kaari välillä [a+18°, a+102°] jää tasan kahden istuimen väliin.
+           Vastapäivään sama peilattuna, jolloin kärki osoittaa toisin päin. */
         var keha = el('span', 'ak__kiertorata' + (tila.suunta < 0 ? ' ak__kiertorata--vasen' : ''));
-        /* ⚠️ OMA NIMI: `ak__kiertaja` oli jo varattu (vuoron kiertäjä,
-           CSS rivi 146). Sama vika kuin `ak__rengas`illa samana päivänä —
-           ja tällä kertaa se näkyi vasta sivustolla: kehän päällä pyöri
-           valkoinen neliö, koska vanha sääntö antoi taustan ja kulmat. */
-        if (tila.suunta) keha.appendChild(el('span', 'ak__suuntanuoli',
-          '<span class="ak__karki">\u25B2</span>'));
+        if (tila.suunta) {
+          var R = 40, KE = 50, myota = tila.suunta > 0;
+          function piste(astetta, sade) {
+            var k = (astetta - 90) * Math.PI / 180;
+            return [KE + (sade || R) * Math.cos(k), KE + (sade || R) * Math.sin(k)];
+          }
+          var polut = '';
+          for (var v = 0; v < 3; v++) {
+            var a1 = v * 120 + (myota ? 18 : 102), a2 = v * 120 + (myota ? 102 : 18);
+            var p1 = piste(a1), p2 = piste(a2);
+            polut += '<path d="M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) +
+                     ' A' + R + ' ' + R + ' 0 0 ' + (myota ? 1 : 0) + ' ' +
+                     p2[0].toFixed(1) + ' ' + p2[1].toFixed(1) + '"/>';
+            /* Kärki on kolmio kaaren päässä: kärkipiste hieman kaaren jäljessä
+               samalla säteellä, kanta sen takana sisä- ja ulkoreunalla. */
+            var kar = piste(a2 + (myota ? 9 : -9));
+            var sisa = piste(a2 + (myota ? -3 : 3), R - 5.5);
+            var ulko = piste(a2 + (myota ? -3 : 3), R + 5.5);
+            polut += '<polygon points="' + kar[0].toFixed(1) + ',' + kar[1].toFixed(1) + ' ' +
+                     sisa[0].toFixed(1) + ',' + sisa[1].toFixed(1) + ' ' +
+                     ulko[0].toFixed(1) + ',' + ulko[1].toFixed(1) + '"/>';
+          }
+          keha.innerHTML = '<svg class="ak__nuolet" viewBox="0 0 100 100" aria-hidden="true">' +
+            polut + '</svg>';
+        }
         rivi.appendChild(keha);
       }
       nayttoEl.appendChild(rivi);

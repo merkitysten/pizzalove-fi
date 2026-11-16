@@ -36,7 +36,12 @@
    olettaa olevansa sivun levyinen. */
 .ak__rengas{position:relative;width:min(320px,100cqw);aspect-ratio:1;flex:none;
   overflow:hidden;border-radius:14px}
-.ak__lautakuva{position:absolute;width:149.01%;height:149.01%;left:-24.01%;top:-22.19%;
+/* ⚠️ MODUULI EI OLE PALJAALLA SIVULLA. pizzalove.fi:n `tyyli.css` sanoo
+   `img{max-width:100%;height:auto}`, ja se leikkasi tämän 149,01 %:n leveyden
+   kehan levyiseksi samalla kun korkeus jäi 149,01 %:iin — rajaus hajosi ja
+   lauta litistyi (mitattu 16.11.2026 työpöytäleveydellä 320 × 477).
+   `max-width:none` on siis välttämätön, ei varmuuden vuoksi. */
+.ak__lautakuva{position:absolute;max-width:none;width:149.01%;height:149.01%;left:-24.01%;top:-22.19%;
   display:block}
 
 /* ⚠️ LAUDAN KUVITUS HIMMENNETÄÄN, JOTTA TORNIT EROTTUVAT (Marko 16.11.2026:
@@ -99,7 +104,7 @@
 .ak__varastokierto{position:absolute;left:0;top:0;
   width:calc(var(--lev) * 0.0832);height:var(--lev);
   transform-origin:0 0;transform:translateX(var(--lev)) rotate(90deg)}
-.ak__varastokierto img{position:absolute;display:block;
+.ak__varastokierto img{position:absolute;max-width:none;display:block;
   width:calc(var(--lev) * 1.0694);
   left:calc(var(--lev) * -0.9649);top:calc(var(--lev) * -0.0332)}
 /* Sama haalennus kuin renkaalla, samasta syystä. */
@@ -328,7 +333,12 @@
 .ak__naytto{container-type:inline-size}
 .ak__pelaajat--rengas{--r:96px;
   display:block;position:relative;width:100%;aspect-ratio:1 / .92;margin:0 auto;gap:0}
-@supports (width:1cqw){ .ak__pelaajat--rengas{--r:26cqw} }
+/* ⚠️ KATTO KOOLLE (Marko 16.11.2026: «Tietokoneella ainäkin nämä kortit
+   ovat koomisen suuria»). `cqw` seuraa säiliötä, ja korttisivulla säiliö on
+   työpöydällä yli tuhat pikseliä leveä — silloin kehä kasvoi ruudun kokoiseksi.
+   Puhelimessa katto ei osu, joten mitta tulee sieltä mistä ennenkin. */
+.ak__pelaajat--rengas{max-width:380px}
+@supports (width:1cqw){ .ak__pelaajat--rengas{--r:min(26cqw, 99px)} }
 .ak__pelaajat--rengas .ak__pelaaja{--polar:translate(-50%,-50%) rotate(var(--a,0deg))
     translateY(calc(var(--r) * -1)) rotate(calc(var(--a,0deg) * -1));
   position:absolute;left:50%;top:50%;width:auto;padding:2px;gap:2px;z-index:1;
@@ -346,15 +356,16 @@
 .ak__pelaajat--rengas .ak__maara{display:none}
 /* Kehä itse: katkoviiva taustalla, jotta sen päällä liikkuva boksi erottuu. */
 .ak__kiertorata{position:absolute;left:50%;top:50%;width:calc(var(--r) * 2);height:calc(var(--r) * 2);
-  transform:translate(-50%,-50%);border-radius:50%;border:2px dashed rgba(238,114,3,.45);
+  transform:translate(-50%,-50%);border-radius:50%;border:2px dashed rgba(238,114,3,.35);
   pointer-events:none;z-index:0}
-/* Kiertävä nuoli: suunta näytetään liikkeenä eikä luettavana merkkinä. */
-.ak__suuntanuoli{position:absolute;inset:0;animation:ak-kierto 7s linear infinite}
-.ak__kiertorata--vasen .ak__suuntanuoli{animation-direction:reverse}
-.ak__suuntanuoli .ak__karki{position:absolute;left:50%;top:0;font-size:15px;line-height:1;
-  color:var(--orange,#EE7203);transform:translate(-50%,-50%) rotate(90deg)}
-.ak__kiertorata--vasen .ak__suuntanuoli .ak__karki{transform:translate(-50%,-50%) rotate(-90deg)}
-@keyframes ak-kierto{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+/* Kaaret piirtävät kehän itse, joten katkoviiva jää pois niiltä korteilta. */
+.ak__kiertorata:has(.ak__nuolet){border:0}
+/* ⚠️ KIERRÄTYSNUOLET: kolme isoa kaarta boksien välissä. Ne korvaavat
+   sekä katkoviivakehän että pienen kiertävän kolmion — kaari ON kehä, ja
+   se kertoo suunnan ilman liikettä ja ilman sanoja. */
+.ak__nuolet{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ak__nuolet path{fill:none;stroke:var(--orange,#EE7203);stroke-width:3.4;stroke-linecap:round}
+.ak__nuolet polygon{fill:var(--orange,#EE7203)}
 @media (prefers-reduced-motion: reduce){
   .ak__suuntanuoli{animation:none}
   .ak__pelaajat--rengas .ak__pelaaja{transition:none}

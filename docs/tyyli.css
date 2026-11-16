@@ -682,7 +682,11 @@ ol.vaiheet h3{margin:6px 0 6px}
 /* ⚠️ Näyttämö koko kortin leveydelle, ei numerosarakkeen oikealle puolelle:
    52 px:n sarakkeen vieressä kehän halkaisija jäi 172 px:iin ja laatat
    peittivät toisensa (mitattu 16.11.2026). */
+/* ⚠️ KESKITYS max-widthilla, EI grid-justifylla: justify-items kutisti
+   näyttämön sisältöönsä, ja koska kehän leveys on 100 %% vanhemmasta, se
+   pieneni kehästä takaisin (mitattu: 221 px odotetun 380:n sijaan). */
 .ak-lava{grid-column:1 / -1;background:#F7F2E6;border-radius:12px;padding:10px;margin:10px 0 2px}
+.ak-lava > div{max-width:420px;margin-inline:auto}
 
 /* ─── Essen 2026: messutarjoukset ─────────────────────────────────────────
    Marko 20.10.2026: «ne messutarjoukset isolla ja mieluiten linkit, että
