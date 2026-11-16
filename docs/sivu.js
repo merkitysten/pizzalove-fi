@@ -219,18 +219,19 @@
     pyyda: teksti('pyyda', 'Request'),
     eituettu: teksti('eituettu', 'Not supported yet'),
     tekeillaLyhyt: teksti('tekeillalyhyt', 'In progress'),
+    omat: teksti('omat', 'Choose which languages appear in your language menu.'),
+    valikossa: teksti('valikossa', 'Show in the language menu'),
     sulje: teksti('sulje', 'Close'),
     kysymys: teksti('kysymys', 'Want the Pizza Love card game rules in %s?'
                     + ' We’ll make them now – machine-translated, free.'),
     kylla: teksti('kylla', 'Yes, please'),
-    tekeilla: teksti('tekeilla', 'Thank you! We’re making the rules in %s.'
-                     + ' It usually takes about three minutes, and the link will appear here.'
-                     + ' You can also close this – the language will appear in the language'
-                     + ' menu when it’s ready.'),
+    tekeilla: teksti('tekeilla', 'Thank you! The rules in %s will be ready in about three'
+                     + ' minutes, and will then appear in the language menu.'),
+    valmis: teksti('valmis', 'Your language is ready!'),
     avaaSaannot: teksti('avaa', 'Open the rules in %s'),
     kone: teksti('kone', '(machine translation – corrections welcome)'),
-    eiOnnistunut: teksti('eionnistunut', 'That didn’t work this time.'
-                         + ' Please try again later or write to info@merkitysten.fi.')
+    eiOnnistunut: teksti('eionnistunut', 'That didn’t work.'
+                         + ' Try again later or write to info@merkitysten.fi.')
   };
   function korvaa(s, n) { return s.replace('%s', n); }
 
@@ -315,6 +316,7 @@
           a.textContent = korvaa(T.avaaSaannot, n);
           kappale.append(a, ' ' + T.kone);
           nappi.remove();
+          valmisIlmoitus(k, n, sivu);
         } else if (mita === 'tekeillä') {
           kappale.textContent = korvaa(T.tekeilla, n);
           nappi.remove();
@@ -326,10 +328,103 @@
     };
   })();
 
+  /* --------------------------------------------------- omat kielet (lukija) */
+  /* 🔵 Marko 16.11.2026: «Se on aika pitkä lista, joten voisi olla kätevää,
+     että sinne saisi itse valita ne kielet, joita haluaa, että itsellä näkyy.
+     — — Oletuksena kaikilla voisi olla oman laitteen kieli ja englanti.»
+
+     ⚠️ TÄMÄ ON AINOA ASIA, JONKA SIVUSTO TALLETTAA. Se on selaimen oma
+     localStorage: ei evästettä, ei palvelinta, ei lähde mihinkään eikä seuraa
+     laitteesta toiseen. Pyyntöjen «ei tietokantaa, ei lokia, ei IP:tä» pätee
+     yhä — tämä on lukijan oma näkymäasetus hänen omassa laitteessaan.
+     Jos talletus ei ole käytettävissä (yksityinen ikkuna, estetty), kaikki
+     toimii kuten ennenkin: valinta elää vain tämän sivun ajan. */
+  var OMAT_AVAIN = 'pizzalove.kielet';
+  var sivunKieli = html.getAttribute('lang') || 'en';
+
+  function omatLue() {
+    try {
+      var v = localStorage.getItem(OMAT_AVAIN);
+      return v === null ? null : (v ? v.split(',') : []);
+    } catch (_) { return null; }
+  }
+  function omatKirjoita(lista) {
+    try { localStorage.setItem(OMAT_AVAIN, lista.join(',')); } catch (_) {}
+  }
+  /* Oletus: luettavan sivun kieli + laitteen kieli (jos sivustolla) + englanti.
+     Sivun kieli on mukana, koska sen piilottaminen piilottaisi sivun, jolla
+     lukija juuri on. */
+  function oletusKielet() {
+    var joukko = {}, oma = selaimenKieli();
+    joukko[sivunKieli] = 1;
+    joukko.en = 1;
+    if (olemassa[oma]) joukko[oma] = 1;
+    var ulos = [];
+    for (var k in joukko) if (olemassa[k]) ulos.push(k);
+    return ulos.sort();
+  }
+  var omat = omatLue() || oletusKielet();
+  function nakyy(k) { return k === sivunKieli || omat.indexOf(k) >= 0; }
+
+  /* Valikon rivit piiloon/näkyviin. Rivejä ei POISTETA, koska hakemisto lukee
+     sivuston kielet, linkit ja liput juuri niistä riveistä. */
+  function paivitaValikko() {
+    var lista = document.querySelector('.kielet__lista');
+    if (!lista) return;
+    Array.prototype.forEach.call(lista.querySelectorAll('a[lang]'), function (a) {
+      a.parentNode.hidden = !nakyy(a.getAttribute('lang'));
+    });
+    /* Konekäännösten ryhmäotsikko piiloon, jos sen alta ei näy yhtään kieltä. */
+    var otsikko = lista.querySelector('.kielet__ryhma');
+    if (!otsikko) return;
+    var jaljella = false;
+    for (var el = otsikko.nextElementSibling; el; el = el.nextElementSibling) {
+      if (el.classList.contains('kielet__pyynto')) break;
+      if (!el.hidden) { jaljella = true; break; }
+    }
+    otsikko.hidden = !jaljella;
+  }
+  /* ⚠️ Suodatus VAIN jos valitsin on käytettävissä. Vanhassa selaimessa, jossa
+     <dialog> ei toimi, piilotettua kieltä ei saisi mitenkään takaisin. */
+  if (painike && window.HTMLDialogElement) paivitaValikko();
+
+  /* ---------------------------------------------------- «kielesi on valmis» */
+  /* 🔵 Marko 16.11.2026: «Pop-uphan olisi kiva, että nyt kielesi on valmis! Ja
+     sitten nappi, josta se vaihtuu.»
+     📐 Miksi oma ilmoitus eikä pelkkä linkki riville: kolme minuuttia on pitkä
+     aika, ja lukija on sillä välin ehtinyt sulkea valitsimen ja vierittää
+     muualle. Ilmoitus tulee hänen luokseen; rivillä oleva linkki ei. */
+  function valmisIlmoitus(k, n, sivu) {
+    if (document.querySelector('.valmiskieli[data-kieli="' + k + '"]')) return;
+    var laatikko = document.createElement('div');
+    laatikko.className = 'valmiskieli';
+    laatikko.setAttribute('data-kieli', k);
+    laatikko.setAttribute('role', 'status');
+    var otsikko = document.createElement('b');
+    otsikko.className = 'valmiskieli__otsikko';
+    otsikko.textContent = T.valmis;
+    var linkki = document.createElement('a');
+    linkki.className = 'nappi'; linkki.href = sivu; linkki.hreflang = k;
+    linkki.textContent = korvaa(T.avaaSaannot, n);
+    var sulje = document.createElement('button');
+    sulje.className = 'valmiskieli__sulje'; sulje.type = 'button';
+    sulje.setAttribute('aria-label', T.sulje); sulje.textContent = '\u00d7';
+    sulje.onclick = function () { laatikko.remove(); };
+    laatikko.append(otsikko, linkki, sulje);
+    document.body.appendChild(laatikko);
+  }
+
+  /* ⚠️ Ilmoitus tehdään HETI, myös valitsimen ollessa auki, eikä jonoteta
+     sulkemiseen asti. 📐 Mitattu 16.11.2026: <dialog>in «close»-tapahtuma ei
+     lauennut tässä selaimessa lainkaan (showModal() → close(): open muuttui
+     true→false, tapahtumia 0), joten jonoon jäänyt ilmoitus ei olisi tullut
+     koskaan näkyviin. Modaalin taustalevy peittää ilmoituksen sillä aikaa kun
+     valitsin on auki, ja se paljastuu itsestään kun valitsin suljetaan — ilman
+     yhtään tapahtumankuuntelijaa, jonka varaan laskea.
+
   /* ------------------------------------------------------------- hakemisto */
   var avaa = painike;
   if (!avaa || !window.HTMLDialogElement) return;
-  var sivunKieli = html.getAttribute('lang') || 'en';
   var dlg, kentta, lista, tila, ehdotus, rivit;
 
   function maa(a) {
@@ -379,9 +474,14 @@
       // Haku osuu kielen omaan nimeen, englanninkieliseen nimeen, koodiin ja maahan.
       haut.push(siisti(k + ' ' + r[1] + ' ' + r[2] + ' ' + m + ' ' + omallaKielella(k)));
       if (olemassa[k]) {
+        /* Täppä = näkyykö kieli LUKIJAN omassa valikossa. Luettavan sivun
+           kieltä ei voi piilottaa: se piilottaisi sivun, jolla ollaan. */
         osat.push('<li class="valitsin__rivi valitsin__rivi--on"><a href="' + p(olemassa[k].osoite) +
-                  '" hreflang="' + p(k) + '">' + sisus +
-                  '<span class="valitsin__on" aria-hidden="true">✓</span></a></li>');
+                  '" hreflang="' + p(k) + '">' + sisus + '</a>' +
+                  '<button type="button" class="valitsin__tappi" data-nayta="' + p(k) +
+                  '" aria-pressed="' + (nakyy(k) ? 'true' : 'false') + '"' +
+                  (k === sivunKieli ? ' disabled' : '') +
+                  ' aria-label="' + p(T.valikossa + ': ' + r[1]) + '"></button></li>');
       } else if (r[4] || !tuettu(k)) {
         osat.push('<li class="valitsin__rivi valitsin__rivi--ei">' + sisus +
                   '<span class="valitsin__ei">' + p(T.eituettu) + '</span></li>');
@@ -406,6 +506,14 @@
       if (ok) nakyy++;
     }
     lista.setAttribute('data-tyhja', nakyy ? '' : 'tyhja');
+  }
+
+  function vaihdaNaytto(nappi) {
+    var k = nappi.getAttribute('data-nayta'), i = omat.indexOf(k);
+    if (i >= 0) omat.splice(i, 1); else omat.push(k);
+    omatKirjoita(omat);
+    nappi.setAttribute('aria-pressed', nakyy(k) ? 'true' : 'false');
+    paivitaValikko();
   }
 
   /* Rivin merkintä «Tekeillä»: nappi katoaa ja tilalle tulee merkki.
@@ -440,6 +548,10 @@
         a.textContent = korvaa(T.avaaSaannot, n);
         kohta.appendChild(a);
         tila.textContent = korvaa(T.avaaSaannot, n) + ' ' + T.kone;
+        /* Pyydetty kieli näkyy jatkossa lukijan omassa valikossa: hän pyysi
+           sitä itse, joten sitä ei tarvitse erikseen käydä valitsemassa. */
+        if (omat.indexOf(k) < 0) { omat.push(k); omatKirjoita(omat); }
+        valmisIlmoitus(k, n, sivu);
       } else if (mita === 'tekeillä') {
         tila.textContent = korvaa(T.tekeilla, n);
       } else {
@@ -515,6 +627,7 @@
     dlg.innerHTML =
       '<div class="valitsin__ylaosa"><h2 class="valitsin__otsikko">' + p(T.otsikko) + '</h2>' +
       '<button type="button" class="valitsin__sulje" aria-label="' + p(T.sulje) + '">×</button></div>' +
+      '<p class="valitsin__ohje">' + p(T.omat) + '</p>' +
       '<div class="valitsin__ehdotus" hidden></div>' +
       '<input class="valitsin__kentta" type="search" autocomplete="off" spellcheck="false" placeholder="' +
       p(T.haku) + '" aria-label="' + p(T.haku) + '">' +
@@ -528,8 +641,11 @@
     dlg.querySelector('.valitsin__sulje').onclick = function () { dlg.close(); };
     kentta.addEventListener('input', suodata);
     dlg.addEventListener('click', function (e) {
-      var b = e.target.closest ? e.target.closest('button[data-k]') : null;
-      if (b) riviPyyda(b);
+      if (!e.target.closest) return;
+      var b = e.target.closest('button[data-k]');
+      if (b) return riviPyyda(b);
+      var t = e.target.closest('button[data-nayta]');
+      if (t && !t.disabled) vaihdaNaytto(t);
     });
     /* Napsautus taustaan sulkee, kuten luettelosta pois napsauttaminen. */
     dlg.addEventListener('mousedown', function (e) { if (e.target === dlg) dlg.close(); });

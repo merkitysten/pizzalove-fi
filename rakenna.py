@@ -333,19 +333,20 @@ def ylaosa(t, sivu, kaikki):
         ('pyyda', ui.get('pyynto_pyyda', 'Request')),
         ('eituettu', ui.get('pyynto_ei_tuettu', 'Not supported yet')),
         ('tekeillalyhyt', ui.get('pyynto_tekeilla_lyhyt', 'In progress')),
+        ('omat', ui.get('pyynto_omat', 'Choose which languages appear in your language menu.')),
+        ('valikossa', ui.get('pyynto_valikossa', 'Show in the language menu')),
         ('otsikko', ui.get('pyynto_otsikko', 'All languages')),
         ('sulje', ui.get('pyynto_sulje', 'Close')),
         ('kysymys', ui.get('pyynto_kysymys', 'Want the Pizza Love card game rules in %s?'
                            ' We’ll make them now – machine-translated, free.')),
         ('kylla', ui.get('pyynto_kylla', 'Yes, please')),
-        ('tekeilla', ui.get('pyynto_tekeilla', 'Thank you! We’re making the rules in %s.'
-                            ' It usually takes about three minutes, and the link will appear here.'
-                            ' You can also close this – the language will appear in the language'
-                            ' menu when it’s ready.')),
+        ('tekeilla', ui.get('pyynto_tekeilla', 'Thank you! The rules in %s will be ready in about'
+                            ' three minutes, and will then appear in the language menu.')),
+        ('valmis', ui.get('pyynto_valmis', 'Your language is ready!')),
         ('avaa', ui.get('pyynto_avaa_saannot', 'Open the rules in %s')),
         ('kone', ui.get('pyynto_konekaannos', '(machine translation – corrections welcome)')),
-        ('eionnistunut', ui.get('pyynto_ei_onnistunut', 'That didn’t work this time.'
-                                ' Please try again later or write to info@merkitysten.fi.')),
+        ('eionnistunut', ui.get('pyynto_ei_onnistunut', 'That didn’t work.'
+                                ' Try again later or write to info@merkitysten.fi.')),
     ]
     kielet += ('<li class="kielet__pyynto"><button type="button" class="kielet__pyynto-nappi"'
                ' data-valitsin%s>%s</button></li>') % (

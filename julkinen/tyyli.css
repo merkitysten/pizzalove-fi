@@ -791,3 +791,27 @@ ol.vaiheet h3{margin:6px 0 6px}
   background:var(--orange);animation:va-syke 1.6s ease-in-out infinite}
 @keyframes va-syke{0%,100%{opacity:1}50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.valitsin__tekeilla::before{animation:none}}
+/* Oma kielivalinta: täppä kertoo, näkyykö kieli LUKIJAN omassa valikossa
+   (Marko 16.11.2026). Valintaruutu eikä pelkkä ✓, jotta sen näkee olevan
+   painettavissa — pelkkä merkki ei kerro, että siitä voi napsauttaa. */
+.valitsin__ohje{margin:10px 16px 0;font-size:14px;color:var(--soft)}
+.valitsin__tappi{flex:none;width:26px;height:26px;padding:0;cursor:pointer;
+  border:2px solid var(--line2);border-radius:7px;background:var(--surface);
+  display:inline-flex;align-items:center;justify-content:center}
+.valitsin__tappi::before{content:"✓";font-size:15px;font-weight:800;color:transparent;line-height:1}
+.valitsin__tappi[aria-pressed="true"]{background:var(--deep);border-color:var(--deep)}
+.valitsin__tappi[aria-pressed="true"]::before{color:#fff}
+.valitsin__tappi:hover:not(:disabled){border-color:var(--orange)}
+.valitsin__tappi:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.valitsin__tappi:disabled{cursor:default;opacity:.55}
+/* «Kielesi on valmis!» — ilmoitus tulee lukijan luo, koska kolmessa minuutissa
+   hän on ehtinyt muualle (Marko 16.11.2026). */
+.valmiskieli{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:90;
+  width:min(440px,calc(100vw - 24px));box-sizing:border-box;
+  display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+  padding:14px 14px 14px 18px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--line2);box-shadow:0 14px 36px rgba(0,0,0,.22)}
+.valmiskieli__otsikko{flex:1 1 100%;font-size:17px}
+.valmiskieli .nappi{margin:0;flex:1 1 auto;justify-content:center}
+.valmiskieli__sulje{border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;
+  color:var(--soft);padding:4px 8px;flex:none}
