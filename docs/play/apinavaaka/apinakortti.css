@@ -1,0 +1,371 @@
+/* Apinakortin animaation ulkoasu. Pari `apinakortti.js`:lle.
+ *
+ * ⚠️ MITAT OVAT PUHELINTA VARTEN. Ehdotuksen periaate 6: «mahtuu puhelimen
+ * ruudulle». Rengas, varastorivi ja selite mitoitetaan 360 px:n leveydelle,
+ * ja kaikki kasvaa siitä ylöspäin — ei toisin päin.
+ *
+ * ⚠️ TÄYTTEEN OMAT TYYLIT TULEVAT `apinavaaka.css`:STÄ (.av__torni, .av__tarra).
+ * Täällä on vain se mikä on apinakorttien omaa: rengas, paikat, boksit ja
+ * vuorokehä. Tornin ulkonäköä ei kirjoiteta toista kertaa.
+ */
+
+.ak{--pala:4px;--leveys:17px;font-family:Poppins,system-ui,sans-serif;color:var(--ink,#1A1A1A)}
+
+/* ---- kortti ---- */
+.ak__kortti{background:var(--surface,#fff);border-radius:14px;padding:12px 14px;text-align:center;
+  box-shadow:0 2px 8px rgba(60,30,0,.14);margin:0 0 12px}
+.ak__nro{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--deep,#C2580C)}
+.ak__korttinimi{display:block;font-size:16px;line-height:1.25;margin:2px 0 4px}
+.ak__ohje{display:block;font-size:14px;line-height:1.3;color:var(--soft,#6E6357)}
+
+/* ---- yhteinen näyttämö ---- */
+.ak__naytto{position:relative;margin:0 auto}
+.ak__selite{min-height:40px;margin:10px 0 0;text-align:center;font-size:14px;line-height:1.3}
+
+/* ---- linjasto omana elementtinä, varasto sen alla vaakaan ---- */
+.ak__naytto--lauta{display:flex;flex-direction:column;align-items:center;gap:10px}
+
+/* 📐 Rengas on neliö ja laudan kuva rajataan sen sisään CSS:llä — ei uutta
+   kuvatiedostoa. Luvut ovat mitatusta geometriasta: rengas mahtuu 900 × 900
+   -kuvan neliöön x 145…749, y 134…738, joten kuva on 149,01 % laatikosta ja
+   siirretään −24,01 % / −22,19 %. */
+/* ⚠️ LEVEYS SÄILIÖSTÄ, EI NÄKYMÄIKKUNASTA. `88vw` on 330 px 375 px:n
+   puhelimella, mutta apinakorttisivulla näyttämö on kortin sisällä ja vain
+   308 px leveä — lauta vuoti yli jokaisessa 16 lautakortissa. Moduuli ei saa
+   olettaa olevansa sivun levyinen. */
+.ak__rengas{position:relative;width:min(320px,100cqw);aspect-ratio:1;flex:none;
+  overflow:hidden;border-radius:14px}
+.ak__lautakuva{position:absolute;width:149.01%;height:149.01%;left:-24.01%;top:-22.19%;
+  display:block}
+
+/* ⚠️ LAUDAN KUVITUS HIMMENNETÄÄN, JOTTA TORNIT EROTTUVAT (Marko 16.11.2026:
+   «Pelilaudan kuvitusta voisi vähän himmentää, jotta täytetornit erottuvat
+   sen päältä selkeästi»). Verho on vaalea ja laudan päällä, ei tornien —
+   tornit ovat verhon yläpuolella eivätkä himmene mukana. Sama keino kuin
+   aloitusruudun kuosilla (`linear-gradient` vaaleaa pohjaväriä). */
+/* 📐 0,70 on valittu vertaamalla eikä arvaamalla: 0,52:lla laudan omat
+   väriympyrät kilpailivat yhä tornien kanssa, 0,70:llä lauta jää aavemaiseksi
+   kontekstiksi ja tornit hallitsevat. Paikat erottuvat yhä, ja juuri se on
+   se osa laudasta jota tässä tarvitaan. */
+.ak__rengas::after{content:'';position:absolute;inset:0;background:var(--ground,#FAF6EE);
+  opacity:.70;pointer-events:none}
+.ak__rengas .ak__paikka{z-index:2}
+
+/* ⚠️ TORNI SAA VALKOISEN TARRAREUNAN, koska tausta on piirros. Sama keino
+   jota `.alku-basso` ja `.alku-vaaka` jo käyttävät. */
+/* ⚠️ TORNI SEISOO SÄILIÖSSÄ, EI LEIJU SEN KESKELLÄ (Marko 16.11.2026: «Laita
+   ne kolikkotornit kasvamaan keskeltä linjaston säiliötä. Eli älä keskitä
+   sitä tornia säiliöön, vaan ajattele, että se torni seisoisi keskellä sitä
+   säiliötä.»). Siksi ankkuri on tornin ALAREUNA (−100 %) eikä sen keskikohta
+   (−50 %): jalka osuu säiliön keskipisteeseen ja torni kasvaa siitä ylös,
+   kuten oikeat nappulat pinossa. */
+.ak__paikka{position:absolute;transform:translate(-50%,-100%);--pala:4px;--leveys:18px;
+  filter:drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff)
+         drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff)
+         drop-shadow(0 2px 3px rgba(60,30,0,.4))}
+/* ⚠️ EI `transition:left,top`. Se oli täällä ja näytti animaatiolta, mutta ei
+   voinut koskaan laueta: `piirra()` luo tornin uudelleen joka askeleella, ja
+   uusi elementti ei siirry vaan ilmestyy. Liike tehdään `lennata()`:ssa
+   FLIP-tekniikalla, joka toimii myös säiliöstä toiseen. Kaksi mekanismia
+   samaan asiaan oli juuri se, mikä piilotti vian. */
+.ak__paikka--lento{z-index:4}
+.ak__paikka--hehku{animation:ak-hehku .75s ease-in-out;z-index:3;transform-origin:50% 100%}
+/* Hehku skaalaa jalan ympäri, jotta torni ei irtoa säiliöstä kesken korostuksen. */
+@keyframes ak-hehku{
+  0%,100%{transform:translate(-50%,-100%) scale(1)}
+  45%{transform:translate(-50%,-100%) scale(1.3)}}
+
+/* ---- varasto: laudan oma pylväs käännettynä vaakaan, haaleana ---- */
+/* 📐 Kaikki mitat johdetaan nauhan leveydestä `--lev`, jotta suhde säilyy.
+   Rajaus y 27,9…869,5 (korkeus 841,6) ja x 812…882 (leveys 70) 900 × 900
+   -kuvasta: kuva on 1,0694 × lev, siirto −0,9649 × lev / −0,0332 × lev, ja
+   nauha on 0,0832 × lev korkea. Kääntö on +90°, jolloin pylvään alapää (1)
+   tulee vasemmalle ja yläpää (10) oikealle. */
+/* ⚠️ `--lev` ON PITUUS, EI PROSENTTI — KOLMAS KERTA SAMAA VIKAA. Kaikki
+   varaston mitat johdetaan tästä (`calc(var(--lev) * 0.0832)` jne.), ja
+   prosentti ratkeaa jokaisessa lapsessa SEN omaan laatikkoon: nauhan korkeus
+   meni nollaan ja kuva 27 × 27 pikseliin, eli varaston grafiikka katosi.
+   `88vw` toimi, mutta oli näkymäikkunan levyinen eikä säiliön; `cqw` on
+   molempia — pituus kaikkialla ja isännän levyinen. */
+.ak__varasto{--lev:320px;width:var(--lev)}
+@supports (width:1cqw){ .ak__varasto{--lev:min(320px,100cqw)} }
+.ak__otsake{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--soft,#6E6357);margin:0 0 3px}
+/* Lava varaa tornille tilan nauhan yläpuolelle: korkein torni on 60 px. */
+.ak__varastolava{position:relative;width:var(--lev);padding-top:58px}
+.ak__varastokuva{position:relative;width:var(--lev);height:calc(var(--lev) * 0.0832);
+  overflow:hidden;border-radius:6px}
+.ak__varastokierto{position:absolute;left:0;top:0;
+  width:calc(var(--lev) * 0.0832);height:var(--lev);
+  transform-origin:0 0;transform:translateX(var(--lev)) rotate(90deg)}
+.ak__varastokierto img{position:absolute;display:block;
+  width:calc(var(--lev) * 1.0694);
+  left:calc(var(--lev) * -0.9649);top:calc(var(--lev) * -0.0332)}
+/* Sama haalennus kuin renkaalla, samasta syystä. */
+.ak__varastokuva::after{content:'';position:absolute;inset:0;
+  background:var(--ground,#FAF6EE);opacity:.70;pointer-events:none}
+/* ⚠️ Torni seisoo varastopaikan keskellä samoin kuin säiliössä (Marko:
+   «Ja sama juttu siinä, että se torni seisoo keskellä varastopaikkaa»).
+   📐 Ympyrän keskikohta on 47,14 % nauhasta, ja nauha alkaa lavan
+   yläreunasta 58 px:n päästä. */
+.ak__paikka--varasto{top:calc(58px + var(--lev) * 0.0832 * 0.4714);z-index:2}
+
+.ak__mittarit{display:flex;gap:8px}
+.ak__mittari{display:flex;align-items:baseline;gap:6px;background:var(--surface,#fff);border-radius:10px;
+  padding:4px 12px;box-shadow:0 1px 4px rgba(60,30,0,.18)}
+.ak__mittari b{font-size:22px}
+.ak__mittari span{font-size:11px;color:var(--soft,#6E6357)}
+
+/* ---- boksit: kolme pelaajaa ---- */
+.ak__naytto--boksit{min-height:260px;display:grid;place-items:center}
+.ak__pelaajat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.ak__pelaaja{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;
+  border-radius:12px;transition:background .3s,transform .3s}
+.ak__pelaaja--lento{z-index:5}
+.ak__pelaaja--korosta{background:rgba(238,114,3,.14);transform:translateY(-3px)}
+.ak__pelaaja--vuoro{box-shadow:inset 0 0 0 2px var(--orange,#EE7203)}
+.ak__nimi{font-size:13px}
+.ak__maara{font-size:11px;color:var(--soft,#6E6357)}
+/* ⚠️ BOKSI ON PELIN OMA `.av__boksi`, JOTEN PALAN GEOMETRIA TULEE
+   `apinavaaka.css`:STÄ. Täällä kumotaan vain se, että pelissä boksi on
+   piilossa muualla kuin Nälkäisissä apinoissa (`.av__boksi{display:none}`),
+   ja annetaan sille tämän näkymän koko. Geometriaa ei kirjoiteta uudelleen. */
+.ak .av__boksi{display:block;width:84px;height:84px}
+
+/* ---- vuoro: kolme pelaajaa kehällä + suuntanuoli ---- */
+.ak__naytto--vuoro{min-height:260px;display:grid;place-items:center}
+.ak__kierto{position:relative;width:240px;height:240px}
+.ak__nuoli{position:absolute;inset:14px;border-radius:50%;
+  border:3px solid rgba(238,114,3,.5);border-top-color:var(--orange,#EE7203);
+  display:grid;place-items:center;animation:ak-pyori 6s linear infinite}
+.ak__nuoli--vasta{animation-direction:reverse}
+.ak__nuoli span{font-size:11px;color:var(--soft,#6E6357);animation:ak-pyori 6s linear infinite reverse}
+.ak__nuoli--vasta span{animation-direction:normal}
+@keyframes ak-pyori{to{transform:rotate(360deg)}}
+.ak__kiertaja{position:absolute;transform:translate(-50%,-50%);background:var(--surface,#fff);
+  border-radius:10px;padding:6px 10px;box-shadow:0 1px 5px rgba(60,30,0,.2);font-size:13px;
+  transition:box-shadow .3s,opacity .3s}
+
+.ak__kiertaja--ohi{opacity:.4;text-decoration:line-through}
+
+/* Kortit 27 ja 30 eivät koske kiertosuuntaan vaan vuoron omiin askeliin. */
+.ak__askeleet{display:flex;flex-direction:column;gap:6px;width:100%;max-width:280px}
+.ak__askel{display:flex;align-items:center;gap:10px;background:var(--surface,#fff);border-radius:10px;
+  padding:8px 12px;box-shadow:0 1px 4px rgba(60,30,0,.14);transition:box-shadow .3s,opacity .3s}
+.ak__askel b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  background:#F1EFD9;font-size:12px;flex:none}
+.ak__askel span{font-size:14px}
+.ak__askel--nyt{box-shadow:0 0 0 2px var(--orange,#EE7203),0 2px 8px rgba(60,30,0,.2)}
+.ak__askel--nyt b{background:var(--orange,#EE7203);color:#fff}
+.ak__askel--peruttu{opacity:.45}
+.ak__askel--peruttu span{text-decoration:line-through}
+
+@media (prefers-reduced-motion:reduce){
+  .ak__paikka--hehku,.av__boksi-pala.uusi,.ak__pelaaja--menettaa,.ak__nuoli,.ak__nuoli span{animation:none}
+  .ak__noppapaikka{animation:none}
+}
+
+/* ---- kehote: kortin paikka ennen valintaa ---- */
+/* ⚠️ TYHJÄ LAATIKKO ON HÄMMENTÄVÄ, KEHOTE EI. Laatikko on olemassa koko ajan,
+   jotta lauta ei hyppää kortin ilmestyessä; ennen valintaa siinä lukee mitä
+   tehdä. Isäntäsivu voi piilottaa laatikon antamalla tyhjän kehotteen. */
+.ak__kortti--kehote{background:none;box-shadow:none;border:2px dashed rgba(110,99,87,.4)}
+.ak__kortti--kehote .ak__korttinimi{color:var(--soft,#6E6357)}
+
+/* ---- noppakortit: ei lautaa, vain noppa ---- */
+/* ⚠️ `.av__d10` on pelin oma noppa. Täällä vain varataan sille tila ja
+   suurennetaan se, kuten lautapelin opastuksessa (`.av__opaskortti`). */
+.ak__naytto--noppa{display:grid;place-items:center;min-height:260px}
+.ak__noppakehys{display:flex;align-items:center;justify-content:center;gap:26px}
+.ak__noppapaikka{display:grid;place-items:center;width:150px;height:150px}
+.ak__noppapaikka .av__d10{transform:scale(1.85)}
+.ak__muutos{font-size:44px;font-weight:700;line-height:1;color:var(--deep,#C2580C);
+  opacity:0;transform:translateX(14px);transition:opacity .35s ease-out,transform .35s ease-out}
+.ak__muutos--nakyy{opacity:1;transform:none}
+
+/* ---- ohjain: silmukka pysäytetään ja vaiheita askelletaan itse ---- */
+.ak__ohjain{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 0}
+.ak__nappi{font:inherit;font-size:13px;font-weight:600;color:var(--ink,#1A1A1A);
+  background:var(--surface,#fff);border:0;border-radius:999px;padding:7px 14px;cursor:pointer;
+  box-shadow:0 1px 4px rgba(60,30,0,.18);min-width:44px;min-height:34px}
+.ak__nappi:disabled{opacity:.35;cursor:default}
+.ak__nappi:focus-visible{outline:3px solid var(--orange,#EE7203);outline-offset:2px}
+.ak__askelnapit{display:flex;gap:6px}
+.ak__pisteet{display:flex;gap:6px}
+.ak__piste{width:8px;height:8px;border-radius:50%;background:rgba(110,99,87,.3);
+  transition:background .25s,transform .25s}
+.ak__piste--nyt{background:var(--orange,#EE7203);transform:scale(1.35)}
+
+/* ---- asema: se ehto jonka kortti katsoo ---- */
+/* ⚠️ Asema on oma rivinsä nimen alla eikä selitteessä, koska se koskee YHTÄ
+   pelaajaa. Selite kertoo säännön, asema kertoo kenen kohdalla se toteutuu. */
+.ak__asema{font-size:11px;font-weight:700;line-height:1.2;color:var(--deep,#C2580C);
+  min-height:13px;text-align:center}
+.ak__pelaaja--menettaa{animation:ak-menetys .5s ease-out}
+@keyframes ak-menetys{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}}
+
+/* ---- boksilava: boksi ja sen luku liikkuvat yhtenä, nimi jää ---- */
+.ak__boksilava{display:flex;flex-direction:column;align-items:center;gap:4px}
+
+/* ---- palojen määrä isona: se luku josta kaikki muu seuraa ---- */
+/* ⚠️ Rivi varaa korkeuden molemmille muodoille, jotta boksit eivät hyppää
+   pystysuunnassa kun luku suurenee. 📐 Mitattu 375 px: iso luku vie 34 px,
+   pieni 15 px, joten varaus on 34 px. */
+.ak__maara{min-height:34px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;line-height:1}
+.ak__maara b{font-size:26px;font-weight:800;color:var(--deep,#C2580C)}
+.ak__maara i{font-size:10px;font-style:normal;color:var(--soft,#6E6357)}
+.ak__pelaajat--luvut .ak__boksilava .av__boksi{opacity:.75;transition:opacity .4s ease-out}
+
+/* ---- katse: yksi asia kerrallaan, isona ---- */
+/* ⚠️ UNIVERSAALI OHJE (Marko 16.11.2026): huomio keskitetään aina yhteen
+   asiaan. Muut eivät katoa — asiayhteys tarvitaan — mutta ne väistyvät
+   selvästi, jotta katse ei joudu valitsemaan. */
+.ak__pelaaja{transition:transform .45s cubic-bezier(.3,1.2,.5,1),opacity .45s ease-out}
+.ak__pelaaja--katse{transform:scale(1.14);z-index:3}
+.ak__pelaaja--sivussa{transform:scale(.84);opacity:.4}
+@media (prefers-reduced-motion:reduce){
+  .ak__pelaaja{transition:none}
+}
+
+/* ---- yksi pelaaja isona ---- */
+.ak__pelaajat--yksi{display:flex;justify-content:center}
+.ak__pelaajat--yksi .ak__pelaaja{transform:scale(1.5);transform-origin:50% 50%}
+.ak__pelaajat--yksi .ak__pelaaja--sivussa{display:none}
+
+/* ---- kierron nuolet: kehä näkyväksi ---- */
+.ak__nuolivali{display:grid;place-items:center;font-size:26px;font-weight:700;
+  color:var(--orange,#EE7203);flex:none;align-self:center}
+/* Paluukaari sulkee kehän: viimeiseltä takaisin ensimmäiselle. */
+.ak__paluu{position:relative;height:22px;margin:2px 10% 0;
+  border:3px solid var(--orange,#EE7203);border-top:0;
+  border-radius:0 0 12px 12px;opacity:.75}
+.ak__paluu::after{content:'\25C0';position:absolute;left:-7px;bottom:-9px;
+  font-size:13px;color:var(--orange,#EE7203)}
+.ak__paluu--vasen::after{content:'\25B6';left:auto;right:-7px}
+
+/* ---- vuoromerkki: vuoro on kappale joka liikkuu, ei korostus ---- */
+.ak__vuoromerkki{position:absolute;transform:translate(-50%,-50%);z-index:4;
+  background:var(--orange,#EE7203);color:#fff;font-size:11px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:5px 11px;
+  box-shadow:0 2px 8px rgba(60,30,0,.35)}
+.ak__vuoromerkki--aave{background:none;color:var(--soft,#6E6357);box-shadow:none;
+  border:2px dashed rgba(110,99,87,.55);text-transform:none;letter-spacing:0;
+  font-weight:600;z-index:3}
+.ak__vuoromerkki--sykkii{animation:ak-sykki .85s ease-in-out 2}
+@keyframes ak-sykki{
+  0%,100%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-50%) scale(1.3)}}
+.ak__kiertaja--ohi{opacity:.45}
+@media (prefers-reduced-motion:reduce){ .ak__vuoromerkki--sykkii{animation:none} }
+
+/* ---- vuoro: noppa seisoo sen kohdalla jonka vuoro on ---- */
+/* ⚠️ Lokero varaa nopalle tilan jokaisen pelaajan kohdalla, jotta rivi ei
+   hyppää kun noppa siirtyy. 📐 Noppa on 80 × 76 px ja skaalattu 1,3 →
+   lokero 104 px. */
+.ak__naytto--vuoro{display:grid;place-items:center;min-height:260px}
+.ak__vuororivi{display:flex;align-items:flex-start;justify-content:center;gap:4px;width:100%}
+.ak__vuoropaikka{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:opacity .4s ease-out}
+.ak__vuoropaikka--ohi{opacity:.4}
+.ak__vuoropaikka--ohi .ak__nimi{text-decoration:line-through}
+.ak__noppatila{height:104px;display:grid;place-items:center;width:100%}
+.ak__noppalava{display:grid;place-items:center}
+.ak__noppalava .av__d10{transform:scale(1.3)}
+.ak__noppalava--sykkii{animation:ak-sykki .85s ease-in-out 2}
+@keyframes ak-sykki{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+.ak__noppaaave{border:2px dashed rgba(110,99,87,.5);border-radius:12px;
+  padding:10px 8px;font-size:11px;color:var(--soft,#6E6357)}
+
+/* ---- kortti 27: yksi apinakortti, joka pyyhitään ---- */
+.ak__yksikortti{position:relative;display:grid;place-items:center}
+.ak__yksikortti img{display:block;width:min(190px,54vw);border-radius:10px;
+  box-shadow:0 3px 12px rgba(60,30,0,.3);transition:opacity .5s ease-out,transform .5s ease-out}
+.ak__yliviiva{position:absolute;left:6%;right:6%;height:7px;border-radius:4px;
+  background:var(--orange,#EE7203);transform:rotate(-14deg) scaleX(0);transform-origin:0 50%;
+  transition:transform .55s cubic-bezier(.3,1.1,.5,1)}
+.ak__yksikortti--pyyhitty img{opacity:.35;transform:scale(.94)}
+.ak__yksikortti--pyyhitty .ak__yliviiva{transform:rotate(-14deg) scaleX(1)}
+
+/* ---- kortti 30: kaksi esinettä ja niiden järjestys ---- */
+.ak__pari{display:flex;align-items:center;justify-content:center;gap:16px}
+.ak__parinoppa{display:grid;place-items:center;width:104px;height:104px}
+.ak__parinoppa .av__d10{transform:scale(1.3)}
+.ak__parinuoli{font-size:40px;font-weight:700;color:var(--orange,#EE7203)}
+.ak__paripizza img{display:block;width:92px;height:auto}
+
+/* ---- kortti 33: Basso syömässä ---- */
+.ak__basso{position:absolute;right:-6px;bottom:-10px;pointer-events:none;
+  animation:ak-basso .6s cubic-bezier(.3,1.5,.5,1)}
+.ak__basso img{display:block;width:min(130px,34vw);height:auto;
+  filter:drop-shadow(0 3px 8px rgba(60,30,0,.35))}
+@keyframes ak-basso{from{transform:translateY(70px) rotate(-8deg);opacity:0}}
+.ak__pelaajat{position:relative}
+
+@media (prefers-reduced-motion:reduce){
+  .ak__basso,.ak__noppalava--sykkii{animation:none}
+}
+
+/* ─── RENGAS: kierto nähdään kehänä ──────────────────────────────────────
+   Marko 16.11.2026: «Tässä kannattaisi olla ympyrä taustalla, jossa kierto
+   näkyy selvästi.»
+   ⚠️ PAIKKA ON KULMA, EI SARAKE. Vanha asettelu oli `repeat(3,1fr)` ja nuoli
+   lisättiin omana soluna riviin — kolme boksia + kaksi nuolta = viisi solua
+   kolmeen sarakkeeseen, joten kolmas boksi putosi omalle rivilleen.
+   ⚠️ SÄDE EI SAA SISÄLTÄÄ PROSENTTIA: `translateY`:n sisällä `100%` tarkoittaa
+   elementin omaa korkeutta, joten laatat istuivat säteellä 45 px kehän säteen
+   ollessa 109 px. `cqw` on isännän leveys kaikkialla, myös transformin sisällä.
+   ⚠️ NAPAKOORDINAATTI ON OMA MUUTTUJANSA (`--polar`), koska korostus, katse ja
+   sivussa-tila asettavat oman transforminsa — ilman yhteistä pohjaa ne
+   pyyhkisivät paikan ja kasaisivat laatat kehän keskelle. */
+/* ⚠️ SÄILIÖ KAIKILLE NÄKYMILLE, EI VAIN BOKSEILLE. `cqw` mittaa lähintä
+   säiliötä; lautanäkymässä sellaista ei ollut, joten 100cqw putosi takaisin
+   näkymäikkunaan ja lauta vuoti taas yli. */
+.ak__naytto{container-type:inline-size}
+.ak__pelaajat--rengas{--r:96px;
+  display:block;position:relative;width:100%;aspect-ratio:1 / .92;margin:0 auto;gap:0}
+@supports (width:1cqw){ .ak__pelaajat--rengas{--r:26cqw} }
+.ak__pelaajat--rengas .ak__pelaaja{--polar:translate(-50%,-50%) rotate(var(--a,0deg))
+    translateY(calc(var(--r) * -1)) rotate(calc(var(--a,0deg) * -1));
+  position:absolute;left:50%;top:50%;width:auto;padding:2px;gap:2px;z-index:1;
+  transform:var(--polar)}
+.ak__pelaajat--rengas .ak__pelaaja--korosta{transform:var(--polar)}
+.ak__pelaajat--rengas .ak__pelaaja--katse{transform:var(--polar) scale(1.12);z-index:3}
+.ak__pelaajat--rengas .ak__pelaaja--sivussa{transform:var(--polar) scale(.86);opacity:.45}
+/* Ravistus on translateX, joka korvaisi napakoordinaatin — kehässä se jätetään. */
+.ak__pelaajat--rengas .ak__pelaaja--menettaa{animation:none}
+.ak__pelaajat--rengas .av__boksi{width:62px;height:62px}
+.ak__pelaajat--rengas .ak__nimi{font-size:11.5px;white-space:nowrap}
+/* ⚠️ PALOJEN MÄÄRÄ POIS KEHÄSTÄ (Marko 16.11.2026: «Palojen määrälläkään ei
+   kauheasti ole merkitystä»). Kortti 9 ei muuta määriä eikä vertaa niitä.
+   Korteissa 6 ja 13 määrä ON kortin sisältö, eivätkä ne käytä kehää. */
+.ak__pelaajat--rengas .ak__maara{display:none}
+/* Kehä itse: katkoviiva taustalla, jotta sen päällä liikkuva boksi erottuu. */
+.ak__kiertorata{position:absolute;left:50%;top:50%;width:calc(var(--r) * 2);height:calc(var(--r) * 2);
+  transform:translate(-50%,-50%);border-radius:50%;border:2px dashed rgba(238,114,3,.45);
+  pointer-events:none;z-index:0}
+/* Kiertävä nuoli: suunta näytetään liikkeenä eikä luettavana merkkinä. */
+.ak__suuntanuoli{position:absolute;inset:0;animation:ak-kierto 7s linear infinite}
+.ak__kiertorata--vasen .ak__suuntanuoli{animation-direction:reverse}
+.ak__suuntanuoli .ak__karki{position:absolute;left:50%;top:0;font-size:15px;line-height:1;
+  color:var(--orange,#EE7203);transform:translate(-50%,-50%) rotate(90deg)}
+.ak__kiertorata--vasen .ak__suuntanuoli .ak__karki{transform:translate(-50%,-50%) rotate(-90deg)}
+@keyframes ak-kierto{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){
+  .ak__suuntanuoli{animation:none}
+  .ak__pelaajat--rengas .ak__pelaaja{transition:none}
+}
+/* Yhden pelaajan vuorokortti: noppa keskelle isona. */
+.ak__vuororivi--yksi{display:flex;justify-content:center}
+.ak__vuororivi--yksi .ak__vuoropaikka{transform:scale(1.25)}
+
+/* Pelaajamerkit (kortit 16 ja 17): montako pelaajaa, niin monta täytettä. */
+.ak__pelaajamerkit{display:flex;gap:6px;justify-content:center;margin:0 0 6px}
+/* Merkki on BOKSI, koska pelissä pelaaja on boksi — kolme identtistä Bassoa
+   luettaisiin kolmena Bassona eikä kolmena pelaajana. */
+.ak__pelaajamerkki{width:30px;height:30px;display:grid;place-items:center}
+.ak__pelaajamerkki img{width:30px;height:30px;object-fit:contain}

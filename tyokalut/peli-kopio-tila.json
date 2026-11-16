@@ -1,9 +1,11 @@
 {
 "tiedostot": {
 "apinavaaka.html": "682099cbcb8806111d81faeebbef1f41711197c2b75d05c02c99429d01239b5d",
+"apinavaaka/apinakortti.css": "3b86a7fae2af941c85a608e92739d383a271f9d602aa44542b86c1a2c59d8779",
+"apinavaaka/apinakortti.js": "3f019ca6825e67841ec03410b57ba2c239de3547cf9990ceb6071cdb42ee7af7",
 "apinavaaka/apinakortti.webp": "782ed54fa0e12c5fa116d4d83af31902f2c257c392806e0d4ad67c52f90e262b",
 "apinavaaka/apinavaaka.css": "0e03d99ff7ddf4d2ac730c992719f75e29bfc4298948c536487cc956d180dbce",
-"apinavaaka/apinavaaka.js": "a9f6b10f0dbee7bc9b216cf5c4da3b2a0c0506472f639cf795c23008e7cefd2f",
+"apinavaaka/apinavaaka.js": "c4fd8ed98be7559291a0a65a7c1b816b821daa63b65982ce32b2b8757562a962",
 "apinavaaka/basso-miettii.webp": "971b244559208b19b4a9f92973b3ae2e9f035d5ba2c7e6562bc8f78a179b7787",
 "apinavaaka/basso-nappi.webp": "ef5788ca261b730ced5156235b7503c5d453ccd7883b5f3228957e1a9b4c5672",
 "apinavaaka/basso-paa.webp": "e803d5f067c9e9147954b5470f4571aae42ad7de7b45adce6efe4376e156df27",

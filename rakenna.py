@@ -453,7 +453,11 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
        # sivuston kopio — sama `laske()` ja `osuuko()` joilla peli tarkistaa
        # pelaajan laskun. Ladataan vain korttipelisivulla, jossa keittiö on,
        # ja ENNEN sivu.js:ää, koska defer-skriptit ajetaan tässä järjestyksessä.
-       ('<script src="../%s" defer></script>\n' % leima('play/laskin.js')) if sivu == 'korttipeli' else '',
+       # Apinakorttisivun animaatiot: pelkkä pieni kytkentäskripti. Raskas
+       # moduuli (noin 100 kt + kuvat) ladataan vasta ensimmäisestä «Näytä»-
+       # painalluksesta, koska sivun tehtävä on löytää kortin sääntö nopeasti.
+       ('<script src="../%s" defer></script>\n' % leima('play/laskin.js')) if sivu == 'korttipeli' else
+       ('<script src="../%s" defer></script>\n' % leima('apinakortit.js')) if sivu == 'apinakortit' else '',
        leima('sivu.js'))
 
 
@@ -1052,6 +1056,13 @@ def apinakortit(t, kaikki):
     virhe (huomautus painetun ohjeen virheestä, esim. EN-kortin 30 numerointi).
     Tekstit: sisalto/apinakortit-xx.json."""
     a = t['apinakortit']
+    # ⚠️ NAPIT RENDERÖIDÄÄN VAIN JOS KÄÄNNÖS ON. Ilman tätä saksalainen
+    # lukija saisi suomenkielisen napin, ja puolikielinen sivu on huonompi
+    # kuin sivu ilman nappia — sääntö on luettavissa ilman animaatiotakin.
+    ui = t.get('ui', {})
+    nayta, piilota = ui.get('apinakortti_nayta'), ui.get('apinakortti_piilota')
+    if not (nayta and piilota):
+        nayta = piilota = None
     numerot = ''.join('<a href="#k%02d">%02d</a>' % (k['n'], k['n']) for k in a['kortit'])
     kortit = []
     for k in a['kortit']:
@@ -1062,9 +1073,21 @@ def apinakortit(t, kaikki):
             lisa += '<p class="apinakortti__tarkennus"><b>%s:</b> %s</p>' % (e(a['tarkennus']), k['tarkennus'])
         if k.get('virhe'):
             lisa += '<p class="apinakortti__huom">%s</p>' % e(k['virhe'])
+                # ⚠️ HUOM JA TARKENNUS i-YMPYRÄN TAAKSE (Marko 16.11.2026: «Nuo
+        # tarkennus-tekstit pitäisi olla jossain piilossa i:n tai ?:n takana» ja
+        # «pelkkä ympyrä, jossa on tuo i-kirjain — ilman tarkennussanaa»).
+        # Kortissa 5 sääntö oli kolme riviä ja poikkeukset viisi: poikkeus sai
+        # enemmän tilaa kuin itse sääntö. Sana elää `aria-label`issa.
+        if lisa:
+            lisa = ('<button type="button" class="apinakortti__i" aria-expanded="false" '
+                    'aria-controls="lisa%02d" aria-label="%s">i</button>'
+                    '<div class="apinakortti__lisa" id="lisa%02d" hidden>%s</div>'
+                    % (k['n'], e(a['tarkennus']), k['n'], lisa))
+        nappi = ('<button type="button" class="apinakortti__nayta" data-n="%d" '
+                 'aria-expanded="false">%s</button>' % (k['n'], e(nayta))) if nayta else ''
         kortit.append('<article class="apinakortti" id="k%02d">\n  <span class="apinakortti__nro">%02d</span>\n'
-                      '  <div><h3>%s</h3><p>%s</p>%s</div>\n</article>'
-                      % (k['n'], k['n'], e(k['nimi']), e(k['ohje']), lisa))
+                      '  <div class="apinakortti__sisalto"><h3>%s</h3><p>%s</p>%s%s</div>\n</article>'
+                      % (k['n'], k['n'], e(k['nimi']), e(k['ohje']), lisa, nappi))
     runko = '''
 <p class="murupolku"><a href="lautapeli.html">← %s</a></p>
 <h1>%s</h1>
@@ -1072,13 +1095,29 @@ def apinakortit(t, kaikki):
 <p class="pieni">%s</p>
 %s
 <nav class="korttinumerot" aria-label="%s">%s</nav>
-<div class="apinakortit">%s</div>
+<div class="apinakortit"%s>%s</div>
 <p class="murupolku" style="margin-top:28px"><a href="lautapeli.html">← %s</a></p>
 ''' % (e(a['takaisin']), e(a['h1']), e(a['ingressi']), e(a['kaytto']),
        # Yleinen sääntö kaikille korteille (Marko 19.1.2026 pelaajalle): vuoro päättyy nostoon,
        # säästettävä kortti on nostajan.
        ('<p class="apinakortit__yleista">%s</p>' % e(a['yleista'])) if a.get('yleista') else '',
        e(a['hae']), numerot,
+       # Polut ja napin tekstit kytkentäskriptille. Lauta on sivuston oma kuva
+       # (`julkinen/kuvat/`), ei pelikansion kopio: yksi tiedosto riittää.
+       # ⚠️ LEIMAT MYÖS DYNAAMISESTI LADATUILLE. Kytkentäskripti hakee moduulin
+       # vasta napin painalluksesta, eikä se voi laskea tiivistettä — joten
+       # leimatut polut annetaan sivulta. Ilman tätä selain tarjoili vanhaa
+       # `apinavaaka.js`:ää välimuistista ja animaatio kaatui (mitattu 16.11.2026:
+       # «torni is not a function»).
+       ('' if not nayta else
+        ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
+        ' data-css="%s" data-js="%s"'
+        ' data-nayta="%s" data-piilota="%s"'
+        % (','.join('../' + leima('play/apinavaaka/' + f)
+                    for f in ('apinavaaka.css', 'apinakortti.css')),
+           ','.join('../' + leima('play/apinavaaka/' + f)
+                    for f in ('noppa3d.js', 'apinavaaka.js', 'apinakortti.js')),
+           e(nayta), e(piilota))),
        '\n'.join(kortit), e(a['takaisin']))
     return kehys(t, kaikki, 'apinakortit', a['title'], a['kuvaus'], runko)
 

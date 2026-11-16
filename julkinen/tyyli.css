@@ -660,6 +660,30 @@ ol.vaiheet h3{margin:6px 0 6px}
 .apinakortti__tarkennus{background:var(--warm);border-left:3px solid var(--orange);border-radius:8px;
   padding:8px 12px;font-size:14.5px;margin-top:8px!important}
 
+
+/* ─── Apinakortin animaatio ──────────────────────────────────────────────
+   Marko 16.11.2026: «Nuo tarkennus-tekstit pitäisi olla jossain piilossa i:n
+   tai ?:n takana» ja «pelkkä ympyrä, jossa on tuo i-kirjain — ilman
+   tarkennussanaa». Paikka on kortin oikea yläkulma: siellä i ei kilpaile
+   Näytä-napin kanssa eikä vie omaa riviään. */
+.apinakortti{position:relative}
+.apinakortti__sisalto{padding-right:30px}
+.apinakortti__i{position:absolute;right:12px;top:12px;width:26px;height:26px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--soft);
+  font:inherit;font-size:14px;font-weight:800;font-style:italic;line-height:1;
+  display:grid;place-items:center;cursor:pointer;padding:0}
+.apinakortti__i[aria-expanded="true"]{border-color:var(--orange);color:var(--orange);background:var(--warm)}
+.apinakortti__lisa{padding-right:0}
+.apinakortti__nayta{border:1px solid var(--line);border-radius:10px;background:var(--surface);
+  font:inherit;font-weight:700;font-size:14px;padding:7px 14px;cursor:pointer;color:var(--ink);margin-top:2px}
+.apinakortti__nayta[aria-expanded="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
+.apinakortti__nayta[disabled]{opacity:.55;cursor:progress}
+.apinakortti--auki{border-color:var(--orange);box-shadow:0 0 0 3px var(--tint)}
+/* ⚠️ Näyttämö koko kortin leveydelle, ei numerosarakkeen oikealle puolelle:
+   52 px:n sarakkeen vieressä kehän halkaisija jäi 172 px:iin ja laatat
+   peittivät toisensa (mitattu 16.11.2026). */
+.ak-lava{grid-column:1 / -1;background:#F7F2E6;border-radius:12px;padding:10px;margin:10px 0 2px}
+
 /* ─── Essen 2026: messutarjoukset ─────────────────────────────────────────
    Marko 20.10.2026: «ne messutarjoukset isolla ja mieluiten linkit, että
    pääsee suoraan ostamaan».

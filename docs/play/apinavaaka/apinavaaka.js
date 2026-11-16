@@ -587,6 +587,35 @@
     return e;
   }
   function pros(x, koko) { return (x / koko * 100) + '%'; }
+
+  /* ⚠️ TARRA JA TORNI OVAT MODUULITASOLLA, EIVÄT PELI-INSTANSSIN SISÄLLÄ
+     (16.11.2026). Ne piirtävät täytteen niin kuin se laudalla on, ja sama
+     piirros tarvitaan nyt myös apinakorttien animaatioon (`apinakortti.js`).
+     Instanssin sisällä ne olisivat sen yksityisomaisuutta, ja toinen toteutus
+     syntyisi väistämättä — «tornit piirretään Apinavaa'an omalla `torni()`-
+     funktiolla» on tehtävän oma vaatimus.
+     📐 Siirto on mekaaninen: funktiot lukivat vain `el`, `VARIT` ja `KANSIO`,
+     jotka ovat kaikki jo tällä tasolla. Yhtään instanssin muuttujaa ne eivät
+     koskeneet, joten pelin käytös ei muutu. */
+  // --- täytteen tarra: värillinen ympyrä, valkoinen reuna ja Markon täytekuva (tayte/1–10.webp)
+  function tarra(luku) {
+    var x = el('span', 'av__tarra');
+    x.style.background = VARIT[luku - 1];
+    x.innerHTML = '<img src="' + KANSIO + 'tayte/' + luku + '.webp" alt="">';
+    return x;
+  }
+  // --- tornin piirto
+  function torni(luku, punnus, ilmanTarraa) {
+    var d = el('span', 'av__torni');
+    for (var i = 0; i < luku; i++) {
+      var p = el('i');
+      if (punnus) { p.className = 'av__punnus'; p.textContent = i + 1; p.style.setProperty('--i', i); }
+      else p.style.background = VARIT[luku - 1];
+      d.appendChild(p);
+    }
+    if (!punnus && !ilmanTarraa) d.appendChild(tarra(luku));   // tornin päällä täytteen tarra kuten oikeissa nappuloissa
+    return d;
+  }
   function summa(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
   function kierra(p, nivel, kulma) {
     var r = kulma * Math.PI / 180, dx = p[0] - nivel[0], dy = p[1] - nivel[1];
@@ -997,25 +1026,6 @@
     ikkuna.addEventListener('click', function (e) { if (e.target === ikkuna) sulje(); });
     ikkuna.addEventListener('keydown', function (e) { if (e.key === 'Escape') sulje(); });
 
-    // --- täytteen tarra: värillinen ympyrä, valkoinen reuna ja Markon täytekuva (tayte/1–10.webp)
-    function tarra(luku) {
-      var x = el('span', 'av__tarra');
-      x.style.background = VARIT[luku - 1];
-      x.innerHTML = '<img src="' + KANSIO + 'tayte/' + luku + '.webp" alt="">';
-      return x;
-    }
-    // --- tornin piirto
-    function torni(luku, punnus, ilmanTarraa) {
-      var d = el('span', 'av__torni');
-      for (var i = 0; i < luku; i++) {
-        var p = el('i');
-        if (punnus) { p.className = 'av__punnus'; p.textContent = i + 1; p.style.setProperty('--i', i); }
-        else p.style.background = VARIT[luku - 1];
-        d.appendChild(p);
-      }
-      if (!punnus && !ilmanTarraa) d.appendChild(tarra(luku));   // tornin päällä täytteen tarra kuten oikeissa nappuloissa
-      return d;
-    }
 
     // --- noppa
     var pyorii = false;
@@ -2439,6 +2449,13 @@
     return (VINKIT[kieli] || VINKIT.en).nimet;
   };
   window.apinavaakaKaynnista = kaynnista;
+
+  /* Täytteen piirto ulos, jotta apinakorttien animaatio käyttää samaa tornia
+     kuin peli (ks. perustelu `tarra`/`torni` yllä). */
+  window.apinavaakaTorni = torni;
+  window.apinavaakaTarra = tarra;
+  window.apinavaakaVarit = VARIT;
+  window.apinavaakaKansio = KANSIO;
 
   /* ⚠️ GEOMETRIA YHDESTÄ LÄHTEESTÄ (15.10.2026). Päävalikon apina kootaan
      samoista kerroksista ja samoilla PSD-koordinaateilla kuin pelin apina.
