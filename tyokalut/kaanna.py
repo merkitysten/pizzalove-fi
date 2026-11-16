@@ -287,34 +287,6 @@ def luvut(s):
     return sorted(re.findall(r'\d+', re.sub(r'<[^>]+>', '', s)))
 
 
-# Virkkeen loppumerkit kirjoitusjärjestelmittäin.
-# 📐 Mitattu 16.11.2026: hindin käännös hylättiin kahdesti, koska tarkistus
-# tunsi vain pisteen ja CJK:n 。！？. Devanagari päättää virkkeen DANDAAN (।).
-# Malli oli siis tehnyt työnsä oikein ja tarkistus oli väärässä — ja hylätty
-# ajo maksoi noin dollarin. Lisätty danda ja kaksoisdanda (käytössä myös
-# bengalissa, gurmukhissa, gujaratissa, orijassa), armenian ։, etiopian ።,
-# khmerin ។, burman ။, tiibetin ། sekä urdun ۔ ؟ (oikealta vasemmalle
-# kirjoitettavat torjutaan muualla, mutta merkki ei maksa mitään).
-VIRKE_VALILYONNILLA = '.!?۔؟։።'   # välilyönti perässä (piste ja sen sukulaiset)
-VIRKE_ILMAN = '。！？।॥។။།'          # ei välttämättä välilyöntiä perässä
-
-
-def virkkeita(s):
-    """Virkkeiden määrä, tai None jos kirjoitusjärjestelmässä ei ole virkkeen
-    lopetusmerkkiä lainkaan.
-
-    ⚠️ None EI ole virhe. Thain ja laon kaltaisissa kielissä virkkeet
-    erotetaan välilyönnillä eikä välimerkillä, joten määrää ei voi tietää.
-    Silloin käännöstä ei saa hylätä tämän perusteella: tarkistus on olemassa
-    estämässä virkkeiden yhdistämistä, ei keksimässä sääntöä, jota kieli ei
-    tunne. Vrt. hindi yllä — väärä tarkistus on kalliimpi kuin puuttuva."""
-    s = s.strip()
-    if not any(c in s for c in VIRKE_VALILYONNILLA + VIRKE_ILMAN):
-        return None
-    jako = r'(?<=[%s])\s+|(?<=[%s])\s*' % (re.escape(VIRKE_VALILYONNILLA), re.escape(VIRKE_ILMAN))
-    return len([v for v in re.split(jako, s) if v.strip()])
-
-
 def tagit(s):
     return sorted(re.findall(r'<\s*(/?[a-z0-9]+)((?:\s+class="[^"]*")?)', s))
 
@@ -369,8 +341,13 @@ def tarkista(tulos):
     vertaa(en['ui'], tulos['ui'], 'ui', virheet)
     tarkista_koko(tulos['koko'], virheet)
     k, kp = tulos['kielet'], tulos['korttipeli']
-    maara = virkkeita(k['vaihto'])
-    if maara is not None and maara != 2:
+    # ⚠️ SAMA jako kuin arkissa (korttisaannot.virkkeet) — ei omaa kopiota.
+    # 📐 Mitattu 16.11.2026: kun kummallakin oli oma sääntönsä, hindi läpäisi
+    # toisen ja kaatoi toisen. Jos kirjoitusjärjestelmän lopetusmerkkiä ei
+    # tunnisteta, lista on tyhjä ja käännös hylätään täällä — ennen kuin arkki
+    # kaatuu siihen, mitä se ei osaa ladota.
+    maara = len(ks.virkkeet(k['vaihto']))
+    if maara != 2:
         virheet.append('kielet.vaihto: pitää olla tasan kaksi virkettä (nyt %d)' % maara)
     for nimi in ('Pizza Party', 'Pizza Basso', 'Pizza Love'):
         if nimi not in json.dumps(kp, ensure_ascii=False):

@@ -224,9 +224,14 @@ def sisalto(kieli):
             j = next(n for n, x in enumerate(osat) if k['vaihto_luku'] in x)
             loppu = next((n for n in range(j + 1, len(osat)) if osat[n].startswith('<h3')), len(osat))
             # Marko 15.11.2026: vaihtoesimerkkikin kortit vasemmalle ja selitys oikealle
-            # Virkkeen loppu myös kiinan/japanin 。！？ (konekäännökset, Marko 16.11.2026)
-            virkkeet = [v for v in re.split(r'(?<=[.!?])\s+|(?<=[。！？])', k['vaihto'].strip()) if v.strip()]
-            assert len(virkkeet) == 2, 'vaihtoesimerkki: odotettiin 2 virkettä: %r' % k['vaihto']
+            # Virkejako on korttisaannot.py:ssä, jotta se on sama kuin käännöksen
+            # tarkistuksessa (kaanna.py). 📐 Hindi kaatui tähän 16.11.2026, koska
+            # tässä oli oma kopio, joka tunsi vain pisteen ja 。！？ — ei dandaa (।).
+            virkkeet = ks.virkkeet(k['vaihto'])
+            assert len(virkkeet) == 2, (
+                'vaihtoesimerkki: odotettiin 2 virkettä, saatiin %d. Jos kieli ei '
+                'käytä virkkeen lopetusmerkkiä lainkaan, sitä ei vielä tueta. %r'
+                % (len(virkkeet), k['vaihto']))
             vesim = ks.vaihtoesimerkki(dict(k, vaihto=virkkeet[0] + '\n' + virkkeet[1])).replace('\n', '<br>').replace('</h3><div class="esimerkki vaihto"',
                                                   '</h3><div class="vierekkain"><div class="esimerkki vaihto"', 1)
             assert vesim.endswith('</p></div>')

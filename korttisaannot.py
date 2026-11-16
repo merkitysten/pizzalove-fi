@@ -231,6 +231,36 @@ KIELET = {
 # (täysautomaattinen konekäännös, yksi pyyntö kieltä kohden). Konekäännökset
 # ovat tiedostoissa sisalto/konekaannos/xx.json (tyokalut/kaanna.py), ja
 # niiden arkin omat tekstit liitetään tähän samaan KIELET-tauluun.
+# ---------------------------------------------------------------- virkkeet
+# Virkkeen loppumerkit kirjoitusjärjestelmittäin.
+# 📐 Mitattu 16.11.2026 KAHDESTI: sama latinalainen oletus kaatoi hindin ensin
+# käännöksen tarkistuksessa (kaanna.py) ja sitten arkin teossa (koteloarkki.py),
+# koska kummallakin oli oma kopionsa samasta säännöstä. Devanagari päättää
+# virkkeen DANDAAN (।). Siksi sääntö asuu nyt YHDESSÄ paikassa, jonka molemmat
+# tuovat — älä kirjoita kolmatta kopiota.
+# Mukana myös bengali/gurmukhi/gujarati/orija (sama danda), armenia ։,
+# etiopia ።, khmer ។, burma ။, tiibet ། ja urdu ۔ ؟.
+VIRKE_VALILYONNILLA = '.!?۔؟։።'   # välilyönti perässä (piste ja sen sukulaiset)
+VIRKE_ILMAN = '。！？।॥។။།'          # ei välttämättä välilyöntiä perässä
+
+
+def virkkeet(s):
+    """Teksti virkkeiksi.
+
+    ⚠️ Tyhjä lista, jos kirjoitusjärjestelmän lopetusmerkkiä ei tunnisteta
+    (esim. thai ja lao erottavat virkkeet välilyönnillä). Silloin tekstiä EI
+    voi jakaa, eikä arkin vaihtoesimerkkiä voi ladota kahteen osaan — eli
+    kieltä ei vielä tueta, kuten ei oikealta vasemmalle kirjoitettaviakaan.
+    Tyhjä lista saa molemmat vaiheet sanomaan saman asian: kaanna.py hylkää
+    käännöksen ja koteloarkki.py kaatuu selvään virheilmoitukseen. Kumpikaan
+    ei saa päästää läpi sellaista, jota toinen ei osaa tehdä."""
+    s = (s or '').strip()
+    if not any(c in s for c in VIRKE_VALILYONNILLA + VIRKE_ILMAN):
+        return []
+    jako = r'(?<=[%s])\s+|(?<=[%s])\s*' % (re.escape(VIRKE_VALILYONNILLA), re.escape(VIRKE_ILMAN))
+    return [v.strip() for v in re.split(jako, s) if v.strip()]
+
+
 def _lataa_konekaannokset():
     if not os.path.isdir(KONEKAANNOS):
         return
