@@ -161,5 +161,34 @@
   "ristiin_otsikko": "次は：Pizza Love® ボードゲーム",
   "ristiin_teksti": "同じピザの世界をゲームボードで。ピザの箱たちの大好きなピザを作り、ちがう種類のピースを10枚、最初に集めましょう。遊び方は三通りで、協力ゲームもあります。",
   "ristiin_saannot": "ボードゲームのルール"
- }
+ },
+ "ui": {
+  "nav_etusivu": "ホーム",
+  "nav_korttipeli": "カードゲーム",
+  "nav_lautapeli": "ボードゲーム",
+  "nav_pelaa": "オンラインでプレイ",
+  "kielivalinta": "言語",
+  "kauppaan": "ショップ",
+  "katso_video": "動画を見る",
+  "video_kieli": {
+   "fi": "フィンランド語",
+   "en": "英語"
+  },
+  "lataa": "ダウンロード",
+  "alaosa_teksti": "Pizza Love® は Merkitysten Oy のゲームです。ゲームはフィンランドでデザインされ、フィンランドで組み立て・梱包されています。",
+  "alaosa_yhteys": "ご質問はこちらまで：",
+  "alaosa_tavaramerkki": "Pizza Love® および Merkitysten® は Merkitysten Oy の登録商標です。",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "資金調達",
+  "ohita": "本文へスキップ",
+  "kauppa_korttipeli": "ショップでカードゲームを見る",
+  "kauppa_lautapeli": "ショップでボードゲームを見る",
+  "kauppa_molemmat": "両方のゲーム"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "KB",
+  "desimaalierotin": "."
+ },
+ "taydennetty": "2026-11-16T09:23:33Z"
 }

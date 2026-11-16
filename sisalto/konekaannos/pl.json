@@ -158,5 +158,34 @@
   "ristiin_otsikko": "Następnie: gra planszowa Pizza Love®",
   "ristiin_teksti": "Ten sam pizzowy świat na planszy: przygotuj ulubione pizze pudełek po pizzy i jako pierwszy zbierz 10 różnych kawałków. Trzy sposoby gry, także kooperacyjnie.",
   "ristiin_saannot": "Zasady gry planszowej"
- }
+ },
+ "ui": {
+  "nav_etusivu": "Strona główna",
+  "nav_korttipeli": "Gra karciana",
+  "nav_lautapeli": "Gra planszowa",
+  "nav_pelaa": "Graj online",
+  "kielivalinta": "Język",
+  "kauppaan": "Sklep",
+  "katso_video": "Obejrzyj wideo",
+  "video_kieli": {
+   "fi": "po fińsku",
+   "en": "po angielsku"
+  },
+  "lataa": "Pobierz",
+  "alaosa_teksti": "Pizza Love® to gra firmy Merkitysten Oy. Gry są projektowane w Finlandii oraz montowane i pakowane w Finlandii.",
+  "alaosa_yhteys": "Pytania? Napisz do nas:",
+  "alaosa_tavaramerkki": "Pizza Love® i Merkitysten® są zarejestrowanymi znakami towarowymi Merkitysten Oy.",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "Zbiórki funduszy",
+  "ohita": "Przejdź do treści",
+  "kauppa_korttipeli": "Gra karciana w sklepie",
+  "kauppa_lautapeli": "Gra planszowa w sklepie",
+  "kauppa_molemmat": "Obie gry"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "KB",
+  "desimaalierotin": ","
+ },
+ "taydennetty": "2026-11-16T09:23:43Z"
 }

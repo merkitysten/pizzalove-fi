@@ -162,5 +162,34 @@
   "ristiin_otsikko": "다음은: Pizza Love® 보드게임",
   "ristiin_teksti": "같은 피자 세상을 게임판에서 만나 보세요. 피자 상자들이 좋아하는 피자를 만들고, 서로 다른 조각 10개를 가장 먼저 모으세요. 협력 게임을 포함해 세 가지 방법으로 할 수 있습니다.",
   "ristiin_saannot": "보드게임 규칙"
- }
+ },
+ "ui": {
+  "nav_etusivu": "홈",
+  "nav_korttipeli": "카드 게임",
+  "nav_lautapeli": "보드 게임",
+  "nav_pelaa": "온라인 플레이",
+  "kielivalinta": "언어",
+  "kauppaan": "상점",
+  "katso_video": "동영상 보기",
+  "video_kieli": {
+   "fi": "핀란드어",
+   "en": "영어"
+  },
+  "lataa": "다운로드",
+  "alaosa_teksti": "Pizza Love®는 Merkitysten Oy의 게임입니다. 게임은 핀란드에서 디자인되었으며 핀란드에서 조립 및 포장됩니다.",
+  "alaosa_yhteys": "문의 사항이 있으신가요? 이메일을 보내 주세요:",
+  "alaosa_tavaramerkki": "Pizza Love® 및 Merkitysten®은 Merkitysten Oy의 등록 상표입니다.",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "모금 활동",
+  "ohita": "본문으로 건너뛰기",
+  "kauppa_korttipeli": "상점에서 카드 게임 보기",
+  "kauppa_lautapeli": "상점에서 보드 게임 보기",
+  "kauppa_molemmat": "두 게임 모두"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "KB",
+  "desimaalierotin": "."
+ },
+ "taydennetty": "2026-11-16T09:23:38Z"
 }
