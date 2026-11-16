@@ -25,21 +25,21 @@
       "n": 3,
       "nimi": "Det är något skumt med fyllningarna.",
       "ohje": "Lägg till ett till talet på tärningen.",
-      "huom": "Kortet kan sparas och spelas av vem som helst.",
+      "huom": "Kortet kan sparas och spelas under vilken spelares tur som helst.",
       "tarkennus": "Spela kortet direkt efter tärningskastet."
     },
     {
       "n": 4,
       "nimi": "Det är något skumt med fyllningarna.",
       "ohje": "Dra av ett från talet på tärningen.",
-      "huom": "Kortet kan sparas och spelas av vem som helst.",
+      "huom": "Kortet kan sparas och spelas under vilken spelares tur som helst.",
       "tarkennus": "Spela kortet direkt efter tärningskastet. Talet kan bli 0, och då flyttas inga fyllningar."
     },
     {
       "n": 5,
       "nimi": "Linjen behöver fyllas på!",
       "ohje": "Kasta tärningen två gånger – fyll på linjen båda gångerna. Pizzor tillagas först efter båda kasten.",
-      "huom": "Kortet kan sparas och spelas av vem som helst.",
+      "huom": "Kortet kan sparas och spelas under vilken spelares tur som helst.",
       "tarkennus": "Den spelare vars tur det är kastar tärningen igen."
     },
     {
@@ -172,7 +172,7 @@
       "n": 27,
       "nimi": "Du har viljestyrka!",
       "ohje": "Du kan ta tillbaka effekten av ett apakort.",
-      "huom": "Kortet kan sparas och spelas av vem som helst.",
+      "huom": "Kortet kan sparas och spelas under vilken spelares tur som helst.",
       "tarkennus": "Spela kortet direkt när någon lyfter ett apakort. Det kortets effekt tas tillbaka."
     },
     {
