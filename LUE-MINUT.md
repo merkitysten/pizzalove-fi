@@ -39,8 +39,21 @@ ohjausten päälle — ja uusi koodi ei olisi näkynyt missään.
 
 1. Kopioi `sisalto/en.json` nimelle `sisalto/xx.json` ja käännä arvot (avaimia ei muuteta).
 2. Lisää `xx` listaan `KIELET` tiedoston `rakenna.py` alussa.
-3. Peli: lisää kielen lohko `../pizzaparty/kielet.js`:ään (ohje tiedoston alussa).
-4. `python3 rakenna.py`. Kielivalikko päivittyy itsestään.
+3. **Lippu:** kopioi flag-icons 7.2.3:n `flags/1x1/<maa>.svg` nimelle
+   `julkinen/kuvat/liput/xx.svg` ja sävytä valkoinen (`#fff` → `#f1f0f0`), kuten
+   `julkinen/kuvat/liput/LUE-MINUT.md` kertoo. Maa on **kielen tavallisimman maan**,
+   ei kohdeyleisön — äläkä tee murteelle poikkeusta (Marko 16.11.2026).
+4. Peli: lisää kielen lohko `../pizzaparty/kielet.js`:ään (ohje tiedoston alussa).
+5. `python3 rakenna.py`. Kielivalikko päivittyy itsestään.
+
+⚠️ **Askel 3 koskee vain käsin lisättyä kieltä.** Konekäännöskieli saa lipun
+itsestään: `.github/workflows/konekaannos.yml` noutaa flag-iconsin (`npm pack`),
+antaa sen `LIPUT_LAHDE`-muuttujassa `tyokalut/kaanna.py`:lle, jonka `lippu()`
+kirjoittaa `julkinen/kuvat/liput/<koodi>.svg`:n, ja `konekaannokset-haara.sh`
+committoi sen samaan ajoon. Markolta ei vaadita mitään.
+
+📐 Jos lippua ei ole, se **näkyy puutteena eikä arvauksena**: valikossa on tyhjä
+20 px:n paikka ja pelkkä kielen nimi, koteloarkissa pelkkä kielikoodi.
 
 ## Peli tulee pizzapartysta (11.11.2026)
 
