@@ -349,7 +349,13 @@ def lippu(koodi, kirjoitus, alue):
     '''Kielen lippu koteloarkkiin (Marko 16.11.2026) flag-icons-kirjastosta (MIT):
     alueen (kielen tavallisimman maan) 1x1-lippu, valkoinen sävytettynä #f1f0f0.
     Ei lippua, jos alue ei ole maa (es-419) tai valinta olisi poliittinen
-    (perinteinen kiina). Silloin arkissa on pelkkä kielikoodi.'''
+    (perinteinen kiina). Silloin arkissa on pelkkä kielikoodi.
+
+    ⚠️ Lippu on KIELEN tavallisimman maan lippu, ei kohdeyleisön maan, eikä
+    murteelle tehdä poikkeusta (Marko 16.11.2026: «Ruotsi on ruotsi, vaikka se
+    olisi suomenruotsi. Muuten olemme kaikkien eri kielimurteiden kanssa
+    helisemässä.»). Älä siis lisää tähän kielikohtaisia poikkeuksia; ks.
+    julkinen/kuvat/liput/LUE-MINUT.md.'''
     kohde = os.path.join(TANNE, 'julkinen', 'kuvat', 'liput', koodi + '.svg')
     if os.path.exists(kohde):
         return
