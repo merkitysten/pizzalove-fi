@@ -1,0 +1,162 @@
+{
+ "kieli": "pl",
+ "nimi": "polski",
+ "nimi_en": "Polish",
+ "konekaannos": true,
+ "tarkastettu": false,
+ "malli": "claude-opus-5-5",
+ "luotu": "2026-11-16T07:19:15Z",
+ "lataa_kielella": "po polsku",
+ "kielet": {
+  "alaotsikko": "Trzy gry jedną talią",
+  "iskulause": "KAŻDA PIZZA SIĘ LICZY",
+  "bruno_huomio": "*W zasadach z 2025 roku: Pizza Bruno.",
+  "hyva_tietaa": "Dobrze wiedzieć",
+  "kaavio": [
+   "Gracz A",
+   "Gracz B",
+   "Stos pizz",
+   "Magazyn",
+   "Stos do dobierania",
+   "Pizza do wymiany"
+  ],
+  "vaihto_luku": "Wymiana kart z magazynu",
+  "vaihto_otsikko": "Przykład wymiany",
+  "vaihto": "Gracz B wymienia swoją 4 na 6 i 2 gracza A, ponieważ 4 = 6 – 2. Teraz B może przygotować swoją pizzę.",
+  "qr_teksti": "Zasady i<br>filmy w internecie",
+  "videot": "Więcej informacji i filmów na stronie",
+  "oikeudet": "Pizza Love® i Merkitysten® są zarejestrowanymi znakami towarowymi Merkitysten Oy. Wszelkie prawa zastrzeżone.",
+  "tiedosto": "pizza-love-card-game-rules-pl.pdf",
+  "osoite": "https://pizzalove.fi/en/card-game",
+  "konekaannos_merkinta": "Tłumaczenie maszynowe – jeszcze niesprawdzone przez rodzimego użytkownika języka."
+ },
+ "korttipeli": {
+  "title": "Gra karciana Pizza Love® – zasady i filmy",
+  "kuvaus": "Zasady i filmy instruktażowe do gry karcianej Pizza Love®: Pizza Party, Pizza Basso i Pizza Love.",
+  "h1": "Gra karciana Pizza Love®",
+  "ingressi": "Trzy gry jedną talią. Zacznij od Pizza Party – najszybciej się jej nauczysz.",
+  "tiedot": [
+   "2–5 graczy",
+   "6+",
+   "42 karty pizzy",
+   "58 kart dodatków",
+   "5–15 min"
+  ],
+  "hyppy": {
+   "perusteet": "Jak przygotować pizzę",
+   "muodot": "Trzy sposoby gry",
+   "lataa": "Zasady w PDF"
+  },
+  "perusteet_otsikko": "Jak przygotować pizzę",
+  "perusteet_ingressi": "Wszystkie trzy gry opierają się na tej samej podstawowej zasadzie. Naucz się jej najpierw.",
+  "pizzakortit_otsikko": "Karty pizzy",
+  "pizzakortit": "Na karcie pizzy jest pizza z jednym do czterech różnych dodatków. W rogach karty jest wartość pizzy (1–10). W grze jest 10 pizz z sercem o wartości 10.",
+  "taytekortit_otsikko": "Karty dodatków",
+  "taytekortit": "Na karcie dodatku jest jeden dodatek. W rogach karty jest wartość dodatku (1–10). 3 dodatki fantazyjne (X) mogą być dowolnym dodatkiem.",
+  "perussaanto_otsikko": "Podstawowa zasada",
+  "perussaanto": "Karty pizzy zawsze leżą na stole. Przygotowuje się je kartami dodatków z ręki.",
+  "arvo_otsikko": "Wartość pizzy",
+  "arvo": "Przygotuj pizzę własnymi kartami dodatków i powiedz na głos działanie, które daje wartość pizzy. Wszystkie działania są dozwolone i można je łączyć, jeśli wynik jest równy wartości pizzy. Na przykład <b>5 = 10 : 2</b>.",
+  "laskut": {
+   "otsikko": "Każde działanie się liczy",
+   "html": "Oprócz dodawania, odejmowania, mnożenia i dzielenia możesz też używać potęg, logarytmów lub silni, na przykład <b>5 = 2² + 1</b> lub <b>5 = 3! – 1</b>. Każdy liczy na swoim poziomie.",
+   "paperi": "<p>Każdy liczy na swoim poziomie, na przykład tak:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Sprytne sztuczki:</b> pomnóż przez jeden albo podziel liczbę przez nią samą, a dostaniesz jeden (2 : 2 = 1).</p>"
+  },
+  "esimerkki_otsikko": "Przykład: pizza z pomidorem i ananasem",
+  "esimerkki_alt": "Karta pizzy o wartości 5 oraz karty dodatków 10 i 2: 10 : 2 = 5",
+  "esimerkki": "Wartość pizzy to 5. Możesz ją przygotować dowolnymi kartami dodatków, jeśli wynik działania to 5: na przykład 4 + 1, 6 – 1, 2 + 3 albo 10 : 2.",
+  "tavat_otsikko": "Dwa sposoby przygotowania pizzy",
+  "helpompi_otsikko": "Łatwiejszy sposób",
+  "helpompi": "Pizzę można przygotować dowolną liczbą kart dodatków, nawet jedną. Używaj tego sposobu, gdy grasz w Pizza Party pierwszy raz albo z małym dzieckiem.",
+  "basso_tapa_otsikko": "Sposób małpki Basso",
+  "basso_tapa": "Użyj tylu <b>różnych dodatków</b>, ile dodatków ma pizza. Kart może być więcej: pizzę z pomidorem i ananasem (wartość 5) możesz przygotować na przykład dwoma pomidorami i jedną oliwką, 2 + 2 + 1 = 5, bo są to dwa różne rodzaje dodatków. Używaj tego sposobu w Pizza Basso albo jako dodatkowego wyzwania w Pizza Party.<br><span class=\"pieni\">W drukowanych zasadach nadal jest napisane „tyle kart dodatków, ile dodatków ma pizza”. Nowy sposób daje grze więcej możliwości.</span>",
+  "huomio_bruno": "<b>Bruno czy Basso?</b> Małpka w grze nazywa się teraz Basso. W starszych zasadach i filmach nazywa się Bruno, a drugi wariant gry to Pizza Bruno. Zasady są takie same.",
+  "portaat_otsikko": "Trzy sposoby przygotowania pizzy",
+  "portaat_ingressi": "Sposoby różnią się tym, jakich kart dodatków możesz użyć. We wszystkich przykładach jest ta sama pizza: z pomidorem i ananasem, wartość 5.",
+  "portaat": [
+   {
+    "otsikko": "1. Dowolne dodatki",
+    "pelit": "#1 Pizza Party",
+    "html": "<p>Użyj dowolnych kart dodatków, ile chcesz – <b>nawet tylko jednej</b>. Liczy się tylko wartość.</p>",
+    "esimerkit": [
+     "5 = 5",
+     "5 = 4 + 1",
+     "5 = 7 + 6 - 8"
+    ]
+   },
+   {
+    "otsikko": "2. Sposób małpki Basso",
+    "pelit": "#1 Pizza Party (dodatkowe wyzwanie) · #2 Pizza Basso",
+    "html": "<p>Użyj tylu <b>różnych</b> dodatków, ile ma pizza. Nie muszą to być dodatki tej pizzy. Kart może być więcej, na przykład dwie takie same.</p><p>Wypróbuj to także w <b>#1 Pizza Party</b>: gra staje się zabawniejsza, choć trochę trudniejsza.</p><p>Pizza z pomidorem i ananasem ma dwa dodatki, więc jedna karta nie wystarczy.</p>",
+    "esimerkit": [
+     "5 = 10 : 2",
+     "5 = 2 + 2 + 1"
+    ]
+   },
+   {
+    "otsikko": "3. Właściwe dodatki",
+    "pelit": "#3 Pizza Love",
+    "html": "<p>Przygotuj pizzę <b>dokładnie z jej własnymi dodatkami</b>.</p><p>Do pizzy z pomidorem i ananasem potrzebujesz pomidora i ananasa.</p>",
+    "esimerkit": [
+     "5 = 2 + 3"
+    ]
+   }
+  ],
+  "tieto": "<b>Bruno czy Basso?</b> W zasadach wydrukowanych w 2025 roku i w filmach małpka nazywa się Bruno (a druga gra Pizza Bruno). Sposób małpki Basso mówi teraz o dodatkach zamiast o kartach dodatków, co daje grze dużo więcej możliwości.",
+  "muodot_otsikko": "Trzy sposoby gry",
+  "muodot_ingressi": "Otwórz wariant gry, aby zobaczyć jego zasady i filmy.",
+  "videot_otsikko": "Filmy",
+  "videot": {
+   "party_en": "Pizza Party – jak grać",
+   "party_fi": "Pizza Party – jak grać",
+   "party_helpompi": "Łatwiejszy sposób gry",
+   "party_helpottaminen": "Jak ułatwić grę",
+   "party_ei_valmistu": "Gdy nikt nie może przygotować pizzy",
+   "party_basso_tapa": "Sposób małpki Basso",
+   "basso_fi": "Pizza Basso – jak grać"
+  },
+  "muodot": [
+   {
+    "avain": "party",
+    "numero": "#1",
+    "nimi": "Pizza Party",
+    "kuvaus": "Najłatwiejsza na początek, szybka i dynamiczna · ok. 5 min",
+    "html": "<h3>Cel gry</h3><p>Gracze przygotowują pizze na wyścigi. Wygrywa ten, kto przygotuje najwięcej pizz, zanim skończą się karty pizzy lub karty dodatków.</p><h3>Przygotowanie gry</h3><ol class=\"lista\"><li>Potasuj karty pizzy i połóż je w stosie w zasięgu wszystkich graczy.</li><li>Potasuj karty dodatków i rozdaj każdemu graczowi 5 kart. Pozostałe karty tworzą stos do dobierania. Gracze mogą oglądać swoje karty.</li></ol><h3>Początek gry</h3><p>Odkryj pierwszą kartę pizzy obok stosu. Wszyscy gracze od razu próbują przygotować tę pizzę swoimi kartami dodatków.</p><h3>Przebieg gry</h3><ul class=\"lista\"><li>Gra toczy się bez tur: wszyscy próbują przygotowywać pizze jednocześnie.</li><li>Pizzę przygotowujesz, uderzając swoimi kartami dodatków w pizzę na stole i mówiąc działanie na głos. Najszybszy gracz bierze kartę pizzy i kładzie ją przed sobą.</li><li>Jeśli kilku graczy uderzy kartami jednocześnie, pizzę dostaje gracz, którego karty leżą na samym dole.</li><li>Zużyte karty dodatków usuwa się z gry. Dobieraj nowe karty, aż znów będziesz mieć 5 kart w ręce.</li><li>Od razu odkryj nową kartę pizzy. Kontynuuj, aż skończą się karty pizzy lub karty dodatków i nikt nie będzie mógł już przygotować pizzy.</li></ul><h3>Gdy nie da się przygotować pizzy</h3><p>Jeśli nikt nie może lub nie chce przygotować pizzy leżącej na stole, odkryj na niej nową kartę pizzy. Gracz, który przygotuje następną pizzę, bierze wszystkie pizze leżące na stole.</p><h3>Punktacja i zwycięstwo</h3><p>Pizza daje tyle punktów, ile ma dodatków. Pizza z sercem daje jeden dodatkowy punkt. Na przykład pizza z pomidorem i ananasem = 2 punkty.</p><p>Rundę wygrywa gracz z największą liczbą punktów. Ustalcie, ile rund gracie – na przykład ten, kto pierwszy wygra 3 lub 5 rund, wygrywa całą grę.</p><h3>Spokojniejsza Pizza Party</h3><p>Możecie też grać w turach, aby każdy miał czas na zastanowienie się w swojej turze.</p><h3>Zasady opcjonalne</h3><p>Możecie ustalić zasady, które ograniczają działania, na przykład:</p><ul class=\"lista\"><li>gramy tylko z dodawaniem i odejmowaniem</li><li>w każdej pizzy trzeba użyć mnożenia lub dzielenia.</li></ul>",
+    "kotisaanto": {
+     "otsikko": "Zasady opcjonalne",
+     "html": "<p><b>Punktacja:</b> przed grą ustalcie, czy liczycie punkty inaczej.</p><ul class=\"lista\"><li><b>Łatwiej:</b> każda pizza = 1 punkt, +1 za pizzę z sercem.</li><li><b>Trudniej:</b> pizza = jej wartość (1–10), +1 za pizzę z sercem.</li></ul>",
+     "siirra": "Zasady opcjonalne",
+     "siirra_alku": "<p><b>Działania:</b> możecie je ograniczyć, na przykład:</p>"
+    }
+   },
+   {
+    "avain": "basso",
+    "numero": "#2",
+    "nimi": "Pizza Basso",
+    "kuvaus": "Spokojna i emocjonująca · ok. 7 min",
+    "html": "<h3>Cel gry</h3><p>Gracze próbują opróżnić rękę, czyli pozbyć się wszystkich kart dodatków z ręki. Kto zrobi to pierwszy, wygrywa rundę.</p><p><b>Uwaga:</b> Pizze przygotowuje się sposobem małpki Basso.</p><h3>Przygotowanie gry</h3><ol class=\"lista\"><li>Potasuj karty pizzy i połóż je w stosie w zasięgu wszystkich graczy.</li><li>Potasuj karty dodatków i rozdaj każdemu graczowi 7 kart. Pozostałe karty tworzą stos do dobierania. Gracze mogą oglądać swoje karty.</li></ol><h3>Początek gry</h3><p>Odkryj pierwszą kartę pizzy obok stosu. Zaczyna gracz, który ostatnio jadł pizzę.</p><h3>Przebieg gry</h3><p>Gracze w swojej turze próbują przygotować pizzę leżącą na stole swoimi kartami dodatków.</p><p><b>A) Jeśli ci się uda:</b> usuń zużyte karty dodatków z gry i odkryj nową kartę pizzy ze stosu na poprzedniej. Tura przechodzi na następnego gracza.</p><p><b>B) Jeśli nie możesz lub nie chcesz przygotować pizzy:</b> dobierz jedną kartę dodatku. Tura przechodzi na następnego gracza.</p><p><b>C) Ostatnia karta w ręce:</b> gdy zostanie ci tylko jedna karta dodatku, zachowuj się jak głodna małpka Basso i krzyknij: „PIZZAAA!”</p><h3>Gdy skończą się karty dodatków</h3><p>Potasuj usunięte z gry karty dodatków, utwórz z nich nowy stos do dobierania i kontynuuj.</p><h3>Punktacja i zwycięstwo</h3><p>Rundę wygrywa gracz, który pierwszy pozbędzie się wszystkich swoich kart dodatków. Zsumuj wartości kart, które zostały w rękach pozostałych graczy – ta suma to punkty zwycięzcy. Zwykły dodatek liczy się według swojej wartości (1–10), dodatek fantazyjny to 20.</p><p>Kto pierwszy zdobędzie 100 punktów, wygrywa i otrzymuje tytuł <b>Pizza Basso – prawdziwa pizzowa małpa</b>.</p><h3>Krótsza gra</h3><p>Możecie ustalić, że gra kończy się na przykład przy 30 lub 50 punktach albo że całą grę wygrywa ten, kto pierwszy wygra 3 lub 5 rund.</p>",
+    "kotisaanto": {
+     "otsikko": "Zasady opcjonalne",
+     "html": "<p><b>Wszyscy zdobywają punkty:</b> każdy zatrzymuje przygotowane przez siebie pizze i na koniec rundy liczy swoje punkty: pizza = jej wartość (1–10), +1 za pizzę z sercem. Dobre do gry z małymi dziećmi.</p>",
+     "siirra": "Krótsza gra",
+     "siirra_alku": "<p><b>Krótsza gra:</b> możecie ustalić, że gra kończy się na przykład przy 30 lub 50 punktach albo że całą grę wygrywa ten, kto pierwszy wygra 3 lub 5 rund.</p>"
+    }
+   },
+   {
+    "avain": "love",
+    "numero": "#3",
+    "nimi": "Pizza Love",
+    "kuvaus": "Najbardziej taktyczna i wymagająca, 8+ · ok. 15 min",
+    "html": "<h3>Cel gry</h3><p>Gracze próbują przygotować wszystkie swoje pizze przed innymi. Kto zrobi to pierwszy, wygrywa.</p><p><b>Uwaga:</b> Teraz liczą się dodatki: pizzę można przygotować tylko z właściwymi dodatkami.</p><h3>Przygotowanie gry</h3><ol class=\"lista\"><li>Potasuj karty pizzy i rozdaj każdemu graczowi 8 kart. Gracze kładą je przed sobą w zakrytym stosie i odkrywają wierzchnią kartę.</li><li>Połóż jedną kartę pizzy odkrytą na środku stołu. To pizza do wymiany. Pozostałe karty pizzy usuń z gry.</li><li>Potasuj karty dodatków i połóż je na stole jako stos do dobierania.</li></ol><h3>Magazyn</h3><p>Każdy gracz ma 4 miejsca w magazynie. Karty dodatków w magazynie leżą odkryte. Możesz ich używać do własnych pizz tak samo jak kart z ręki, a inni gracze mogą ich używać do wymian.</p><h3>Początek gry</h3><p>Zaczyna gracz, który ostatnio jadł pizzę. Dobiera on 5 kart dodatków na rękę.</p><h3>Przebieg gry</h3><ol class=\"lista\"><li>Dobieraj karty dodatków, aż będziesz mieć 5 kart w ręce.</li><li>Spróbuj przygotować wierzchnią pizzę ze swojego stosu kartami z ręki i z magazynu.</li><li>Możesz wymieniać karty ze swojego magazynu na karty z magazynu innego gracza za pomocą działań.</li><li>Raz w turze możesz zamienić miejscami wierzchnią pizzę ze swojego stosu i pizzę do wymiany: twoja pizza zostaje na środku jako nowa pizza do wymiany, a pizza do wymiany trafia na wierzch twojego stosu. Otrzymaną pizzę możesz od razu przygotować.</li><li>Na koniec tury połóż jedną kartę dodatku z ręki odkrytą w swoim magazynie.</li></ol><p><b>Uwaga:</b> Jeśli pozbędziesz się wszystkich kart z ręki, zanim położysz kartę w magazynie, dobierz 5 nowych kart i kontynuuj turę.</p><h3>Przygotowanie pizzy</h3><p>Gdy masz potrzebne dodatki w ręce i/lub w magazynie, przygotuj pizzę. Kartę pizzy i zużyte karty dodatków usuwa się z gry. Odkryj następną kartę pizzy ze swojego stosu – jeśli masz do niej dodatki, możesz ją od razu przygotować.</p><h3>Pizza z sercem</h3><p>Gdy przygotujesz pizzę z sercem, daj swoją następną kartę pizzy (bez patrzenia na nią) innemu graczowi. Kładzie on ją na spód swojego stosu.</p><h3>Wymiana kart z magazynu</h3><p>Zdobądź potrzebne dodatki, wymieniając karty ze swojego magazynu na karty z magazynu innego gracza.</p><ul class=\"lista\"><li>Z kart, które dajesz, i z kart, które dostajesz, musi wyjść ta sama liczba, gdy liczysz. Wszystkie działania są dozwolone.</li><li>Drugi gracz musi zgodzić się na wymianę.</li><li>Otrzymane karty połóż w swoim magazynie.</li><li>W swojej turze możesz zrobić kilka wymian. Każda wymiana odbywa się zawsze z jednym innym graczem.</li><li>Wymieniać można tylko wierzchnie karty.</li></ul><h3>Zapełnianie magazynu</h3><ul class=\"lista\"><li>Miejsca w magazynie można zapełniać w dowolnej kolejności.</li><li>Karty można układać jedna na drugiej. Używać lub wymieniać można tylko wierzchnią kartę, więc układając karty jedna na drugiej, możesz chronić kartę przed wymianą. Wtedy jest ona zablokowana także dla ciebie.</li><li>Kart w magazynie nie wolno przenosić.</li></ul><h3>Zwycięstwo</h3><p>Gra kończy się, gdy jeden z graczy przygotuje wszystkie pizze ze swojego stosu.</p>"
+   }
+  ],
+  "lataa_otsikko": "Zasady w PDF",
+  "lataa_teksti": "Wszystkie trzy warianty gry po polsku – jeden dwustronny arkusz, który po złożeniu mieści się w pudełku z grą.",
+  "lataa_tiedosto": "Zasady gry karcianej (po polsku)",
+  "pelaa_otsikko": "Pizza Party i Pizza Basso",
+  "pelaa_teksti": "W obie gry możesz też grać w przeglądarce. Wypróbuj je przed pierwszą grą albo zagraj ze znajomymi na własnych telefonach.",
+  "ristiin_otsikko": "Następnie: gra planszowa Pizza Love®",
+  "ristiin_teksti": "Ten sam pizzowy świat na planszy: przygotuj ulubione pizze pudełek po pizzy i jako pierwszy zbierz 10 różnych kawałków. Trzy sposoby gry, także kooperacyjnie.",
+  "ristiin_saannot": "Zasady gry planszowej"
+ }
+}
