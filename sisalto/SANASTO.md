@@ -10,7 +10,7 @@ Sääntö: **yksi termi yhdelle asialle koko ohjeessa.** Jos termi muuttuu, se m
 
 | fi | en | sv | de | fr | es | nl | sk |
 |---|---|---|---|---|---|---|---|
-| sinä; ryhmälle te (sopikaa, voitte) | you | du; ni ryhmälle | du; ihr ryhmälle | tu; vous ryhmälle | tú; vosotros ryhmälle (Espanjan espanja) | je; jullie ryhmälle | vy (teitittely) koko ohjeessa |
+| sinä; ryhmälle te (sopikaa, voitte) | you | du; ni ryhmälle | du; ihr ryhmälle | tu; vous ryhmälle | tú; vosotros ryhmälle (Espanjan espanja) | je; jullie ryhmälle | vy koko ohjeessa (slovakin sääntöjen vakiotapa, ks. alla) |
 
 Samassa virkkeessä ei vaihdeta yksikköä ja monikkoa (korjattu 16.11.: de «Mische … und spielt», fr «Mélange … et continuez», es «Baraja … y seguid»).
 
@@ -41,7 +41,8 @@ Samassa virkkeessä ei vaihdeta yksikköä ja monikkoa (korjattu 16.11.: de «Mi
 | kierros | round | omgång | Runde | manche | ronda | ronde | kolo |
 | peli (koko peli) | game | spel | Spiel | partie | partida | spel | hra |
 | vuoro | turn | tur | Zug | tour | turno | beurt | ťah |
-| laskutoimitus | calculation | räkneoperation / räknesätt | Rechnung / Rechenart | calcul | cálculo | berekening ⚠️ (myös «som») | výpočet |
+| laskutoimitus | calculation | räkneoperation / räknesätt | Rechnung / Rechenart | calcul | cálculo | berekening (EI «som») | výpočet |
+| laskun tulos | result | resultat | Ergebnis | résultat | resultado | uitkomst | výsledok |
 | valmistaa pizza | make a pizza | tillaga en pizza | eine Pizza zubereiten | préparer une pizza | preparar una pizza | een pizza maken | pripraviť pizzu |
 | lyödä kortit (Party) | slap | slå ner | schlagen | plaquer | poner de golpe | slaan | plesnúť |
 | Valinnaiset säännöt | Optional rules | Valfria regler | Zusatzregeln | Règles optionnelles | Reglas opcionales | Optionele regels | Voliteľné pravidlá |
@@ -58,9 +59,13 @@ Pelimuotojen numerot #1, #2, #3 säilyvät.
 | Pizza Basso – todellinen pizza-apina | Pizza Basso – the true pizza monkey | Pizza Basso – den sanna pizzaapan | Pizza Basso – der wahre Pizzaaffe | Pizza Basso – le vrai singe de la pizza | Pizza Basso – el auténtico mono pizzero | Pizza Basso – de echte pizza-aap | Pizza Basso – skutočná pizzová opica |
 | JOKAINEN PIZZA LASKETAAN | EVERY PIZZA COUNTS | VARJE PIZZA RÄKNAS | JEDE PIZZA ZÄHLT | CHAQUE PIZZA COMPTE | CADA PIZZA CUENTA | ELKE PIZZA TELT | KAŽDÁ PIZZA SA POČÍTA |
 
+## Ratkaistut kysymykset (16.11.2026, lähteinä julkaistut pelisäännöt ja sanakirjat)
+
+- **sk, puhuttelu: vy (vykanie) on oikein.** Slovakinkieliset pelisäännöt puhuttelevat pelaajaa monikon 2. persoonalla tai passiivilla. Myös lapsille ja perheille tarkoitetuissa peleissä käytetään näin, ei «ty»-muotoa. Tarkistetut ohjeet: IELLO Solitaire, Koi-Koi ja Scopa (SK), Bluff Pirate (SK, 6+) ja Lentiamo «Hracie karty» (SK, passiivi). Vertailuksi tšekinkielinen Dobble (6+, vykání) ja Dobble Catan. Yhdessäkään ei ollut tykanie-muotoa. → Pidetään «vy».
+- **nl, laskutoimitus: «berekening».** «Som» tarkoittaa sanakirjoissa yhteenlaskun tulosta (Wiktionary NL: «resultaat van een optelling»), ja koulukielessä se tarkoittaa tehtävää («vraagstuk waarbij je moet rekenen», Muiswerk). Hollanninkielisissä lasten laskupeleissä «som» on painettu tehtäväkortti ja «uitkomst» on vastaus (Ravensburger «Eerste rekenen»). Itse laskemisesta käytetään sanaa «rekenen/berekening», ja laskutoimituksista sanoja «basisbewerkingen/rekenoperaties» («Cijferstorm», «Primo Calculino»). Pelissämme lasku voi olla jakolasku (10 : 2), joten «som» olisi harhaanjohtava. → Laskutoimitus on aina «berekening», tulos on «uitkomst», ja «som» jätetään sille, mitä se tarkoittaa: yhteissummalle (apinakortit, Topping Ten). Poikkeus: koulukielen yhdyssanat «plus-/min-/keer-/deelsom» (yhteen-, vähennys-, kerto- ja jakolaskutehtävä) saavat jäädä valinnaisiin sääntöihin («alleen spelen met plus- en minsommen»), koska lapset tuntevat ne koulusta.
+
 ## Avoimet kysymykset natiivitarkistajille
 
-- **nl:** laskutoimituksesta käytetään sekä «berekening» että «som». Yhtenäistettävä.
-- **sk:** koko ohje teitittelee (vy). Onko se lasten pelissä luonteva, vai tykkääkö slovakkilainen lukija sinuttelusta (ty)?
 - **es:** käytössä Espanjan espanja (vosotros). Latinalaiseen Amerikkaan tarvittaisiin oma versio (ustedes).
 - **de:** «Zusatzregeln» = valinnaiset säännöt. Vaihtoehto «Optionale Regeln».
+- **nl:** onko tekstissä riittävästi flaamia, vai tarvitaanko Belgiaan oma versio? Belgian jälleenmyyjät ovat hollanninkielisiä.
