@@ -86,6 +86,17 @@ jobs:
         if: inputs.kieli != 'kaikki'
         run: python3 tyokalut/kaanna.py "$KIELI"
 
+      # ⚠️ KÄÄNNÖS TALTEEN HETI, ennen raskaita askeleita.
+      # 📐 Mitattu 16.11.2026: hindin käännös ONNISTUI ja läpäisi tarkistuksen,
+      # mutta ajo kaatui vasta arkin teossa — ja koska tallennus oli vasta sen
+      # jälkeen, valmis käännös katosi kokonaan. Hinta noin dollari, tulos nolla,
+      # ja seuraava yritys maksaa saman uudelleen. Nyt JSON menee haaraan heti;
+      # arkki ja PDF lisätään samaan haaraan ajon lopuksi. Jos loppu kaatuu,
+      # käännös on silti tallessa, ja seuraava «kaikki»-ajo tekee arkin ilmaiseksi.
+      - name: Tallenna käännös heti (ennen arkkeja)
+        if: steps.kaannos.outputs.uusi == '1'
+        run: bash tyokalut/konekaannokset-haara.sh tallenna "${{ steps.kaannos.outputs.koodi }}" "$KIELI (käännös talteen)"
+
       # Aiemmista käännöksistä puuttuvat myöhemmin lisätyt osat (valikko ja napit
       # «ui», tiedostokoko «koko», sekä puuttuva lippu). Ei uusi käännös eikä
       # kuluta päiväkattoa; lippu ei vaadi API-kutsua lainkaan.
