@@ -251,19 +251,27 @@
      hiljaa 25 minuuttiin asti — jos sivu ilmestyy myöhemmin, linkki tulee
      silti näkyviin. Ei palvelinmuutosta: palvelin ei tiedä ajon tilaa. */
   var KYSELYVALI = 30000, LUOVUTUS = 10 * 60 * 1000, LOPETUS = 25 * 60 * 1000;
-  function pyyda(k, tila) {
+
+  /* Pelkkä kysely, ei uutta pyyntöä. Omana funktionaan, jotta sivun lataus voi
+     jatkaa kesken jäänyttä odotusta käynnistämättä toista ajoa. */
+  function seuraa(k, alku, tila) {
     var sivu = SIVU.replace('%s', k), kerrottu = false;
-    function odota(alku) {
+    function odota() {
       fetch(sivu, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
         if (r.ok) return tila('valmis', sivu);
-        jatka(alku);
-      }).catch(function () { jatka(alku); });
+        jatka();
+      }).catch(function () { jatka(); });
     }
-    function jatka(alku) {
+    function jatka() {
       var kulunut = Date.now() - alku;
       if (kulunut >= LUOVUTUS && !kerrottu) { kerrottu = true; tila('virhe', sivu); }
-      if (kulunut < LOPETUS) setTimeout(function () { odota(alku); }, KYSELYVALI);
+      if (kulunut < LOPETUS) setTimeout(odota, KYSELYVALI);
     }
+    odota();
+  }
+
+  function pyyda(k, tila) {
+    var sivu = SIVU.replace('%s', k);
     fetch(osoite, { method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ kieli: k }) })
       .then(function (r) { return r.json(); })
@@ -271,9 +279,34 @@
         if (v.tila === 'valmis') return tila('valmis', sivu);
         if (v.tila !== 'aloitettu' && v.tila !== 'tekeillä') throw new Error(v.virhe || 'virhe');
         tila('tekeillä', sivu);
-        odota(Date.now());
+        pyydetytLisaa(k);
+        seuraa(k, Date.now(), tila);
       })
       .catch(function () { tila('virhe', sivu); });
+  }
+
+  /* ⚠️ Oma pyyntö muistiin, jotta SIVUN LATAUS ei unohda sitä.
+     🔵 Marko 16.11.2026: «Laitoin hindin jonoon, mutta ei tämä minun selain
+     ainakaan sitä nyt tiedä, että se on työn alla.»
+     📐 Syy oli, että pyyntö eli vain sen sivunlatauksen muistissa. Palvelin
+     tietää asian (ja kertoo sen muillekin, kun uusi kaannospyynto.php on
+     ladattu), mutta pyytäjän oma selain unohti sen heti.
+     Sama localStorage kuin omissa kielissä: ei evästettä, ei palvelinta, ei
+     lähde mihinkään. Vanhenee itsestään, koska odotus loppuu joka tapauksessa
+     LOPETUS-rajaan. */
+  var PYYDETYT_AVAIN = 'pizzalove.pyydetyt';
+  function pyydetytLue() {
+    try { return JSON.parse(localStorage.getItem(PYYDETYT_AVAIN) || '{}') || {}; }
+    catch (_) { return {}; }
+  }
+  function pyydetytKirjoita(p) {
+    try { localStorage.setItem(PYYDETYT_AVAIN, JSON.stringify(p)); } catch (_) {}
+  }
+  function pyydetytLisaa(k) {
+    var p = pyydetytLue(); p[k] = Date.now(); pyydetytKirjoita(p);
+  }
+  function pyydetytPoista(k) {
+    var p = pyydetytLue(); delete p[k]; pyydetytKirjoita(p);
   }
 
   /* ?pyynto=xx: Marko näkee bannerin ja hakemiston ehdotuksen omalla
@@ -316,6 +349,7 @@
           a.textContent = korvaa(T.avaaSaannot, n);
           kappale.append(a, ' ' + T.kone);
           nappi.remove();
+          pyydetytPoista(k);
           valmisIlmoitus(k, n, sivu);
         } else if (mita === 'tekeillä') {
           kappale.textContent = korvaa(T.tekeilla, n);
@@ -421,6 +455,31 @@
      koskaan näkyviin. Modaalin taustalevy peittää ilmoituksen sillä aikaa kun
      valitsin on auki, ja se paljastuu itsestään kun valitsin suljetaan — ilman
      yhtään tapahtumankuuntelijaa, jonka varaan laskea.
+
+  /* Kesken jäänyt odotus jatkuu sivun latauksen yli: ilman tätä lukija ei saisi
+     tietää valmistumisesta, jos hän vaihtoi sivua kolmen minuutin aikana.
+     ⚠️ seuraa(), ei pyyda(): uutta ajoa EI käynnistetä. */
+  (function () {
+    var p = pyydetytLue(), muuttui = false;
+    for (var k in p) {
+      if (!kelpaa(k) || olemassa[k] || Date.now() - p[k] > LOPETUS) {
+        delete p[k]; muuttui = true; continue;
+      }
+      (function (koodi, alku) {
+        var n = nimi(koodi);
+        seuraa(koodi, alku, function (mita, sivu) {
+          /* Vain valmistuminen kerrotaan. Epäonnistumisesta ei pompata
+             ilmoitusta satunnaisella sivunlatauksella: lukija on jo nähnyt
+             sen kerran, ja muistiinpano vanhenee itsestään. */
+          if (mita !== 'valmis') return;
+          pyydetytPoista(koodi);
+          if (omat.indexOf(koodi) < 0) { omat.push(koodi); omatKirjoita(omat); }
+          valmisIlmoitus(koodi, n, sivu);
+        });
+      })(k, p[k]);
+    }
+    if (muuttui) pyydetytKirjoita(p);
+  })();
 
   /* ------------------------------------------------------------- hakemisto */
   var avaa = painike;
@@ -551,6 +610,7 @@
         /* Pyydetty kieli näkyy jatkossa lukijan omassa valikossa: hän pyysi
            sitä itse, joten sitä ei tarvitse erikseen käydä valitsemassa. */
         if (omat.indexOf(k) < 0) { omat.push(k); omatKirjoita(omat); }
+        pyydetytPoista(k);
         valmisIlmoitus(k, n, sivu);
       } else if (mita === 'tekeillä') {
         tila.textContent = korvaa(T.tekeilla, n);
@@ -602,6 +662,14 @@
       });
       piirra(data);
       merkitseTyonAlla();
+      /* Omat kesken olevat pyynnöt näkyviin heti, ilman palvelinta: lukijan oma
+         selain tietää ne, vaikka uusi kaannospyynto.php ei vielä olisi
+         palvelimella. */
+      var omatPyynnot = pyydetytLue();
+      for (var kk in omatPyynnot) {
+        var nap = lista.querySelector('button[data-k="' + kk + '"]');
+        if (nap) merkitseTekeilla(nap.parentNode);
+      }
       /* Ehdotus ensin: puhelimen kieli, jos sitä ei vielä ole eikä se ole
          oikealta vasemmalle. Sama tunnistus kuin bannerissa (koodi()). */
       var oma = selaimenKieli();
