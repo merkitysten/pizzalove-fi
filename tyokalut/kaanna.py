@@ -43,7 +43,16 @@ KONEKAANNOS = os.path.join(TANNE, 'sisalto', 'konekaannos')
 MALLI = os.environ.get('KAANNOS_MALLI', 'claude-opus-5-5')
 API = 'https://api.anthropic.com'
 API_VERSIO = '2026-10-21'
-MAKS_TOKENIT = 20000
+# ⚠️ MAKS_TOKENIT KATTAA MYÖS AJATTELUN, EI VAIN JSONia. 📐 Mitattu 16.11.2026:
+# hindin käännös katkesi 20 000 tokeniin (ajo 43904182452, «Vastaus katkesi
+# (max_tokens)»), koska devanagari vie moninkertaisesti enemmän tokeneita kuin
+# latinalainen kirjoitus — ja koska claude-opus-5-5 ajattelee oletuksena
+# (adaptive), joten osa katosta meni ajatteluun. Mallin katto on 128 000.
+# 64 000 on Anthropicin suositus suoratoistetulle pyynnölle, ja kysy() käyttää
+# suoratoistoa (stream) 900 s:n aikarajalla, joten iso katto ei uhkaa aikarajaa.
+# Katon nosto ei maksa mitään itsessään: tulostokeneista laskutetaan vain ne,
+# jotka malli todella tuottaa.
+MAKS_TOKENIT = 64000
 
 # 🔵 Marko 16.11.2026: kielilistaa ei ole — mikä tahansa kieli kelpaa
 # («Juuri näin»). Kiina, japani, korea, kreikka, kyrilliset jne. piirtyvät
@@ -209,8 +218,13 @@ def anthropic_tunnus():
 # ---------------------------------------------------------------- API-kutsu
 def kysy(viestit, jarjestelma):
     """Messages API suoratoistona (pitkä vastaus). Palauttaa tekstin."""
+    # effort: claude-opus-5-5:n oletus on 'medium'. Merkitään se näkyviin, jottei
+    # se muutu huomaamatta mallin vaihtuessa. 'thinking' jätetään pois tarkoilla:
+    # opus-5-5 ajattelee ilman sitäkin, ja vanhemmalla mallilla (KAANNOS_MALLI)
+    # nimenomainen thinking-kenttä kaataisi pyynnön.
     runko = {'model': MALLI, 'max_tokens': MAKS_TOKENIT, 'system': jarjestelma,
-             'messages': viestit, 'stream': True}
+             'messages': viestit, 'stream': True,
+             'output_config': {'effort': 'medium'}}
     pyynto = urllib.request.Request(
         API + '/v1/messages', data=json.dumps(runko).encode(),
         headers={'content-type': 'application/json', 'anthropic-version': API_VERSIO,
@@ -237,7 +251,12 @@ def kysy(viestit, jarjestelma):
     print('Malli %s, tokeneita: syöte %s, tuloste %s, lopetus %s'
           % (MALLI, kaytto.get('input_tokens'), kaytto.get('output_tokens'), syy))
     if syy == 'max_tokens':
-        raise SystemExit('Vastaus katkesi (max_tokens)')
+        # Ei yritetä uudelleen: sama pyyntö katkeaisi samaan kohtaan. Viesti
+        # kertoo luvut, jotta syy näkyy lokista ilman API-kyselyä.
+        raise SystemExit(
+            'Vastaus katkesi: %s tulostokenia täytti katon MAKS_TOKENIT=%d '
+            '(ajattelu mukaan luettuna). Nosta MAKS_TOKENIT:ia tyokalut/kaanna.py:ssä '
+            '— mallin katto on 128000.' % (kaytto.get('output_tokens'), MAKS_TOKENIT))
     return ''.join(osat)
 
 
