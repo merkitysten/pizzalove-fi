@@ -169,3 +169,19 @@ tulee, lisää kuva `julkinen/kuvat/`-kansioon, kuva diviin ja poista `hidden`.
 - Saksankieliset tekstit (`sisalto/de.json`, pelin `kielet.js` de-lohko) ovat
   Clauden käännös 6.10.2026 ja odottavat natiivitarkistusta.
 - Basso / Bruno: uusi nimi kaikessa, korttipelisivulla huomautus vanhasta nimestä.
+
+### ⏳ Kesken: `pelilauta.webp` on kahdessa paikassa (16.11.2026)
+
+Sama kuva on nyt `julkinen/kuvat/pelilauta.webp` (lautapelisivun «laudan
+kartta») ja `../pizzaparty/apinavaaka/pelilauta.webp` (apinakorttien
+animaatio). 📐 Todennettu `shasum`illa: **tavulleen sama tiedosto**.
+
+Jälkimmäinen on päätetty lähde — pizzaparty on pelin aineiston koti, ja
+`tyokalut/peli-kopio.py` vie sen `julkinen/play/`:hin. **Toinen puoli on
+tekemättä:** lautapelisivun kartta siirtyy samaan tiedostoon ja
+`julkinen/kuvat/`-kopio poistuu, jolloin julkaistuja kopioita on yksi.
+
+⚠️ Tehdään apinakorttien vaiheen 2 yhteydessä yhtenä muutoksena, jottei
+sivusto ole välillä rikki. Jos luet tätä ja kuvia on yhä kaksi, siirto on
+yhä tekemättä — ja syy miksi sitä ei jätetä on se, että kaksi kopiota
+ajautuu erilleen eikä mikään hälytä.
