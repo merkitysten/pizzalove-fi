@@ -1,0 +1,224 @@
+{
+ "kieli": "tr",
+ "tagi": "tr",
+ "nimi": "Türkçe",
+ "nimi_en": "Turkish",
+ "kirjoitus": "Latn",
+ "alue": "TR",
+ "konekaannos": true,
+ "tarkastettu": false,
+ "malli": "claude-opus-5-5",
+ "luotu": "2026-11-17T18:10:42Z",
+ "lataa_kielella": "Türkçe",
+ "ilmoita_virhe": "Çeviri hatası bildirin",
+ "ui": {
+  "nav_etusivu": "Ana sayfa",
+  "nav_korttipeli": "Kart oyunu",
+  "nav_lautapeli": "Masa oyunu",
+  "nav_pelaa": "Çevrimiçi oyna",
+  "kielivalinta": "Dil",
+  "pyynto_avaa": "Dilinizi isteyin",
+  "pyynto_otsikko": "Tüm diller",
+  "pyynto_haku": "Dil arayın",
+  "pyynto_pyyda": "İste",
+  "pyynto_ei_tuettu": "Henüz desteklenmiyor",
+  "pyynto_tekeilla_lyhyt": "Hazırlanıyor",
+  "pyynto_omat": "Dil menünüzde hangi dillerin görüneceğini seçin.",
+  "pyynto_valikossa": "Dil menüsünde göster",
+  "konekaannos_ryhma": "Makine çevirisi · kart oyunu kuralları",
+  "pyynto_sulje": "Kapat",
+  "pyynto_kysymys": "Pizza Love kart oyununun kurallarını %s dilinde ister misiniz? Hemen hazırlıyoruz: makine çevirisi ve ücretsiz.",
+  "pyynto_kylla": "Evet, lütfen",
+  "pyynto_tekeilla": "Teşekkürler! %s dilindeki kurallar yaklaşık üç dakikada hazır olacak ve ardından dil menüsünde görünecek.",
+  "pyynto_valmis": "Diliniz hazır!",
+  "pyynto_avaa_saannot": "Kuralları %s dilinde açın",
+  "pyynto_konekaannos": "(makine çevirisi – düzeltmelerinizi bekliyoruz)",
+  "pyynto_ei_onnistunut": "Olmadı. Daha sonra yeniden deneyin ya da info@merkitysten.fi adresine yazın.",
+  "kauppaan": "Mağaza",
+  "katso_video": "Videoyu izle",
+  "apinakortti_nayta": "Göster",
+  "apinakortti_piilota": "Gizle",
+  "video_kieli": {
+   "fi": "Fince",
+   "en": "İngilizce"
+  },
+  "lataa": "İndir",
+  "alaosa_teksti": "Pizza Love®, Merkitysten Oy'nin bir oyunudur. Oyunlar Finlandiya'da tasarlanır, Finlandiya'da birleştirilir ve paketlenir.",
+  "alaosa_yhteys": "Sorunuz mu var? Bize yazın:",
+  "alaosa_tavaramerkki": "Pizza Love® ve Merkitysten®, Merkitysten Oy'nin tescilli ticari markalarıdır.",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "Bağış toplama",
+  "ohita": "İçeriğe geç",
+  "kauppa_korttipeli": "Mağazada kart oyunu",
+  "kauppa_lautapeli": "Mağazada masa oyunu",
+  "kauppa_molemmat": "İki oyun birden",
+  "keittio_otsikko": "Deneyin: pizza hangi işlemle yapılır?",
+  "keittio_vaihda": "Malzeme kartını değiştir",
+  "keittio_merkki": "İşlemi değiştir",
+  "keittio_valmis": "Pizza yapıldı",
+  "keittio_ei": "Pizza yapılmadı",
+  "keittio_eikorttia": "Kart yok",
+  "keittio_tee": "Sıra sizde.",
+  "keittio_taytteet": "Bunlar bu pizzanın malzemeleri değil.",
+  "keittio_maara": "İşlem doğru ama malzeme sayısı yanlış.",
+  "keittio_hienoa": "Harika!",
+  "keittio_peli": "Gerisini oyun öğretir"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "KB",
+  "desimaalierotin": ","
+ },
+ "kielet": {
+  "alaotsikko": "Tek destede üç oyun",
+  "iskulause": "HER PİZZA SAYILIR",
+  "bruno_huomio": "*2025 kurallarında: Pizza Bruno.",
+  "hyva_tietaa": "Bilmekte fayda var",
+  "kaavio": [
+   "Oyuncu A",
+   "Oyuncu B",
+   "Pizza yığını",
+   "Depo",
+   "Çekme destesi",
+   "Takas pizzası"
+  ],
+  "vaihto_luku": "Depo kartlarını takas etmek",
+  "vaihto_otsikko": "Takas örneği",
+  "vaihto": "Oyuncu B kendi 4'ünü oyuncu A'nın 6 ve 2'siyle takas eder, çünkü 4 = 6 – 2. Artık B kendi pizzasını yapabilir.",
+  "qr_teksti": "Kurallar ve<br>videolar internette",
+  "videot": "Daha fazla bilgi ve video için:",
+  "oikeudet": "Pizza Love® ve Merkitysten®, Merkitysten Oy'nin tescilli ticari markalarıdır. Tüm hakları saklıdır.",
+  "tiedosto": "pizza-love-card-game-rules-tr.pdf",
+  "osoite": "https://pizzalove.fi/tr/card-game",
+  "konekaannos_merkinta": "Makine çevirisi – henüz anadili Türkçe olan biri tarafından kontrol edilmedi."
+ },
+ "korttipeli": {
+  "title": "Pizza Love® kart oyunu – kurallar ve videolar",
+  "kuvaus": "Pizza Love® kart oyununun kuralları ve anlatım videoları: Pizza Party, Pizza Basso ve Pizza Love.",
+  "h1": "Pizza Love® kart oyunu",
+  "ingressi": "Tek destede üç oyun. Pizza Party ile başlayın: öğrenmesi en hızlı olan odur.",
+  "tiedot": [
+   "2–5 oyuncu",
+   "6+",
+   "42 pizza kartı",
+   "58 malzeme kartı",
+   "5–15 dk"
+  ],
+  "hyppy": {
+   "perusteet": "Pizza nasıl yapılır",
+   "muodot": "Oynamanın üç yolu",
+   "lataa": "Yazdırılabilir kurallar"
+  },
+  "perusteet_otsikko": "Pizza nasıl yapılır",
+  "perusteet_ingressi": "Üç oyunun hepsi aynı temel kurala dayanır. Önce bunu öğrenin.",
+  "pizzakortit_otsikko": "Pizza kartları",
+  "pizzakortit": "Pizza kartında birden dörde kadar farklı malzemesi olan bir pizza vardır. Pizzanın değeri (1–10) kartın köşelerinde yazar. Oyunda değeri 10 olan 10 kalpli pizza vardır.",
+  "taytekortit_otsikko": "Malzeme kartları",
+  "taytekortit": "Malzeme kartında bir malzeme vardır. Malzemenin değeri (1–10) kartın köşelerinde yazar. 3 fantezi malzeme (X) herhangi bir malzeme olabilir.",
+  "perussaanto_otsikko": "Temel kural",
+  "perussaanto": "Pizza kartları her zaman masadadır. Pizzalar, elinizdeki malzeme kartlarıyla yapılır.",
+  "arvo_otsikko": "Pizzanın değeri",
+  "arvo": "Pizzayı kendi malzeme kartlarınızla yapın ve pizzanın değerini veren işlemi yüksek sesle söyleyin. Sonuç pizzanın değerine eşit olduğu sürece bütün işlemler serbesttir ve birleştirilebilir. Örneğin <b>5 = 10 : 2</b>.",
+  "laskut": {
+   "otsikko": "Bütün işlemler geçerlidir",
+   "html": "Toplama, çıkarma, çarpma ve bölmenin yanı sıra üs, logaritma ve faktöriyel de kullanılabilir, örneğin <b>5 = 2² + 1</b> ya da <b>5 = 3! – 1</b>. Herkes kendi seviyesinde hesaplar.",
+   "paperi": "<p>Herkes kendi seviyesinde hesaplar, örneğin şöyle:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Pratik ipuçları:</b> bir ile çarpın ya da bir sayıyı kendisine bölün, böylece bir elde edersiniz (2 : 2 = 1).</p>"
+  },
+  "esimerkki_otsikko": "Örnek: domates-ananaslı pizza",
+  "esimerkki_alt": "Değeri 5 olan bir pizza kartı ile 10 ve 2 değerli malzeme kartları: 10 : 2 = 5",
+  "esimerkki": "Pizzanın değeri 5. İşlemin sonucu 5 olduğu sürece bu pizzayı herhangi bir malzeme kartıyla yapabilirsiniz: örneğin 4 + 1, 6 – 1, 2 + 3 ya da 10 : 2.",
+  "tavat_otsikko": "Pizza yapmanın iki yolu",
+  "helpompi_otsikko": "Kolay yol",
+  "helpompi": "Pizza istenen sayıda malzeme kartıyla, hatta tek kartla bile yapılabilir. Pizza Party'yi ilk kez oynarken ya da küçük bir çocukla oynarken bunu kullanın.",
+  "basso_tapa_otsikko": "Maymun Basso'nun yolu",
+  "basso_tapa": "Pizzada kaç malzeme varsa o kadar <b>farklı malzeme</b> kullanın. Daha fazla kart da kullanabilirsiniz: domates-ananaslı pizzayı (değer 5) örneğin iki domates ve bir zeytinle yapabilirsiniz, 2 + 2 + 1 = 5, çünkü iki farklı türde malzeme var. Bunu Pizza Basso'da ya da Pizza Party'de ek zorluk için kullanın.<br><span class=\"pieni\">Basılı kurallarda hâlâ “pizzada kaç malzeme varsa o kadar malzeme kartı” yazıyor. Yeni yol oyuna daha çok olasılık sunar.</span>",
+  "huomio_bruno": "<b>Bruno mu, Basso mu?</b> Oyundaki maymunun adı artık Basso. Eski kurallarda ve videolarda adı Bruno, ikinci oyun modunun adı da Pizza Bruno. Kurallar aynıdır.",
+  "portaat_otsikko": "Pizza yapmanın üç yolu",
+  "portaat_ingressi": "Bu yollar, hangi malzeme kartlarını kullanabileceğinize göre değişir. Bütün örneklerde aynı pizza var: domates-ananaslı, değeri 5.",
+  "portaat": [
+   {
+    "otsikko": "1. Herhangi bir malzeme",
+    "pelit": "#1 Pizza Party",
+    "html": "<p>Herhangi bir malzeme kartını, istediğiniz kadar kullanın – <b>tek kart bile olur</b>. Sadece değer önemlidir.</p>",
+    "esimerkit": [
+     "5 = 5",
+     "5 = 4 + 1",
+     "5 = 7 + 6 - 8"
+    ]
+   },
+   {
+    "otsikko": "2. Maymun Basso'nun yolu",
+    "pelit": "#1 Pizza Party (ek zorluk) · #2 Pizza Basso",
+    "html": "<p>Pizzada kaç malzeme varsa o kadar <b>farklı</b> malzeme kullanın. Bunların pizzanın kendi malzemeleri olması gerekmez. Daha fazla kart da kullanabilirsiniz, örneğin iki aynı kart.</p><p>Bunu <b>#1 Pizza Party</b> oyununda da deneyin: oyun biraz zorlaşır ama daha eğlenceli olur.</p><p>Domates-ananaslı pizzada iki malzeme var, bu yüzden tek kart yetmez.</p>",
+    "esimerkit": [
+     "5 = 10 : 2",
+     "5 = 2 + 2 + 1"
+    ]
+   },
+   {
+    "otsikko": "3. Doğru malzemeler",
+    "pelit": "#3 Pizza Love",
+    "html": "<p>Pizzayı <b>tam olarak kendi malzemeleriyle</b> yapın.</p><p>Domates-ananaslı pizza için bir domates ve bir ananas gerekir.</p>",
+    "esimerkit": [
+     "5 = 2 + 3"
+    ]
+   }
+  ],
+  "tieto": "<b>Bruno mu, Basso mu?</b> 2025'te basılan kurallarda ve videolarda maymunun adı Bruno (ikinci oyunun adı da Pizza Bruno). Basso'nun yolu artık malzeme kartlarından değil malzemelerden söz ediyor; bu da oyuna çok daha fazla olasılık sunuyor.",
+  "muodot_otsikko": "Oynamanın üç yolu",
+  "muodot_ingressi": "Kurallarını ve videolarını görmek için bir oyun modunu açın.",
+  "videot_otsikko": "Videolar",
+  "videot": {
+   "party_en": "Pizza Party – nasıl oynanır",
+   "party_fi": "Pizza Party – nasıl oynanır",
+   "party_helpompi": "Kolay oynama yolu",
+   "party_helpottaminen": "Oyunu kolaylaştırmak",
+   "party_ei_valmistu": "Pizza yapılamadığında",
+   "party_basso_tapa": "Maymun Basso'nun yolu",
+   "basso_fi": "Pizza Basso – nasıl oynanır"
+  },
+  "muodot": [
+   {
+    "avain": "party",
+    "numero": "#1",
+    "nimi": "Pizza Party",
+    "kuvaus": "Başlamak için en kolayı, hızlı ve hareketli · yakl. 5 dk",
+    "html": "<h3>Amaç</h3><p>Oyuncular pizza yapmak için yarışır. Pizza ya da malzeme kartları bitmeden en çok pizzayı yapan kazanır.</p><h3>Hazırlık</h3><ol class=\"lista\"><li>Pizza kartlarını karıştırın ve herkesin uzanabileceği bir yere yığın hâlinde koyun.</li><li>Malzeme kartlarını karıştırın ve her oyuncuya 5 kart dağıtın. Kalan malzeme kartları çekme destesini oluşturur. Oyuncular kendi kartlarına bakabilir.</li></ol><h3>Oyunun başlaması</h3><p>İlk pizza kartını yığının yanına yüzü yukarı açın. Herkes hemen bu pizzayı kendi malzeme kartlarıyla yapmaya çalışır.</p><h3>Oyunun akışı</h3><ul class=\"lista\"><li>Oyun sırasız oynanır: herkes aynı anda pizza yapmaya çalışır.</li><li>Pizza yapmak için malzeme kartlarınızı masadaki pizzanın üstüne vurun ve işlemi yüksek sesle söyleyin. En hızlı oyuncu pizza kartını alır ve önünde biriktirir.</li><li>Birkaç oyuncu aynı anda vurursa pizzayı, kartları en altta olan oyuncu alır.</li><li>Kullanılan malzeme kartları oyundan çıkarılır. Elinizde yeniden 5 kart olana kadar yeni kart çekin.</li><li>Hemen yeni bir pizza kartını yüzü yukarı açın. Pizza ya da malzeme kartları bitene ve kimse artık pizza yapamayana kadar devam edin.</li></ul><h3>Pizza yapılamıyorsa</h3><p>Masadaki pizzayı kimse yapamıyor ya da yapmak istemiyorsa, üstüne yeni bir pizza kartı açın. Sonraki pizzayı yapan oyuncu masadaki bütün pizzaları alır.</p><h3>Puanlar ve kazanma</h3><p>Bir pizza, malzemesi kadar puan değerindedir. Kalpli pizza bir ek puan kazandırır. Örneğin domates-ananaslı pizza = 2 puan.</p><p>Turu en çok puanı alan oyuncu kazanır. Kaç tur oynayacağınıza birlikte karar verin: örneğin 3 ya da 5 turu ilk kazanan oyunun tamamını kazanır.</p><h3>Daha sakin Pizza Party</h3><p>Sırayla da oynayabilirsiniz; böylece herkes kendi sırasında rahatça düşünebilir.</p><h3>İsteğe bağlı kurallar</h3><p>İşlemleri sınırlayabilirsiniz, örneğin:</p><ul class=\"lista\"><li>sadece toplama ve çıkarma ile oynanır</li><li>her pizzada çarpma ya da bölme kullanılmalıdır.</li></ul>",
+    "kotisaanto": {
+     "otsikko": "İsteğe bağlı kurallar",
+     "html": "<p><b>Puanlar:</b> puanları farklı sayacaksanız buna oyundan önce birlikte karar verin.</p><ul class=\"lista\"><li><b>Daha kolay:</b> her pizza = 1 puan, kalpli pizza için +1.</li><li><b>Daha zor:</b> pizza = değeri (1–10), kalpli pizza için +1.</li></ul>",
+     "siirra": "İsteğe bağlı kurallar",
+     "siirra_alku": "<p><b>İşlemler:</b> işlemleri sınırlayabilirsiniz, örneğin:</p>"
+    }
+   },
+   {
+    "avain": "basso",
+    "numero": "#2",
+    "nimi": "Pizza Basso",
+    "kuvaus": "Sakin ve heyecanlı · yakl. 7 dk",
+    "html": "<h3>Amaç</h3><p>Oyuncular elini boşaltmaya, yani elindeki bütün malzeme kartlarından kurtulmaya çalışır. Bunu ilk başaran turu kazanır.</p><p><b>Dikkat:</b> Pizzalar Maymun Basso'nun yoluyla yapılır.</p><h3>Hazırlık</h3><ol class=\"lista\"><li>Pizza kartlarını karıştırın ve herkesin uzanabileceği bir yere yığın hâlinde koyun.</li><li>Malzeme kartlarını karıştırın ve her oyuncuya 7 kart dağıtın. Kalan malzeme kartları çekme destesini oluşturur. Oyuncular kendi kartlarına bakabilir.</li></ol><h3>Oyunun başlaması</h3><p>İlk pizza kartını yığının yanına yüzü yukarı açın. En son pizza yiyen oyuncu başlar.</p><h3>Oyunun akışı</h3><p>Oyuncular sırayla masadaki pizzayı kendi malzeme kartlarıyla yapmaya çalışır.</p><p><b>A) Başarırsanız:</b> kullandığınız malzeme kartlarını oyundan çıkarın ve yığından yeni bir pizza kartını eskisinin üstüne açın. Sıra bir sonraki oyuncuya geçer.</p><p><b>B) Pizzayı yapamıyor ya da yapmak istemiyorsanız:</b> bir malzeme kartı çekin. Sıra bir sonraki oyuncuya geçer.</p><p><b>C) Elde tek kart:</b> elinizde tek bir malzeme kartı kaldığında aç bir Maymun Basso gibi davranın ve bağırın: “PİZZAAA!”</p><h3>Malzeme kartları biterse</h3><p>Oyundan çıkarılan malzeme kartlarını karıştırıp yeni bir çekme destesi yapın ve devam edin.</p><h3>Puanlar ve kazanma</h3><p>Bütün malzeme kartlarından ilk kurtulan turu kazanır. Diğer oyuncuların elinde kalan kartların değerleri toplanır; bu toplam kazananın puanıdır. Normal malzemeler kendi değeri kadar (1–10), fantezi malzeme 20 puan değerindedir.</p><p>100 puana ilk ulaşan kazanır ve <b>Pizza Basso – gerçek pizza maymunu</b> unvanını alır.</p><h3>Daha kısa oyun</h3><p>Oyunun örneğin 30 ya da 50 puanda bitmesine ya da 3 veya 5 turu ilk kazananın oyunun tamamını kazanmasına birlikte karar verebilirsiniz.</p>",
+    "kotisaanto": {
+     "otsikko": "İsteğe bağlı kurallar",
+     "html": "<p><b>Herkes puan alır:</b> herkes yaptığı pizzaları saklar ve tur sonunda kendi puanını sayar: pizza = değeri (1–10), kalpli pizza için +1. Küçük çocuklarla oynarken çok uygundur.</p>",
+     "siirra": "Daha kısa oyun",
+     "siirra_alku": "<p><b>Daha kısa oyun:</b> oyunun örneğin 30 ya da 50 puanda bitmesine ya da 3 veya 5 turu ilk kazananın oyunun tamamını kazanmasına birlikte karar verebilirsiniz.</p>"
+    }
+   },
+   {
+    "avain": "love",
+    "numero": "#3",
+    "nimi": "Pizza Love",
+    "kuvaus": "En taktik ve en zorlayıcı, 8+ · yakl. 15 dk",
+    "html": "<h3>Amaç</h3><p>Oyuncular kendi pizzalarının hepsini diğerlerinden önce yapmaya çalışır. Bunu ilk başaran kazanır.</p><p><b>Dikkat:</b> Artık malzemeler önemlidir: pizza sadece doğru malzemelerle yapılabilir.</p><h3>Hazırlık</h3><ol class=\"lista\"><li>Pizza kartlarını karıştırın ve her oyuncuya 8 pizza kartı dağıtın. Oyuncular kartları yüzü aşağı bir yığın hâlinde önlerine koyar ve en üstteki kartı yüzü yukarı çevirir.</li><li>Bir pizza kartını masanın ortasına yüzü yukarı koyun. Bu, takas pizzasıdır. Kalan pizza kartları oyundan çıkarılır.</li><li>Malzeme kartlarını karıştırın ve masaya çekme destesi olarak koyun.</li></ol><h3>Depo</h3><p>Her oyuncunun önünde depo kartları için 4 depo yeri vardır. Depodaki malzeme kartları yüzü yukarı durur. Bunları elinizdeki kartlar gibi kendi pizzalarınız için kullanabilirsiniz; diğer oyuncular da bunları takaslar için kullanabilir.</p><h3>Oyunun başlaması</h3><p>En son pizza yiyen oyuncu başlar ve eline 5 malzeme kartı çeker.</p><h3>Oyunun akışı</h3><ol class=\"lista\"><li>Elinizde 5 kart olana kadar malzeme kartı çekin.</li><li>Elinizdeki ve deponuzdaki kartlarla yığınınızın en üstündeki pizzayı yapmaya çalışın.</li><li>İşlemler yaparak deponuzdaki kartları başka bir oyuncunun depo kartlarıyla takas edebilirsiniz.</li><li>Sıranızda bir kez, yığınınızın en üstündeki pizza ile takas pizzasının yerini değiştirebilirsiniz: kendi pizzanız yeni takas pizzası olarak ortada kalır, takas pizzası da yığınınızın üstüne gelir. Aldığınız pizzayı hemen yapabilirsiniz.</li><li>Sıranızı, elinizden bir malzeme kartını yüzü yukarı deponuza koyarak bitirin.</li></ol><p><b>Dikkat:</b> Depoya kart koymadan önce eliniz boşalırsa 5 yeni kart çekin ve sıranıza devam edin.</p><h3>Pizza yapmak</h3><p>Pizza için gereken malzemeler elinizde ve/veya deponuzda varsa pizzayı yapın. Pizza kartı ve kullanılan malzeme kartları oyundan çıkarılır. Yığınınızdan yeni bir pizzayı yüzü yukarı açın: malzemeleri sizde varsa onu da hemen yapabilirsiniz.</p><h3>Kalpli pizza</h3><p>Kalpli pizza yaptığınızda bir sonraki pizza kartınızı ona bakmadan başka bir oyuncuya verin. O oyuncu kartı yığınının en altına koyar.</p><h3>Depo kartlarını takas etmek</h3><p>Eksik malzemeleri, deponuzdaki kartları başka bir oyuncunun depo kartlarıyla takas ederek edinin.</p><ul class=\"lista\"><li>Verdiğiniz kartlarla aldığınız kartlardan işlem yaparak aynı sayı elde edilmelidir. Bütün işlemler geçerlidir.</li><li>Takası kabul etmek zorunludur.</li><li>Aldığınız kartları kendi deponuza koyun.</li><li>Sıranızda birkaç takas yapabilirsiniz. Her takas her zaman tek bir oyuncuyla yapılır.</li><li>Sadece en üstteki kartlar takas edilebilir.</li></ul><h3>Depoyu doldurmak</h3><ul class=\"lista\"><li>Depo yerleri istediğiniz sırayla doldurulabilir.</li><li>Kartlar üst üste konabilir. Sadece en üstteki kart kullanılabilir ya da takas edilebilir; bu yüzden üst üste koyarak bir kartı takastan koruyabilirsiniz. O kart bu durumda sizin için de kilitlidir.</li><li>Depodaki kartların yeri değiştirilemez.</li></ul><h3>Oyunu kazanmak</h3><p>Bir oyuncu yığınındaki bütün pizzaları yaptığında oyun biter.</p>"
+   }
+  ],
+  "lataa_otsikko": "Yazdırılabilir kurallar",
+  "lataa_teksti": "Üç oyun modunun hepsi Türkçe – katlandığında oyun kutusuna sığan, iki yüzlü tek bir sayfa.",
+  "lataa_tiedosto": "Kart oyunu kuralları (Türkçe)",
+  "pelaa_otsikko": "Pizza Party ve Pizza Basso",
+  "pelaa_teksti": "İkisi de tarayıcıda da oynanabilir. İlk oyununuzdan önce deneyin ya da arkadaşlarınızla kendi telefonlarınızda oynayın.",
+  "ristiin_otsikko": "Sırada: Pizza Love® masa oyunu",
+  "ristiin_teksti": "Aynı pizza dünyası bir oyun tahtasında: pizza kutularının en sevdiği pizzaları yapın ve 10 farklı dilimi ilk toplayan olun. Oynamanın üç yolu var, iş birliğiyle oynanan oyun da dahil.",
+  "ristiin_saannot": "Masa oyunu kuralları"
+ }
+}
