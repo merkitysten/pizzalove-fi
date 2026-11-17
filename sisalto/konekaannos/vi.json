@@ -1,0 +1,224 @@
+{
+ "kieli": "vi",
+ "tagi": "vi",
+ "nimi": "Tiếng Việt",
+ "nimi_en": "Vietnamese",
+ "kirjoitus": "Latn",
+ "alue": "VN",
+ "konekaannos": true,
+ "tarkastettu": false,
+ "malli": "claude-opus-5-5",
+ "luotu": "2026-11-17T18:14:24Z",
+ "lataa_kielella": "tiếng Việt",
+ "ilmoita_virhe": "Báo lỗi dịch",
+ "ui": {
+  "nav_etusivu": "Trang chủ",
+  "nav_korttipeli": "Trò chơi thẻ bài",
+  "nav_lautapeli": "Trò chơi bàn cờ",
+  "nav_pelaa": "Chơi trực tuyến",
+  "kielivalinta": "Ngôn ngữ",
+  "pyynto_avaa": "Yêu cầu ngôn ngữ của bạn",
+  "pyynto_otsikko": "Tất cả ngôn ngữ",
+  "pyynto_haku": "Tìm ngôn ngữ",
+  "pyynto_pyyda": "Yêu cầu",
+  "pyynto_ei_tuettu": "Chưa hỗ trợ",
+  "pyynto_tekeilla_lyhyt": "Đang thực hiện",
+  "pyynto_omat": "Chọn ngôn ngữ hiển thị trong menu ngôn ngữ của bạn.",
+  "pyynto_valikossa": "Hiện trong menu ngôn ngữ",
+  "konekaannos_ryhma": "Bản dịch máy · luật trò chơi thẻ bài",
+  "pyynto_sulje": "Đóng",
+  "pyynto_kysymys": "Bạn muốn có luật trò chơi thẻ bài Pizza Love bằng %s? Chúng tôi sẽ làm ngay – dịch máy, miễn phí.",
+  "pyynto_kylla": "Có, cảm ơn",
+  "pyynto_tekeilla": "Cảm ơn bạn! Luật chơi bằng %s sẽ sẵn sàng sau khoảng ba phút, rồi sẽ xuất hiện trong menu ngôn ngữ.",
+  "pyynto_valmis": "Ngôn ngữ của bạn đã sẵn sàng!",
+  "pyynto_avaa_saannot": "Mở luật chơi bằng %s",
+  "pyynto_konekaannos": "(bản dịch máy – rất hoan nghênh góp ý sửa lỗi)",
+  "pyynto_ei_onnistunut": "Không thành công. Hãy thử lại sau hoặc viết thư tới info@merkitysten.fi.",
+  "kauppaan": "Cửa hàng",
+  "katso_video": "Xem video",
+  "apinakortti_nayta": "Hiện",
+  "apinakortti_piilota": "Ẩn",
+  "video_kieli": {
+   "fi": "tiếng Phần Lan",
+   "en": "tiếng Anh"
+  },
+  "lataa": "Tải xuống",
+  "alaosa_teksti": "Pizza Love® là trò chơi của Merkitysten Oy. Các trò chơi được thiết kế tại Phần Lan, lắp ráp và đóng gói tại Phần Lan.",
+  "alaosa_yhteys": "Có câu hỏi? Hãy viết cho chúng tôi:",
+  "alaosa_tavaramerkki": "Pizza Love® và Merkitysten® là nhãn hiệu đã đăng ký của Merkitysten Oy.",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "Gây quỹ",
+  "ohita": "Chuyển đến nội dung",
+  "kauppa_korttipeli": "Trò chơi thẻ bài tại cửa hàng",
+  "kauppa_lautapeli": "Trò chơi bàn cờ tại cửa hàng",
+  "kauppa_molemmat": "Cả hai trò chơi",
+  "keittio_otsikko": "Thử xem: phép tính nào làm được pizza?",
+  "keittio_vaihda": "Đổi thẻ topping",
+  "keittio_merkki": "Đổi phép tính",
+  "keittio_valmis": "Pizza đã làm xong",
+  "keittio_ei": "Pizza chưa làm xong",
+  "keittio_eikorttia": "Không có thẻ",
+  "keittio_tee": "Đến lượt bạn.",
+  "keittio_taytteet": "Đây không phải topping của pizza này.",
+  "keittio_maara": "Phép tính đúng, nhưng số topping bị sai.",
+  "keittio_hienoa": "Giỏi lắm!",
+  "keittio_peli": "Trò chơi sẽ dạy phần còn lại"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "KB",
+  "desimaalierotin": ","
+ },
+ "kielet": {
+  "alaotsikko": "Ba trò chơi với một bộ thẻ",
+  "iskulause": "MỖI CHIẾC PIZZA ĐỀU ĐƯỢC TÍNH",
+  "bruno_huomio": "*Trong luật chơi năm 2025: Pizza Bruno.",
+  "hyva_tietaa": "Nên biết",
+  "kaavio": [
+   "Người chơi A",
+   "Người chơi B",
+   "Chồng thẻ pizza",
+   "Kho",
+   "Chồng thẻ rút",
+   "Pizza trao đổi"
+  ],
+  "vaihto_luku": "Trao đổi thẻ trong kho",
+  "vaihto_otsikko": "Ví dụ về trao đổi",
+  "vaihto": "Người chơi B trao đổi thẻ 4 của mình lấy thẻ 6 và thẻ 2 của người chơi A, vì 4 = 6 – 2. Giờ B có thể làm pizza của mình.",
+  "qr_teksti": "Luật chơi và<br>video trực tuyến",
+  "videot": "Thêm thông tin và video tại",
+  "oikeudet": "Pizza Love® và Merkitysten® là nhãn hiệu đã đăng ký của Merkitysten Oy. Bảo lưu mọi quyền.",
+  "tiedosto": "pizza-love-card-game-rules-vi.pdf",
+  "osoite": "https://pizzalove.fi/vi/card-game",
+  "konekaannos_merkinta": "Bản dịch máy – chưa được người bản ngữ kiểm tra."
+ },
+ "korttipeli": {
+  "title": "Trò chơi thẻ bài Pizza Love® – luật chơi và video",
+  "kuvaus": "Luật chơi và video hướng dẫn trò chơi thẻ bài Pizza Love®: Pizza Party, Pizza Basso và Pizza Love.",
+  "h1": "Trò chơi thẻ bài Pizza Love®",
+  "ingressi": "Ba trò chơi với một bộ thẻ. Hãy bắt đầu với Pizza Party – trò này học nhanh nhất.",
+  "tiedot": [
+   "2–5 người chơi",
+   "6+",
+   "42 thẻ pizza",
+   "58 thẻ topping",
+   "5–15 phút"
+  ],
+  "hyppy": {
+   "perusteet": "Cách làm pizza",
+   "muodot": "Ba cách chơi",
+   "lataa": "Luật chơi để in"
+  },
+  "perusteet_otsikko": "Cách làm pizza",
+  "perusteet_ingressi": "Cả ba trò chơi đều dùng chung một luật cơ bản. Hãy học luật này trước.",
+  "pizzakortit_otsikko": "Thẻ pizza",
+  "pizzakortit": "Mỗi thẻ pizza có một chiếc pizza với từ một đến bốn loại topping khác nhau. Giá trị của pizza (1–10) ghi ở các góc thẻ. Trò chơi có 10 pizza trái tim với giá trị 10.",
+  "taytekortit_otsikko": "Thẻ topping",
+  "taytekortit": "Mỗi thẻ topping có một loại topping. Giá trị của topping (1–10) ghi ở các góc thẻ. 3 topping tưởng tượng (X) có thể là bất kỳ topping nào.",
+  "perussaanto_otsikko": "Luật cơ bản",
+  "perussaanto": "Thẻ pizza luôn nằm trên bàn. Pizza được làm bằng thẻ topping trên tay bạn.",
+  "arvo_otsikko": "Giá trị của pizza",
+  "arvo": "Hãy làm pizza bằng thẻ topping của bạn và nói to phép tính cho ra giá trị của pizza. Mọi phép tính đều được phép và có thể kết hợp, miễn là kết quả bằng giá trị của pizza. Ví dụ <b>5 = 10 : 2</b>.",
+  "laskut": {
+   "otsikko": "Phép tính nào cũng được",
+   "html": "Ngoài phép cộng, trừ, nhân và chia, bạn cũng có thể dùng lũy thừa, lôgarit hoặc giai thừa, ví dụ <b>5 = 2² + 1</b> hoặc <b>5 = 3! – 1</b>. Mỗi người tính theo trình độ của mình.",
+   "paperi": "<p>Mỗi người tính theo trình độ của mình, ví dụ:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Mẹo hay:</b> nhân với một, hoặc chia một số cho chính nó để được một (2 : 2 = 1).</p>"
+  },
+  "esimerkki_otsikko": "Ví dụ: pizza cà chua – dứa",
+  "esimerkki_alt": "Một thẻ pizza có giá trị 5 và các thẻ topping 10 và 2: 10 : 2 = 5",
+  "esimerkki": "Giá trị của pizza là 5. Bạn có thể làm pizza này bằng bất kỳ thẻ topping nào, miễn là phép tính cho ra 5: ví dụ 4 + 1, 6 – 1, 2 + 3 hoặc 10 : 2.",
+  "tavat_otsikko": "Hai cách làm pizza",
+  "helpompi_otsikko": "Cách dễ hơn",
+  "helpompi": "Có thể làm pizza bằng bao nhiêu thẻ topping cũng được, kể cả chỉ một thẻ. Hãy dùng cách này khi chơi Pizza Party lần đầu hoặc khi chơi với trẻ nhỏ.",
+  "basso_tapa_otsikko": "Cách của khỉ Basso",
+  "basso_tapa": "Hãy dùng số <b>loại topping khác nhau</b> bằng số topping trên pizza. Bạn có thể dùng nhiều thẻ hơn: pizza cà chua – dứa (giá trị 5) có thể làm bằng hai thẻ cà chua và một thẻ ô liu, 2 + 2 + 1 = 5, vì có hai loại topping khác nhau. Hãy dùng cách này trong Pizza Basso, hoặc để có thử thách thêm trong Pizza Party.<br><span class=\"pieni\">Luật chơi in trên giấy vẫn ghi “số thẻ topping bằng số topping trên pizza”. Cách mới cho trò chơi nhiều khả năng hơn.</span>",
+  "huomio_bruno": "<b>Bruno hay Basso?</b> Chú khỉ trong trò chơi giờ tên là Basso. Trong luật chơi và video cũ, chú tên là Bruno, và kiểu chơi thứ hai tên là Pizza Bruno. Luật chơi vẫn như nhau.",
+  "portaat_otsikko": "Ba cách làm pizza",
+  "portaat_ingressi": "Các cách khác nhau ở chỗ bạn được dùng những thẻ topping nào. Mọi ví dụ đều dùng cùng một pizza: cà chua – dứa, giá trị 5.",
+  "portaat": [
+   {
+    "otsikko": "1. Topping nào cũng được",
+    "pelit": "#1 Pizza Party",
+    "html": "<p>Dùng bất kỳ thẻ topping nào, bao nhiêu cũng được – <b>kể cả chỉ một thẻ</b>. Chỉ có giá trị là quan trọng.</p>",
+    "esimerkit": [
+     "5 = 5",
+     "5 = 4 + 1",
+     "5 = 7 + 6 - 8"
+    ]
+   },
+   {
+    "otsikko": "2. Cách của khỉ Basso",
+    "pelit": "#1 Pizza Party (thử thách thêm) · #2 Pizza Basso",
+    "html": "<p>Dùng số loại topping <b>khác nhau</b> bằng số topping trên pizza. Chúng không cần là topping của chính pizza đó. Bạn có thể dùng nhiều thẻ hơn, ví dụ hai thẻ giống nhau.</p><p>Hãy thử cả trong <b>#1 Pizza Party</b>: trò chơi sẽ vui hơn, dù khó hơn một chút.</p><p>Pizza cà chua – dứa có hai topping, nên một thẻ là không đủ.</p>",
+    "esimerkit": [
+     "5 = 10 : 2",
+     "5 = 2 + 2 + 1"
+    ]
+   },
+   {
+    "otsikko": "3. Đúng topping",
+    "pelit": "#3 Pizza Love",
+    "html": "<p>Làm pizza bằng <b>đúng các topping của chính nó</b>.</p><p>Pizza cà chua – dứa cần cà chua và dứa.</p>",
+    "esimerkit": [
+     "5 = 2 + 3"
+    ]
+   }
+  ],
+  "tieto": "<b>Bruno hay Basso?</b> Trong luật chơi in năm 2025 và trong các video, chú khỉ tên là Bruno (và trò chơi thứ hai là Pizza Bruno). Cách của Basso giờ nói về topping thay vì thẻ topping, nhờ vậy trò chơi có nhiều khả năng hơn hẳn.",
+  "muodot_otsikko": "Ba cách chơi",
+  "muodot_ingressi": "Mở một kiểu chơi để xem luật chơi và video.",
+  "videot_otsikko": "Video",
+  "videot": {
+   "party_en": "Pizza Party – cách chơi",
+   "party_fi": "Pizza Party – cách chơi",
+   "party_helpompi": "Cách chơi dễ hơn",
+   "party_helpottaminen": "Làm trò chơi dễ hơn",
+   "party_ei_valmistu": "Khi không ai làm được pizza",
+   "party_basso_tapa": "Cách của khỉ Basso",
+   "basso_fi": "Pizza Basso – cách chơi"
+  },
+  "muodot": [
+   {
+    "avain": "party",
+    "numero": "#1",
+    "nimi": "Pizza Party",
+    "kuvaus": "Dễ bắt đầu nhất, nhanh và sôi nổi · khoảng 5 phút",
+    "html": "<h3>Mục tiêu</h3><p>Người chơi thi nhau làm pizza. Người thắng là người làm được nhiều pizza nhất trước khi hết thẻ pizza hoặc thẻ topping.</p><h3>Chuẩn bị</h3><ol class=\"lista\"><li>Xáo các thẻ pizza và đặt thành một chồng ở chỗ mọi người đều với tới.</li><li>Xáo các thẻ topping và chia cho mỗi người chơi 5 thẻ. Số thẻ còn lại là chồng thẻ rút. Người chơi được xem thẻ của mình.</li></ol><h3>Bắt đầu</h3><p>Lật thẻ pizza đầu tiên ngửa lên cạnh chồng thẻ. Mọi người chơi lập tức cố làm pizza đó bằng thẻ topping của mình.</p><h3>Cách chơi</h3><ul class=\"lista\"><li>Trò chơi không chia lượt: mọi người cùng lúc cố làm pizza.</li><li>Bạn làm pizza bằng cách đập thẻ topping của mình lên pizza trên bàn và nói to phép tính. Người nhanh nhất lấy thẻ pizza và để trước mặt mình.</li><li>Nếu nhiều người đập cùng lúc, pizza thuộc về người có thẻ nằm dưới cùng.</li><li>Thẻ topping đã dùng bị loại khỏi trò chơi. Rút thẻ mới cho đến khi trên tay lại có 5 thẻ.</li><li>Lật ngay một thẻ pizza mới ngửa lên. Tiếp tục cho đến khi hết thẻ pizza hoặc thẻ topping và không ai làm được pizza nữa.</li></ul><h3>Nếu không làm được pizza</h3><p>Nếu không ai làm được hoặc muốn làm pizza trên bàn, hãy lật một thẻ pizza mới đặt lên trên nó. Người làm được pizza tiếp theo sẽ lấy tất cả pizza trên bàn.</p><h3>Tính điểm và chiến thắng</h3><p>Mỗi pizza được số điểm bằng số topping của nó. Pizza trái tim được thêm một điểm. Ví dụ: pizza cà chua – dứa = 2 điểm.</p><p>Người có nhiều điểm nhất thắng vòng. Các bạn hãy thống nhất chơi bao nhiêu vòng – ví dụ, ai thắng 3 hoặc 5 vòng trước sẽ thắng cả trò chơi.</p><h3>Pizza Party theo lượt</h3><p>Các bạn cũng có thể chơi theo lượt, để mỗi người có thời gian suy nghĩ trong lượt của mình.</p><h3>Luật tùy chọn</h3><p>Các bạn có thể thống nhất luật giới hạn phép tính, ví dụ:</p><ul class=\"lista\"><li>chỉ chơi với phép cộng và phép trừ</li><li>pizza nào cũng phải có phép nhân hoặc phép chia.</li></ul>",
+    "kotisaanto": {
+     "otsikko": "Luật tùy chọn",
+     "html": "<p><b>Tính điểm:</b> hãy thống nhất trước khi chơi nếu các bạn tính điểm khác đi.</p><ul class=\"lista\"><li><b>Dễ hơn:</b> mỗi pizza = 1 điểm, +1 cho pizza trái tim.</li><li><b>Khó hơn:</b> một pizza = giá trị của nó (1–10), +1 cho pizza trái tim.</li></ul>",
+     "siirra": "Luật tùy chọn",
+     "siirra_alku": "<p><b>Phép tính:</b> các bạn có thể giới hạn chúng, ví dụ:</p>"
+    }
+   },
+   {
+    "avain": "basso",
+    "numero": "#2",
+    "nimi": "Pizza Basso",
+    "kuvaus": "Thong thả và hồi hộp · khoảng 7 phút",
+    "html": "<h3>Mục tiêu</h3><p>Người chơi cố đánh hết thẻ trên tay – tức là bỏ hết các thẻ topping trên tay. Ai làm được trước sẽ thắng vòng.</p><p><b>Lưu ý:</b> Pizza được làm theo cách của khỉ Basso.</p><h3>Chuẩn bị</h3><ol class=\"lista\"><li>Xáo các thẻ pizza và đặt thành một chồng ở chỗ mọi người đều với tới.</li><li>Xáo các thẻ topping và chia cho mỗi người chơi 7 thẻ. Số thẻ còn lại là chồng thẻ rút. Người chơi được xem thẻ của mình.</li></ol><h3>Bắt đầu</h3><p>Lật thẻ pizza đầu tiên ngửa lên cạnh chồng thẻ. Người ăn pizza gần đây nhất đi trước.</p><h3>Cách chơi</h3><p>Người chơi lần lượt cố làm pizza trên bàn bằng thẻ topping của mình.</p><p><b>A) Nếu bạn làm được:</b> loại các thẻ topping đã dùng khỏi trò chơi và lật một thẻ pizza mới từ chồng thẻ đặt lên trên thẻ cũ. Lượt chuyển sang người tiếp theo.</p><p><b>B) Nếu bạn không làm được hoặc không muốn làm pizza:</b> rút một thẻ topping. Lượt chuyển sang người tiếp theo.</p><p><b>C) Còn một thẻ:</b> khi bạn chỉ còn một thẻ topping, hãy làm điệu bộ như chú khỉ Basso đang đói và hô to: “PIZZAAA!”</p><h3>Nếu hết thẻ topping</h3><p>Xáo các thẻ topping đã bị loại thành chồng thẻ rút mới và chơi tiếp.</p><h3>Tính điểm và chiến thắng</h3><p>Người đầu tiên bỏ hết thẻ topping của mình sẽ thắng vòng. Cộng giá trị các thẻ còn trên tay những người chơi khác – tổng đó là điểm của người thắng. Topping thường tính theo giá trị của nó (1–10), topping tưởng tượng tính 20 điểm.</p><p>Ai đạt 100 điểm trước sẽ thắng và nhận danh hiệu <b>Pizza Basso – chú khỉ pizza thực thụ</b>.</p><h3>Trò chơi ngắn hơn</h3><p>Các bạn có thể thống nhất rằng trò chơi kết thúc ở, ví dụ, 30 hoặc 50 điểm, hoặc ai thắng 3 hoặc 5 vòng trước sẽ thắng cả trò chơi.</p>",
+    "kotisaanto": {
+     "otsikko": "Luật tùy chọn",
+     "html": "<p><b>Ai cũng được điểm:</b> mỗi người giữ các pizza mình làm và tự tính điểm vào cuối vòng: một pizza = giá trị của nó (1–10), +1 cho pizza trái tim. Rất hợp khi chơi với trẻ nhỏ.</p>",
+     "siirra": "Trò chơi ngắn hơn",
+     "siirra_alku": "<p><b>Trò chơi ngắn hơn:</b> các bạn có thể thống nhất rằng trò chơi kết thúc ở, ví dụ, 30 hoặc 50 điểm, hoặc ai thắng 3 hoặc 5 vòng trước sẽ thắng cả trò chơi.</p>"
+    }
+   },
+   {
+    "avain": "love",
+    "numero": "#3",
+    "nimi": "Pizza Love",
+    "kuvaus": "Nhiều chiến thuật và thử thách nhất, 8+ · khoảng 15 phút",
+    "html": "<h3>Mục tiêu</h3><p>Người chơi cố làm hết pizza của mình trước những người khác. Ai làm được trước sẽ thắng.</p><p><b>Lưu ý:</b> Lúc này topping mới là điều quan trọng: chỉ làm được pizza bằng đúng topping.</p><h3>Chuẩn bị</h3><ol class=\"lista\"><li>Xáo và chia cho mỗi người chơi 8 thẻ pizza. Người chơi úp chúng thành một chồng trước mặt và lật thẻ trên cùng ngửa lên.</li><li>Đặt một thẻ pizza ngửa lên ở giữa bàn làm pizza trao đổi. Loại các thẻ pizza còn lại khỏi trò chơi.</li><li>Xáo các thẻ topping và đặt thành chồng thẻ rút trên bàn.</li></ol><h3>Kho</h3><p>Mỗi người chơi có 4 ô kho. Thẻ topping trong kho được đặt ngửa. Bạn có thể dùng chúng cho pizza của mình như thẻ trên tay, và người chơi khác có thể dùng chúng để trao đổi.</p><h3>Bắt đầu</h3><p>Người ăn pizza gần đây nhất đi trước và rút 5 thẻ topping lên tay.</p><h3>Cách chơi</h3><ol class=\"lista\"><li>Rút thẻ topping cho đến khi bạn có 5 thẻ trên tay.</li><li>Cố làm pizza trên cùng trong chồng thẻ của bạn bằng thẻ trên tay và trong kho.</li><li>Bạn có thể trao đổi thẻ trong kho của mình lấy thẻ trong kho của người chơi khác bằng phép tính.</li><li>Mỗi lượt một lần, bạn có thể đổi chỗ pizza trên cùng trong chồng thẻ của bạn với pizza trao đổi: pizza của bạn ở lại giữa bàn làm pizza trao đổi mới, còn pizza trao đổi lên trên cùng chồng thẻ của bạn. Bạn có thể làm ngay pizza vừa nhận.</li><li>Kết thúc lượt bằng cách đặt một thẻ topping từ tay vào kho của bạn, ngửa lên.</li></ol><p><b>Lưu ý:</b> Nếu bạn đánh hết thẻ trên tay trước khi đặt thẻ vào kho, hãy rút 5 thẻ mới và tiếp tục lượt.</p><h3>Làm pizza</h3><p>Khi có đủ topping cần thiết trên tay và/hoặc trong kho, hãy làm pizza. Thẻ pizza và các thẻ topping đã dùng bị loại khỏi trò chơi. Lật thẻ pizza tiếp theo trong chồng thẻ của bạn ngửa lên – nếu bạn có topping cho nó, bạn có thể làm ngay.</p><h3>Pizza trái tim</h3><p>Khi bạn làm một pizza trái tim, hãy đưa thẻ pizza tiếp theo của bạn (không nhìn) cho một người chơi khác. Người đó đặt nó xuống dưới cùng chồng thẻ của mình.</p><h3>Trao đổi thẻ trong kho</h3><p>Hãy lấy topping bạn cần bằng cách trao đổi thẻ trong kho của mình lấy thẻ trong kho của người chơi khác.</p><ul class=\"lista\"><li>Thẻ bạn đưa và thẻ bạn nhận phải tính ra cùng một số. Mọi phép tính đều được phép.</li><li>Người chơi kia phải chấp nhận trao đổi.</li><li>Đặt thẻ bạn nhận vào kho của mình.</li><li>Bạn có thể trao đổi nhiều lần trong một lượt. Mỗi lần trao đổi luôn chỉ với một người chơi khác.</li><li>Chỉ được trao đổi thẻ trên cùng.</li></ul><h3>Xếp thẻ vào kho</h3><ul class=\"lista\"><li>Có thể xếp thẻ vào các ô kho theo bất kỳ thứ tự nào.</li><li>Có thể chồng thẻ lên nhau. Chỉ thẻ trên cùng được dùng hoặc trao đổi, nên bằng cách chồng thẻ bạn có thể bảo vệ một thẻ khỏi bị trao đổi. Khi đó thẻ ấy cũng bị khóa với chính bạn.</li><li>Không được di chuyển thẻ trong kho.</li></ul><h3>Chiến thắng</h3><p>Trò chơi kết thúc khi có một người chơi làm xong tất cả pizza trong chồng thẻ của mình.</p>"
+   }
+  ],
+  "lataa_otsikko": "Luật chơi để in",
+  "lataa_teksti": "Cả ba kiểu chơi bằng tiếng Việt – một tờ in hai mặt, gấp lại vừa hộp trò chơi.",
+  "lataa_tiedosto": "Luật trò chơi thẻ bài (tiếng Việt)",
+  "pelaa_otsikko": "Pizza Party và Pizza Basso",
+  "pelaa_teksti": "Cả hai trò cũng chơi được trên trình duyệt. Hãy thử trước lần chơi đầu tiên, hoặc chơi cùng bạn bè trên điện thoại của mỗi người.",
+  "ristiin_otsikko": "Tiếp theo: trò chơi bàn cờ Pizza Love®",
+  "ristiin_teksti": "Cùng thế giới pizza trên bàn cờ: làm những chiếc pizza yêu thích của các hộp pizza và là người đầu tiên thu thập 10 miếng pizza khác nhau. Ba cách chơi, có cả cách chơi hợp tác.",
+  "ristiin_saannot": "Luật trò chơi bàn cờ"
+ }
+}
