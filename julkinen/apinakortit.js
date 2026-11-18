@@ -131,7 +131,9 @@
           korttipaikka: false, selite: false,
           otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' },
           /* Laudan alueiden mitat sivulta: moduuli ei saa pitää omaa kopiota. */
-          alueet: alueet()
+          alueet: alueet(),
+          /* Lautapelin omat kortit, ei korttipelin pakan kuvia. */
+          lautakortit: A.lautakortit || null
         });
         mountti.classList.add('ak-opas--auki');
         nappi.setAttribute('aria-expanded', 'true');

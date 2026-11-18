@@ -178,6 +178,17 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
     /* Laudan alueiden mitat (900×900 kuvan koordinaateissa) tulevat
        isäntäsivulta, jolla ne on mitattu kuvasta kerran. */
     var ALUEET = asetukset.alueet || null;
+    /* ⚠️ LAUTAPELILLÄ ON OMAT KORTTINSA. Korttipelin pakan kuvat
+       (`play/kuvat/pizza-NN.webp`) ovat eri pelin kortteja, ja Marko huomasi
+       sen heti: «Nuo pizzakortit ei ole nyt lautapelin pizzakortteja.»
+       Tiedostonimi on painon sarjanumero: pizzat 1–42, apinat 43–75, ja
+       apinakortin kuvassa on painettuna sen oma numero 01–33. Täällä
+       käytetään kortin omaa numeroa, koska tiedostot on nimetty sen mukaan. */
+    var LAUTAKORTIT = asetukset.lautakortit || null;
+    function lautakortti(laji, n) {
+      if (!LAUTAKORTIT) return null;
+      return LAUTAKORTIT + laji + '-' + (n < 10 ? '0' : '') + n + '.webp';
+    }
     function otsake(avain, oletus) { return OTSAKE[avain] || oletus; }
     var KEHOTE = !KORTTIPAIKKA ? '' :
       asetukset.kehote !== undefined ? asetukset.kehote :
@@ -1274,6 +1285,10 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       if (!window.pizzapakka) return null;
       var pakka;
       try { pakka = window.pizzapakka(); } catch (_) { return null; }
+      /* ⚠️ JÄRJESTYSNUMERO TALTEEN HETI. Lautapelin korttitiedostot on nimetty
+         pakan painetun järjestyksen mukaan (pizzakortti-01 = pakan ensimmäinen),
+         ja suodatusten jälkeen alkuperäistä indeksiä ei enää saa takaisin. */
+      pakka.forEach(function (k, i) { k.nro = i + 1; });
       var sydan = pakka.filter(function (k) { return k.sydan; })[0];
       if (!sydan) return null;
       /* \u26a0\ufe0f AHNE VALINTA, EI KIINTE\u00c4 KOKO. Ensin vaadin kolmea kolmen
@@ -1330,8 +1345,10 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
           k.style.left = pros(r[1]); k.style.top = pros(r[2]);
           k.style.width = pros(r[3]); k.style.height = pros(r[4]);
           k.style.setProperty('--viive', (i * 160) + 'ms');
-          if (tila.pizzat && tila.pizzat[i])
-            k.innerHTML = '<img src="' + KANSIO + '../' + tila.pizzat[i].kuva + '" alt="">';
+          var p = tila.pizzat && tila.pizzat[i];
+          var polku = p && (lautakortti('pizzakortti', p.nro) ||
+                            (KANSIO + '../' + p.kuva));
+          if (polku) k.innerHTML = '<img src="' + polku + '" alt="">';
           lava.appendChild(k);
         });
       }
@@ -1341,7 +1358,10 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       var poyta = el('div', 'ak__poyta');
       if (tila.vvaihe >= 3) {
         var pakka = el('span', 'ak__vpakka');
-        pakka.innerHTML = '<img src="' + KANSIO + 'apinakortti.webp" alt="">';
+        /* Pakka on pöydällä kuvapuoli alaspäin, joten se on SELKÄPUOLI. */
+        pakka.innerHTML = '<img src="' +
+          ((LAUTAKORTIT && LAUTAKORTIT + 'selkapuoli-apinakortti.webp') ||
+           (KANSIO + 'apinakortti.webp')) + '" alt="">';
         poyta.appendChild(pakka);
       }
       if (tila.vvaihe >= 4) {
@@ -1360,7 +1380,9 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       var rivi = el('div', 'ak__opas');
       var pizza = el('div', 'ak__opaspizza');
       if (tila.pizza) {
-        pizza.innerHTML = '<img src="' + KANSIO + '../' + tila.pizza.kuva + '" alt="">';
+        var kuva = lautakortti('pizzakortti', tila.pizza.nro) ||
+                   (KANSIO + '../' + tila.pizza.kuva);
+        pizza.innerHTML = '<img src="' + kuva + '" alt="">';
         pizza.classList.add('ak__opaspizza--nakyy');
         if (tila.pizza.sydan) pizza.classList.add('ak__opaspizza--sydan');
       }

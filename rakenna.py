@@ -1072,6 +1072,7 @@ def opasmountti(nimi, t):
     return ('<div class="ak-opas" data-opas="%s"'
             ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
             ' data-css="%s" data-js="%s" data-alueet="%s"'
+            ' data-lautakortit="../kuvat/lautapeli/"'
             ' data-linjasto="%s" data-varasto="%s"'
             ' data-nayta="%s" data-piilota="%s">'
             '<button type="button" class="apinakortti__nayta" aria-expanded="false">%s</button>'
