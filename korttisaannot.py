@@ -981,8 +981,22 @@ LIGATUURIT = {'ﬀ': 'ff', 'ﬁ': 'fi', 'ﬂ': 'fl',
               'ﬃ': 'ffi', 'ﬄ': 'ffl'}
 
 
+# Turkin pistetön ı ja pisteellinen İ.
+# 📐 Mitattu 17.–18.11.2026: turkin arkki syntyi oikein, mutta SISALTOKOE hylkäsi
+# sen ja kaatoi koko ajon — 18 lukua «puuttui», vaikka ne olivat arkilla.
+# Syy on Pythonin lower(), joka ei tunne turkin i-paria:
+#   'İ'.lower() -> 'i' + U+0307 (yhdistyvä piste), ei 'i'
+#   'I'.lower() -> 'i', vaikka turkissa se on 'ı'
+# Lähteessä lukee «Hazırlık», arkilla «HAZIRLIK» — samat sanat, eri kirjaimet.
+# Siksi i-perhe taitetaan yhteen ENNEN lower():ia. Koskee vain turkkia ja sen
+# sukukieliä; esim. vietnam ei muutu (mitattu).
+TURKIN_I = {'İ': 'i', 'ı': 'i', '\u0307': ''}
+
+
 def norm(s):
     for a, b in LIGATUURIT.items():
+        s = s.replace(a, b)
+    for a, b in TURKIN_I.items():
         s = s.replace(a, b)
     return re.sub(r'\s+', '', re.sub('<[^>]+>', '', s)).lower()
 
