@@ -77,12 +77,15 @@ window.rtlMittaa = function (doc) {
      Jos eristetty versio ei kestä, mittaus itse on rikki eikä tulosta saa lukea. */
   var KANTO_A = '\u0647\u0630\u0647 ';                 // «tämä »
   var KANTO_B = ' \u0644\u0639\u0628\u0629 \u0645\u0645\u062a\u0639\u0629';  // « hauska peli»
+  /* odotus = mita PALJAALLE merkkijonolle pitaa tapahtua arabian seassa. */
   var KOEPALAT = [
-    { laji: 'tuotenimi',   teksti: 'Pizza Love\u00ae',          eristettava: true },
-    { laji: 'pelimuoto',   teksti: '#1 Pizza',                  eristettava: true },
-    { laji: 'osoite',      teksti: 'pizzalove.fi/ar/card-game', eristettava: true },
-    { laji: 'korttivali',  teksti: '01\u201333',                eristettava: true },
-    { laji: 'numerovali',  teksti: '2\u20134',                  eristettava: false }
+    { laji: 'tuotenimi',   teksti: 'Pizza Love\u00ae',          odotus: 'kaantyy' },
+    { laji: 'pelimuoto',   teksti: '#1 Pizza',                  odotus: 'kaantyy' },
+    { laji: 'korttivali',  teksti: '01\u201333',                odotus: 'kaantyy' },
+    /* Osoite kestaa itsestaan: pisteet ja kauttaviivat sitovat sen yhteen. */
+    { laji: 'osoite',      teksti: 'pizzalove.fi/ar/card-game', odotus: 'kestaa' },
+    /* Numerovali SAA kaantya — sita ei eristeta. */
+    { laji: 'numerovali',  teksti: '2\u20134',                  odotus: 'kaantyy' }
   ];
   function nakyvaJarjestys(el) {
     var kavelija = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT), s, merkit = [];
@@ -114,7 +117,7 @@ window.rtlMittaa = function (doc) {
         var nakyi = nakyvaJarjestys(kpl);
         var kesti = nakyi.indexOf(k.teksti) >= 0;
         ulos.push({ laji: k.laji, teksti: k.teksti, tapa: tapa, kesti: kesti,
-                    nakyi: nakyi, eristettava: k.eristettava });
+                    nakyi: nakyi, odotus: k.odotus });
         kpl.remove();
       });
     });

@@ -437,6 +437,51 @@ def leima(nimi):
         return nimi + '?v=' + hashlib.sha1(f.read()).hexdigest()[:8]
 
 
+
+# ---------------------------------------------------------------- tunnisteet
+# ⚠️ TUNNISTE JA NUMEROVÄLI OVAT ERI ASIA, JA LÄHDETEKSTISSÄ NE NÄYTTÄVÄT SAMALTA.
+# Mitattu 18.11.2026 selaimessa, arabialaisen kantolauseen sisässä:
+#
+#   «#1 Pizza Party» paljaana        -> «Pizza Party 1#»     🔴 risuaita irtoaa
+#   «<bdi>#1</bdi> Pizza Party»      -> «Pizza Party #1»      ehjä, mutta nimi kääntyi
+#   «<bdi>#1 Pizza Party</bdi>»      -> «#1 Pizza Party»      ✓ kuten painettuna
+#   «Pizza Love®» paljaana           -> «®Pizza Love»        🔴 ® hyppää eteen
+#
+# ⛔ ÄLÄ LISÄÄ TÄHÄN NUMEROVÄLEJÄ («2–4 pelaajaa», «10–20 min»). Niiden KUULUU
+# kääntyä arabiassa — W3C (strings-and-bidi): «a range such as 10-12 … would
+# look like this in Arabic: 12-10». Eristys rikkoisi ne. Hepreassa ja persiassa
+# järjestys on päinvastainen, ja ratkaisija on KIELI eikä kirjoitusjärjestelmä.
+# Siksi tässä on vain se mikä luetaan aina vasemmalta oikealle: tuotenimi,
+# pelimuodon nimi ja nollalla alkava korttiväli (01–33, ei 10–20).
+#
+# Vartija: tyokalut/rtlkoe.py (osa «tunnisteet HTML:ssä»).
+TUNNISTEET = (
+    re.compile(r'Pizza Love\u00ae'),
+    # Pelimuodon nimi kokonaisena, myös suomen taivutus («#1 Pizza Partyssä»).
+    # ⚠️ `(?<![&\w])` on pakollinen: ilman sita kuvio osuu HTML-entiteetin
+    # numeroon (`&#8249;` -> `&<bdi>#8249</bdi>;`) ja rikkoo sen aanettomasti.
+    # Mitattu 18.11.2026 pelisivuilta: 60 osumaa, jokainen entiteetti.
+    re.compile(r'(?<![&\w])#\d(?:\s+Pizza(?:\s+[A-Za-z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u024f]+)?)?'),
+    # Korttiväli: nollalla alkava on tunniste, «10–20 min» ei ole.
+    re.compile(r'\b0\d\u2013\d\d\b'),
+)
+# Tagit ja skriptit ohitetaan: <bdi> ei kuulu attribuuttiin eikä JavaScriptiin.
+_EI_TEKSTIA = re.compile(r'(<script\b.*?</script>|<style\b.*?</style>|<[^>]*>)',
+                         re.S | re.I)
+
+
+def eristatunnisteet(html):
+    """Kääri tunnisteet <bdi>:hin, jotta ne pysyvät ehjinä RTL-tekstin seassa."""
+    osat = _EI_TEKSTIA.split(html)
+    for i in range(0, len(osat), 2):          # parittomat ovat tageja/skriptejä
+        teksti = osat[i]
+        if not teksti:
+            continue
+        for kuvio in TUNNISTEET:
+            teksti = kuvio.sub(lambda m: '<bdi>%s</bdi>' % m.group(0), teksti)
+        osat[i] = teksti
+    return ''.join(osat)
+
 def kehys(t, kaikki, sivu, title, kuvaus, runko):
     lang = t['lang']
     alt = ''.join('<link rel="alternate" hreflang="%s" href="%s/%s/%s">' % (k, OSOITE, k, sivutiedosto(sivu, k))
@@ -480,7 +525,8 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 </html>
 ''' % (lang + '" data-suunta="%s" data-kielet="%s" data-pyynto="%s'
                % (suunta(lang), ','.join(KIELET + sorted(KONEKIELET)), PYYNTO_OSOITE), e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT.get(lang, lang.replace('-', '_')),
-       ylaosa(t, sivu, kaikki), runko, alaosa(t),
+       eristatunnisteet(ylaosa(t, sivu, kaikki)), eristatunnisteet(runko),
+       eristatunnisteet(alaosa(t)),
        # Pizzakeittiön aritmetiikka on PELIN oma (julkinen/play/laskin.js), ei
        # sivuston kopio — sama `laske()` ja `osuuko()` joilla peli tarkistaa
        # pelaajan laskun. Ladataan vain korttipelisivulla, jossa keittiö on,

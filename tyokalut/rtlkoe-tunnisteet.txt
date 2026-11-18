@@ -1,5 +1,0 @@
-# Tunnisteet jotka hajoavat RTL-tekstissa ilman eristysta.
-# sivu<TAB>laji<TAB>merkkijono — tallennettu rtlkoe.py --tallenna
-korttivali	01–33
-pelimuoto	#1 Pizza
-tuotenimi	Pizza Love®

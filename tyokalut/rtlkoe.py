@@ -34,7 +34,6 @@ riippuu kielestä eikä kirjoitusjärjestelmästä.
 Käyttö:
     python3 tyokalut/rtlkoe.py              # docs/ (rakenna.py:n tulos)
     python3 tyokalut/rtlkoe.py --mutaatiot  # todistaa että koe osaa pettää
-    python3 tyokalut/rtlkoe.py --tallenna   # tunnisteiden perusluettelo talteen
 """
 import glob
 import http.server
@@ -53,7 +52,6 @@ import time
 TANNE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS = os.path.join(TANNE, 'docs')
 MITTAUS_JS = os.path.join(TANNE, 'tyokalut', 'rtlkoe.js')
-PERUSLUETTELO = os.path.join(TANNE, 'tyokalut', 'rtlkoe-tunnisteet.txt')
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 BUDJETTI = 20000          # ms, Chromen virtuaaliaika
 # ⚠️ KAKSI LEVEYTTÄ: media queryt vaihtavat mitkä säännöt ovat voimassa, joten
@@ -221,19 +219,37 @@ def arvioi(sivu, t):
                            % (sivu, x['teksti'], x['nakyi']))
         if x['tapa'] != 'paljas':
             continue
-        if x['eristettava'] and not x['kesti']:
-            tunnisteet.append('%s\t%s' % (x['laji'], x['teksti']))
-        if not x['eristettava'] and x['kesti']:
-            huomiot.append('%s: verrokki %r EI kaantynyt arabiassa — tarkista saanto uudelleen'
+        if x['odotus'] == 'kaantyy' and x['kesti']:
+            huomiot.append('%s: %r EI kaantynyt arabiassa — tarkista saanto uudelleen'
+                           % (sivu, x['teksti']))
+        if x['odotus'] == 'kestaa' and not x['kesti']:
+            huomiot.append('%s: %r kaantyi, vaikka sen piti kestaa itsestaan'
                            % (sivu, x['teksti']))
     return virheet, huomiot, tunnisteet
 
 
-def lue_perusluettelo():
-    if not os.path.exists(PERUSLUETTELO):
-        return None
-    with open(PERUSLUETTELO, encoding='utf-8') as f:
-        return set(r.rstrip('\n') for r in f if r.strip() and not r.startswith('#'))
+def tunnisteet_htmlssa(juuri):
+    """Tunnisteet valmiissa sivuissa, jotka EIVAT ole <bdi>:n sisalla.
+
+    ⚠️ Kuviot luetaan rakenna.py:sta — yksi lahde. Oma kopio ajautuisi erilleen
+    juuri siita mita se vartioi."""
+    sys.path.insert(0, TANNE)
+    import rakenna
+    bdi = re.compile(r'<bdi>.*?</bdi>', re.S)
+    ulos = []
+    # ⚠️ VAIN KIELISIVUT (kaksikirjaiminen kansio). `play/`, `joulu/` ja
+    # `varainhankinta/` eivat ole kehys():n tekemia eivatka saa data-suunta-lippua,
+    # joten niiden skannaus tuottaisi vain vaaria halytyksia.
+    kansiot = [d for d in sorted(os.listdir(juuri))
+               if len(d) == 2 and os.path.isdir(os.path.join(juuri, d))]
+    for f in sorted(sum([glob.glob(os.path.join(juuri, d, '*.html')) for d in kansiot], [])):
+        s = open(f, encoding='utf-8').read()
+        runko = s.split('</head>', 1)[-1]          # <title> ei voi sisaltaa markupia
+        puhdas = rakenna._EI_TEKSTIA.sub(' ', bdi.sub(' ', runko))
+        for kuvio in rakenna.TUNNISTEET:
+            for m in kuvio.finditer(puhdas):
+                ulos.append((os.path.relpath(f, juuri), m.group(0)))
+    return ulos
 
 
 def aja(juuri, sivut, hiljaa=False):
@@ -257,6 +273,13 @@ def aja(juuri, sivut, hiljaa=False):
                         print('  %-30s teksti %d/%d · asettelu %d · lava %d · ulkona %d · korkeus %+d'
                               % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
                                  t['lavaSiirtyi'], t['ulkona'], t['korkeusKasvoi']))
+    paljaat = tunnisteet_htmlssa(juuri)
+    if paljaat:
+        nayte = ' · '.join('%s: %s' % x for x in paljaat[:4])
+        virheet.append('%d eristamatonta tunnistetta valmiissa sivuissa (%s)'
+                       % (len(paljaat), nayte))
+    elif not hiljaa:
+        print('  eristamattomia tunnisteita valmiissa sivuissa: 0')
     return virheet, huomiot, tunnisteet
 
 
@@ -266,17 +289,46 @@ def aja(juuri, sivut, hiljaa=False):
 # dokumentin suunta kääntyi. Kun käännetään VAIN teksti, sillä ei ole vikatilaa
 # — ja mutaatio joka ei voi kaataa koetta on tyhjä koe. Korjaus (pystysuora
 # piilotus + `inset-inline-start`) on siis kestävyyttä, ei vartioitu lupaus.
+# (nimi, tiedostokuvio, vanha, uusi)
 MUTAATIOT = [
-    ('luettelon sisennys takaisin fyysiseksi',
+    ('luettelon sisennys takaisin fyysiseksi', 'tyyli.css',
      'ul.lista,ol.lista{margin:0 0 12px;padding-inline-start:22px}',
      'ul.lista,ol.lista{margin:0 0 12px;padding-left:22px}'),
-    ('asettelun palautussaanto pois',
+    ('asettelun palautussaanto pois', 'tyyli.css',
      'html[data-suunta="rtl"][lang] :is(',
      'html[data-suunta="EI-KAYTOSSA"][lang] :is('),
-    ('tekstin suunta pois',
+    ('tekstin suunta pois', 'tyyli.css',
      'html[data-suunta="rtl"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,',
      'html[data-suunta="EI-KAYTOSSA"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,'),
+    ('tunnisteiden eristys pois', '*/*.html', '<bdi>', ''),
 ]
+
+
+def eristyskoe():
+    """`eristatunnisteet` ilman selainta: osuuko se oikeaan ja VAIN oikeaan."""
+    sys.path.insert(0, TANNE)
+    import rakenna
+    vaatimukset = [
+        ('Pelaa #1 Pizza Party nyt', '<bdi>#1 Pizza Party</bdi>'),
+        ('Pelaa #1 Pizza Partyssa',  '<bdi>#1 Pizza Partyssa</bdi>'),
+        ('Peli Pizza Love\u00ae on', '<bdi>Pizza Love\u00ae</bdi>'),
+        ('Kortit 01\u201333 ovat',   '<bdi>01\u201333</bdi>'),
+    ]
+    kielletyt = [
+        ('2\u20134 pelaajaa', '<bdi>'),          # numerovali saa kaantya
+        ('10\u201320 min', '<bdi>'),
+        ('nuoli &#8249; tassa', '<bdi>'),       # HTML-entiteetti
+        ('<a title="#1 Pizza Party">x</a>', '<bdi>'),   # attribuutti
+        ('<script>var a="Pizza Love\u00ae";</script>', '<bdi>'),
+    ]
+    virheet = []
+    for syote, odotettu in vaatimukset:
+        if odotettu not in rakenna.eristatunnisteet(syote):
+            virheet.append('ei eristanyt: %r' % syote)
+    for syote, kielletty in kielletyt:
+        if kielletty in rakenna.eristatunnisteet(syote):
+            virheet.append('eristi liikaa: %r -> %r' % (syote, rakenna.eristatunnisteet(syote)))
+    return virheet
 
 
 def mutaatiokoe():
@@ -284,8 +336,17 @@ def mutaatiokoe():
     try:
         kopio = os.path.join(hiekka, 'docs')
         shutil.copytree(DOCS, kopio)
-        css = os.path.join(kopio, 'tyyli.css')
-        alkup = open(css, encoding='utf-8').read()
+
+        def kohteet(kuvio):
+            return sorted(glob.glob(os.path.join(kopio, kuvio)))
+
+        def lue(kuvio):
+            return {f: open(f, encoding='utf-8').read() for f in kohteet(kuvio)}
+
+        def kirjoita(tila):
+            for f, teksti in tila.items():
+                with open(f, 'w', encoding='utf-8') as fh:
+                    fh.write(teksti)
         # ⚠️ Sivut valitaan SISÄLLÖN mukaan, ei listan järjestyksessä.
         # Mitattu: apinakorttisivulla on 0 proosaluetteloa, joten luettelovika
         # ei voinut näkyä siellä — koe oli vihreä koska mitattavaa ei ollut.
@@ -301,16 +362,19 @@ def mutaatiokoe():
             return 1
 
         huonot = 0
-        for nimi, vanha, uusi in MUTAATIOT:
-            if alkup.count(vanha) != 1:
-                print('🔴 ANKKURI AJAUTUNUT: %r ei osu kertaalleen (%s)' % (vanha[:50], nimi))
+        for nimi, kuvio, vanha, uusi in MUTAATIOT:
+            alkup = lue(kuvio)
+            osumia = sum(t.count(vanha) for t in alkup.values())
+            # Yhden tiedoston ankkurin on osuttava kertaalleen; monen tiedoston
+            # kuviossa riittaa etta osumia on (muuten mutaatio ei tee mitaan).
+            if (osumia != 1) if '*' not in kuvio else (osumia == 0):
+                print('🔴 ANKKURI AJAUTUNUT: %r osui %d kertaa (%s)'
+                      % (vanha[:50], osumia, nimi))
                 huonot += 1
                 continue
-            with open(css, 'w', encoding='utf-8') as f:
-                f.write(alkup.replace(vanha, uusi, 1))
+            kirjoita({f: t.replace(vanha, uusi) for f, t in alkup.items()})
             v, _, _ = aja(kopio, sivut, hiljaa=True)
-            with open(css, 'w', encoding='utf-8') as f:
-                f.write(alkup)
+            kirjoita(alkup)
             if v:
                 print('  ✓ huomattiin: %-40s (%s)' % (nimi, v[0].split(': ', 1)[1][:60]))
             else:
@@ -336,35 +400,15 @@ def main():
         print('docs/ puuttuu — aja ensin python3 rakenna.py')
         return 1
 
+    v = eristyskoe()
+    if v:
+        for r in v:
+            print('🔴 eristatunnisteet: ' + r)
+        return 1
+    print('eristatunnisteet: osuu oikeaan ja vain oikeaan')
     print('Tekstin suunta oikealta vasemmalle (%s px):'
           % ' ja '.join(str(x) for x in LEVEYDET))
     virheet, huomiot, tunnisteet = aja(DOCS, SIVUT)
-
-    if '--tallenna' in sys.argv:
-        with open(PERUSLUETTELO, 'w', encoding='utf-8') as f:
-            f.write('# Tunnisteet jotka hajoavat RTL-tekstissa ilman eristysta.\n'
-                    '# sivu<TAB>laji<TAB>merkkijono — tallennettu rtlkoe.py --tallenna\n')
-            for r in sorted(set(tunnisteet)):
-                f.write(r + '\n')
-        print('\nPerusluettelo tallennettu: %d tunnistetta' % len(set(tunnisteet)))
-        return 0
-
-    peruste = lue_perusluettelo()
-    nyt = set(tunnisteet)
-    print('\nTunnisteet jotka hajoavat arabian seassa ilman <bdi>-eristysta: %d' % len(nyt))
-    if peruste is None:
-        print('  (ei perusluetteloa — aja --tallenna kun lista on hyvaksytty)')
-        for r in sorted(nyt)[:10]:
-            print('  · ' + r.replace('\t', '  '))
-    else:
-        uudet = nyt - peruste
-        poistuneet = peruste - nyt
-        for r in sorted(uudet):
-            print('  🔴 UUSI: ' + r.replace('\t', '  '))
-        for r in sorted(poistuneet):
-            print('  ✓ korjattu: ' + r.replace('\t', '  '))
-        if uudet:
-            virheet.append('%d uutta eristamatonta tunnistetta' % len(uudet))
 
     print()
     for r in huomiot:
