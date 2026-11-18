@@ -178,6 +178,15 @@ def korttipeli_pdf(lang):
     if polku and not os.path.exists(os.path.join(JULKINEN, polku[0])):
         print('⚠️  %s puuttuu – aja: python3 korttisaannot.py %s' % (polku[0], lang))
         polku = None
+    if lang in KONEKIELET:
+        # ⚠️ EI VARASIJAISTA ARKKIA konekäännöskielelle. 📐 Mitattu 18.11.2026:
+        # turkin arkki jäi syntymättä, ja nappi tarjosi hiljaa suomi–ruotsi–
+        # englanti-arkkia. Turkkilaiselle lukijalle se on tiedosto jota hän ei
+        # osaa lukea, ilman selitystä. None piilottaa napin ja koko
+        # latauslohkon: puuttuva nappi on oikea signaali, väärä sisältö ei ole.
+        # Selitystä ei lisätä, koska se olisi englanniksi turkinkielisellä
+        # sivulla — sama vika toisessa muodossa.
+        return polku
     return polku or PDF['korttipeli']
 
 
@@ -521,6 +530,9 @@ def hyppynapit(hyppy, avaimet, polut):
     suora = polut[avaimet[0]][0] if len(avaimet) == 1 else None
     ulos = []
     for k, v in hyppy.items():
+        # Ei ladattavaa -> ei nappia: muuten se veisi tyhjään lohkoon.
+        if k == 'lataa' and not avaimet:
+            continue
         if k == 'lataa' and suora and not suora.startswith('http'):
             ulos.append('<a href="../%s" target="_blank" rel="noopener">%s</a>'
                         % (leima(suora), e(v)))
@@ -831,9 +843,17 @@ def korttipeli(t, kaikki):
     # omankielinen tulee `korttipeli_pdf(lang)`:sta. Ensimmäinen versio luki
     # ylänapin suoraan `PDF`:stä, ja nappi osoitti kaikilla kielillä vanhaan
     # tiedostoon — alalista oli oikein, koska se sai korvatun sanakirjan.
-    polut = dict(PDF, korttipeli=korttipeli_pdf(lang))
+    oma_arkki = korttipeli_pdf(lang)
+    polut = dict(PDF, korttipeli=oma_arkki or PDF['korttipeli'])
+    lataa_avaimet = ['korttipeli'] if oma_arkki else []
     kaanto_pizzat, kaanto_taytteet = kaanto_pakat()
-    hyppy = hyppynapit(s['hyppy'], ['korttipeli'], polut)
+    hyppy = hyppynapit(s['hyppy'], lataa_avaimet, polut)
+    # Koko lohko yhtenä palana, jotta se voi myös puuttua: tyhjä «Säännöt
+    # PDF:nä» -otsikko ilman tiedostoa olisi lupaus jota ei lunasteta.
+    latauslohko = ('<h2 id="lataa">%s</h2>\n<p>%s</p>\n%s' % (
+        e(s['lataa_otsikko']), e(s['lataa_teksti']),
+        lataukset(lataa_avaimet, {'korttipeli': s['lataa_tiedosto']}, polut, lang))
+    ) if lataa_avaimet else ''
 
     muodot = []
     for i, m in enumerate(s['muodot']):
@@ -910,8 +930,6 @@ def korttipeli(t, kaikki):
   </div>
 </div>
 
-<h2 id="lataa">%s</h2>
-<p>%s</p>
 %s
 %s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
@@ -927,8 +945,7 @@ def korttipeli(t, kaikki):
        s['huomio_bruno'],
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), '\n'.join(muodot),
        e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
-       e(s['lataa_otsikko']), e(s['lataa_teksti']),
-       lataukset(['korttipeli'], {'korttipeli': s['lataa_tiedosto']}, polut, lang),
+       latauslohko,
        ristiinmyynti(t, 'lautapeli', 'korttipelisivu'))
     return kehys(t, kaikki, 'korttipeli', s['title'], s['kuvaus'], runko)
 
