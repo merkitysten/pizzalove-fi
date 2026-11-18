@@ -57,6 +57,7 @@ import sys
 import tempfile
 
 import korttisaannot as ks
+import rakenna as rk      # tunnisteiden eristys ja tekstisuunta: yksi lähde sivuston kanssa
 
 TANNE = os.path.dirname(os.path.abspath(__file__))
 SIVUJA = 2
@@ -133,6 +134,13 @@ def osoite(k):
 
 def e(s):
     return html.escape(str(s), quote=False)
+
+
+def tekstisuunta(kieli):
+    """Arkin tekstisuunta SAMASTA lähteestä kuin sivuston (rakenna.suunta_tiedoista):
+    käännöksen `suunta`, muuten kirjoitusjärjestelmä. Ei omaa kielilistaa — se olisi
+    toinen kopio, ja korjaus osuisi vain toiseen."""
+    return rk.suunta_tiedoista(json.load(open(ks.lahdepolku(kieli), encoding='utf-8')))
 
 
 def atomit_html(osa, pida_otsikot=True):
@@ -270,6 +278,10 @@ def sisalto(kieli):
 
 def sivu_html(kieli, luonnos=True):
     s, k, atomit, lisat = sisalto(kieli)
+    # ⚠️ Tunnisteet <bdi>:hin ENNEN kuin sisältö menee sivulle, samalla funktiolla
+    # kuin verkkosivuilla (rakenna.eristatunnisteet). ⛔ EI koko dokumenttiin:
+    # <title>-teksti ei voi kantaa <bdi>:tä — se näkyisi merkkeinä.
+    lisat = rk.eristatunnisteet(lisat)
     # Marko 15.11.2026: ylärivillä pelaajat, ikä ja kesto, alarivillä korttimäärät.
     # sisalto/*.json:n järjestys kaikilla kielillä: pelaajat, ikä, pizzakortit,
     # täytekortit, kesto.
@@ -310,7 +322,7 @@ def sivu_html(kieli, luonnos=True):
               % (tiheys[n][0], tiheys[n][1], lisat if n == SIVUJA - 1 else '', taitteet)
               for n in range(SIVUJA)]
     return '''<!doctype html>
-<html lang="{kieli}"><meta charset="utf-8"><title>{title}</title>
+<html lang="{kieli}" data-suunta="{suunta}"><meta charset="utf-8"><title>{title}</title>
 <style>
 {kirjasimet}
   {viiri_face}
@@ -368,7 +380,8 @@ def sivu_html(kieli, luonnos=True):
   p {{ margin-bottom: .6mm }}
   .johdanto {{ font-weight: 700 }}
   .pieni {{ font-size: 6.4pt; opacity: .8 }}
-  ul.lista, ol.lista {{ margin: 0 0 .5mm 3.4mm }}
+  /* sisennys loogisena: oikealta vasemmalle kirjoitettavassa kielessä numerot ja pallot oikealle */
+  ul.lista, ol.lista {{ margin: 0 0 .5mm; margin-inline-start: 3.4mm }}
   ul.lista li, ol.lista li {{ margin-bottom: .35mm }}
   ol.lista + ol.lista, ul.lista + ul.lista {{ margin-top: -.15mm }}
 
@@ -461,6 +474,22 @@ def sivu_html(kieli, luonnos=True):
   .vaihtoesim .vierekkain {{ margin: 1mm 0 0 }}
   .vaihtoesim .vaihto img {{ width: 7.4mm; border-color: {oranssi}; border-width: .35mm }}
   #lahde {{ position: absolute; left: -9999mm; width: {palsta_l}mm }}
+  /* ---- oikealta vasemmalle kirjoitettavat kielet (Marko 18.11.2026) ----------
+     «Älä käännä koko asettelua, vain tekstin suunta.» Sama sopimus kuin
+     sivustolla (julkinen/tyyli.css, lohko data-suunta): ensin teksti rtl:ksi,
+     sitten ne kohdat takaisin ltr:ksi joiden JÄRJESTYS on sisältöä eikä kieltä.
+     Toinen sääntö voittaa TARKKUUDELLA ([lang]) eikä järjestyksellä.
+     ⚠️ direction PERIYTYY, joten rtl:n saava ul vie mukanaan flex- ja
+     grid-lastensa järjestyksen. Siksi .tiedot ja .laskulista ovat listassa.
+     ⚠️ Laskulausekkeet on pakko lukita: UAX #9:n sääntö N1 kohtelee numeroita
+     oikealta vasemmalle, joten «2 · 3 = 6» kääntyisi rtl-kappaleessa.
+     ⛔ Numerovälejä EI eristetä (ks. rakenna.TUNNISTEET) — niiden kuuluu
+     kääntyä arabiassa. */
+  /* ⚠️ VAIN `direction`, EI `text-align`: oletus `start` seuraa suuntaa jo itse,
+     ja kirjoitettu `text-align` kumoaisi keskityksen (.banneri on h2). */
+  html[data-suunta="rtl"] :is(h1, h2, h3, p, li, ul, ol) {{ direction: rtl }}
+  html[data-suunta="rtl"][lang] :is(.banneri, .banneri *, .pelit,
+      .tiedot, .laskulista, .laskulista *, .laskut, .laskut *) {{ direction: ltr }}
   .ylivuoto {{ position: absolute; left: 4mm; top: 4mm; color: red; font: 700 14pt Otsikko, sans-serif }}
 </style>
 {ruudut}
@@ -545,7 +574,8 @@ function pakkaa() {{
         palsta_l=PALSTA_L, palstavali=PALSTAVALI,
         viiri_face=viirikirjasin()[0], viiri_font=viirikirjasin()[1], musta=ks.MUSTA, oranssi=ks.ORANSSI,
         hanta_raja=round(100 * (39 * 374 / 1030 - 5.3) / (39 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
-        ruudut=''.join(ruudut), atomit='\n'.join(atomit), osoite=json.dumps(osoite(k)),
+        ruudut=''.join(ruudut), atomit=rk.eristatunnisteet('\n'.join(atomit)), osoite=json.dumps(osoite(k)),
+        suunta=tekstisuunta(kieli),
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
 

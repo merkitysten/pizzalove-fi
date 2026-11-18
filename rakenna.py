@@ -47,12 +47,19 @@ OIKEALTA_VASEMMALLE_KIRJOITUKSET = {'Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo',
                                     'Adlm', 'Mand', 'Samr', 'Rohg'}
 
 
-def suunta(lang):
-    """'rtl' tai 'ltr'. Vain tekstin suunta — asettelua ei peilata (Marko 18.11.2026)."""
-    d = KONEKIELET.get(lang) or {}
+def suunta_tiedoista(d):
+    """'rtl' tai 'ltr' kaannoksen tiedoista (`suunta`, muuten `kirjoitus`).
+    Myos koteloarkki.py kysyy taman tasta, jotta sivulla ja painetulla arkilla
+    on yksi lahde — eika kahta listaa jotka ajautuvat erilleen."""
+    d = d or {}
     if d.get('suunta') in ('rtl', 'ltr'):
         return d['suunta']
     return 'rtl' if d.get('kirjoitus') in OIKEALTA_VASEMMALLE_KIRJOITUKSET else 'ltr'
+
+
+def suunta(lang):
+    """'rtl' tai 'ltr'. Vain tekstin suunta — asettelua ei peilata (Marko 18.11.2026)."""
+    return suunta_tiedoista(KONEKIELET.get(lang))
 
 
 def lue_konekaannokset():

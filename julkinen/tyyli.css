@@ -931,9 +931,13 @@ ol.vaiheet h3{margin:6px 0 6px}
  * Vartija: tyokalut/rtlkoe.py — mittaa molemmat puolet (teksti kääntyy JA
  * asettelu ei käänny). Uusi asettelulohko tekstin sisällä näkyy siellä heti.
  */
+/* ⚠️ VAIN `direction`, EI `text-align`. Oletus `start` seuraa suuntaa jo itse,
+   ja kirjoitettu `text-align` KUMOAISI keskityksen: mitattu 18.11.2026 —
+   `text-align:right` vei keskityksen p.keittio__tehtava:lta ja `start`
+   .korttinumerot a:lta. Vartija: rtlkoe «keskitys katosi». */
 html[data-suunta="rtl"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,
     h1,h2,h3,h4,th,td,.ingressi,.pieni,.murupolku){
-  direction:rtl;text-align:right}
+  direction:rtl}
 
 /* Asettelua kantavat lohkot: suunta takaisin. Lapset perivät tämän, joten
    `*` tarvitaan vain siellä missä lapsi on itse tekstielementti (lautakartan
@@ -947,4 +951,4 @@ html[data-suunta="rtl"][lang] :is(
     .apinakortti,.ak-opas,
     .lautakartta,.lautakartta *,.ak-lava,.ak-lava *,.apinakortti__lava,.apinakortti__lava *,
     .kielet,.kielet *,.korttinumerot,.korttinumerot *){
-  direction:ltr;text-align:start}
+  direction:ltr}

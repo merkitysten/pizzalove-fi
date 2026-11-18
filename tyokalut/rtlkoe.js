@@ -62,6 +62,26 @@ window.rtlMittaa = function (doc) {
     return o;
   }
 
+  /* Luettelon sisennys: kun suunta on rtl, numeroiden ja pallojen tila on
+     oltava OIKEALLA. Fyysinen `padding-left`/`margin-left` ei seuraa suuntaa,
+     ja oire on hiljainen: laatikko siirtyy, mutta mikään ei ylivuoda eikä
+     korkeus välttämättä muutu. Siksi tämä on oma mitta.
+     ⚠️ Vain rtl-suuntaiset listat: ltr-lukitun listan (esim. .tiedot)
+     sisennys KUULUU olla vasemmalla. */
+  function sisennysVaarin() {
+    var ulos = [], k = solmut();
+    for (var i = 0; i < k.length; i++) {
+      var el = k[i];
+      if (!/^(ul|ol)$/i.test(el.tagName)) continue;
+      var cs = doc.defaultView.getComputedStyle(el);
+      if (cs.direction !== 'rtl') continue;
+      var v = parseFloat(cs.paddingLeft) + parseFloat(cs.marginLeft);
+      var o = parseFloat(cs.paddingRight) + parseFloat(cs.marginRight);
+      if (v - o > 2) ulos.push({ n: nimi(el), vasen: Math.round(v), oikea: Math.round(o) });
+    }
+    return ulos;
+  }
+
   /* --- TUNNISTEET -----------------------------------------------------------
      ⚠️ TÄTÄ EI VOI MITATA SIVUN OMALLA TEKSTILLÄ. Englanninkielisessä
      kappaleessa «Pizza Love®» ei hajoa, vaikka perussuunta olisi rtl: koko
@@ -146,7 +166,8 @@ window.rtlMittaa = function (doc) {
   // ---- 2) RTL (vain tekstin suunta: attribuutti <html>:ään, kuten rakenna.py tekee)
   juuri.setAttribute('data-suunta', 'rtl');
   void doc.body.offsetHeight;
-  var b = kuva(), jb = jarjestykset(), lb = lavat(), sb = sivuntila(), tun = tunnisteet();
+  var b = kuva(), jb = jarjestykset(), lb = lavat(), sb = sivuntila();
+  var sisennys = sisennysVaarin(), tun = tunnisteet();
   juuri.removeAttribute('data-suunta');
   void doc.body.offsetHeight;
 
@@ -173,6 +194,19 @@ window.rtlMittaa = function (doc) {
       lavaSiirtyi.push({ n: e.n, dx: u.x - e.x, dy: u.y - e.y });
   });
 
+  /* ⚠️ KESKITYS VOI KADOTA ILMAN ETTÄ YKSIKÄÄN LAATIKKO LIIKKUU. Mitattu
+     18.11.2026: lohkon oma `text-align` (`right` tekstisäännössä, `start`
+     asettelusäännössä) voittaa tarkkuudella komponentin `center`:in, ja
+     laatikkokuva näyttää silti identtiseltä — vain teksti siirtyy laatikon
+     sisällä. Siksi tasaus on oma mitta. `start`->`right` on odotettu eikä
+     löydös; `center`/`justify` -> jotain muuta on. */
+  var tasausMuuttui = [];
+  a.forEach(function (e) {
+    var u = kartta[e.i];
+    if (!u || !/center|justify/.test(e.tasaus) || u.tasaus === e.tasaus) return;
+    tasausMuuttui.push({ n: e.n, ltr: e.tasaus, rtl: u.tasaus });
+  });
+
   var tekstiRtl = 0, tekstiYht = 0;
   b.forEach(function (e) {
     if (!/^p($|[#.])/.test(e.n) && !/^li($|[#.])/.test(e.n)) return;
@@ -187,6 +221,8 @@ window.rtlMittaa = function (doc) {
     ulkona: ulkona.length, ulkonaNaytteet: ulkona.slice(0, 8),
     asetteluKaantyi: kaantyneet.length, kaantyneetNaytteet: kaantyneet.slice(0, 8),
     lavaSiirtyi: lavaSiirtyi.length, lavaNaytteet: lavaSiirtyi.slice(0, 8),
+    tasausMuuttui: tasausMuuttui.length, tasausNaytteet: tasausMuuttui.slice(0, 8),
+    sisennysVaarin: sisennys.length, sisennysNaytteet: sisennys.slice(0, 8),
     tekstiRtl: tekstiRtl, tekstiYhteensa: tekstiYht,
     ohituslinkki: ohituslinkki(),
     tunnisteet: tun

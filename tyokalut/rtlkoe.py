@@ -26,13 +26,25 @@ Mitattu ja tarkistettu W3C:n i18n-ohjeesta (strings-and-bidi):
                 vasemmalta oikealle (W3C:n esimerkki on ISBN, joka
                 *«has to be read LTR»*). Nämä ON eristettävä.
 
-Koe mittaa vain tunnisteet, ja listaa ne perusluetteloa vasten
-(`rtlkoe-tunnisteet.txt`): uusi rikkoutuva tunniste on punainen, jo tiedossa
-oleva jono keltainen. Numerovälejä se EI mittaa, koska niiden oikea järjestys
-riippuu kielestä eikä kirjoitusjärjestelmästä.
+Koe vaatii tunnisteista **nollan eristämätöntä** valmiissa sivuissa ja arkissa.
+Numerovälejä se EI mittaa, koska niiden oikea järjestys riippuu kielestä eikä
+kirjoitusjärjestelmästä.
+
+Mitattavat puolet (jokaisella oma mutaationsa):
+  teksti        kääntyikö `direction: rtl`
+  asettelu      kääntyikö jonkin flex-/grid-lohkon lasten järjestys
+  lava          siirtyikö pelilaudan tai animaation osa
+  tasaus        katosiko keskitys (`center` -> jotain muuta)
+  sisennys      jäikö rtl-luettelon sisennys vasemmalle (fyysinen padding)
+  ulkona        valuiko jokin ruudun ulkopuolelle
+  korkeus       muuttuiko sivun korkeus (asettelu eli)
+  tunnisteet    arabialaisen kantolauseen koepala + staattinen haku
+
+Kohteet: `docs/`:n kielisivut JA painettu sääntöarkki (`koteloarkki.py`), joka
+rakentaa oman HTML:nsä eikä kulje `rakenna.py`:n kehyksen läpi.
 
 Käyttö:
-    python3 tyokalut/rtlkoe.py              # docs/ (rakenna.py:n tulos)
+    python3 tyokalut/rtlkoe.py              # docs/ + koteloarkki
     python3 tyokalut/rtlkoe.py --mutaatiot  # todistaa että koe osaa pettää
 """
 import glob
@@ -199,6 +211,16 @@ def arvioi(sivu, t):
         virheet.append('%s: %d lavan osaa siirtyi (pelilauta/animaatio esittaa fyysista pelia) (%s)'
                        % (sivu, t['lavaSiirtyi'],
                           ' · '.join(n['n'] for n in t['lavaNaytteet'][:3])))
+    if t.get('sisennysVaarin'):
+        virheet.append('%s: %d luettelon sisennys jai vasemmalle (%s)'
+                       % (sivu, t['sisennysVaarin'],
+                          ' · '.join('%s %d/%d' % (n['n'], n['vasen'], n['oikea'])
+                                     for n in t['sisennysNaytteet'][:3])))
+    if t.get('tasausMuuttui'):
+        virheet.append('%s: %d lohkon keskitys katosi (%s)'
+                       % (sivu, t['tasausMuuttui'],
+                          ' · '.join('%s %s->%s' % (n['n'], n['ltr'], n['rtl'])
+                                     for n in t['tasausNaytteet'][:3])))
     if t['tekstiYhteensa'] and not t['tekstiRtl']:
         virheet.append('%s: yksikaan teksti ei kaantynyt — saanto ei ole voimassa' % sivu)
     elif t['tekstiYhteensa'] and t['tekstiRtl'] < t['tekstiYhteensa'] * 0.5:
@@ -270,9 +292,11 @@ def aja(juuri, sivut, hiljaa=False):
                     if t.get('virhe'):
                         print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
                     else:
-                        print('  %-30s teksti %d/%d · asettelu %d · lava %d · ulkona %d · korkeus %+d'
+                        print('  %-30s teksti %d/%d · asettelu %d · lava %d · tasaus %d'
+                              ' · sisennys %d · ulkona %d · korkeus %+d'
                               % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
-                                 t['lavaSiirtyi'], t['ulkona'], t['korkeusKasvoi']))
+                                 t['lavaSiirtyi'], t.get('tasausMuuttui', 0),
+                                 t.get('sisennysVaarin', 0), t['ulkona'], t['korkeusKasvoi']))
     paljaat = tunnisteet_htmlssa(juuri)
     if paljaat:
         nayte = ' · '.join('%s: %s' % x for x in paljaat[:4])
@@ -281,6 +305,122 @@ def aja(juuri, sivut, hiljaa=False):
     elif not hiljaa:
         print('  eristamattomia tunnisteita valmiissa sivuissa: 0')
     return virheet, huomiot, tunnisteet
+
+
+# ------------------------------------------------------------- koteloarkki
+# 🔵 Marko 18.11.2026: «Tee se koteloarkkiin myös.»
+# Painettu sääntöarkki (koteloarkki.py) rakentaa OMAN HTML:nsä eikä kulje
+# rakenna.py:n kehyksen läpi, joten se tarvitsee saman kahden säännön
+# sopimuksen erikseen. Mitataan samalla mittausosalla (rtlkoe.js) kuin sivut:
+# arkki ON oikea selainsivu, vain sen paperi on A4.
+#
+# ⚠️ ARKIN SISÄLTÖ PAKATAAN RUUTUIHIN JAVASCRIPTILLÄ, joten mittaus on
+# odotettava: sivun oma skripti kirjoittaa `document.title`en «VALMIS», ja
+# vasta sen jälkeen laatikot ovat paikoillaan.
+# ⚠️ Mittaus tehdään yhdellä kielellä (fi): arkin rakenne ja CSS ovat samat
+# kaikille kielille, ja jokainen kieli maksaisi oman Chrome-ajonsa.
+ARKKI_KIELI = 'fi'
+ARKKI_PROBE = """
+<script src="tyokalut/rtlkoe.js"></script>
+<script>
+(function odota(n) {
+  function kirjoita(o) {
+    var pre = document.createElement('pre');
+    pre.id = 'rtlTulos'; pre.textContent = JSON.stringify(o);
+    document.body.appendChild(pre);
+  }
+  if (/^VALMIS/.test(document.title)) {
+    try { kirjoita(window.rtlMittaa(document)); }
+    catch (e) { kirjoita({ virhe: String(e && e.stack || e) }); }
+    return;
+  }
+  if (n > 400) { kirjoita({ virhe: 'pakkaus ei valmistunut: ' + document.title }); return; }
+  setTimeout(function () { odota(n + 1); }, 30);
+})(0);
+</script>
+"""
+
+
+def arkki_html(kieli=ARKKI_KIELI):
+    sys.path.insert(0, TANNE)
+    import koteloarkki
+    return koteloarkki.sivu_html(kieli, luonnos=False)
+
+
+def arkki_tunnisteet(html):
+    """Eristamattomat tunnisteet arkin rungossa.
+
+    ⚠️ <title> rajataan pois TARKOITUKSELLA: sen teksti ei voi kantaa <bdi>:ta
+    (markup nakyisi merkkeina). Sama rajaus kuin sivuilla."""
+    sys.path.insert(0, TANNE)
+    import rakenna
+    runko = html.split('</title>', 1)[-1]
+    bdi = re.compile(r'<bdi>.*?</bdi>', re.S)
+    puhdas = rakenna._EI_TEKSTIA.sub(' ', bdi.sub(' ', runko))
+    return [m.group(0) for kuvio in rakenna.TUNNISTEET for m in kuvio.finditer(puhdas)]
+
+
+def arkki_mittaa(html):
+    """Arkki selaimessa: file://, koska kuvat ja kirjasimet ovat omilla
+    suhteellisilla poluillaan tyopuussa (kuten koteloarkki.tulosta tekee)."""
+    polku = os.path.join(TANNE, '.rtlkoe-arkki-%d.html' % os.getpid())
+    with open(polku, 'w', encoding='utf-8') as f:
+        f.write(html.replace('</html>', ARKKI_PROBE + '</html>'))
+    try:
+        siivoa_profiilit()
+        komento = [CHROME, '--headless=new', '--disable-gpu', '--no-sandbox',
+                   '--hide-scrollbars', '--allow-file-access-from-files',
+                   '--virtual-time-budget=%d' % BUDJETTI,
+                   '--dump-dom', 'file://' + polku]
+        try:
+            r = subprocess.run(komento, capture_output=True, text=True,
+                               timeout=BUDJETTI / 1000 + 60)
+        except subprocess.TimeoutExpired:
+            return {'virhe': 'Chrome ei palannut ajoissa'}
+        m = re.search(r'<pre id="rtlTulos"[^>]*>(.*?)</pre>', r.stdout, re.S)
+        if not m:
+            return {'virhe': 'tuomiota ei loytynyt DOMista'}
+        teksti = m.group(1)
+        for a, b in (('&quot;', '"'), ('&amp;', '&'), ('&lt;', '<'), ('&gt;', '>')):
+            teksti = teksti.replace(a, b)
+        try:
+            return json.loads(teksti)
+        except ValueError as e:
+            return {'virhe': 'tuomio ei jasenny: %s' % e}
+    finally:
+        try:
+            os.unlink(polku)
+        except OSError:
+            pass
+
+
+def arkkikoe(html=None, hiljaa=False):
+    """Painettu arkki: tunnisteet eristetty JA teksti kaantyy asettelun pysyen."""
+    virheet, huomiot = [], []
+    if html is None:
+        html = arkki_html()
+    nimi = 'koteloarkki/%s' % ARKKI_KIELI
+    paljaat = arkki_tunnisteet(html)
+    if paljaat:
+        virheet.append('%s: %d eristamatonta tunnistetta (%s)'
+                       % (nimi, len(paljaat), ' · '.join(paljaat[:4])))
+    elif not hiljaa:
+        print('  %-30s eristamattomia tunnisteita: 0' % nimi)
+    tagi = re.search(r'<html[^>]*>', html)
+    if not tagi or 'data-suunta=' not in tagi.group(0):
+        virheet.append('%s: <html>:lta puuttuu data-suunta — saanto ei voi astua voimaan' % nimi)
+    t = arkki_mittaa(html)
+    v, h, _ = arvioi(nimi, t)
+    virheet += v
+    huomiot += h
+    if not hiljaa:
+        if t.get('virhe'):
+            print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
+        else:
+            print('  %-30s teksti %d/%d · asettelu %d · tasaus %d · sisennys %d · korkeus %+d'
+                  % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
+                     t.get('tasausMuuttui', 0), t.get('sisennysVaarin', 0), t['korkeusKasvoi']))
+    return virheet, huomiot
 
 
 # ----------------------------------------------------------------- mutaatiot
@@ -300,8 +440,62 @@ MUTAATIOT = [
     ('tekstin suunta pois', 'tyyli.css',
      'html[data-suunta="rtl"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,',
      'html[data-suunta="EI-KAYTOSSA"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,'),
+    # Kirjoitettu text-align kumoaa komponentin keskityksen, eikä yksikään
+    # laatikko liiku: vain teksti siirtyy laatikon sisällä (mitattu 18.11.2026).
+    ('tekstin tasaus kirjoitettuna', 'tyyli.css',
+     '  direction:rtl}', '  direction:rtl;text-align:right}'),
     ('tunnisteiden eristys pois', '*/*.html', '<bdi>', ''),
 ]
+
+
+# Arkin mutaatiot tehdaan VALMIISEEN HTML:aan eika koteloarkki.py:hyn: arkki
+# syntyy yhdella funktiokutsulla, joten hiekkalaatikkoa ei tarvita — eika
+# tyopuun tiedostoihin kosketa lainkaan (Drive peilaa ne).
+# ⚠️ Ankkurit ovat SITA TEKSTIA JOKA ON TULOSTEESSA (CSS:n {{ on jo purettu).
+ARKKI_MUTAATIOT = [
+    # Staattinen puoli
+    ('arkin tunnisteiden eristys pois', '<bdi>', ''),
+    ('arkin data-suunta pois', 'data-suunta="', 'data-eisuuntaa="'),
+    # Selainpuoli
+    ('arkin tekstisaanto pois',
+     'html[data-suunta="rtl"] :is(h1, h2, h3, p, li, ul, ol)',
+     'html[data-suunta="EI-KAYTOSSA"] :is(h1, h2, h3, p, li, ul, ol)'),
+    ('arkin asettelun lukitus pois',
+     'html[data-suunta="rtl"][lang] :is(.banneri',
+     'html[data-suunta="EI-KAYTOSSA"][lang] :is(.banneri'),
+    ('arkin tekstin tasaus kirjoitettuna',
+     ':is(h1, h2, h3, p, li, ul, ol) { direction: rtl }',
+     ':is(h1, h2, h3, p, li, ul, ol) { direction: rtl; text-align: start }'),
+    ('arkin luettelon sisennys fyysiseksi',
+     'margin: 0 0 .5mm; margin-inline-start: 3.4mm',
+     'margin: 0 0 .5mm 3.4mm'),
+]
+
+
+def arkkimutaatiot():
+    """Palauttaa huomaamattomien mutaatioiden maaran."""
+    print('Koteloarkin mutaatiot:')
+    alkup = arkki_html()
+    v, _ = arkkikoe(alkup, hiljaa=True)
+    if v:
+        print('🔴 Arkki on punainen jo ilman mutaatiota — koe on sokea:')
+        for r in v:
+            print('   ' + r)
+        return 1
+    huonot = 0
+    for nimi, vanha, uusi in ARKKI_MUTAATIOT:
+        osumia = alkup.count(vanha)
+        if not osumia:
+            print('🔴 ANKKURI AJAUTUNUT: %r ei osu arkkiin (%s)' % (vanha[:50], nimi))
+            huonot += 1
+            continue
+        v, _ = arkkikoe(alkup.replace(vanha, uusi), hiljaa=True)
+        if v:
+            print('  ✓ huomattiin: %-38s (%s)' % (nimi, v[0].split(': ', 1)[1][:58]))
+        else:
+            print('  🔴 EI HUOMATTU: %s' % nimi)
+            huonot += 1
+    return huonot
 
 
 def eristyskoe():
@@ -380,6 +574,7 @@ def mutaatiokoe():
             else:
                 print('  🔴 EI HUOMATTU: %s' % nimi)
                 huonot += 1
+        huonot += arkkimutaatiot()
         if huonot:
             print('\n🔴 %d mutaatiota meni lapi — vartija ei vartioi niita.' % huonot)
             return 1
@@ -409,6 +604,10 @@ def main():
     print('Tekstin suunta oikealta vasemmalle (%s px):'
           % ' ja '.join(str(x) for x in LEVEYDET))
     virheet, huomiot, tunnisteet = aja(DOCS, SIVUT)
+    print('Painettu kotelon saantoarkki:')
+    v, h = arkkikoe()
+    virheet += v
+    huomiot += h
 
     print()
     for r in huomiot:
