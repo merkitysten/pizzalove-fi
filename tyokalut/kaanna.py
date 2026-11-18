@@ -369,6 +369,9 @@ def tallenna(koodi, tulos):
     kielet['konekaannos_merkinta'] = tulos['konekaannos_merkinta']
     d = {'kieli': koodi, 'tagi': tagi, 'nimi': oma, 'nimi_en': en_nimi, 'kirjoitus': kirjoitus,
          'alue': alue, 'konekaannos': True,
+         # Tekstin suunta sivulle (rakenna.py lukee tämän). Kirjataan jo nyt, vaikka
+         # RTL-kielet torjutaan alla — jotta tieto on yhdessä paikassa eikä listassa.
+         'suunta': 'rtl' if kirjoitus in OIKEALTA_VASEMMALLE else 'ltr',
          'tarkastettu': False, 'malli': MALLI,
          'luotu': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
          'lataa_kielella': tulos['lataa_kielella'], 'ilmoita_virhe': tulos['ilmoita_virhe'],

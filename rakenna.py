@@ -36,8 +36,23 @@ KONE_SIVU = 'card-game'
 # Puuttuvan kielen nappi (sivu.js) lähettää pyynnön tähän. PHP-skripti
 # käynnistää GitHubin konekäännösajon (palvelin/kaannospyynto.php). Ei talletusta.
 PYYNTO_OSOITE = 'https://varainhankinta.merkitysten.fi/kaannos/pyynto.php'
-# Oikealta vasemmalle kirjoitettavat: ei vielä tukea, ei kehotusta (kaanna.py torjuu).
-OIKEALTA_VASEMMALLE = ['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb']
+# Oikealta vasemmalle kirjoitettavat kielet.
+# ⚠️ TÄSSÄ OLI 18.11.2026 ASTI KIELIKOODILISTA, JOTA EI KÄYTETTY MISSÄÄN — neljäs
+# kopio samasta tiedosta (kaanna.py, sivu.js, kielet.json). Suunta johdetaan nyt
+# KIRJOITUSJÄRJESTELMÄSTÄ, jonka kaanna.py kirjaa käännökseen (`kirjoitus`), joten
+# uusi kieli ei vaadi riviä mihinkään listaan.
+# ⚠️ Kieli, ei kirjoitus, ratkaisee numerovälit (W3C: «this is a language-specific
+# issue, rather than a script-specific issue») — se koskee SISÄLTÖÄ, ei tätä lippua.
+OIKEALTA_VASEMMALLE_KIRJOITUKSET = {'Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo',
+                                    'Adlm', 'Mand', 'Samr', 'Rohg'}
+
+
+def suunta(lang):
+    """'rtl' tai 'ltr'. Vain tekstin suunta — asettelua ei peilata (Marko 18.11.2026)."""
+    d = KONEKIELET.get(lang) or {}
+    if d.get('suunta') in ('rtl', 'ltr'):
+        return d['suunta']
+    return 'rtl' if d.get('kirjoitus') in OIKEALTA_VASEMMALLE_KIRJOITUKSET else 'ltr'
 
 
 def lue_konekaannokset():
@@ -463,7 +478,8 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
 %s<script src="../%s" defer></script>
 </body>
 </html>
-''' % (lang + '" data-kielet="%s" data-pyynto="%s' % (','.join(KIELET + sorted(KONEKIELET)), PYYNTO_OSOITE), e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT.get(lang, lang.replace('-', '_')),
+''' % (lang + '" data-suunta="%s" data-kielet="%s" data-pyynto="%s'
+               % (suunta(lang), ','.join(KIELET + sorted(KONEKIELET)), PYYNTO_OSOITE), e(title), e(kuvaus), leima('tyyli.css'), OSOITE, lang, sivutiedosto(sivu, lang), alt, e(title), e(kuvaus), OSOITE, lang, OSOITE, lang, sivutiedosto(sivu, lang), LOKAALIT.get(lang, lang.replace('-', '_')),
        ylaosa(t, sivu, kaikki), runko, alaosa(t),
        # Pizzakeittiön aritmetiikka on PELIN oma (julkinen/play/laskin.js), ei
        # sivuston kopio — sama `laske()` ja `osuuko()` joilla peli tarkistaa

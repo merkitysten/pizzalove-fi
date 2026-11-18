@@ -158,7 +158,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;
 .kielet>summary:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .kielet__nuoli{width:12px;height:12px;transition:transform .15s}
 .kielet[open] .kielet__nuoli{transform:rotate(180deg)}
-.kielet__lista{position:absolute;right:0;top:calc(100% + 8px);z-index:60;margin:0;padding:6px;list-style:none;
+.kielet__lista{position:absolute;inset-inline-end:0;top:calc(100% + 8px);z-index:60;margin:0;padding:6px;list-style:none;
   min-width:170px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
 .kielet__lista a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;
   border-radius:8px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px}
@@ -228,7 +228,11 @@ h3{font-size:18px;font-weight:700;margin:22px 0 6px}
 p{margin:0 0 12px}
 .ingressi{font-size:18px;color:var(--soft);margin-top:10px}
 .pieni{font-size:14px;color:var(--soft)}
-ul.lista,ol.lista{margin:0 0 12px;padding-left:22px}
+/* ⚠️ `padding-inline-start`, EI `padding-left`. Mitattu 18.11.2026:
+   RTL-tekstissä oma 22 px jäi vasemmalle ja selaimen oma 40 px tuli
+   oikealle (`22px / 40px`) — rivit kapenivat 283 → 243 px ja korttipelin
+   sivu kasvoi 102 px. */
+ul.lista,ol.lista{margin:0 0 12px;padding-inline-start:22px}
 ul.lista li,ol.lista li{margin:4px 0}
 
 /* ---------- Napit ---------- */
@@ -687,9 +691,13 @@ ol.vaiheet h3{margin:6px 0 6px}
 .eu-tunnus img{height:44px;width:auto;background:#fff;padding:6px;border-radius:6px}
 
 /* Näppäimistön käyttäjälle: hyppy suoraan sisältöön */
-.ohita{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--orange);color:#fff;
+/* ⚠️ Piilotus PYSTYSUUNNASSA, ei `left:-9999px`. Mitattu 18.11.2026:
+   vaakasuuntainen piilotus venytti sivun 9 999 px leveäksi heti kun
+   tekstin suunta kääntyi (selain laskee sen vierityalueeseen).
+   Ylhäälle piilotettu ei tee vieritysta kumpaankaan suuntaan. */
+.ohita{position:absolute;inset-inline-start:8px;top:-9999px;z-index:100;background:var(--orange);color:#fff;
   padding:8px 14px;border-radius:8px;font-weight:700}
-.ohita:focus{left:8px}
+.ohita:focus{top:8px}
 
 /* ---------- Apinakortit 01–33 (apinakortit.html, Marko 20.10.2026) ----------
  * Numeroruudukko vie suoraan korttiin. Valittu kortti (#k07) korostuu oranssilla reunalla. */
@@ -898,3 +906,45 @@ ol.vaiheet h3{margin:6px 0 6px}
 .valmiskieli .nappi{margin:0;flex:1 1 auto;justify-content:center}
 .valmiskieli__sulje{border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;
   color:var(--soft);padding:4px 8px;flex:none}
+
+/* ---------- Oikealta vasemmalle kirjoitettavat kielet (Marko 18.11.2026) ----------
+ * 🔵 «Älä käännä koko asettelua, vain tekstin suunta.»
+ *
+ * Siksi `dir="rtl"` EI ole <html>:ssä. Mitattu 18.11.2026 mitä se tekisi:
+ * pelilaudan osoittimet pysyivät paikoillaan (0 px), mutta apinakortin
+ * valmisteluanimaatiossa pizza ja boksi vaihtoivat puolta (±138 px) ja
+ * kortissa 16 kaksi pelaajamerkkiä vaihtoi paikkaa (±72 px) — eli kuka saa
+ * mitäkin olisi muuttunut. Animaatio esittää fyysistä peliä, eikä peli peilaudu.
+ *
+ * ⚠️ KAKSI SÄÄNTÖÄ, EI YHTÄ — koska `direction` PERIYTYY. Mitattu: pelkkä
+ * tekstisääntö valui `.esimerkki`-riviin ja käänsi pizzayhtälön (0,1,2,3,4 →
+ * 4,3,2,1,0), videonauhan ja latauslinkit. Teksti saa suunnan, asettelu ottaa
+ * sen takaisin.
+ *
+ * ⚠️ Jälkimmäinen voittaa TARKKUUDELLA eikä järjestyksellä: `[lang]` on aina
+ * <html>:ssä ja nostaa tarkkuuden (0,3,1) > (0,2,1). Lohkon siirtäminen ei siis
+ * riko tätä — samantarkkuuksinen pari rikkoutuisi äänettömästi.
+ *
+ * ⚠️ Vahva RTL-teksti renderöityy oikein myös LTR-lohkon sisällä: `direction`
+ * asettaa vain PERUSsuunnan (tasaus ja neutraalien merkkien paikka).
+ *
+ * Vartija: tyokalut/rtlkoe.py — mittaa molemmat puolet (teksti kääntyy JA
+ * asettelu ei käänny). Uusi asettelulohko tekstin sisällä näkyy siellä heti.
+ */
+html[data-suunta="rtl"] :is(p,ul,ol,li,dd,dt,blockquote,figcaption,summary,
+    h1,h2,h3,h4,th,td,.ingressi,.pieni,.murupolku){
+  direction:rtl;text-align:right}
+
+/* Asettelua kantavat lohkot: suunta takaisin. Lapset perivät tämän, joten
+   `*` tarvitaan vain siellä missä lapsi on itse tekstielementti (lautakartan
+   nimilista on <li>, joka on samalla flex-rivi). */
+html[data-suunta="rtl"][lang] :is(
+    .esimerkki,.videot,.lataukset a,.napit,.hyppylinkit,.pelin-tiedot,.muoto__tapa,
+    .korttiparit,.korttipari,.portaat,.vaiheet,.tarjoukset,.tarjous,.kaupanpaalle,
+    .huomio,.sankari,.pelit,.peli-kortti,.pelaa-banneri,.kauppa-banneri,
+    .sivurivi__sisus,.alaosa__sisus,.alaosa__linkit,.valmiskieli,.kielipyynto,
+    .lataukset,.kielet__lista,.lautakartta__nimet,
+    .apinakortti,.ak-opas,
+    .lautakartta,.lautakartta *,.ak-lava,.ak-lava *,.apinakortti__lava,.apinakortti__lava *,
+    .kielet,.kielet *,.korttinumerot,.korttinumerot *){
+  direction:ltr;text-align:start}
