@@ -405,3 +405,26 @@
   .ak__opaspizza{transition:none}
   .ak__opasboksi--taysi .av__boksi{animation:none}
 }
+
+/* ─── Pelivalmistelut: koko lauta, esineet mitatuille paikoilleen ───────
+   Marko 16.11.2026: «Nämä voisi myös olla sellaisena animaationa tuossa
+   pelilaudan yhteydessä.» Paikat tulevat isäntäsivun LAUTA_ALUEET-mitoista,
+   joten moduuli ei arvaa yhtäkään kohtaa. */
+.ak__naytto--valmistelut{display:grid;place-items:center;gap:10px}
+.ak__valmistelulauta{position:relative;width:min(340px,100cqw);aspect-ratio:1}
+.ak__valmistelukuva{width:100%;height:100%;object-fit:contain;max-width:none;display:block;
+  border-radius:10px}
+.ak__vtorni{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
+  background:var(--orange,#EE7203);box-shadow:0 1px 2px rgba(60,30,0,.35);
+  animation:ak-ilmesty .5s ease-out backwards;animation-delay:var(--viive,0ms)}
+.ak__vpizza{position:absolute;border-radius:7px;overflow:hidden;
+  box-shadow:0 2px 6px rgba(60,30,0,.3);
+  animation:ak-ilmesty .55s ease-out backwards;animation-delay:var(--viive,0ms)}
+.ak__vpizza img{width:100%;height:100%;object-fit:cover;max-width:none;display:block}
+.ak__poyta{display:flex;align-items:center;justify-content:center;gap:12px;min-height:54px}
+.ak__vpakka img,.ak__vboksi img{width:46px;height:46px;object-fit:contain;max-width:none;display:block}
+.ak__vpakka,.ak__vboksi{animation:ak-ilmesty .5s ease-out backwards;animation-delay:var(--viive,0ms)}
+@keyframes ak-ilmesty{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .ak__vtorni,.ak__vpizza,.ak__vpakka,.ak__vboksi{animation:none}
+}

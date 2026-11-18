@@ -35,6 +35,9 @@
     });
   }
   function tyyli(p) { return aineisto('link', p, { rel: 'stylesheet' }); }
+  function alueet() {
+    try { return A.alueet ? JSON.parse(A.alueet) : null; } catch (_) { return null; }
+  }
   function skripti(p) { return aineisto('script', p, {}); }
 
   /* Latausjärjestys on sääntö, ei tyylikysymys: `apinakortti.js` kutsuu
@@ -126,7 +129,9 @@
         oma = window.Apinakortti(sisus, {
           kansio: A.kansio, lautakuva: A.lauta, pelaajia: 3,
           korttipaikka: false, selite: false,
-          otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' }
+          otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' },
+          /* Laudan alueiden mitat sivulta: moduuli ei saa pitää omaa kopiota. */
+          alueet: alueet()
         });
         mountti.classList.add('ak-opas--auki');
         nappi.setAttribute('aria-expanded', 'true');

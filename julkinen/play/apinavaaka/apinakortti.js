@@ -175,6 +175,9 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        sivuille — sanat ovat jo olemassa käännettyinä (`lautapeli.lauta`), joten
        isäntäsivu antaa ne. Suomi jää oletukseksi esikatselua varten. */
     var OTSAKE = asetukset.otsakkeet || {};
+    /* Laudan alueiden mitat (900×900 kuvan koordinaateissa) tulevat
+       isäntäsivulta, jolla ne on mitattu kuvasta kerran. */
+    var ALUEET = asetukset.alueet || null;
     function otsake(avain, oletus) { return OTSAKE[avain] || oletus; }
     var KEHOTE = !KORTTIPAIKKA ? '' :
       asetukset.kehote !== undefined ? asetukset.kehote :
@@ -221,6 +224,11 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       tila.rengas = false;        // onko kehäasettelu päällä
       tila.suunta = 0;            // kehän kiertosuunta nuolelle: 1, -1 tai 0
       tila.mittarit = [];         // mitkä luvut näytetään (ks. MITTARIT)
+      tila.valmistelut = false;   // pelivalmisteluiden oma näkymä
+      /* ⚠️ OMA NIMI: `tila.vaihe` on jo vuoron askel (kortit 27 ja 30).
+         Sama nimi kahdessa merkityksessä on tämän projektin toistuvin
+         vikaluokka — kolme kertaa tänään (ak__rengas, ak__kiertaja, --lev). */
+      tila.vvaihe = 0;
       tila.pelaajamerkit = 0;     // montako pelaajamerkkiä laudan laidassa
       tila.nimet = true;          // näytetäänkö pelaajien nimet (ks. NIMETTOMAT)
       tila.aave = null;            // «tavallisesti tähän» — se mitä kortti muuttaa
@@ -601,6 +609,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       nayttoEl.innerHTML = '';
       var r = RYHMA[nykyinen] || 'lauta';
       if (r === 'boksi') piirraBoksit();
+      else if (tila.valmistelut) piirraValmistelut();
       else if (tila.opas) piirraOpas();
       else if (r === 'vuoro') piirraVuoro();
       else if (r === 'noppa') piirraNoppa();
@@ -1289,6 +1298,63 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       return { pizzat: valitut, sydan: sydan };
     }
 
+    /* ⚠️ VALMISTELUT NÄYTETÄÄN KOKO LAUDALLA, EI RENKAASSA. Apinakorttien
+       lautanäkymä on rajattu linjaston renkaaseen, mutta valmistelut koskevat
+       varastoa ja NELJÄÄ PIZZAKORTTIPAIKKAA, jotka ovat rajauksen ulkopuolella
+       laudan vasemmassa laidassa. Rajattu kuva ei voi näyttää niitä.
+       Paikat tulevat `ALUEET`ista 900×900 -kuvan koordinaatteina, joten ne
+       muuttuvat prosenteiksi jakamalla 9:llä. */
+    function pros(v) { return (v / 9).toFixed(2) + '%'; }
+
+    function piirraValmistelut() {
+      nayttoEl.className = 'ak__naytto ak__naytto--valmistelut';
+      var lava = el('div', 'ak__valmistelulauta');
+      lava.innerHTML = '<img src="' + (asetukset.lautakuva || KANSIO + 'pelilauta.webp') +
+        '" alt="" class="ak__valmistelukuva">';
+      var A = ALUEET || {};
+      /* Varasto: täytetornit nauhan sisälle tasavälein. */
+      if (tila.vvaihe >= 1 && A.varasto && A.varasto[0]) {
+        var v0 = A.varasto[0];   // ['rect', x, y, w, h, r]
+        for (var t = 0; t < 10; t++) {
+          var torni = el('span', 'ak__vtorni');
+          torni.style.left = pros(v0[1] + v0[3] / 2);
+          torni.style.top = pros(v0[2] + (t + 0.5) * (v0[4] / 10));
+          torni.style.setProperty('--viive', (t * 70) + 'ms');
+          lava.appendChild(torni);
+        }
+      }
+      /* Neljä pizzakorttia omille katkoviivapaikoilleen. */
+      if (tila.vvaihe >= 2 && A.pizzat) {
+        A.pizzat.forEach(function (r, i) {
+          var k = el('span', 'ak__vpizza');
+          k.style.left = pros(r[1]); k.style.top = pros(r[2]);
+          k.style.width = pros(r[3]); k.style.height = pros(r[4]);
+          k.style.setProperty('--viive', (i * 160) + 'ms');
+          if (tila.pizzat && tila.pizzat[i])
+            k.innerHTML = '<img src="' + KANSIO + '../' + tila.pizzat[i].kuva + '" alt="">';
+          lava.appendChild(k);
+        });
+      }
+      nayttoEl.appendChild(lava);
+
+      /* Pakka ja boksit laudan viereen: ne ovat pöydällä, eivät laudalla. */
+      var poyta = el('div', 'ak__poyta');
+      if (tila.vvaihe >= 3) {
+        var pakka = el('span', 'ak__vpakka');
+        pakka.innerHTML = '<img src="' + KANSIO + 'apinakortti.webp" alt="">';
+        poyta.appendChild(pakka);
+      }
+      if (tila.vvaihe >= 4) {
+        for (var b = 0; b < (asetukset.pelaajia || 3); b++) {
+          var bo = el('span', 'ak__vboksi');
+          bo.style.setProperty('--viive', (b * 180) + 'ms');
+          bo.innerHTML = '<img src="' + KANSIO + 'boksi.webp" alt="">';
+          poyta.appendChild(bo);
+        }
+      }
+      if (poyta.children.length) nayttoEl.appendChild(poyta);
+    }
+
     function piirraOpas() {
       nayttoEl.className = 'ak__naytto ak__naytto--opas';
       var rivi = el('div', 'ak__opas');
@@ -1428,11 +1494,18 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        esitetään liikkeellä. Näin «Edellinen» näyttää oikean tilan eikä
        peruutettua arvausta — tilaa ei voi perua, mutta sen voi rakentaa. */
     async function askeleeseen(i) {
-      if (nykyinen === null) return;
+      if (nykyinen === null && !nykyinenOpas) return;
       var suku = ++ajo;
       looppi = false;
       pika = true;
-      nollaa(nykyinen);
+      if (nykyinenOpas) {
+        alkuun();
+        askeleet = OPAS[nykyinenOpas]() || [];
+        askel = -1;
+        piirra();
+      } else {
+        nollaa(nykyinen);
+      }
       for (var j = 0; j < i; j++) {
         await naytaAskel(j, suku);
         if (suku !== ajo) { pika = false; return; }
@@ -1460,9 +1533,10 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
     }
 
     toistoEl.onclick = function () {
-      if (nykyinen === null) return;
+      if (nykyinen === null && !nykyinenOpas) return;
       looppi = !looppi;
       var suku = ++ajo;
+      if (looppi && nykyinenOpas) { naytaOpas(nykyinenOpas); ohjainPaivita(); return; }
       if (looppi) pyori(nykyinen, suku);
       else if (askel < 0) askeleeseen(0);
       ohjainPaivita();
@@ -1480,6 +1554,17 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        korttitekstiä, joten ne eivät saa kulkea samasta ovesta — muuten
        `kortit[n]` ja `RYHMA[n]` alkaisivat tarkoittaa kahta eri asiaa. */
     var OPAS = {
+      valmistelut: function () {
+        tila.valmistelut = true;
+        tila.vvaihe = 0;
+        var k = pizzaKortit();
+        tila.pizzat = k ? k.pizzat.concat([k.sydan]).slice(0, 4) : null;
+        function vvaiheeseen(n) {
+          return function () { tila.vvaihe = n; tila.liike = null; return uudelleen(); };
+        }
+        return [{ tee: vvaiheeseen(0) }, { tee: vvaiheeseen(1) },
+                { tee: vvaiheeseen(2) }, { tee: vvaiheeseen(3) }, { tee: vvaiheeseen(4) }];
+      },
       voitto: function () {
         var k = pizzaKortit();
         if (!k) return null;
@@ -1521,10 +1606,17 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       }
     };
 
+    /* ⚠️ OPAS EI OLE KORTTI, JOTEN `nykyinen` (korttinumero) ei kelpaa sen
+       muistamiseen. Käsiaskellus (‹ ›) kutsuu `nollaa(nykyinen)`, ja ilman
+       tätä se nollasi opasnakymän pois: napit olivat näkyvissä mutta eivät
+       tehneet mitään (mitattu selaimessa — kolme napautusta, tyhjä lauta). */
+    var nykyinenOpas = null;
+
     async function naytaOpas(nimi) {
       if (!OPAS[nimi]) return;
       var suku = ++ajo;
       nykyinen = null;
+      nykyinenOpas = nimi;
       looppi = true;
       pika = false;
       seliteEl.textContent = '';
@@ -1555,7 +1647,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       nayta: nayta,
       opas: naytaOpas,
       alkuun: function () {
-        ajo++; nykyinen = null; askeleet = []; askel = -1; looppi = true;
+        ajo++; nykyinen = null; nykyinenOpas = null; askeleet = []; askel = -1; looppi = true;
         alkuun(); piirra(); kehote(); seliteEl.textContent = ''; ohjainPaivita();
       },
       ryhma: function (n) { return RYHMA[n]; },

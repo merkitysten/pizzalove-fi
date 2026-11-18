@@ -1055,6 +1055,13 @@ def opasmountti(nimi, t):
     lauta = t.get('lautapeli', {}).get('lauta', {})
     # ⚠️ Leimatut polut myös tänne: kytkentäskripti lataa moduulin ajossa eikä
     # voi laskea tiivistettä, ja ilman leimaa selain tarjoilee vanhaa.
+    # ⚠️ ALUEIDEN MITAT TULEVAT SIVULTA, EI MODUULIN OMASTA KOPIOSTA.
+    # `LAUTA_ALUEET` on mitattu laudan kuvasta kerran (ks. sen kommentti), ja
+    # toinen kopio ajautuisi erilleen juuri silloin kun lauta piirretään
+    # uusiksi — väärään kohtaan osuva korostus on pahempi kuin ei korostusta.
+    import json as _json
+    alueet = _json.dumps({k: v for k, v in LAUTA_ALUEET.items()},
+                         separators=(',', ':')).replace('"', '&quot;')
     css = ','.join('../' + leima('play/apinavaaka/' + f)
                    for f in ('apinavaaka.css', 'apinakortti.css'))
     # kortit.js on play-juuressa (pelin oma pizzapakka), muut apinavaaka-kansiossa.
@@ -1064,12 +1071,12 @@ def opasmountti(nimi, t):
                    '../' + leima('play/apinavaaka/apinakortti.js')])
     return ('<div class="ak-opas" data-opas="%s"'
             ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
-            ' data-css="%s" data-js="%s"'
+            ' data-css="%s" data-js="%s" data-alueet="%s"'
             ' data-linjasto="%s" data-varasto="%s"'
             ' data-nayta="%s" data-piilota="%s">'
             '<button type="button" class="apinakortti__nayta" aria-expanded="false">%s</button>'
             '</div>'
-            % (nimi, css, js, e(lauta.get('linjasto', '')), e(lauta.get('varasto', '')),
+            % (nimi, css, js, alueet, e(lauta.get('linjasto', '')), e(lauta.get('varasto', '')),
                e(nayta), e(ui.get('apinakortti_piilota')), e(nayta)))
 
 
@@ -1137,6 +1144,7 @@ def lautapeli(t, kaikki):
   %s
   <h3>%s</h3>
   <ul class="lista">%s</ul>
+  %s
 </div>
 <h3>%s</h3>
 <ol class="vaiheet">%s</ol>
@@ -1166,7 +1174,7 @@ def lautapeli(t, kaikki):
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
        e(s['peli_otsikko']), lautakartta(s),
        e(s['voittaminen_otsikko']), s['voittaminen'], opasmountti('voitto', t),
-       e(s['valmistelut_otsikko']), valm,
+       e(s['valmistelut_otsikko']), valm, opasmountti('valmistelut', t),
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
        VAAKA_W, VAAKA_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),
