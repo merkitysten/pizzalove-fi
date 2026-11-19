@@ -24,7 +24,7 @@ name: Konekäännös
 # kaikki ajot olivat nimeltään pelkkä «Konekäännös» — ja palvelin
 # (palvelin/kaannospyynto.php) lukee tästä nimestä, mitkä kielet ovat työn
 # alla, eikä sen tarvitse tallettaa sitä itse.
-run-name: Konekäännös ${{ inputs.kieli }}
+run-name: Konekäännös ${{ inputs.kieli }}${{ inputs.toistokoe && ' (toistokoe)' || '' }}
 
 on:
   workflow_dispatch:
@@ -33,6 +33,11 @@ on:
         description: 'Kielikoodi (pl, ja, ko, zh-Hans, pt-BR …) tai «kaikki» = arkit uudelleen'
         required: true
         type: string
+      toistokoe:
+        description: 'Toistettavuusmittaus: käännä sama kieli uudelleen ja vertaa. MAKSAA yhden käännöksen, EI tallenna mitään.'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write   # tulos haaraan konekaannokset
@@ -84,9 +89,17 @@ jobs:
           mkdir -p "$RUNNER_TEMP/liput" && (cd "$RUNNER_TEMP/liput" && npm pack -s flag-icons@7.2.3 && tar xzf flag-icons-7.2.3.tgz)
           echo "LIPUT_LAHDE=$RUNNER_TEMP/liput/package/flags/1x1" >> "$GITHUB_ENV"
 
+      # 🔵 Marko 19.11.2026: «Tee se toistettavuusmittaus.»
+      # ⚠️ OMA HAARANSA, joka EI tallenna eikä julkaise: mittaus kysyy mikä
+      # kohta vaihtelee ajosta toiseen, eikä sen tulos saa korvata käännöstä
+      # joka on jo sivulla ja arkissa. Ajo paattyy tahan.
+      - name: Toistettavuusmittaus (Claude API, EI tallenna)
+        if: inputs.toistokoe
+        run: python3 tyokalut/kaanna.py --toisto "$KIELI"
+
       - name: Käännös (Claude API)
         id: kaannos
-        if: inputs.kieli != 'kaikki'
+        if: inputs.kieli != 'kaikki' && !inputs.toistokoe
         run: python3 tyokalut/kaanna.py "$KIELI"
 
       # ⚠️ KÄÄNNÖS TALTEEN HETI, ennen raskaita askeleita.
@@ -97,7 +110,7 @@ jobs:
       # arkki ja PDF lisätään samaan haaraan ajon lopuksi. Jos loppu kaatuu,
       # käännös on silti tallessa, ja seuraava «kaikki»-ajo tekee arkin ilmaiseksi.
       - name: Tallenna käännös heti (ennen arkkeja)
-        if: steps.kaannos.outputs.uusi == '1'
+        if: steps.kaannos.outputs.uusi == '1' && !inputs.toistokoe
         run: bash tyokalut/konekaannokset-haara.sh tallenna "${{ steps.kaannos.outputs.koodi }}" "$KIELI (käännös talteen)"
 
       # Aiemmista käännöksistä puuttuvat myöhemmin lisätyt osat (valikko ja napit
@@ -105,10 +118,14 @@ jobs:
       # kuluta päiväkattoa; lippu ei vaadi API-kutsua lainkaan.
       - name: Täydennä aiemmat konekäännökset
         id: taydennys
+        if: ${{ !inputs.toistokoe }}
         run: python3 tyokalut/kaanna.py --taydenna
 
       - name: Mitä tehdään
         id: tulos
+        # ⚠️ Toistokoe-ajossa ei tehdä mitään jatkoa: ilman tätä «kaikki» +
+        # toistokoe olisi rakentanut arkit uudelleen mittauksen sivutuotteena.
+        if: ${{ !inputs.toistokoe }}
         run: |
           if [ "$KIELI" = "kaikki" ]; then
             KOODIT=$(ls sisalto/konekaannos/*.json 2>/dev/null | xargs -n1 basename | sed 's/\.json$//' | tr '\n' ' ')

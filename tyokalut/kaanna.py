@@ -569,7 +569,97 @@ def taydenna(vastaus_tiedosto=None):
     return 0
 
 
+def kaanna_kerran(koodi, tuloste=''):
+    """Yksi käännös: kysy, tarkista, ja anna mallin korjata kerran.
+    Palauttaa (tulos, virheet). ⚠️ EI tallenna mitään — tallennus on kutsujan
+    asia, jotta toistettavuusmittaus (--toisto) voi ajaa tämän useasti
+    koskematta ihmisen hyväksymään käännökseen."""
+    jarjestelma = ohje(koodi)
+    viestit = [{'role': 'user', 'content': viesti(koodi)}]
+    tulos, virheet = None, ['ei tehty']
+    for yritys in (1, 2):
+        vastaus = kysy(viestit, jarjestelma)
+        try:
+            tulos = json_vastauksesta(vastaus)
+            virheet = tarkista(tulos)
+        except (ValueError, KeyError, TypeError) as v:
+            tulos, virheet = None, ['vastaus ei ole kelvollista JSONia: %s' % v]
+        print('%sYritys %d: %d virhettä' % (tuloste, yritys, len(virheet)))
+        if not virheet:
+            break
+        viestit += [{'role': 'assistant', 'content': vastaus},
+                    {'role': 'user', 'content': 'The automatic check found these problems. '
+                     'Fix them and return the complete corrected JSON object only:\n- '
+                     + '\n- '.join(virheet[:60])}]
+    return tulos, virheet
+
+
+def toistokoe(koodi, kerrat=None):
+    """Sama käännös uudelleen, ja vertailu: mikä kohta vaihtelee ajosta toiseen?
+
+    🔵 Marko 19.11.2026: «Tee se toistettavuusmittaus.»
+    ⚠️ TÄMÄ MAKSAA: jokainen ajo on kokonainen käännös. Jos kielellä on jo
+    tallennettu käännös, vertailu tehdään SITÄ vasten — silloin riittää yksi
+    uusi ajo kahden sijaan.
+    ⚠️ EI KIRJOITA `sisalto/konekaannos/`-kansioon. Mittaus ei saa korvata
+    käännöstä, joka on jo sivulla ja arkissa."""
+    import tempfile
+    sys.path.insert(0, os.path.join(TANNE, 'tyokalut'))
+    import toistokoe as tk
+
+    if koodi == 'kaikki':
+        raise SystemExit('Toistettavuutta mitataan YHDESTÄ kielestä, ei «kaikki»-ajosta.')
+
+    # ⚠️ Kaadu heti ja selvästi, älä kesken maksullisen ajon. Käännös tehdään
+    # vain siellä missä tunnukset ovat (GitHub Actions, OIDC-federaatio).
+    puuttuu = [a for a in ('ANTHROPIC_FEDERATION_RULE_ID', 'ANTHROPIC_ORGANIZATION_ID',
+                           'ANTHROPIC_SERVICE_ACCOUNT_ID', 'ANTHROPIC_WORKSPACE_ID')
+               if not os.environ.get(a)]
+    if puuttuu:
+        raise SystemExit('Toistettavuusmittaus tarvitsee API-tunnukset (puuttuu: %s).\n'
+                         'Aja se GitHub Actionsissa: Konekäännös → Run workflow → '
+                         'kieli <koodi>, toistokoe = true.\n'
+                         'Pelkän vertailun voi ajaa täällä ilman kuluja:\n'
+                         '  python3 tyokalut/toistokoe.py ajo1.json ajo2.json'
+                         % ', '.join(puuttuu))
+
+    polku = os.path.join(KONEKAANNOS, koodi + '.json')
+    tallennettu = json.load(open(polku, encoding='utf-8')) if os.path.exists(polku) else None
+    if kerrat is None:
+        kerrat = 1 if tallennettu else 2
+    print('Toistettavuus: %s, %d uutta ajoa%s'
+          % (koodi, kerrat, ' + tallennettu käännös' if tallennettu else ''))
+    ajot = [tallennettu] if tallennettu else []
+    hiekka = tempfile.mkdtemp(prefix='toistokoe-%s-' % koodi)
+    for n in range(1, kerrat + 1):
+        tulos, virheet = kaanna_kerran(koodi, tuloste='  ajo %d: ' % n)
+        if virheet:
+            print('🔴 ajo %d hylättiin: %s' % (n, ' · '.join(virheet[:3])))
+            return 1
+        # Sama muoto kuin tallennetulla (tallenna() lisaa kielet.tiedosto ym.),
+        # jotta vertailu ei nae tallennuksen lisayksia vaihteluna.
+        d = dict(tulos)
+        d['kieli'] = koodi
+        d['kielet'] = dict(tulos['kielet'])
+        if tallennettu:
+            for a in ('tiedosto', 'osoite', 'konekaannos_merkinta'):
+                if a in tallennettu['kielet']:
+                    d['kielet'][a] = tallennettu['kielet'][a]
+        with open(os.path.join(hiekka, 'ajo%d.json' % n), 'w', encoding='utf-8') as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        ajot.append(d)
+    print('Ajot talletettu vertailua varten: %s' % hiekka)
+    print()
+    return tk.tuomio(tk.vertaile(ajot))
+
+
 def main():
+    if '--toisto' in sys.argv:
+        argit = [a for a in sys.argv[1:] if not a.startswith('--')]
+        if not argit:
+            raise SystemExit('Käyttö: kaanna.py --toisto <kielikoodi> [--kerrat N]')
+        kerrat = int(sys.argv[sys.argv.index('--kerrat') + 1]) if '--kerrat' in sys.argv else None
+        return toistokoe(argit[0].strip().lower(), kerrat)
     if '--taydenna' in sys.argv:
         return taydenna(sys.argv[sys.argv.index('--vastaus') + 1] if '--vastaus' in sys.argv else None)
     argit = [a for i, a in enumerate(sys.argv[1:], 1)
@@ -601,22 +691,7 @@ def main():
         tulos = json_vastauksesta(open(sys.argv[sys.argv.index('--vastaus') + 1], encoding='utf-8').read())
         virheet = tarkista(tulos)
     else:
-        jarjestelma = ohje(koodi)
-        viestit = [{'role': 'user', 'content': viesti(koodi)}]
-        for yritys in (1, 2):
-            vastaus = kysy(viestit, jarjestelma)
-            try:
-                tulos = json_vastauksesta(vastaus)
-                virheet = tarkista(tulos)
-            except (ValueError, KeyError, TypeError) as v:
-                tulos, virheet = None, ['vastaus ei ole kelvollista JSONia: %s' % v]
-            print('Yritys %d: %d virhettä' % (yritys, len(virheet)))
-            if not virheet:
-                break
-            viestit += [{'role': 'assistant', 'content': vastaus},
-                        {'role': 'user', 'content': 'The automatic check found these problems. '
-                         'Fix them and return the complete corrected JSON object only:\n- '
-                         + '\n- '.join(virheet[:60])}]
+        tulos, virheet = kaanna_kerran(koodi)
     if virheet:
         print('🔴 KÄÄNNÖS HYLÄTTY:\n- ' + '\n- '.join(virheet[:60]))
         return 1
