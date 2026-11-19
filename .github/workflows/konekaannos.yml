@@ -2,8 +2,11 @@
 # 🔵 Marko 16.11.2026: «tämän kaiken pitää tapahtua automaattisesti ilman
 # minulta vaadittavia toimintoja». Yksi ajo tekee käännöksen, kielen oman sivun
 # (pizzalove.fi/xx/card-game) ja sääntöarkin ja julkaisee ne.
-# Kielilistaa ei ole (BCP 47: pl, ja, ko, zh-Hans, pt-BR …); oikealta vasemmalle
-# kirjoitettavat torjutaan toistaiseksi. Yksi pyyntö kieltä kohden.
+# Kielilistaa ei ole (BCP 47: pl, ja, ko, zh-Hans, pt-BR, ar …). Yksi pyyntö
+# kieltä kohden. ⚠️ Oikealta vasemmalle kirjoitettavat torjuttiin 19.11.2026
+# asti; portti poistettiin, kun *vain tekstin suunta* oli toteutettu ja
+# vartioitu (tyokalut/rtlkoe.py). Arabian kirjasimet tulevat `fonts-noto-core`-
+# paketista, jonka alla oleva askel jo asentaa.
 #
 # Tulokset tallennetaan omaan haaraansa `konekaannokset`, EI main-haaraan:
 # näin Markon GitHub Desktop ei koskaan vaadi Pullia käännösten takia.

@@ -59,12 +59,26 @@ MAKS_TOKENIT = 64000
 # Noto-fonteilla (selaimen merkkikohtainen varafontti; koe 16.11. kiinalla).
 # Tarkistus hylkää käännöksen, jos jokin ei täsmää, ja jokaisen uuden
 # kirjoitusjärjestelmän ensimmäisen arkin Marko katsoo itse.
-# ⚠️ Oikealta vasemmalle kirjoitettavat (arabia, heprea, persia, urdu …) vaativat
-# peilatun asettelun, jota ei vielä ole: ne torjutaan selvällä viestillä.
+# 🔵 Marko 19.11.2026: «Avaa se portti ja tee arabian käännös.»
+# ⚠️ TÄSSÄ OLI 19.11.2026 ASTI PORTTI, joka torjui oikealta vasemmalle
+# kirjoitettavat kielet perusteella «arkin peilattua asettelua ei vielä ole».
+# Peilattua asettelua EI TULE: päätös 18.11.2026 on *vain tekstin suunta*, ja se
+# on nyt toteutettu sekä sivuilla (julkinen/tyyli.css) että painetussa arkissa
+# (koteloarkki.py). Portin tilalla on vartija `tyokalut/rtlkoe.py`, joka mittaa
+# molemmat puolet (teksti kääntyy, asettelu ei) ja todistaa itsensä mutaatioilla.
+# `OIKEALTA_VASEMMALLE` jää, koska `tallenna()` kirjaa siitä kentän `suunta`.
 PUHUJIA_VAHINTAAN = 50000
 PAIVAKATTO = 10          # uusia konekäännöksiä enintään vuorokaudessa (kustannusten yläraja)
 IHMISEN_TARKASTAMAT = ('fi', 'en', 'sv', 'de', 'nl', 'fr', 'es', 'sk')
 OIKEALTA_VASEMMALLE = {'Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo', 'Adlm', 'Mand', 'Samr', 'Rohg'}
+# 🔵 Marko 19.11.2026 (Kakkukirjassa ratkaistu näin): kielelle, jolla EI OLE YHTÄ
+# MAATA, ei tule lippua vaan pyöreä kielikoodi. `langcodes` antaa arabialle alueen
+# EG (CLDR:n todennäköisin), ja Egyptin lippu arabian kieliversion päällä olisi
+# väite jota emme tarkoita — arabia on virallinen kieli yli 20 maassa.
+# ⚠️ Tämä EI ole murrepoikkeus (vrt. «Ruotsi on ruotsi, vaikka se olisi
+# suomenruotsi»): kyse ei ole siitä kumpi maa valitaan vaan siitä, ettei yhtä ole.
+# Lisää tähän vain kieli, jolla ei aidosti ole yhtä kotimaata.
+EI_YHTA_MAATA = {'ar'}
 
 
 def kieli(koodi):
@@ -418,7 +432,7 @@ def lippu(koodi, kirjoitus, alue):
     if os.path.exists(kohde):
         return
     lahde_kansio = os.environ.get('LIPUT_LAHDE', '')
-    if kirjoitus == 'Hant' or not alue or not re.fullmatch(r'[A-Z]{2}', alue):
+    if koodi in EI_YHTA_MAATA or kirjoitus == 'Hant' or not alue or not re.fullmatch(r'[A-Z]{2}', alue):
         print('Lippu: ei lippua (%s, alue %s) — arkissa pelkkä kielikoodi' % (koodi, alue))
         return
     lahde = os.path.join(lahde_kansio, alue.lower() + '.svg')
@@ -565,9 +579,6 @@ def main():
     koodi, tagi, en_nimi, oma, kirjoitus, alue = kieli(argit[0].strip())
     if koodi in IHMISEN_TARKASTAMAT:
         raise SystemExit('%s on jo ihmisen tarkastama kieli — konekäännöstä ei tehdä.' % koodi)
-    if kirjoitus in OIKEALTA_VASEMMALLE:
-        raise SystemExit('%s (%s) kirjoitetaan oikealta vasemmalle. Arkin peilattua asettelua ei '
-                         'vielä ole — Marko tekee tämän kielen käsin.' % (en_nimi, tagi))
     print('Kieli: %s / %s (%s, kirjoitus %s, alue %s)' % (en_nimi, oma, tagi, kirjoitus, alue))
     polku = os.path.join(KONEKAANNOS, koodi + '.json')
     if os.path.exists(polku) and '--uudelleen' not in sys.argv:

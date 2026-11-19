@@ -198,7 +198,9 @@ def korttipeli_pdf(lang):
     if lang in KONEKIELET:
         polku = ('pdf/' + KONEKIELET[lang]['kielet']['tiedosto'], 'korttipeli')
     if polku and not os.path.exists(os.path.join(JULKINEN, polku[0])):
-        print('⚠️  %s puuttuu – aja: python3 korttisaannot.py %s' % (polku[0], lang))
+        # ⚠️ Arkin tekee 15.11.2026 alkaen koteloarkki.py (korttisaannot.py on sen
+        # kirjasto, ei enää generaattori). Neuvo osoitti 19.11.2026 asti vanhaan.
+        print('⚠️  %s puuttuu – aja: python3 koteloarkki.py %s' % (polku[0], lang))
         polku = None
     if lang in KONEKIELET:
         # ⚠️ EI VARASIJAISTA ARKKIA konekäännöskielelle. 📐 Mitattu 18.11.2026:

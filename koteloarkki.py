@@ -399,7 +399,12 @@ def sivu_html(kieli, luonnos=True):
   .netti #qr svg {{ width: 17mm; height: auto; display: block }}
   .netti .lippu {{ margin-left: auto; align-self: flex-end; text-align: center; flex: none }}
   .netti .lippu img {{ width: 10mm; height: 10mm; border-radius: 50%; display: block; object-fit: cover }}
-  .netti .lippu .vain-koodi {{ font-size: 9pt; border: .35mm solid {musta}; border-radius: 1.5mm; padding: 1.2mm 1.6mm; margin: 0 }}
+  /* 🔵 Marko 19.11.2026 (Kakkukirja): kielelle jolla ei ole yhtä maata ei tule
+     lippua vaan PYÖREÄ kielikoodi. Sama halkaisija kuin lipulla, koska se on
+     saman paikan asukki — pyöristetty suorakaide näytti virheeltä lipun paikalla. */
+  .netti .lippu .vain-koodi {{ width: 10mm; height: 10mm; border-radius: 50%; display: flex;
+     align-items: center; justify-content: center; background: {musta}; color: #fff;
+     font: 700 8pt/1 Otsikko, sans-serif; letter-spacing: .04em; margin: 0 }}
   .netti .lippu span {{ display: block; font: 700 6.5pt/1 Otsikko, sans-serif; margin-top: .9mm; letter-spacing: .04em }}
   .netti p {{ margin: 0 0 .5mm }}
   .netti .qr-teksti {{ font: 700 7pt/1.15 Otsikko, sans-serif; text-transform: uppercase }}
