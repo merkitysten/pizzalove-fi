@@ -177,7 +177,13 @@
      perusteella. Selain ei tiedä kirjoitusjärjestelmää, joten tässä ovat
      kielet; hakemiston riveillä (kielet.json) tieto tulee kaanna.py:n omasta
      OIKEALTA_VASEMMALLE-joukosta. */
-  var EI_VIELA = ['ar', 'he', 'iw', 'fa', 'ur', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'];
+  /* ⚠️ TÄSSÄ OLI 19.11.2026 ASTI LISTA, joka torjui oikealta vasemmalle
+     kirjoitettavat kielet (ar, he, fa, ur …) merkinnällä «Ei vielä tuettu».
+     Ne OVAT nyt tuettuja: 18.11. päätös on *vain tekstin suunta*, ja se on
+     toteutettu sivuilla ja painetussa arkissa sekä vartioitu (tyokalut/rtlkoe.py).
+     📐 Portti poistettiin kaanna.py:stä 19.11., mutta tämä jäi — ja silloin
+     sivusto EI ANTANUT pyytää arabiaa, vaikka palvelin olisi tehnyt sen.
+     Sama tieto oli siis kolmessa paikassa, ja korjaus osui yhteen niistä. */
 
   function koodi(l) {
     l = String(l || '').toLowerCase(); var p = l.split('-');
@@ -187,7 +193,6 @@
     return p[0];
   }
   function kelpaa(k) { return /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(k); }
-  function tuettu(k) { return EI_VIELA.indexOf(k.split('-')[0]) < 0; }
   function nimi(k, oma) {
     try { return new Intl.DisplayNames([oma || k], { type: 'language' }).of(k) || k; } catch (_) { return k; }
   }
@@ -320,7 +325,7 @@
   /* ---------------------------------------------------------------- banneri */
   (function () {
     var k = selaimenKieli();
-    if (!kelpaa(k) || olemassa[k] || !tuettu(k)) return;
+    if (!kelpaa(k) || olemassa[k]) return;
     var n = nimi(k);
     var main = document.getElementById('sisalto');
     if (!main) return;
@@ -541,9 +546,6 @@
                   '" aria-pressed="' + (nakyy(k) ? 'true' : 'false') + '"' +
                   (k === sivunKieli ? ' disabled' : '') +
                   ' aria-label="' + p(T.valikossa + ': ' + r[1]) + '"></button></li>');
-      } else if (r[4] || !tuettu(k)) {
-        osat.push('<li class="valitsin__rivi valitsin__rivi--ei">' + sisus +
-                  '<span class="valitsin__ei">' + p(T.eituettu) + '</span></li>');
       } else {
         osat.push('<li class="valitsin__rivi">' + sisus +
                   '<button type="button" class="nappi nappi--pieni" data-k="' + p(k) +
@@ -675,7 +677,7 @@
       var oma = selaimenKieli();
       var rivi = null;
       for (var i = 0; i < data.length; i++) if (data[i][0] === oma) { rivi = data[i]; break; }
-      if (rivi && !olemassa[oma] && tuettu(oma) && !rivi[4]) {
+      if (rivi && !olemassa[oma]) {
         ehdotus.innerHTML = '<div class="valitsin__rivi valitsin__rivi--ehdotus">' +
           rivinSisus(rivi, maa(rivi[3])) + '<button type="button" class="nappi" data-k="' + p(oma) +
           '" data-nimi="' + p(rivi[1]) + '" aria-label="' + p(T.pyyda + ': ' + rivi[1]) + '">' +
