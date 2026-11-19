@@ -600,7 +600,15 @@ def tulosta(html_polku, pdf_polku):
         return
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
-        b = p.chromium.launch(args=['--allow-file-access-from-files'])
+        # ⚠️ JARJESTELMAN Chrome, ei erikseen ladattua Chromiumia. GitHubin
+        # ajurikuvassa Google Chrome on valmiina, ja `playwright install`
+        # latasi saman selaimen uudelleen joka ajossa.
+        # 📐 Mitattu 19.11.2026: askel «Fontit ja selain» kesti eri ajoissa
+        # 29 s … 2188 s, ja 2188 s:n ajossa arkkien teko itse vei 49 s.
+        try:
+            b = p.chromium.launch(channel='chrome', args=['--allow-file-access-from-files'])
+        except Exception:
+            b = p.chromium.launch(args=['--allow-file-access-from-files'])
         sivu = b.new_page()
         sivu.goto('file://' + html_polku, wait_until='load')
         sivu.wait_for_function("document.title.indexOf('VALMIS') === 0", timeout=20000)

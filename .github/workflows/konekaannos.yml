@@ -140,8 +140,21 @@ jobs:
       - name: Fontit ja selain
         if: steps.tulos.outputs.uusi == '1'
         run: |
+          # ⚠️ Askel on mitattava, koska se on ylivoimaisesti hitain ja sen
+          # kesto vaihtelee: 29 s … 2188 s (19.11.2026). Ilman erittelyä ei
+          # tiedä kumpi puoli on hidas.
+          alku=$SECONDS
           sudo apt-get update -q && sudo apt-get install -y -q poppler-utils fonts-noto-core fonts-noto-cjk
-          python -m playwright install --with-deps chromium
+          echo "apt: $((SECONDS - alku)) s"
+          # Chrome on ajurikuvassa valmiina (Google Chrome 157). Ladataan
+          # selain vain jos sitä EI ole — aiemmin se ladattiin joka ajossa.
+          alku=$SECONDS
+          if command -v google-chrome >/dev/null; then
+            echo "Chrome valmiina: $(google-chrome --version)"
+          else
+            python -m playwright install --with-deps chromium
+          fi
+          echo "selain: $((SECONDS - alku)) s"
 
       - name: VAG Rounded -viirikirjasin (salaisuudesta, ei repoon)
         if: steps.tulos.outputs.uusi == '1'
