@@ -39,6 +39,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import unicodedata
 
 TANNE = os.path.dirname(os.path.abspath(__file__))
 # Macilla Chrome; GitHub Actionsissa (Linux) polku annetaan ympäristömuuttujalla
@@ -581,6 +582,18 @@ LATIN_EXT = ('U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, '
 # D-DIN-osajoukossa on Latin-1 + š ž Œ Ÿ, ei muuta (luettu cmapista).
 DDIN = ('U+0000-00FF, U+0152-0153, U+0160-0161, U+0178, U+017D-017E, '
         'U+2000-206F, U+20AC, U+2122')
+# 🔵 Marko 19.11.2026: arabia selkeänä ja lämminhenkisenä, mutta bränditekstit
+# samannäköisinä kuin muilla kielillä. Tajawal (Boutros International, OFL —
+# julkinen/fontit/OFL-tajawal.txt) VAIN arabian merkistöalueelle, saman
+# perhenimen alla: silloin jokainen Teksti/Otsikko/Viiri saa arabian ilman että
+# yhtäkään sääntöä muutetaan, ja latina pysyy painetun arkin omissa kirjasimissa.
+# ⚠️ Yksi kopio tiedostoista (julkinen/fontit/), ei toista paperi/fontit/:iin.
+# 📐 Mitattu 19.11.2026: ilman tätä arabia tuli laitteen varafontista, ja kaksi
+# laitetta latoi saman tekstin 13–15 % eri levyisenä — painettu arkki ei siis
+# ollut toistettavissa (Mac: Geeza Pro, GitHub Actions: Noto).
+ARAB = ('U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, '
+        'U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, '
+        'U+FE76-FEFC')
 KIRJASIMET = '''
   @font-face {{ font-family: Otsikko; font-weight: 700;
     src: url(paperi/fontit/barlow-condensed-700-ext.woff2); unicode-range: {ext} }}
@@ -598,7 +611,16 @@ KIRJASIMET = '''
     src: url(paperi/fontit/source-sans-3-700-latin-ext.woff2); unicode-range: {ext} }}
   @font-face {{ font-family: Teksti; font-weight: 700;
     src: url(paperi/fontit/source-sans-3-700-latin.woff2); unicode-range: {latin} }}
-'''.format(ext=LATIN_EXT, latin=LATIN, ddin=DDIN)
+  /* arabia: sama perhenimi, vain arabian merkistoalue (ks. ARAB:n kommentti) */
+  @font-face {{ font-family: Teksti; font-weight: 400;
+    src: url(julkinen/fontit/tajawal-400-arabic.woff2); unicode-range: {arab} }}
+  @font-face {{ font-family: Teksti; font-weight: 700;
+    src: url(julkinen/fontit/tajawal-700-arabic.woff2); unicode-range: {arab} }}
+  @font-face {{ font-family: Otsikko; font-weight: 700;
+    src: url(julkinen/fontit/tajawal-700-arabic.woff2); unicode-range: {arab} }}
+  @font-face {{ font-family: Viiri; font-weight: 900;
+    src: url(julkinen/fontit/tajawal-900-arabic.woff2); unicode-range: {arab} }}
+'''.format(ext=LATIN_EXT, latin=LATIN, ddin=DDIN, arab=ARAB)
 
 
 def lasku(lauseke):
@@ -994,6 +1016,14 @@ TURKIN_I = {'İ': 'i', 'ı': 'i', '\u0307': ''}
 
 
 def norm(s):
+    # ⚠️ NFKC ENSIN: arabian kirjaimet latoutuvat ligatuureiksi, ja PDF:sta
+    # teksti purkautuu ESITYSMUOTONA. 📐 Mitattu 19.11.2026: «الﻼعب» tuli
+    # PDF:sta merkilla U+FEFC (lam-alef) kahden kirjaimen U+0644 U+0627
+    # sijaan, ja sisaltokoe ilmoitti neljan luvun puuttuvan arkilta, vaikka
+    # ne olivat siina. NFKC palauttaa esitysmuodot peruskirjaimiksi.
+    # Kaytetaan molemmilla puolilla vertailua, joten se ei voi tuoda vaaria
+    # osumia — vain poistaa vaaria hälytyksiä.
+    s = unicodedata.normalize('NFKC', s)
     for a, b in LIGATUURIT.items():
         s = s.replace(a, b)
     for a, b in TURKIN_I.items():

@@ -146,7 +146,17 @@ function aja(){
   try { kirjoita(window.rtlMittaa(f.contentDocument)); }
   catch (e) { kirjoita({ virhe: String(e && e.stack || e) }); }
 }
-f.addEventListener('load', function(){ setTimeout(aja, 800); });
+f.addEventListener('load', function(){
+  /* ⚠️ Arabian kirjasin ladataan vasta kun sen merkkeja piirretaan. Pyydetaan
+     se ETUKATEEN, muuten kirjasinmittaus lukee varafonttia. */
+  var d = f.contentDocument, AR = '\u0647\u0630\u0647 \u0644\u0639\u0628\u0629';
+  var perhe = d.defaultView.getComputedStyle(d.body).fontFamily.split(',')[0];
+  function merkitse(n){ d.__arabianKasvot = n; }
+  var odota = d.fonts ? d.fonts.load('48px ' + perhe, AR)
+                         .then(function(k){ merkitse(k.length); }, function(){ merkitse(0); })
+                      : Promise.resolve(merkitse(0));
+  odota.then(function(){ setTimeout(aja, 800); });
+});
 setTimeout(function(){
   if (document.getElementById('rtlTulos').textContent === 'kesken') kirjoita({ virhe: 'iframe ei latautunut' });
 }, 12000);
@@ -226,6 +236,13 @@ def arvioi(sivu, t):
     elif t['tekstiYhteensa'] and t['tekstiRtl'] < t['tekstiYhteensa'] * 0.5:
         huomiot.append('%s: vain %d/%d tekstilohkoa kaantyi'
                        % (sivu, t['tekstiRtl'], t['tekstiYhteensa']))
+    k = t.get('kirjasin') or {}
+    if k.get('tila') == 'varafontista':
+        virheet.append('%s: arabia tulee laitteen varafontista eika perheesta %r '
+                       '(0 arabialaista kasvoa) — painojalki ei ole toistettavissa'
+                       % (sivu, k.get('perhe')))
+    elif k.get('tila') == 'ei mitattavissa':
+        huomiot.append('%s: kirjasinta ei voitu mitata (%s)' % (sivu, k.get('syy', '-')))
     o = t.get('ohituslinkki') or {}
     if o.get('tila') == 'jaa piiloon':
         virheet.append('%s: ohituslinkki ei palaa nakyviin kohdistettaessa (y=%s)'
@@ -293,10 +310,11 @@ def aja(juuri, sivut, hiljaa=False):
                         print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
                     else:
                         print('  %-30s teksti %d/%d · asettelu %d · lava %d · tasaus %d'
-                              ' · sisennys %d · ulkona %d · korkeus %+d'
+                              ' · sisennys %d · ulkona %d · korkeus %+d · arabia %s'
                               % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
                                  t['lavaSiirtyi'], t.get('tasausMuuttui', 0),
-                                 t.get('sisennysVaarin', 0), t['ulkona'], t['korkeusKasvoi']))
+                                 t.get('sisennysVaarin', 0), t['ulkona'], t['korkeusKasvoi'],
+                                 (t.get('kirjasin') or {}).get('tila', '?')))
     paljaat = tunnisteet_htmlssa(juuri)
     if paljaat:
         nayte = ' · '.join('%s: %s' % x for x in paljaat[:4])
@@ -330,8 +348,16 @@ ARKKI_PROBE = """
     document.body.appendChild(pre);
   }
   if (/^VALMIS/.test(document.title)) {
-    try { kirjoita(window.rtlMittaa(document)); }
-    catch (e) { kirjoita({ virhe: String(e && e.stack || e) }); }
+    /* sama lataus kuin sivujen kaareessa: ilman sita kirjasinmittaus on sokea */
+    var AR = '\u0647\u0630\u0647 \u0644\u0639\u0628\u0629';
+    var perhe = (getComputedStyle(document.body).fontFamily || '').split(',')[0];
+    var merkitse = function (n) { document.__arabianKasvot = n; };
+    document.fonts.load('48px ' + perhe, AR)
+      .then(function (k) { merkitse(k.length); }, function () { merkitse(0); })
+      .then(function () {
+        try { kirjoita(window.rtlMittaa(document)); }
+        catch (e) { kirjoita({ virhe: String(e && e.stack || e) }); }
+      });
     return;
   }
   if (n > 400) { kirjoita({ virhe: 'pakkaus ei valmistunut: ' + document.title }); return; }
@@ -418,8 +444,10 @@ def arkkikoe(html=None, hiljaa=False):
             print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
         else:
             print('  %-30s teksti %d/%d · asettelu %d · tasaus %d · sisennys %d · korkeus %+d'
+                  ' · arabia %s'
                   % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
-                     t.get('tasausMuuttui', 0), t.get('sisennysVaarin', 0), t['korkeusKasvoi']))
+                     t.get('tasausMuuttui', 0), t.get('sisennysVaarin', 0), t['korkeusKasvoi'],
+                     (t.get('kirjasin') or {}).get('tila', '?')))
     return virheet, huomiot
 
 
@@ -429,7 +457,10 @@ def arkkikoe(html=None, hiljaa=False):
 # dokumentin suunta kääntyi. Kun käännetään VAIN teksti, sillä ei ole vikatilaa
 # — ja mutaatio joka ei voi kaataa koetta on tyhjä koe. Korjaus (pystysuora
 # piilotus + `inset-inline-start`) on siis kestävyyttä, ei vartioitu lupaus.
-# (nimi, tiedostokuvio, vanha, uusi)
+# (nimi, tiedostokuvio, vanha, uusi[, odotettu osumamaara])
+# ⚠️ Osumamaara on OLETUKSENA 1, jotta ajautunut ankkuri huomataan. Jos mutaatio
+# tarkoituksella vie monta kohtaa (esim. kaikki kirjasimen painot), maara
+# kirjoitetaan nakyviin — silloin sekin on vartioitu luku eika sattuma.
 MUTAATIOT = [
     ('luettelon sisennys takaisin fyysiseksi', 'tyyli.css',
      'ul.lista,ol.lista{margin:0 0 12px;padding-inline-start:22px}',
@@ -444,6 +475,12 @@ MUTAATIOT = [
     # laatikko liiku: vain teksti siirtyy laatikon sisällä (mitattu 18.11.2026).
     ('tekstin tasaus kirjoitettuna', 'tyyli.css',
      '  direction:rtl}', '  direction:rtl;text-align:right}'),
+    # ⚠️ KAIKKI arabian kasvot kerralla. 📐 Mitattu 19.11.2026: kun mutaatio
+    # rikkoi vain painon 400, selain valitsi saman perheen painon 700 ja arabia
+    # tuli yha Tajawalista — mutaatio meni lapi eli koe oli tyhja.
+    # 4 = neljä painoa (400/600/700/800); yksi paino yksin ei riita, koska
+    # selain valitsee silloin saman perheen toisen arabialaisen kasvon.
+    ('arabian kirjasin pois', 'tyyli.css', 'fontit/tajawal-', 'fontit/ei-ole-tata-', 4),
     ('tunnisteiden eristys pois', '*/*.html', '<bdi>', ''),
 ]
 
@@ -463,6 +500,7 @@ ARKKI_MUTAATIOT = [
     ('arkin asettelun lukitus pois',
      'html[data-suunta="rtl"][lang] :is(.banneri',
      'html[data-suunta="EI-KAYTOSSA"][lang] :is(.banneri'),
+    ('arkin arabian kirjasin pois', 'julkinen/fontit/tajawal-', 'julkinen/fontit/ei-ole-'),
     ('arkin tekstin tasaus kirjoitettuna',
      ':is(h1, h2, h3, p, li, ul, ol) { direction: rtl }',
      ':is(h1, h2, h3, p, li, ul, ol) { direction: rtl; text-align: start }'),
@@ -556,12 +594,14 @@ def mutaatiokoe():
             return 1
 
         huonot = 0
-        for nimi, kuvio, vanha, uusi in MUTAATIOT:
+        for rivi in MUTAATIOT:
+            nimi, kuvio, vanha, uusi = rivi[:4]
+            odotettu = rivi[4] if len(rivi) > 4 else 1
             alkup = lue(kuvio)
             osumia = sum(t.count(vanha) for t in alkup.values())
-            # Yhden tiedoston ankkurin on osuttava kertaalleen; monen tiedoston
-            # kuviossa riittaa etta osumia on (muuten mutaatio ei tee mitaan).
-            if (osumia != 1) if '*' not in kuvio else (osumia == 0):
+            # Yhden tiedoston ankkurin on osuttava odotetun monta kertaa; monen
+            # tiedoston kuviossa riittaa etta osumia on (muuten mutaatio ei tee mitaan).
+            if (osumia != odotettu) if '*' not in kuvio else (osumia == 0):
                 print('🔴 ANKKURI AJAUTUNUT: %r osui %d kertaa (%s)'
                       % (vanha[:50], osumia, nimi))
                 huonot += 1

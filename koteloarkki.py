@@ -100,8 +100,13 @@ VAG = os.environ.get('VAG_FONTTI') or os.path.normpath(os.path.join(TANNE, '..',
 
 def viirikirjasin():
     if os.path.exists(VAG):
+        # ⚠️ Arabia myös VAG-perheelle. Pelimuotojen viirit (#1 PIZZAPARTY) ovat
+        # aina latinaa, mutta perhe asetetaan koko lohkolle: ilman tätä mikä
+        # tahansa arabialainen merkki VAG-lohkossa putoaisi laitteen fonttiin.
         return ('@font-face { font-family: VAG; font-weight: 400; src: url("%s"); }'
-                % pathlib.Path(VAG).as_uri(), '400 14pt/1 VAG')
+                '@font-face { font-family: VAG; font-weight: 400;'
+                ' src: url(julkinen/fontit/tajawal-700-arabic.woff2); unicode-range: %s; }'
+                % (pathlib.Path(VAG).as_uri(), ks.ARAB), '400 14pt/1 VAG')
     print('⚠️  VAG Rounded puuttuu (%s) — viirit Nunito Blackilla' % VAG)
     return '', '900 14pt/1 Viiri'
 

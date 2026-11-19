@@ -159,6 +159,28 @@ window.rtlMittaa = function (doc) {
     return ulos;
   }
 
+  /* --- KIRJASIN ------------------------------------------------------------
+     Tuleeko arabia JULISTETUSTA perheesta vai laitteen varafontista?
+
+     ⚠️ ALA MITTAA TATA LEVEYKSILLA. Ensimmainen versio vertasi perhetta
+     olemattomaan perheeseen, ja se EI toiminut: perheen oma varaketju
+     (Teksti -> Arial -> jarjestelma) ja oletusketju paatyvat eri fonttiin,
+     joten leveydet erosivat vaikka kumpikaan ei ollut Tajawal. 📐 Mitattu
+     19.11.2026: molemmat mutaatiot menivat lapi, eli koe oli tyhja.
+
+     Suora signaali sen sijaan on yksikasitteinen: `document.fonts.load()`
+     palauttaa ne @font-face-kasvot jotka TAYSMASIVAT naihin merkkeihin ja
+     latautuivat. Tyhja = perheella ei ole arabiaa (tai tiedostoa ei saatu),
+     eli glyfit tulevat laitteelta. Lataus on asynkroninen, joten sen tekee
+     kutsuja ennen rtlMittaa:ta ja jattaa tuloksen tahan. */
+  function kirjasin() {
+    var perhe = (doc.defaultView.getComputedStyle(doc.body).fontFamily || '').split(',')[0];
+    var kasvot = doc.__arabianKasvot;
+    if (kasvot === undefined) return { tila: 'ei mitattavissa', syy: 'latausta ei odotettu' };
+    return { tila: kasvot > 0 ? 'perheesta' : 'varafontista',
+             perhe: perhe.replace(/["']/g, ''), kasvot: kasvot };
+  }
+
   /* Ohituslinkki: piilotettu pystysuunnassa, joten sen ON palattava näkyviin
      kohdistettaessa. ⚠️ Kolme tilaa, ei kahta: jos dokumentilla ei ole
      järjestelmän fokusta, `:focus` ei ole voimassa eikä asiaa voi mitata —
@@ -247,6 +269,7 @@ window.rtlMittaa = function (doc) {
     sisennysVaarin: sisennys.length, sisennysNaytteet: sisennys.slice(0, 8),
     tekstiRtl: tekstiRtl, tekstiYhteensa: tekstiYht,
     ohituslinkki: ohituslinkki(),
+    kirjasin: kirjasin(),
     tunnisteet: tun
   };
 };
