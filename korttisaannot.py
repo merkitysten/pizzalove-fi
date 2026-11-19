@@ -1017,6 +1017,19 @@ TURKIN_I = {'İ': 'i', 'ı': 'i', '\u0307': ''}
 
 # Harakat (U+064B–U+0652), yliasetettu alef (U+0670), tatweel (U+0640) ja
 # kaksisuuntaisuuden ohjausmerkit. ⛔ Ei kirjaimia: pelkkaa nakymatonta.
+# ⚠️ LAM-ALEF -LIGATUURI PURKAUTUU VISUAALISESSA JÄRJESTYKSESSÄ.
+# Arabian ainoa pakollinen ligatuuri on lam + alef (لا ﻷ ﻹ ﻵ). Siinä lam on
+# oikealla ja alef vasemmalla, joten vasemmalta oikealle lukeva PDF-purkaja
+# antaa ALEFIN ENSIN. NFKC purkaa ligatuurin merkeiksi muttei järjestä niitä.
+# 📐 Mitattu 19.11.2026 CI:n omasta tulosteesta: otsikko «القاعدة الأساسية»
+# (ل+أ) oli PDF:ssä muodossa «القاعدة األساسية» (أ+ل), ja kaikki kolme
+# puuttunutta lukua sisälsivät juuri tämän parin.
+# ⛔ ÄLÄ korjaa tätä vaihtamalla «alef+lam» -pareja: ال on määräinen artikkeli
+# ja esiintyy joka toisessa sanassa. Vaihto tehdään VAIN toiseen suuntaan
+# (lam+alef → alef+lam) ja molemmille vertailtaville, jolloin kumpikin
+# järjestys päätyy samaan muotoon.
+LAM_ALEF = re.compile('\u0644([\u0622\u0623\u0625\u0627])')
+
 ARABIAN_KORISTEET = re.compile('[\u064b-\u0652\u0670\u0640'
                                '\u200c-\u200f\u202a-\u202e\u2066-\u2069]')
 
@@ -1037,6 +1050,7 @@ def norm(s):
     # kadonneet osuivat leipatekstiin eivatka otsikoihin. Se on sattuma, ei
     # sääntö, ja vertailun on kestettava ilman sita.
     s = ARABIAN_KORISTEET.sub('', s)
+    s = LAM_ALEF.sub(lambda m: m.group(1) + '\u0644', s)
     for a, b in LIGATUURIT.items():
         s = s.replace(a, b)
     for a, b in TURKIN_I.items():
