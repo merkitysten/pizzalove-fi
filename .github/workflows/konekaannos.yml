@@ -168,8 +168,19 @@ jobs:
           python3 rakenna.py
           virheita=0
           for k in ${{ steps.tulos.outputs.koodit }}; do
-            if ! python3 koteloarkki.py "$k"; then
+            if python3 koteloarkki.py "$k" > "$RUNNER_TEMP/arkki-$k.log" 2>&1; then
+              cat "$RUNNER_TEMP/arkki-$k.log"
+            else
+              cat "$RUNNER_TEMP/arkki-$k.log"
+              # ⚠️ Syy HUOMAUTUKSIIN, ei vain lokiin: lokin lukeminen vaatii
+              # ylläpito-oikeudet, huomautukset (annotations) ovat julkisen
+              # repon API:ssa kenen tahansa luettavissa. 📐 Mitattu 19.11.2026:
+              # arabian arkin kaatumisesta jäi näkyviin vain «Process completed
+              # with exit code 1», eikä syytä voinut tutkia sieltä missä se
+              # tapahtui.
               echo "::error::arkki $k epäonnistui"
+              grep -E '^(🔴|ℹ️|   )' "$RUNNER_TEMP/arkki-$k.log" | head -14 \
+                | while IFS= read -r rivi; do echo "::error::$k $rivi"; done
               virheita=$((virheita + 1))
             fi
           done
