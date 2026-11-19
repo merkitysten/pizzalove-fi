@@ -782,18 +782,37 @@ def tee(kieli, luonnos):
     # Tarkoituksella karsittu otsikko (perusteiden otsikko, ks. KIELET-kommentti) ohitetaan.
     lahde = json.load(open(ks.lahdepolku(kieli), encoding='utf-8'))['korttipeli']
     karsitut = {ks.norm(lahde['perusteet_otsikko'])}
-    puuttuu = [o for o in ks.otsikot(ks.lahdepolku(kieli))
-               if ks.norm(o) not in ks.norm(t) and ks.norm(o) not in karsitut
-               # Kiinassa ym. portaan numero («1.») irtoaa PDF:n tekstissä eri
-               # kirjasimen takia: hyväksytään otsikko ilman numeroa.
-               and ks.norm(re.sub(r'^\d+\.\s*', '', o)) not in ks.norm(t)]
+    # ⚠️ OSUMASAANTO ON korttisaannot.osuu — EI omaa kopiota. Tassa oli oma
+    # rivinsa, ja CI ajaa nimenomaan taman (ei korttisaannot.sisaltokoe:ta).
+    # ⚠️ Se EI ollut arabian kaatumisen syy: molemmat kutsuivat ks.norm:ia,
+    # joten NFKC oli voimassa kummassakin. Kahdennuksen hinta on tuleva —
+    # jokainen uusi osumasaannon korjaus (kaannetty jarjestys, diagnostiikka)
+    # olisi osunut vain toiseen.
+    nt = ks.norm(t)
+    puuttuu, kaannettyja = [], 0
+    for o in ks.otsikot(ks.lahdepolku(kieli)):
+        if ks.norm(o) in karsitut:
+            continue
+        loytyi, miten = ks.osuu(o, nt)
+        if not loytyi:
+            # Kiinassa ym. portaan numero («1.») irtoaa PDF:n tekstissä eri
+            # kirjasimen takia: hyväksytään otsikko ilman numeroa.
+            loytyi, miten = ks.osuu(re.sub(r'^\d+\.\s*', '', o), nt)
+        if not loytyi:
+            puuttuu.append(o)
+        elif miten == 'kaannettyna':
+            kaannettyja += 1
     if len(t) < 2000:
         print('Sisaltokoe: PDF:sta ei saatu tekstia — EI MITATTAVISSA')
     elif puuttuu:
-        print('🔴 SISALTOKOE: arkilta puuttuu: ' + ' · '.join(puuttuu))
+        print('🔴 SISALTOKOE: arkilta puuttuu %d lukua:' % len(puuttuu))
+        for o in puuttuu:
+            print('   %s\n     %s' % (o, ks.miksi_ei_loytynyt(o, nt)))
         virhe = 1
     else:
-        print('Sisaltokoe: kaikki luvut loytyvat arkilta — OK')
+        print('Sisaltokoe: kaikki luvut loytyvat arkilta — OK%s'
+              % (' (%d vain kaannettyna: purkaja antaa visuaalisen jarjestyksen)'
+                 % kaannettyja if kaannettyja else ''))
     # QR luetaan VALMIISTA PDF:stä ja osoitteen sivu tarkistetaan docs/:sta
     # (samat kokeet kuin vanhassa verkko-PDF:ssä)
     if ks.qr_lukukoe(kohde, osoite(ks.KIELET[kieli])) is False:

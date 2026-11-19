@@ -1015,6 +1015,12 @@ LIGATUURIT = {'ﬀ': 'ff', 'ﬁ': 'fi', 'ﬂ': 'fl',
 TURKIN_I = {'İ': 'i', 'ı': 'i', '\u0307': ''}
 
 
+# Harakat (U+064B–U+0652), yliasetettu alef (U+0670), tatweel (U+0640) ja
+# kaksisuuntaisuuden ohjausmerkit. ⛔ Ei kirjaimia: pelkkaa nakymatonta.
+ARABIAN_KORISTEET = re.compile('[\u064b-\u0652\u0670\u0640'
+                               '\u200c-\u200f\u202a-\u202e\u2066-\u2069]')
+
+
 def norm(s):
     # ⚠️ NFKC ENSIN: arabian kirjaimet latoutuvat ligatuureiksi, ja PDF:sta
     # teksti purkautuu ESITYSMUOTONA. 📐 Mitattu 19.11.2026: «الﻼعب» tuli
@@ -1024,11 +1030,47 @@ def norm(s):
     # Kaytetaan molemmilla puolilla vertailua, joten se ei voi tuoda vaaria
     # osumia — vain poistaa vaaria hälytyksiä.
     s = unicodedata.normalize('NFKC', s)
+    # ⚠️ Diakriitit, tatweel ja kaksisuuntaisuuden ohjausmerkit pois. Ne ovat
+    # ladonnan koristeita, eivat sisaltoa, eika PDF:n tekstikerros sailyta
+    # niita luotettavasti. 📐 Mitattu 19.11.2026 arabian arkista: lahteessa
+    # 187 diakriittia, PDF:sta purkautui 115 — vertailu onnistui vain koska
+    # kadonneet osuivat leipatekstiin eivatka otsikoihin. Se on sattuma, ei
+    # sääntö, ja vertailun on kestettava ilman sita.
+    s = ARABIAN_KORISTEET.sub('', s)
     for a, b in LIGATUURIT.items():
         s = s.replace(a, b)
     for a, b in TURKIN_I.items():
         s = s.replace(a, b)
     return re.sub(r'\s+', '', re.sub('<[^>]+>', '', s)).lower()
+
+
+# ⚠️ KAKSI ERI PDF-PURKAJAA: macOS Quartz (paikallisesti) ja `pdftotext` (CI).
+# 📐 Mitattu 19.11.2026: arabian arkki lapaisi sisaltokokeen paikallisesti ja
+# KAATUI CI:ssa samalla koodilla ja samalla kaannoksella. Purkajat eivat anna
+# samaa tekstia: ligatuurit, diakriitit ja oikealta vasemmalle kirjoitetun
+# jakson JARJESTYS voivat erota. Siksi:
+#  1. osuma yritetaan myos kaannettyna (visuaalinen jarjestys), ja
+#  2. puuttuva luku RAPORTOI mita PDF:ssa oli sen tilalla — muuten vika on
+#     toistettavissa vain siella missa sita ei voi tutkia.
+def osuu(otsikko, teksti):
+    """(loytyi, miten). miten: 'suoraan' · 'kaannettyna' · ''."""
+    n = norm(otsikko)
+    if n and n in teksti:
+        return True, 'suoraan'
+    if n and n[::-1] in teksti:
+        return True, 'kaannettyna'
+    return False, ''
+
+
+def miksi_ei_loytynyt(otsikko, teksti, merkkeja=40):
+    """Pisin alkuosa joka loytyy, ja mita PDF:ssa on sen jalkeen."""
+    n = norm(otsikko)
+    for i in range(len(n), 1, -1):
+        if n[:i] in teksti:
+            j = teksti.index(n[:i])
+            return ('%d/%d merkkia osui · PDF: %r · otsikko: %r'
+                    % (i, len(n), teksti[j:j + merkkeja], n[:merkkeja]))
+    return 'yksikaan alkuosa ei osu · otsikko: %r' % n[:merkkeja]
 
 
 def sisaltokoe(pdf, lahde):
@@ -1048,10 +1090,21 @@ def sisaltokoe(pdf, lahde):
     if len(teksti) < 2000:
         print('Sisaltokoe: PDF:sta ei saatu tekstia — EI MITATTAVISSA')
         return None
-    puuttuu = [o for o in otsikot(lahde) if norm(o) not in teksti]
+    puuttuu, kaannettyja = [], 0
+    for o in otsikot(lahde):
+        loytyi, miten = osuu(o, teksti)
+        if not loytyi:
+            puuttuu.append(o)
+        elif miten == 'kaannettyna':
+            kaannettyja += 1
+    if kaannettyja:
+        print('ℹ️  %d lukua loytyi vain KAANNETTYNA — purkaja antaa '
+              'oikealta vasemmalle kirjoitetun tekstin visuaalisessa jarjestyksessa'
+              % kaannettyja)
     if puuttuu:
-        print('🔴 SISALTOKOE: arkilta puuttuu %d lukua: %s'
-              % (len(puuttuu), ' · '.join(puuttuu)))
+        print('🔴 SISALTOKOE: arkilta puuttuu %d lukua:' % len(puuttuu))
+        for o in puuttuu:
+            print('   %s\n     %s' % (o, miksi_ei_loytynyt(o, teksti)))
         return False
     print('Sisaltokoe: kaikki %d lukua loytyvat arkilta — OK'
           % len(otsikot(lahde)))
