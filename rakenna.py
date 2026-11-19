@@ -474,18 +474,51 @@ TUNNISTEET = (
     # Korttiväli: nollalla alkava on tunniste, «10–20 min» ei ole.
     re.compile(r'\b0\d\u2013\d\d\b'),
 )
+# ⚠️ LASKU EI OLE NUMEROVÄLI — JA ARABIASSA NE MENEVÄT ERI SUUNTIIN.
+# Mitattu 19.11.2026 JULKAISTULTA ar-sivulta, selaimesta eikä lähdetekstistä:
+#
+#   «5 = 7 + 6 - 8»  ->  «8 - 6 + 7 = 5»   🔴 ruudulla lukee 9 = 5
+#   «5 = 10 : 2»     ->  «2 : 10 = 5»      🔴 ruudulla lukee 0,2 = 5
+#   «6 – 1»          ->  «1 – 6»           🔴 ruudulla lukee −5
+#   «5 = 3! – 1»     ->  «1 – !3 = 5»      🔴 huutomerkki irtosi luvusta
+#   «1–10» (väli)    ->  «10–1»             ✓ näin sen KUULUU mennä (W3C)
+#
+# Syy on UAX #9 sääntö N1: rtl-kappaleessa numerojakso ladotaan oikealta
+# vasemmalle, vaikka kukin luku itse luetaan vasemmalta oikealle. Numeroväliin
+# se on oikein, laskuun ei: lasku on SISÄLTÖÄ, ja käännettynä se on väite joka
+# ei pidä paikkaansa. Pizza Lovessa lapsi lukee sen ääneen.
+#
+# ⚠️ Erottaja on mitattu tästä aineistosta eikä arvattu: laskun operaattorin
+# ympärillä on VÄLILYÖNNIT («6 – 1»), numerovälin ajatusviivan ympärillä ei
+# («1–10»). 22 kielitiedostoa, 325 osumaa, 0 väärää osumaa (ei päivämääriä,
+# ei pelaajamääriä). Jos uusi kieli kirjoittaa laskun ilman välilyöntejä, se
+# jää eristämättä — ja silloin se on tämän kuvion korjaus, ei poikkeus.
+LASKU = re.compile(
+    r'\d+(?:[.,]\d+)?[\u00b2\u00b3]?!?'
+    r'(?:\s[-+\u2013\u2212\u00d7x*/:=\u00b7]\s\d+(?:[.,]\d+)?[\u00b2\u00b3]?!?)+')
+
 # Tagit ja skriptit ohitetaan: <bdi> ei kuulu attribuuttiin eikä JavaScriptiin.
 _EI_TEKSTIA = re.compile(r'(<script\b.*?</script>|<style\b.*?</style>|<[^>]*>)',
                          re.S | re.I)
 
 
 def eristatunnisteet(html):
-    """Kääri tunnisteet <bdi>:hin, jotta ne pysyvät ehjinä RTL-tekstin seassa."""
+    """Kääri tunnisteet ja laskut <bdi>:hin, jotta ne pysyvät ehjinä RTL-tekstissä.
+
+    Kaksi eri tarvetta, sama keino:
+      tunniste  <bdi>            — suunta saa ratketa sisällöstä
+      lasku     <bdi dir="ltr">  — suunta on PAKOTETTU, koska laskussa ei ole
+                                   yhtään vahvaa kirjainta josta se ratkeaisi
+                                   («1 = 1 — البيتزا» alkaa luvulla mutta
+                                   jatkuu arabiaksi).
+    Laskut ensin: tunnistekuviot eivät voi osua laskun sisään, mutta
+    numerokuvio voisi osua lisättyyn markupiin."""
     osat = _EI_TEKSTIA.split(html)
     for i in range(0, len(osat), 2):          # parittomat ovat tageja/skriptejä
         teksti = osat[i]
         if not teksti:
             continue
+        teksti = LASKU.sub(lambda m: '<bdi dir="ltr">%s</bdi>' % m.group(0), teksti)
         for kuvio in TUNNISTEET:
             teksti = kuvio.sub(lambda m: '<bdi>%s</bdi>' % m.group(0), teksti)
         osat[i] = teksti

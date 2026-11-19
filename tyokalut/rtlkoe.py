@@ -25,6 +25,12 @@ Mitattu ja tarkistettu W3C:n i18n-ohjeesta (strings-and-bidi):
   tunniste      Tuotenimi, «#1», osoite, korttiväli «01–33» luetaan aina
                 vasemmalta oikealle (W3C:n esimerkki on ISBN, joka
                 *«has to be read LTR»*). Nämä ON eristettävä.
+  lasku         «5 = 10 : 2» on SISÄLTÖÄ: käännettynä ruudulla lukee
+                «2 : 10 = 5», joka on väärä väite — ja tämä on matikkapeli.
+                📐 Mitattu 19.11.2026 julkaistulta ar-sivulta: 14 laskua,
+                12 kääntyi, 3 meni ruudulla matemaattisesti väärin.
+                Erottaja laskun ja välin välillä on VÄLILYÖNTI operaattorin
+                ympärillä («6 – 1» lasku, «1–10» väli) — ks. rakenna.LASKU.
 
 Koe vaatii tunnisteista **nollan eristämätöntä** valmiissa sivuissa ja arkissa.
 Numerovälejä se EI mittaa, koska niiden oikea järjestys riippuu kielestä eikä
@@ -39,6 +45,7 @@ Mitattavat puolet (jokaisella oma mutaationsa):
   ulkona        valuiko jokin ruudun ulkopuolelle
   korkeus       muuttuiko sivun korkeus (asettelu eli)
   tunnisteet    arabialaisen kantolauseen koepala + staattinen haku
+  laskut        kääntyikö lasku ruudulla («5 = 10 : 2» -> «2 : 10 = 5»)
 
 Kohteet: `docs/`:n kielisivut JA painettu sääntöarkki (`koteloarkki.py`), joka
 rakentaa oman HTML:nsä eikä kulje `rakenna.py`:n kehyksen läpi.
@@ -236,6 +243,13 @@ def arvioi(sivu, t):
     elif t['tekstiYhteensa'] and t['tekstiRtl'] < t['tekstiYhteensa'] * 0.5:
         huomiot.append('%s: vain %d/%d tekstilohkoa kaantyi'
                        % (sivu, t['tekstiRtl'], t['tekstiYhteensa']))
+    # ⚠️ Lasku on sisaltoa: kaantyneena se on vaara vaite eika asetteluvirhe.
+    L = t.get('laskut') or {}
+    if L.get('vaarin'):
+        virheet.append('%s: %d laskua kaantyi ruudulla (%s)'
+                       % (sivu, len(L['vaarin']),
+                          ' · '.join('%s -> %s [%s]' % (n['lasku'], n['nakyi'], n.get('n', '?'))
+                                     for n in L['vaarin'][:3])))
     k = t.get('kirjasin') or {}
     if k.get('tila') == 'varafontista':
         virheet.append('%s: arabia tulee laitteen varafontista eika perheesta %r '
@@ -274,7 +288,7 @@ def tunnisteet_htmlssa(juuri):
     juuri siita mita se vartioi."""
     sys.path.insert(0, TANNE)
     import rakenna
-    bdi = re.compile(r'<bdi>.*?</bdi>', re.S)
+    bdi = re.compile(r'<bdi[^>]*>.*?</bdi>', re.S)
     ulos = []
     # ⚠️ VAIN KIELISIVUT (kaksikirjaiminen kansio). `play/`, `joulu/` ja
     # `varainhankinta/` eivat ole kehys():n tekemia eivatka saa data-suunta-lippua,
@@ -291,9 +305,31 @@ def tunnisteet_htmlssa(juuri):
     return ulos
 
 
+def laskut_htmlssa(juuri):
+    """Laskut valmiissa sivuissa, jotka EIVAT ole <bdi>:n sisalla.
+
+    Halpa vartija ilman selainta: jos `rakenna.LASKU` ei osu johonkin
+    kirjoitusasuun, se nakyy tassa jokaisella kielella — myos ltr-kielilla,
+    joissa itse oire (kaantynyt lasku) ei nay missaan."""
+    sys.path.insert(0, TANNE)
+    import rakenna
+    bdi = re.compile(r'<bdi[^>]*>.*?</bdi>', re.S)
+    ulos = []
+    kansiot = [d for d in sorted(os.listdir(juuri))
+               if len(d) == 2 and os.path.isdir(os.path.join(juuri, d))]
+    for f in sorted(sum([glob.glob(os.path.join(juuri, d, '*.html')) for d in kansiot], [])):
+        s = open(f, encoding='utf-8').read()
+        runko = s.split('</head>', 1)[-1]
+        puhdas = rakenna._EI_TEKSTIA.sub(' ', bdi.sub(' ', runko))
+        for m in rakenna.LASKU.finditer(puhdas):
+            ulos.append((os.path.relpath(f, juuri), m.group(0)))
+    return ulos
+
+
 def aja(juuri, sivut, hiljaa=False):
     """Palauttaa (virheet, huomiot, tunnisteet)."""
     virheet, huomiot, tunnisteet = [], [], []
+    laskuja = 0
     with Palvelin(juuri) as p:
         for sivu in sivut:
             if not os.path.exists(os.path.join(juuri, sivu)):
@@ -310,12 +346,26 @@ def aja(juuri, sivut, hiljaa=False):
                         print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
                     else:
                         print('  %-30s teksti %d/%d · asettelu %d · lava %d · tasaus %d'
-                              ' · sisennys %d · ulkona %d · korkeus %+d · arabia %s'
+                              ' · sisennys %d · laskut %d/%d (piilossa %d) · ulkona %d · korkeus %+d · arabia %s'
                               % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
                                  t['lavaSiirtyi'], t.get('tasausMuuttui', 0),
-                                 t.get('sisennysVaarin', 0), t['ulkona'], t['korkeusKasvoi'],
+                                 t.get('sisennysVaarin', 0),
+                                 len((t.get('laskut') or {}).get('vaarin', [])),
+                                 (t.get('laskut') or {}).get('maara', 0),
+                                 (t.get('laskut') or {}).get('piilossa', 0),
+                                 t['ulkona'], t['korkeusKasvoi'],
                                  (t.get('kirjasin') or {}).get('tila', '?')))
+                laskuja += (t.get('laskut') or {}).get('maara', 0)
+    # ⚠️ Nolla laskua EI ole lapimeno vaan «ei mitattavaa»: korttipelisivulla
+    # niita on joka kielella, joten tyhja tulos tarkoittaa etta mitta on rikki.
+    if not laskuja:
+        virheet.append('yhtaan laskua ei mitattu — laskumitta on tyhja')
     paljaat = tunnisteet_htmlssa(juuri)
+    eristamattomat = laskut_htmlssa(juuri)
+    if eristamattomat:
+        nayte = ' · '.join('%s: %s' % x for x in eristamattomat[:4])
+        virheet.append('%d eristamatonta laskua valmiissa sivuissa (%s)'
+                       % (len(eristamattomat), nayte))
     if paljaat:
         nayte = ' · '.join('%s: %s' % x for x in paljaat[:4])
         virheet.append('%d eristamatonta tunnistetta valmiissa sivuissa (%s)'
@@ -381,9 +431,10 @@ def arkki_tunnisteet(html):
     sys.path.insert(0, TANNE)
     import rakenna
     runko = html.split('</title>', 1)[-1]
-    bdi = re.compile(r'<bdi>.*?</bdi>', re.S)
+    bdi = re.compile(r'<bdi[^>]*>.*?</bdi>', re.S)
     puhdas = rakenna._EI_TEKSTIA.sub(' ', bdi.sub(' ', runko))
-    return [m.group(0) for kuvio in rakenna.TUNNISTEET for m in kuvio.finditer(puhdas)]
+    return ([m.group(0) for kuvio in rakenna.TUNNISTEET for m in kuvio.finditer(puhdas)]
+            + [m.group(0) for m in rakenna.LASKU.finditer(puhdas)])
 
 
 def arkki_mittaa(html):
@@ -428,7 +479,7 @@ def arkkikoe(html=None, hiljaa=False):
     nimi = 'koteloarkki/%s' % ARKKI_KIELI
     paljaat = arkki_tunnisteet(html)
     if paljaat:
-        virheet.append('%s: %d eristamatonta tunnistetta (%s)'
+        virheet.append('%s: %d eristamatonta tunnistetta tai laskua (%s)'
                        % (nimi, len(paljaat), ' · '.join(paljaat[:4])))
     elif not hiljaa:
         print('  %-30s eristamattomia tunnisteita: 0' % nimi)
@@ -443,11 +494,15 @@ def arkkikoe(html=None, hiljaa=False):
         if t.get('virhe'):
             print('  %-30s EI MITATTAVISSA (%s)' % (nimi, t['virhe']))
         else:
-            print('  %-30s teksti %d/%d · asettelu %d · tasaus %d · sisennys %d · korkeus %+d'
-                  ' · arabia %s'
+            print('  %-30s teksti %d/%d · asettelu %d · tasaus %d · sisennys %d'
+                  ' · laskut %d/%d · korkeus %+d · arabia %s'
                   % (nimi, t['tekstiRtl'], t['tekstiYhteensa'], t['asetteluKaantyi'],
-                     t.get('tasausMuuttui', 0), t.get('sisennysVaarin', 0), t['korkeusKasvoi'],
+                     t.get('tasausMuuttui', 0), t.get('sisennysVaarin', 0),
+                     len((t.get('laskut') or {}).get('vaarin', [])),
+                     (t.get('laskut') or {}).get('maara', 0), t['korkeusKasvoi'],
                      (t.get('kirjasin') or {}).get('tila', '?')))
+    if not (t.get('virhe') or (t.get('laskut') or {}).get('maara')):
+        virheet.append('%s: yhtaan laskua ei mitattu — laskumitta on tyhja' % nimi)
     return virheet, huomiot
 
 
@@ -482,6 +537,9 @@ MUTAATIOT = [
     # selain valitsee silloin saman perheen toisen arabialaisen kasvon.
     ('arabian kirjasin pois', 'tyyli.css', 'fontit/tajawal-', 'fontit/ei-ole-tata-', 4),
     ('tunnisteiden eristys pois', '*/*.html', '<bdi>', ''),
+    # ⛔ ALA mutatoi tata pelkaksi <bdi>:ksi: laskussa ei ole yhtaan vahvaa
+    # kirjainta, joten dir=auto ratkeaisi ltr:ksi ja mutaatio menisi lapi.
+    ('laskujen eristys pois', '*/*.html', '<bdi dir="ltr">', '<span>'),
 ]
 
 
@@ -492,6 +550,7 @@ MUTAATIOT = [
 ARKKI_MUTAATIOT = [
     # Staattinen puoli
     ('arkin tunnisteiden eristys pois', '<bdi>', ''),
+    ('arkin laskujen eristys pois', '<bdi dir="ltr">', '<span>'),
     ('arkin data-suunta pois', 'data-suunta="', 'data-eisuuntaa="'),
     # Selainpuoli
     ('arkin tekstisaanto pois',
@@ -545,10 +604,17 @@ def eristyskoe():
         ('Pelaa #1 Pizza Partyssa',  '<bdi>#1 Pizza Partyssa</bdi>'),
         ('Peli Pizza Love\u00ae on', '<bdi>Pizza Love\u00ae</bdi>'),
         ('Kortit 01\u201333 ovat',   '<bdi>01\u201333</bdi>'),
+        # Lasku: pakotettu suunta, koska siina ei ole vahvaa kirjainta.
+        ('arvo 5 = 10 : 2 tassa',   '<bdi dir="ltr">5 = 10 : 2</bdi>'),
+        ('koska 2 + 2 + 1 = 5, ja', '<bdi dir="ltr">2 + 2 + 1 = 5</bdi>'),
+        ('tai 5 = 3! \u2013 1 vaikka', '<bdi dir="ltr">5 = 3! \u2013 1</bdi>'),
+        ('tai 5 = 2\u00b2 + 1 vaikka', '<bdi dir="ltr">5 = 2\u00b2 + 1</bdi>'),
     ]
     kielletyt = [
         ('2\u20134 pelaajaa', '<bdi>'),          # numerovali saa kaantya
         ('10\u201320 min', '<bdi>'),
+        ('kortit 1\u201310 ja 2\u20135 pelaajaa', '<bdi>'),   # ei valilyonteja = vali
+        ('Essen 2026 messut', '<bdi>'),
         ('nuoli &#8249; tassa', '<bdi>'),       # HTML-entiteetti
         ('<a title="#1 Pizza Party">x</a>', '<bdi>'),   # attribuutti
         ('<script>var a="Pizza Love\u00ae";</script>', '<bdi>'),

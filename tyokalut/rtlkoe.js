@@ -121,21 +121,25 @@ window.rtlMittaa = function (doc) {
     /* Numerovali SAA kaantya — sita ei eristeta. */
     { laji: 'numerovali',  teksti: '2\u20134',                  odotus: 'kaantyy' }
   ];
-  function nakyvaJarjestys(el) {
-    var kavelija = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT), s, merkit = [];
-    while ((s = kavelija.nextNode())) {
-      for (var i = 0; i < s.nodeValue.length; i++) {
-        var r = doc.createRange();
-        r.setStart(s, i); r.setEnd(s, i + 1);
-        var b = r.getBoundingClientRect();
-        var m = s.nodeValue[i];
-        if (!b.width && m !== ' ') continue;
-        if (/[\u2066-\u2069]/.test(m)) continue;
-        merkit.push({ m: m, x: b.left, y: Math.round(b.top) });
-      }
+  function keraaMerkit(s, alku, loppu, merkit) {
+    for (var i = alku; i < loppu; i++) {
+      var r = doc.createRange();
+      r.setStart(s, i); r.setEnd(s, i + 1);
+      var b = r.getBoundingClientRect();
+      var m = s.nodeValue[i];
+      if (!b.width && m !== ' ') continue;
+      if (/[\u2066-\u2069]/.test(m)) continue;
+      merkit.push({ m: m, x: b.left, y: Math.round(b.top) });
     }
+  }
+  function jarjesta(merkit) {
     merkit.sort(function (a, b) { return a.y - b.y || a.x - b.x; });
     return merkit.map(function (k) { return k.m; }).join('');
+  }
+  function nakyvaJarjestys(el) {
+    var kavelija = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT), s, merkit = [];
+    while ((s = kavelija.nextNode())) keraaMerkit(s, 0, s.nodeValue.length, merkit);
+    return jarjesta(merkit);
   }
   function tunnisteet() {
     var isanta = doc.querySelector('main') || doc.body;
@@ -157,6 +161,45 @@ window.rtlMittaa = function (doc) {
     });
     laatikko.remove();
     return ulos;
+  }
+
+  /* --- LASKUT --------------------------------------------------------------
+     ⚠️ LASKU EI OLE NUMEROVÄLI. «1–10» KUULUU kääntyä arabiassa (W3C), mutta
+     «5 = 10 : 2» ei: käännettynä ruudulla lukee «2 : 10 = 5». Se ei ole
+     asetteluvirhe vaan väärä väite — ja tämä on matikkapeli.
+
+     📐 Mitattu 19.11.2026 JULKAISTULTA ar-sivulta ennen korjausta: 11 laskua,
+     joista 3 meni ruudulla matemaattisesti väärin.
+
+     ⚠️ Mitataan SISÄLLÖSTÄ eikä <bdi>-elementeistä. Jos eristys katoaa,
+     bdi-elementtejä ei ole lainkaan, ja niiden laskeminen antaisi nollan —
+     eli tyhjän läpimenon juuri siitä viasta jota vastaan mitta on.
+     Tekstisolmu sen sijaan löytyy kummassakin tapauksessa. */
+  var LASKU = /\d+(?:[.,]\d+)?[\u00b2\u00b3]?!?(?:\s[-+\u2013\u2212\u00d7x*\/:=\u00b7]\s\d+(?:[.,]\d+)?[\u00b2\u00b3]?!?)+/g;
+  function ilmanValeja(x) { return x.replace(/\s/g, ''); }
+  function laskut() {
+    var kavelija = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT), s;
+    var vaarin = [], maara = 0, piilossa = 0;
+    while ((s = kavelija.nextNode())) {
+      var vanhempi = s.parentElement;
+      if (!vanhempi || /^(script|style)$/i.test(vanhempi.tagName)) continue;
+      var r = vanhempi.getBoundingClientRect();
+      if (!vanhempi.getClientRects().length) continue;   /* ei ladottu: ei mitattavissa */
+      var m; LASKU.lastIndex = 0;
+      while ((m = LASKU.exec(s.nodeValue))) {
+        /* ⚠️ RUUDUNLUKIJALLE PIILOTETTU TEKSTI EI OLE LÖYDÖS. `.vain-ruudun-
+           lukijalle` on leikattu 1x1 pikseliin: kukaan ei NÄE sitä, ja
+           ruudunlukija lukee DOMin loogisen järjestyksen, joka on oikein.
+           Lasketaan silti erikseen, jotta «0 väärin» ei synny vaikenemalla. */
+        if (r.width <= 2 || r.height <= 2) { piilossa++; continue; }
+        var nakyi = jarjesta((function () { var l = []; keraaMerkit(s, m.index, m.index + m[0].length, l); return l; })());
+        if (!ilmanValeja(nakyi)) continue;
+        maara++;
+        if (ilmanValeja(nakyi) !== ilmanValeja(m[0]))
+          vaarin.push({ lasku: m[0], nakyi: nakyi, n: nimi(vanhempi) });
+      }
+    }
+    return { maara: maara, vaarin: vaarin, piilossa: piilossa };
   }
 
   /* --- KIRJASIN ------------------------------------------------------------
@@ -210,7 +253,7 @@ window.rtlMittaa = function (doc) {
   juuri.setAttribute('data-suunta', 'rtl');
   void doc.body.offsetHeight;
   var b = kuva(), jb = jarjestykset(), lb = lavat(), sb = sivuntila();
-  var sisennys = sisennysVaarin(), tun = tunnisteet();
+  var sisennys = sisennysVaarin(), tun = tunnisteet(), las = laskut();
   if (oliSuunta === null) juuri.removeAttribute('data-suunta');
   else juuri.setAttribute('data-suunta', oliSuunta);
   void doc.body.offsetHeight;
@@ -270,6 +313,7 @@ window.rtlMittaa = function (doc) {
     tekstiRtl: tekstiRtl, tekstiYhteensa: tekstiYht,
     ohituslinkki: ohituslinkki(),
     kirjasin: kirjasin(),
+    laskut: las,
     tunnisteet: tun
   };
 };
