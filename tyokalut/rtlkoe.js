@@ -13,13 +13,27 @@ window.rtlMittaa = function (doc) {
   }
   function solmut() { return doc.querySelectorAll('body *'); }
 
+  /* ⚠️ VAAKAVIERITETTAVAN SAILION SISALLA «ruudun ulkopuolella» EI OLE VIKA.
+     Videokarusellin (.videot, overflow-x:auto) kortit ovat tarkoituksella
+     ruudun ulkopuolella — niihin vieritetaan. Mitattu 19.11.2026 ensimmaisella
+     aidosti rtl-sivulla: kielimerkki siirtyi karusellin sisalla 96 px, koska
+     kuvateksti on nyt rtl, ja vanha mittaus luki sen vuodoksi. Sivun oma
+     vaakavuoto mitataan erikseen (`vaakayli`), ja se on se joka oikeasti haittaa. */
+  function vierittyvaSisalla(el) {
+    for (var n = el.parentElement; n && n !== doc.body; n = n.parentElement) {
+      var o = doc.defaultView.getComputedStyle(n).overflowX;
+      if (o === 'auto' || o === 'scroll') return 1;
+    }
+    return 0;
+  }
+
   function kuva() {
     var ulos = [], k = solmut();
     for (var i = 0; i < k.length; i++) {
       var el = k[i], r = el.getBoundingClientRect();
       if (!r.width && !r.height) continue;
       var cs = doc.defaultView.getComputedStyle(el);
-      ulos.push({ i: i, n: nimi(el),
+      ulos.push({ i: i, n: nimi(el), vierittyva: vierittyvaSisalla(el),
                   x: Math.round(r.left), y: Math.round(r.top + doc.defaultView.scrollY),
                   w: Math.round(r.width), h: Math.round(r.height),
                   d: cs.display, suunta: cs.direction, tasaus: cs.textAlign });
@@ -161,14 +175,22 @@ window.rtlMittaa = function (doc) {
     return { tila: nakyy ? 'palaa nakyviin' : 'jaa piiloon', y: Math.round(r.top) };
   }
 
-  // ---- 1) LTR
+  /* ---- 1) LTR-lahtotila PAKOTETAAN.
+     ⚠️ Ala oleta etta sivu alkaa ltr:na. Oikealta vasemmalle kirjoitettavan
+     kielen sivu tulee palvelimelta JO rtl-tilassa, ja silloin «mittaa, kaanna,
+     vertaa» vertaisi rtl:aa rtl:aan: nolla eroa joka nayttaa taysin samalta
+     kuin lapimeno. Mitattu 19.11.2026 keinotekoisella ar-sivulla. */
+  var oliSuunta = juuri.getAttribute('data-suunta');
+  juuri.setAttribute('data-suunta', 'ltr');
+  void doc.body.offsetHeight;
   var a = kuva(), ja = jarjestykset(), la = lavat(), sa = sivuntila();
   // ---- 2) RTL (vain tekstin suunta: attribuutti <html>:ään, kuten rakenna.py tekee)
   juuri.setAttribute('data-suunta', 'rtl');
   void doc.body.offsetHeight;
   var b = kuva(), jb = jarjestykset(), lb = lavat(), sb = sivuntila();
   var sisennys = sisennysVaarin(), tun = tunnisteet();
-  juuri.removeAttribute('data-suunta');
+  if (oliSuunta === null) juuri.removeAttribute('data-suunta');
+  else juuri.setAttribute('data-suunta', oliSuunta);
   void doc.body.offsetHeight;
 
   // ---- vertailu
@@ -176,7 +198,7 @@ window.rtlMittaa = function (doc) {
   var ulkona = [], ennestaanUlkona = {};
   a.forEach(function (e) { if (e.x < -1 || e.x + e.w > W + 1) ennestaanUlkona[e.i] = 1; });
   b.forEach(function (e) {
-    if (ennestaanUlkona[e.i]) return;
+    if (ennestaanUlkona[e.i] || e.vierittyva) return;
     if (e.x < -1 || e.x + e.w > W + 1) ulkona.push({ n: e.n, x: e.x, oikea: e.x + e.w });
   });
 
@@ -215,7 +237,7 @@ window.rtlMittaa = function (doc) {
   });
 
   return {
-    leveys: W,
+    leveys: W, sivunSuunta: oliSuunta,
     ltr: sa, rtl: sb,
     korkeusKasvoi: sb.korkeus - sa.korkeus,
     ulkona: ulkona.length, ulkonaNaytteet: ulkona.slice(0, 8),

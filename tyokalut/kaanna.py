@@ -307,8 +307,12 @@ def vertaa(lahde, kaannos, polku, virheet):
                     virheet.append('%s.%s: ei saa kääntää (pitää olla %r)' % (polku, a, lahde[a]))
                 else:
                     vertaa(lahde[a], kaannos[a], '%s.%s' % (polku, a), virheet)
-    elif isinstance(lahde, list):
-        if not isinstance(kaannos, list) or len(kaannos) != len(lahde):
+    elif isinstance(lahde, (list, tuple)):
+        # ⚠️ MYOS TUPLE. `kielet.kaavio` on korttisaannot.KIELET:ssa tuple, ja
+        # pelkka `list`-ehto putosi sen lapi: kentta jai ILMAN YHTAAN
+        # tarkistusta. 📐 Mitattu 19.11.2026: kaannos, jonka kaaviossa oli
+        # kaksi nimiota kuuden sijaan, LAPAISI tarkista():n.
+        if not isinstance(kaannos, (list, tuple)) or len(kaannos) != len(lahde):
             virheet.append('%s: listan pituus pitää olla %d' % (polku, len(lahde))); return
         for i, (x, y) in enumerate(zip(lahde, kaannos)):
             vertaa(x, y, '%s[%d]' % (polku, i), virheet)
@@ -354,6 +358,20 @@ def tarkista(tulos):
             virheet.append('nimi %r puuttuu' % nimi)
     if '<b>#1 Pizza Party' not in kp['portaat'][1]['html']:
         virheet.append('korttipeli.portaat[1].html: «<b>#1 Pizza Party» puuttuu')
+    # ⚠️ `kotisaanto.siirra` NIMEAA OTSIKON, joka on loydyttava SAMAN pelimuodon
+    # html:sta — arkki leikkaa sen luvun irti (korttisaannot.irrota_luku).
+    # Kaantaja kaantaa kentat erikseen, joten ne voivat ajautua erilleen, eika
+    # mikaan rakenne- tai lukuvertailu nae sita: avaimet ja tagit tasmaavat.
+    # 📐 Mitattu 19.11.2026 kuiva-ajossa: ilman tata tarkistusta kaannos
+    # hyvaksytaan ja TALLENNETAAN, ja vasta arkin teko kuolee viestiin
+    # «Lukua 'X' ei loytynyt siirrettavaksi» — joka ei kerro kielta eika kenttaa.
+    # Kaikki kymmenen oikeaa kielta lapaisevat taman (tarkistettu samana paivana).
+    for i, m in enumerate(kp.get('muodot', [])):
+        siirra = (m.get('kotisaanto') or {}).get('siirra')
+        if siirra and not re.search(r'<h3>%s</h3>' % re.escape(siirra), m.get('html', ''), re.S):
+            virheet.append('korttipeli.muodot[%d].kotisaanto.siirra: %r ei ole otsikkona '
+                           'saman pelimuodon html:ssa — arkki ei voi leikata sita lukua'
+                           % (i, siirra))
     if k['iskulause'] != k['iskulause'].upper():
         virheet.append('kielet.iskulause: pitää olla isoin kirjaimin')
     return virheet
