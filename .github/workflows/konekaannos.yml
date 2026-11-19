@@ -155,15 +155,36 @@ jobs:
             echo "::warning::Salaisuus VAG_FONTTI_B64 puuttuu — viirit Nunito Blackilla"
           fi
 
+      # ⚠️ YKSI KIELI EI SAA KAATAA MUITA. 📐 Mitattu 19.11.2026: «kaikki»-ajo
+      # kuoli arabian arkkiin, ja koska `run: |` ajaa bashin -e-lipulla ja `ar`
+      # on aakkosissa ensimmäinen, yksikään muu arkki ei syntynyt eikä mitään
+      # tallennettu. Kuusi kieltä jäi ilman uutta kirjasinta yhden takia.
+      # Nyt jokainen kieli ajetaan loppuun, onnistuneet TALLENNETAAN, ja ajo
+      # merkitään punaiseksi vasta sen jälkeen.
       - name: Sivusto (kielen oma sivu) ja arkit
+        id: arkit
         if: steps.tulos.outputs.uusi == '1'
         run: |
           python3 rakenna.py
-          for k in ${{ steps.tulos.outputs.koodit }}; do python3 koteloarkki.py "$k"; done
+          virheita=0
+          for k in ${{ steps.tulos.outputs.koodit }}; do
+            if ! python3 koteloarkki.py "$k"; then
+              echo "::error::arkki $k epäonnistui"
+              virheita=$((virheita + 1))
+            fi
+          done
+          echo "virheita=$virheita" >> "$GITHUB_OUTPUT"
 
       - name: Tallenna haaraan konekaannokset
         if: steps.tulos.outputs.uusi == '1'
         run: bash tyokalut/konekaannokset-haara.sh tallenna "${{ steps.tulos.outputs.koodit }}" "$KIELI"
+
+      # Punainen vasta tässä, jotta onnistuneet arkit ehtivät tallentua.
+      - name: Epäonnistuiko jokin arkki?
+        if: always() && steps.arkit.outputs.virheita != '' && steps.arkit.outputs.virheita != '0'
+        run: |
+          echo "🔴 ${{ steps.arkit.outputs.virheita }} arkkia epäonnistui — ks. lokin «::error::arkki» -rivit."
+          exit 1
 
   julkaise:
     needs: kaanna
