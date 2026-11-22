@@ -1,0 +1,225 @@
+{
+ "kieli": "et",
+ "tagi": "et",
+ "nimi": "eesti",
+ "nimi_en": "Estonian",
+ "kirjoitus": "Latn",
+ "alue": "EE",
+ "konekaannos": true,
+ "suunta": "ltr",
+ "tarkastettu": false,
+ "malli": "claude-opus-5-5",
+ "luotu": "2026-11-22T16:55:23Z",
+ "lataa_kielella": "eesti keeles",
+ "ilmoita_virhe": "Teata tõlkeveast",
+ "ui": {
+  "nav_etusivu": "Avaleht",
+  "nav_korttipeli": "Kaardimäng",
+  "nav_lautapeli": "Lauamäng",
+  "nav_pelaa": "Mängi veebis",
+  "kielivalinta": "Keel",
+  "pyynto_avaa": "Küsi oma keelt",
+  "pyynto_otsikko": "Kõik keeled",
+  "pyynto_haku": "Otsi keelt",
+  "pyynto_pyyda": "Telli",
+  "pyynto_ei_tuettu": "Veel ei toetata",
+  "pyynto_tekeilla_lyhyt": "Töös",
+  "pyynto_omat": "Vali, millised keeled on sinu keelemenüüs näha.",
+  "pyynto_valikossa": "Näita keelemenüüs",
+  "konekaannos_ryhma": "Masintõlge · kaardimängu reeglid",
+  "pyynto_sulje": "Sulge",
+  "pyynto_kysymys": "Kas soovid Pizza Love kaardimängu reegleid keeles %s? Teeme need kohe, masintõlkena ja tasuta.",
+  "pyynto_kylla": "Jah, palun",
+  "pyynto_tekeilla": "Aitäh! Reeglid keeles %s on valmis umbes kolme minuti pärast ja ilmuvad siis keelemenüüsse.",
+  "pyynto_valmis": "Sinu keel on valmis!",
+  "pyynto_avaa_saannot": "Ava reeglid keeles %s",
+  "pyynto_konekaannos": "(masintõlge – parandused on oodatud)",
+  "pyynto_ei_onnistunut": "Ei õnnestunud. Proovi hiljem uuesti või kirjuta info@merkitysten.fi.",
+  "kauppaan": "Poodi",
+  "katso_video": "Vaata videot",
+  "apinakortti_nayta": "Näita",
+  "apinakortti_piilota": "Peida",
+  "video_kieli": {
+   "fi": "soome keeles",
+   "en": "inglise keeles"
+  },
+  "lataa": "Laadi alla",
+  "alaosa_teksti": "Pizza Love® on Merkitysten Oy mäng. Mängud on kavandatud Soomes ning need pannakse kokku ja pakitakse Soomes.",
+  "alaosa_yhteys": "Küsimusi? Kirjuta meile:",
+  "alaosa_tavaramerkki": "Pizza Love® ja Merkitysten® on Merkitysten Oy registreeritud kaubamärgid.",
+  "alaosa_yritys": "Merkitysten Oy",
+  "alaosa_varainhankinta": "Raha kogumine",
+  "ohita": "Liigu sisu juurde",
+  "kauppa_korttipeli": "Kaardimäng poes",
+  "kauppa_lautapeli": "Lauamäng poes",
+  "kauppa_molemmat": "Mõlemad mängud",
+  "keittio_otsikko": "Proovi: millise tehtega pitsa valmib?",
+  "keittio_vaihda": "Vaheta lisandikaart",
+  "keittio_merkki": "Vaheta tehe",
+  "keittio_valmis": "Pitsa valmib",
+  "keittio_ei": "Pitsa ei valmi",
+  "keittio_eikorttia": "Kaarti pole",
+  "keittio_tee": "Sinu kord.",
+  "keittio_taytteet": "Need ei ole selle pitsa lisandid.",
+  "keittio_maara": "Tehe on õige, aga lisandeid on vale arv.",
+  "keittio_hienoa": "Tubli!",
+  "keittio_peli": "Ülejäänu õpetab mäng"
+ },
+ "koko": {
+  "mb": "MB",
+  "kb": "kB",
+  "desimaalierotin": ","
+ },
+ "kielet": {
+  "alaotsikko": "Kolm mängu ühe kaardipakiga",
+  "iskulause": "IGA PITSA LOEB",
+  "bruno_huomio": "*2025. aasta reeglites Pizza Bruno.",
+  "hyva_tietaa": "Hea teada",
+  "kaavio": [
+   "Mängija A",
+   "Mängija B",
+   "Pitsavirn",
+   "Ladu",
+   "Tõmbepakk",
+   "Vahetuspitsa"
+  ],
+  "vaihto_luku": "Laokaartide vahetamine",
+  "vaihto_otsikko": "Vahetuse näide",
+  "vaihto": "Mängija B vahetab oma 4 mängija A kaartide 6 ja 2 vastu, sest 4 = 6 – 2. Nüüd saab B oma pitsa valmistada.",
+  "qr_teksti": "Reeglid ja<br>videod veebis",
+  "videot": "Lisateave ja videod aadressil",
+  "oikeudet": "Pizza Love® ja Merkitysten® on Merkitysten Oy registreeritud kaubamärgid. Kõik õigused kaitstud.",
+  "tiedosto": "pizza-love-card-game-rules-et.pdf",
+  "osoite": "https://pizzalove.fi/et/card-game",
+  "konekaannos_merkinta": "Masintõlge – emakeelne kõneleja pole seda veel üle vaadanud."
+ },
+ "korttipeli": {
+  "title": "Pizza Love® kaardimäng – reeglid ja videod",
+  "kuvaus": "Pizza Love® kaardimängu reeglid ja õpetusvideod: Pizza Party, Pizza Basso ja Pizza Love.",
+  "h1": "Pizza Love® kaardimäng",
+  "ingressi": "Kolm mängu ühe kaardipakiga. Alusta mänguga Pizza Party: seda on kõige kiirem õppida.",
+  "tiedot": [
+   "2–5 mängijat",
+   "6+",
+   "42 pitsakaarti",
+   "58 lisandikaarti",
+   "5–15 min"
+  ],
+  "hyppy": {
+   "perusteet": "Kuidas pitsat valmistada",
+   "muodot": "Kolm mänguviisi",
+   "lataa": "Reeglid printimiseks"
+  },
+  "perusteet_otsikko": "Kuidas pitsat valmistada",
+  "perusteet_ingressi": "Kõik kolm mängu põhinevad samal põhireeglil. Õpi see kõigepealt selgeks.",
+  "pizzakortit_otsikko": "Pitsakaardid",
+  "pizzakortit": "Pitsakaardil on pitsa, millel on üks kuni neli erinevat lisandit. Kaardi nurkades on pitsa väärtus (1–10). Mängus on 10 südamepitsat, mille väärtus on 10.",
+  "taytekortit_otsikko": "Lisandikaardid",
+  "taytekortit": "Lisandikaardil on üks lisand. Kaardi nurkades on lisandi väärtus (1–10). 3 fantaasialisandit (X) võivad olla ükskõik milline lisand.",
+  "perussaanto_otsikko": "Põhireegel",
+  "perussaanto": "Pitsakaardid on alati laual. Need valmistatakse käes olevate lisandikaartidega.",
+  "arvo_otsikko": "Pitsa väärtus",
+  "arvo": "Valmista pitsa oma lisandikaartidega ja ütle valjusti tehe, mis annab pitsa väärtuse. Kõik tehted on lubatud ja neid võib kombineerida, kui tulemus on pitsa väärtus. Näiteks <b>5 = 10 : 2</b>.",
+  "laskut": {
+   "otsikko": "Kõik tehted sobivad",
+   "html": "Lisaks liitmisele, lahutamisele, korrutamisele ja jagamisele sobivad ka astmed, logaritmid ja faktoriaal, näiteks <b>5 = 2² + 1</b> või <b>5 = 3! – 1</b>. Igaüks arvutab omal tasemel.",
+   "paperi": "<p>Igaüks arvutab omal tasemel, näiteks nii:</p><ul class=\"laskulista\"><li>5 = 2 + 3</li><li>5 = 7 – 2</li><li>5 = 5 · 1</li><li>5 = 10 : 2</li><li>5 = 2² + 1</li><li>5 = √9 + 2</li><li>5 = log₂ 8 + 2</li><li>5 = 3! – 1</li></ul><p class=\"konstit\"><b>Nutikad nipid:</b> korruta ühega või jaga arv iseendaga, siis saad ühe (2 : 2 = 1).</p>"
+  },
+  "esimerkki_otsikko": "Näide: tomati-ananassipitsa",
+  "esimerkki_alt": "Pitsakaart väärtusega 5 ning lisandikaardid 10 ja 2: 10 : 2 = 5",
+  "esimerkki": "Pitsa väärtus on 5. Selle võib valmistada ükskõik milliste lisandikaartidega, kui tehte tulemus on 5: näiteks 4 + 1, 6 – 1, 2 + 3 või 10 : 2.",
+  "tavat_otsikko": "Kaks viisi pitsat valmistada",
+  "helpompi_otsikko": "Lihtsam viis",
+  "helpompi": "Pitsa võib valmistada ükskõik mitme lisandikaardiga, ka ainult ühega. Kasuta seda, kui mängid mängu Pizza Party esimest korda või väikese lapsega.",
+  "basso_tapa_otsikko": "Ahv Basso viis",
+  "basso_tapa": "Kasuta sama palju <b>erinevaid lisandeid</b>, kui pitsal on lisandeid. Kaarte võib olla rohkem: tomati-ananassipitsa (väärtus 5) võib valmistada näiteks kahe tomati ja ühe oliiviga, 2 + 2 + 1 = 5, sest lisandeid on kaks eri liiki. Kasuta seda mängus Pizza Basso või kui soovid mängus Pizza Party lisaväljakutset.<br><span class=\"pieni\">Trükitud reeglites on reegel veel kujul „sama palju lisandikaarte, kui pitsal on lisandeid”. Uus viis annab mängule rohkem võimalusi.</span>",
+  "huomio_bruno": "<b>Bruno või Basso?</b> Mängu ahvi nimi on nüüd Basso. Vanemates reeglites ja videotes on tema nimi Bruno ning teise mänguviisi nimi on Pizza Bruno. Reeglid on samad.",
+  "portaat_otsikko": "Kolm viisi pitsat valmistada",
+  "portaat_ingressi": "Viisid erinevad selle poolest, milliseid lisandikaarte tohib kasutada. Kõigis näidetes on sama pitsa: tomati-ananassi, väärtus 5.",
+  "portaat": [
+   {
+    "otsikko": "1. Ükskõik millised lisandid",
+    "pelit": "#1 Pizza Party",
+    "html": "<p>Kasuta ükskõik milliseid lisandikaarte, nii palju kui tahad – <b>kasvõi ainult ühte</b>. Loeb ainult väärtus.</p>",
+    "esimerkit": [
+     "5 = 5",
+     "5 = 4 + 1",
+     "5 = 7 + 6 - 8"
+    ]
+   },
+   {
+    "otsikko": "2. Ahv Basso viis",
+    "pelit": "#1 Pizza Party (lisaväljakutse) · #2 Pizza Basso",
+    "html": "<p>Kasuta sama palju <b>erinevaid</b> lisandeid, kui pitsal on lisandeid. Need ei pea olema selle pitsa enda lisandid. Kaarte võib olla rohkem, näiteks kaks ühesugust.</p><p>Proovi seda ka mängus <b>#1 Pizza Party</b>: mäng muutub lõbusamaks, kuigi veidi raskemaks.</p><p>Tomati-ananassipitsal on kaks lisandit, seega ühest kaardist ei piisa.</p>",
+    "esimerkit": [
+     "5 = 10 : 2",
+     "5 = 2 + 2 + 1"
+    ]
+   },
+   {
+    "otsikko": "3. Õiged lisandid",
+    "pelit": "#3 Pizza Love",
+    "html": "<p>Valmista pitsa <b>täpselt selle enda lisanditega</b>.</p><p>Tomati-ananassipitsa jaoks on vaja tomatit ja ananassi.</p>",
+    "esimerkit": [
+     "5 = 2 + 3"
+    ]
+   }
+  ],
+  "tieto": "<b>Bruno või Basso?</b> 2025. aastal trükitud reeglites ja videotes on ahvi nimi Bruno (ja teise mängu nimi Pizza Bruno). Basso viisis räägitakse nüüd lisandikaartide asemel lisanditest, mis annab mängule palju rohkem võimalusi.",
+  "muodot_otsikko": "Kolm mänguviisi",
+  "muodot_ingressi": "Ava mänguviis, et näha reegleid ja videoid.",
+  "videot_otsikko": "Videod",
+  "videot": {
+   "party_en": "Pizza Party – kuidas mängida",
+   "party_fi": "Pizza Party – kuidas mängida",
+   "party_helpompi": "Lihtsam viis mängida",
+   "party_helpottaminen": "Mängu lihtsustamine",
+   "party_ei_valmistu": "Kui pitsat ei saa valmistada",
+   "party_basso_tapa": "Ahv Basso viis",
+   "basso_fi": "Pizza Basso – kuidas mängida"
+  },
+  "muodot": [
+   {
+    "avain": "party",
+    "numero": "#1",
+    "nimi": "Pizza Party",
+    "kuvaus": "Kõige lihtsam alustada, kiire ja hoogne · u 5 min",
+    "html": "<h3>Eesmärk</h3><p>Mängijad valmistavad võidu pitsasid. Võidab see, kes valmistab kõige rohkem pitsasid enne, kui pitsa- või lisandikaardid otsa saavad.</p><h3>Ettevalmistus</h3><ol class=\"lista\"><li>Sega pitsakaardid ja pane need virna nii, et kõik ulatuvad.</li><li>Sega lisandikaardid ja jaga igale mängijale 5 kaarti. Ülejäänud lisandikaardid on tõmbepakk. Mängijad võivad oma kaarte vaadata.</li></ol><h3>Mängu algus</h3><p>Pööra esimene pitsakaart virna kõrvale pildiga üles. Kõik proovivad kohe seda pitsat oma lisandikaartidega valmistada.</p><h3>Mängu käik</h3><ul class=\"lista\"><li>Mängitakse ilma käikudeta: kõik proovivad pitsasid valmistada samal ajal.</li><li>Pitsa valmistamiseks löö oma lisandikaardid laual oleva pitsa peale ja ütle tehe valjusti. Kiireim saab pitsakaardi ja kogub selle enda ette.</li><li>Kui mitu mängijat löövad korraga, saab pitsa see, kelle kaardid on kõige all.</li><li>Kasutatud lisandikaardid eemaldatakse mängust. Tõmba uusi kaarte, kuni sul on jälle 5 kaarti käes.</li><li>Pööra kohe uus pitsakaart pildiga üles. Jätka, kuni pitsa- või lisandikaardid saavad otsa ja keegi ei suuda enam pitsat valmistada.</li></ul><h3>Kui pitsat ei saa valmistada</h3><p>Kui keegi ei suuda või ei taha laual olevat pitsat valmistada, pööra selle peale uus pitsakaart. Järgmise pitsa valmistaja saab kõik laual olevad pitsad.</p><h3>Punktid ja võitmine</h3><p>Pitsa annab nii palju punkte, kui palju on sellel lisandeid. Südamepitsa annab ühe lisapunkti. Näiteks tomati-ananassipitsa = 2 punkti.</p><p>Vooru võidab see, kellel on kõige rohkem punkte. Lepige kokku, mitu vooru mängite, näiteks võidab kogu mängu see, kes võidab esimesena 3 või 5 vooru.</p><h3>Rahulikum Pizza Party</h3><p>Võite mängida ka käikude kaupa, siis saab igaüks oma käigul rahulikult mõelda.</p><h3>Valikulised reeglid</h3><p>Võite tehteid piirata, näiteks:</p><ul class=\"lista\"><li>mängitakse ainult liitmise ja lahutamisega</li><li>igas pitsas peab olema korrutamine või jagamine.</li></ul>",
+    "kotisaanto": {
+     "otsikko": "Valikulised reeglid",
+     "html": "<p><b>Punktid:</b> lepige enne mängu kokku, kui loete punkte teisiti.</p><ul class=\"lista\"><li><b>Lihtsam:</b> iga pitsa = 1 punkt, südamepitsa eest +1.</li><li><b>Raskem:</b> pitsa = selle väärtus (1–10), südamepitsa eest +1.</li></ul>",
+     "siirra": "Valikulised reeglid",
+     "siirra_alku": "<p><b>Tehted:</b> võite neid piirata, näiteks:</p>"
+    }
+   },
+   {
+    "avain": "basso",
+    "numero": "#2",
+    "nimi": "Pizza Basso",
+    "kuvaus": "Rahulik ja põnev · u 7 min",
+    "html": "<h3>Eesmärk</h3><p>Mängijad püüavad oma käe tühjaks mängida ehk saada lahti kõigist käes olevatest lisandikaartidest. Esimesena õnnestunu võidab vooru.</p><p><b>NB!</b> Pitsad valmistatakse ahv Basso viisil.</p><h3>Ettevalmistus</h3><ol class=\"lista\"><li>Sega pitsakaardid ja pane need virna nii, et kõik ulatuvad.</li><li>Sega lisandikaardid ja jaga igale mängijale 7 kaarti. Ülejäänud lisandikaardid on tõmbepakk. Mängijad võivad oma kaarte vaadata.</li></ol><h3>Mängu algus</h3><p>Pööra esimene pitsakaart virna kõrvale pildiga üles. Alustab mängija, kes viimati pitsat sõi.</p><h3>Mängu käik</h3><p>Mängijad püüavad oma käigul laual olevat pitsat oma lisandikaartidega valmistada.</p><p><b>A) Kui see õnnestub:</b> eemalda kasutatud lisandikaardid mängust ja pööra virnast uus pitsakaart eelmise peale. Käik läheb järgmisele mängijale.</p><p><b>B) Kui sa ei suuda või ei taha pitsat valmistada:</b> tõmba üks lisandikaart. Käik läheb järgmisele mängijale.</p><p><b>C) Üks kaart käes:</b> kui sul on alles ainult üks lisandikaart, tee nagu näljane ahv Basso ja hüüa: „PITSAAA!”</p><h3>Kui lisandikaardid saavad otsa</h3><p>Sega mängust eemaldatud lisandikaardid uueks tõmbepakiks ja jätka.</p><h3>Punktid ja võitmine</h3><p>Vooru võidab see, kes saab esimesena lahti kõigist oma lisandikaartidest. Teiste mängijate kätte jäänud kaartide väärtused liidetakse kokku ja summa on võitja punktid. Tavaline lisand annab oma väärtuse (1–10), fantaasialisand 20.</p><p>Esimesena 100 punkti kogunu võidab ja saab tiitli <b>Pizza Basso – tõeline pitsaahv</b>.</p><h3>Lühem mäng</h3><p>Võite kokku leppida, et mäng lõpeb näiteks 30 või 50 punkti juures või et kogu mängu võidab see, kes võidab esimesena 3 või 5 vooru.</p>",
+    "kotisaanto": {
+     "otsikko": "Valikulised reeglid",
+     "html": "<p><b>Kõik saavad punkte:</b> igaüks jätab enda valmistatud pitsad endale ja loeb vooru lõpus oma punktid kokku: pitsa = selle väärtus (1–10), südamepitsa eest +1. Sobib hästi väikeste lastega mängimiseks.</p>",
+     "siirra": "Lühem mäng",
+     "siirra_alku": "<p><b>Lühem mäng:</b> võite kokku leppida, et mäng lõpeb näiteks 30 või 50 punkti juures või et kogu mängu võidab see, kes võidab esimesena 3 või 5 vooru.</p>"
+    }
+   },
+   {
+    "avain": "love",
+    "numero": "#3",
+    "nimi": "Pizza Love",
+    "kuvaus": "Kõige taktikalisem ja keerulisem, 8+ · u 15 min",
+    "html": "<h3>Eesmärk</h3><p>Mängijad püüavad valmistada kõik oma pitsad enne teisi. Esimesena õnnestunu võidab.</p><p><b>NB!</b> Nüüd on lisandid tähtsad: pitsat saab valmistada ainult õigete lisanditega.</p><h3>Ettevalmistus</h3><ol class=\"lista\"><li>Sega ja jaga igale mängijale 8 pitsakaarti. Mängijad panevad need enda ette virna pildiga alla ja pööravad pealmise pildiga üles.</li><li>Pane üks pitsakaart laua keskele pildiga üles. See on vahetuspitsa. Ülejäänud pitsakaardid eemaldatakse mängust.</li><li>Sega lisandikaardid ja pane need lauale tõmbepakiks.</li></ol><h3>Ladu</h3><p>Igal mängijal on enda ees 4 laokohta. Laos olevad lisandikaardid on pildiga üles. Neid võib kasutada oma pitsade jaoks nagu käes olevaid kaarte ja teised mängijad võivad neid kasutada vahetusteks.</p><h3>Mängu algus</h3><p>Alustab mängija, kes viimati pitsat sõi, ja tõmbab kätte 5 lisandikaarti.</p><h3>Mängu käik</h3><ol class=\"lista\"><li>Tõmba lisandikaarte, kuni sul on käes 5 kaarti.</li><li>Püüa valmistada oma virna pealmine pitsa käe ja lao kaartidega.</li><li>Võid vahetada oma lao kaarte teise mängija laokaartide vastu tehete abil.</li><li>Ühe korra käigu jooksul võid vahetada oma virna pealmise pitsa ja vahetuspitsa kohad: sinu pitsa jääb keskele uueks vahetuspitsaks ja vahetuspitsa läheb sinu virna peale. Saadud pitsa võid kohe valmistada.</li><li>Käigu lõpus pane üks lisandikaart käest pildiga üles oma lattu.</li></ol><p><b>NB!</b> Kui mängid käe tühjaks enne laokaardi panemist, tõmba 5 uut kaarti ja jätka käiku.</p><h3>Pitsa valmistamine</h3><p>Kui sul on pitsa jaoks vajalikud lisandid käes ja/või laos, valmista pitsa. Pitsakaart ja kasutatud lisandikaardid eemaldatakse mängust. Pööra oma virnast uus pitsa pildiga üles: kui sul on selle jaoks lisandid, võid ka selle kohe valmistada.</p><h3>Südamepitsa</h3><p>Kui valmistad südamepitsa, anna oma järgmine pitsakaart vaatamata teisele mängijale. Tema paneb selle oma virna alla.</p><h3>Laokaartide vahetamine</h3><p>Hangi puuduvaid lisandeid, vahetades oma lao kaarte teise mängija laokaartide vastu.</p><ul class=\"lista\"><li>Antavatest ja saadavatest kaartidest peab arvutades tulema sama arv. Kõik tehted sobivad.</li><li>Vahetusest ei tohi keelduda.</li><li>Pane saadud kaardid oma lattu.</li><li>Oma käigul võid teha mitu vahetust. Üks vahetus tehakse alati ühe teise mängijaga.</li><li>Vahetada saab ainult pealmisi kaarte.</li></ul><h3>Lao täitmine</h3><ul class=\"lista\"><li>Laokohti võib täita ükskõik millises järjekorras.</li><li>Kaarte võib panna üksteise peale. Kasutada või vahetada saab ainult pealmist, seega saad kaarte kuhjates kaitsta kaarti vahetuse eest. Siis on see lukus ka sinu jaoks.</li><li>Laos olevaid kaarte ei tohi liigutada.</li></ul><h3>Mängu võitmine</h3><p>Mäng lõpeb, kui keegi on valmistanud kõik oma virna pitsad.</p>"
+   }
+  ],
+  "lataa_otsikko": "Reeglid printimiseks",
+  "lataa_teksti": "Kõik kolm mänguviisi eesti keeles – üks kahepoolne leht, mis mahub kokkuvoldituna mängukarpi.",
+  "lataa_tiedosto": "Kaardimängu reeglid (eesti keeles)",
+  "pelaa_otsikko": "Pizza Party ja Pizza Basso",
+  "pelaa_teksti": "Mõlemad töötavad ka brauseris. Proovi enne esimest mängu või mängi sõpradega oma telefonides.",
+  "ristiin_otsikko": "Järgmisena: Pizza Love® lauamäng",
+  "ristiin_teksti": "Sama pitsamaailm mängulaual: valmista pitsakarpide lemmikpitsasid ja kogu esimesena 10 erinevat viilu. Kolm mänguviisi, ka koostöömänguna.",
+  "ristiin_saannot": "Lauamängu reeglid"
+ }
+}
