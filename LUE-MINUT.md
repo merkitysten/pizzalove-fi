@@ -100,7 +100,7 @@ kahdessa paikassa, ja molemmat ovat haarassa `konekaannokset`:
 
 | kesken | missä se näkyy | kuka vie loppuun |
 |---|---|---|
-| käännöstä ei syntynyt | `konekaannos-jono.json` | yöajo, enintään 5 yritystä |
+| käännöstä ei syntynyt | `konekaannos-jono.json` | yöajo, enintään 5 **maksettua** yritystä tai 2,00 $ |
 | arkki puuttuu tai katkesi | tiedostoista (`jono.py puuttuvat`) | yöajo, ei kattoa (maksuton) |
 
 `konekaannos.yml` ajetaan **joka yö klo 03.17 UTC** kielellä «jono». Se ei
@@ -108,9 +108,18 @@ käännä mitään kysymättä: vain sen, minkä joku on pyytänyt ja jonka kä�
 ei onnistunut. Jos mikään ei ole kesken, ajo ei tallenna eikä julkaise mitään.
 
 ```bash
-python3 tyokalut/jono.py tila                 # mitä on kesken
+python3 tyokalut/jono.py tila                 # mitä on kesken ja mitä se on maksanut
 python3 tyokalut/jono.py --itsetesti --mutaatiot
 ```
+
+⚠️ **Hinta mitataan, ei arvata.** `kaanna.py` kirjaa jokaisen API-kutsun tokenit
+(`KAANNOS_KULUKIRJA`), ja `jono.py` laskee niistä kielen kulun hinnastosta
+(`HINNASTO`, claude-opus-5-5 = 4 $ / 20 $ per Mtok). Siitä seuraa kolme asiaa:
+**ilmainen epäonnistuminen** (päiväkatto poistuu ennen ensimmäistä kutsua) ei
+kuluta maksettua yritystä, **raharaja** `KULUKATTO_DOLLARIA` pysäyttää kielen
+rahassa eikä yrityksissä (raja luetaan ennen yritystä, joten yläraja on raja +
+yksi yritys), ja **tuntemattoman mallin** hintaa ei arvata — silloin rajaa pitää
+yrityskatto.
 
 ⚠️ **Arkin tuomiossa on kolme tilaa, ei kaksi** (`jono.py arkki`). `koteloarkki.py`
 kirjoittaa PDF:n **ennen** omia kokeitaan, joten kaatuneen ajon arkki on levyllä:

@@ -277,6 +277,27 @@ def kysy(viestit, jarjestelma):
              yksityiskohdat.get('thinking_tokens', '–'),
              kaytto.get('cache_read_input_tokens', 0),
              kaytto.get('cache_creation_input_tokens', 0), syy))
+    # 📐 Marko 22.11.2026: «voiko siis olla niin, että joku kieli maksaakin n. 5
+    # dollaria?» Siihen ei voi vastata arvaamalla, ja ASIAKASKAANNOS.md:n 0,35 $
+    # on ARVIO tekstin pituudesta (45 000 + 8 000 tokenia) — se ei tiedä
+    # ajattelutokeneista eikä siitä, että yksi käännös tekee KAKSI kutsua jos
+    # tarkistus löytää virheitä. Jos ympäristössä on KAANNOS_KULUKIRJA, jokainen
+    # kutsu kirjataan sinne rivinä, ja tyokalut/jono.py laskee siitä sekä hinnan
+    # että sen, kuluiko tässä yrityksessä rahaa lainkaan (päiväkatto ei kuluta).
+    kulukirja = os.environ.get('KAANNOS_KULUKIRJA')
+    if kulukirja:
+        try:
+            with open(kulukirja, 'a', encoding='utf-8') as f:
+                f.write(json.dumps({
+                    'malli': MALLI,
+                    'syote': kaytto.get('input_tokens') or 0,
+                    'tuloste': kaytto.get('output_tokens') or 0,
+                    'ajattelu': yksityiskohdat.get('thinking_tokens') or 0,
+                    'valimuisti_luettu': kaytto.get('cache_read_input_tokens') or 0,
+                }) + '\n')
+        except OSError as v:
+            # ⚠️ Kulukirjanpito ei saa kaataa käännöstä, joka on jo maksettu.
+            print('⚠️  Kulukirjaa ei voitu kirjoittaa (%s)' % v)
     if syy == 'max_tokens':
         # Ei yritetä uudelleen: sama pyyntö katkeaisi samaan kohtaan. Viesti
         # kertoo luvut, jotta syy näkyy lokista ilman API-kyselyä.

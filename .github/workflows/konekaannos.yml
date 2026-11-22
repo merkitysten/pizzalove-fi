@@ -122,6 +122,11 @@ jobs:
             *)      kaanna="$KIELI" ;;
           esac
           echo "KAANNA=$kaanna" >> "$GITHUB_ENV"
+          # 📐 Kulukirja: kaanna.py kirjaa tähän jokaisen API-kutsun tokenit, ja
+          # jono.py laskee niistä hinnan — ja ennen kaikkea sen, kuluiko rahaa
+          # lainkaan. Päiväkatto poistuu ennen ensimmäistä kutsua, eikä ilmainen
+          # epäonnistuminen saa kuluttaa maksettua yritystä (Marko 22.11.2026).
+          echo "KAANNOS_KULUKIRJA=$RUNNER_TEMP/kulu.jsonl" >> "$GITHUB_ENV"
           echo "Käännetään: ${kaanna:-(ei mitään — vain arkit)}"
           python3 tyokalut/jono.py tila
 
@@ -140,7 +145,7 @@ jobs:
       # kasvaa. ⚠️ `!cancelled()`, jotta kaatunut käännös ehtii jonoon.
       - name: Kielijono (tilaus ei katoa)
         if: ${{ !cancelled() && env.KAANNA != '' && !inputs.toistokoe }}
-        run: python3 tyokalut/jono.py paivita "$KAANNA" "ajo ${{ github.run_number }} - käännös ${{ steps.kaannos.outcome }}"
+        run: python3 tyokalut/jono.py paivita "$KAANNA" "ajo ${{ github.run_number }} - käännös ${{ steps.kaannos.outcome }}" "$KAANNOS_KULUKIRJA"
 
       # ⚠️ KÄÄNNÖS TALTEEN HETI, ennen raskaita askeleita.
       # 📐 Mitattu 16.11.2026: hindin käännös ONNISTUI ja läpäisi tarkistuksen,

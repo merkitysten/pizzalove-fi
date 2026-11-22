@@ -25,16 +25,27 @@ tallennu mitään. Tiedosto on `konekaannos-jono.json` repon JUURESSA eikä
 ja jono olisi näyttänyt kieleltä nimeltä «jono».
 
 ⚠️ YRITYKSET_MAKS on raja, ja se on tietoinen. Käännös joka hylätään samasta
-syystä joka kerta ei onnistu kuudennellakaan, ja jokainen yritys maksaa noin
-dollarin. Viisi vuorokautta on «ennemmin tai myöhemmin»; ikuinen uudelleenyritys
-olisi vain laskutettu toivo. Rivi JÄÄ jonoon kun raja täyttyy, jotta se näkyy
-(`jono.py tila`) eikä katoa hiljaa.
+syystä joka kerta ei onnistu kuudennellakaan. Viisi vuorokautta on «ennemmin tai
+myöhemmin»; ikuinen uudelleenyritys olisi vain laskutettu toivo. Rivi JÄÄ jonoon
+kun raja täyttyy, jotta se näkyy (`jono.py tila`) eikä katoa hiljaa.
+
+📐 MITÄ YKSI YRITYS MAKSAA (Marko 22.11.2026: «voiko siis olla niin, että joku
+kieli maksaakin n. 5 dollaria?»). Yksi yritys on 1–2 API-kutsua: `kaanna_kerran`
+antaa mallin korjata kerran, jos tarkistus löytää virheitä. Hinnastosta
+(claude-opus-5-5: 4 $ / 20 $ per Mtok) ja ASIAKASKAANNOS.md:n mitatusta koosta
+(45 000 syöte- ja 8 000 tulostetokenia) yksi kutsu on noin 0,34 $, eli yritys
+0,34–0,68 $ ja viisi yritystä 1,7–3,4 $. ⚠️ MUTTA ARVIO EI TUNNE
+AJATTELUTOKENEITA, jotka opus-5-5 tuottaa oletuksena ja jotka hinnoitellaan
+tulosteena — mitattu kutsu voi siis olla kaksi kertaa tuo. Siksi hintaa ei
+jätetä yrityskaton varaan: todellinen kulu kirjataan jonon riville (`dollaria`)
+API:n omista usage-luvuista, ja `KULUKATTO_DOLLARIA` pysäyttää kielen rahassa.
+Ilmainen epäonnistuminen (päiväkatto) ei kuluta maksettua yritystä lainkaan.
 
 ⚠️ ARKKI ON ERI ASIA KUIN KÄÄNNÖS, eikä se ole jonossa. Puuttuva arkki näkyy
 tiedostoista (`puuttuvat`), sen uusiminen ei maksa mitään, ja siksi sitä
 yritetään joka ajossa ilman kattoa.
 
-  python3 tyokalut/jono.py paivita <koodi> "<syy>"     onnistui? pois : jonoon
+  python3 tyokalut/jono.py paivita <koodi> "<syy>" [kulukirja]  onnistui? pois : jonoon
   python3 tyokalut/jono.py seuraava                    vanhin kesken, 1 kpl
   python3 tyokalut/jono.py puuttuvat                   käännös on, arkki ei
   python3 tyokalut/jono.py arkki <koodi> <loki>        saako arkki lähteä?
@@ -49,7 +60,29 @@ import sys
 TANNE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 JONO_TIEDOSTO = 'konekaannos-jono.json'
+# ⚠️ KATTO LASKEE VAIN MAKSETTUJA YRITYKSIÄ. 📐 Marko 22.11.2026: «voiko siis
+# olla niin, että joku kieli maksaakin n. 5 dollaria?» Päiväkatto ei kuluta
+# mitään (kaanna.py poistuu ennen ensimmäistä API-kutsua), joten ilmainen
+# epäonnistuminen ei saa syödä maksetusta budjetista. Kuluiko rahaa, luetaan
+# kulukirjasta (KAANNOS_KULUKIRJA) eikä arvata.
 YRITYKSET_MAKS = 5
+# Ja raja myös ilmaisille, jotta väärä tunniste tai rikkinäinen ohje ei jää
+# yrittämään ikuisesti. 20 yötä, ja sitten rivi jää näkyviin.
+YRITYKSET_KAIKKI_MAKS = 20
+# ⚠️ RAHARAJA, koska Markon kysymys oli rahasta eikä yrityksistä: yksi kieli ei
+# saa kuluttaa enempää. Yrityskatto ei yksin riitä rajaamaan hintaa, koska yhden
+# yrityksen hinta ei ole vakio — se on 1–2 kutsua, ja ajattelutokenit vaihtelevat
+# (mitattu kutsu voi olla 0,34 $ tai kaksi kertaa enemmän). Raja tarkistetaan
+# ENNEN yritystä, joten viimeinen yritys voi ylittää sen: yläraja on siis
+# KULUKATTO + yksi yritys. Tuntemattomalla mallilla hintaa ei lasketa, ja
+# silloin rajaa pitää yrityskatto.
+KULUKATTO_DOLLARIA = 2.00
+# Hinnasto, $ / miljoona tokenia (Anthropicin oma hinnasto 22.11.2026).
+# ⚠️ Nämä ovat kaanna.py:n MALLI-kohtaisia: jos malli vaihtuu, lisää rivi —
+# tuntemattomalle mallille hintaa EI arvata, vaan se sanotaan tuntemattomaksi.
+HINNASTO = {'claude-opus-5-5': (4.00, 20.00),
+            'claude-opus-5': (5.00, 25.00),
+            'claude-sonnet-5-5': (2.00, 10.00)}
 # Sama kieli ei yritä kahdesti saman vuorokauden aikana, vaikka ajo
 # käynnistettäisiin käsin kahdesti: yritys on API-kutsu eli rahaa.
 ODOTUS_TUNNIT = 6
@@ -135,8 +168,40 @@ def pdf_ehja(polku):
         return b'%%EOF' in f.read()
 
 
+# ------------------------------------------------------------------ kulut
+def kulut(kulukirja):
+    '''Mitä tämä ajo on maksanut: (kutsuja, dollaria, syote, tuloste).
+
+    `dollaria` on None, jos jonkin kutsun mallia ei ole hinnastossa — hintaa ei
+    arvata. ⚠️ Kolme tilaa: tiedostoa ei ole (= yhtään API-kutsua ei tehty, ja
+    se on se tieto jota katto tarvitsee), tiedosto on ja rivejä on, tai rivi ei
+    jäsenny (ohitetaan ääneen).'''
+    if not kulukirja or not os.path.exists(kulukirja):
+        return 0, 0.0, 0, 0
+    kutsuja, dollaria, syote, tuloste, tuntematon = 0, 0.0, 0, 0, False
+    for rivi in open(kulukirja, encoding='utf-8'):
+        rivi = rivi.strip()
+        if not rivi:
+            continue
+        try:
+            d = json.loads(rivi)
+        except ValueError:
+            print('⚠️  kulukirjan rivi ei jäsenny: %s' % rivi[:60])
+            continue
+        kutsuja += 1
+        syote += int(d.get('syote') or 0)
+        tuloste += int(d.get('tuloste') or 0)
+        hinta = HINNASTO.get(d.get('malli'))
+        if hinta:
+            dollaria += (int(d.get('syote') or 0) * hinta[0]
+                         + int(d.get('tuloste') or 0) * hinta[1]) / 1e6
+        else:
+            tuntematon = True
+    return kutsuja, (None if tuntematon else round(dollaria, 3)), syote, tuloste
+
+
 # ------------------------------------------------------------------ jono
-def paivita(koodi, syy='', juuri=TANNE, nyt=None):
+def paivita(koodi, syy='', juuri=TANNE, nyt=None, kulukirja=None):
     """Yksi kutsu, joka osaa molemmat suunnat: jos käännös on levyllä, tilaus
     on toimitettu ja rivi poistuu; jos ei, se jää jonoon ja yrityslaskuri
     kasvaa. ⚠️ Yksi kutsu eikä kaksi siksi, että työnkulun YAMLissa ehtoja on
@@ -150,13 +215,28 @@ def paivita(koodi, syy='', juuri=TANNE, nyt=None):
         return 'VALMIS: %s on käännetty, jonossa ei ollut mitään' % koodi
     rivi = d.get(koodi) or {}
     rivi['pyydetty'] = rivi.get('pyydetty') or (nyt or nyt_iso())
-    rivi['yritykset'] = int(rivi.get('yritykset') or 0) + 1
     rivi['viimeksi'] = nyt or nyt_iso()
     rivi['syy'] = (syy or '')[:200]
+    # ⚠️ Ilman kulukirjan polkua oletus on MAKSOI. Väärä oletus toiseen suuntaan
+    # tarkoittaisi rajattomasti maksettuja yrityksiä; tämä suunta vain pysähtyy
+    # aikaisemmin, ja sen Marko näkee jonosta.
+    kutsuja, dollaria, _, _ = kulut(kulukirja) if kulukirja else (1, None, 0, 0)
+    if kutsuja:
+        rivi['yritykset'] = int(rivi.get('yritykset') or 0) + 1
+        if dollaria is not None:
+            rivi['dollaria'] = round(float(rivi.get('dollaria') or 0) + dollaria, 3)
+        rivi['kutsuja'] = int(rivi.get('kutsuja') or 0) + kutsuja
+    else:
+        rivi['ilmaisia'] = int(rivi.get('ilmaisia') or 0) + 1
     d[koodi] = rivi
     kirjoita(d, juuri)
-    return 'JONOON: %s (yritys %d/%d) — %s' % (koodi, rivi['yritykset'],
-                                               YRITYKSET_MAKS, rivi['syy'] or 'syy ei tiedossa')
+    if not kutsuja:
+        return ('JONOON: %s (ilmainen yritys %d, ei API-kutsuja) — %s'
+                % (koodi, rivi['ilmaisia'], rivi['syy'] or 'syy ei tiedossa'))
+    return ('JONOON: %s (maksettu yritys %d/%d, %d kutsua, %s) — %s'
+            % (koodi, rivi['yritykset'], YRITYKSET_MAKS, kutsuja,
+               ('%.2f $ yhteensä' % rivi['dollaria']) if rivi.get('dollaria') is not None
+               else 'hinta tuntematon', rivi['syy'] or 'syy ei tiedossa'))
 
 
 def seuraava(juuri=TANNE, nyt=None):
@@ -170,6 +250,11 @@ def seuraava(juuri=TANNE, nyt=None):
         if kaannos_on(koodi, juuri):
             continue
         if int(rivi.get('yritykset') or 0) >= YRITYKSET_MAKS:
+            continue
+        if (int(rivi.get('yritykset') or 0) + int(rivi.get('ilmaisia') or 0)
+                >= YRITYKSET_KAIKKI_MAKS):
+            continue
+        if float(rivi.get('dollaria') or 0) >= KULUKATTO_DOLLARIA:
             continue
         viime = _aika(rivi.get('viimeksi'))
         if viime and hetki and (hetki - viime).total_seconds() < ODOTUS_TUNNIT * 3600:
@@ -227,10 +312,13 @@ def tila(juuri=TANNE):
     rivit = []
     for koodi in sorted(d):
         r = d[koodi]
-        rivit.append('  %-8s yritys %s/%s · pyydetty %s · %s'
-                     % (koodi, r.get('yritykset'), YRITYKSET_MAKS,
+        rivit.append('  %-8s maksettu %s/%s · ilmaisia %s · %s · pyydetty %s · %s'
+                     % (koodi, r.get('yritykset') or 0, YRITYKSET_MAKS,
+                        r.get('ilmaisia') or 0,
+                        ('%.2f $' % r['dollaria']) if r.get('dollaria') is not None else '– $',
                         (r.get('pyydetty') or '?')[:10], r.get('syy') or ''))
-    print('Jono (%s): %d kieltä odottaa käännöstä' % (JONO_TIEDOSTO, len(d)))
+    print('Jono (%s): %d kieltä odottaa käännöstä · rajat: %d maksettua yritystä '
+          'tai %.2f $ kieleltä' % (JONO_TIEDOSTO, len(d), YRITYKSET_MAKS, KULUKATTO_DOLLARIA))
     print('\n'.join(rivit) if rivit else '  (tyhjä)')
     p = puuttuvat(juuri)
     print('Käännös on, arkki puuttuu: %s' % (' '.join(p) if p else '(ei yhtään)'))
@@ -333,7 +421,69 @@ def itsetesti():
     tuomio, _ = arkkituomio('tr', loki, j)
     vaadi(tuomio == 'rikki', 'katkennut PDF pääsi julkaisuun')
 
-    # 6. Rikkinäinen jono ei kaada ajoa.
+    # 6. kulut(): kolme tilaa, ja hinta lasketaan eikä arvata.
+    j = _hiekka()
+    kk = os.path.join(j, 'kulu.jsonl')
+    vaadi(kulut(kk) == (0, 0.0, 0, 0), 'puuttuva kulukirja ei tarkoittanut nollaa')
+    with open(kk, 'w', encoding='utf-8') as f:
+        for _ in range(2):
+            f.write(json.dumps({'malli': 'claude-opus-5-5', 'syote': 45000,
+                                'tuloste': 8000}) + '\n')
+    kutsuja, dollaria, syote, _ = kulut(kk)
+    vaadi((kutsuja, syote) == (2, 90000), 'kutsut tai tokenit laskettiin väärin')
+    vaadi(dollaria == 0.68, 'hinta laskettiin väärin: %r (odotus 0.68)' % dollaria)
+    open(kk, 'a', encoding='utf-8').write(json.dumps(
+        {'malli': 'tuntematon-malli', 'syote': 10, 'tuloste': 10}) + '\n')
+    vaadi(kulut(kk)[1] is None, 'tuntemattoman mallin hinta arvattiin')
+
+    # 7. Ilmainen epäonnistuminen ei kuluta maksettua yritystä.
+    # 📐 Tämä on se, mitä Marko kysyi: päiväkatto ei maksa mitään, joten se ei
+    # saa viedä budjetista. Kulukirjaa EI ole = yhtään API-kutsua ei tehty.
+    j = _hiekka()
+    tyhja = os.path.join(j, 'ei-kutsuja.jsonl')
+    paivita('hi', 'päiväkatto täynnä', j, '2026-11-20T10:00:00Z', kulukirja=tyhja)
+    r = lue(j)['hi']
+    vaadi(int(r.get('yritykset') or 0) == 0, 'ilmainen yritys kulutti maksetun')
+    vaadi(r.get('ilmaisia') == 1, 'ilmaista yritystä ei kirjattu')
+    vaadi(seuraava(j, '2026-11-21T10:00:00Z') == 'hi', 'ilmainen yritys esti uuden')
+    maksoi = os.path.join(j, 'kulu.jsonl')
+    open(maksoi, 'w', encoding='utf-8').write(json.dumps(
+        {'malli': 'claude-opus-5-5', 'syote': 45000, 'tuloste': 8000}) + '\n')
+    paivita('hi', 'käännös hylätty', j, '2026-11-22T10:00:00Z', kulukirja=maksoi)
+    r = lue(j)['hi']
+    vaadi(r.get('yritykset') == 1, 'maksettua yritystä ei kirjattu')
+    vaadi(r.get('dollaria') == 0.34, 'kulu ei kertynyt riville: %r' % r.get('dollaria'))
+    paivita('hi', 'käännös hylätty', j, '2026-11-23T10:00:00Z', kulukirja=maksoi)
+    vaadi(lue(j)['hi'].get('dollaria') == 0.68, 'kulu ei summautunut')
+    # Ilman kulukirjan polkua oletus on maksoi (varma suunta).
+    paivita('hi', 'tuntematon', j, '2026-11-24T10:00:00Z')
+    vaadi(lue(j)['hi'].get('yritykset') == 3, 'tuntematon kulu luettiin ilmaiseksi')
+
+    # 8. Raharaja pysäyttää, vaikka yrityksiä olisi jäljellä.
+    vaadi(KULUKATTO_DOLLARIA == 2.00, 'raharaja muuttui — päivitä tämä koe ja PAATOSLOKI')
+    j = _hiekka()
+    kallis = os.path.join(j, 'kallis.jsonl')
+    # Yksi kutsu, jossa ajattelu nostaa tulosteen: 46 000 × 4 + 60 000 × 20.
+    open(kallis, 'w', encoding='utf-8').write(json.dumps(
+        {'malli': 'claude-opus-5-5', 'syote': 46000, 'tuloste': 60000}) + '\n')
+    paivita('kal', 'käännös hylätty', j, '2026-11-20T10:00:00Z', kulukirja=kallis)
+    vaadi(lue(j)['kal'].get('dollaria') == 1.384, 'kallis kutsu laskettiin väärin')
+    vaadi(seuraava(j, '2026-11-25T10:00:00Z') == 'kal', 'raharaja pysäytti liian aikaisin')
+    paivita('kal', 'käännös hylätty', j, '2026-11-26T10:00:00Z', kulukirja=kallis)
+    vaadi(lue(j)['kal'].get('dollaria') == 2.768, 'kulu ei summautunut')
+    vaadi(lue(j)['kal'].get('yritykset') == 2, 'yrityksiä pitäisi olla 2')
+    vaadi(seuraava(j, '2026-12-01T10:00:00Z') is None,
+          'raharaja ei pysäyttänyt, vaikka yrityksiä oli jäljellä')
+
+    # 9. Ilmaisillakin on katto, jotta väärä tunniste ei yritä ikuisesti.
+    vaadi(YRITYKSET_KAIKKI_MAKS == 20, 'kokonaiskatto muuttui — päivitä tämä koe')
+    j = _hiekka()
+    tyhja = os.path.join(j, 'ei-kutsuja.jsonl')
+    for i in range(20):
+        paivita('xx', 'API-virhe', j, '2026-11-%02dT10:00:00Z' % (i + 1), kulukirja=tyhja)
+    vaadi(seuraava(j, '2026-12-20T10:00:00Z') is None, 'ilmaiset yritykset eivät pysähtyneet')
+
+    # 10. Rikkinäinen jono ei kaada ajoa.
     j = _hiekka()
     open(os.path.join(j, JONO_TIEDOSTO), 'w').write('{ tämä ei ole jsonia')
     vaadi(lue(j) == {}, 'rikkinäinen jono kaatoi lukemisen')
@@ -341,7 +491,7 @@ def itsetesti():
 
     for v in virheet:
         print('🔴 ' + v)
-    print('Itsetesti: %s' % ('🔴 %d' % len(virheet) if virheet else 'OK (21 väitettä)'))
+    print('Itsetesti: %s' % ('🔴 %d' % len(virheet) if virheet else 'OK (40 väitettä)'))
     return 1 if virheet else 0
 
 
@@ -355,6 +505,9 @@ def mutaatiot():
         ('kattoraja pois', 'YRITYKSET_MAKS', 10 ** 6),
         ('odotusaika pois', 'ODOTUS_TUNNIT', 0),
         ('katkennut PDF kelpaa', 'PIENIN_PDF', 0),
+        ('kokonaiskatto pois', 'YRITYKSET_KAIKKI_MAKS', 10 ** 6),
+        ('hinnasto tyhjä', 'HINNASTO', {}),
+        ('raharaja pois', 'KULUKATTO_DOLLARIA', 10 ** 6),
     ]
     for nimi, avain, arvo in kokeet:
         vanha = getattr(mod, avain)
@@ -367,16 +520,21 @@ def mutaatiot():
         if not tulos:
             huonot.append(nimi)
 
-    # Ja funktiomutaatio: tuomio joka ei koskaan hylkää mitään.
-    vanha = mod.pdf_ehja
-    mod.pdf_ehja = lambda polku: True
-    try:
-        tulos = itsetesti()
-    finally:
-        mod.pdf_ehja = vanha
-    print('  mutaatio «kaikki PDF:t ehjiä»: %s' % ('HUOMATTIIN' if tulos else '🔴 EI HUOMATTU'))
-    if not tulos:
-        huonot.append('kaikki PDF:t ehjiä')
+    # Ja funktiomutaatiot: tuomio joka ei koskaan hylkää mitään, ja kulumittaus
+    # joka pitää jokaista yritystä maksettuna (eli ilmainen päiväkatto söisi
+    # budjetin — juuri se, mitä Marko kysyi).
+    for nimi, avain, korvike in (('kaikki PDF:t ehjiä', 'pdf_ehja', lambda polku: True),
+                                 ('joka yritys näyttää maksetulta', 'kulut',
+                                  lambda kk: (1, 0.34, 45000, 8000))):
+        vanha = getattr(mod, avain)
+        setattr(mod, avain, korvike)
+        try:
+            tulos = itsetesti()
+        finally:
+            setattr(mod, avain, vanha)
+        print('  mutaatio «%s»: %s' % (nimi, 'HUOMATTIIN' if tulos else '🔴 EI HUOMATTU'))
+        if not tulos:
+            huonot.append(nimi)
     print('Mutaatiot: %s' % ('🔴 %d ei huomattu' % len(huonot) if huonot else 'kaikki huomattiin'))
     return 1 if huonot else 0
 
@@ -393,7 +551,10 @@ def main():
     if komento == 'paivita':
         if len(sys.argv) < 3:
             raise SystemExit('käyttö: jono.py paivita <koodi> "<syy>"')
-        print(paivita(sys.argv[2].strip().lower(), sys.argv[3] if len(sys.argv) > 3 else ''))
+        print(paivita(sys.argv[2].strip().lower(),
+                      sys.argv[3] if len(sys.argv) > 3 else '',
+                      kulukirja=(sys.argv[4] if len(sys.argv) > 4
+                                 else os.environ.get('KAANNOS_KULUKIRJA'))))
         return 0
     if komento == 'seuraava':
         k = seuraava()
