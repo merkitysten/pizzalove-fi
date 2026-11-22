@@ -1248,8 +1248,14 @@ def lautapeli(t, kaikki):
   <p>%s</p>
   %s
   <h3>%s</h3>
-  <ul class="lista">%s</ul>
+  <!-- ⚠️ KUVA ENNEN TEKSTEJÄ (Marko 22.11.2026: «Tässä pelin setupin
+       laittamisessa taas ei pysy ollenkaan perässä että mikä ohje kuuluu
+       mihinkin, kun ei tekstit ja kuva näy samaan aikaan. Kuva ensin ja
+       vasta sitten tekstit.»). Animaatio aukesi listan ALLE, jolloin se
+       työnsi ohjeet ruudun ulkopuolelle juuri kun niitä olisi pitänyt
+       verrata animaatioon. -->
   %s
+  <ul class="lista">%s</ul>
 </div>
 <h3>%s</h3>
 <ol class="vaiheet">%s</ol>
@@ -1279,7 +1285,7 @@ def lautapeli(t, kaikki):
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
        e(s['peli_otsikko']), lautakartta(s),
        e(s['voittaminen_otsikko']), s['voittaminen'], opasmountti('voitto', t),
-       e(s['valmistelut_otsikko']), valm, opasmountti('valmistelut', t),
+       e(s['valmistelut_otsikko']), opasmountti('valmistelut', t), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
        VAAKA_W, VAAKA_H, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), lang, e(t['ui']['nav_pelaa']),

@@ -414,8 +414,16 @@
 .ak__valmistelulauta{position:relative;width:min(340px,100cqw);aspect-ratio:1}
 .ak__valmistelukuva{width:100%;height:100%;object-fit:contain;max-width:none;display:block;
   border-radius:10px}
-.ak__vtorni{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
-  background:var(--orange,#EE7203);box-shadow:0 1px 2px rgba(60,30,0,.35);
+/* Varaston täytetorni: pelin oma `.av__torni` paikalleen keskitettynä.
+   📐 Palan koko on laskettu paikasta, ei valittu silmämääräisesti: varaston
+   kaistale on laudan 900 px:n koordinaatistossa 846 px korkea ja siinä on 10
+   paikkaa, eli yksi paikka on 9,4 % laudan korkeudesta — 340 px:n laudalla
+   32 px. Korkein torni on 10 palaa ja väli on .18 palaa, siis 11,62 palan
+   korkuinen; 3,6 px:n pala tekee siitä 42 px. Keskitettynä se ulottuu 5 px
+   naapuripaikan puolelle, mikä on juuri sitä miltä vierekkäiset tornit
+   oikeallakin laudalla näyttävät. */
+.ak__vtorni{position:absolute;transform:translate(-50%,-50%);
+  --pala:min(3.6px,1.06cqw);--leveys:min(12px,3.5cqw);
   animation:ak-ilmesty .5s ease-out backwards;animation-delay:var(--viive,0ms)}
 .ak__vpizza{position:absolute;border-radius:7px;overflow:hidden;
   box-shadow:0 2px 6px rgba(60,30,0,.3);

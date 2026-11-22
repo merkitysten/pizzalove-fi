@@ -1331,11 +1331,22 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       if (tila.vvaihe >= 1 && A.varasto && A.varasto[0]) {
         var v0 = A.varasto[0];   // ['rect', x, y, w, h, r]
         for (var t = 0; t < 10; t++) {
-          var torni = el('span', 'ak__vtorni');
-          torni.style.left = pros(v0[1] + v0[3] / 2);
-          torni.style.top = pros(v0[2] + (t + 0.5) * (v0[4] / 10));
-          torni.style.setProperty('--viive', (t * 70) + 'ms');
-          lava.appendChild(torni);
+          /* ⚠️ TÄYTETORNIT PIIRTÄÄ PELIN OMA `torni()`, EI OMA MERKKI.
+             Marko 22.11.2026: «Varastoon laitettavat täytteet pitäisi olla
+             niitä tuttuja täytetorneja, eikä mitään oransseja merkkejä.»
+             Ensimmäinen versio piirsi tähän oranssin pallon, joka ei kertonut
+             mikä täyte on kyseessä eikä miten korkea sen torni on — ja juuri
+             tornin korkeus on koko pelin idea.
+             ⚠️ Varaston paikat ovat laudalla ylhäältä alas 10…1, eivät 1…10
+             (mitattu laudan kuvasta: ylin ympyrä on kala 10, alin oliivi 1).
+             Tarra jätetään pois (kolmas argumentti), koska lauta on painanut
+             täytteen oman ympyrän jo paikan alle. */
+          var paikka = el('span', 'ak__vtorni');
+          paikka.style.left = pros(v0[1] + v0[3] / 2);
+          paikka.style.top = pros(v0[2] + (t + 0.5) * (v0[4] / 10));
+          paikka.style.setProperty('--viive', (t * 70) + 'ms');
+          paikka.appendChild(torni(10 - t, false, true));
+          lava.appendChild(paikka);
         }
       }
       /* Neljä pizzakorttia omille katkoviivapaikoilleen. */
