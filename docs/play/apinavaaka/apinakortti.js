@@ -1600,15 +1600,26 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
           tila.pizza = null; tila.tuoreet = null; tila.liike = null; return uudelleen();
         } }];
         k.pizzat.forEach(function (p) { askeleet.push({ tee: pizzaBoksiin(p) }); });
-        /* Syd\u00e4npizzasta saa YHDEN VAPAAVALINTAISEN palan, ei sen t\u00e4ytteit\u00e4. */
+        /* ⚠️ SYDÄNPIZZA ON ENSIN PIZZA JA VASTA SITTEN SYDÄN (Marko 22.11.2026
+           demoa katsoessaan: «kalapizzasta saa rukolan. Kalapizza on myös
+           sydänpizza, joten siitä pitäisi saada sitä paitsi yksi extra»).
+           Sivun oma sääntö samalla sivulla: «Valmista pelilaudalla olevia
+           pizzoja, niin saat täytteiden mukaiset palat boksiisi.
+           Sydänpizzasta saat yhden vapaavalintaisen LISÄpalan.»
+           Aiempi versio antoi pelkän vapaavalintaisen palan ja jätti kortin
+           omat täytteet pois, jolloin kalapizzasta tuli rukola eikä kalaa. */
         askeleet.push({ tee: function () {
           tila.pizza = k.sydan;
+          var uudet = [];
+          k.sydan.taytteet.forEach(function (t) {
+            if (tila.boksit[0].indexOf(t) < 0) { tila.boksit[0].push(t); uudet.push(t); }
+          });
           var puuttuu = null;
           for (var n = 1; n <= 10 && !puuttuu; n++)
             if (tila.boksit[0].indexOf(n) < 0) puuttuu = n;
-          if (puuttuu) tila.boksit[0].push(puuttuu);
-          tila.tuoreet = {}; tila.tuoreet[0] = puuttuu ? [puuttuu] : [];
-          tila.liike = null;
+          if (puuttuu) { tila.boksit[0].push(puuttuu); uudet.push(puuttuu); }
+          tila.tuoreet = {}; tila.tuoreet[0] = uudet;
+          tila.liike = null; tila.menetys = null;
           return uudelleen();
         } });
         /* \u26a0\ufe0f VIIMEINEN ASKEL EI VALEHTELE PELIST\u00c4. Kymmenen eri palaa on koko
