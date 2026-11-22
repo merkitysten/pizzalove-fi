@@ -121,6 +121,21 @@ rahassa eikä yrityksissä (raja luetaan ennen yritystä, joten yläraja on raja
 yksi yritys), ja **tuntemattoman mallin** hintaa ei arvata — silloin rajaa pitää
 yrityskatto.
 
+⚠️ **Uudelleenyritys katsoo LAJIA eikä pelkkää laskuria.** `kaanna.py` kirjoittaa
+epäonnistumisen lajin ulos (`KAANNOS_TULOS`), ja jono päättää siitä:
+
+| laji | mitä yöajo tekee |
+|---|---|
+| `paatos` (tuntematon koodi, liian pieni puhujamäärä, ihmisen tarkastama kieli) | **ei jää jonoon lainkaan** — se ei ole tilaus vaan vastaus |
+| `katto` · `asetus` | ilmainen yritys, ei kuluta maksettua |
+| `api` | yrittää uudelleen (ohimenevä) |
+| `hylatty` · `katkesi` | **sama syy kahdesti → `odottaa_korjausta`**, yöajo lakkaa maksamasta |
+
+⚠️ `odottaa_korjausta` pysäyttää **vain yöajon**. Markon käsiajo (Actions → Run workflow) ja
+asiakkaan «Pyydä»-nappi käynnistävät kielen suoraan eivätkä katso lippua — korjauksen jälkeen
+mitään ei tarvitse nollata käsin. Ja lajiluettelo on **suljettu**: `jono.py --itsetesti` lukee
+`kaanna.py`:n jokaisen `SystemExit`-viestin jäsentimellä ja vaatii, että jokainen luokittuu.
+
 ⚠️ **Arkin tuomiossa on kolme tilaa, ei kaksi** (`jono.py arkki`). `koteloarkki.py`
 kirjoittaa PDF:n **ennen** omia kokeitaan, joten kaatuneen ajon arkki on levyllä:
 🔴-rivin saanut arkki poistetaan (väärä sisältö ei lähde sivulle — 18.11.2026),

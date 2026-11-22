@@ -69,7 +69,17 @@ case "${1:-}" in
     if git diff --cached --quiet; then echo "Ei muutoksia."; cd - >/dev/null; git worktree remove --force "$KK"; exit 0; fi
     git -c user.name="pizzalove-konekaannos" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
       commit -q -m "Konekäännös: $SYY (ei tarkastettu)"
-    git push -q origin "$HAARA"
+    # ⚠️ Push uudelleen, jos haara ehti liikkua. 📐 Ajo #5 (16.11.2026) kaatui
+    # juuri tähän askeleeseen, ja silloin se vei mukanaan juuri maksetun
+    # käännöksen. Kolme yritystä, ja väliin uusi pohja originista.
+    for yritys in 1 2 3; do
+      if git push -q origin "$HAARA"; then break; fi
+      if [ "$yritys" = 3 ]; then echo "::error::Haaraan $HAARA ei saatu vietyä"; exit 1; fi
+      echo "Push ei onnistunut (yritys $yritys) — haetaan haara uudelleen."
+      sleep $((yritys * 5))
+      git fetch -q origin "+refs/heads/$HAARA:refs/remotes/origin/$HAARA" || true
+      git rebase -q "origin/$HAARA" || { echo "::error::Rebase ei onnistunut"; exit 1; }
+    done
     echo "Tallennettu haaraan $HAARA: $(git log --oneline -1)"
     cd - >/dev/null
     git worktree remove --force "$KK"

@@ -118,7 +118,9 @@ jobs:
         run: |
           case "$KIELI" in
             kaikki) kaanna="" ;;
-            jono)   kaanna="$(python3 tyokalut/jono.py seuraava)" ;;
+            # ⚠️ `|| true`: jonon lukeminen on kirjanpitoa. Jos se kaatuu, ajo
+            # jatkaa ilman käännöstä — se EI saa estää arkkien tekemistä.
+            jono)   kaanna="$(python3 tyokalut/jono.py seuraava || true)" ;;
             *)      kaanna="$KIELI" ;;
           esac
           echo "KAANNA=$kaanna" >> "$GITHUB_ENV"
@@ -127,8 +129,11 @@ jobs:
           # lainkaan. Päiväkatto poistuu ennen ensimmäistä kutsua, eikä ilmainen
           # epäonnistuminen saa kuluttaa maksettua yritystä (Marko 22.11.2026).
           echo "KAANNOS_KULUKIRJA=$RUNNER_TEMP/kulu.jsonl" >> "$GITHUB_ENV"
+          # Ja epäonnistumisen LAJI (paatos/katto/asetus/api/katkesi/hylatty):
+          # jono päättää siitä, kannattaako yrittää uudelleen lainkaan.
+          echo "KAANNOS_TULOS=$RUNNER_TEMP/tulos.json" >> "$GITHUB_ENV"
           echo "Käännetään: ${kaanna:-(ei mitään — vain arkit)}"
-          python3 tyokalut/jono.py tila
+          python3 tyokalut/jono.py tila || echo "::warning::jonon tila ei auennut"
 
       # ⚠️ `continue-on-error`: epäonnistunut käännös EI saa pysäyttää ajoa,
       # koska sen jälkeen on kaksi asiaa jotka on vielä tehtävä — tilaus
@@ -140,13 +145,6 @@ jobs:
         continue-on-error: true
         run: python3 tyokalut/kaanna.py "$KAANNA"
 
-      # 🔵 Marko 22.11.2026: tilaus ei katoa. Yksi kutsu osaa molemmat suunnat:
-      # käännös levyllä → rivi pois jonosta, ei käännöstä → jonoon ja laskuri
-      # kasvaa. ⚠️ `!cancelled()`, jotta kaatunut käännös ehtii jonoon.
-      - name: Kielijono (tilaus ei katoa)
-        if: ${{ !cancelled() && env.KAANNA != '' && !inputs.toistokoe }}
-        run: python3 tyokalut/jono.py paivita "$KAANNA" "ajo ${{ github.run_number }} - käännös ${{ steps.kaannos.outcome }}" "$KAANNOS_KULUKIRJA"
-
       # ⚠️ KÄÄNNÖS TALTEEN HETI, ennen raskaita askeleita.
       # 📐 Mitattu 16.11.2026: hindin käännös ONNISTUI ja läpäisi tarkistuksen,
       # mutta ajo kaatui vasta arkin teossa — ja koska tallennus oli vasta sen
@@ -157,6 +155,18 @@ jobs:
       - name: Tallenna käännös heti (ennen arkkeja)
         if: steps.kaannos.outputs.uusi == '1' && !inputs.toistokoe
         run: bash tyokalut/konekaannokset-haara.sh tallenna "${{ steps.kaannos.outputs.koodi }}" "$KIELI (käännös talteen)"
+
+      # 🔵 Marko 22.11.2026: tilaus ei katoa. Yksi kutsu osaa molemmat suunnat:
+      # käännös levyllä → rivi pois jonosta, ei käännöstä → jonoon ja laskuri
+      # kasvaa; laji kertoo, kannattaako yrittää uudelleen lainkaan.
+      # ⚠️ TÄMÄ ON KIRJANPITOA, JA SE TULEE VASTA TALLENNUKSEN JÄLKEEN. Jos se
+      # ajettaisiin ennen, tämän askeleen kaatuminen veisi juuri maksetun
+      # käännöksen mukanaan. `continue-on-error`: kirjanpito ei kaada ajoa.
+      # ⚠️ `!cancelled()`, jotta kaatunut käännös ehtii jonoon.
+      - name: Kielijono (tilaus ei katoa)
+        if: ${{ !cancelled() && env.KAANNA != '' && !inputs.toistokoe }}
+        continue-on-error: true
+        run: python3 tyokalut/jono.py paivita "$KAANNA" "ajo ${{ github.run_number }} - käännös ${{ steps.kaannos.outcome }}" "$KAANNOS_KULUKIRJA" "$KAANNOS_TULOS"
 
       # Aiemmista käännöksistä puuttuvat myöhemmin lisätyt osat (valikko ja napit
       # «ui», tiedostokoko «koko», sekä puuttuva lippu). Ei uusi käännös eikä
@@ -180,7 +190,7 @@ jobs:
             # (tai joka on katkennut) ja tässä ajossa syntynyt käännös. Jos
             # mikään ei ole kesken, uusi=0 eikä julkaisua tehdä — tyhjä yö ei
             # saa maksaa Pages-julkaisua eikä roskacommittia haaraan.
-            KOODIT="$(python3 tyokalut/jono.py puuttuvat | tr '\n' ' ')${{ steps.taydennys.outputs.taydennetty }} "
+            KOODIT="$( { python3 tyokalut/jono.py puuttuvat || true ; } | tr '\n' ' ')${{ steps.taydennys.outputs.taydennetty }} "
             if [ "${{ steps.kaannos.outputs.uusi }}" = "1" ]; then KOODIT="$KOODIT ${{ steps.kaannos.outputs.koodi }}"; fi
             if [ -n "$(printf '%s' "$KOODIT" | tr -d ' ')" ]; then u=1; else u=0; fi
             echo "Kesken: ${KOODIT:-(ei mitään)}"
@@ -264,7 +274,8 @@ jobs:
               # perässä vain KOE kaatui (viro) jää, koska arkissa ei ole
               # vikaa. Puuttuva arkki tehdään uudelleen seuraavassa ajossa,
               # eikä se maksa mitään.
-              python3 tyokalut/jono.py arkki "$k" "$RUNNER_TEMP/arkki-$k.log"
+              python3 tyokalut/jono.py arkki "$k" "$RUNNER_TEMP/arkki-$k.log" \
+                || echo "::warning::$k: arkin tuomiota ei saatu — PDF jää sellaisenaan"
               virheita=$((virheita + 1))
             fi
           done

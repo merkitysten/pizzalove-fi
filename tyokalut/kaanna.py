@@ -467,6 +467,61 @@ def lippu(koodi, kirjoitus, alue):
     print('Lippu: %s -> %s' % (alue, kohde))
 
 
+# ---------------------------------------------------------------- tulos jonolle
+# 🔵 Marko 22.11.2026: «Eikai niitä eri tapoja epäonnistua voi olla määräänsä
+# enempää?» Ei voikaan — ja siksi epäonnistumisen LAJI kirjoitetaan ulos, jotta
+# jono (tyokalut/jono.py) voi päättää, kannattaako yrittää uudelleen.
+# 📐 Mitattu 22.11.2026 GitHubin API:sta: 26 ajosta 11 epäonnistui, ja jokainen
+# nimettävissä oleva syy oli meidän koodissamme tai ympäristössä — ei yksikään
+# «malli käänsi huonosti». Sokea uudelleenyritys korjaa vain jälkimmäiset, ja
+# maksaa joka kerta. Lajit:
+#   paatos     kielikoodi, puhujamäärä, ihmisen tarkastama kieli — EI koskaan
+#   katto      päiväkatto täynnä — huomenna, eikä maksanut mitään
+#   asetus     tunnukset puuttuvat — korjaantuu vasta kun me korjaamme
+#   api        API-virhe — ohimenevä, kannattaa yrittää
+#   katkesi    vastaus katkesi max_tokens:iin — sama katkeaa samaan kohtaan
+#   hylatty    tarkistus hylkäsi — tunniste kertoo, onko syy SAMA kuin viimeksi
+#   valmis     onnistui
+LAJIT = (('Virheellinen kielikoodi', 'paatos'),
+         ('Tuntematon kieli', 'paatos'),
+         ('puhujia alle', 'paatos'),
+         ('on jo ihmisen tarkastama', 'paatos'),
+         ('Päiväkatto täynnä', 'katto'),
+         ('OIDC-tunnusta ei saatu', 'asetus'),
+         ('Tunnuksen vaihto epäonnistui', 'asetus'),
+         ('Puuttuu:', 'asetus'),
+         ('Vastaus katkesi', 'katkesi'),
+         ('API-virhe', 'api'))
+
+
+def laji_viestista(viesti):
+    for merkki, laji in LAJIT:
+        if merkki in viesti:
+            return laji
+    return 'tuntematon'
+
+
+def hylkays_tunniste(virheet):
+    """Sama hylkäys = sama tunniste. Arvot ovat mukana tarkoituksella:
+    «luvut [3], pitää olla [4]» on eri vika kuin «puuttuu ui»."""
+    import hashlib
+    return hashlib.sha256('\n'.join(sorted(v.strip() for v in virheet))
+                          .encode('utf-8')).hexdigest()[:12]
+
+
+def tulos_ulos(laji, viesti='', tunniste=''):
+    """⚠️ Ei saa kaataa ajoa: tämä on kirjanpitoa, ja käännös on sitä tärkeämpi."""
+    polku = os.environ.get('KAANNOS_TULOS')
+    if not polku:
+        return
+    try:
+        with open(polku, 'w', encoding='utf-8') as f:
+            json.dump({'laji': laji, 'viesti': str(viesti)[:300],
+                       'tunniste': tunniste}, f, ensure_ascii=False)
+    except OSError as v:
+        print('⚠️  Tulosta ei voitu kirjoittaa (%s)' % v)
+
+
 def ulos(**arvot):
     '''GitHub Actionsin askeleen tulokset (koodi, uusi) seuraaville askelille.'''
     polku = os.environ.get('GITHUB_OUTPUT')
@@ -715,12 +770,27 @@ def main():
         tulos, virheet = kaanna_kerran(koodi)
     if virheet:
         print('🔴 KÄÄNNÖS HYLÄTTY:\n- ' + '\n- '.join(virheet[:60]))
+        tulos_ulos('hylatty', virheet[0], hylkays_tunniste(virheet))
         return 1
     print('Tallennettu:', tallenna(koodi, tulos))
     lippu(koodi, kirjoitus, alue)
     ulos(koodi=koodi, uusi=1)
+    tulos_ulos('valmis')
     return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    # ⚠️ Laji kirjataan myös silloin kun ajo kaatuu — juuri silloin se on
+    # tarpeen. Poikkeus nostetaan sen jälkeen eteenpäin ennallaan, jotta ajo
+    # näkyy punaisena niin kuin ennenkin.
+    try:
+        _tulos = main()
+    except SystemExit as _v:
+        _viesti = '' if isinstance(_v.code, int) or _v.code is None else str(_v.code)
+        if _viesti:
+            tulos_ulos(laji_viestista(_viesti), _viesti)
+        raise
+    except Exception as _v:                      # noqa: BLE001 — laji talteen
+        tulos_ulos('tuntematon', '%s: %s' % (type(_v).__name__, _v))
+        raise
+    sys.exit(_tulos)
