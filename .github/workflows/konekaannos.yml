@@ -219,7 +219,15 @@ jobs:
 
   julkaise:
     needs: kaanna
-    if: needs.kaanna.outputs.uusi == '1'
+    # 🔵 Marko 22.11.2026: «Älä estä julkaisua, tee se yhden rivin muutos.»
+    # 📐 Syy mitattiin ajossa #25: viron arkki VALMISTUI, ja vain sen perään
+    # ajettava QR-lukukoe kaatui — mutta koska punainen arkki punaa koko työn,
+    # paljas `needs: kaanna` OHITTI tämän julkaisun. Valmis käännös makasi
+    # haarassa, eikä ulospäin näkynyt muuta kuin «1 arkkia epäonnistui».
+    # ⚠️ Ehto `uusi == '1'` JÄÄ — se on se joka kertoo, että käännös todella
+    # tallentui haaraan. Jos ajo kaatuu ennen sitä, julkaistavaa ei ole.
+    # ⚠️ `!cancelled()` eikä `always()`: KÄSIN keskeytetty ajo ei julkaise.
+    if: ${{ !cancelled() && needs.kaanna.outputs.uusi == '1' }}
     uses: ./.github/workflows/julkaise.yml
     permissions:
       contents: read
