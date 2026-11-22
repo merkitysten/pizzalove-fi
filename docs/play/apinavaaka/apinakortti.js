@@ -112,6 +112,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
     var kortit = asetukset.kortit || {};
     var KANSIO = asetukset.kansio || window.apinavaakaKansio || 'apinavaaka/';
     var torni = window.apinavaakaTorni;
+    var tarra = window.apinavaakaTarra;
     var vahennaLiike = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var tila = {};
@@ -1321,6 +1322,13 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        muuttuvat prosenteiksi jakamalla 9:llä. */
     function pros(v) { return (v / 9).toFixed(2) + '%'; }
 
+    /* Yhden tornin matka ja sarjan tahti. Nämä menevät myös CSS:ään
+       (`--kesto`, `--viive`), jotta kesto on yhdessä paikassa eikä kahdessa.
+       📐 Väli on kestoa lyhyempi: seuraava torni ilmestyy keskelle juuri kun
+       edellinen vaihtuu nappulaksi omalla paikallaan, joten matkalla on aina
+       tasan yksi torni. Kymmenen tornia kestää 9 × 620 + 1000 = 6,6 s. */
+    var TORNI_KESTO = 1000, TORNI_VALI = 620;
+
     function piirraValmistelut() {
       nayttoEl.className = 'ak__naytto ak__naytto--valmistelut';
       var lava = el('div', 'ak__valmistelulauta');
@@ -1330,22 +1338,42 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       /* Varasto: täytetornit nauhan sisälle tasavälein. */
       if (tila.vvaihe >= 1 && A.varasto && A.varasto[0]) {
         var v0 = A.varasto[0];   // ['rect', x, y, w, h, r]
+        /* ⚠️ LAUTA ON YLHÄÄLTÄ KUVATTU, TORNI ON SIVUSTA (Marko 22.11.2026):
+           «ensin näytetään esim. se yhden nappulan torni, joka liukuu oliivin
+           varastopaikalle ja siinä muuttuu sitten ylhäältä kuvatuksi
+           oliivinappulaksi. — — kun ylhäältä torneja katsotaan, niin eihän
+           siinä näy kuin se ylin nappula. Liikkeellä me saadaan se ajatus
+           kumminkin, että siinä on se koko torni, kun se torni näytetään
+           ennen paikalleen siirtymistä. Yksitellen nämä kaikki.»
+
+           Siis kolme vaihetta jokaiselle: torni ilmestyy laudan keskelle
+           sivusta katsottuna (siinä näkyy KORKEUS, joka on koko pelin idea),
+           liukuu omalle varastopaikalleen ja vaihtuu siellä ristiinhäivytyksellä
+           ylhäältä katsotuksi nappulaksi. Molemmat piirtää pelin oma koodi:
+           `torni()` ja `tarra()`, ei tämän moduulin omaa versiota.
+
+           ⚠️ Varaston paikat ovat laudalla ylhäältä alas 10…1, eivät 1…10
+           (mitattu laudan kuvasta: ylin ympyrä on kala 10, alin oliivi 1).
+           Torni piirretään ilman tarraa (kolmas argumentti), koska tarra on
+           tässä se erillinen nappula johon se muuttuu.
+
+           ⚠️ LIIKE VAIN OMASSA ASKELEESSAAN. Tornit jäävät näkyviin myös
+           askeleissa 2–4, ja koko näkymä piirretään uusiksi joka askeleella.
+           Ilman `--valmis`-tilaa koko kuuden sekunnin sarja alkaisi alusta
+           joka kerta, kun seuraava askel piirtää pizzakortit. */
+        var liikkuu = tila.vvaihe === 1 && !vahennaLiike;
         for (var t = 0; t < 10; t++) {
-          /* ⚠️ TÄYTETORNIT PIIRTÄÄ PELIN OMA `torni()`, EI OMA MERKKI.
-             Marko 22.11.2026: «Varastoon laitettavat täytteet pitäisi olla
-             niitä tuttuja täytetorneja, eikä mitään oransseja merkkejä.»
-             Ensimmäinen versio piirsi tähän oranssin pallon, joka ei kertonut
-             mikä täyte on kyseessä eikä miten korkea sen torni on — ja juuri
-             tornin korkeus on koko pelin idea.
-             ⚠️ Varaston paikat ovat laudalla ylhäältä alas 10…1, eivät 1…10
-             (mitattu laudan kuvasta: ylin ympyrä on kala 10, alin oliivi 1).
-             Tarra jätetään pois (kolmas argumentti), koska lauta on painanut
-             täytteen oman ympyrän jo paikan alle. */
-          var paikka = el('span', 'ak__vtorni');
-          paikka.style.left = pros(v0[1] + v0[3] / 2);
-          paikka.style.top = pros(v0[2] + (t + 0.5) * (v0[4] / 10));
-          paikka.style.setProperty('--viive', (t * 70) + 'ms');
-          paikka.appendChild(torni(10 - t, false, true));
+          var paikka = el('span', 'ak__vtorni' + (liikkuu ? '' : ' ak__vtorni--valmis'));
+          paikka.style.setProperty('--x', pros(v0[1] + v0[3] / 2));
+          paikka.style.setProperty('--y', pros(v0[2] + (t + 0.5) * (v0[4] / 10)));
+          paikka.style.setProperty('--kesto', TORNI_KESTO + 'ms');
+          paikka.style.setProperty('--viive', (t * TORNI_VALI) + 'ms');
+          var sivusta = el('span', 'ak__vtorni__torni');
+          sivusta.appendChild(torni(10 - t, false, true));
+          var ylhaalta = el('span', 'ak__vtorni__nappula');
+          ylhaalta.appendChild(tarra(10 - t));
+          paikka.appendChild(sivusta);
+          paikka.appendChild(ylhaalta);
           lava.appendChild(paikka);
         }
       }
@@ -1592,8 +1620,20 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         tila.vvaihe = 0;
         var k = pizzaKortit();
         tila.pizzat = k ? k.pizzat.concat([k.sydan]).slice(0, 4) : null;
+        /* ⚠️ ASKEL KESTÄÄ NIIN KAUAN KUIN SARJA. Tornit tulevat yksitellen,
+           joten varastoaskel on pidempi kuin muut; ilman tätä silmukka siirtyi
+           seuraavaan askeleeseen kesken sarjan. `hidas()` palauttaa nollan kun
+           liike on kytketty pois, joten kukaan ei jää odottamaan animaatiota
+           jota ei aja. 350 ms on se mitä `uudelleen()` jo odotti. */
         function vvaiheeseen(n) {
-          return function () { tila.vvaihe = n; tila.liike = null; return uudelleen(); };
+          return function () {
+            tila.vvaihe = n; tila.liike = null;
+            var valmis = uudelleen();
+            if (n !== 1) return valmis;
+            return valmis.then(function () {
+              return hidas(TORNI_VALI * 9 + TORNI_KESTO - 350);
+            });
+          };
         }
         return [{ tee: vvaiheeseen(0) }, { tee: vvaiheeseen(1) },
                 { tee: vvaiheeseen(2) }, { tee: vvaiheeseen(3) }, { tee: vvaiheeseen(4) }];
