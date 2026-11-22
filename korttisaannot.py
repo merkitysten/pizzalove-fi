@@ -45,6 +45,27 @@ TANNE = os.path.dirname(os.path.abspath(__file__))
 # Macilla Chrome; GitHub Actionsissa (Linux) polku annetaan ympäristömuuttujalla
 # tai käytetään Playwrightia (koteloarkki.tulosta, qr_lukukoe).
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+
+
+def avaa_selain(p, args=('--allow-file-access-from-files',)):
+    """Playwrightin selain — YKSI LÄHDE kaikille kolmelle käyttöpaikalle.
+
+    ⚠️ 📐 MITATTU 22.11.2026, JA TÄMÄ ON «SAMA ASIA MONESSA PAIKASSA»:
+    19.11. nopeutin arkin teon käyttämään ajurikuvan omaa Chromea
+    (`channel='chrome'`), ja samalla työnkulku lakkasi lataamasta
+    Playwrightin omaa Chromiumia. Muunsin YHDEN käynnistyksen kolmesta.
+    Ensimmäisellä ajolla sen jälkeen (viro, ajo 25) QR-lukukoe kaatui
+    `p.chromium.launch()`:iin, koska ladattua Chromiumia ei enää ole —
+    ja koska kaatunut arkki punaa koko työn, `julkaise`-työ OHITETTIIN.
+    Käännös oli valmis ja talletettu, mutta sivua ei julkaistu.
+
+    Järjestelmän Chrome ensin, ladattu Chromium varalla. Jos lisäät uuden
+    selainkäynnistyksen, kutsu tätä — älä kirjoita neljättä `launch`-riviä.
+    """
+    try:
+        return p.chromium.launch(channel='chrome', args=list(args))
+    except Exception:
+        return p.chromium.launch(args=list(args))
 MAC = sys.platform == 'darwin'
 KONEKAANNOS = os.path.join(TANNE, 'sisalto', 'konekaannos')
 
@@ -1185,7 +1206,7 @@ def qr_lukukoe(pdf, osoite):
         else:
             from playwright.sync_api import sync_playwright
             with sync_playwright() as p:
-                b = p.chromium.launch(args=['--allow-file-access-from-files'])
+                b = avaa_selain(p)
                 s_ = b.new_page()
                 s_.goto('file://' + sivu)
                 s_.wait_for_function("document.title.indexOf('TULOS') === 0", timeout=20000)
@@ -1328,7 +1349,7 @@ def jpeg_kuvat(polut, juuri, leveys, laatu=PAKKAUS_LAATU):
         else:
             from playwright.sync_api import sync_playwright
             with sync_playwright() as pw:
-                selain = pw.chromium.launch(args=['--allow-file-access-from-files'])
+                selain = avaa_selain(pw)
                 lehti = selain.new_page()
                 lehti.goto('file://' + sivu, wait_until='load')
                 lehti.wait_for_function("document.title === 'VALMIS'", timeout=120000)

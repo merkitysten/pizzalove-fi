@@ -783,8 +783,9 @@ def tulosta(html_polku, pdf_polku):
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return
     from playwright.sync_api import sync_playwright
+    from korttisaannot import avaa_selain   # yksi lahde selaimen valinnalle
     with sync_playwright() as p:
-        b = p.chromium.launch(args=['--allow-file-access-from-files'])
+        b = avaa_selain(p)
         sivu = b.new_page()
         sivu.goto('file://' + html_polku, wait_until='load')
         sivu.evaluate('document.fonts.ready')

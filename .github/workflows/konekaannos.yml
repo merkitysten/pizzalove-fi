@@ -155,6 +155,13 @@ jobs:
             python -m playwright install --with-deps chromium
           fi
           echo "selain: $((SECONDS - alku)) s"
+          # ⚠️ Savutesti TÄSSÄ eikä ensimmäisen arkin sisällä. 📐 22.11.2026:
+          # viron ajossa selain kaatui vasta QR-lukukokeessa 17 s myöhemmin,
+          # ja kaatunut arkki ohitti koko `julkaise`-työn — käännös oli
+          # valmis mutta sivua ei julkaistu. Samalla tarkistetaan että
+          # käynnistys on yhdessä paikassa: neljäs `launch`-rivi on juuri se
+          # joka jää muuntamatta.
+          python3 tyokalut/selainkoe.py --vaadi-savu
 
       - name: VAG Rounded -viirikirjasin (salaisuudesta, ei repoon)
         if: steps.tulos.outputs.uusi == '1'
