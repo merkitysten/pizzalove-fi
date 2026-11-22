@@ -5,6 +5,11 @@
 #   sisalto/konekaannos/<koodi>.json
 #   julkinen/pdf/pizza-love-card-game-rules-<koodi>.pdf
 #   julkinen/kuvat/liput/<koodi>.svg (jos lippu tehtiin)
+#   konekaannos-jono.json           (tilaukset joita ei ole vielä toimitettu)
+#
+# ⚠️ Jono on repon JUURESSA eikä sisalto/konekaannos/issa, jossa jokainen
+# *.json on yksi kieli — siellä se olisi näyttänyt kieleltä nimeltä «jono».
+# Ks. tyokalut/jono.py.
 #
 #   hae                      kopioi haaran tiedostot työpuuhun (ennen kokoamista)
 #   tallenna "<koodit>" <syy> kopioi koodien tiedostot haaraan, commit ja push
@@ -34,6 +39,7 @@ case "${1:-}" in
       cp -f "$KK"/sisalto/konekaannos/*.json sisalto/konekaannos/ 2>/dev/null || true
       cp -f "$KK"/julkinen/pdf/*.pdf julkinen/pdf/ 2>/dev/null || true
       cp -f "$KK"/julkinen/kuvat/liput/*.svg julkinen/kuvat/liput/ 2>/dev/null || true
+      cp -f "$KK"/konekaannos-jono.json . 2>/dev/null || true
       echo "Konekäännökset haarasta: $(ls "$KK"/sisalto/konekaannos 2>/dev/null | tr '\n' ' ')"
       git worktree remove --force "$KK"
     else
@@ -49,6 +55,9 @@ case "${1:-}" in
       k=$(basename "$j" .json)
       KOODIT="$KOODIT $k"
     done
+    # Tilausjono mukaan aina, myös kun yhtään arkkia ei syntynyt: se on se
+    # tiedosto joka muistaa kääntämättä jääneen kielen seuraavaan ajoon.
+    if [ -f konekaannos-jono.json ]; then cp -f konekaannos-jono.json "$KK/"; fi
     for k in $(echo $KOODIT | tr ' ' '\n' | sort -u); do
       cp -f "sisalto/konekaannos/$k.json" "$KK/sisalto/konekaannos/"
       pdf=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['kielet']['tiedosto'])" "sisalto/konekaannos/$k.json")

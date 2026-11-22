@@ -16,6 +16,13 @@
 # GitHub → Actions → Konekäännös → Run workflow. Kieli «kaikki» = tee kaikkien
 # konekäännösten arkit uudelleen (ei uutta käännöstä), kun arkin pohja muuttuu.
 #
+# 🔵 Marko 22.11.2026: «kun asiakas tilaa jonkin kielen, niin se sinne tulee
+# ennemmin tai myöhemmin, mutta tulee kumminkin.» Siksi kolmas kieli «jono»,
+# joka on myös ajastetun ajon oma: se EI käännä mitä tahansa, vaan vie
+# loppuun sen mikä jäi kesken — kääntämättä jääneen tilauksen (jono) ja
+# puuttuvan arkin (tiedostoista). Jos mikään ei ole kesken, ajo ei tee
+# eikä julkaise mitään. Ks. tyokalut/jono.py.
+#
 # Claude API ilman avainta: Workload Identity Federation. ⚠️ ÄLÄ lisää
 # ANTHROPIC_API_KEY-salaisuutta: se ohittaisi tämän.
 name: Konekäännös
@@ -24,7 +31,7 @@ name: Konekäännös
 # kaikki ajot olivat nimeltään pelkkä «Konekäännös» — ja palvelin
 # (palvelin/kaannospyynto.php) lukee tästä nimestä, mitkä kielet ovat työn
 # alla, eikä sen tarvitse tallettaa sitä itse.
-run-name: Konekäännös ${{ inputs.kieli }}${{ inputs.toistokoe && ' (toistokoe)' || '' }}
+run-name: Konekäännös ${{ inputs.kieli || 'jono' }}${{ inputs.toistokoe && ' (toistokoe)' || '' }}
 
 on:
   workflow_dispatch:
@@ -38,6 +45,12 @@ on:
         required: false
         default: false
         type: boolean
+  # Kesken jäänyt tilaus viedään loppuun joka yö. ⚠️ Ei uusi käännös
+  # kysymättä: ajo kääntää vain sen minkä joku on pyytänyt ja jonka
+  # kääntäminen EI onnistunut (konekaannos-jono.json haarassa
+  # konekaannokset), enintään yhden kielen kerrallaan.
+  schedule:
+    - cron: '17 3 * * *'
 
 permissions:
   contents: write   # tulos haaraan konekaannokset
@@ -55,7 +68,7 @@ jobs:
     outputs:
       uusi: ${{ steps.tulos.outputs.uusi }}
     env:
-      KIELI: ${{ inputs.kieli }}
+      KIELI: ${{ inputs.kieli || 'jono' }}
       ANTHROPIC_FEDERATION_RULE_ID: fdrl_01M561D21RCq6seGezU3CdMC
       ANTHROPIC_ORGANIZATION_ID: 810872cd-f15a-4813-983b-d3815c015434
       ANTHROPIC_SERVICE_ACCOUNT_ID: svac_01RcJwQ5gztBgTRXJoNpbV9Y
@@ -65,7 +78,7 @@ jobs:
 
       - name: Tarkista kielikoodin muoto
         run: |
-          if [ "$KIELI" != "kaikki" ] && ! printf '%s' "$KIELI" | grep -Eq '^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8}){0,2}$'; then
+          if [ "$KIELI" != "kaikki" ] && [ "$KIELI" != "jono" ] && ! printf '%s' "$KIELI" | grep -Eq '^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8}){0,2}$'; then
             echo "::error::Virheellinen kielikoodi"; exit 1
           fi
 
@@ -97,10 +110,37 @@ jobs:
         if: inputs.toistokoe
         run: python3 tyokalut/kaanna.py --toisto "$KIELI"
 
+      # Yksi paikka, joka vastaa kysymykseen «käännetäänkö tässä ajossa, ja
+      # mitä». ⚠️ Ajastettu ajo ei tiedä kieltä ennen kuin jono on luettu, ja
+      # jono voi olla tyhjä — silloin KAANNA on tyhjä eikä yhtään API-kutsua
+      # tehdä. Ilman tätä askelta ehto olisi kirjoitettu kolmeen `if`-riviin.
+      - name: Mitä käännetään
+        run: |
+          case "$KIELI" in
+            kaikki) kaanna="" ;;
+            jono)   kaanna="$(python3 tyokalut/jono.py seuraava)" ;;
+            *)      kaanna="$KIELI" ;;
+          esac
+          echo "KAANNA=$kaanna" >> "$GITHUB_ENV"
+          echo "Käännetään: ${kaanna:-(ei mitään — vain arkit)}"
+          python3 tyokalut/jono.py tila
+
+      # ⚠️ `continue-on-error`: epäonnistunut käännös EI saa pysäyttää ajoa,
+      # koska sen jälkeen on kaksi asiaa jotka on vielä tehtävä — tilaus
+      # jonoon ja puuttuvat arkit. Ajo merkitään punaiseksi vasta lopussa
+      # («Epäonnistuiko käännös?»), samalla kuviolla kuin arkit 19.11.2026.
       - name: Käännös (Claude API)
         id: kaannos
-        if: inputs.kieli != 'kaikki' && !inputs.toistokoe
-        run: python3 tyokalut/kaanna.py "$KIELI"
+        if: ${{ env.KAANNA != '' && !inputs.toistokoe }}
+        continue-on-error: true
+        run: python3 tyokalut/kaanna.py "$KAANNA"
+
+      # 🔵 Marko 22.11.2026: tilaus ei katoa. Yksi kutsu osaa molemmat suunnat:
+      # käännös levyllä → rivi pois jonosta, ei käännöstä → jonoon ja laskuri
+      # kasvaa. ⚠️ `!cancelled()`, jotta kaatunut käännös ehtii jonoon.
+      - name: Kielijono (tilaus ei katoa)
+        if: ${{ !cancelled() && env.KAANNA != '' && !inputs.toistokoe }}
+        run: python3 tyokalut/jono.py paivita "$KAANNA" "ajo ${{ github.run_number }} - käännös ${{ steps.kaannos.outcome }}"
 
       # ⚠️ KÄÄNNÖS TALTEEN HETI, ennen raskaita askeleita.
       # 📐 Mitattu 16.11.2026: hindin käännös ONNISTUI ja läpäisi tarkistuksen,
@@ -130,6 +170,16 @@ jobs:
           if [ "$KIELI" = "kaikki" ]; then
             KOODIT=$(ls sisalto/konekaannos/*.json 2>/dev/null | xargs -n1 basename | sed 's/\.json$//' | tr '\n' ' ')
             echo "koodit=$KOODIT" >> "$GITHUB_OUTPUT"; echo "uusi=1" >> "$GITHUB_OUTPUT"
+          elif [ "$KIELI" = "jono" ]; then
+            # ⚠️ Ajastettu ajo tekee VAIN sen mikä on kesken: arkki jota ei ole
+            # (tai joka on katkennut) ja tässä ajossa syntynyt käännös. Jos
+            # mikään ei ole kesken, uusi=0 eikä julkaisua tehdä — tyhjä yö ei
+            # saa maksaa Pages-julkaisua eikä roskacommittia haaraan.
+            KOODIT="$(python3 tyokalut/jono.py puuttuvat | tr '\n' ' ')${{ steps.taydennys.outputs.taydennetty }} "
+            if [ "${{ steps.kaannos.outputs.uusi }}" = "1" ]; then KOODIT="$KOODIT ${{ steps.kaannos.outputs.koodi }}"; fi
+            if [ -n "$(printf '%s' "$KOODIT" | tr -d ' ')" ]; then u=1; else u=0; fi
+            echo "Kesken: ${KOODIT:-(ei mitään)}"
+            echo "koodit=$KOODIT" >> "$GITHUB_OUTPUT"; echo "uusi=$u" >> "$GITHUB_OUTPUT"
           elif [ "${{ steps.kaannos.outputs.uusi }}" = "1" ] || [ -n "${{ steps.taydennys.outputs.taydennetty }}" ]; then
             echo "koodit=${{ steps.kaannos.outputs.koodi }} ${{ steps.taydennys.outputs.taydennetty }}" >> "$GITHUB_OUTPUT"
             echo "uusi=1" >> "$GITHUB_OUTPUT"
@@ -201,14 +251,34 @@ jobs:
               echo "::error::arkki $k epäonnistui"
               grep -E '^(🔴|ℹ️|   )' "$RUNNER_TEMP/arkki-$k.log" | head -14 \
                 | while IFS= read -r rivi; do echo "::error::$k $rivi"; done
+              # ⚠️ KOLME TILAA, EI KAHTA (Marko 22.11.2026, ja 18.11.2026:
+              # «puuttuva nappi on oikea signaali, väärä sisältö ei ole»).
+              # koteloarkki.py kirjoittaa PDF:n ENNEN omia kokeitaan, joten
+              # 🔴-tuomion saanut arkki on levyllä ja lähtisi muuten haaraan
+              # ja sivulle. Se poistetaan tässä — mutta ehjä arkki jonka
+              # perässä vain KOE kaatui (viro) jää, koska arkissa ei ole
+              # vikaa. Puuttuva arkki tehdään uudelleen seuraavassa ajossa,
+              # eikä se maksa mitään.
+              python3 tyokalut/jono.py arkki "$k" "$RUNNER_TEMP/arkki-$k.log"
               virheita=$((virheita + 1))
             fi
           done
           echo "virheita=$virheita" >> "$GITHUB_OUTPUT"
 
+      # ⚠️ EI enää `uusi == '1'`: jono on tiedosto tässä haarassa, ja juuri se
+      # ajo jossa käännös EI onnistunut on se jonka tilaus on muistettava.
+      # Skripti päättyy itse «Ei muutoksia» -riviin, jos mitään ei muuttunut.
       - name: Tallenna haaraan konekaannokset
-        if: steps.tulos.outputs.uusi == '1'
+        if: ${{ !cancelled() && !inputs.toistokoe }}
         run: bash tyokalut/konekaannokset-haara.sh tallenna "${{ steps.tulos.outputs.koodit }}" "$KIELI"
+
+      # Punainen vasta tässä, jotta tilaus ehtii jonoon ja arkit tallentua.
+      - name: Epäonnistuiko käännös?
+        if: ${{ !cancelled() && steps.kaannos.outcome == 'failure' }}
+        run: |
+          echo "🔴 Käännös ($KAANNA) ei onnistunut — kieli on jonossa (konekaannos-jono.json"
+          echo "   haarassa konekaannokset) ja yritetään uudelleen seuraavassa yöajossa."
+          exit 1
 
       # Punainen vasta tässä, jotta onnistuneet arkit ehtivät tallentua.
       - name: Epäonnistuiko jokin arkki?

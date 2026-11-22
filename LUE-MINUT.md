@@ -89,6 +89,38 @@ talleteta palvelimelle** — alkuperäinen «ei tietokantaa, ei lokia, ei eväst
 pitää. Ilman latausta sivu toimii kuten ennenkin: painaja näkee «Tekeillä»,
 muut eivät.
 
+### Tilaus ei katoa: kielijono ja yöajo (22.11.2026)
+
+🔵 Marko: *«kun asiakas tilaa jonkin kielen, niin se sinne tulee ennemmin tai
+myöhemmin, mutta tulee kumminkin.»*
+
+Pyyntöä ei talleteta palvelimelle (ei tietokantaa, ei lokia, ei evästettä),
+joten ennen tätä kaatunut ajo oli tilauksen loppu. Nyt kesken jäänyt työ on
+kahdessa paikassa, ja molemmat ovat haarassa `konekaannokset`:
+
+| kesken | missä se näkyy | kuka vie loppuun |
+|---|---|---|
+| käännöstä ei syntynyt | `konekaannos-jono.json` | yöajo, enintään 5 yritystä |
+| arkki puuttuu tai katkesi | tiedostoista (`jono.py puuttuvat`) | yöajo, ei kattoa (maksuton) |
+
+`konekaannos.yml` ajetaan **joka yö klo 03.17 UTC** kielellä «jono». Se ei
+käännä mitään kysymättä: vain sen, minkä joku on pyytänyt ja jonka kääntäminen
+ei onnistunut. Jos mikään ei ole kesken, ajo ei tallenna eikä julkaise mitään.
+
+```bash
+python3 tyokalut/jono.py tila                 # mitä on kesken
+python3 tyokalut/jono.py --itsetesti --mutaatiot
+```
+
+⚠️ **Arkin tuomiossa on kolme tilaa, ei kaksi** (`jono.py arkki`). `koteloarkki.py`
+kirjoittaa PDF:n **ennen** omia kokeitaan, joten kaatuneen ajon arkki on levyllä:
+🔴-rivin saanut arkki poistetaan (väärä sisältö ei lähde sivulle — 18.11.2026),
+ehjä arkki jonka perässä vain **koe** kaatui jää (viro 22.11.2026), ja katkennut
+PDF poistetaan. Napin puuttuminen on oikea signaali; väärä sisältö ei ole.
+
+⚠️ **Jono on repon juuressa** eikä `sisalto/konekaannos/`issa, jossa jokainen
+`*.json` on yksi kieli — siellä se olisi näyttänyt kieleltä nimeltä «jono».
+
 ## Peli tulee pizzapartysta (11.11.2026)
 
 `julkinen/play/` on **kopio** `../pizzaparty/`:sta, ja kopiointi tehdään
