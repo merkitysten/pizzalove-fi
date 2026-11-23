@@ -34,6 +34,8 @@
       "en": "EN"
     },
     "lataa": "Lataa",
+    "edellinen": "Edellinen",
+    "seuraava": "Seuraava",
     "alaosa_teksti": "Pizza Love® on Merkitysten Oy:n peli. Pelit on suunniteltu Suomessa, ja ne kootaan ja pakataan Suomessa.",
     "alaosa_yhteys": "Kysyttävää? Kirjoita meille:",
     "alaosa_tavaramerkki": "Pizza Love® ja Merkitysten® ovat Merkitysten Oy:n rekisteröityjä tavaramerkkejä.",
@@ -243,9 +245,24 @@
       "vaaka": "Apinavaaka",
       "pizzat": "Pizzakortit"
     },
+    "lauta_otsikko": "Pelilauta",
+    "lauta_ohje": "Napauta laudan osaa – kerromme, mitä siinä tapahtuu.",
+    "lauta_tiedot": {
+      "varasto": "Varastossa odottavat kaikki kymmenen täytettä omina väritorneinaan. Noppa kertoo, montako nappulaa siirretään varaston ja linjaston välillä, ja pizzaan käytetyt täytteet palaavat tänne.",
+      "linjasto": "Linjastolla olevista täytteistä pizzat valmistetaan. Kun pizzakortin tarvitsemat täytteet ovat linjastolla, voit valmistaa sen pizzan.",
+      "vaaka": "Apinavaaka ja punnukset auttavat lasta hahmottamaan, montako nappulaa siirtyy. Niitä ei ole pakko käyttää.",
+      "pizzat": "Pelilaudalla on neljä pizzakorttia, joita kaikki pelaajat tavoittelevat. Kortti kertoo, mitkä täytteet pizzaan tarvitaan. Kun kortti valmistuu, tilalle nostetaan pakasta uusi."
+    },
+    "lauta_selaa": "Selaa pizzakortteja",
     "peli_otsikko": "Näin peli toimii",
     "voittaminen_otsikko": "Pelin voittaminen",
     "voittaminen": "Voita keräämällä ensimmäisenä <b>10 erilaista</b> palaa boksiisi. Valmista pelilaudalla olevia pizzoja, niin saat täytteiden mukaiset palat boksiisi. Sydänpizzasta saat yhden vapaavalintaisen lisäpalan.",
+    "voittaminen_askeleet": [
+      "Boksisi on tyhjä. Tavoite: 10 erilaista palaa.",
+      "Valmistat pelilaudalla olevan pizzan ja saat sen täytteiden mukaiset palat boksiisi.",
+      "Sydänpizzasta saat täytteiden palat ja lisäksi yhden vapaavalintaisen palan.",
+      "10 erilaista palaa koossa – voitit pelin!"
+    ],
     "valmistelut_otsikko": "Pelivalmistelut",
     "valmistelut": [
       "Pinoa värikkäät täytetornit paikoilleen varastoon.",

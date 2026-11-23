@@ -1166,6 +1166,27 @@ def opasmountti(nimi, t):
     import json as _json
     alueet = _json.dumps({k: v for k, v in LAUTA_ALUEET.items()},
                          separators=(',', ':')).replace('"', '&quot;')
+    # ⚠️ JOKAISELLE KUVALLE OMA TEKSTI (Marko 23.11.2026: «Tämä saisi olla
+    # enemmän sarjakuvamainen tuotos, jossa jokaisessa kuvassa on myös lyhyt
+    # teksti, joka kertoo sen mitä siinä tapahtuu. Nyt tuo alempana oleva
+    # teksti on irrallaan kuvista, joten ei tietämätön tiedä, että mikä
+    # liittyy mihinkin.»).
+    #
+    # ⚠️ VALMISTELUILLA EI OLE OMAA TEKSTIÄ, VAAN SEN OMA LISTA. Animaation
+    # viisi askelta ovat tyhjä lauta + neljä valmistelua, eli listan virkkeet
+    # yksi yhteen. Uusi käännettävä teksti olisi sama asia toisin sanoin —
+    # ja juuri se irrallisuus jota tämä korjaa. Askeleen 0 (tyhjä lauta)
+    # otsikkona on osion oma otsikko, kuten sarjakuvan ensimmäinen ruutu.
+    s_lauta = t.get('lautapeli', {})
+    if nimi == 'valmistelut':
+        selitteet = [s_lauta.get('valmistelut_otsikko', '')] + list(s_lauta.get('valmistelut', []))
+        lista_id = ' data-askellista="valmistelulista"'
+    else:
+        selitteet = list(s_lauta.get('voittaminen_askeleet', []))
+        lista_id = ''
+    # ⚠️ e(), ei pelkkä lainausmerkkien vaihto: teksti on ihmisen kirjoittamaa
+    # ja voi sisältää & ja < -merkkejä, jotka rikkoisivat attribuutin.
+    selitteet = e(_json.dumps(selitteet, separators=(',', ':'), ensure_ascii=False))
     css = ','.join('../' + leima('play/apinavaaka/' + f)
                    for f in ('apinavaaka.css', 'apinakortti.css'))
     # kortit.js on play-juuressa (pelin oma pizzapakka), muut apinavaaka-kansiossa.
@@ -1173,15 +1194,16 @@ def opasmountti(nimi, t):
                    '../' + leima('play/apinavaaka/apinavaaka.js'),
                    '../' + leima('play/kortit.js'),
                    '../' + leima('play/apinavaaka/apinakortti.js')])
-    return ('<div class="ak-opas" data-opas="%s"'
+    return ('<div class="ak-opas" data-opas="%s"%s'
             ' data-kansio="../play/apinavaaka/" data-lauta="../kuvat/pelilauta.webp"'
-            ' data-css="%s" data-js="%s" data-alueet="%s"'
+            ' data-css="%s" data-js="%s" data-alueet="%s" data-selitteet="%s"'
             ' data-lautakortit="../kuvat/lautapeli/"'
             ' data-linjasto="%s" data-varasto="%s"'
             ' data-nayta="%s" data-piilota="%s">'
             '<button type="button" class="apinakortti__nayta" aria-expanded="false">%s</button>'
             '</div>'
-            % (nimi, css, js, alueet, e(lauta.get('linjasto', '')), e(lauta.get('varasto', '')),
+            % (nimi, lista_id, css, js, alueet, selitteet,
+               e(lauta.get('linjasto', '')), e(lauta.get('varasto', '')),
                e(nayta), e(ui.get('apinakortti_piilota')), e(nayta)))
 
 
@@ -1260,7 +1282,7 @@ def lautapeli(t, kaikki):
        työnsi ohjeet ruudun ulkopuolelle juuri kun niitä olisi pitänyt
        verrata animaatioon. -->
   %s
-  <ul class="lista">%s</ul>
+  <ul class="lista" id="valmistelulista">%s</ul>
 </div>
 <h3>%s</h3>
 <ol class="vaiheet">%s</ol>

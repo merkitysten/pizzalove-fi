@@ -34,6 +34,8 @@
       "en": "en anglais"
     },
     "lataa": "Télécharger",
+    "edellinen": "Précédent",
+    "seuraava": "Suivant",
     "alaosa_teksti": "Pizza Love® est un jeu de Merkitysten Oy. Les jeux sont conçus en Finlande, puis assemblés et emballés en Finlande.",
     "alaosa_yhteys": "Des questions ? Écris-nous :",
     "alaosa_tavaramerkki": "Pizza Love® et Merkitysten® sont des marques déposées de Merkitysten Oy.",
@@ -242,9 +244,24 @@
       "vaaka": "Balance des singes",
       "pizzat": "Cartes pizza"
     },
+    "lauta_otsikko": "Le plateau de jeu",
+    "lauta_ohje": "Touche une partie du plateau – on t'explique ce qui s'y passe.",
+    "lauta_tiedot": {
+      "varasto": "Dans la réserve attendent les dix ingrédients, chacun dans sa tour de couleur. Le dé indique combien de pions passent entre la réserve et la chaîne, et les ingrédients utilisés pour une pizza reviennent ici.",
+      "linjasto": "Les pizzas se préparent avec les ingrédients posés sur la chaîne. Dès que les ingrédients d'une carte pizza sont sur la chaîne, tu peux préparer cette pizza.",
+      "vaaka": "La balance des singes et les poids aident l'enfant à voir combien de pions se déplacent. Leur usage est facultatif.",
+      "pizzat": "Quatre cartes pizza sont posées sur le plateau, et tous les joueurs les visent. La carte montre les ingrédients nécessaires. Quand une carte est réussie, on en pioche une nouvelle à sa place."
+    },
+    "lauta_selaa": "Feuilleter les cartes pizza",
     "peli_otsikko": "Comment fonctionne le jeu",
     "voittaminen_otsikko": "Gagner la partie",
     "voittaminen": "Pour gagner, sois le premier à réunir <b>10 parts différentes</b> dans ta boîte. Prépare les pizzas du plateau pour gagner les parts correspondantes pour ta boîte. Une pizza cœur te donne une part en plus, au choix.",
+    "voittaminen_askeleet": [
+      "Ta boîte est vide. Objectif : 10 parts différentes.",
+      "Tu prépares une pizza du plateau et tu gagnes les parts correspondantes pour ta boîte.",
+      "La pizza cœur donne les parts de ses ingrédients et une part en plus, au choix.",
+      "10 parts différentes réunies – tu gagnes la partie !"
+    ],
     "valmistelut_otsikko": "Mise en place",
     "valmistelut": [
       "Empile les pions de chaque couleur en tours, à leur place dans la réserve.",

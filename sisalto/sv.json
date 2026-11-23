@@ -34,6 +34,8 @@
       "en": "på engelska"
     },
     "lataa": "Ladda ner",
+    "edellinen": "Föregående",
+    "seuraava": "Nästa",
     "alaosa_teksti": "Pizza Love® är ett spel från Merkitysten Oy. Spelen är designade i Finland och monteras och packas i Finland.",
     "alaosa_yhteys": "Frågor? Skriv till oss:",
     "alaosa_tavaramerkki": "Pizza Love® och Merkitysten® är registrerade varumärken som ägs av Merkitysten Oy.",
@@ -236,9 +238,24 @@
       "vaaka": "Apvåg",
       "pizzat": "Pizzakort"
     },
+    "lauta_otsikko": "Spelbrädet",
+    "lauta_ohje": "Tryck på en del av brädet – vi berättar vad som händer där.",
+    "lauta_tiedot": {
+      "varasto": "I lagret väntar alla tio fyllningarna i egna färgtorn. Tärningen säger hur många pjäser som flyttas mellan lagret och linjen, och fyllningar som använts till en pizza kommer tillbaka hit.",
+      "linjasto": "Pizzorna tillagas av fyllningarna på linjen. När pizzakortets fyllningar finns på linjen kan du tillaga den pizzan.",
+      "vaaka": "Apvågen och vikterna hjälper barnet att uppfatta hur många pjäser som flyttas. Man måste inte använda dem.",
+      "pizzat": "På spelbrädet ligger fyra pizzakort som alla spelare försöker tillaga. Kortet visar vilka fyllningar pizzan behöver. När ett kort är klart dras ett nytt i stället."
+    },
+    "lauta_selaa": "Bläddra bland pizzakorten",
     "peli_otsikko": "Så fungerar spelet",
     "voittaminen_otsikko": "Att vinna spelet",
     "voittaminen": "Vinn genom att först samla <b>10 olika</b> bitar i din box. Tillaga pizzor på spelbrädet och få motsvarande bitar i din box. En hjärtpizza ger dig en valfri extrabit.",
+    "voittaminen_askeleet": [
+      "Din box är tom. Mål: 10 olika bitar.",
+      "Du tillagar en pizza på spelbrädet och får motsvarande bitar i din box.",
+      "Hjärtpizzan ger fyllningarnas bitar och dessutom en valfri extrabit.",
+      "10 olika bitar samlade – du vinner spelet!"
+    ],
     "valmistelut_otsikko": "Spelförberedelser",
     "valmistelut": [
       "Stapla de färgglada fyllningstornen på plats i lagret.",

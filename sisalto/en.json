@@ -34,6 +34,8 @@
       "en": "in English"
     },
     "lataa": "Download",
+    "edellinen": "Previous",
+    "seuraava": "Next",
     "alaosa_teksti": "Pizza Love® is a game by Merkitysten Oy. The games are designed in Finland and assembled and packed in Finland.",
     "alaosa_yhteys": "Questions? Write to us:",
     "alaosa_tavaramerkki": "Pizza Love® and Merkitysten® are registered trademarks of Merkitysten Oy.",
@@ -242,9 +244,24 @@
       "vaaka": "Monkey scales",
       "pizzat": "Pizza cards"
     },
+    "lauta_otsikko": "The game board",
+    "lauta_ohje": "Tap a part of the board – we'll tell you what happens there.",
+    "lauta_tiedot": {
+      "varasto": "The storage holds all ten toppings, each in its own colour tower. The die tells how many pieces move between the storage and the line, and toppings used for a pizza come back here.",
+      "linjasto": "Pizzas are made from the toppings on the line. Once a pizza card's toppings are all on the line, you can make that pizza.",
+      "vaaka": "The monkey scales and the weights help a child grasp how many pieces are moving. Using them is optional.",
+      "pizzat": "Four pizza cards lie on the board, and every player is after them. The card shows which toppings the pizza needs. When a card is done, a new one is drawn in its place."
+    },
+    "lauta_selaa": "Browse the pizza cards",
     "peli_otsikko": "How the game works",
     "voittaminen_otsikko": "Winning the game",
     "voittaminen": "Win by being the first to collect <b>10 different</b> slices in your box. Make pizzas on the board to earn matching slices for your box. A heart pizza gives you one extra slice of your choice.",
+    "voittaminen_askeleet": [
+      "Your box is empty. Goal: 10 different slices.",
+      "You make a pizza on the board and earn its matching slices for your box.",
+      "A heart pizza gives the slices for its toppings and one extra slice of your choice.",
+      "10 different slices collected – you win the game!"
+    ],
     "valmistelut_otsikko": "Game preparations",
     "valmistelut": [
       "Stack the colourful topping towers in the storage.",

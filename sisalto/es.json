@@ -34,6 +34,8 @@
       "en": "en inglés"
     },
     "lataa": "Descargar",
+    "edellinen": "Anterior",
+    "seuraava": "Siguiente",
     "alaosa_teksti": "Pizza Love® es un juego de Merkitysten Oy. Los juegos se diseñan en Finlandia y se montan y empaquetan en Finlandia.",
     "alaosa_yhteys": "¿Preguntas? Escríbenos:",
     "alaosa_tavaramerkki": "Pizza Love® y Merkitysten® son marcas registradas de Merkitysten Oy.",
@@ -242,9 +244,24 @@
       "vaaka": "Balanza del mono",
       "pizzat": "Cartas de pizza"
     },
+    "lauta_otsikko": "El tablero",
+    "lauta_ohje": "Toca una parte del tablero: te contamos qué pasa ahí.",
+    "lauta_tiedot": {
+      "varasto": "En el almacén esperan los diez ingredientes, cada uno en su torre de color. El dado dice cuántas fichas pasan entre el almacén y la línea, y los ingredientes usados para una pizza vuelven aquí.",
+      "linjasto": "Las pizzas se preparan con los ingredientes que están en la línea. Cuando los ingredientes de una carta de pizza están en la línea, puedes preparar esa pizza.",
+      "vaaka": "La balanza del mono y las pesas ayudan al niño a ver cuántas fichas se mueven. No es obligatorio usarlas.",
+      "pizzat": "En el tablero hay cuatro cartas de pizza que todos los jugadores quieren preparar. La carta indica qué ingredientes necesita la pizza. Cuando una carta se completa, se roba otra en su lugar."
+    },
+    "lauta_selaa": "Hojea las cartas de pizza",
     "peli_otsikko": "Cómo funciona el juego",
     "voittaminen_otsikko": "Cómo se gana",
     "voittaminen": "Gana siendo el primero en reunir <b>10 porciones distintas</b> en tu caja. Prepara pizzas en el tablero para conseguir las porciones correspondientes para tu caja. Una pizza corazón te da una porción extra a tu elección.",
+    "voittaminen_askeleet": [
+      "Tu caja está vacía. Objetivo: 10 porciones distintas.",
+      "Preparas una pizza del tablero y consigues las porciones correspondientes para tu caja.",
+      "La pizza corazón da las porciones de sus ingredientes y además una porción extra a tu elección.",
+      "10 porciones distintas reunidas: ¡ganas la partida!"
+    ],
     "valmistelut_otsikko": "Preparación",
     "valmistelut": [
       "Apila las torres de ingredientes de colores en el almacén.",

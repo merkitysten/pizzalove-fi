@@ -248,6 +248,13 @@ p{margin:0 0 12px}
    sivu kasvoi 102 px. */
 ul.lista,ol.lista{margin:0 0 12px;padding-inline-start:22px}
 ul.lista li,ol.lista li{margin:4px 0}
+/* ⚠️ LISTA JA ANIMAATIO OVAT YKSI PARI (Marko 23.11.2026: «ei tietämätön
+   tiedä, että mikä liittyy mihinkin»). Pelivalmistelujen animaatio kertoo
+   julkinen/apinakortit.js:n kautta, mikä askel on menossa, ja sama virke
+   korostuu listassa. Merkkinä on väri ja lihavointi, ei liike: tilanvaihto
+   toimii myös silloin kun liike on kytketty pois. */
+.lista__kohta--nyt{font-weight:800;color:var(--deep)}
+.lista__kohta--nyt::marker{color:var(--orange)}
 
 /* ---------- Napit ---------- */
 .napit{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 4px}

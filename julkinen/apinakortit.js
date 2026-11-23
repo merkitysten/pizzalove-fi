@@ -38,6 +38,9 @@
   function alueet() {
     try { return A.alueet ? JSON.parse(A.alueet) : null; } catch (_) { return null; }
   }
+  function jono(teksti) {
+    try { var a = JSON.parse(teksti); return a instanceof Array ? a : []; } catch (_) { return []; }
+  }
   function skripti(p) { return aineisto('script', p, {}); }
 
   /* Latausjärjestys on sääntö, ei tyylikysymys: `apinakortti.js` kutsuu
@@ -115,7 +118,12 @@
         var auki = mountti.classList.toggle('ak-opas--auki');
         nappi.setAttribute('aria-expanded', String(auki));
         nappi.textContent = auki ? A.piilota : A.nayta;
-        if (auki) oma.opas(mountti.dataset.opas); else oma.alkuun();
+        if (auki) { oma.opas(mountti.dataset.opas); } else {
+          oma.alkuun();
+          /* Korostus pois: suljettuna listassa ei ole «nyt menossa» -riviä. */
+          var l = mountti.dataset.askellista && document.getElementById(mountti.dataset.askellista);
+          if (l) [].forEach.call(l.children, function (li) { li.classList.remove('lista__kohta--nyt'); });
+        }
         return;
       }
       nappi.disabled = true;
@@ -126,10 +134,30 @@
         var sisus = document.createElement('div');
         lava.appendChild(sisus);
         mountti.appendChild(lava);
+        /* ⚠️ SELITE PÄÄLLE JUURI TÄÄLLÄ (Marko 23.11.2026: «jokaisessa kuvassa
+           on myös lyhyt teksti, joka kertoo sen mitä siinä tapahtuu»).
+           Apinakorttisivulla `selite:false` on oikein, koska kortin sääntö
+           lukee animaation yläpuolella ja selite olisi sama teksti kahdesti.
+           Opasanimaatioissa sellaista tekstiä EI ole kuvan kohdalla: pitkä
+           kappale on kuvan alla ja lista vieläkin alempana, eikä kumpikaan
+           kerro mikä kohta kuuluu mihin ruutuun. */
+        var selitteet = {};
+        selitteet[mountti.dataset.opas] = jono(mountti.dataset.selitteet);
+        /* Valmistelulistan rivi korostuu samaan tahtiin kuvan kanssa: kuva ja
+           sen oma virke ovat silloin yksi pari eivätkä kaksi irrallista asiaa.
+           Askel 0 on tyhjä lauta, joten listan rivi on askel − 1. */
+        var lista = mountti.dataset.askellista &&
+                    document.getElementById(mountti.dataset.askellista);
         oma = window.Apinakortti(sisus, {
           kansio: A.kansio, lautakuva: A.lauta, pelaajia: 3,
-          korttipaikka: false, selite: false,
+          korttipaikka: false, selite: true,
           otsakkeet: { linjasto: A.linjasto || '', varasto: A.varasto || '' },
+          selitteet: selitteet,
+          askel: !lista ? null : function (i) {
+            [].forEach.call(lista.children, function (li, n) {
+              li.classList.toggle('lista__kohta--nyt', n === i - 1);
+            });
+          },
           /* Laudan alueiden mitat sivulta: moduuli ei saa pitää omaa kopiota. */
           alueet: alueet(),
           /* Lautapelin omat kortit, ei korttipelin pakan kuvia. */

@@ -136,6 +136,15 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        «Seuraava» voivat näyttää minkä tahansa vaiheen oikeasta tilasta. */
     var ajo = 0, askeleet = [], askel = -1, looppi = true, pika = false;
     function hidas(ms) { return odota((vahennaLiike || pika) ? 0 : ms); }
+    /* ⚠️ TAUKO EI OLE LIIKETTA, VAAN LUKUAIKAA. `hidas()` on nolla kun liike
+       on kytketty pois — oikein animaation odottamiselle, koska animaatiota ei
+       silloin ole. Mutta askelten VALINEN tauko on sita aikaa jossa katsoja
+       lukee selitteen, ja se tarvitaan liikkeesta riippumatta: ilman sita koko
+       silmukka juoksee ympari niin nopeasti kuin selain ehtii, selite
+       (aria-live) vaihtuu kymmenia kertoja sekunnissa eika kukaan ehdi lukea
+       mitaan. `pika` on eri asia: se on katsojan oma napinpainallus, jolloin
+       tila kelataan haluttuun askeleeseen ilman odotuksia. */
+    function tauko(ms) { return odota(pika ? 0 : ms); }
 
     // ---------------------------------------------------------------- runko
     juuri.classList.add('ak');
@@ -186,6 +195,21 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        apinakortin kuvassa on painettuna sen oma numero 01–33. Täällä
        käytetään kortin omaa numeroa, koska tiedostot on nimetty sen mukaan. */
     var LAUTAKORTIT = asetukset.lautakortit || null;
+    /* ⚠️ JOKAISELLA KUVALLA ON OMA TEKSTINSA (Marko 23.11.2026: «Tama saisi
+       olla enemman sarjakuvamainen tuotos, jossa jokaisessa kuvassa on myos
+       lyhyt teksti, joka kertoo sen mita siina tapahtuu. Nyt tuo alempana
+       oleva teksti on irrallaan kuvista, joten ei tietamaton tieda, etta mika
+       liittyy mihinkin.»). Opasanimaatioiden askeltekstit tulevat SIVULTA
+       kaannettyina — moduulissa ne olisivat suomeksi, kuten otsakkeetkin
+       ennen. Muoto: { valmistelut: [...], voitto: [...] }. */
+    var SELITTEET = asetukset.selitteet || {};
+    function opasteksti(nimi, i) {
+      var a = SELITTEET[nimi];
+      return (a && a[i]) || '';
+    }
+    /* Isantasivu saa tietaa, mika askel on menossa: lautapelisivu korostaa
+       samalla sen oman listan kohdan, jotta kuva ja teksti ovat yksi pari. */
+    var ASKELILMOITUS = typeof asetukset.askel === 'function' ? asetukset.askel : null;
     function lautakortti(laji, n) {
       if (!LAUTAKORTIT) return null;
       return LAUTAKORTIT + laji + '-' + (n < 10 ? '0' : '') + n + '.webp';
@@ -1516,6 +1540,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       if (!a) return false;
       askel = i;
       seliteEl.textContent = SELITE ? (a.teksti || '') : '';
+      if (ASKELILMOITUS) ASKELILMOITUS(i, a);
       ohjainPaivita();
       /* Katse siirretään omana hetkenään ennen tapahtumaa: ensin katsoja
          löytää kohteen, vasta sitten siinä tapahtuu jotain. */
@@ -1544,11 +1569,11 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       while (suku === ajo && looppi) {
         nollaa(n);
         ohjainPaivita();
-        await hidas(900);
+        await tauko(900);
         for (var i = 0; i < askeleet.length; i++) {
           if (suku !== ajo || !looppi) return;
           if (!(await naytaAskel(i, suku))) return;
-          await hidas(1300);
+          await tauko(1300);
         }
         if (suku !== ajo || !looppi) return;
         /* ⚠️ TARKENNUS ON KORTIN OMAA TEKSTIÄ, JOTEN SE EI KUULU TÄNNE KUN
@@ -1556,7 +1581,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
            yhtä aikaa Tarkennus-laatikossa JA laudan alla). */
         var k = SELITE ? kortit[n] : null;
         if (k && k.tarkennus) seliteEl.textContent = k.tarkennus;
-        await hidas(2600);
+        await tauko(2600);
       }
     }
 
@@ -1644,8 +1669,16 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
             });
           };
         }
-        return [{ tee: vvaiheeseen(0) }, { tee: vvaiheeseen(1) },
-                { tee: vvaiheeseen(2) }, { tee: vvaiheeseen(3) }, { tee: vvaiheeseen(4) }];
+        /* ⚠️ ASKELTEKSTIT OVAT SIVUN OMA VALMISTELULISTA, EIVAT UUSI TEKSTI.
+           Viisi askelta ovat tyhja lauta + nelja valmistelua, eli jokaiselle
+           askeleelle 1–4 on jo olemassa kaannetty virke listassa alempana.
+           Niiden toistaminen tassa olisi sama teksti kahdesti — ja juuri se
+           irrallisuus jota Marko moitti: nyt sama virke lukee kuvan alla
+           silloin kun kuva nayttaa sen. */
+        var teksti = [0, 1, 2, 3, 4].map(function (n) { return opasteksti('valmistelut', n); });
+        return [{ tee: vvaiheeseen(0), teksti: teksti[0] }, { tee: vvaiheeseen(1), teksti: teksti[1] },
+                { tee: vvaiheeseen(2), teksti: teksti[2] }, { tee: vvaiheeseen(3), teksti: teksti[3] },
+                { tee: vvaiheeseen(4), teksti: teksti[4] }];
       },
       voitto: function () {
         var k = pizzaKortit();
@@ -1656,10 +1689,16 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         /* Pizza ilmestyy ja sen palat kasvavat boksiin SAMASSA askeleessa:
            erillinen \u00abkortti n\u00e4kyviin\u00bb -askel oli tauko jossa ei tapahdu mit\u00e4\u00e4n,
            ja sellaiset poistettiin apinakorteista samana p\u00e4iv\u00e4n\u00e4. */
-        var askeleet = [{ tee: function () {
+        /* ⚠️ NELJA SELITETTA, EI YHTA PER ASKEL: pizza-askeleiden maara
+           tulee pakasta (`pizzaKortit()` valitsee ahneesti), joten niita on eri
+           maara eri pakalla. Siksi teksti on askeleen LAJIN mukaan: alku,
+           pizza, sydanpizza, tays boksi. */
+        var askeleet = [{ teksti: opasteksti('voitto', 0), tee: function () {
           tila.pizza = null; tila.tuoreet = null; tila.liike = null; return uudelleen();
         } }];
-        k.pizzat.forEach(function (p) { askeleet.push({ tee: pizzaBoksiin(p) }); });
+        k.pizzat.forEach(function (p) {
+          askeleet.push({ teksti: opasteksti('voitto', 1), tee: pizzaBoksiin(p) });
+        });
         /* ⚠️ SYDÄNPIZZA ON ENSIN PIZZA JA VASTA SITTEN SYDÄN (Marko 22.11.2026
            demoa katsoessaan: «kalapizzasta saa rukolan. Kalapizza on myös
            sydänpizza, joten siitä pitäisi saada sitä paitsi yksi extra»).
@@ -1668,7 +1707,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
            Sydänpizzasta saat yhden vapaavalintaisen LISÄpalan.»
            Aiempi versio antoi pelkän vapaavalintaisen palan ja jätti kortin
            omat täytteet pois, jolloin kalapizzasta tuli rukola eikä kalaa. */
-        askeleet.push({ tee: function () {
+        askeleet.push({ teksti: opasteksti('voitto', 2), tee: function () {
           tila.pizza = k.sydan;
           var uudet = [];
           k.sydan.taytteet.forEach(function (t) {
@@ -1686,7 +1725,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
            pelin urakka eik\u00e4 nelj\u00e4n pizzan juttu, joten t\u00e4m\u00e4 ei esit\u00e4 ett\u00e4 ne
            tulivat n\u00e4ist\u00e4 korteista: pizza katoaa, ja loput palat kertyv\u00e4t
            t\u00e4yteen boksiin, joka on kortin lupaus \u2014 voitto. */
-        askeleet.push({ tee: function () {
+        askeleet.push({ teksti: opasteksti('voitto', 3), tee: function () {
           tila.pizza = null;
           var uudet = [];
           for (var n = 1; n <= 10; n++)
@@ -1725,14 +1764,14 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
         askeleet = alku;
         askel = -1;
         piirra();
-        await hidas(900);
+        await tauko(900);
         for (var i = 0; i < askeleet.length; i++) {
           if (suku !== ajo || !looppi) return;
           if (!(await naytaAskel(i, suku))) return;
-          await hidas(1100);
+          await tauko(1100);
         }
         if (suku !== ajo || !looppi) return;
-        await hidas(2400);
+        await tauko(2400);
       }
     }
 

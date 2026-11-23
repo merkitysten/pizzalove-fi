@@ -34,6 +34,8 @@
       "en": "in het Engels"
     },
     "lataa": "Downloaden",
+    "edellinen": "Vorige",
+    "seuraava": "Volgende",
     "alaosa_teksti": "Pizza Love® is een spel van Merkitysten Oy. De spellen zijn ontworpen in Finland en worden in Finland samengesteld en verpakt.",
     "alaosa_yhteys": "Vragen? Schrijf ons:",
     "alaosa_tavaramerkki": "Pizza Love® en Merkitysten® zijn geregistreerde handelsmerken van Merkitysten Oy.",
@@ -242,9 +244,24 @@
       "vaaka": "Apenweegschaal",
       "pizzat": "Pizzakaarten"
     },
+    "lauta_otsikko": "Het speelbord",
+    "lauta_ohje": "Tik op een deel van het bord – we vertellen wat daar gebeurt.",
+    "lauta_tiedot": {
+      "varasto": "In de voorraad wachten alle tien toppings in eigen kleurtorens. De dobbelsteen zegt hoeveel pionnen er tussen de voorraad en de lijn verhuizen, en toppings die voor een pizza gebruikt zijn komen hier terug.",
+      "linjasto": "Pizza's worden gemaakt van de toppings op de lijn. Zodra de toppings van een pizzakaart op de lijn liggen, kun je die pizza maken.",
+      "vaaka": "De apenweegschaal en de gewichten helpen een kind te zien hoeveel pionnen er verhuizen. Je hoeft ze niet te gebruiken.",
+      "pizzat": "Op het bord liggen vier pizzakaarten waar alle spelers op uit zijn. De kaart laat zien welke toppings de pizza nodig heeft. Is een kaart klaar, dan komt er een nieuwe voor in de plaats."
+    },
+    "lauta_selaa": "Blader door de pizzakaarten",
     "peli_otsikko": "Zo werkt het spel",
     "voittaminen_otsikko": "Het spel winnen",
     "voittaminen": "Je wint als je als eerste <b>10 verschillende</b> stukken in je doos hebt. Maak pizza’s op het bord om de bijpassende stukken voor je doos te krijgen. Een hartjespizza geeft je één extra stuk naar keuze.",
+    "voittaminen_askeleet": [
+      "Je doos is leeg. Doel: 10 verschillende stukken.",
+      "Je maakt een pizza op het bord en krijgt de bijpassende stukken in je doos.",
+      "De hartjespizza geeft de stukken van haar toppings én één extra stuk naar keuze.",
+      "10 verschillende stukken verzameld – je wint het spel!"
+    ],
     "valmistelut_otsikko": "Voorbereiding",
     "valmistelut": [
       "Stapel de kleurige toppingtorens in de voorraad.",

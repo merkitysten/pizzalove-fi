@@ -34,6 +34,8 @@
       "en": "po anglicky"
     },
     "lataa": "Stiahnuť",
+    "edellinen": "Predchádzajúca",
+    "seuraava": "Ďalšia",
     "alaosa_teksti": "Pizza Love® je hra spoločnosti Merkitysten Oy. Hry sú navrhnuté vo Fínsku a vo Fínsku aj skompletizované a zabalené.",
     "alaosa_yhteys": "Máte otázky? Napíšte nám:",
     "alaosa_tavaramerkki": "Pizza Love® a Merkitysten® sú registrované ochranné známky spoločnosti Merkitysten Oy.",
@@ -242,9 +244,24 @@
       "vaaka": "Opičia váha",
       "pizzat": "Karty pízz"
     },
+    "lauta_otsikko": "Herný plán",
+    "lauta_ohje": "Klepnite na časť plánu – povieme vám, čo sa na nej deje.",
+    "lauta_tiedot": {
+      "varasto": "V sklade čaká všetkých desať prísad, každá vo vlastnej farebnej veži. Kocka hovorí, koľko figúrok sa presunie medzi skladom a linkou, a prísady použité na pizzu sa sem vracajú.",
+      "linjasto": "Pizze sa pripravujú z prísad na linke. Keď sú prísady karty pizze na linke, môžete tú pizzu pripraviť.",
+      "vaaka": "Opičia váha a závažia pomáhajú dieťaťu pochopiť, koľko figúrok sa presúva. Nemusíte ich používať.",
+      "pizzat": "Na pláne ležia štyri karty pízz, o ktoré sa usilujú všetci hráči. Karta ukazuje, aké prísady pizza potrebuje. Keď je karta hotová, na jej miesto si doberiete novú."
+    },
+    "lauta_selaa": "Prelistujte karty pízz",
     "peli_otsikko": "Ako hra funguje",
     "voittaminen_otsikko": "Víťazstvo",
     "voittaminen": "Vyhráte, ak ako prvý nazbierate do svojej krabice <b>10 rôznych</b> kúskov. Pripravujte pizze na pláne a za ne získate zodpovedajúce kúsky do krabice. Srdcová pizza vám dá jeden kúsok navyše podľa vlastného výberu.",
+    "voittaminen_askeleet": [
+      "Vaša krabica je prázdna. Cieľ: 10 rôznych kúskov.",
+      "Pripravíte pizzu na pláne a získate zodpovedajúce kúsky do svojej krabice.",
+      "Srdcová pizza dá kúsky svojich prísad a navyše jeden kúsok podľa vlastného výberu.",
+      "10 rôznych kúskov nazbieraných – vyhrávate hru!"
+    ],
     "valmistelut_otsikko": "Príprava hry",
     "valmistelut": [
       "Farebné veže prísad naskladajte do skladu.",
