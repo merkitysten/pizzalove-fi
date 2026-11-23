@@ -909,11 +909,16 @@ ol.vaiheet h3{margin:6px 0 6px}
 .lautaikkuna__selain{margin:14px 16px 0;padding-top:12px;border-top:1px solid var(--line);
   display:flex;flex-direction:column;align-items:center;gap:8px}
 .lautaikkuna__selaa{margin:0;font-size:14px;font-weight:700;color:var(--soft)}
-.lautaikkuna__kortti{width:min(170px,42vw);aspect-ratio:1;flex:none}
+/* ⚠️ VAALEA POHJA REUNUKSEN TAAKSE (Marko 23.11.2026: «Tee ikkunaankin
+   vaalea pohja reunuksen taakse»). Ikkunan oma tausta on valkoinen, joten
+   kortin valkoinen reunus ei erottuisi siitä lainkaan — ja juuri reunus on
+   se, jolla kortti erottuu taustastaan. Pohjan väri on SAMA kuin
+   opasanimaation näyttämöllä (.ak-lava, #F7F2E6), joten kortti näyttää
+   samalta kummassakin paikassa. */
+.lautaikkuna__kortti{width:min(186px,46vw);aspect-ratio:1;flex:none;box-sizing:border-box;
+  background:#F7F2E6;border-radius:14px;padding:12px}
 /* Sama 9,4 %:n ulkokaari kuin opasanimaation kortissa: valkoinen reunus jää,
    sen kulmat pyöristyvät. Mitat ks. apinakortti.css. */
-/* Ikkunan tausta on valkoinen, joten kortin oma valkoinen reunus ei erotu
-   siitä — varjo tekee saman työn tässä kuin reunus vaalealla näyttämöllä. */
 .lautaikkuna__kortti img{width:100%;height:100%;object-fit:contain;display:block;
   border-radius:9.4%;filter:drop-shadow(0 2px 7px rgba(60,30,0,.22))}
 .lautaikkuna__ohjain{display:flex;align-items:center;gap:14px}
