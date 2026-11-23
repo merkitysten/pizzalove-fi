@@ -1322,12 +1322,16 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
        muuttuvat prosenteiksi jakamalla 9:llä. */
     function pros(v) { return (v / 9).toFixed(2) + '%'; }
 
-    /* Yhden tornin matka ja sarjan tahti. Nämä menevät myös CSS:ään
+    /* Yhden tornin kesto ja sarjan tahti. Nämä menevät myös CSS:ään
        (`--kesto`, `--viive`), jotta kesto on yhdessä paikassa eikä kahdessa.
-       📐 Väli on kestoa lyhyempi: seuraava torni ilmestyy keskelle juuri kun
-       edellinen vaihtuu nappulaksi omalla paikallaan, joten matkalla on aina
-       tasan yksi torni. Kymmenen tornia kestää 9 × 620 + 1000 = 6,6 s. */
-    var TORNI_KESTO = 1000, TORNI_VALI = 620;
+       ⚠️ VÄLI ON SAMA KUIN KESTO, EI LYHYEMPI (Marko: «Yksitellen nämä
+       kaikki»). Torni ulottuu ylimmästä palastaan alaspäin yli kolmen
+       seuraavan paikan, joten kaksi yhtaikaista tornia sulautuisi yhdeksi
+       pylvääksi — mitattu ruudulla lyhyemmällä välillä: kalan ja katkaravun
+       tornit näkyivät yhtenä pinona. Tällä välillä edellinen on ehtinyt
+       muuttua nappulaksi ennen kuin seuraava alkaa.
+       📐 Kymmenen tornia kestää 9 × 700 + 700 = 7,0 s. */
+    var TORNI_KESTO = 700, TORNI_VALI = 700;
 
     function piirraValmistelut() {
       nayttoEl.className = 'ak__naytto ak__naytto--valmistelut';
@@ -1339,18 +1343,23 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
       if (tila.vvaihe >= 1 && A.varasto && A.varasto[0]) {
         var v0 = A.varasto[0];   // ['rect', x, y, w, h, r]
         /* ⚠️ LAUTA ON YLHÄÄLTÄ KUVATTU, TORNI ON SIVUSTA (Marko 22.11.2026):
-           «ensin näytetään esim. se yhden nappulan torni, joka liukuu oliivin
-           varastopaikalle ja siinä muuttuu sitten ylhäältä kuvatuksi
-           oliivinappulaksi. — — kun ylhäältä torneja katsotaan, niin eihän
-           siinä näy kuin se ylin nappula. Liikkeellä me saadaan se ajatus
-           kumminkin, että siinä on se koko torni, kun se torni näytetään
-           ennen paikalleen siirtymistä. Yksitellen nämä kaikki.»
+           «kun ylhäältä torneja katsotaan, niin eihän siinä näy kuin se ylin
+           nappula». Siksi jokainen täyte näytetään ensin sivusta tornina ja
+           vasta sitten sinä mitä laudalta oikeastikin näkyy: nappulana.
 
-           Siis kolme vaihetta jokaiselle: torni ilmestyy laudan keskelle
-           sivusta katsottuna (siinä näkyy KORKEUS, joka on koko pelin idea),
-           liukuu omalle varastopaikalleen ja vaihtuu siellä ristiinhäivytyksellä
-           ylhäältä katsotuksi nappulaksi. Molemmat piirtää pelin oma koodi:
-           `torni()` ja `tarra()`, ei tämän moduulin omaa versiota.
+           ⚠️ JA PAIKKA ON SE VARASTOPAIKKA, EI LAUDAN KESKI (Marko 23.11.2026:
+           «olisiko kumminkin selkeämpi paikka tornin ilmestymiselle se varasto
+           itsessään. Eli vuorotellen sinne oikealle paikalleen ilmestyisi se
+           nappulatorni. Siinä voisi olla jopa pieni zoomaus, jotta sen
+           hahmottaa, että nyt tuli uudet nappulat ennen kuin se muuttuu
+           ylhäältäpäin kuvatuksi "torniksi" eli se nappula käytännössä.»).
+           Edellinen versio toi tornin laudan keskeltä, jolloin silmä joutui
+           seuraamaan matkaa ja paikka selvisi vasta matkan päässä. Nyt torni
+           ilmestyy zoomauksella suoraan omalle paikalleen ja vaihtuu siellä
+           nappulaksi — molemmat vaiheet samassa kohdassa. Kumpikin kuva tulee
+           pelin omasta koodista: `torni()` ja `tarra()`, ei tämän moduulin
+           omaa versiota. Mittakaavasta ks. apinakortti.css: täysmittainen
+           kympin torni ei mahdu ylimmän paikan kohdalle.
 
            ⚠️ Varaston paikat ovat laudalla ylhäältä alas 10…1, eivät 1…10
            (mitattu laudan kuvasta: ylin ympyrä on kala 10, alin oliivi 1).
@@ -1359,7 +1368,7 @@ var PELAAJAT = ['Sinä', 'Pelaaja 2', 'Basso'];
 
            ⚠️ LIIKE VAIN OMASSA ASKELEESSAAN. Tornit jäävät näkyviin myös
            askeleissa 2–4, ja koko näkymä piirretään uusiksi joka askeleella.
-           Ilman `--valmis`-tilaa koko kuuden sekunnin sarja alkaisi alusta
+           Ilman `--valmis`-tilaa koko sarja alkaisi alusta
            joka kerta, kun seuraava askel piirtää pizzakortit. */
         var liikkuu = tila.vvaihe === 1 && !vahennaLiike;
         for (var t = 0; t < 10; t++) {

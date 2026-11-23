@@ -1244,9 +1244,14 @@ def lautapeli(t, kaikki):
 <h2 id="peli">%s</h2>
 %s
 <div class="laatikko">
+  <!-- ⚠️ OTSIKKO → KUVA → TEKSTI (Marko 23.11.2026: «Tee sama voitto-osiolle:
+       kuva ennen tekstiä, mutta muista otsikko, että sen täytyy tietenkin olla
+       selkeästi isona ennen kuvaa.»). Otsikko kertoo mistä on kysymys, animaatio
+       näyttää sen, teksti sanoo saman tarkasti — sama järjestys kuin
+       pelivalmisteluissa alla. ÄLÄ siirrä tekstia kuvan edelle takaisin. -->
   <h3 style="margin-top:0">%s</h3>
-  <p>%s</p>
   %s
+  <p>%s</p>
   <h3>%s</h3>
   <!-- ⚠️ KUVA ENNEN TEKSTEJÄ (Marko 22.11.2026: «Tässä pelin setupin
        laittamisessa taas ei pysy ollenkaan perässä että mikä ohje kuuluu
@@ -1284,7 +1289,7 @@ def lautapeli(t, kaikki):
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
        e(s['peli_otsikko']), lautakartta(s),
-       e(s['voittaminen_otsikko']), s['voittaminen'], opasmountti('voitto', t),
+       e(s['voittaminen_otsikko']), opasmountti('voitto', t), s['voittaminen'],
        e(s['valmistelut_otsikko']), opasmountti('valmistelut', t), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,
        e(s['muodot_otsikko']), e(s['muodot_ingressi']), muodot,
