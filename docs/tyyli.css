@@ -910,9 +910,12 @@ ol.vaiheet h3{margin:6px 0 6px}
   display:flex;flex-direction:column;align-items:center;gap:8px}
 .lautaikkuna__selaa{margin:0;font-size:14px;font-weight:700;color:var(--soft)}
 .lautaikkuna__kortti{width:min(170px,42vw);aspect-ratio:1;flex:none}
-/* Sama 4,4 %:n valkoinen reunus pois kuin opasanimaation kortista. */
+/* Sama 9,4 %:n ulkokaari kuin opasanimaation kortissa: valkoinen reunus jää,
+   sen kulmat pyöristyvät. Mitat ks. apinakortti.css. */
+/* Ikkunan tausta on valkoinen, joten kortin oma valkoinen reunus ei erotu
+   siitä — varjo tekee saman työn tässä kuin reunus vaalealla näyttämöllä. */
 .lautaikkuna__kortti img{width:100%;height:100%;object-fit:contain;display:block;
-  clip-path:inset(4.4% round 11%)}
+  border-radius:9.4%;filter:drop-shadow(0 2px 7px rgba(60,30,0,.22))}
 .lautaikkuna__ohjain{display:flex;align-items:center;gap:14px}
 .lautaikkuna__luku{font-weight:800;color:var(--deep);min-width:5.5em;text-align:center}
 .lautaikkuna__nappi{width:42px;height:42px;border-radius:50%;border:1px solid var(--line2);

@@ -406,16 +406,21 @@
 .ak__opaspizza{width:var(--opaskortti);height:var(--opaskortti);display:grid;place-items:center;
   opacity:0;transform:scale(.9);transition:opacity .45s ease-out,transform .45s ease-out}
 .ak__opaspizza--nakyy{opacity:1;transform:none}
-/* ⚠️ PYÖRISTETYT KULMAT (Marko 23.11.2026: «Pizzakortti pitäisi olla
-   pyöristetyillä kulmilla»). Korttikuva on neliö, jonka ympärillä on valkoista
-   taustaa painetun kortin ulkopuolella — ruudulla se näkyi terävänä valkoisena
-   kehyksenä, jonka nurkat olivat suorat vaikka kortin omat ovat pyöreät.
-   📐 MITATTU KUVASTA, EI ARVATTU (canvas, kortit 01/07/15/23/31/42): valkoista
-   on joka reunalla 14 px kun kuva on 320 px, eli 4,4 %. Siksi kuvasta
-   leikataan juuri se pois, ja jäljelle jäävän kortin oma kaari on ~11 %.
-   Jos korttikuvat uusitaan, tämä on mitattava uudelleen. */
+/* ⚠️ VALKOINEN REUNUS KUULUU KORTTIIN — PYÖRISTYS KOSKEE SITÄ (Marko
+   23.11.2026: «Pizzakortissa kuuluu olla valkoinen reunus ja siinä kuuluu
+   olla se pyöristys myös. Valkoisella reunuksella ko. kortti erottuu
+   taustastaan paremmin kuin ilman sitä.»).
+
+   ⚠️ ÄLÄ LEIKKAA VALKOISTA POIS. Ensimmäinen yritys samana päivänä leikkasi
+   sen (`clip-path:inset(4.4% …)`), koska luulin sitä kuvan taustaksi. Se on
+   kortin oma reunus, ja ilman sitä kortti suli vaaleaan taustaan.
+
+   📐 MITATTU KUVISTA, EI ARVATTU (canvas, kortit 01/07/15/23/31/42, 320 px):
+   valkoista on joka reunalla 14 px, ja painetun kortin oma kulmasäde on 16 px.
+   Ulkoreunan säde on siis 14 + 16 = 30 px = 9,4 %, jolloin reunus on yhtä
+   paksu myös kulmissa. Jos korttikuvat uusitaan, tämä on mitattava uudelleen. */
 .ak__opaspizza img{width:100%;height:100%;object-fit:contain;max-width:none;
-  clip-path:inset(4.4% round 11%);
+  border-radius:9.4%;
   filter:drop-shadow(0 2px 6px rgba(60,30,0,.22))}
 .ak__opaspizza--sydan img{filter:drop-shadow(0 0 10px rgba(238,114,3,.55))}
 .ak__opasboksi{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -504,13 +509,12 @@
 .ak__vtorni--valmis .ak__vtorni__torni{display:none}
 .ak__vtorni--valmis .ak__vtorni__nappula{animation:none;opacity:1;
   transform:translate(-50%,-50%)}
-.ak__vpizza{position:absolute;border-radius:7px;overflow:hidden;
+/* Sama 9,4 %:n ulkokaari kuin muillakin korttikuvilla: valkoinen reunus jää
+   näkyviin (se erottaa kortin laudasta) ja sen kulmat ovat pyöreät. */
+.ak__vpizza{position:absolute;border-radius:9.4%;overflow:hidden;
   box-shadow:0 2px 6px rgba(60,30,0,.3);
   animation:ak-ilmesty .55s ease-out backwards;animation-delay:var(--viive,0ms)}
-/* Sama 4,4 %:n valkoinen reunus pois myös laudan korteista: paikka on
-   katkoviivalaatikko, jonka sisään kortti kuuluu reunoja myöten. 320/292. */
-.ak__vpizza img{width:100%;height:100%;object-fit:cover;max-width:none;display:block;
-  transform:scale(1.096)}
+.ak__vpizza img{width:100%;height:100%;object-fit:cover;max-width:none;display:block}
 .ak__poyta{display:flex;align-items:center;justify-content:center;gap:12px;min-height:54px}
 .ak__vpakka img,.ak__vboksi img{width:46px;height:46px;object-fit:contain;max-width:none;display:block}
 .ak__vpakka,.ak__vboksi{animation:ak-ilmesty .5s ease-out backwards;animation-delay:var(--viive,0ms)}
