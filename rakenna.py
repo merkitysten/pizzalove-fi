@@ -576,9 +576,22 @@ def kehys(t, kaikki, sivu, title, kuvaus, runko):
        # Apinakorttisivun animaatiot: pelkkä pieni kytkentäskripti. Raskas
        # moduuli (noin 100 kt + kuvat) ladataan vasta ensimmäisestä «Näytä»-
        # painalluksesta, koska sivun tehtävä on löytää kortin sääntö nopeasti.
-       ('<script src="../%s" defer></script>\n' % leima('play/laskin.js')) if sivu == 'korttipeli' else
-       ('<script src="../%s" defer></script>\n' % leima('apinakortit.js')) if sivu in ('apinakortit', 'lautapeli') else '',
+       sivuskriptit(sivu),
        leima('sivu.js'))
+
+
+def sivuskriptit(sivu):
+    """Sivukohtaiset skriptit ENNEN sivu.js:ää (defer ajaa ne tässä
+    järjestyksessä). Lautapelisivu saa kaksi: opasanimaatioiden kytkennän ja
+    pelilaudan oman kartan, joka avaa laudan osista ikkunan."""
+    nimet = []
+    if sivu == 'korttipeli':
+        nimet.append('play/laskin.js')
+    if sivu in ('apinakortit', 'lautapeli'):
+        nimet.append('apinakortit.js')
+    if sivu == 'lautapeli':
+        nimet.append('lautakartta.js')
+    return ''.join('<script src="../%s" defer></script>\n' % leima(n) for n in nimet)
 
 
 def video(tunnus, otsikko, kieli, t, muoto='vaaka'):
@@ -1083,6 +1096,12 @@ def korttipeli(t, kaikki):
 LAUTA_MERKIT = [('varasto', '93', '50'), ('linjasto', '76.5', '47'),
                 ('vaaka', '38', '41'), ('pizzat', '19', '11')]
 
+# ⚠️ LUKU LEVYLTÄ, EI MUISTISTA. Pizzakorttien selain ikkunassa käy pakan läpi
+# yksi kerrallaan, ja jos tähän kirjoittaisi luvun käsin, se jäisi jälkeen heti
+# kun kuvia lisätään. Nimet ovat pizzakortti-01 … pizzakortti-NN.
+PIZZAKORTTEJA = len([f for f in os.listdir(os.path.join(JULKINEN, 'kuvat', 'lautapeli'))
+                     if f.startswith('pizzakortti-') and f.endswith('.webp')])
+
 # ── Laudan alueet (Marko 16.11.2026) ──────────────────────────────────────
 # Marko: «Kyllä se koko alue pitäisi korostua siinä pelilaudalla. Eli kun
 # puhutaan varastosta, niin ne varastopaikat pitäisi korostua. Kun puhutaan
@@ -1207,32 +1226,127 @@ def opasmountti(nimi, t):
                e(nayta), e(ui.get('apinakortti_piilota')), e(nayta)))
 
 
-def lautakartta(s):
+def alue_rajat(muodot, marginaali=24):
+    """Alueen ympärysruutu NELIÖNÄ laudan 900×900 koordinaatistossa.
+
+    ⚠️ NELIÖ, EI ALUEEN OMA MUOTO. Varastonauha on 126 × 886 ja pizzapaikat
+    233 × 856 — niiden oman mittasuhteen mukainen ikkuna olisi kapea raita,
+    joka ei mahdu ruudulle järkevästi eikä kerro missä kohtaa lautaa se on.
+    Neliö on sama muoto joka osalle, ja se zoomaa niin paljon kuin alue
+    sallii: linjasto 1,5× ja apinavaaka 2,1×, kun taas laudan laidasta
+    laitaan ulottuvat varasto ja pizzapaikat näkyvät lähes koko lautana.
+    Juuri siksi ikkunassa on myös korostus — pelkkä rajaus ei riittäisi
+    kertomaan, mistä osasta on kyse.
+
+    Mitat tulevat `LAUTA_ALUEET`-taulukosta eli SAMASTA kerran mitatusta
+    lähteestä kuin laudan korostus; toinen, erikseen arvattu ruutu ajautuisi
+    erilleen heti kun lauta piirretään uusiksi."""
+    xs, ys = [], []
+    for m in muodot:
+        if m[0] == 'rect':
+            _, x, y, w, h, _r = m
+            xs += [x, x + w]; ys += [y, y + h]
+        elif m[0] == 'soikio':
+            _, cx, cy, rx, ry = m
+            xs += [cx - rx, cx + rx]; ys += [cy - ry, cy + ry]
+        elif m[0] == 'rengas':
+            _, cx, cy, rox, roy, _rix, _riy = m
+            xs += [cx - rox, cx + rox]; ys += [cy - roy, cy + roy]
+    x0 = min(xs) - marginaali; y0 = min(ys) - marginaali
+    x1 = max(xs) + marginaali; y1 = max(ys) + marginaali
+    # Neliöksi pidemmän sivun mukaan, alueen keskipisteen ympäri, ja sitten
+    # laudan sisään: reunaan osuva neliö siirtyy, ei kutistu, jotta alue
+    # pysyy kokonaan näkyvissä.
+    sivu = min(900, max(x1 - x0, y1 - y0))
+    kx = (x0 + x1) / 2.0 - sivu / 2.0
+    ky = (y0 + y1) / 2.0 - sivu / 2.0
+    kx = max(0, min(900 - sivu, kx))
+    ky = max(0, min(900 - sivu, ky))
+    return kx, ky, sivu, sivu
+
+
+def lautakartta(s, t):
     """Lauta kuvana ja osien nimet sen päällä. Nimet ovat oikeaa tekstiä
     eivätkä kuvaan poltettuja, joten ne kääntyvät ja ruudunlukija lukee ne.
-    Kuva itse on koriste (alt=""): sen sisältö on juuri nämä nimet."""
+    Kuva itse on koriste (alt=""): sen sisältö on juuri nämä nimet.
+
+    ⚠️ LAUTA ON KOSKETELTAVA, EI JULISTE (Marko 23.11.2026: «pitäisi pystyä
+    painamaan näitä pelilaudan eri elementtejä, jolloin ruudulle tulisi
+    ikkuna, jossa kerrotaan ko. elementistä olennainen tieto … sen kuvan
+    pitäisi olla vuorovaikutuksellinen eikä tuollainen staattinen kuva.
+    Muista, että meillä on digitaalinen maailma, joka ei rajoitu analogisen
+    maailman esteisiin.»).
+
+    Siksi jokaisella osalla on KOLME sisäänkäyntiä samaan ikkunaan: numero
+    laudalla, nimi listassa ja itse alue laudalla (läpinäkyvä osumapolku).
+    Numero ja nimi ovat oikeita <button>eja, joten näppäimistö ja ruudunlukija
+    pääsevät sisään; osumapolku on hiiren ja sormen mukavuus eikä siis oma
+    kohteensa (aria-hidden).
+
+    Ilman JavaScriptiä kartta on entisellään: kuva, numerot ja nimet. Napit
+    eivät silloin tee mitään, joten kehote «napauta» paljastetaan vasta
+    skriptistä — lupaus, jota ei voi pitää, on pahempi kuin ei lupausta.
+    """
     if not s.get('lauta'):
         return ''
     merkit = ''.join(
-        '<span class="lautakartta__merkki" data-osa="%s" style="--x:%s%%;--y:%s%%" aria-hidden="true">%d</span>'
-        % (osa, x, y, i + 1) for i, (osa, x, y) in enumerate(LAUTA_MERKIT))
-    nimet = ''.join('<li data-osa="%s"><b>%d</b>%s</li>' % (osa, i + 1, e(s['lauta'][osa]))
-                    for i, (osa, _, _) in enumerate(LAUTA_MERKIT))
+        '<button type="button" class="lautakartta__merkki" data-osa="%s"'
+        ' style="--x:%s%%;--y:%s%%">%d<span class="vain-ruudunlukijalle">%s</span></button>'
+        % (osa, x, y, i + 1, e(s['lauta'][osa])) for i, (osa, x, y) in enumerate(LAUTA_MERKIT))
+    nimet = ''.join(
+        '<li><button type="button" class="lautakartta__nimi" data-osa="%s"><b>%d</b>%s</button></li>'
+        % (osa, i + 1, e(s['lauta'][osa])) for i, (osa, _, _) in enumerate(LAUTA_MERKIT))
     # Varjo on yksi polku: koko lauta + alueen muodot, fill-rule evenodd.
     # Alue jää siis reiäksi, ja reikiä voi olla monta (pizzakorttipaikkoja on
     # neljä) tai se voi olla rengas. Reuna piirtää saman muodon ääriviivana.
+    # Osumapolku on sama muoto kolmannen kerran, läpinäkyvänä ja hiirelle.
     alueet = ''.join(
         '<path class="lautakartta__varjo" data-alue="%s" fill-rule="evenodd" d="M0 0H900V900H0Z%s"/>'
         '<path class="lautakartta__reuna" data-alue="%s" d="%s"/>'
         % (osa, alue_polku(LAUTA_ALUEET[osa]), osa, alue_polku(LAUTA_ALUEET[osa]))
         for osa, _, _ in LAUTA_MERKIT if LAUTA_ALUEET.get(osa))
-    return ('<figure class="lautakartta liike">\n'
+    # ⚠️ evenodd myös osumapolulle: linjasto on RENGAS, ja ilman tätä sen
+    # osuma-ala kattaisi myös keskellä olevan apinavaaan — eli vaaan oma alue
+    # jäisi renkaan alle eikä sitä voisi napauttaa.
+    osumat = ''.join(
+        '<path class="lautakartta__osuma" data-osa="%s" fill-rule="evenodd" d="%s"/>'
+        % (osa, alue_polku(LAUTA_ALUEET[osa]))
+        for osa, _, _ in LAUTA_MERKIT if LAUTA_ALUEET.get(osa))
+    # Ikkunan lähikuvan rajaus lasketaan TÄSSÄ eikä CSS:ssä: calc() ei saa
+    # jakaa muuttujalla kaikissa selaimissa, ja luvut ovat joka tapauksessa
+    # vakioita. Kuva on 900 leveä; rajattu ruutu on w × h samassa mitassa.
+    tiedot = s.get('lauta_tiedot') or {}
+    osat = {}
+    for osa, _, _ in LAUTA_MERKIT:
+        tieto = {'nimi': s['lauta'][osa], 'teksti': tiedot.get(osa, '')}
+        if LAUTA_ALUEET.get(osa):
+            x, y, w, h = alue_rajat(LAUTA_ALUEET[osa])
+            # ⚠️ KOROSTUS MYÖS IKKUNAAN, SAMASTA POLUSTA. Ilman sitä lähikuva
+            # olisi vain pala lautaa: katsoja näkisi kuvan muttei sitä, mikä
+            # siinä on se puhuttu osa. Polku on sama kuin kartan varjossa ja
+            # ääriviivassa, joten kolmea kopiota ei synny.
+            tieto['kuva'] = {'lev': round(900.0 / w * 100, 3),
+                             'vas': round(-x / float(w) * 100, 3),
+                             'yla': round(-y / float(h) * 100, 3),
+                             'polku': alue_polku(LAUTA_ALUEET[osa])}
+        osat[osa] = tieto
+    import json as _json
+    data = e(_json.dumps(osat, separators=(',', ':'), ensure_ascii=False))
+    ohje = s.get('lauta_ohje', '')
+    ui = t.get('ui', {})
+    return ('<figure class="lautakartta liike" data-osat="%s" data-kortit="../kuvat/lautapeli/pizzakortti-"'
+            ' data-kortteja="%d" data-selaa="%s"'
+            ' data-sulje="%s" data-edellinen="%s" data-seuraava="%s">\n'
             '  <div class="lautakartta__lauta">'
             '<img src="../kuvat/pelilauta.webp" width="900" height="900" alt="" loading="lazy">'
-            '<svg class="lautakartta__alueet" viewBox="0 0 900 900" aria-hidden="true" focusable="false">%s</svg>'
+            '<svg class="lautakartta__alueet" viewBox="0 0 900 900" aria-hidden="true" focusable="false">%s%s</svg>'
             '%s</div>\n'
+            '  <p class="lautakartta__ohje" hidden>%s</p>\n'
             '  <figcaption><ol class="lautakartta__nimet">%s</ol></figcaption>\n'
-            '</figure>' % (alueet, merkit, nimet))
+            '</figure>' % (data, PIZZAKORTTEJA, e(s.get('lauta_selaa', '')),
+                           e(ui.get('pyynto_sulje', '')), e(ui.get('edellinen', '')),
+                           e(ui.get('seuraava', '')),
+                           alueet, osumat, merkit, e(ohje), nimet))
 
 
 def lautapeli(t, kaikki):
@@ -1264,6 +1378,13 @@ def lautapeli(t, kaikki):
 %s
 
 <h2 id="peli">%s</h2>
+<!-- ⚠️ LAUDALLA ON OMA OTSIKKONSA (Marko 23.11.2026: «"Näin peli toimii" on
+     otsikko. Pitäisikö siinä lukea "Pelilauta"?»). Luku «Näin peli toimii»
+     ei ole pelkkä lauta: sen alla ovat myös voittaminen, valmistelut, vuoro
+     ja pelimuodot. Siksi luvun otsikko jää ennalleen ja LAUTA saa omansa,
+     samalla tasolla kuin «Pelin voittaminen» ja «Pelivalmistelut». Nyt
+     jokaisen kuvan yläpuolella lukee mikä se on. -->
+<h3 style="margin-top:0">%s</h3>
 %s
 <div class="laatikko">
   <!-- ⚠️ OTSIKKO → KUVA → TEKSTI (Marko 23.11.2026: «Tee sama voitto-osiolle:
@@ -1310,7 +1431,7 @@ def lautapeli(t, kaikki):
 %s
 ''' % (e(s['h1']), e(s['ingressi']), tiedot, hyppy,
        e(s['kokoaminen_otsikko']), e(s['kokoaminen']), kok,
-       e(s['peli_otsikko']), lautakartta(s),
+       e(s['peli_otsikko']), e(s.get('lauta_otsikko', '')), lautakartta(s, t),
        e(s['voittaminen_otsikko']), opasmountti('voitto', t), s['voittaminen'],
        e(s['valmistelut_otsikko']), opasmountti('valmistelut', t), valm,
        e(s['vuoro_otsikko']), vaiheet, vuoro,

@@ -631,16 +631,32 @@ main>.videot{margin-left:0;margin-right:0;padding-left:0;padding-right:0}
   font-weight:800;font-size:13px;line-height:1;flex:none;
   box-shadow:0 0 0 2.5px #fff,0 1px 4px rgba(0,0,0,.4)}
 .lautakartta__merkki{position:absolute;left:var(--x);top:var(--y);
-  transform:translate(-50%,-50%) scale(var(--korosta-skaala,1))}
+  transform:translate(-50%,-50%) scale(var(--korosta-skaala,1));
+  border:0;padding:0;font-family:inherit;cursor:pointer}
 /* Merkki on 22 px eli pieni osumapinta. Näkymätön kehys kasvattaa sen 38
    pikseliin ilman että mikään näkyvä muuttuu. Merkit ovat laudalla 73 px:n
    päässä toisistaan (440 px:n lauta, lähimmät 16,5 % erillään), joten
    kehykset eivät mene päällekkäin. */
 .lautakartta__merkki::before{content:"";position:absolute;inset:-8px;border-radius:50%}
-.lautakartta__nimet{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;
-  list-style:none;margin:12px 0 0;padding:0}
-.lautakartta__nimet li{display:flex;align-items:center;gap:7px;
-  font-weight:700;font-size:15px;color:var(--korosta-vari,var(--deep))}
+/* ⚠️ KAKSI SARAKETTA, EI RIVITTYVÄ JONO (Marko 23.11.2026: «Tuo asettelu
+   noissa kuvan alapuolella olevissa teksteissä on ruma, koska 4 Pizzakortit
+   on nyt yksin tuolla alhaalla»). Nimiä on neljä ja ne ovat eri mittaisia,
+   joten `flex-wrap` katkesi siitä mihin sattui — puhelimessa 3 + 1. Kahden
+   sarakkeen ruudukko on aina 2 + 2, ja leveys on sidottu laudan leveyteen
+   (sama min(440px,100%)), jotta lista ja lauta ovat saman levyinen pari. */
+.lautakartta__nimet{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;
+  list-style:none;margin:12px auto 0;padding:0;width:min(440px,100%)}
+.lautakartta__nimet li{display:flex}
+.lautakartta__nimi{display:flex;align-items:center;gap:7px;width:100%;
+  text-align:start;font-family:inherit;font-weight:700;font-size:15px;
+  color:var(--korosta-vari,var(--deep));background:none;border:0;
+  padding:4px 2px;border-radius:9px;cursor:pointer}
+/* ⚠️ OSUMAPOLKU ON ALUEEN MUOTO KOLMANNEN KERRAN, LÄPINÄKYVÄNÄ. Numero on
+   22 px eli pieni maali; koko alue on iso. Polku ei ole oma kohteensa
+   ruudunlukijalle (svg on aria-hidden) vaan hiiren ja sormen mukavuus —
+   näppäimistötie kulkee numeron ja nimen nappien kautta. */
+.lautakartta__osuma{fill:#000;fill-opacity:0;pointer-events:auto;cursor:pointer}
+.lautakartta__ohje{margin:10px 0 0;text-align:center;font-size:14px;color:var(--soft)}
 
 /* ---------- Kartan korostus (Marko 16.11.2026) ----------
    «kun hiiren vie noiden nimien tai pelilaudan päälle, niin silloin muut
@@ -858,6 +874,54 @@ ol.vaiheet h3{margin:6px 0 6px}
 .kielet__pyynto-nappi{display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;
   font:inherit;font-weight:700;color:var(--deep);padding:10px 12px;border-radius:9px}
 .kielet__pyynto-nappi:hover{background:var(--tint)}
+/* ---------- Laudan osan ikkuna (Marko 23.11.2026) ----------
+   «pitäisi pystyä painamaan näitä pelilaudan eri elementtejä, jolloin
+   ruudulle tulisi ikkuna, jossa kerrotaan ko. elementistä olennainen tieto»
+
+   Ikkunassa on kolme asiaa: osan nimi, LÄHIKUVA laudasta juuri siitä kohdasta,
+   ja olennainen tieto. Lähikuva on sama pelilauta.webp rajattuna — ei uutta
+   kuvatiedostoa — ja rajaus tulee rakenna.py:n mittaamista alueista.
+   📐 Luvut (--suhde ja kuvan leveys/sijainti) lasketaan rakennusvaiheessa,
+   koska calc() ei saa jakaa muuttujalla kaikissa selaimissa. */
+.lautaikkuna{width:min(560px,calc(100vw - 24px));max-height:min(90vh,760px);padding:0;border:0;
+  border-radius:16px;background:var(--surface);color:var(--ink);
+  box-shadow:0 18px 50px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden}
+.lautaikkuna::backdrop{background:rgba(26,26,26,.45)}
+.lautaikkuna__ylaosa{display:flex;align-items:center;gap:10px;padding:14px 10px 10px 16px;
+  border-bottom:1px solid var(--line);flex:none}
+.lautaikkuna__otsikko{margin:0;font-size:19px;flex:1 1 auto;color:var(--deep)}
+.lautaikkuna__sulje{border:0;background:none;font-size:1.5rem;line-height:1;cursor:pointer;
+  color:var(--soft);padding:2px 10px}
+/* Vain sisus vierittää: otsikko ja sulkemisnappi pysyvät paikallaan, jotta
+   ikkunasta pääsee pois myös silloin kun pizzakorttien selain on auki. */
+.lautaikkuna__sisus{overflow-y:auto;flex:1 1 auto;min-height:0;padding-bottom:16px}
+/* Lähikuva: laudan kuva ylisuurena ja siirrettynä niin, että oikea kohta
+   näkyy, ja sen päällä sama varjo + ääriviiva kuin kartassa. Neliö on sama
+   muoto joka osalle — ks. rakenna.py `alue_rajat`. */
+.lautaikkuna__kuva{position:relative;overflow:hidden;margin:14px auto 0;
+  border-radius:12px;background:var(--ground);aspect-ratio:1;
+  width:min(100% - 32px,34vh);flex:none}
+.lautaikkuna__kuva img,.lautaikkuna__kuva svg{position:absolute;max-width:none;
+  height:auto;display:block}
+.lautaikkuna__varjo{fill:var(--ground);fill-opacity:.72}
+.lautaikkuna__reuna{fill:none;stroke:var(--orange);stroke-width:7;stroke-linejoin:round}
+.lautaikkuna__teksti{margin:12px 16px 0;font-size:15.5px;line-height:1.45}
+.lautaikkuna__selain{margin:14px 16px 0;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;gap:8px}
+.lautaikkuna__selaa{margin:0;font-size:14px;font-weight:700;color:var(--soft)}
+.lautaikkuna__kortti{width:min(170px,42vw);aspect-ratio:1;flex:none}
+/* Sama 4,4 %:n valkoinen reunus pois kuin opasanimaation kortista. */
+.lautaikkuna__kortti img{width:100%;height:100%;object-fit:contain;display:block;
+  clip-path:inset(4.4% round 11%)}
+.lautaikkuna__ohjain{display:flex;align-items:center;gap:14px}
+.lautaikkuna__luku{font-weight:800;color:var(--deep);min-width:5.5em;text-align:center}
+.lautaikkuna__nappi{width:42px;height:42px;border-radius:50%;border:1px solid var(--line2);
+  background:var(--ground);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.lautaikkuna__nappi:hover{background:var(--line)}
+.lautaikkuna[open]{animation:lautaikkuna-tulo var(--liike-nopea,.18s) var(--liike-saapuu,ease-out)}
+@keyframes lautaikkuna-tulo{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.lautaikkuna[open]{animation:none}}
+
 .valitsin{width:min(560px,calc(100vw - 24px));max-height:min(88vh,720px);padding:0;border:0;border-radius:16px;
   background:var(--surface);color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.28);
   display:flex;flex-direction:column;overflow:hidden}
