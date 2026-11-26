@@ -281,7 +281,7 @@ def sisalto(kieli):
     return s, k, a, lisat
 
 
-def sivu_html(kieli, luonnos=True):
+def sivu_html(kieli, luonnos=True, ohita_murrot=False):
     s, k, atomit, lisat = sisalto(kieli)
     # ⚠️ Tunnisteet <bdi>:hin ENNEN kuin sisältö menee sivulle, samalla funktiolla
     # kuin verkkosivuilla (rakenna.eristatunnisteet). ⛔ EI koko dokumenttiin:
@@ -516,26 +516,73 @@ function pakkaa() {{
   var lahde = document.getElementById('lahde');
   var atomit = [].slice.call(lahde.children);
   var ruudut = [].slice.call(document.querySelectorAll('.palsta .sisus'));
-  var i = 0, virheet = [];
   function yli(p) {{ return p.scrollHeight > p.clientHeight + 0.5; }}
-  for (var n = 0; n < atomit.length; n++) {{
-    var a = atomit[n];
-    if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
-    var p = ruudut[i];
-    // pelimuoto, joka aloittaa uuden palstan (Markon jako 15.11.2026)
-    if (a.classList.contains('uusi-palsta') && p.children.length && i + 1 < ruudut.length) {{ i++; p = ruudut[i]; }}
-    p.appendChild(a);
-    if (!yli(p)) continue;
-    p.removeChild(a);
-    var siirto = [a];
-    while (p.lastElementChild && p.lastElementChild.classList.contains('pida')) {{
-      siirto.unshift(p.lastElementChild); p.removeChild(p.lastElementChild);
-    }}
-    i++;
-    if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
-    siirto.forEach(function (x) {{ ruudut[i].appendChild(x); }});
-    if (yli(ruudut[i])) virheet.push('ei mahdu ruutuun: ' + a.textContent.slice(0, 40));
+  /* ⚠️ PAKKOMURTO MAKSAA PALSTAN — JA JOSKUS KOKO ARKIN.
+     📐 Mitattu 26.11.2026 (venäjä, ajot #27–#30, kolme peräkkäistä yötä):
+
+       palsta 1  234,1 / 272,0 mm   perusteet
+       palsta 2  261,5 / 272,0 mm   #1 PizzaParty + #2 PizzaBasso
+       palsta 3   26,6 / 201,9 mm   ← Basson lisäsäännöt, 175,3 mm TYHJÄÄ
+       palsta 4  193,8 / 201,9 mm   #3 PizzaLove alkaa — 79,7 mm jäi yli
+
+     PizzaBasson lisäsäännöt ovat jakamaton 26,6 mm:n lohko, joka valui
+     palstaan 3. Sen jälkeen `#3 PizzaLove`in pakkomurto näki palstan
+     varatuksi ja hyppäsi sen yli. Teksti EI ollut liian pitkä: Loven oma
+     tarve 273,5 mm on vähemmän kuin puolan 291,7 mm, joka mahtuu.
+
+     Siksi murrosta voidaan luopua — yksi kerrallaan, eniten tyhjää jättävä
+     ensin. ⚠️ Mutta VASTA kun tiivistys on käytetty loppuun: `tee` ajaa
+     kaikki 16 tiivistysporrasta ensin ilman tätä (`ohita_murrot=False`).
+     📐 Syy mitattiin: jos ohitus sallitaan heti, es · fr · ja · nl · pl
+     mahtuvat löysemmällä tiivistyksellä mutta menettävät palstan alusta
+     alkavan pelin. Markon jako 15.11.2026 on päätös, tiivistys on
+     mekaniikkaa — päätös saa väistyä vasta viimeisenä, kun vaihtoehto on
+     ettei arkkia synny lainkaan. */
+  var SALLI_OHITUS = {ohitus};
+  var murrot = [];
+  atomit.forEach(function (a, n) {{ if (a.classList.contains('uusi-palsta')) murrot.push(n); }});
+  function palauta() {{
+    ruudut.forEach(function (p) {{ while (p.firstChild) p.removeChild(p.firstChild); }});
+    atomit.forEach(function (a) {{ lahde.appendChild(a); }});
   }}
+  function yritys(estetyt) {{
+    palauta();
+    var i = 0, virheet = [], hukka = {{}};
+    for (var n = 0; n < atomit.length; n++) {{
+      var a = atomit[n];
+      if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
+      var p = ruudut[i];
+      // pelimuoto, joka aloittaa uuden palstan (Markon jako 15.11.2026)
+      if (a.classList.contains('uusi-palsta') && p.children.length && i + 1 < ruudut.length
+          && estetyt.indexOf(n) < 0) {{
+        hukka[n] = p.clientHeight - kork(p);
+        i++; p = ruudut[i];
+      }}
+      p.appendChild(a);
+      if (!yli(p)) continue;
+      p.removeChild(a);
+      var siirto = [a];
+      while (p.lastElementChild && p.lastElementChild.classList.contains('pida')) {{
+        siirto.unshift(p.lastElementChild); p.removeChild(p.lastElementChild);
+      }}
+      i++;
+      if (i >= ruudut.length) {{ virheet.push('ruudut loppuivat'); break; }}
+      siirto.forEach(function (x) {{ ruudut[i].appendChild(x); }});
+      if (yli(ruudut[i])) virheet.push('ei mahdu ruutuun: ' + a.textContent.slice(0, 40));
+    }}
+    return {{ i: i, virheet: virheet, hukka: hukka }};
+  }}
+  var estetyt = [], tulos = yritys(estetyt);
+  while (SALLI_OHITUS && tulos.virheet.length && estetyt.length < murrot.length) {{
+    var jaljella = murrot.filter(function (n) {{ return estetyt.indexOf(n) < 0; }});
+    jaljella.sort(function (x, y) {{ return (tulos.hukka[y] || 0) - (tulos.hukka[x] || 0); }});
+    estetyt.push(jaljella[0]);
+    tulos = yritys(estetyt);
+  }}
+  // Jos mikään ohitus ei auttanut, palataan alkuperäiseen latomukseen, jotta
+  // virheilmoitus kertoo saman kuin ennen korjausta.
+  if (tulos.virheet.length && estetyt.length) {{ estetyt = []; tulos = yritys(estetyt); }}
+  var i = tulos.i, virheet = tulos.virheet;
   // Viimeinen sivu tasataan kahdelle palstalle (Markon toive 15.11.2026:
   // Love "ilmavasti kahdelle palstalle", koko paperia ei tarvitse käyttää).
   function kork(p) {{
@@ -569,7 +616,9 @@ function pakkaa() {{
     v.textContent = '{ylivuoto}: ' + virheet.join(' | ');
     document.querySelector('.sivu').appendChild(v);
   }}
-  document.title = 'VALMIS palsta ' + (i + 1) + '/' + ruudut.length + (virheet.length ? ' {ylivuoto}' : '');
+  document.title = 'VALMIS palsta ' + (i + 1) + '/' + ruudut.length
+    + (estetyt.length ? ' murtoja-ohitettu:' + estetyt.length : '')
+    + (virheet.length ? ' {ylivuoto}' : '');
 }}
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {{
   var kuvat = [].slice.call(document.images).map(function (im) {{
@@ -585,7 +634,7 @@ function pakkaa() {{
         viiri_face=viirikirjasin()[0], viiri_font=viirikirjasin()[1], musta=ks.MUSTA, oranssi=ks.ORANSSI,
         hanta_raja=round(100 * (39 * 374 / 1030 - 5.3) / (39 * 374 / 1030), 1), viiva=ks.VIIVA, pt=LEIPA_PT, luonnos_nako='block' if luonnos else 'none',
         ruudut=''.join(ruudut), atomit=rk.eristatunnisteet('\n'.join(atomit)), osoite=json.dumps(osoite(k)),
-        suunta=tekstisuunta(kieli),
+        suunta=tekstisuunta(kieli), ohitus='true' if ohita_murrot else 'false',
         ylivuoto=KIELET[kieli]['ylivuoto'])
 
 
@@ -689,6 +738,13 @@ TIIVISTYS_O = ['', _O1, _O2, _O3]
 # kokeilujärjestys: pienin yhteistiivistys ensin, väljä puoli säästetään
 PORTAAT = sorted(((v, o) for v in range(4) for o in range(4)), key=lambda p: (p[0] + p[1], p[0]))
 
+# Kaksi kierrosta PORTAILLE, ja JÄRJESTYS ON PÄÄTÖS (ks. `pakkaa`-kommentti):
+# ensin jokainen peli omasta palstastaan (Markon jako 15.11.2026), ja vasta
+# jos yksikään porras ei mahdu, sama haku uudelleen niin että pakkomurrosta
+# saa luopua. ⚠️ Käännettynä viiden jo toimivan kielen arkki muuttuisi.
+# Vartija: tyokalut/latojakoe.py.
+KIERROKSET = (False, True)
+
 
 # Rasteriviittaukset valmiista sivusta: <img src>, <image href> ja CSS url().
 # ⚠️ Luetaan SIVUSTA eikä lähdepoluista, koska painokuvat() on jo vaihtanut
@@ -758,16 +814,30 @@ def tee(kieli, luonnos):
     kohde = verkkopolku(kieli)
     os.makedirs(os.path.dirname(kohde), exist_ok=True)
     sivu = os.path.join(TANNE, '.koteloarkki-%s.html' % kieli)
-    for v, o in PORTAAT:
-        lisa = TIIVISTYS_V[v] + TIIVISTYS_O[o]
-        with open(sivu, 'w', encoding='utf-8') as f:
-            html_, kuvia = painokuvat(sivu_html(kieli, luonnos).replace('</style>', lisa + '\n</style>', 1))
-            f.write(html_)
-        tulosta(sivu, kohde)
-        if ks.sivuja(kohde) == SIVUJA and KIELET[kieli]['ylivuoto'] not in teksti(kohde):
+    # ⚠️ KAKSI KIERROSTA, JA JÄRJESTYS ON PÄÄTÖS EIKÄ TEKNIIKKAA.
+    # Ensin kaikki 16 tiivistysporrasta niin, että jokainen peli aloittaa
+    # oman palstansa (Markon jako 15.11.2026). Vasta jos yksikään ei mahdu,
+    # sama haku uudelleen niin, että pakkomurrosta saa luopua. Näin jokainen
+    # tänään mahtuva kieli latoutuu tasan kuten ennenkin — mitattu 26.11.2026,
+    # 17 kieltä ennen ja jälkeen: vain venäjä muuttui.
+    valmis = False
+    for ohitus in KIERROKSET:
+        for v, o in PORTAAT:
+            lisa = TIIVISTYS_V[v] + TIIVISTYS_O[o]
+            with open(sivu, 'w', encoding='utf-8') as f:
+                html_, kuvia = painokuvat(sivu_html(kieli, luonnos, ohitus).replace('</style>', lisa + '\n</style>', 1))
+                f.write(html_)
+            tulosta(sivu, kohde)
+            if ks.sivuja(kohde) == SIVUJA and KIELET[kieli]['ylivuoto'] not in teksti(kohde):
+                valmis = True
+                break
+        if valmis:
             break
     print('Painokuvat: %d korttikuvaa litistetty valkoiselle, %d px, terävöity' % (kuvia, PAINOKUVA_LEVEYS))
     print('Välien tiivistys: väljät palstat %d/3, oikea palsta %d/3' % (v, o))
+    if ohitus:
+        print('⚠️  Pakkomurrosta luovuttiin: arkki ei mahtunut yhdelläkään '
+              'tiivistysportaalla niin, että jokainen peli alkaisi omasta palstastaan.')
     os.unlink(sivu)
     # ⚠️ EI kuvien pakkausta (lautasaannot.pakkaa): mitattu 15.11.2026, se
     # pikselöi pienet korttikuvat (sama kuva kahdessa koossa). Painotiedosto

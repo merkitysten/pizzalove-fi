@@ -246,6 +246,15 @@ jobs:
       # tallennettu. Kuusi kieltä jäi ilman uutta kirjasinta yhden takia.
       # Nyt jokainen kieli ajetaan loppuun, onnistuneet TALLENNETAAN, ja ajo
       # merkitään punaiseksi vasta sen jälkeen.
+      - name: Latojakoe (pakkomurto ei saa heittää palstaa hukkaan)
+        if: steps.tulos.outputs.uusi == '1'
+        # ⚠️ TÄSSÄ eikä ennen VAG-askelta: viirien kirjasin vaikuttaa
+        # korkeuksiin, ja koe latoo saman arkin kuin oikea ajo.
+        # 📐 26.11.2026: venäjän arkki kaatui kolmena yönä, koska pakkomurto
+        # hyppäsi 175,3 mm tyhjän palstan yli. Punainen EI estä julkaisua
+        # (ks. `julkaise`-työn ehto) — se vain näkyy.
+        run: python3 tyokalut/latojakoe.py
+
       - name: Sivusto (kielen oma sivu) ja arkit
         id: arkit
         if: steps.tulos.outputs.uusi == '1'
