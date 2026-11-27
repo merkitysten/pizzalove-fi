@@ -106,6 +106,15 @@ KAUPPA_KIELI = {
 # DE/NL/FR/ES: ei omaa kauppaa → EN-tuotesivut.
 for _k in ('de', 'nl', 'fr', 'es', 'sk'):
     KAUPPA_KIELI[_k] = KAUPPA_KIELI['en']
+# Kaupan etusivu kielittäin (Marko 27.11.2026: pizzalove.fi:stä pitää päästä
+# kauppaan yhdellä napautuksella — Instagramin biolinkki vie tänne). FI käyttää
+# /shop/:ia, ei /tuote/:a: /shop/ toimii jo, ja /tuote vaihdetaan /shop:iksi
+# joulun jälkeen (Verkkosivut/PAATOSLOKI.md), joten linkki ei vanhene silloin.
+KAUPPA_ETUSIVU = {
+    'fi': 'https://merkitysten.fi/shop/',
+    'sv': 'https://merkitysten.fi/sv/butik/',
+    'en': 'https://merkitysten.fi/en/shop/',
+}
 MIETTII_W, MIETTII_H = 520, 503  # julkinen/kuvat/basso-miettii.webp (huomio-laatikko käyttää 3.11.2026 alkaen basso-pohtii.webp 560×601)
 VAAKA_W, VAAKA_H = 720, 489  # julkinen/kuvat/apinavaaka.webp (koottu Apinavaa'an valikkoapinan kerroksista, Marko 20.10.2026)
 
@@ -118,6 +127,14 @@ def kauppa(t, tuote, paikka=None):
         osoite += ('?utm_source=pizzalove.fi&utm_medium=referral&utm_campaign=pizzalove-%s&utm_content=%s'
                    % (t['lang'], paikka))
     return osoite
+
+
+def kauppa_etusivu(t, paikka):
+    """Kaupan etusivu sivun kielellä; kielet ilman omaa kauppaa → EN. Sama
+    seurantatunniste kuin kauppa():lla, jotta tilauksesta näkee lähteen."""
+    osoite = KAUPPA_ETUSIVU.get(t['lang'], KAUPPA_ETUSIVU['en'])
+    return osoite + ('?utm_source=pizzalove.fi&utm_medium=referral&utm_campaign=pizzalove-%s&utm_content=%s'
+                     % (t['lang'], paikka))
 
 
 def kauppa_banneri(t, kuva, kuva_l, kuva_k, otsikko, teksti, napit, alalinkki=''):
@@ -679,6 +696,7 @@ def etusivu(t, kaikki):
   <div>
     <h1>%s</h1>
     <p class="ingressi">%s</p>
+    <div class="napit"><a class="nappi" href="%s">%s</a></div>
   </div>
   <img class="sankari__basso" src="../kuvat/halaus.webp" width="420" height="420" alt="">
 </section>
@@ -714,7 +732,9 @@ def etusivu(t, kaikki):
 
 %s
 %s
-''' % (e(s['h1']), s['ingressi'], e(s['valitse']),
+''' % (e(s['h1']), s['ingressi'],
+       e(kauppa_etusivu(t, 'sankari')), e(t['ui'].get('osta_peli') or t['ui']['kauppaan']),
+       e(s['valitse']),
        e(t['ui']['nav_korttipeli']), e(s['korttipeli_tiedot']), e(s['avaa']),
        e(t['ui']['nav_lautapeli']), e(s['lautapeli_tiedot']), e(s['avaa']),
        lang, e(s['pelaa_otsikko']), e(s['pelaa_teksti']), e(s['pelaa_nappi']),
