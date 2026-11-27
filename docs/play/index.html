@@ -31,7 +31,7 @@ if(p&&k.every(function(n){return n==='kieli'}))location.replace(p+location.searc
 <title>Pizza Love</title>
 <meta name="description" content="Pizza Love -pelit selaimessa: korttipelit Pizza Party ja Pizza Basso sekä lautapeli Apinavaaka.">
 <link rel="preload" href="fontit/poppins-700.woff2?v=20260911a" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="yhteinen.css?v=cf8e6557">
+<link rel="stylesheet" href="yhteinen.css?v=a05026d6">
 <link rel="stylesheet" href="pelivalinta.css?v=de89dd1c">
 </head>
 <body>
@@ -48,11 +48,16 @@ if(p&&k.every(function(n){return n==='kieli'}))location.replace(p+location.searc
     </div>
     <div class="verkko-osa alku-paa">
       <div class="pelivalinta pelivalinta--etuovi" data-vain="pelit"></div>
+      <!-- Kauppaan pelivalinnan alta (Marko 27.11.2026): ilmainen peli vie myös
+           kauppaan. Osoite, seurantatunniste ja kampanjarivi: kauppa.js. -->
+      <hr class="valikko-viiva alku-viiva">
+      <a class="alku-kauppa" data-kauppa="etuovi" href="https://merkitysten.fi/shop/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="kauppa.nosto">Pizza Love -pelit kotiin</span></a>
     </div>
     <img class="alku-logo" src="kuvat/merkitysten-logo.svg?v=20261009a" width="314" height="110" alt="Merkitysten">
   </div>
 </div>
-<script src="kielet.js?v=d6ccc137"></script>
+<script src="kielet.js?v=72c5e5fb"></script>
+<script src="kauppa.js?v=8cdcb8ed"></script>
 <script src="siirtyma.js?v=af27f415"></script>
 <script src="pelivalinta.js?v=b2c1f5bf"></script>
 </body>

@@ -639,6 +639,10 @@ body::after{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-
 .alku-kauppa .pieni-ikoni{color:var(--orange, #EE7203)}
 .alku-kauppa:active{transform:scale(.98)}
 .alku-kauppa:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* Kampanjarivi kauppanapissa (kauppa.js, Marko 27.11.2026). Rivittyy napin sisällä
+ * omaksi rivikseen vain jos tila loppuu; muuten samalla rivillä. */
+.alku-kauppa{flex-wrap:wrap;row-gap:4px}
+.kauppa-bf{background:#111;color:#fff;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;white-space:nowrap}
 .alku-ruutu:active{transform:scale(.97)}
 .alku-ruutu:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 /* Apinan naama: Markon vektori (kuvat/apinanaama_vektori.svg, 9.10.2026),

@@ -56,7 +56,7 @@
 <link rel="preload" href="kuvat/basso-syo.webp?v=20261006a" as="image">
 <link rel="stylesheet" href="peli.css?v=4820b15d">
 <link rel="stylesheet" href="opetus.css?v=79250472">
-<link rel="stylesheet" href="yhteinen.css?v=cf8e6557">
+<link rel="stylesheet" href="yhteinen.css?v=a05026d6">
 <link rel="stylesheet" href="pelivalinta.css?v=de89dd1c">
 <link rel="stylesheet" href="basso.css?v=f5fc3d53">
 </head>
@@ -435,7 +435,7 @@
          liian pieni ja «ruma». Kauppa aukeaa uuteen välilehteen, peli jää odottamaan. -->
     <div class="valikko-ala">
       <button id="taukoValikkoon" class="valikko-nappi reuna" data-t="valikko.alkuun">Alkuvalikkoon</button>
-      <a class="valikko-nappi tausta" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
+      <a class="valikko-nappi tausta" data-kauppa="korttipeli" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener" data-t="as.kauppa">Kauppaan</a>
     </div>
   </div>
 </div>
@@ -628,7 +628,7 @@
            Kauppa omana nappinaan hiusviivan alla (Marko: «Kauppaan on nyt tosi pieni ja
            taustaan hukkuva teksti. Kyllä silläkin pitää olla reunukset.»). -->
       <hr class="valikko-viiva alku-viiva">
-      <a class="alku-kauppa" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
+      <a class="alku-kauppa" data-kauppa="korttipeli" href="https://merkitysten.fi/tuote/pizza-love-korttipeli/" target="_blank" rel="noopener"><svg class="pieni-ikoni" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg><span data-t="as.kauppa">Kauppaan</span></a>
     </div>
     <div class="verkko-osa" data-osa="moninpeli" hidden>
       <!-- Liity ensin: neljän pelaajan pelissä yksi luo ja kolme liittyy (Marko 9.10.2026). -->
@@ -715,7 +715,8 @@
   <b id="bassoPizzaaTeksti" data-t="basso.pizzaa">PIZZAA!</b>
 </div>
 
-<script src="kielet.js?v=d6ccc137"></script>
+<script src="kielet.js?v=72c5e5fb"></script>
+<script src="kauppa.js?v=8cdcb8ed"></script>
 <script src="kortit.js?v=90448be8"></script>
 <script src="vieteri.js?v=5f77666a"></script>
 <script src="qrluku.js?v=80ab8640"></script>
